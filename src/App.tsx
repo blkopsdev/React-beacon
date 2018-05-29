@@ -1,72 +1,121 @@
-import * as React from 'react';
+import * as React from "react";
 import {
   BrowserRouter as Router,
   Link,
-  Route
-} from 'react-router-dom'
+  Redirect,
+  Route,
+  withRouter
+} from "react-router-dom";
 
-const Home = () => (
-  <div>
-    <h2>Home</h2>
-  </div>
-)
+////////////////////////////////////////////////////////////
+// 1. Click the public page
+// 2. Click the protected page
+// 3. Log in
+// 4. Click the back button, note the URL each time
 
-const About = () => (
-  <div>
-    <h2>About</h2>
-  </div>
-)
-
-const Topic = ({ match }: any) => (
-  <div>
-    <h3>{match.params.topicId}</h3>
-  </div>
-)
-const SelectTopic = ({ match }: any) => (
-  <h3>Please select a topic.</h3>
-)
-
-const Topics = ({ match }: any) => (
-  <div>
-    <h2>Topics</h2>
-    <ul>
-      <li>
-        <Link to={`${match.url}/rendering`}>
-          Rendering with React
-        </Link>
-      </li>
-      <li>
-        <Link to={`${match.url}/components`}>
-          Components
-        </Link>
-      </li>
-      <li>
-        <Link to={`${match.url}/props-v-state`}>
-          Props v. State
-        </Link>
-      </li>
-    </ul>
-
-    <Route path={`${match.path}/:topicId`} component={Topic}/>
-    <Route exact path={match.path} component={SelectTopic}/>
-  </div>
-)
-
-const BasicExample = () => (
+const AuthExample = () => (
   <Router>
     <div>
+      <AuthButton />
       <ul>
-        <li><Link to="/">Home</Link></li>
-        <li><Link to="/about">About</Link></li>
-        <li><Link to="/topics">Topics</Link></li>
+        <li>
+          <Link to="/public">Public Page</Link>
+        </li>
+        <li>
+          <Link to="/protected">Protected Page</Link>
+        </li>
       </ul>
-
-      <hr/>
-
-      <Route exact path="/" component={Home}/>
-      <Route path="/about" component={About}/>
-      <Route path="/topics" component={Topics}/>
+      <Route path="/public" component={Public} />
+      <Route path="/login" component={Login} />
+      <PrivateRoute path="/protected" component={Protected} />
     </div>
   </Router>
-)
-export default BasicExample
+);
+
+const fakeAuth = {
+  isAuthenticated: false,
+  authenticate(cb : any) {
+    this.isAuthenticated = true;
+    setTimeout(cb, 100); // fake async
+  },
+  signout(cb : any) {
+    this.isAuthenticated = false;
+    setTimeout(cb, 100);
+  }
+};
+
+const AuthButton = withRouter(
+  ({ history }) =>
+    fakeAuth.isAuthenticated ? (
+      <p>
+        Welcome!{" "}
+        <button
+          onClick={ () => {
+            fakeAuth.signout(() => history.push("/"));
+          }}
+        >
+          Sign out
+        </button>
+      </p>
+    ) : (
+      <p>You are not logged in.</p>
+    )
+);
+
+const PrivateRoute = ({ component: Component, ...rest } : any) => (
+  <Route
+    {...rest}
+    render={ (props : any) =>
+      fakeAuth.isAuthenticated ? (
+        <Component {...props} />
+      ) : (
+        <Redirect
+          to={{
+            pathname: "/login",
+            state: { from: props.location }
+          }}
+        />
+      )
+    }
+  />
+);
+
+const Public = () => <h3>Public</h3>;
+const Protected = () => <h3>Protected</h3>;
+
+interface Iprops extends React.Props<Login> {
+  location: any
+}
+interface Istate {
+  redirectToReferrer: boolean;
+}
+
+class Login extends React.Component <Iprops, Istate >{
+  state : Istate = {
+    redirectToReferrer: false
+  };
+
+  login = () => {
+    fakeAuth.authenticate(() => {
+      this.setState({ redirectToReferrer: true });
+    });
+  };
+
+  render() {
+    const { from } = this.props.location.state || { from: { pathname: "/" } };
+    const { redirectToReferrer } = this.state;
+
+    if (redirectToReferrer) {
+      return <Redirect to={from} />;
+    }
+
+    return (
+      <div>
+        <p>You must log in to view the page at {from.pathname}</p>
+        <button onClick={this.login}>Log in</button>
+      </div>
+    );
+  }
+}
+
+export default AuthExample;

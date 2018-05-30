@@ -4,19 +4,19 @@ import { InitialState } from '../models';
 import rootReducer from '../reducers';
 
 
-export function configureStore(intialState : InitialState) {
-  return createStore(
-    rootReducer,
-    intialState,
-    require('redux-devtools-extension').composeWithDevTools(
-      applyMiddleware(thunk, require('redux-immutable-state-invariant').default())
+export default function configureStore(intialState : InitialState) {
+  if (process.env.NODE_ENV !== 'production'){
+    return createStore(
+      rootReducer,
+      intialState,
+      require('redux-devtools-extension').composeWithDevTools(
+        applyMiddleware(thunk, require('redux-immutable-state-invariant').default())
     ));
-}
-
-export function configureStoreProduction(intialState: InitialState) {
-  return createStore(
-    rootReducer,
-    intialState,
-    applyMiddleware(thunk)
+  } else {
+    return createStore(
+      rootReducer,
+      intialState,
+      applyMiddleware(thunk)
     );
+  }
 }

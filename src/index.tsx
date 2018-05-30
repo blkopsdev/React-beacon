@@ -1,6 +1,8 @@
 import 'bootstrap/dist/css/bootstrap.css';
+import { throttle } from 'lodash';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
 import {
   BrowserRouter as Router,
   Redirect,
@@ -8,8 +10,22 @@ import {
   Switch,
 } from "react-router-dom";
 import LoginLayout from './components/auth/LoginLayout';
-import './index.css';
+// import './index.css';
+import initialState from './reducers/initialState';
 import registerServiceWorker from './registerServiceWorker';
+import configureStore from './store/configureStore';
+import { loadState, saveState } from './store/localStorage';
+
+const persistedState = loadState('state-core-care');
+const store = configureStore(persistedState || initialState);
+
+// throttle ensures that we never write to
+// localstorage more than once per second
+store.subscribe(throttle(() => {
+  saveState({
+    user: store.getState().user
+  }, 'state-core-care');
+}, 1000));
 
 // TODO replace with actual dashboard
 const Dashboard = () => <h3>Dashboard</h3>;
@@ -41,6 +57,7 @@ const PrivateRoute = ({ component: Component, ...rest } : any) => (
 );
 
 ReactDOM.render(
+  <Provider store={store}>
     <Router>
       <div>
         <p> temp header </p>
@@ -50,7 +67,8 @@ ReactDOM.render(
           <Route component={NoMatch} />
         </Switch>
       </div>
-    </Router>,
+    </Router>
+   </Provider>,
   document.getElementById('root') as HTMLElement
 );
 registerServiceWorker();

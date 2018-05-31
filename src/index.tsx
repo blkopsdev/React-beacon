@@ -3,6 +3,8 @@ import { throttle } from 'lodash';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
+import ReduxToastr from 'react-redux-toastr';
+import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 import {
   BrowserRouter as Router,
   Redirect,
@@ -66,6 +68,7 @@ ReactDOM.render(
           <PrivateRoute path="/dashboard" component={Dashboard} />
           <Route component={NoMatch} />
         </Switch>
+        <ReduxToastr />
       </div>
     </Router>
    </Provider>,

@@ -2,6 +2,28 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 ## API documentation:
 https://app.apiary.io/corecare/editor
+test endpoint: http://private-cad60-corecare.apiary-mock.com
+fake login: http://private-cad60-corecare.apiary-mock.com/user/login?email=test&password=test
+
+## Design Spec
+https://xd.adobe.com/view/98de6938-9789-4098-6f9a-955b46301e31-eeef/
+
+## Random notes
+ 135 hours for the project.  6 weeks
+
+ ### Azure Active Directory Test Data:
+ Display name
+CoreCare-AD-Dev
+Application type
+Web app / API
+Home page
+http://localhost:3000
+Application ID
+9eced824-e4db-436e-ad99-82391d4b9f25
+Object ID
+e0b4048b-662b-4774-8394-4b7c26a3e51c
+Managed application in local directory
+CoreCare-AD-Dev
 
 ## Available Scripts
 

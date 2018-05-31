@@ -1,5 +1,7 @@
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
+iK4uY&QM
+
 ## API documentation:
 https://app.apiary.io/corecare/editor
 test endpoint: http://private-cad60-corecare.apiary-mock.com
@@ -24,6 +26,20 @@ Object ID
 e0b4048b-662b-4774-8394-4b7c26a3e51c
 Managed application in local directory
 CoreCare-AD-Dev
+
+## Components
+* LoginLayout - layout
+  - LoginForm - connected
+* SignupLayout
+  - SignupForm - connected
+* Header - layout
+  - ProfileItem - connected
+* Dashboard - connected
+* TwoPaneLayout - layout
+  - Menu
+  - Training
+    + TrainingListItem
+  - Inventory
 
 ## Available Scripts
 

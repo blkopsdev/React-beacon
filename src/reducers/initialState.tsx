@@ -1,6 +1,8 @@
 export default {
   ajaxCallsInProgress: 0,
   user: {
-      username: ''
+      password: '',
+      username: '',
+      isAuthenticated: false
   }
 }

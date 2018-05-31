@@ -12,7 +12,7 @@ import {
   Switch,
 } from "react-router-dom";
 import LoginLayout from './components/auth/LoginLayout';
-// import './index.css';
+import './index.css';
 import initialState from './reducers/initialState';
 import registerServiceWorker from './registerServiceWorker';
 import configureStore from './store/configureStore';
@@ -68,7 +68,9 @@ ReactDOM.render(
           <PrivateRoute path="/dashboard" component={Dashboard} />
           <Route component={NoMatch} />
         </Switch>
-        <ReduxToastr />
+        <ReduxToastr 
+          position={'top-right'}
+        />
       </div>
     </Router>
    </Provider>,

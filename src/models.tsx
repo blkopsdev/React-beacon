@@ -1,11 +1,11 @@
 export interface Iuser {
+    password: string;
     username: string;
+    isAuthenticated: boolean;
 }
 
 export interface InitialState {
-    user : {
-    username: string;
-};
+    user : Iuser;
     ajaxCallsInProgress : number;
 }
 

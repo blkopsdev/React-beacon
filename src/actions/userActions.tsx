@@ -13,7 +13,7 @@ export function userLogin(
   password: string = "test"
 ) {
   return (dispatch: any, getState: any) => {
-    dispatch(beginAjaxCall());
+    dispatch(beginAjaxCall())
     return axios
       .get(API.GET.user.login, { params: { email, password } })
       .then(data => {

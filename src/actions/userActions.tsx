@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "axios"
 import * as types from "./actionTypes"
 import API from "../constants/apiEndpoints"
 import { beginAjaxCall } from "./ajaxStatusActions"

@@ -3,8 +3,8 @@ import * as types from './actionTypes';
 import API from '../constants/apiEndpoints';
 import { beginAjaxCall } from './ajaxStatusActions';
 import { toastr } from 'react-redux-toastr';
+import constants from '../constants/constants';
 
-// import {BasicToastrOptions} from 'react-redux-toastr/index.d'
 // import {Iuser} from '../models';
 
 export function userLogin(
@@ -33,11 +33,7 @@ export function userLogin(
         if (!navigator.onLine) {
           msg = 'Please connect to the internet.';
         }
-        toastr.error('Error', msg, {
-          transitionIn: 'bounceInDown',
-          transitionOut: 'bounceOutUp',
-          timeOut: 0
-        });
+        toastr.error('Error', msg, constants.toastrError);
         throw error;
       });
   };

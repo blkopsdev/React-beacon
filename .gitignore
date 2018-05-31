@@ -3,6 +3,9 @@
 # dependencies
 /node_modules
 
+# Runtime data
+/src/index.css
+
 # testing
 /coverage
 

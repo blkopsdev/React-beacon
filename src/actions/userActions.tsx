@@ -20,7 +20,7 @@ export function userLogin(
         if (!data.data) {
           throw undefined;
         } else {
-          dispatch({ type: types.USER_LOGIN_SUCCESS, user: data.data });
+          dispatch({ type: types.USER_LOGIN_SUCCESS, user: data.data })
           toastr.success("Success", "Logged in.");
           return data;
         }

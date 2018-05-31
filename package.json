@@ -22,14 +22,13 @@
     "redux-thunk": "^2.3.0"
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,json,css}": [
+    "src/**/*.{js,tsx,json,css}": [
       "prettier --single-quote --write",
       "git add"
     ]
   },
-  "pre-commit": "lint-staged",
   "scripts": {
-    "lint-staged": "lint-staged",
+    "precommit": "lint-staged",
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",

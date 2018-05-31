@@ -1,8 +1,8 @@
-import * as React from "react";
+import * as React from 'react';
 import { connect } from 'react-redux';
-import { Button, Col, Grid, Row  } from 'react-bootstrap';
-import {InitialState, Iuser} from '../../models';
-import {userLogin} from '../../actions/userActions'
+import { Button, Col, Grid, Row } from 'react-bootstrap';
+import { InitialState, Iuser } from '../../models';
+import { userLogin } from '../../actions/userActions';
 // import { Col, Grid, Row, Button, FormGroup, FormControl, HelpBlock } from 'react-bootstrap';
 
 interface Iprops extends React.Props<LoginForm> {
@@ -14,14 +14,13 @@ interface Istate {
   user: string;
 }
 
-class LoginForm extends React.Component <Iprops, Istate > {
-
+class LoginForm extends React.Component<Iprops, Istate> {
   constructor(props: Iprops) {
     super(props);
   }
 
   render() {
-    return(
+    return (
       <div>
         <Grid>
           <Row>
@@ -31,17 +30,19 @@ class LoginForm extends React.Component <Iprops, Istate > {
               </Button>
             </Col>
           </Row>
-
         </Grid>
       </div>
-    )
+    );
   }
 }
 
-const mapStateToProps = (state : InitialState, ownProps: Iprops) => {
+const mapStateToProps = (state: InitialState, ownProps: Iprops) => {
   return {
     user: state.user
-  }
-}
+  };
+};
 
-export default connect(mapStateToProps, {userLogin})(LoginForm)
+export default connect(
+  mapStateToProps,
+  { userLogin }
+)(LoginForm);

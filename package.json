@@ -27,9 +27,8 @@
       "git add"
     ]
   },
-  "precommit": "lint-staged",
   "scripts": {
-    "lint-staged": "lint-staged",
+    "precommit": "lint-staged",
     "start": "react-scripts-ts start",
     "build": "react-scripts-ts build",
     "test": "react-scripts-ts test --env=jsdom",

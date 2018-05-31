@@ -1,8 +1,8 @@
-import axios from 'axios'
-import * as types from './actionTypes'
-import API from '../constants/apiEndpoints'
-import { beginAjaxCall } from './ajaxStatusActions'
-import { toastr } from 'react-redux-toastr'
+import axios from 'axios';
+import * as types from './actionTypes';
+import API from '../constants/apiEndpoints';
+import { beginAjaxCall } from './ajaxStatusActions';
+import { toastr } from 'react-redux-toastr';
 
 // import {BasicToastrOptions} from 'react-redux-toastr/index.d'
 // import {Iuser} from '../models';
@@ -29,7 +29,7 @@ export function userLogin(
         dispatch({ type: types.USER_LOGIN_FAILED });
         let msg =
           error.message ||
-          'Failed to login.  Please try again or contact support.'
+          'Failed to login.  Please try again or contact support.';
         if (!navigator.onLine) {
           msg = 'Please connect to the internet.';
         }
@@ -47,7 +47,7 @@ export function userLogout() {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());
     return new Promise((resolve, reject) => {
-      dispatch({ type: types.USER_LOGOUT_SUCCESS })
+      dispatch({ type: types.USER_LOGOUT_SUCCESS });
       resolve();
     });
   };

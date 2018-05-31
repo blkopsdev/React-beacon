@@ -47,7 +47,7 @@ export function userLogout() {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());
     return new Promise((resolve, reject) => {
-      dispatch({ type: types.USER_LOGOUT_SUCCESS });
+      dispatch({ type: types.USER_LOGOUT_SUCCESS })
       resolve();
     });
   };

@@ -29,7 +29,7 @@ export function userLogin(
         dispatch({ type: types.USER_LOGIN_FAILED });
         let msg =
           error.message ||
-          'Failed to login.  Please try again or contact support.';
+          'Failed to login.  Please try again or contact support.'
         if (!navigator.onLine) {
           msg = 'Please connect to the internet.';
         }

@@ -1,70 +1,10 @@
 ﻿/* This has the CSS for the shell and common screens */
 
 @import 'variables.less';
+@import url('https://fonts.googleapis.com/css?family=Roboto+Condensed:300,400,700');
 body {
   margin: 0;
   padding: 0;
-  font-family: sans-serif;
-}
-
-.header {
-  width: 100%;
-  height: 84px;
-  img {
-    // float: left;
-    height: 53px;
-    margin-top: 15px;
-    margin-left: 30px;
-  }
-}
-
-.tile {
-  outline: 1px solid @white;
-  .title {
-    position: absolute;
-    left: 0;
-    right: 0;
-    top: 30%;
-    // display: block;
-    margin-left: auto;
-    margin-right: auto;
-    /* Need a specific width value to work */
-    width: 360px;
-    // height: 100%;
-    display: inline-block;
-    vertical-align: middle;
-    text-align: center;
-    font-size: 2em;
-    color: @white;
-    img {
-      opacity: 1;
-      width: 35px;
-      margin-left: auto;
-      margin-right: auto;
-      display: block;
-    }
-  }
-  img {
-    opacity: .3;
-  }
-}
-
-.tile-dark {
-  background-color: @dark;
-}
-
-.tile-green {
-  background-color: @green;
-}
-
-.tile-blue {
-  background-color: @blue;
-}
-
-.tile-orange {
-  background-color: @orange;
-}
-
-.tile-purple {
-  background-color: @purple;
+  font-family: 'Roboto Condensed', sans-serif;
+  font-weight: 300;
 }

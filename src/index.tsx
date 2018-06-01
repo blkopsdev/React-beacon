@@ -15,6 +15,7 @@ import registerServiceWorker from './registerServiceWorker';
 import configureStore from './store/configureStore';
 import { loadState, saveState } from './store/localStorage';
 import Dashboard from './components/dashboard/Dashboard';
+import Header from './components/header/Header';
 
 // import project css
 import 'bootstrap/dist/css/bootstrap.css';
@@ -67,15 +68,11 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => (
   />
 );
 
-const headerImg = require('src/images/KittenLogo@2x.png');
-
 ReactDOM.render(
   <Provider store={store}>
     <Router>
       <div>
-        <div className="header">
-          <img src={headerImg} />
-        </div>
+        <Header />
         <Switch>
           <Route exact path="/" component={LoginLayout} />
           <PrivateRoute path="/dashboard" component={Dashboard} />

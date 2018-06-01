@@ -129,7 +129,7 @@ class Dashboard extends React.Component<Iprops, Istate> {
 
     return (
       <Masonry
-        className={'tiles'} // default ''
+        className={'dashboard'} // default ''
         elementType={'div'} // default 'div'
         options={masonryOptions} // default {}
         disableImagesLoaded={false} // default false

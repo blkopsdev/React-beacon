@@ -1,0 +1,50 @@
+@import '../../less/variables.less';
+.dashboard {
+  .tile {
+    outline: 1px solid @white;
+    .title {
+      position: absolute;
+      left: 0;
+      right: 0;
+      top: 40%;
+      // display: block;
+      margin-left: auto;
+      margin-right: auto;
+      /* Need a specific width value to work */
+      width: 360px;
+      // height: 100%;
+      display: inline-block;
+      vertical-align: middle;
+      text-align: center;
+      font-size: 20px;
+      text-transform: uppercase;
+      color: @white;
+      img {
+        margin-bottom: 10px;
+        opacity: 1;
+        width: 35px;
+        margin-left: auto;
+        margin-right: auto;
+        display: block;
+      }
+    }
+    img {
+      opacity: .3;
+    }
+  }
+  .tile-dark {
+    background-color: @dark;
+  }
+  .tile-green {
+    background-color: @green;
+  }
+  .tile-blue {
+    background-color: @blue;
+  }
+  .tile-orange {
+    background-color: @orange;
+  }
+  .tile-purple {
+    background-color: @purple;
+  }
+}

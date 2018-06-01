@@ -9,47 +9,59 @@ import {
   BrowserRouter as Router,
   Redirect,
   Route,
-  Switch,
-} from "react-router-dom";
+  Switch
+} from 'react-router-dom';
 import LoginLayout from './components/auth/LoginLayout';
 import './index.css';
 import initialState from './reducers/initialState';
 import registerServiceWorker from './registerServiceWorker';
 import configureStore from './store/configureStore';
 import { loadState, saveState } from './store/localStorage';
+import { runWithAdal } from 'react-adal';
+import { authContext, withAdalLoginApi } from './constants/adalConfig';
 
 const persistedState = loadState('state-core-care');
 const store = configureStore(persistedState || initialState);
 
 // throttle ensures that we never write to
 // localstorage more than once per second
-store.subscribe(throttle(() => {
-  saveState({
-    user: store.getState().user
-  }, 'state-core-care');
-}, 1000));
+store.subscribe(
+  throttle(() => {
+    saveState(
+      {
+        user: store.getState().user
+      },
+      'state-core-care'
+    );
+  }, 1000)
+);
 
 // TODO replace with actual dashboard
 const Dashboard = () => <h3>Dashboard</h3>;
+const ADlogin = () => <h3>AD Login</h3>;
 
-const NoMatch = ({ location } : any) => {
-  console.error(`no match for route: ${location.pathname}` );
-  return ( <h3><code>{location.pathname}</code> does not exist</h3>);
+const NoMatch = ({ location }: any) => {
+  console.error(`no match for route: ${location.pathname}`);
+  return (
+    <h3>
+      <code>{location.pathname}</code> does not exist
+    </h3>
+  );
 };
 
 // TODO get the user object from Redux and check if they are authenticated
-const fakeAuth = {isAuthenticated: false};
+const fakeAuth = { isAuthenticated: false };
 
-const PrivateRoute = ({ component: Component, ...rest } : any) => (
+const PrivateRoute = ({ component: Component, ...rest }: any) => (
   <Route
     {...rest}
-    render={ (props : any) =>
+    render={(props: any) =>
       fakeAuth.isAuthenticated ? (
         <Component {...props} />
       ) : (
         <Redirect
           to={{
-            pathname: "/",
+            pathname: '/adLogin',
             state: { from: props.location }
           }}
         />
@@ -58,22 +70,29 @@ const PrivateRoute = ({ component: Component, ...rest } : any) => (
   />
 );
 
-ReactDOM.render(
-  <Provider store={store}>
-    <Router>
-      <div>
-        <p> temp header </p>
-        <Switch>
-          <Route exact path="/" component={LoginLayout} />
-          <PrivateRoute path="/dashboard" component={Dashboard} />
-          <Route component={NoMatch} />
-        </Switch>
-        <ReduxToastr 
-          position={'top-right'}
-        />
-      </div>
-    </Router>
-   </Provider>,
-  document.getElementById('root') as HTMLElement
+const MyProtectedPage = withAdalLoginApi(ADlogin);
+
+runWithAdal(
+  authContext,
+  () => {
+    ReactDOM.render(
+      <Provider store={store}>
+        <Router>
+          <div>
+            <p> temp header </p>
+            <Switch>
+              <Route exact path="/" component={LoginLayout} />
+              <Route path="/adlogin" component={MyProtectedPage} />
+              <PrivateRoute path="/dashboard" component={Dashboard} />
+              <Route component={NoMatch} />
+            </Switch>
+            <ReduxToastr position={'top-right'} />
+          </div>
+        </Router>
+      </Provider>,
+      document.getElementById('root') as HTMLElement
+    );
+  },
+  true
 );
 registerServiceWorker();

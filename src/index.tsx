@@ -38,7 +38,11 @@ store.subscribe(
 
 // TODO replace with actual dashboard
 const Dashboard = () => <h3>Dashboard</h3>;
-const ADlogin = () => <h3>AD Login</h3>;
+const ADlogin = () => {
+  return <h3>AD Login</h3>;
+};
+// const Loading = () => <h3>Loading</h3>;
+// const ErrorPage = (error: any) => <h3>Error: {error}</h3>;
 
 const NoMatch = ({ location }: any) => {
   console.error(`no match for route: ${location.pathname}`);
@@ -70,6 +74,32 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => (
   />
 );
 
+// const PrivateRoute = ({ component: Component, ...rest }: any) => (
+//   <Route
+//     {...rest}
+//     render={(props: any) =>
+//       // return withAdalLoginApi(()=>{<Component {...props} />}, ()=>{ <Loading />}, (error) => {<ErrorPage error={error}/>})
+//       withAdalLoginApi(
+//         () => {
+//           <Component {...props} />;
+//         },
+//         () => {
+//           <Loading />;
+//         },
+//         (error: any) => {
+//           <Redirect
+//             to={{
+//               pathname: "/",
+//               state: { from: props.location, error }
+//             }}
+//           />;
+//         }
+//       );
+//     }
+//   />
+// );
+
+// TODO how do we initiate the login formt he userAction
 const MyProtectedPage = withAdalLoginApi(ADlogin);
 
 runWithAdal(

@@ -2,6 +2,7 @@ export interface Iuser {
   password: string;
   username: string;
   isAuthenticated: boolean;
+  token: string;
 }
 
 export interface InitialState {

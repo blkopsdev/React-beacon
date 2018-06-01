@@ -2,11 +2,12 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Button, Col, Grid, Row } from 'react-bootstrap';
 import { InitialState, Iuser } from '../../models';
-import { userLogin } from '../../actions/userActions';
+import { userLogin, getToken } from '../../actions/userActions';
 // import { Col, Grid, Row, Button, FormGroup, FormControl, HelpBlock } from 'react-bootstrap';
 
 interface Iprops extends React.Props<LoginForm> {
   userLogin?: any;
+  getToken?: any;
   user?: Iuser;
   // dispatch: (action: any) => void;
 }
@@ -25,8 +26,11 @@ class LoginForm extends React.Component<Iprops, Istate> {
         <Grid>
           <Row>
             <Col>
-              <Button bsStyle="default" onClick={this.props.userLogin}>
+              <Button bsStyle="default" onClick={this.props.getToken}>
                 Login With Azure
+              </Button>
+              <Button bsStyle="default" onClick={this.props.userLogin}>
+                Login With to app
               </Button>
             </Col>
           </Row>
@@ -44,5 +48,5 @@ const mapStateToProps = (state: InitialState, ownProps: Iprops) => {
 
 export default connect(
   mapStateToProps,
-  { userLogin }
+  { userLogin, getToken }
 )(LoginForm);

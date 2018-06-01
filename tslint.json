@@ -13,6 +13,7 @@
     "member-access": false,
     "jsx-no-lambda": false,
     "interface-name": false,
+    "no-string-literal": false,
     "no-console": [
       false,
       "log",

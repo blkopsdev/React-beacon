@@ -27,6 +27,10 @@ e0b4048b-662b-4774-8394-4b7c26a3e51c
 Managed application in local directory
 CoreCare-AD-Dev
 
+c4c919d8-b946-48a3-a1c3-eb12b3e1f83b // tennat ID and Directory ID (working)
+9eced824-e4db-436e-ad99-82391d4b9f25 // client ID and Application id for Web/API
+fd71f683-7423-4ba0-9ed3-fba0547be076 // cliend ID and Application ID for Native - used in React
+
 ## Components
 * LoginLayout - layout
   - LoginForm - connected

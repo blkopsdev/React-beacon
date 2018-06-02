@@ -2,15 +2,15 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Button, Col, Grid, Row } from 'react-bootstrap';
 import { InitialState, Iuser } from '../../models';
-import { userLogin, getToken } from '../../actions/userActions';
-import { authContext } from '../../constants/adalConfig';
+import { userLogin, userLogout } from '../../actions/userActions';
+// import { authContext } from '../../constants/adalConfig';
 import { withRouter, RouteComponentProps } from 'react-router-dom';
 
 // import { Col, Grid, Row, Button, FormGroup, FormControl, HelpBlock } from 'react-bootstrap';
 
 interface Iprops extends RouteComponentProps<{}> {
   userLogin?: any;
-  getToken?: any;
+  userLogout?: any;
   user?: Iuser;
 }
 
@@ -33,13 +33,8 @@ class LoginForm extends React.Component<Iprops, any> {
         <Grid>
           <Row>
             <Col>
-              <Button
-                bsStyle="default"
-                onClick={() => {
-                  authContext.login();
-                }}
-              >
-                Login With Azure
+              <Button bsStyle="default" onClick={this.props.userLogout}>
+                Logout
               </Button>
               <Button bsStyle="default" onClick={this.login}>
                 Login With to app
@@ -61,6 +56,6 @@ const mapStateToProps = (state: InitialState, ownProps: any) => {
 export default withRouter(
   connect(
     mapStateToProps,
-    { userLogin, getToken }
+    { userLogin, userLogout }
   )(LoginForm)
 );

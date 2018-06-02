@@ -3,6 +3,8 @@
 * you must manually put it in node_modules/@types/react-adal and rename it to be index.d.ts
 */
 
+// commented out so that it does not conflict
+/*
 declare module 'react-adal' {
     export interface AdalConfig {
         tenant: string,
@@ -38,6 +40,9 @@ declare module 'react-adal' {
 
         getCachedToken(resource: string): string | undefined;
         getCachedUser(): IAdalUser | undefined;
+        acquireToken(resource: string, cb: (message : string, token: string, msg?: string)=> any): () => any ;
+        login(): any;
+        logOut(): any;
     }
 
     export function adalFetch (
@@ -56,3 +61,4 @@ declare module 'react-adal' {
 
     export function runWithAdal(authContext: AuthenticationContext, callback: () => void, shouldLogin?: boolean): any; 
 }
+*/

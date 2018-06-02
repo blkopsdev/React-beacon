@@ -18,11 +18,7 @@ import registerServiceWorker from './registerServiceWorker';
 import configureStore from './store/configureStore';
 import { loadState, saveState } from './store/localStorage';
 import { runWithAdal } from 'react-adal';
-import {
-  authContext,
-  withAdalLoginApi,
-  adalConfig
-} from './constants/adalConfig';
+import { authContext, adalConfig } from './constants/adalConfig';
 
 const persistedState = loadState('state-core-care');
 const store = configureStore(persistedState || initialState);
@@ -42,9 +38,6 @@ store.subscribe(
 
 // TODO replace with actual dashboard
 const Dashboard = () => <h3>Dashboard</h3>;
-const ADlogin = () => {
-  return <h3>AD Login</h3>;
-};
 // const Loading = () => <h3>Loading</h3>;
 // const ErrorPage = (error: any) => <h3>Error: {error}</h3>;
 
@@ -56,9 +49,6 @@ const NoMatch = ({ location }: any) => {
     </h3>
   );
 };
-
-// TODO get the user object from Redux and check if they are authenticated
-// let isAuthenticated = false;
 
 function isAuthenticated() {
   let isAuth = false;
@@ -78,24 +68,6 @@ function isAuthenticated() {
 
 // every time we want to go to a protected route call adalGetToken.  if it fails then redirect to login page.  when they hit the login button.  call authContext.login();
 // if an API call is unauthenticated redirect to the login page
-
-// const PrivateRoute = ({ component: Component, ...rest }: any) => (
-//   <Route
-//     {...rest}
-//     render={(props: any) =>
-//       fakeAuth.isAuthenticated ? (
-//         <Component {...props} />
-//       ) : (
-//         <Redirect
-//           to={{
-//             pathname: '/adLogin',
-//             state: { from: props.location }
-//           }}
-//         />
-//       )
-//     }
-//   />
-// );
 
 const PrivateRoute = ({ component: Component, ...rest }: any) => {
   return (
@@ -117,9 +89,6 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
   );
 };
 
-// TODO how do we initiate the login formt he userAction
-const MyProtectedPage = withAdalLoginApi(ADlogin);
-
 runWithAdal(
   authContext,
   () => {
@@ -130,7 +99,6 @@ runWithAdal(
             <p> temp header </p>
             <Switch>
               <Route exact path="/" component={LoginLayout} />
-              <Route path="/adlogin" component={MyProtectedPage} />
               <PrivateRoute path="/dashboard" component={Dashboard} />
               <Route component={NoMatch} />
             </Switch>

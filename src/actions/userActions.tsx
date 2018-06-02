@@ -86,6 +86,7 @@ export const getToken = () => {
 
 export function userLogout() {
   return (dispatch: any, getState: any) => {
+    authContext.logOut();
     dispatch(beginAjaxCall());
     return new Promise((resolve, reject) => {
       dispatch({ type: types.USER_LOGOUT_SUCCESS });

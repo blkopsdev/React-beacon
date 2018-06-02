@@ -18,7 +18,11 @@ import registerServiceWorker from './registerServiceWorker';
 import configureStore from './store/configureStore';
 import { loadState, saveState } from './store/localStorage';
 import { runWithAdal } from 'react-adal';
-import { authContext, withAdalLoginApi } from './constants/adalConfig';
+import {
+  authContext,
+  withAdalLoginApi,
+  adalConfig
+} from './constants/adalConfig';
 
 const persistedState = loadState('state-core-care');
 const store = configureStore(persistedState || initialState);
@@ -54,50 +58,64 @@ const NoMatch = ({ location }: any) => {
 };
 
 // TODO get the user object from Redux and check if they are authenticated
-const fakeAuth = { isAuthenticated: false };
+// let isAuthenticated = false;
 
-const PrivateRoute = ({ component: Component, ...rest }: any) => (
-  <Route
-    {...rest}
-    render={(props: any) =>
-      fakeAuth.isAuthenticated ? (
-        <Component {...props} />
-      ) : (
-        <Redirect
-          to={{
-            pathname: '/adLogin',
-            state: { from: props.location }
-          }}
-        />
-      )
+function isAuthenticated() {
+  let isAuth = false;
+  authContext.acquireToken(
+    adalConfig.endpoints.api,
+    (message: string, token: string, msg: string) => {
+      if (!msg) {
+        isAuth = true;
+      } else {
+        console.error(message, msg);
+        isAuth = false;
+      }
     }
-  />
-);
+  );
+  return isAuth;
+}
+
+// every time we want to go to a protected route call adalGetToken.  if it fails then redirect to login page.  when they hit the login button.  call authContext.login();
+// if an API call is unauthenticated redirect to the login page
 
 // const PrivateRoute = ({ component: Component, ...rest }: any) => (
 //   <Route
 //     {...rest}
 //     render={(props: any) =>
-//       // return withAdalLoginApi(()=>{<Component {...props} />}, ()=>{ <Loading />}, (error) => {<ErrorPage error={error}/>})
-//       withAdalLoginApi(
-//         () => {
-//           <Component {...props} />;
-//         },
-//         () => {
-//           <Loading />;
-//         },
-//         (error: any) => {
-//           <Redirect
-//             to={{
-//               pathname: "/",
-//               state: { from: props.location, error }
-//             }}
-//           />;
-//         }
-//       );
+//       fakeAuth.isAuthenticated ? (
+//         <Component {...props} />
+//       ) : (
+//         <Redirect
+//           to={{
+//             pathname: '/adLogin',
+//             state: { from: props.location }
+//           }}
+//         />
+//       )
 //     }
 //   />
 // );
+
+const PrivateRoute = ({ component: Component, ...rest }: any) => {
+  return (
+    <Route
+      {...rest}
+      render={(props: any) =>
+        isAuthenticated() ? (
+          <Component {...props} />
+        ) : (
+          <Redirect
+            to={{
+              pathname: '/',
+              state: { from: props.location }
+            }}
+          />
+        )
+      }
+    />
+  );
+};
 
 // TODO how do we initiate the login formt he userAction
 const MyProtectedPage = withAdalLoginApi(ADlogin);

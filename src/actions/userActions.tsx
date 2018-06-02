@@ -43,6 +43,11 @@ import { authContext } from '../constants/adalConfig';
 export function userLogin() {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());
+    authContext.login();
+    const token = authContext.getCachedToken(authContext.config.clientId);
+    console.log('token', token);
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+    dispatch({ type: types.AAD_LOGIN_SUCCESS, token });
     return axios
       .get(API.GET.user.login)
       .then(data => {

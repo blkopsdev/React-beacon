@@ -1,3 +1,8 @@
+/*
+* @jfbloom22 created this type file
+* you must manually put it in node_modules/@types/react-adal and rename it to be index.d.ts
+*/
+
 declare module 'react-adal' {
     export interface AdalConfig {
         tenant: string,
@@ -36,16 +41,16 @@ declare module 'react-adal' {
     }
 
     export function adalFetch (
-        authContext: any,
-        resourceGuiId: any,
+        authContext: AuthenticationContext,
+        resourceGuiId: string,
         fetch: any,
-        url: any,
+        url: string,
         options: any
 
     ): any
 
     export function withAdalLogin (
-        authContext: any,
+        authContext: AuthenticationContext,
         resourceId: string
     ): any
 

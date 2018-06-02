@@ -5,5 +5,9 @@ export default {
     username: '',
     isAuthenticated: false,
     token: ''
+  },
+  redirect: {
+    redirectToReferrer: false,
+    pathname: '/'
   }
 };

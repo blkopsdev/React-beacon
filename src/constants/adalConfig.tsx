@@ -19,3 +19,19 @@ export const withAdalLoginApi = withAdalLogin(
   authContext,
   adalConfig.endpoints.api
 );
+
+export function isAuthenticated() {
+  let isAuth = false;
+  authContext.acquireToken(
+    adalConfig.endpoints.api,
+    (message: string, token: string, msg: string) => {
+      if (!msg) {
+        isAuth = true;
+      } else {
+        console.error(message, msg);
+        isAuth = false;
+      }
+    }
+  );
+  return isAuth;
+}

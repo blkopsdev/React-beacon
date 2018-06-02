@@ -5,9 +5,14 @@ export interface Iuser {
   token: string;
 }
 
+export interface Iredirect {
+  redirectToReferrer: boolean;
+  pathname: string;
+}
 export interface InitialState {
   user: Iuser;
   ajaxCallsInProgress: number;
+  redirect: Iredirect;
 }
 
 // these are copied from react-redux-toastr beacuse could not figure out any other way to make typescript happy

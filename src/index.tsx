@@ -29,7 +29,8 @@ store.subscribe(
   throttle(() => {
     saveState(
       {
-        user: store.getState().user
+        user: store.getState().user,
+        redirect: store.getState().redirect
       },
       'state-core-care'
     );

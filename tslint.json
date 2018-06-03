@@ -9,6 +9,8 @@
     "jsx-boolean-value": false,
     "member-access": false,
     "jsx-no-lambda": false,
+    "interface-name": false,
+    "no-string-literal": false,
     "no-var-requires": false,
     "no-console": [
       false,

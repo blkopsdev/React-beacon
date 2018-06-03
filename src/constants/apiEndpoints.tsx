@@ -1,4 +1,3 @@
-
 let root;
 if (process.env.NODE_ENV === 'production') {
   root = 'http://private-cad60-corecare.apiary-mock.com/'; // TODO replace with production URL
@@ -8,7 +7,8 @@ if (process.env.NODE_ENV === 'production') {
 const API = {
   GET: {
     user: {
-      login : `${root}user/login`
+      login: `${root}user/login`,
+      adLogin: `${root}user/adlogin`
     }
   }
 };

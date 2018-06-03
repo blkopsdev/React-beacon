@@ -14,6 +14,8 @@ import initialState from './reducers/initialState';
 import registerServiceWorker from './registerServiceWorker';
 import configureStore from './store/configureStore';
 import { loadState, saveState } from './store/localStorage';
+import { runWithAdal } from 'react-adal';
+import { authContext, isAuthenticated } from './constants/adalConfig';
 import Dashboard from './components/dashboard/Dashboard';
 import Header from './components/header/Header';
 
@@ -31,13 +33,16 @@ store.subscribe(
   throttle(() => {
     saveState(
       {
-        user: store.getState().user
+        user: store.getState().user,
+        redirect: store.getState().redirect
       },
       'state-core-care'
     );
   }, 1000)
 );
 
+// const Loading = () => <h3>Loading</h3>;
+// const ErrorPage = (error: any) => <h3>Error: {error}</h3>;
 const NoMatch = ({ location }: any) => {
   console.error(`no match for route: ${location.pathname}`);
   return (
@@ -47,41 +52,49 @@ const NoMatch = ({ location }: any) => {
   );
 };
 
-// TODO get the user object from Redux and check if they are authenticated
-const fakeAuth = { isAuthenticated: true };
+// every time we want to go to a protected route call adalGetToken.  if it fails then redirect to login page.  when they hit the login button.  call authContext.login();
+// if an API call is unauthenticated redirect to the login page
 
-const PrivateRoute = ({ component: Component, ...rest }: any) => (
-  <Route
-    {...rest}
-    render={(props: any) =>
-      fakeAuth.isAuthenticated ? (
-        <Component {...props} />
-      ) : (
-        <Redirect
-          to={{
-            pathname: '/',
-            state: { from: props.location }
-          }}
-        />
-      )
-    }
-  />
-);
+const PrivateRoute = ({ component: Component, ...rest }: any) => {
+  return (
+    <Route
+      {...rest}
+      render={(props: any) =>
+        isAuthenticated() ? (
+          <Component {...props} />
+        ) : (
+          <Redirect
+            to={{
+              pathname: '/',
+              state: { from: props.location }
+            }}
+          />
+        )
+      }
+    />
+  );
+};
 
-ReactDOM.render(
-  <Provider store={store}>
-    <Router>
-      <div>
-        <Header />
-        <Switch>
-          <Route exact path="/" component={LoginLayout} />
-          <PrivateRoute path="/dashboard" component={Dashboard} />
-          <Route component={NoMatch} />
-        </Switch>
-        <ReduxToastr position={'top-right'} />
-      </div>
-    </Router>
-  </Provider>,
-  document.getElementById('root') as HTMLElement
+runWithAdal(
+  authContext,
+  () => {
+    ReactDOM.render(
+      <Provider store={store}>
+        <Router>
+          <div>
+            <Header />
+            <Switch>
+              <Route exact path="/" component={LoginLayout} />
+              <PrivateRoute path="/dashboard" component={Dashboard} />
+              <Route component={NoMatch} />
+            </Switch>
+            <ReduxToastr position={'top-right'} />
+          </div>
+        </Router>
+      </Provider>,
+      document.getElementById('root') as HTMLElement
+    );
+  },
+  true
 );
 registerServiceWorker();

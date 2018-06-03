@@ -9,6 +9,7 @@ fake login: http://private-cad60-corecare.apiary-mock.com/user/login?email=test&
 
 ## Design Spec
 https://xd.adobe.com/view/98de6938-9789-4098-6f9a-955b46301e31-eeef/
+https://xd.adobe.com/spec/ec9f6390-2e34-4630-61ee-c0aabe3c71bb-9aae/#screen/e6e7393c-93d5-4ae4-b71b-d22b520ec322/Dashboard
 
 ## Random notes
  135 hours for the project.  6 weeks
@@ -27,6 +28,10 @@ e0b4048b-662b-4774-8394-4b7c26a3e51c
 Managed application in local directory
 CoreCare-AD-Dev
 
+c4c919d8-b946-48a3-a1c3-eb12b3e1f83b // tennat ID and Directory ID (working)
+9eced824-e4db-436e-ad99-82391d4b9f25 // client ID and Application id for Web/API
+fd71f683-7423-4ba0-9ed3-fba0547be076 // cliend ID and Application ID for Native - used in React
+
 ## Components
 * LoginLayout - layout
   - LoginForm - connected
@@ -40,6 +45,13 @@ CoreCare-AD-Dev
   - Training
     + TrainingListItem
   - Inventory
+
+## Initial Setup
+
+`npm install`
+
+### install the types for react-adal
+you must manually put react-adal-index.d.ts in node_modules/@types/react-adal and rename it to be index.d.ts
 
 ## Available Scripts
 

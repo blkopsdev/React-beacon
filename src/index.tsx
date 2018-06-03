@@ -18,7 +18,7 @@ import registerServiceWorker from './registerServiceWorker';
 import configureStore from './store/configureStore';
 import { loadState, saveState } from './store/localStorage';
 import { runWithAdal } from 'react-adal';
-import { authContext, adalConfig } from './constants/adalConfig';
+import { authContext, isAuthenticated } from './constants/adalConfig';
 
 const persistedState = loadState('state-core-care');
 const store = configureStore(persistedState || initialState);
@@ -50,22 +50,6 @@ const NoMatch = ({ location }: any) => {
     </h3>
   );
 };
-
-function isAuthenticated() {
-  let isAuth = false;
-  authContext.acquireToken(
-    adalConfig.endpoints.api,
-    (message: string, token: string, msg: string) => {
-      if (!msg) {
-        isAuth = true;
-      } else {
-        console.error(message, msg);
-        isAuth = false;
-      }
-    }
-  );
-  return isAuth;
-}
 
 // every time we want to go to a protected route call adalGetToken.  if it fails then redirect to login page.  when they hit the login button.  call authContext.login();
 // if an API call is unauthenticated redirect to the login page

@@ -1,12 +1,16 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { InitialState, Iuser } from '../../models';
+import { userLogout } from '../../actions/userActions';
+
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import * as faCog from '@fortawesome/fontawesome-free-solid/faCog';
 
 const headerImg = require('src/images/KittenLogo@2x.png');
 
-interface Iprops extends React.Props<Header> {}
+interface Iprops extends React.Props<Header> {
+  userLogout?: any;
+}
 interface Istate {
   user: Iuser;
 }
@@ -24,7 +28,11 @@ class Header extends React.Component<Iprops, Istate> {
           WELCOME&nbsp;
           <span className="name"> Fluffy</span>
           <span className="vertical" />
-          <FontAwesomeIcon icon={faCog} size="lg" />
+          <FontAwesomeIcon
+            icon={faCog}
+            size="lg"
+            onClick={this.props.userLogout}
+          />
         </span>
       </div>
     );
@@ -39,5 +47,5 @@ const mapStateToProps = (state: InitialState, ownProps: Iprops) => {
 
 export default connect(
   mapStateToProps,
-  {}
+  { userLogout }
 )(Header);

@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { InitialState, Iuser, Iredirect } from '../../models';
-import { userLogin, userLogout } from '../../actions/userActions';
+import { adalLogin, userLogin, userLogout } from '../../actions/userActions';
 import {
   setLoginRedirect,
   removeLoginRedirect,
@@ -14,11 +14,12 @@ import { isAuthenticated } from '../../constants/adalConfig';
 
 interface Iprops extends RouteComponentProps<{}> {
   userLogin?: any;
+  adalLogin?: any;
   userLogout?: any;
   setLoginRedirect?: any;
   setRedirectPathname?: any;
   removeLoginRedirect?: any;
-  user?: Iuser;
+  user: Iuser;
   redirect: Iredirect;
 }
 
@@ -27,6 +28,12 @@ class LoginLayout extends React.Component<Iprops, any> {
     super(props);
 
     this.login = this.login.bind(this);
+  }
+  componentWillMount() {
+    // if there is no username and there is a token, get the user
+    if (this.props.user.email.length === 0 && isAuthenticated()) {
+      this.props.userLogin();
+    }
   }
   componentDidMount() {
     // store the referring loation in redux
@@ -39,14 +46,8 @@ class LoginLayout extends React.Component<Iprops, any> {
 
   login() {
     this.props.setLoginRedirect().then(() => {
-      // setTimeout(() =>{
-      this.props.userLogin().then(() => {
-        console.log('logged in');
-
-        // this.setState({ redirectToReferrer: true });
-        // this.props.history.push('/dashboard');
-      });
-      // }, 20000)
+      console.log('start adal login');
+      this.props.adalLogin();
     });
   }
   render() {
@@ -58,6 +59,9 @@ class LoginLayout extends React.Component<Iprops, any> {
     if (redirectToReferrer && isAuthenticated()) {
       this.props.removeLoginRedirect();
       return <Redirect to={from} />;
+    }
+    if (this.props.user.email.length !== 0 && isAuthenticated()) {
+      return <Redirect to={'/dashboard'} />;
     }
 
     return (
@@ -93,6 +97,7 @@ export default withRouter(
     mapStateToProps,
     {
       userLogin,
+      adalLogin,
       userLogout,
       setLoginRedirect,
       removeLoginRedirect,

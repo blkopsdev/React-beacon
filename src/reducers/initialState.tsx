@@ -4,7 +4,8 @@ export default {
     password: '',
     username: '',
     isAuthenticated: false,
-    token: ''
+    token: '',
+    email: ''
   },
   redirect: {
     redirectToReferrer: false,

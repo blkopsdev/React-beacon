@@ -18,7 +18,13 @@ export function isAuthenticated() {
       if (!msg) {
         isAuth = true;
       } else {
-        console.error(message, msg);
+        console.error(`message: ${message}  msg: ${msg}`);
+        if (msg === 'login required') {
+          const tokenT = authContext.getCachedToken(
+            authContext.config.clientId
+          );
+          console.log(`should we try to automatically login here? ${tokenT}`);
+        }
         isAuth = false;
       }
     }

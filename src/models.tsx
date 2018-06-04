@@ -3,6 +3,7 @@ export interface Iuser {
   username: string;
   isAuthenticated: boolean;
   token: string;
+  email: string;
 }
 
 export interface Iredirect {

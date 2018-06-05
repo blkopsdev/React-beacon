@@ -23,6 +23,8 @@ interface Iprops extends RouteComponentProps<{}> {
   redirect: Iredirect;
 }
 
+const azure = require('../../images/Azure.png');
+
 class LoginLayout extends React.Component<Iprops, any> {
   constructor(props: Iprops) {
     super(props);
@@ -65,17 +67,31 @@ class LoginLayout extends React.Component<Iprops, any> {
     }
 
     return (
-      <div>
-        <p>You must log in to view the page at {from.pathname}</p>
+      <div className="loginlayout">
+        {/* <p>You must log in to view the page at {from.pathname}</p> */}
         <Grid>
           <Row>
             <Col>
-              <Button bsStyle="default" onClick={this.props.userLogout}>
+              {/* <Button bsStyle="default" onClick={this.props.userLogout}>
                 Logout
-              </Button>
-              <Button bsStyle="default" onClick={this.login}>
-                Login With to app
-              </Button>
+              </Button> */}
+              <div className="loginForm">
+                <span className="loginTitle">Welcome to CatCare!</span>
+                <Button
+                  bsStyle="default"
+                  className="loginBtn"
+                  onClick={this.login}
+                >
+                  <img width="20" height="20" src={azure} /> Login with Meozure
+                </Button>
+                <Button
+                  bsStyle="link"
+                  className="signupBtn"
+                  // onClick={}
+                >
+                  Signup
+                </Button>
+              </div>
             </Col>
           </Row>
         </Grid>

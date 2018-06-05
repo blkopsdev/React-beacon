@@ -1,0 +1,56 @@
+@import '../../less/variables.less';
+.loginlayout {
+  .loginForm {
+    position: relative;
+    margin-left: auto;
+    margin-right: auto;
+    margin-top: 127px;
+    height: 320px;
+    width: 400px;
+    background-color: fade(@blue, 70%);
+    border: 2px solid @white;
+    box-shadow: @shadow;
+    .loginTitle {
+      color: @white;
+      font-size: 24px;
+      line-height: 29px;
+      position: absolute;
+      top: 30px;
+      left: 30px;
+    }
+    .loginBtn {
+      position: absolute;
+      top: 115px;
+      left: 74px;
+      width: 252px;
+      height: 40px;
+      color: @textBlue;
+      font-size: 14px;
+      box-shadow: @shadow;
+      img {
+        float: left;
+      }
+    }
+    .signupBtn {
+      position: absolute;
+      top: 175px;
+      left: 167px;
+      width: 66px;
+      color: @white;
+      font-size: 18px;
+    }
+  }
+}
+
+.loginlayout:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-image: url(http://placekitten.com/1440/900);
+  width: 100%;
+  height: 100%;
+  opacity: 0.2;
+  z-index: -1;
+}

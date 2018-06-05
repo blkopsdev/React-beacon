@@ -2,7 +2,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { InitialState, Iuser } from '../../models';
 import { userLogout } from '../../actions/userActions';
-
+import { isAuthenticated } from '../../constants/adalConfig';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 import * as faCog from '@fortawesome/fontawesome-free-solid/faCog';
 
@@ -20,10 +20,9 @@ class Header extends React.Component<Iprops, Istate> {
     super(props);
   }
 
-  render() {
-    return (
-      <div className="header">
-        <img src={headerImg} />
+  getProfile() {
+    if (isAuthenticated()) {
+      return (
         <span className="profile">
           WELCOME&nbsp;
           <span className="name"> Fluffy</span>
@@ -34,6 +33,16 @@ class Header extends React.Component<Iprops, Istate> {
             onClick={this.props.userLogout}
           />
         </span>
+      );
+    }
+    return '';
+  }
+
+  render() {
+    return (
+      <div className="header">
+        <img src={headerImg} />
+        {this.getProfile()}
       </div>
     );
   }

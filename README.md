@@ -33,10 +33,9 @@ c4c919d8-b946-48a3-a1c3-eb12b3e1f83b // tennat ID and Directory ID (working)
 fd71f683-7423-4ba0-9ed3-fba0547be076 // cliend ID and Application ID for Native - used in React
 
 ## Components
-* LoginLayout - layout
-  - LoginForm - connected
-* SignupLayout
-  - SignupForm - connected
+* LoginLayout - connected
+* Signup - connected
+  - UserForm 
 * Header - layout
   - ProfileItem - connected
 * Dashboard - connected
@@ -45,6 +44,8 @@ fd71f683-7423-4ba0-9ed3-fba0547be076 // cliend ID and Application ID for Native 
   - Training
     + TrainingListItem
   - Inventory
+  - Manage Users - connected
+    + UserForm
 
 ## Initial Setup
 

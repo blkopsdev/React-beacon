@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { Redirect, Link } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { InitialState, Iuser, Iredirect } from '../../models';
 import { adalLogin, userLogin, userLogout } from '../../actions/userActions';
 import {
@@ -11,6 +11,7 @@ import {
 import { Button, Col, Grid, Row } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
 import { isAuthenticated } from '../../constants/adalConfig';
+import UserForm from './UserForm';
 
 interface Iprops extends RouteComponentProps<{}> {
   userLogin?: any;
@@ -25,7 +26,7 @@ interface Iprops extends RouteComponentProps<{}> {
 
 const azure = require('../../images/Azure.png');
 
-class LoginLayout extends React.Component<Iprops, any> {
+class SignUp extends React.Component<Iprops, any> {
   constructor(props: Iprops) {
     super(props);
 
@@ -33,17 +34,12 @@ class LoginLayout extends React.Component<Iprops, any> {
   }
   componentWillMount() {
     // if there is no username and there is a token, get the user
-    if (this.props.user.email.length === 0 && isAuthenticated()) {
-      this.props.userLogin();
-    }
+    // if (this.props.user.email.length === 0 && isAuthenticated()) {
+    //   this.props.userLogin();
+    // }
   }
   componentDidMount() {
-    // store the referring loation in redux
-    console.log('this.props.location.state', this.props.location.state);
-    const { from } = this.props.location.state || { from: { pathname: '/' } };
-    // if (from.pathname !== '/' && isAuthenticated()){
-    this.props.setRedirectPathname(from.pathname);
-    // }
+    this.props.setRedirectPathname('/signup');
   }
 
   login() {
@@ -52,20 +48,16 @@ class LoginLayout extends React.Component<Iprops, any> {
       this.props.adalLogin();
     });
   }
-
   render() {
-    const { from } = { from: { pathname: this.props.redirect.pathname } } || {
-      from: { pathname: '/' }
-    };
-    const { redirectToReferrer } = this.props.redirect;
-
-    if (redirectToReferrer && isAuthenticated()) {
+    let showSignUpForm: boolean = false;
+    if (this.props.user.email.length && isAuthenticated()) {
       this.props.removeLoginRedirect();
-      return <Redirect to={from} />;
+      return <Redirect to={'/dashboard'} />;
     }
-    // if (this.props.user.email.length !== 0 && isAuthenticated()) {
-    //   return <Redirect to={'/dashboard'} />;
-    // }
+    if (!this.props.user.email.length && isAuthenticated()) {
+      this.props.removeLoginRedirect();
+      showSignUpForm = true;
+    }
 
     return (
       <div className="loginlayout">
@@ -73,23 +65,21 @@ class LoginLayout extends React.Component<Iprops, any> {
         <Grid>
           <Row>
             <Col>
-              {/* <Button bsStyle="default" onClick={this.props.userLogout}>
-                Logout
-              </Button> */}
               <div className="loginForm">
-                <span className="loginTitle">Welcome to CatCare!</span>
-                <Button
-                  bsStyle="default"
-                  className="loginBtn"
-                  onClick={this.login}
-                >
-                  <img width="20" height="20" src={azure} /> Login with Meozure
-                </Button>
-                <Link to={'/signup'}>
-                  <Button bsStyle="link" className="signupBtn">
-                    Signup
-                  </Button>
-                </Link>
+                {showSignUpForm && <UserForm />}
+                {!showSignUpForm && (
+                  <div>
+                    <span className="loginTitle">Sign Up to CatCare!</span>
+                    <Button
+                      bsStyle="default"
+                      className="loginBtn"
+                      onClick={this.login}
+                    >
+                      <img width="20" height="20" src={azure} /> Sign Up with
+                      Meozure
+                    </Button>
+                  </div>
+                )}
               </div>
             </Col>
           </Row>
@@ -117,4 +107,4 @@ export default connect(
     removeLoginRedirect,
     setRedirectPathname
   }
-)(LoginLayout);
+)(SignUp);

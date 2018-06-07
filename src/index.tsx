@@ -15,9 +15,12 @@ import registerServiceWorker from './registerServiceWorker';
 import configureStore from './store/configureStore';
 import { loadState, saveState } from './store/localStorage';
 import { runWithAdal } from 'react-adal';
+import axios from 'axios';
 import { authContext, isAuthenticated } from './constants/adalConfig';
 import Dashboard from './components/dashboard/Dashboard';
 import Header from './components/header/Header';
+import LoginSuccess from './components/auth/LoginSuccess';
+import SignUp from './components/auth/SignUp';
 
 // import project css
 import 'bootstrap/dist/css/bootstrap.css';
@@ -26,6 +29,9 @@ import './index.css';
 
 const persistedState = loadState('state-core-care');
 const store = configureStore(persistedState || initialState);
+
+// set Axios default header for accepting JSON
+axios.defaults.headers.common['Accept'] = 'application/json';
 
 // throttle ensures that we never write to
 // localstorage more than once per second
@@ -60,7 +66,7 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
     <Route
       {...rest}
       render={(props: any) =>
-        isAuthenticated() ? (
+        store.getState().user.email.length && isAuthenticated() ? (
           <Component {...props} />
         ) : (
           <Redirect
@@ -85,6 +91,8 @@ runWithAdal(
             <Header />
             <Switch>
               <Route exact path="/" component={LoginLayout} />
+              <Route exact path="/loginsuccess" component={LoginSuccess} />
+              <Route exact path="/signup" component={SignUp} />
               <PrivateRoute path="/dashboard" component={Dashboard} />
               <Route component={NoMatch} />
             </Switch>

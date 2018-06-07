@@ -24,22 +24,22 @@ class Header extends React.Component<Iprops, Istate> {
   }
 
   render() {
-    if (isAuthenticated()) {
-      return (
-        <span className="profile">
-          WELCOME&nbsp;
-          <span className="name"> Fluffy</span>
-          <span className="vertical" />
-          <FontAwesomeIcon
-            icon={faCog}
-            size="lg"
-            onClick={this.props.userLogout}
-          />
-        </span>
-      );
-    } else {
+    if (!isAuthenticated()) {
       return null;
     }
+
+    return (
+      <span className="profile">
+        WELCOME&nbsp;
+        <span className="name"> Fluffy</span>
+        <span className="vertical" />
+        <FontAwesomeIcon
+          icon={faCog}
+          size="lg"
+          onClick={this.props.userLogout}
+        />
+      </span>
+    );
   }
 }
 

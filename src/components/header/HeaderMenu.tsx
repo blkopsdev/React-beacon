@@ -1,5 +1,6 @@
 /*
 * The HeaderMenu only displays if we have an authenticated user.
+* It is responsible for displaying the welcome message and the dropdown menu for logged in users
 */
 
 import * as React from 'react';

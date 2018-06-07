@@ -1,3 +1,7 @@
+/* 
+* Header simply displays the header on all pages
+*/
+
 import * as React from 'react';
 import HeaderMenu from './HeaderMenu';
 

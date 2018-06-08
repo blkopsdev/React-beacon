@@ -81,6 +81,10 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
   );
 };
 
+const testme = () => {
+  return <h3>Your test is a success</h3>;
+};
+
 runWithAdal(
   authContext,
   () => {
@@ -90,10 +94,11 @@ runWithAdal(
           <div>
             <Header />
             <Switch>
-              <Route exact path="/" component={LoginLayout} />
-              <Route exact path="/loginsuccess" component={LoginSuccess} />
+              <Route exact path="/" component={LoginSuccess} />
+              <Route exact path="/login" component={LoginLayout} />
               <Route exact path="/signup" component={SignUp} />
               <PrivateRoute path="/dashboard" component={Dashboard} />
+              <PrivateRoute path="/testing" component={testme} />
               <Route component={NoMatch} />
             </Switch>
             <ReduxToastr position={'top-right'} />

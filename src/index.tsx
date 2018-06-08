@@ -9,7 +9,7 @@ import {
   Route,
   Switch
 } from 'react-router-dom';
-import LoginLayout from './components/auth/LoginLayout';
+import Login from './components/auth/Login';
 import initialState from './reducers/initialState';
 import registerServiceWorker from './registerServiceWorker';
 import configureStore from './store/configureStore';
@@ -93,7 +93,7 @@ runWithAdal(
           <div>
             <Header />
             <Switch>
-              <Route exact path="/" component={LoginLayout} />
+              <Route exact path="/" component={Login} />
               <Route exact path="/signup" component={SignUp} />
               <PrivateRoute path="/dashboard" component={Dashboard} />
               <PrivateRoute path="/testing" component={testme} />

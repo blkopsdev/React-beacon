@@ -35,7 +35,7 @@ interface Iprops extends RouteComponentProps<{}> {
 
 const azure = require('../../images/Azure.png');
 
-class LoginLayout extends React.Component<Iprops, any> {
+class Login extends React.Component<Iprops, any> {
   constructor(props: Iprops) {
     super(props);
 
@@ -130,4 +130,4 @@ export default connect(
     removeLoginRedirect,
     setRedirectPathname
   }
-)(LoginLayout);
+)(Login);

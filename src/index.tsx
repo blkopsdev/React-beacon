@@ -57,8 +57,7 @@ const NoMatch = ({ location }: any) => {
   );
 };
 
-// every time we want to go to a protected route call adalGetToken.  if it fails then redirect to login page.  when they hit the login button.  call authContext.login();
-// if an API call is unauthenticated redirect to the login page
+// TODO if an API call is unauthenticated redirect to the login page
 
 const PrivateRoute = ({ component: Component, ...rest }: any) => {
   return (

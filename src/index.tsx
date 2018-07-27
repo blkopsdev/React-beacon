@@ -20,6 +20,7 @@ import { authContext, isAuthenticated } from './constants/adalConfig';
 import Dashboard from './components/dashboard/Dashboard';
 import Header from './components/header/Header';
 import SignUp from './components/auth/SignUp';
+import TwoPaneLayout from './components/common/TwoPaneLayout';
 
 // import project css
 import 'bootstrap/dist/css/bootstrap.css';
@@ -79,10 +80,6 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
   );
 };
 
-const testme = () => {
-  return <h3>Your test is a success</h3>;
-};
-
 runWithAdal(
   authContext,
   () => {
@@ -95,7 +92,7 @@ runWithAdal(
               <Route exact path="/" component={Login} />
               <Route exact path="/signup" component={SignUp} />
               <PrivateRoute path="/dashboard" component={Dashboard} />
-              <PrivateRoute path="/testing" component={testme} />
+              <PrivateRoute path="/secure" component={TwoPaneLayout} />
               <Route component={NoMatch} />
             </Switch>
             <ReduxToastr position={'top-right'} />

@@ -59,8 +59,11 @@ export const getToken = () => {
 
 export function userLogout() {
   return (dispatch: any, getState: any) => {
-    authContext.logOut();
     dispatch(beginAjaxCall());
     dispatch({ type: types.USER_LOGOUT_SUCCESS });
+    setTimeout(() => {
+      authContext.logOut();
+    }, 1000); // give it time to persist this to local storage
+    // authContext.logOut();
   };
 }

@@ -32,23 +32,33 @@ interface Iprops extends RouteComponentProps<{}> {
   user: Iuser;
   redirect: Iredirect;
 }
+interface Istate {
+  userLoginFailed: boolean;
+}
 
 const azure = require('../../images/Azure.png');
 
-class Login extends React.Component<Iprops, any> {
+class Login extends React.Component<Iprops, Istate> {
   constructor(props: Iprops) {
     super(props);
 
     this.login = this.login.bind(this);
+    this.state = {
+      userLoginFailed: false
+    };
   }
   componentWillMount() {
     const { from } = this.props.location.state || { from: { pathname: '/' } };
     if (
       !this.props.user.email.length &&
       isAuthenticated() &&
-      from.pathname !== '/signup'
+      from.pathname !== '/signup' &&
+      !this.state.userLoginFailed
     ) {
-      this.props.userLogin();
+      this.props.userLogin().catch((err: any) => {
+        console.error('error logging in', err);
+        this.setState({ userLoginFailed: true });
+      }); // TODO how do we handle this if it fails?
     }
   }
   componentDidMount() {
@@ -72,9 +82,13 @@ class Login extends React.Component<Iprops, any> {
     };
     const { redirectToReferrer } = this.props.redirect;
 
+    // if (!this.props.user.email.length){
+    //   return <div>loading... </div>;
+    // }
+
     // if user is authenticated and exists in the backend
     // redirect to the redirect.pathname or the dashboard
-    if (isAuthenticated()) {
+    if (isAuthenticated() && this.props.user.email.length) {
       const loggedInPath: string = redirectToReferrer
         ? from.pathname
         : '/dashboard';

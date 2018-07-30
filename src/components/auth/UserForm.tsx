@@ -94,14 +94,14 @@ const fieldConfig = {
         validators: Validators.required
       },
       render: TextInput,
-      meta: { label: 'City', colWidth: 6, type: 'text' }
+      meta: { label: 'City', colWidth: 5, type: 'text' }
     },
     tempState: {
       options: {
         validators: Validators.required
       },
       render: TextInput,
-      meta: { label: 'State', colWidth: 2, type: 'text' }
+      meta: { label: 'State', colWidth: 3, type: 'text' }
     },
     tempZip: {
       options: {
@@ -115,7 +115,7 @@ const fieldConfig = {
         validators: Validators.required
       },
       render: TextInput,
-      meta: { label: 'State', colWidth: 12, type: 'text' }
+      meta: { label: 'Position', colWidth: 12, type: 'text' }
     },
     $field_0: {
       isStatic: false,
@@ -167,7 +167,7 @@ export default class UserForm extends React.Component<Iprops, Istate> {
   handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('Form values', this.userForm.value);
-    // this.props.handleSubmit(this.userForm.value);
+    this.props.handleSubmit(this.userForm.value);
   };
   setForm = (form: any) => {
     this.userForm = form;

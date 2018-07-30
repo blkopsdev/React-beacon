@@ -7,7 +7,7 @@ import constants from '../constants/constants';
 import { authContext } from '../constants/adalConfig';
 // import { filter } from 'lodash';
 
-// import {Iuser} from '../models';
+import { ItempUser } from '../models';
 
 export function userLogin() {
   return (dispatch: any, getState: any) => {
@@ -66,5 +66,33 @@ export function userLogout() {
       authContext.logOut();
     }, 1000); // give it time to persist this to local storage
     // authContext.logOut();
+  };
+}
+
+export function signUpDirect(tempUser: ItempUser) {
+  return (dispatch: any, getState: any) => {
+    dispatch(beginAjaxCall());
+    return axios
+      .post(API.POST.user.signup, tempUser)
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({ type: types.USER_SIGNUP_SUCCESS, user: data.data });
+          toastr.success('Success', 'Signed Up!');
+          return data;
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.USER_SIGNUP_FAILED });
+        let msg =
+          error.message ||
+          'Failed to signup.  Please try again or contact support.';
+        if (!navigator.onLine) {
+          msg = 'Please connect to the internet.';
+        }
+        toastr.error('Error', msg, constants.toastrError);
+        throw error;
+      });
   };
 }

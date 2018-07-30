@@ -5,6 +5,25 @@ export interface Iuser {
   token: string;
   email: string;
   securityFunctions: string[];
+  first: string;
+  last: string;
+  position: string;
+  address: string;
+  address2: string;
+  city: string;
+  state: string;
+  zip: string;
+}
+export interface ItempUser {
+  email: string;
+  first: string;
+  last: string;
+  position: string;
+  tempAddress: string;
+  tempAddress2: string;
+  tempCity: string;
+  tempState: string;
+  tempZip: string;
 }
 
 export interface Iredirect {

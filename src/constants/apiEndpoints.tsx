@@ -15,7 +15,8 @@ if (process.env.NODE_ENV === 'production') {
 const API = {
   POST: {
     user: {
-      login: `${root}user/login`
+      login: `${root}user/login`,
+      signup: `${root}user/login`
     }
   }
 };

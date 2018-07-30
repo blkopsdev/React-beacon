@@ -4,8 +4,13 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { InitialState, Iuser, Iredirect } from '../../models';
-import { adalLogin, userLogin, userLogout } from '../../actions/userActions';
+import { InitialState, Iuser, Iredirect, ItempUser } from '../../models';
+import {
+  adalLogin,
+  userLogin,
+  userLogout,
+  signUpDirect
+} from '../../actions/userActions';
 import {
   setLoginRedirect,
   removeLoginRedirect,
@@ -25,13 +30,14 @@ interface Iprops extends RouteComponentProps<{}> {
   removeLoginRedirect?: any;
   user: Iuser;
   redirect: Iredirect;
+  signUpDirect: any;
 }
 
 class SignUpDirect extends React.Component<Iprops, any> {
   constructor(props: Iprops) {
     super(props);
 
-    this.login = this.login.bind(this);
+    this.signup = this.signup.bind(this);
   }
   componentWillMount() {
     // if there is no username and there is a token, get the user
@@ -43,11 +49,13 @@ class SignUpDirect extends React.Component<Iprops, any> {
     this.props.setRedirectPathname('/signup');
   }
 
-  login() {
-    this.props.setLoginRedirect().then(() => {
-      console.log('start adal login');
-      this.props.adalLogin();
-    });
+  signup(newUser: ItempUser) {
+    this.props.signUpDirect(newUser);
+
+    // this.props.setLoginRedirect().then(() => {
+    //   console.log('start adal login');
+    //   this.props.adalLogin();
+    // });
   }
   render() {
     if (this.props.user.email.length && isAuthenticated()) {
@@ -61,7 +69,7 @@ class SignUpDirect extends React.Component<Iprops, any> {
           <Row>
             <Col>
               <div className="loginForm">
-                <UserForm handleSubmit={this.login} />
+                <UserForm handleSubmit={this.signup} />
               </div>
             </Col>
           </Row>
@@ -87,6 +95,7 @@ export default connect(
     userLogout,
     setLoginRedirect,
     removeLoginRedirect,
-    setRedirectPathname
+    setRedirectPathname,
+    signUpDirect
   }
 )(SignUpDirect);

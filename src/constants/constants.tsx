@@ -2,7 +2,15 @@ import { transitionInType, transitionOutType, Iuser } from '../models';
 
 const securityFunctions = {
   manageUsers: 'AA6F93B7-D278-4117-9B14-26DFA795742E',
-  manageTrainingPayment: '3A0D4616-4179-4BA1-98F0-6A929A3A5E0D'
+  manageTrainingPayment: '3A0D4616-4179-4BA1-98F0-6A929A3A5E0D',
+  // does the user have permission?
+  hasSecurityFunction: (user: Iuser, securityFunction: string) => {
+    if (user.securityFunctions.indexOf(securityFunction) >= 0) {
+      return true;
+    } else {
+      return false;
+    }
+  }
 };
 
 const constants = {
@@ -13,14 +21,6 @@ const constants = {
   },
   securityFunctions,
 
-  // does the user have permission?
-  hasSecurityFunction: (user: Iuser, securityFunction: string) => {
-    if (user.securityFunctions.indexOf(securityFunction) >= 0) {
-      return true;
-    } else {
-      return false;
-    }
-  },
   tiles: [
     {
       icon: 'icon-alerts',

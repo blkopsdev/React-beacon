@@ -27,7 +27,7 @@ class Dashboard extends React.Component<Iprops, {}> {
 
   render() {
     const tileElements = tiles.map((tile: any) => {
-      const shouldDisplay = constants.hasSecurityFunction(
+      const shouldDisplay = constants.securityFunctions.hasSecurityFunction(
         this.props.user,
         tile.securityFunction
       );

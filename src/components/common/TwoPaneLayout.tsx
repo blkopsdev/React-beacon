@@ -15,7 +15,7 @@ const TwoPaneLayout = () => {
 
         <Col xs={8}>
           <Switch>
-            <Route exact path="/secure/queue" component={testme} />
+            <Route exact path="/queue" component={testme} />
           </Switch>
         </Col>
       </Row>

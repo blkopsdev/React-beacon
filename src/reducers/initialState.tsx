@@ -5,7 +5,8 @@ export default {
     username: '',
     isAuthenticated: false,
     token: '',
-    email: ''
+    email: '',
+    securityFunctions: []
   },
   redirect: {
     redirectToReferrer: false,

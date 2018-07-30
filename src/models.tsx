@@ -4,6 +4,7 @@ export interface Iuser {
   isAuthenticated: boolean;
   token: string;
   email: string;
+  securityFunctions: string[];
 }
 
 export interface Iredirect {

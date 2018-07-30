@@ -19,7 +19,7 @@ import axios from 'axios';
 import { authContext, isAuthenticated } from './constants/adalConfig';
 import Dashboard from './components/dashboard/Dashboard';
 import Header from './components/header/Header';
-import SignUp from './components/auth/SignUp';
+import SignUpDirect from './components/auth/SignUpDirect';
 import TwoPaneLayout from './components/common/TwoPaneLayout';
 
 // import project css
@@ -90,7 +90,7 @@ runWithAdal(
             <Header />
             <Switch>
               <Route exact path="/" component={Login} />
-              <Route exact path="/signup" component={SignUp} />
+              <Route exact path="/signup" component={SignUpDirect} />
               <PrivateRoute path="/dashboard" component={Dashboard} />
               <PrivateRoute path="/queue" component={TwoPaneLayout} />
               <PrivateRoute path="/user-management" component={TwoPaneLayout} />

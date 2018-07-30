@@ -1,3 +1,6 @@
+/*
+* Signup directly (no existing Microsoft account)
+*/
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
@@ -8,7 +11,7 @@ import {
   removeLoginRedirect,
   setRedirectPathname
 } from '../../actions/redirectToReferrerAction';
-import { Button, Col, Grid, Row } from 'react-bootstrap';
+import { Col, Grid, Row } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
 import { isAuthenticated } from '../../constants/adalConfig';
 import UserForm from './UserForm';
@@ -24,9 +27,7 @@ interface Iprops extends RouteComponentProps<{}> {
   redirect: Iredirect;
 }
 
-const azure = require('../../images/Azure.png');
-
-class SignUp extends React.Component<Iprops, any> {
+class SignUpDirect extends React.Component<Iprops, any> {
   constructor(props: Iprops) {
     super(props);
 
@@ -49,16 +50,10 @@ class SignUp extends React.Component<Iprops, any> {
     });
   }
   render() {
-    let showSignUpForm: boolean = false;
     if (this.props.user.email.length && isAuthenticated()) {
       this.props.removeLoginRedirect();
       return <Redirect to={'/dashboard'} />;
     }
-    if (!this.props.user.email.length && isAuthenticated()) {
-      this.props.removeLoginRedirect();
-      showSignUpForm = true;
-    }
-
     return (
       <div className="loginlayout">
         {/* <p>You must log in to view the page at {from.pathname}</p> */}
@@ -66,20 +61,7 @@ class SignUp extends React.Component<Iprops, any> {
           <Row>
             <Col>
               <div className="loginForm">
-                {showSignUpForm && <UserForm />}
-                {!showSignUpForm && (
-                  <div>
-                    <span className="loginTitle">Sign Up to CatCare!</span>
-                    <Button
-                      bsStyle="default"
-                      className="loginBtn"
-                      onClick={this.login}
-                    >
-                      <img width="20" height="20" src={azure} /> Sign Up with
-                      Meozure
-                    </Button>
-                  </div>
-                )}
+                <UserForm handleSubmit={this.login} />
               </div>
             </Col>
           </Row>
@@ -107,4 +89,4 @@ export default connect(
     removeLoginRedirect,
     setRedirectPathname
   }
-)(SignUp);
+)(SignUpDirect);

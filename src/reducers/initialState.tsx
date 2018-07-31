@@ -14,10 +14,12 @@ export default {
     address2: '',
     city: '',
     state: '',
-    zip: ''
+    zip: '',
+    id: ''
   },
   redirect: {
     redirectToReferrer: false,
     pathname: '/'
-  }
+  },
+  userQueue: {}
 };

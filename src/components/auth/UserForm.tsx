@@ -88,7 +88,7 @@ const fieldConfig = {
     },
     tempAddress2: {
       render: TextInput,
-      meta: { label: 'Address2', colWidth: 4, type: 'text' }
+      meta: { label: 'Address 2', colWidth: 4, type: 'text' }
     },
     tempCity: {
       options: {

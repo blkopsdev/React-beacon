@@ -95,3 +95,30 @@ export function signUpDirect(tempUser: ItempUser) {
       });
   };
 }
+
+export function getUserQueue(page: number, search: string) {
+  return (dispatch: any, getState: any) => {
+    dispatch(beginAjaxCall());
+    return axios
+      .get(API.GET.user.getuserqueue, { params: { page, search } })
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({ type: types.USER_QUEUE_SUCCESS, queue: data.data.users });
+          return data;
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.USER_QUEUE_FAILED });
+        let msg =
+          error.message ||
+          'Failed to get new user queue.  Please try again or contact support.';
+        if (!navigator.onLine) {
+          msg = 'Please connect to the internet.';
+        }
+        toastr.error('Error', msg, constants.toastrError);
+        throw error;
+      });
+  };
+}

@@ -18,6 +18,11 @@ const API = {
       login: `${root}user/login`,
       signup: `${root}user/signup`
     }
+  },
+  GET: {
+    user: {
+      getuserqueue: `${root}user/getuserqueue`
+    }
   }
 };
 

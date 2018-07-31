@@ -13,7 +13,12 @@ export interface Iuser {
   city: string;
   state: string;
   zip: string;
+  id: string;
 }
+export interface IuserQueue {
+  [key: string]: Iuser;
+}
+
 export interface ItempUser {
   email: string;
   first: string;
@@ -34,6 +39,7 @@ export interface InitialState {
   user: Iuser;
   ajaxCallsInProgress: number;
   redirect: Iredirect;
+  userQueue: IuserQueue;
 }
 
 // these are copied from react-redux-toastr beacuse could not figure out any other way to make typescript happy

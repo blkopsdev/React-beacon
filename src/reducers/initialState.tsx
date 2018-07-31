@@ -5,7 +5,16 @@ export default {
     username: '',
     isAuthenticated: false,
     token: '',
-    email: ''
+    email: '',
+    securityFunctions: [],
+    first: '',
+    last: '',
+    position: '',
+    address: '',
+    address2: '',
+    city: '',
+    state: '',
+    zip: ''
   },
   redirect: {
     redirectToReferrer: false,

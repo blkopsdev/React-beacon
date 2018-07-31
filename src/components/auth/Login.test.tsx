@@ -3,7 +3,7 @@ import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import initialState from '../../reducers/initialState';
 import configureStore from '../../store/configureStore';
-import LoginLayout from './LoginLayout';
+import Login from './Login';
 import { loadState } from '../../store/localStorage';
 import { BrowserRouter as Router } from 'react-router-dom';
 
@@ -15,7 +15,7 @@ it('renders without crashing', () => {
   ReactDOM.render(
     <Provider store={store}>
       <Router>
-        <LoginLayout />
+        <Login />
       </Router>
     </Provider>,
     div

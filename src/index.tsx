@@ -9,15 +9,18 @@ import {
   Route,
   Switch
 } from 'react-router-dom';
-import LoginLayout from './components/auth/LoginLayout';
+import Login from './components/auth/Login';
 import initialState from './reducers/initialState';
 import registerServiceWorker from './registerServiceWorker';
 import configureStore from './store/configureStore';
 import { loadState, saveState } from './store/localStorage';
 import { runWithAdal } from 'react-adal';
+import axios from 'axios';
 import { authContext, isAuthenticated } from './constants/adalConfig';
 import Dashboard from './components/dashboard/Dashboard';
 import Header from './components/header/Header';
+import SignUpDirect from './components/auth/SignUpDirect';
+import TwoPaneLayout from './components/common/TwoPaneLayout';
 
 // import project css
 import 'bootstrap/dist/css/bootstrap.css';
@@ -26,6 +29,9 @@ import './index.css';
 
 const persistedState = loadState('state-core-care');
 const store = configureStore(persistedState || initialState);
+
+// set Axios default header for accepting JSON
+axios.defaults.headers.common['Accept'] = 'application/json';
 
 // throttle ensures that we never write to
 // localstorage more than once per second
@@ -52,15 +58,14 @@ const NoMatch = ({ location }: any) => {
   );
 };
 
-// every time we want to go to a protected route call adalGetToken.  if it fails then redirect to login page.  when they hit the login button.  call authContext.login();
-// if an API call is unauthenticated redirect to the login page
+// TODO if an API call is unauthenticated redirect to the login page
 
 const PrivateRoute = ({ component: Component, ...rest }: any) => {
   return (
     <Route
       {...rest}
       render={(props: any) =>
-        isAuthenticated() ? (
+        store.getState().user.email.length && isAuthenticated() ? (
           <Component {...props} />
         ) : (
           <Redirect
@@ -84,8 +89,11 @@ runWithAdal(
           <div>
             <Header />
             <Switch>
-              <Route exact path="/" component={LoginLayout} />
+              <Route exact path="/" component={Login} />
+              <Route exact path="/signup" component={SignUpDirect} />
               <PrivateRoute path="/dashboard" component={Dashboard} />
+              <PrivateRoute path="/queue" component={TwoPaneLayout} />
+              <PrivateRoute path="/user-management" component={TwoPaneLayout} />
               <Route component={NoMatch} />
             </Switch>
             <ReduxToastr position={'top-right'} />

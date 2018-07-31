@@ -15,6 +15,8 @@ export default function redirect(
       return { ...state, pathname: action.pathname } as Iredirect;
     case types.REMOVE_REDIRECT_REFERRER:
       return initialState.redirect;
+    case types.USER_LOGOUT_SUCCESS:
+      return initialState.redirect;
 
     default:
       return state;

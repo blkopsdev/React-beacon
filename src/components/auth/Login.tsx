@@ -1,6 +1,16 @@
+/*
+* This component has 2 primary responsibilities
+* 1)  a successful login into Azure
+* If it is an existing user, route to the dashboard or whatever private route they were trying to access before
+* being redirected to the login screen.
+* If it is a new user, route to the signup page
+* 2) provide a plane for the user to begin logging in
+*/
+
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
+import { LinkContainer } from 'react-router-bootstrap';
 import { InitialState, Iuser, Iredirect } from '../../models';
 import { adalLogin, userLogin, userLogout } from '../../actions/userActions';
 import {
@@ -9,7 +19,7 @@ import {
   setRedirectPathname
 } from '../../actions/redirectToReferrerAction';
 import { Button, Col, Grid, Row } from 'react-bootstrap';
-import { withRouter, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps } from 'react-router-dom';
 import { isAuthenticated } from '../../constants/adalConfig';
 
 interface Iprops extends RouteComponentProps<{}> {
@@ -22,28 +32,41 @@ interface Iprops extends RouteComponentProps<{}> {
   user: Iuser;
   redirect: Iredirect;
 }
+interface Istate {
+  userLoginFailed: boolean;
+}
 
 const azure = require('../../images/Azure.png');
 
-class LoginLayout extends React.Component<Iprops, any> {
+class Login extends React.Component<Iprops, Istate> {
   constructor(props: Iprops) {
     super(props);
 
     this.login = this.login.bind(this);
+    this.state = {
+      userLoginFailed: false
+    };
   }
   componentWillMount() {
-    // if there is no username and there is a token, get the user
-    if (this.props.user.email.length === 0 && isAuthenticated()) {
-      this.props.userLogin();
+    const { from } = this.props.location.state || { from: { pathname: '/' } };
+    if (
+      !this.props.user.email.length &&
+      isAuthenticated() &&
+      from.pathname !== '/signup' &&
+      !this.state.userLoginFailed
+    ) {
+      this.props.userLogin().catch((err: any) => {
+        console.error('error logging in', err);
+        this.setState({ userLoginFailed: true });
+      }); // TODO how do we handle this if it fails?
     }
   }
   componentDidMount() {
     // store the referring loation in redux
-    console.log('this.props.location.state', this.props.location.state);
     const { from } = this.props.location.state || { from: { pathname: '/' } };
-    // if (from.pathname !== '/' && isAuthenticated()){
     this.props.setRedirectPathname(from.pathname);
-    // }
+    // TODO show a toast message if this.props.redirect.pathname does not equal "/"
+    // <p>You must log in to view the page at {from.pathname}</p>
   }
 
   login() {
@@ -53,28 +76,33 @@ class LoginLayout extends React.Component<Iprops, any> {
     });
   }
   render() {
+    // handle potential redirects
     const { from } = { from: { pathname: this.props.redirect.pathname } } || {
       from: { pathname: '/' }
     };
     const { redirectToReferrer } = this.props.redirect;
 
-    if (redirectToReferrer && isAuthenticated()) {
+    // if (!this.props.user.email.length){
+    //   return <div>loading... </div>;
+    // }
+
+    // if user is authenticated and exists in the backend
+    // redirect to the redirect.pathname or the dashboard
+    if (isAuthenticated() && this.props.user.email.length) {
+      const loggedInPath: string = redirectToReferrer
+        ? from.pathname
+        : '/dashboard';
+
+      console.log('redirecting!!!', loggedInPath);
       this.props.removeLoginRedirect();
-      return <Redirect to={from} />;
-    }
-    if (this.props.user.email.length !== 0 && isAuthenticated()) {
-      return <Redirect to={'/dashboard'} />;
+      return <Redirect to={loggedInPath} />;
     }
 
     return (
       <div className="loginlayout">
-        {/* <p>You must log in to view the page at {from.pathname}</p> */}
         <Grid>
           <Row>
             <Col>
-              {/* <Button bsStyle="default" onClick={this.props.userLogout}>
-                Logout
-              </Button> */}
               <div className="loginForm">
                 <span className="loginTitle">Welcome to CatCare!</span>
                 <Button
@@ -84,13 +112,11 @@ class LoginLayout extends React.Component<Iprops, any> {
                 >
                   <img width="20" height="20" src={azure} /> Login with Meozure
                 </Button>
-                <Button
-                  bsStyle="link"
-                  className="signupBtn"
-                  // onClick={}
-                >
-                  Signup
-                </Button>
+                <LinkContainer to={'/signup'}>
+                  <Button bsStyle="link" className="signupBtn">
+                    Signup
+                  </Button>
+                </LinkContainer>
               </div>
             </Col>
           </Row>
@@ -108,16 +134,14 @@ const mapStateToProps = (state: InitialState, ownProps: any) => {
 
 // export default LoginLayout;
 
-export default withRouter(
-  connect(
-    mapStateToProps,
-    {
-      userLogin,
-      adalLogin,
-      userLogout,
-      setLoginRedirect,
-      removeLoginRedirect,
-      setRedirectPathname
-    }
-  )(LoginLayout)
-);
+export default connect(
+  mapStateToProps,
+  {
+    userLogin,
+    adalLogin,
+    userLogout,
+    setLoginRedirect,
+    removeLoginRedirect,
+    setRedirectPathname
+  }
+)(Login);

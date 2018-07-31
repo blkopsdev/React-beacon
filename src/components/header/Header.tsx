@@ -4,13 +4,16 @@
 
 import * as React from 'react';
 import HeaderMenu from './HeaderMenu';
+import { Link } from 'react-router-dom';
 
 const headerImg = require('src/images/KittenLogo@2x.png');
 
 const Header = () => {
   return (
     <div className="header">
-      <img src={headerImg} />
+      <Link to={'dashboard'}>
+        <img src={headerImg} />
+      </Link>
       <HeaderMenu />
     </div>
   );

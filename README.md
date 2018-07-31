@@ -12,6 +12,8 @@ https://xd.adobe.com/view/98de6938-9789-4098-6f9a-955b46301e31-eeef/
 https://xd.adobe.com/spec/ec9f6390-2e34-4630-61ee-c0aabe3c71bb-9aae/#screen/e6e7393c-93d5-4ae4-b71b-d22b520ec322/Dashboard
 
 ## Random notes
+
+Swagger: https://app.swaggerhub.com/apis/Big-Pixel/Core-Care/1.0.21
  135 hours for the project.  6 weeks
 
  ### Azure Active Directory Test Data:
@@ -33,18 +35,19 @@ c4c919d8-b946-48a3-a1c3-eb12b3e1f83b // tennat ID and Directory ID (working)
 fd71f683-7423-4ba0-9ed3-fba0547be076 // cliend ID and Application ID for Native - used in React
 
 ## Components
-* LoginLayout - layout
-  - LoginForm - connected
-* SignupLayout
-  - SignupForm - connected
+* Login - connected
+* Signup - connected
+  - UserForm 
 * Header - layout
   - ProfileItem - connected
 * Dashboard - connected
 * TwoPaneLayout - layout
-  - Menu
+  - SideMenu
   - Training
     + TrainingListItem
   - Inventory
+  - Manage Users - connected
+    + UserForm
 
 ## Initial Setup
 

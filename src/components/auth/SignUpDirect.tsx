@@ -39,7 +39,7 @@ interface Istate {
 
 const SignUpSuccess = (props: any) => {
   return (
-    <div className="loginForm" style={{ color: 'white' }}>
+    <div className="loginForm signup-success" style={{ color: 'white' }}>
       <h2> Success! </h2>
       <p>
         You have been successfully added into the system. An BeaconMedaes admin

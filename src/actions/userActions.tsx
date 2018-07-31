@@ -79,7 +79,6 @@ export function signUpDirect(tempUser: ItempUser) {
           throw undefined;
         } else {
           dispatch({ type: types.USER_SIGNUP_SUCCESS, user: data.data });
-          toastr.success('Success', 'Signed Up!');
           return data;
         }
       })

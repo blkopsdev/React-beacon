@@ -1,4 +1,4 @@
-@import '../../less/variables.less';
+@import "../../less/variables.less";
 .loginlayout {
   .loginForm {
     position: relative;
@@ -12,10 +12,14 @@
     background-color: fade(@blue, 70%);
     border: 2px solid @white;
     box-shadow: @shadow;
-    form{
+    form {
       display: inline-block;
     }
-    .user-form-buttons{
+    &.signup-success{
+      background-color: @transparentGreen;
+      font-size: 1.1em;
+    }
+    .user-form-buttons {
       margin-top: 20px;
     }
     .loginTitle {
@@ -47,18 +51,17 @@
       color: @white;
       font-size: 18px;
     }
-    .form-group .control-label{
+    .form-group .control-label {
       margin-bottom: 0;
       text-transform: uppercase;
-
     }
-    .form-group{
+    .form-group {
       margin-bottom: 10px;
     }
-    .form-control-feedback-glyphicon{
+    .form-control-feedback-glyphicon {
       top: 30px;
     }
-    .has-feedback .form-control{
+    .has-feedback .form-control {
       padding-right: 30px;
     }
   }

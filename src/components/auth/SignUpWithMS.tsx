@@ -70,7 +70,12 @@ class SignUpWithMS extends React.Component<Iprops, any> {
           <Row>
             <Col>
               <div className="loginForm">
-                {showSignUpForm && <UserForm handleSubmit={this.login} />}
+                {showSignUpForm && (
+                  <UserForm
+                    handleSubmit={this.login}
+                    handleCancel={this.login}
+                  />
+                )}
                 {!showSignUpForm && (
                   <div>
                     <span className="loginTitle">Sign Up to CatCare!</span>

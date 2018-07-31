@@ -16,7 +16,7 @@ const API = {
   POST: {
     user: {
       login: `${root}user/login`,
-      signup: `${root}user/login`
+      signup: `${root}user/signup`
     }
   }
 };

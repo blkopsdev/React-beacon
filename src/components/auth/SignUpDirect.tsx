@@ -4,7 +4,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { InitialState, Iuser, Iredirect, ItempUser } from '../../models';
+import { InitialState, Iuser, Iredirect } from '../../models';
 import {
   adalLogin,
   userLogin,
@@ -32,44 +32,41 @@ interface Iprops extends RouteComponentProps<{}> {
   redirect: Iredirect;
   signUpDirect: any;
 }
+interface Istate {
+  redirectToLogin: boolean;
+}
 
-class SignUpDirect extends React.Component<Iprops, any> {
+class SignUpDirect extends React.Component<Iprops, Istate> {
   constructor(props: Iprops) {
     super(props);
-
-    this.signup = this.signup.bind(this);
-  }
-  componentWillMount() {
-    // if there is no username and there is a token, get the user
-    // if (this.props.user.email.length === 0 && isAuthenticated()) {
-    //   this.props.userLogin();
-    // }
-  }
-  componentDidMount() {
-    this.props.setRedirectPathname('/signup');
+    this.state = {
+      redirectToLogin: false
+    };
+    this.cancel = this.cancel.bind(this);
   }
 
-  signup(newUser: ItempUser) {
-    this.props.signUpDirect(newUser);
-
-    // this.props.setLoginRedirect().then(() => {
-    //   console.log('start adal login');
-    //   this.props.adalLogin();
-    // });
+  cancel() {
+    this.setState({ redirectToLogin: true });
   }
   render() {
     if (this.props.user.email.length && isAuthenticated()) {
       this.props.removeLoginRedirect();
       return <Redirect to={'/dashboard'} />;
     }
+    if (this.state.redirectToLogin) {
+      return <Redirect to={'/'} />;
+    }
+
     return (
       <div className="loginlayout">
-        {/* <p>You must log in to view the page at {from.pathname}</p> */}
         <Grid>
           <Row>
             <Col>
               <div className="loginForm">
-                <UserForm handleSubmit={this.signup} />
+                <UserForm
+                  handleSubmit={this.props.signUpDirect}
+                  handleCancel={this.cancel}
+                />
               </div>
             </Col>
           </Row>

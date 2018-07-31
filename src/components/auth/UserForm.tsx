@@ -16,6 +16,7 @@ import {
   ControlLabel,
   Button
 } from 'react-bootstrap';
+import { forEach } from 'lodash';
 
 const getValidationState = (pristine: boolean, error: boolean) => {
   if (!pristine && error) {
@@ -78,7 +79,7 @@ const fieldConfig = {
       render: TextInput,
       meta: { label: 'Company Name', colWidth: 12, type: 'text' }
     },
-    tempAddress1: {
+    tempAddress: {
       options: {
         validators: Validators.required
       },
@@ -145,8 +146,23 @@ const fieldConfig = {
     }
   }
 };
+
+const testUser = {
+  first: 'jim',
+  last: 'bean',
+  email: 'some',
+  position: 'president',
+  tempAddress: '12 street',
+  tempAddress2: '2 street',
+  tempCity: 'mycity',
+  tempZip: '77',
+  tempState: 'TX',
+  tempCompany: 'BP',
+  phone: '888-333-1121'
+};
 interface Iprops extends React.Props<{}> {
   handleSubmit: any;
+  handleCancel: any;
 }
 interface Istate {
   signupForm: any;
@@ -160,10 +176,14 @@ export default class UserForm extends React.Component<Iprops, Istate> {
     };
     this.handleSubmit = this.handleSubmit.bind(this);
   }
+  componentDidMount() {
+    if (process.env.NODE_ENV !== 'production') {
+      forEach(testUser, (value, key) => {
+        this.userForm.patchValue({ [key]: value });
+      });
+    }
+  }
 
-  handleCancel = () => {
-    console.log('cancel');
-  };
   handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
     console.log('Form values', this.userForm.value);
@@ -172,7 +192,7 @@ export default class UserForm extends React.Component<Iprops, Istate> {
   setForm = (form: any) => {
     this.userForm = form;
     this.userForm.meta = {
-      handleCancel: this.handleCancel,
+      handleCancel: this.props.handleCancel,
       cancelText: 'Cancel',
       submitText: 'Sign Up'
     };

@@ -4,7 +4,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { InitialState, Iuser, Iredirect } from '../../models';
+import { InitialState, Iuser, Iredirect, ItempUser } from '../../models';
 import {
   adalLogin,
   userLogin,
@@ -16,7 +16,7 @@ import {
   removeLoginRedirect,
   setRedirectPathname
 } from '../../actions/redirectToReferrerAction';
-import { Col, Grid, Row } from 'react-bootstrap';
+import { Col, Grid, Row, Button } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
 import { isAuthenticated } from '../../constants/adalConfig';
 import UserForm from './UserForm';
@@ -34,19 +34,49 @@ interface Iprops extends RouteComponentProps<{}> {
 }
 interface Istate {
   redirectToLogin: boolean;
+  showSignupSuccess: boolean;
 }
+
+const SignUpSuccess = (props: any) => {
+  return (
+    <div className="loginForm" style={{ color: 'white' }}>
+      <h2> Success! </h2>
+      <p>
+        You have been successfully added into the system. An BeaconMedaes admin
+        will review your application and be in touch with you soon. Please make
+        sure that no-reply@beaconmedaes.com is cleared so that it does not end
+        up in your spam.
+      </p>
+      <Button
+        bsStyle="link"
+        className="pull-right"
+        style={{ color: 'white' }}
+        onClick={props.handleCancel}
+      >
+        Ok
+      </Button>
+    </div>
+  );
+};
 
 class SignUpDirect extends React.Component<Iprops, Istate> {
   constructor(props: Iprops) {
     super(props);
     this.state = {
-      redirectToLogin: false
+      redirectToLogin: false,
+      showSignupSuccess: false
     };
     this.cancel = this.cancel.bind(this);
+    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   cancel() {
     this.setState({ redirectToLogin: true });
+  }
+  handleSubmit(newUser: ItempUser) {
+    this.props.signUpDirect(newUser).then(() => {
+      this.setState({ showSignupSuccess: true });
+    });
   }
   render() {
     if (this.props.user.email.length && isAuthenticated()) {
@@ -62,12 +92,14 @@ class SignUpDirect extends React.Component<Iprops, Istate> {
         <Grid>
           <Row>
             <Col>
-              <div className="loginForm">
+              {this.state.showSignupSuccess ? (
+                <SignUpSuccess handleCancel={this.cancel} />
+              ) : (
                 <UserForm
-                  handleSubmit={this.props.signUpDirect}
+                  handleSubmit={this.handleSubmit}
                   handleCancel={this.cancel}
                 />
-              </div>
+              )}
             </Col>
           </Row>
         </Grid>

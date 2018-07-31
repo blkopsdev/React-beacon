@@ -199,9 +199,11 @@ export default class UserForm extends React.Component<Iprops, Istate> {
   };
   render() {
     return (
-      <form onSubmit={this.handleSubmit} className="user-form">
-        <FormGenerator onMount={this.setForm} fieldConfig={fieldConfig} />
-      </form>
+      <div className="loginForm">
+        <form onSubmit={this.handleSubmit} className="user-form">
+          <FormGenerator onMount={this.setForm} fieldConfig={fieldConfig} />
+        </form>
+      </div>
     );
   }
 }

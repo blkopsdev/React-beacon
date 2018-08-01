@@ -5,9 +5,9 @@ if (process.env.NODE_ENV === 'production') {
 } else if (process.env.NODE_ENV === 'test') {
   root = 'http://private-cad60-corecare.apiary-mock.com/';
 } else if (process.env.NODE_ENV === 'development') {
-  // root = 'http://beacon-corecare-api-dev.azurewebsites.net/';
+  root = 'http://beacon-corecare-api-dev.azurewebsites.net/';
   // root = 'http://private-cad60-corecare.apiary-mock.com/';
-  root = 'https://virtserver.swaggerhub.com/Big-Pixel/Core-Care/1.0.21/'; // swagger
+  // root = 'https://virtserver.swaggerhub.com/Big-Pixel/Core-Care/1.0.21/'; // swagger
 } else {
   console.error('invalid NODE_ENV');
 }

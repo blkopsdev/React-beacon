@@ -1,11 +1,11 @@
 // import { adalFetch, withAdalLogin } from 'react-adal';
 import * as AuthenticationContext from 'adal-angular';
 
-const resource: string = '9eced824-e4db-436e-ad99-82391d4b9f25';
+const resource = 'e5fb8173-e048-4cda-8acd-a8e735b4c927'; // same as clientID
 
 export const authContext = new AuthenticationContext({
-  tenant: 'c4c919d8-b946-48a3-a1c3-eb12b3e1f83b',
-  clientId: '9eced824-e4db-436e-ad99-82391d4b9f25',
+  tenant: 'a675e2fc-4806-4ec9-b49c-b0dc413b0e6b',
+  clientId: 'e5fb8173-e048-4cda-8acd-a8e735b4c927',
   cacheLocation: 'localStorage',
   redirectUri: 'http://localhost:3000'
 });

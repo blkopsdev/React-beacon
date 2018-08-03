@@ -44,7 +44,7 @@ const constants = {
       width: 360,
       height: 408,
       url: '/training',
-      securityFunction: ''
+      securityFunction: securityFunctions.manageUsers
     },
     {
       icon: 'users',

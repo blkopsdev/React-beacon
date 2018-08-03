@@ -30,11 +30,7 @@ class Header extends React.Component<Iprops, {}> {
         WELCOME&nbsp;
         <span className="name"> Fluffy</span>
         <span className="vertical" />
-        <FontAwesomeIcon
-          icon="faCog"
-          size="lg"
-          onClick={this.props.userLogout}
-        />
+        <FontAwesomeIcon icon="cog" size="lg" onClick={this.props.userLogout} />
       </span>
     );
   }

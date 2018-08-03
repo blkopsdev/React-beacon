@@ -23,6 +23,7 @@ export function isAuthenticated() {
     (message: string, token: string, msg: string) => {
       if (!msg) {
         isAuth = true;
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
       } else {
         console.error(`message: ${message}  msg: ${msg}`);
         if (msg === 'login required') {

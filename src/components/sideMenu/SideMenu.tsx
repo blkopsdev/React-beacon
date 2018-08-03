@@ -23,7 +23,7 @@ const MenuItems = ({ user }: any) => (
   <ListGroup>
     {map(constants.tiles, tile => {
       if (constants.hasSecurityFunction(user, tile.securityFunction)) {
-        return <Item key={tile.securityFunction} {...tile} />;
+        return <Item key={tile.url} {...tile} />;
       } else {
         return '';
       }

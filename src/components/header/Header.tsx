@@ -8,13 +8,13 @@ import { Link } from 'react-router-dom';
 
 const headerImg = require('src/images/KittenLogo@2x.png');
 
-const Header = () => {
+const Header = (props: any) => {
   return (
     <div className="header">
       <Link to={'dashboard'}>
         <img src={headerImg} />
       </Link>
-      <HeaderMenu />
+      <HeaderMenu {...props} />
     </div>
   );
 };

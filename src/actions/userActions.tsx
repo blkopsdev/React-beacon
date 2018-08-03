@@ -4,10 +4,47 @@ import API from '../constants/apiEndpoints';
 import { beginAjaxCall } from './ajaxStatusActions';
 import { toastr } from 'react-redux-toastr';
 import constants from '../constants/constants';
-import { authContext } from '../constants/adalConfig';
-// import { filter } from 'lodash';
+import * as AuthenticationContext from 'adal-angular';
 
-import { ItempUser } from '../models';
+import { ItempUser, Iuser } from '../models';
+
+export const authContext = new AuthenticationContext({
+  tenant: constants.adalAuth.tenant,
+  clientId: constants.adalAuth.clientId,
+  cacheLocation: 'localStorage',
+  redirectUri: constants.adalAuth.redirectUri
+});
+
+export function isAuthenticated() {
+  let isAuth = false;
+  const resource = constants.adalAuth.clientId;
+  authContext.acquireToken(
+    resource,
+    (message: string, token: string, msg: string) => {
+      if (!msg) {
+        isAuth = true;
+      } else {
+        console.error(`message: ${message}  msg: ${msg}`);
+        if (msg === 'login required') {
+          const tokenT = authContext.getCachedToken(
+            authContext.config.clientId
+          );
+          console.log(`should we try to automatically login here? ${tokenT}`);
+        }
+        isAuth = false;
+      }
+    }
+  );
+  return isAuth;
+}
+
+export function isFullyAuthenticated(user: Iuser) {
+  if (isAuthenticated() && user.id) {
+    return true;
+  } else {
+    return false;
+  }
+}
 
 export function userLogin() {
   return (dispatch: any, getState: any) => {

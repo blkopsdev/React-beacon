@@ -16,7 +16,7 @@ import configureStore from './store/configureStore';
 import { loadState, saveState } from './store/localStorage';
 import { runWithAdal } from 'react-adal';
 import axios from 'axios';
-import { authContext, isAuthenticated } from './constants/adalConfig';
+import { authContext, isFullyAuthenticated } from './actions/userActions';
 import Dashboard from './components/dashboard/Dashboard';
 import Header from './components/header/Header';
 import SignUpDirect from './components/auth/SignUpDirect';
@@ -65,7 +65,7 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
     <Route
       {...rest}
       render={(props: any) =>
-        store.getState().user.email.length && isAuthenticated() ? (
+        isFullyAuthenticated(store.getState().user) ? (
           <Component {...props} />
         ) : (
           <Redirect

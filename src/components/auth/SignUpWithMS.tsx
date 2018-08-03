@@ -14,7 +14,10 @@ import {
 } from '../../actions/redirectToReferrerAction';
 import { Button, Col, Grid, Row } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
-import { isAuthenticated } from '../../constants/adalConfig';
+import {
+  isAuthenticated,
+  isFullyAuthenticated
+} from '../../actions/userActions';
 import UserForm from './UserForm';
 
 interface Iprops extends RouteComponentProps<{}> {
@@ -54,11 +57,11 @@ class SignUpWithMS extends React.Component<Iprops, any> {
   }
   render() {
     let showSignUpForm: boolean = false;
-    if (this.props.user.email.length && isAuthenticated()) {
+    if (isFullyAuthenticated(this.props.user)) {
       this.props.removeLoginRedirect();
       return <Redirect to={'/dashboard'} />;
     }
-    if (!this.props.user.email.length && isAuthenticated()) {
+    if (!isFullyAuthenticated(this.props.user) && isAuthenticated()) {
       this.props.removeLoginRedirect();
       showSignUpForm = true;
     }

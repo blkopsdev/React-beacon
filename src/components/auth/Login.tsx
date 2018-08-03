@@ -20,7 +20,10 @@ import {
 } from '../../actions/redirectToReferrerAction';
 import { Button, Col, Grid, Row } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
-import { isAuthenticated } from '../../constants/adalConfig';
+import {
+  isAuthenticated,
+  isFullyAuthenticated
+} from '../../actions/userActions';
 
 interface Iprops extends RouteComponentProps<{}> {
   userLogin?: any;
@@ -50,7 +53,7 @@ class Login extends React.Component<Iprops, Istate> {
   componentWillMount() {
     const { from } = this.props.location.state || { from: { pathname: '/' } };
     if (
-      !this.props.user.email.length &&
+      !isFullyAuthenticated(this.props.user) &&
       isAuthenticated() &&
       from.pathname !== '/signup' &&
       !this.state.userLoginFailed
@@ -88,7 +91,7 @@ class Login extends React.Component<Iprops, Istate> {
 
     // if user is authenticated and exists in the backend
     // redirect to the redirect.pathname or the dashboard
-    if (isAuthenticated() && this.props.user.email.length) {
+    if (isFullyAuthenticated(this.props.user)) {
       const loggedInPath: string = redirectToReferrer
         ? from.pathname
         : '/dashboard';

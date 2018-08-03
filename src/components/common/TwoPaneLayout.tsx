@@ -6,12 +6,12 @@ import UserQueue from '../userQueue/UserQueue';
 const testme = () => {
   return <h3>Your test is a success</h3>;
 };
-const TwoPaneLayout = () => {
+const TwoPaneLayout = (props: any) => {
   return (
     <Grid>
       <Row>
         <Col xs={4}>
-          <SideMenu />
+          <SideMenu {...props} />
         </Col>
 
         <Col xs={8}>

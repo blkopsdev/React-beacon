@@ -17,25 +17,45 @@ import {
   Button
 } from 'react-bootstrap';
 import { forEach } from 'lodash';
+import constants from '../../constants/constants';
+import { toastr } from 'react-redux-toastr';
 
-const getValidationState = (pristine: boolean, error: boolean) => {
+const getValidationState = (
+  pristine: boolean,
+  error: boolean,
+  submitted: boolean
+) => {
   if (!pristine && error) {
     return 'error';
   } else if (!pristine && !error) {
     return 'success';
+  } else if (pristine && error && submitted) {
+    return 'error';
   } else {
     return null;
   }
 };
 // Input component
-const TextInput = ({ handler, touched, hasError, meta, pristine }: any) => (
+const TextInput = ({
+  handler,
+  touched,
+  hasError,
+  meta,
+  pristine,
+  errors,
+  submitted
+}: any) => (
   <Col xs={meta.colWidth}>
     <FormGroup
-      validationState={getValidationState(pristine, hasError('required'))}
+      validationState={getValidationState(pristine, errors, submitted)}
       bsSize="sm"
     >
       <ControlLabel>{meta.label}</ControlLabel>
-      <FormControl type={meta.type} {...handler()} />
+      <FormControl
+        type={meta.type}
+        placeholder={meta.placeholder}
+        {...handler()}
+      />
       <FormControl.Feedback />
     </FormGroup>
   </Col>
@@ -60,17 +80,32 @@ const fieldConfig = {
     },
     email: {
       options: {
-        validators: Validators.required
+        validators: [
+          Validators.required,
+          Validators.pattern(
+            /^([\w-\.]+)@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.)|(([\w-]+\.)+))([a-zA-Z]{2,4}|[0-9]{1,3})(\]?)$/
+          )
+        ]
       },
       render: TextInput,
       meta: { label: 'Email', colWidth: 6, type: 'text' }
     },
     phone: {
       options: {
-        validators: Validators.required
+        validators: [
+          Validators.required,
+          Validators.pattern(
+            /^((\+\d{1,3}(-| )?\(?\d\)?(-| )?\d{1,5})|(\(?\d{2,6}\)?))(-| )?(\d{3,4})(-| )?(\d{4})(( x| ext)\d{1,5}){0,1}$/
+          )
+        ]
       },
       render: TextInput,
-      meta: { label: 'Phone Number', colWidth: 6, type: 'tel' }
+      meta: {
+        label: 'Phone Number',
+        colWidth: 6,
+        type: 'tel',
+        placeholder: '***-***-****'
+      }
     },
     tempCompany: {
       options: {
@@ -106,7 +141,12 @@ const fieldConfig = {
     },
     tempZip: {
       options: {
-        validators: Validators.required
+        validators: [
+          Validators.required,
+          Validators.pattern(
+            /(^[0-9]{5}(-[0-9]{4})?$)|(^[ABCEGHJKLMNPRSTVXYabceghjklmnprstvxy]{1}[0-9]{1}[ABCEGHJKLMNPRSTVWXYZabceghjklmnprstv‌​xy]{1} *[0-9]{1}[ABCEGHJKLMNPRSTVWXYZabceghjklmnprstvxy]{1}[0-9]{1}$)/
+          )
+        ]
       },
       render: TextInput,
       meta: { label: 'Zip', colWidth: 4, type: 'tel' }
@@ -121,8 +161,7 @@ const fieldConfig = {
     $field_0: {
       isStatic: false,
       render: ({
-        invalid,
-        meta: { handleCancel, cancelText, submitText }
+        meta: { handleCancel, cancelText, submitText, loading }
       }: any) => (
         <Col xs={12} className="user-form-buttons">
           <Button
@@ -136,7 +175,7 @@ const fieldConfig = {
           <Button
             bsStyle="primary"
             type="submit"
-            disabled={invalid}
+            disabled={loading}
             className="pull-right"
           >
             {submitText}
@@ -150,12 +189,12 @@ const fieldConfig = {
 const testUser = {
   first: 'jim',
   last: 'bean',
-  email: 'some',
+  email: 'a@test.com',
   position: 'president',
   tempAddress: '12 street',
   tempAddress2: '2 street',
   tempCity: 'mycity',
-  tempZip: '77',
+  tempZip: '77080',
   tempState: 'TX',
   tempCompany: 'BP',
   phone: '888-333-1121'
@@ -186,7 +225,12 @@ export default class UserForm extends React.Component<Iprops, Istate> {
 
   handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Form values', this.userForm.value);
+    if (this.userForm.status === 'INVALID') {
+      this.userForm.markAsSubmitted();
+      toastr.error('Please check invalid inputs', '', constants.toastrError);
+      return;
+    }
+    console.log('Form values', this.userForm);
     this.props.handleSubmit(this.userForm.value);
   };
   setForm = (form: any) => {
@@ -194,7 +238,8 @@ export default class UserForm extends React.Component<Iprops, Istate> {
     this.userForm.meta = {
       handleCancel: this.props.handleCancel,
       cancelText: 'Cancel',
-      submitText: 'Sign Up'
+      submitText: 'Sign Up',
+      loading: false
     };
   };
   render() {

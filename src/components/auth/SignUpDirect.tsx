@@ -18,7 +18,7 @@ import {
 } from '../../actions/redirectToReferrerAction';
 import { Col, Grid, Row, Button } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
-import { isAuthenticated } from '../../constants/adalConfig';
+import { isFullyAuthenticated } from '../../actions/userActions';
 import UserForm from './UserForm';
 
 interface Iprops extends RouteComponentProps<{}> {
@@ -79,7 +79,7 @@ class SignUpDirect extends React.Component<Iprops, Istate> {
     });
   }
   render() {
-    if (this.props.user.email.length && isAuthenticated()) {
+    if (isFullyAuthenticated(this.props.user)) {
       this.props.removeLoginRedirect();
       return <Redirect to={'/dashboard'} />;
     }

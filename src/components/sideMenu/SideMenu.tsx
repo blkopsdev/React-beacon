@@ -1,11 +1,40 @@
 import * as React from 'react';
-import { Col, Row } from 'react-bootstrap';
+import { ListGroupItem, ListGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
 import { InitialState, Iuser } from '../../models';
+import { RouteComponentProps } from 'react-router-dom';
+import { LinkContainer } from 'react-router-bootstrap';
+import { map } from 'lodash';
+import constants from '../../constants/constants';
+import FontAwesomeIcon from '@fortawesome/react-fontawesome';
 
-interface Iprops extends React.Props<SideMenu> {
+const Item = (props: any) => {
+  const { url, title, icon } = props;
+  return (
+    <LinkContainer to={url}>
+      <ListGroupItem>
+        <FontAwesomeIcon icon="users" /> {title} {icon}
+      </ListGroupItem>
+    </LinkContainer>
+  );
+};
+
+const MenuItems = ({ user }: any) => (
+  <ListGroup>
+    {map(constants.tiles, tile => {
+      if (constants.hasSecurityFunction(user, tile.securityFunction)) {
+        return <Item key={tile.securityFunction} {...tile} />;
+      } else {
+        return '';
+      }
+    })}
+  </ListGroup>
+);
+
+interface Iprops extends RouteComponentProps<SideMenu> {
   user: Iuser;
 }
+
 class SideMenu extends React.Component<Iprops, {}> {
   constructor(props: any) {
     super(props);
@@ -13,15 +42,11 @@ class SideMenu extends React.Component<Iprops, {}> {
   render() {
     return (
       <div>
-        <Row>
+        {/*        <Row>
           <Col xs={12}>Welcome {this.props.user.first}</Col>
-        </Row>
-        <Row>
-          <Col xs={12}>Dashboard</Col>
-        </Row>
-        <Row>
-          <Col xs={12}>Training</Col>
-        </Row>
+        </Row>*/}
+
+        <MenuItems user={this.props.user} />
       </div>
     );
   }

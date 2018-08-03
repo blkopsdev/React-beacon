@@ -9,7 +9,6 @@ import { InitialState, Iuser } from '../../models';
 import { userLogout } from '../../actions/userActions';
 import { isFullyAuthenticated } from '../../actions/userActions';
 import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import * as faCog from '@fortawesome/fontawesome-free-solid/faCog';
 
 interface Iprops extends React.Props<Header> {
   user: Iuser;
@@ -32,7 +31,7 @@ class Header extends React.Component<Iprops, {}> {
         <span className="name"> Fluffy</span>
         <span className="vertical" />
         <FontAwesomeIcon
-          icon={faCog}
+          icon="faCog"
           size="lg"
           onClick={this.props.userLogout}
         />

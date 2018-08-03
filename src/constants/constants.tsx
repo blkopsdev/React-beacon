@@ -2,15 +2,7 @@ import { transitionInType, transitionOutType, Iuser } from '../models';
 
 const securityFunctions = {
   manageUsers: 'AA6F93B7-D278-4117-9B14-26DFA795742E',
-  manageTrainingPayment: '3A0D4616-4179-4BA1-98F0-6A929A3A5E0D',
-  // does the user have permission?
-  hasSecurityFunction: (user: Iuser, securityFunction: string) => {
-    if (user.securityFunctions.indexOf(securityFunction) >= 0) {
-      return true;
-    } else {
-      return false;
-    }
-  }
+  manageTrainingPayment: '3A0D4616-4179-4BA1-98F0-6A929A3A5E0D'
 };
 
 const constants = {
@@ -25,6 +17,13 @@ const constants = {
     timeOut: 0
   },
   securityFunctions,
+  hasSecurityFunction: (user: Iuser, securityFunction: string): boolean => {
+    if (user.securityFunctions.indexOf(securityFunction) >= 0) {
+      return true;
+    } else {
+      return false;
+    }
+  },
 
   tiles: [
     {
@@ -48,7 +47,7 @@ const constants = {
       securityFunction: ''
     },
     {
-      icon: 'icon-training',
+      icon: 'users',
       title: 'New User Queue',
       src: 'https://placekitten.com/360/408',
       class: 'tile tile-green',

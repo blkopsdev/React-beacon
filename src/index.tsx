@@ -16,6 +16,10 @@ import configureStore from './store/configureStore';
 import { loadState, saveState } from './store/localStorage';
 import { runWithAdal } from 'react-adal';
 import axios from 'axios';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faCog, faUsers } from '@fortawesome/free-solid-svg-icons';
+library.add(faCog, faUsers);
+
 import { authContext, isFullyAuthenticated } from './actions/userActions';
 import Dashboard from './components/dashboard/Dashboard';
 import Header from './components/header/Header';

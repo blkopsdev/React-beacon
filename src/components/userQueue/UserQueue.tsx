@@ -8,6 +8,7 @@ import { InitialState, ItempUser } from '../../models';
 import { RouteComponentProps } from 'react-router-dom';
 import ReactTable from 'react-table';
 import { Button } from 'react-bootstrap';
+import CommonModal from '../common/CommonModal';
 
 interface Iprops extends RouteComponentProps<{}> {
   getUserQueue: any;
@@ -17,13 +18,20 @@ interface Iprops extends RouteComponentProps<{}> {
 
 interface Istate {
   showEditUserModal: boolean;
+  selectedRow: any;
 }
 
 class UserQueue extends React.Component<Iprops, Istate> {
   public columns: any[];
+  public buttonInAction = false;
   constructor(props: Iprops) {
     super(props);
     this.ApproveCell = this.ApproveCell.bind(this);
+    this.getTrProps = this.getTrProps.bind(this);
+    this.state = {
+      showEditUserModal: false,
+      selectedRow: null
+    };
     this.columns = [
       {
         id: 'name',
@@ -67,8 +75,16 @@ class UserQueue extends React.Component<Iprops, Istate> {
     return (
       <div>
         <Button
-          onClick={() => {
-            this.props.approveUser(row.value.id, true);
+          onClick={(e: React.MouseEvent<Button>) => {
+            this.buttonInAction = true;
+            this.props
+              .approveUser(row.value.id, true)
+              .then((blah: any) => {
+                this.buttonInAction = false;
+              })
+              .catch((err: any) => {
+                this.buttonInAction = false;
+              });
           }}
         >
           approve
@@ -77,11 +93,52 @@ class UserQueue extends React.Component<Iprops, Istate> {
       </div>
     );
   };
+  getTrProps = (state: any, rowInfo: any) => {
+    // console.log("ROWINFO", rowInfo);
+    if (rowInfo) {
+      return {
+        onClick: (e: React.MouseEvent<HTMLFormElement>) => {
+          if (!this.buttonInAction) {
+            this.setState({
+              selectedRow: rowInfo.index,
+              showEditUserModal: true
+            });
+          }
+        },
+        style: {
+          background:
+            rowInfo.index === this.state.selectedRow ? '#00afec' : 'white',
+          color: rowInfo.index === this.state.selectedRow ? 'white' : 'black'
+        }
+      };
+    } else {
+      return {};
+    }
+  };
 
   render() {
     return (
       <div>
-        <ReactTable data={this.props.userQueue} columns={this.columns} />
+        <ReactTable
+          data={this.props.userQueue}
+          columns={this.columns}
+          getTrProps={this.getTrProps}
+        />
+        <CommonModal
+          modalVisible={this.state.showEditUserModal}
+          cancel={() => {
+            this.setState({ showEditUserModal: false });
+          }}
+          cancelText="cancel"
+          submit={() => {
+            this.setState({ showEditUserModal: false });
+          }}
+          submitText="Approve"
+          bsSize="sm"
+          className="user-edit"
+          body={<div>hello edit user modal</div>}
+          title="Edit and New User"
+        />
       </div>
     );
   }

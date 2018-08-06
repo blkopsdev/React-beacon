@@ -6,7 +6,7 @@ import * as React from 'react';
 import { Modal, Button } from 'react-bootstrap';
 
 interface Props extends React.Props<CommonModal> {
-  modalVisable: boolean;
+  modalVisible: boolean;
   cancel: any;
   cancelText: string;
   submit: any;
@@ -32,7 +32,7 @@ class CommonModal extends React.Component<Props, State> {
   render() {
     return (
       <Modal
-        show={this.props.modalVisable}
+        show={this.props.modalVisible}
         onHide={this.props.cancel}
         bsSize={this.props.bsSize}
         className={this.props.className}

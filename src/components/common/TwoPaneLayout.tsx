@@ -10,7 +10,7 @@ const testme = () => {
 };
 const TwoPaneLayout = (props: any) => {
   return (
-    <Grid>
+    <Grid className="modal-container">
       <Row>
         <Col xs={4}>
           <SideMenu {...props} />

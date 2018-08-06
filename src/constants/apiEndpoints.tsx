@@ -17,7 +17,8 @@ const API = {
       login: `${root}user/login`,
       signup: `${root}user/signup`,
       approve: `${root}user/approve`,
-      reject: `${root}user/reject`
+      reject: `${root}user/reject`,
+      update: `${root}user/update`
     }
   },
   GET: {

@@ -12,6 +12,9 @@ export default function userQueue(state: IqueueUser[] = [], action: any) {
     //   state,
     //   keyBy(action.queue, (user: Iuser) => user.id)
     // ) as IuserQueue;
+    case types.USER_UPDATE_SUCCESS:
+      console.log(action.user);
+      return state;
 
     case types.USER_LOGOUT_SUCCESS:
       return {};

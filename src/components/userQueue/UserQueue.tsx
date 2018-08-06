@@ -3,8 +3,12 @@
 */
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { getUserQueue, approveUser } from '../../actions/userActions';
-import { InitialState, IqueueUser } from '../../models';
+import {
+  getUserQueue,
+  approveUser,
+  updateUser
+} from '../../actions/userActions';
+import { InitialState, IqueueUser, Iuser } from '../../models';
 import { RouteComponentProps } from 'react-router-dom';
 import ReactTable from 'react-table';
 import { Button } from 'react-bootstrap';
@@ -15,6 +19,7 @@ interface Iprops extends RouteComponentProps<{}> {
   getUserQueue: any;
   userQueue: IqueueUser[];
   approveUser: any;
+  updateUser: any;
 }
 
 interface Istate {
@@ -134,7 +139,8 @@ class UserQueue extends React.Component<Iprops, Istate> {
           }}
           body={
             <UserQueueForm
-              handleSubmit={() => {
+              handleSubmit={(user: Iuser) => {
+                this.props.updateUser(user);
                 this.setState({ showEditUserModal: false });
               }}
               handleCancel={() => {
@@ -160,6 +166,7 @@ export default connect(
   mapStateToProps,
   {
     getUserQueue,
-    approveUser
+    approveUser,
+    updateUser
   }
 )(UserQueue);

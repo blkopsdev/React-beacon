@@ -10,7 +10,7 @@ import {
   AbstractControl
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
-import { forEach } from 'lodash';
+// import { forEach } from "lodash";
 import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
@@ -24,6 +24,13 @@ const fieldConfigControls = {
     },
     render: FormUtil.TextInput,
     meta: { label: 'Company Name', colWidth: 12, type: 'text' }
+  },
+  customerID: {
+    options: {
+      validators: Validators.required
+    },
+    render: FormUtil.TextInput,
+    meta: { label: 'Customer', colWidth: 12, type: 'text' }
   },
   tempAddress: {
     options: {
@@ -103,12 +110,19 @@ export default class UserQueueForm extends React.Component<Iprops, Istate> {
       signupForm: {}
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.setForm = this.setForm.bind(this);
   }
   componentDidMount() {
     // set values
-    forEach(this.props.user.user, (value, key) => {
-      this.userForm.patchValue({ [key]: value });
-    });
+    // forEach(this.props.user.user, (value, key) => {
+    //   this.userForm.patchValue({ [key]: value });
+    // });
+    // TODO: CHANGE TO REAL CUSTOMER STUFF
+    // hardcode CustomerID for now
+    // this.userForm.patchValue({
+    //   customerID: "162EC4C8-1E15-45FD-BF60-26FBD8A44042"
+    // });
+    // console.log(this.userForm.value);
   }
 
   handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
@@ -118,10 +132,14 @@ export default class UserQueueForm extends React.Component<Iprops, Istate> {
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-    console.log('Form values', this.userForm);
-    this.props.handleSubmit(this.userForm.value);
+    console.log('Form values', this.userForm.value);
+    this.props.handleSubmit({
+      ...this.props.user.user,
+      ...this.userForm.value
+    });
   };
   setForm = (form: any) => {
+    console.log(form);
     this.userForm = form;
     this.userForm.meta = {
       handleCancel: this.props.handleCancel,

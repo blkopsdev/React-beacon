@@ -213,3 +213,29 @@ export function rejectUser(userID: string) {
       });
   };
 }
+export function updateUser(user: Iuser) {
+  return (dispatch: any, getState: any) => {
+    dispatch(beginAjaxCall());
+    return axios
+      .post(API.POST.user.update, user)
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({ type: types.USER_UPDATE_SUCCESS, user: data.data });
+          return data;
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.USER_UPDATE_FAILED });
+        let msg =
+          error.message ||
+          'Failed to update user.  Please try again or contact support.';
+        if (!navigator.onLine) {
+          msg = 'Please connect to the internet.';
+        }
+        toastr.error('Error', msg, constants.toastrError);
+        throw error;
+      });
+  };
+}

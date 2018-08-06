@@ -17,7 +17,8 @@ import { loadState, saveState } from './store/localStorage';
 import { runWithAdal } from 'react-adal';
 import axios from 'axios';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faCog, faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faCog } from '@fortawesome/pro-regular-svg-icons';
 library.add(faCog, faUsers);
 
 import { authContext, isFullyAuthenticated } from './actions/userActions';

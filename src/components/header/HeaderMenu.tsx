@@ -36,7 +36,7 @@ class Header extends React.Component<Iprops, {}> {
           onClick={this.props.userLogout}
           className="header-settings"
         >
-          <FontAwesomeIcon icon="cog" size="lg" />
+          <FontAwesomeIcon icon={['far', 'cog']} size="lg" />
         </Button>
       </span>
     );

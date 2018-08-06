@@ -62,6 +62,13 @@ For development add the appropriate envirement: `export NODE_ENV=development` to
 Then restart your terminal window.
 To override on the fly:  `NODE_ENV=production npm start`
 
+## FontAwesome
+* we are using Font Awesome 5 in this project and using the prerelease version of react-fontawesome.  
+* The config for PRO FontAwesome is located in .npmrc
+* Reference changes for version 5:  https://fontawesome.com/how-to-use/on-the-web/setup/upgrading-from-version-4
+* npm: https://github.com/FortAwesome/react-fontawesome/tree/development
+* index.tsx is where you configure the library of icons
+
 ## Available Scripts
 
 In the project directory, you can run:

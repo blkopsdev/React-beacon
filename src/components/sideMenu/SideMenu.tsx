@@ -6,7 +6,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import { map } from 'lodash';
 import constants from '../../constants/constants';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const Item = (props: any) => {
   const { url, title, icon } = props;

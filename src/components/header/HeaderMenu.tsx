@@ -8,7 +8,8 @@ import { connect } from 'react-redux';
 import { InitialState, Iuser } from '../../models';
 import { userLogout } from '../../actions/userActions';
 import { isFullyAuthenticated } from '../../actions/userActions';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button } from 'react-bootstrap';
 
 interface Iprops extends React.Props<Header> {
   user: Iuser;
@@ -30,7 +31,13 @@ class Header extends React.Component<Iprops, {}> {
         WELCOME&nbsp;
         <span className="name"> Fluffy</span>
         <span className="vertical" />
-        <FontAwesomeIcon icon="cog" size="lg" onClick={this.props.userLogout} />
+        <Button
+          bsStyle="link"
+          onClick={this.props.userLogout}
+          className="header-settings"
+        >
+          <FontAwesomeIcon icon="cog" size="lg" />
+        </Button>
       </span>
     );
   }

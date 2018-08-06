@@ -21,5 +21,5 @@ export default {
     redirectToReferrer: false,
     pathname: '/'
   },
-  userQueue: {}
+  userQueue: []
 };

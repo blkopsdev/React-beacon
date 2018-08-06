@@ -3,6 +3,8 @@ import { Col, Grid, Row } from 'react-bootstrap';
 import SideMenu from '../sideMenu/SideMenu';
 import { Route, Switch } from 'react-router-dom';
 import UserQueue from '../userQueue/UserQueue';
+import 'react-table/react-table.css';
+
 const testme = () => {
   return <h3>Your test is a success</h3>;
 };

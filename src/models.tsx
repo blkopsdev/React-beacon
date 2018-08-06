@@ -15,9 +15,12 @@ export interface Iuser {
   zip: string;
   id: string;
 }
-export interface IuserQueue {
-  [key: string]: Iuser;
-}
+// export interface IuserQueue {
+//   [key: string]: Iuser;
+// }
+// export interface IuserQueue {
+//   [key: string]: Iuser;
+// }
 
 export interface ItempUser {
   email: string;
@@ -39,7 +42,7 @@ export interface InitialState {
   user: Iuser;
   ajaxCallsInProgress: number;
   redirect: Iredirect;
-  userQueue: IuserQueue;
+  userQueue: ItempUser[];
 }
 
 // these are copied from react-redux-toastr beacuse could not figure out any other way to make typescript happy

@@ -48,6 +48,9 @@ fd71f683-7423-4ba0-9ed3-fba0547be076 // cliend ID and Application ID for Native 
   - Inventory
   - Manage Users - connected
     + UserForm
+  - New User Queue
+    + editUserModal
+    + 
 
 ## Initial Setup
 

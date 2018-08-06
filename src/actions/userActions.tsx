@@ -143,7 +143,7 @@ export function getUserQueue(page: number, search: string) {
         if (!data.data) {
           throw undefined;
         } else {
-          dispatch({ type: types.USER_QUEUE_SUCCESS, queue: data.data.users });
+          dispatch({ type: types.USER_QUEUE_SUCCESS, queue: data.data[1] });
           return data;
         }
       })
@@ -152,6 +152,59 @@ export function getUserQueue(page: number, search: string) {
         let msg =
           error.message ||
           'Failed to get new user queue.  Please try again or contact support.';
+        if (!navigator.onLine) {
+          msg = 'Please connect to the internet.';
+        }
+        toastr.error('Error', msg, constants.toastrError);
+        throw error;
+      });
+  };
+}
+
+export function approveUser(userID: string) {
+  return (dispatch: any, getState: any) => {
+    dispatch(beginAjaxCall());
+    return axios
+      .post(API.POST.user.approve, userID)
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({ type: types.USER_APPROVE_SUCCESS, user: data.data });
+          return data;
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.USER_APPROVE_FAILED });
+        let msg =
+          error.message ||
+          'Failed to approve user.  Please try again or contact support.';
+        if (!navigator.onLine) {
+          msg = 'Please connect to the internet.';
+        }
+        toastr.error('Error', msg, constants.toastrError);
+        throw error;
+      });
+  };
+}
+export function rejectUser(userID: string) {
+  return (dispatch: any, getState: any) => {
+    dispatch(beginAjaxCall());
+    return axios
+      .post(API.POST.user.reject, userID)
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({ type: types.USER_REJECT_SUCCESS, user: data.data });
+          return data;
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.USER_REJECT_FAILED });
+        let msg =
+          error.message ||
+          'Failed to reject user.  Please try again or contact support.';
         if (!navigator.onLine) {
           msg = 'Please connect to the internet.';
         }

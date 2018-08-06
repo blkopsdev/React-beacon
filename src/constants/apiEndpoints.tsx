@@ -16,7 +16,9 @@ const API = {
   POST: {
     user: {
       login: `${root}user/login`,
-      signup: `${root}user/signup`
+      signup: `${root}user/signup`,
+      approve: `${root}user/approve`,
+      reject: `${root}user/reject`
     }
   },
   GET: {

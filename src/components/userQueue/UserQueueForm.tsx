@@ -101,14 +101,14 @@ const testUser = {
   tempCompany: 'BP',
   phone: '888-333-1121'
 };
-interface Iprops extends React.Props<{}> {
+interface Iprops extends React.Props<UserQueueForm> {
   handleSubmit: any;
   handleCancel: any;
 }
 interface Istate {
   signupForm: any;
 }
-export default class UserForm extends React.Component<Iprops, Istate> {
+export default class UserQueueForm extends React.Component<Iprops, Istate> {
   public userForm: AbstractControl;
   constructor(props: Iprops) {
     super(props);

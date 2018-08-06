@@ -1,6 +1,6 @@
 /* 
-* UserForm 
-* User signs up directly to the platform
+* UserQueueForm 
+* Edit and approve new users
 */
 
 import * as React from 'react';
@@ -14,6 +14,7 @@ import { forEach } from 'lodash';
 import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
+import { IqueueUser } from '../../models';
 
 // Field config to configure form
 const fieldConfigControls = {
@@ -67,43 +68,29 @@ const fieldConfigControls = {
       meta: { handleCancel, cancelText, submitText, loading }
     }: any) => (
       <Col xs={12} className="user-form-buttons">
-        <Button
-          bsStyle="link"
-          type="button"
-          onClick={handleCancel}
-          style={{ color: 'white' }}
-        >
-          {cancelText}
+        <Button bsStyle="link" type="button" onClick={handleCancel}>
+          Cancel
+        </Button>
+        <Button bsStyle="primary" type="submit" disabled={loading} className="">
+          Save
         </Button>
         <Button
           bsStyle="primary"
-          type="submit"
+          type="button"
           disabled={loading}
           className="pull-right"
         >
-          {submitText}
+          Save & Approve
         </Button>
       </Col>
     )
   }
 };
 
-const testUser = {
-  first: 'jim',
-  last: 'bean',
-  email: 'a@test.com',
-  position: 'president',
-  tempAddress: '12 street',
-  tempAddress2: '2 street',
-  tempCity: 'mycity',
-  tempZip: '77080',
-  tempState: 'TX',
-  tempCompany: 'BP',
-  phone: '888-333-1121'
-};
 interface Iprops extends React.Props<UserQueueForm> {
   handleSubmit: any;
   handleCancel: any;
+  user: IqueueUser;
 }
 interface Istate {
   signupForm: any;
@@ -118,11 +105,10 @@ export default class UserQueueForm extends React.Component<Iprops, Istate> {
     this.handleSubmit = this.handleSubmit.bind(this);
   }
   componentDidMount() {
-    if (process.env.NODE_ENV !== 'production') {
-      forEach(testUser, (value, key) => {
-        this.userForm.patchValue({ [key]: value });
-      });
-    }
+    // set values
+    forEach(this.props.user.user, (value, key) => {
+      this.userForm.patchValue({ [key]: value });
+    });
   }
 
   handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
@@ -139,8 +125,6 @@ export default class UserQueueForm extends React.Component<Iprops, Istate> {
     this.userForm = form;
     this.userForm.meta = {
       handleCancel: this.props.handleCancel,
-      cancelText: 'Cancel',
-      submitText: 'Sign Up',
       loading: false
     };
   };

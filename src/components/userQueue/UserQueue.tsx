@@ -4,15 +4,16 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { getUserQueue, approveUser } from '../../actions/userActions';
-import { InitialState, ItempUser } from '../../models';
+import { InitialState, IqueueUser } from '../../models';
 import { RouteComponentProps } from 'react-router-dom';
 import ReactTable from 'react-table';
 import { Button } from 'react-bootstrap';
 import CommonModal from '../common/CommonModal';
+import UserQueueForm from './UserQueueForm';
 
 interface Iprops extends RouteComponentProps<{}> {
   getUserQueue: any;
-  userQueue: ItempUser[];
+  userQueue: IqueueUser[];
   approveUser: any;
 }
 
@@ -126,17 +127,22 @@ class UserQueue extends React.Component<Iprops, Istate> {
         />
         <CommonModal
           modalVisible={this.state.showEditUserModal}
-          cancel={() => {
-            this.setState({ showEditUserModal: false });
-          }}
-          cancelText="cancel"
-          submit={() => {
-            this.setState({ showEditUserModal: false });
-          }}
-          submitText="Approve"
           bsSize="sm"
           className="user-edit"
-          body={<div>hello edit user modal</div>}
+          onHide={() => {
+            this.setState({ showEditUserModal: false });
+          }}
+          body={
+            <UserQueueForm
+              handleSubmit={() => {
+                this.setState({ showEditUserModal: false });
+              }}
+              handleCancel={() => {
+                this.setState({ showEditUserModal: false });
+              }}
+              user={this.props.userQueue[this.state.selectedRow]}
+            />
+          }
           title="Edit and New User"
         />
       </div>

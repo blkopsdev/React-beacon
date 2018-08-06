@@ -1,9 +1,9 @@
 import * as types from '../actions/actionTypes';
-import { ItempUser } from '../models';
+import { IqueueUser } from '../models';
 // import initialState from './initialState';
 // import { keyBy } from 'lodash';
 
-export default function userQueue(state: ItempUser[] = [], action: any) {
+export default function userQueue(state: IqueueUser[] = [], action: any) {
   switch (action.type) {
     case types.USER_QUEUE_SUCCESS:
       return [...state, ...action.queue];

@@ -3,9 +3,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 iK4uY&QM
 
 ## API documentation:
-https://app.apiary.io/corecare/editor
-test endpoint: http://private-cad60-corecare.apiary-mock.com
-fake login: http://private-cad60-corecare.apiary-mock.com/user/login?email=test&password=test
+Swagger: https://app.swaggerhub.com/apis/Big-Pixel/Core-Care
 
 ## Design Spec
 https://xd.adobe.com/view/98de6938-9789-4098-6f9a-955b46301e31-eeef/
@@ -13,7 +11,6 @@ https://xd.adobe.com/spec/ec9f6390-2e34-4630-61ee-c0aabe3c71bb-9aae/#screen/e6e7
 
 ## Random notes
 
-Swagger: https://app.swaggerhub.com/apis/Big-Pixel/Core-Care/1.0.21
  135 hours for the project.  6 weeks
 
  ### Azure Active Directory Test Data:
@@ -48,8 +45,9 @@ fd71f683-7423-4ba0-9ed3-fba0547be076 // cliend ID and Application ID for Native 
   - Inventory
   - Manage Users - connected
     + UserForm
-  - New User Queue
-    + editUserModal
+  - New User Queue - connected
+    + editUserModal - connected
+      * UserQueueForm
     + 
 
 ## Initial Setup

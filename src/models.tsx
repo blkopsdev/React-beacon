@@ -21,6 +21,10 @@ export interface Iuser {
 // export interface IuserQueue {
 //   [key: string]: Iuser;
 // }
+export interface IqueueUser {
+  id: string;
+  user: Iuser;
+}
 
 export interface ItempUser {
   email: string;

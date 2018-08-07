@@ -83,7 +83,7 @@ body {
   .modal-content {
     transition: transform .5s;
     border-radius: 0px;
-    height: 100% - @headerHeight;
+    height: calc(~"100vh - " @headerHeight);
   }
   &.from-left .modal-content {
     margin-right: auto;

@@ -2,7 +2,7 @@
 @highlightBlue: #38A1DF;
 .two-pane-layout {
   .side-menu {
-    height: 100%-@headerHeight;
+    height: calc(~"100vh - " @headerHeight);
     background-color: @textBlue;
   }
   .list-group {

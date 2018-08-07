@@ -129,6 +129,9 @@ class UserQueue extends React.Component<Iprops, Istate> {
           data={this.props.userQueue}
           columns={this.columns}
           getTrProps={this.getTrProps}
+          pageSize={this.props.userQueue.length}
+          manual // Forces table not to paginate or sort automatically, so we can handle it server-side
+          pages={1}
         />
         <CommonModal
           modalVisible={this.state.showEditUserModal}

@@ -48,7 +48,11 @@ fd71f683-7423-4ba0-9ed3-fba0547be076 // cliend ID and Application ID for Native 
   - New User Queue - connected
     + editUserModal - connected
       * UserQueueForm
-    + 
+
+## How to handle pagination and filtering notes
+* QueueReducer - contains an array of all the new users in the queue
+* QueueFilter - keep track of the filter applied to the queue
+  - the paging will be stored in a query param?
 
 ## Initial Setup
 

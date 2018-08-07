@@ -142,13 +142,12 @@ export default class UserQueueForm extends React.Component<Iprops, Istate> {
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-    console.log('Form values', this.userForm.value);
     this.props.handleSubmit({
       id: this.props.user.user.id,
       ...this.userForm.value
     });
   };
-  setForm = (form: any) => {
+  setForm = (form: AbstractControl) => {
     if (this.state.queueForm.status) {
       this.userForm = this.state.queueForm;
     } else {
@@ -165,7 +164,7 @@ export default class UserQueueForm extends React.Component<Iprops, Istate> {
       controls: { ...userBaseConfigControls, ...fieldConfigControls }
     };
     return (
-      <div className="loginForm">
+      <div className="user-form">
         <form onSubmit={this.handleSubmit} className="user-form">
           <FormGenerator onMount={this.setForm} fieldConfig={fieldConfig} />
         </form>

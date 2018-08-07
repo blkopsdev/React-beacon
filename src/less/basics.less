@@ -20,6 +20,8 @@ body {
   // font-size: 16px;
   // font-weight: 400;
   text-transform: capitalize;
+  padding: 6px 18px;
+  border-radius: 8px;
   // font-family: @headerFont;
   i {
     // margin-right: 5px;
@@ -35,6 +37,7 @@ body {
   &.btn-primary{
     // color: #fff;
     background: @primaryBlue;
+    border-color: @textBlue;
     // border-bottom: 3px solid @grayBlueShadow;
   }
   &.btn-warning{
@@ -55,5 +58,17 @@ body {
   }
   &:focus{
     outline: none !important;
+  }
+}
+
+.user-form{
+  display: inline-block;
+}
+.form-group{
+  .control-label{
+    font-weight: normal;
+  }
+  .form-control{
+    border-right: 8px;
   }
 }

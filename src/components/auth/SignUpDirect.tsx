@@ -43,13 +43,15 @@ const SignUpSuccess = (props: any) => {
       <h2> Success! </h2>
       <p>
         You have been successfully added into the system. An BeaconMedaes admin
-        will review your application and be in touch with you soon. Please make
-        sure that no-reply@beaconmedaes.com is cleared so that it does not end
-        up in your spam.
+        will review your application and be in touch with you soon.{' '}
+      </p>
+      <p>
+        Please make sure that no-reply@beaconmedaes.com is cleared so that it
+        does not end up in your spam.
       </p>
       <Button
         bsStyle="link"
-        className="pull-right"
+        className="pull-right ok-button"
         style={{ color: 'white' }}
         onClick={props.handleCancel}
       >
@@ -92,7 +94,7 @@ class SignUpDirect extends React.Component<Iprops, Istate> {
         <Grid>
           <Row>
             <Col>
-              {this.state.showSignupSuccess ? (
+              {!this.state.showSignupSuccess ? (
                 <SignUpSuccess handleCancel={this.cancel} />
               ) : (
                 <UserForm

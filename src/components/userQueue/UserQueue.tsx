@@ -14,6 +14,7 @@ import ReactTable from 'react-table';
 import { Button } from 'react-bootstrap';
 import CommonModal from '../common/CommonModal';
 import UserQueueForm from './UserQueueForm';
+import Banner from '../common/Banner';
 
 interface Iprops extends RouteComponentProps<{}> {
   getUserQueue: any;
@@ -125,6 +126,7 @@ class UserQueue extends React.Component<Iprops, Istate> {
   render() {
     return (
       <div className="user-queue">
+        <Banner title="New User Queue" img="http://placekitten.com/1440/60" />
         <ReactTable
           data={this.props.userQueue}
           columns={this.columns}

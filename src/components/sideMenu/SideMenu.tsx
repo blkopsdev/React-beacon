@@ -21,6 +21,11 @@ const Item = (props: any) => {
 
 const MenuItems = ({ user }: any) => (
   <ListGroup>
+    <LinkContainer to={'/dashboard'}>
+      <ListGroupItem>
+        <FontAwesomeIcon icon={['far', 'th']} /> Dashboard
+      </ListGroupItem>
+    </LinkContainer>
     {map(constants.tiles, tile => {
       if (constants.hasSecurityFunction(user, tile.securityFunction)) {
         return <Item key={tile.url} {...tile} />;
@@ -41,7 +46,7 @@ class SideMenu extends React.Component<Iprops, {}> {
   }
   render() {
     return (
-      <div>
+      <div className="side-menu">
         {/*        <Row>
           <Col xs={12}>Welcome {this.props.user.first}</Col>
         </Row>*/}

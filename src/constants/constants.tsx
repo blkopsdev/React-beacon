@@ -37,7 +37,7 @@ const constants = {
       securityFunction: ''
     },
     {
-      icon: 'icon-training',
+      icon: ['far', 'calendar-check'],
       title: 'Training',
       src: 'https://placekitten.com/360/408',
       class: 'tile tile-green',

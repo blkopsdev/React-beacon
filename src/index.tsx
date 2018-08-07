@@ -18,8 +18,12 @@ import { runWithAdal } from 'react-adal';
 import axios from 'axios';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { faUsers } from '@fortawesome/free-solid-svg-icons';
-import { faCog } from '@fortawesome/pro-regular-svg-icons';
-library.add(faCog, faUsers);
+import {
+  faCog,
+  faCalendarCheck,
+  faTh
+} from '@fortawesome/pro-regular-svg-icons';
+library.add(faCog, faUsers, faCalendarCheck, faTh);
 
 import { authContext, isFullyAuthenticated } from './actions/userActions';
 import Dashboard from './components/dashboard/Dashboard';

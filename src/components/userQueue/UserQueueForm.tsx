@@ -16,14 +16,21 @@ import { toastr } from 'react-redux-toastr';
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
 import { IqueueUser } from '../../models';
 
+const TextLabel = ({ handler, meta }: any) => {
+  return (
+    <Col xs={meta.colWidth}>
+      <FormGroup bsSize="sm">
+        <ControlLabel>{meta.label}</ControlLabel>
+        <h4 className="queue-form-label">{handler().value}</h4>
+      </FormGroup>
+    </Col>
+  );
+};
 // Field config to configure form
 const fieldConfigControls = {
   tempCompany: {
-    options: {
-      validators: Validators.required
-    },
-    render: FormUtil.TextInput,
-    meta: { label: 'Company Name', colWidth: 12, type: 'text' }
+    render: TextLabel,
+    meta: { label: 'User Supplied Customer', colWidth: 12 }
   },
   customerID: {
     options: {
@@ -32,49 +39,17 @@ const fieldConfigControls = {
     render: FormUtil.TextInput,
     meta: { label: 'Customer', colWidth: 12, type: 'text' }
   },
+
+  providedAddress: {
+    render: TextLabel,
+    meta: { label: 'User Supplied Facility Address', colWidth: 8 }
+  },
   facilityID: {
     options: {
       validators: Validators.required
     },
     render: FormUtil.TextInput,
     meta: { label: 'Facility', colWidth: 12, type: 'text' }
-  },
-  tempAddress: {
-    options: {
-      validators: Validators.required
-    },
-    render: FormUtil.TextInput,
-    meta: { label: 'Address', colWidth: 8, type: 'text' }
-  },
-  tempAddress2: {
-    render: FormUtil.TextInput,
-    meta: { label: 'Address 2', colWidth: 4, type: 'text' }
-  },
-  tempCity: {
-    options: {
-      validators: Validators.required
-    },
-    render: FormUtil.TextInput,
-    meta: { label: 'City', colWidth: 5, type: 'text' }
-  },
-  tempState: {
-    options: {
-      validators: Validators.required
-    },
-    render: FormUtil.TextInput,
-    meta: { label: 'State', colWidth: 3, type: 'text' }
-  },
-  tempZip: {
-    options: {
-      validators: [
-        Validators.required,
-        Validators.pattern(
-          /(^[0-9]{5}(-[0-9]{4})?$)|(^[ABCEGHJKLMNPRSTVXYabceghjklmnprstvxy]{1}[0-9]{1}[ABCEGHJKLMNPRSTVWXYZabceghjklmnprstv‌​xy]{1} *[0-9]{1}[ABCEGHJKLMNPRSTVWXYZabceghjklmnprstvxy]{1}[0-9]{1}$)/
-        )
-      ]
-    },
-    render: FormUtil.TextInput,
-    meta: { label: 'Zip', colWidth: 4, type: 'tel' }
   },
   $field_0: {
     isStatic: false,
@@ -100,15 +75,6 @@ const fieldConfigControls = {
     )
   }
 };
-
-const TextLabel = ({ meta }: any) => (
-  <Col xs={meta.colWidth}>
-    <FormGroup bsSize="sm">
-      <ControlLabel>{meta.label}</ControlLabel>
-      <h2 className="queue-form-label">{meta.content}</h2>
-    </FormGroup>
-  </Col>
-);
 
 interface Iprops extends React.Props<UserQueueForm> {
   handleSubmit: any;
@@ -141,6 +107,15 @@ export default class UserQueueForm extends React.Component<Iprops, Istate> {
     this.userForm.patchValue({
       facilityID: 'BBB5D95C-129F-4837-988C-0BF4AE1F3B67'
     });
+    const {
+      tempAddress,
+      tempAddress2,
+      tempCity,
+      tempState,
+      tempZip
+    } = this.props.user.user;
+    const providedAddress = `${tempAddress} ${tempAddress2} ${tempCity} ${tempState} ${tempZip}`;
+    this.userForm.patchValue({ providedAddress });
     // console.log(this.userForm.value);
   }
 

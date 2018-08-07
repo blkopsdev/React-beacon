@@ -14,6 +14,11 @@ export interface Iuser {
   state: string;
   zip: string;
   id: string;
+  tempAddress?: string;
+  tempAddress2?: string;
+  tempCity?: string;
+  tempState?: string;
+  tempZip?: string;
 }
 // export interface IuserQueue {
 //   [key: string]: Iuser;

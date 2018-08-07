@@ -72,3 +72,21 @@ body {
     border-right: 8px;
   }
 }
+
+
+.slide-modal{
+  .modal-dialog{
+    transform: translateY(0%) !important;
+  }
+  .modal-content{
+    transition: transform .5s;
+  }
+  &.from-left .modal-content{
+    margin-right: auto;
+    transform: translateX(-100%);
+  }
+
+  &.after-open .modal-content{
+    transform: translateX(0%);
+  }
+}

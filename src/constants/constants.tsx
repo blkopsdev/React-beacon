@@ -43,7 +43,7 @@ const constants = {
       class: 'tile tile-green',
       width: 360,
       height: 408,
-      url: '/training',
+      url: '/users',
       securityFunction: securityFunctions.manageUsers
     },
     {

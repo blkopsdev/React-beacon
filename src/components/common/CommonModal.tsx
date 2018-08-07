@@ -15,23 +15,32 @@ interface Props extends React.Props<CommonModal> {
 }
 
 interface State {
-  temp: any;
+  classNameAnimation: string;
 }
 
 class CommonModal extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      temp: ''
+      classNameAnimation: ''
     };
   }
 
   render() {
+    const className = `${this.props.className} ${
+      this.state.classNameAnimation
+    } slide-modal from-left`;
     return (
       <Modal
         show={this.props.modalVisible}
         onHide={this.props.onHide}
-        className={this.props.className}
+        className={className}
+        onExiting={() => {
+          this.setState({ classNameAnimation: '' });
+        }}
+        onEntering={() => {
+          this.setState({ classNameAnimation: 'after-open' });
+        }}
       >
         <Modal.Header>
           <Modal.Title>{this.props.title}</Modal.Title>

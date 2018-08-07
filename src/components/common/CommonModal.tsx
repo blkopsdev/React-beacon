@@ -8,7 +8,6 @@ import { Modal } from 'react-bootstrap';
 interface Props extends React.Props<CommonModal> {
   modalVisible: boolean;
   onHide: any;
-  bsSize: any;
   className: string;
   body: JSX.Element;
   footer?: JSX.Element;
@@ -32,7 +31,6 @@ class CommonModal extends React.Component<Props, State> {
       <Modal
         show={this.props.modalVisible}
         onHide={this.props.onHide}
-        bsSize={this.props.bsSize}
         className={this.props.className}
       >
         <Modal.Header>

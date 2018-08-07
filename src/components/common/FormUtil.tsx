@@ -1,6 +1,12 @@
 import * as React from 'react';
 
-import { Col, FormGroup, FormControl, ControlLabel } from 'react-bootstrap';
+import {
+  Col,
+  FormGroup,
+  FormControl,
+  ControlLabel,
+  Button
+} from 'react-bootstrap';
 import { Validators } from 'react-reactive-form';
 
 export const FormUtil = {
@@ -39,6 +45,41 @@ export const FormUtil = {
         bsSize="sm"
       >
         <ControlLabel>{meta.label}</ControlLabel>
+        <FormControl
+          type={meta.type}
+          placeholder={meta.placeholder}
+          {...handler()}
+        />
+        <FormControl.Feedback />
+      </FormGroup>
+    </Col>
+  ),
+  TextInputWithButton: ({
+    handler,
+    touched,
+    hasError,
+    meta,
+    pristine,
+    errors,
+    submitted
+  }: any) => (
+    <Col xs={meta.colWidth}>
+      <FormGroup
+        validationState={FormUtil.getValidationState(
+          pristine,
+          errors,
+          submitted
+        )}
+        bsSize="sm"
+      >
+        <ControlLabel>{meta.label}</ControlLabel>
+        <Button
+          bsStyle="link"
+          className="pull-right"
+          onClick={meta.buttonAction}
+        >
+          {meta.buttonName}
+        </Button>
         <FormControl
           type={meta.type}
           placeholder={meta.placeholder}

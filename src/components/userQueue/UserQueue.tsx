@@ -135,7 +135,6 @@ class UserQueue extends React.Component<Iprops, Istate> {
         />
         <CommonModal
           modalVisible={this.state.showEditUserModal}
-          bsSize="lg"
           className="user-edit"
           onHide={() => {
             this.setState({ showEditUserModal: false });

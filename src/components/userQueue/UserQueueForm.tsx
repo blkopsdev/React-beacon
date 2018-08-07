@@ -26,6 +26,7 @@ const TextLabel = ({ handler, meta }: any) => {
     </Col>
   );
 };
+
 // Field config to configure form
 const fieldConfigControls = {
   tempCompany: {
@@ -36,8 +37,16 @@ const fieldConfigControls = {
     options: {
       validators: Validators.required
     },
-    render: FormUtil.TextInput,
-    meta: { label: 'Customer', colWidth: 12, type: 'text' }
+    render: FormUtil.TextInputWithButton,
+    meta: {
+      label: 'Customer',
+      colWidth: 12,
+      type: 'text',
+      buttonName: 'Add New Customer',
+      buttonAction: () => {
+        alert('functionality under construction');
+      }
+    }
   },
 
   providedAddress: {
@@ -48,8 +57,16 @@ const fieldConfigControls = {
     options: {
       validators: Validators.required
     },
-    render: FormUtil.TextInput,
-    meta: { label: 'Facility', colWidth: 12, type: 'text' }
+    render: FormUtil.TextInputWithButton,
+    meta: {
+      label: 'Facility',
+      colWidth: 12,
+      type: 'text',
+      buttonName: 'Add New Facility',
+      buttonAction: () => {
+        alert('functionality under construction');
+      }
+    }
   },
   $field_0: {
     isStatic: false,

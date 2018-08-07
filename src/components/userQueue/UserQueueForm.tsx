@@ -9,7 +9,7 @@ import {
   FormGenerator,
   AbstractControl
 } from 'react-reactive-form';
-import { Col, Button } from 'react-bootstrap';
+import { Col, Button, FormGroup, ControlLabel } from 'react-bootstrap';
 import { forEach } from 'lodash';
 import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
@@ -100,6 +100,15 @@ const fieldConfigControls = {
     )
   }
 };
+
+const TextLabel = ({ meta }: any) => (
+  <Col xs={meta.colWidth}>
+    <FormGroup bsSize="sm">
+      <ControlLabel>{meta.label}</ControlLabel>
+      <h2 className="queue-form-label">{meta.content}</h2>
+    </FormGroup>
+  </Col>
+);
 
 interface Iprops extends React.Props<UserQueueForm> {
   handleSubmit: any;

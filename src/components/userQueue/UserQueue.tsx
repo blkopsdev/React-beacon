@@ -124,7 +124,7 @@ class UserQueue extends React.Component<Iprops, Istate> {
 
   render() {
     return (
-      <div>
+      <div className="user-queue">
         <ReactTable
           data={this.props.userQueue}
           columns={this.columns}

@@ -90,11 +90,11 @@ class SignUpDirect extends React.Component<Iprops, Istate> {
     }
 
     return (
-      <div className="loginlayout">
+      <div className="loginlayout signup">
         <Grid>
           <Row>
             <Col>
-              {!this.state.showSignupSuccess ? (
+              {this.state.showSignupSuccess ? (
                 <SignUpSuccess handleCancel={this.cancel} />
               ) : (
                 <UserForm

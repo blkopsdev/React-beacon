@@ -6,19 +6,27 @@
     margin-right: auto;
     margin-top: 60px;
     padding: 20px 10px 20px 10px;
-    min-height: 480px;
+    min-height: 320px;
     height: auto;
     width: 400px;
     background-color: fade(@blue, 70%);
     border: 2px solid @white;
     box-shadow: @shadow;
+    
     form {
       display: inline-block;
+    }
+    &.login{
+      text-align: center;
+    }
+    &.signup{
+      min-height: 480px;
     }
     &.signup-success{
       background-color: @transparentGreen;
       font-size: 1.3em;
       padding: 20px 30px;
+      min-height: 480px;
     }
     .user-form-buttons {
       margin-top: 20px;
@@ -27,30 +35,22 @@
       color: @white;
       font-size: 24px;
       line-height: 29px;
-      position: absolute;
-      top: 30px;
-      left: 30px;
     }
     .loginBtn {
-      position: absolute;
-      top: 115px;
-      left: 74px;
-      width: 252px;
-      height: 40px;
       color: @textBlue;
       font-size: 14px;
       box-shadow: @shadow;
+      display: block;
+      margin: 45px auto 10px auto;
       img {
         float: left;
       }
     }
     .signupBtn {
-      position: absolute;
-      top: 175px;
-      left: 167px;
-      width: 66px;
       color: @white;
       font-size: 18px;
+      display: block;
+      margin-top: 20px;
     }
     .ok-button{
       position: absolute;

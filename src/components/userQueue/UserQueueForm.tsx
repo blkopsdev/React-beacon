@@ -10,7 +10,7 @@ import {
   AbstractControl
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
-// import { forEach } from "lodash";
+import { forEach } from 'lodash';
 import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
@@ -31,6 +31,13 @@ const fieldConfigControls = {
     },
     render: FormUtil.TextInput,
     meta: { label: 'Customer', colWidth: 12, type: 'text' }
+  },
+  facilityID: {
+    options: {
+      validators: Validators.required
+    },
+    render: FormUtil.TextInput,
+    meta: { label: 'Facility', colWidth: 12, type: 'text' }
   },
   tempAddress: {
     options: {
@@ -100,28 +107,31 @@ interface Iprops extends React.Props<UserQueueForm> {
   user: IqueueUser;
 }
 interface Istate {
-  signupForm: any;
+  queueForm: any;
 }
 export default class UserQueueForm extends React.Component<Iprops, Istate> {
   public userForm: AbstractControl;
   constructor(props: Iprops) {
     super(props);
     this.state = {
-      signupForm: {}
+      queueForm: {}
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setForm = this.setForm.bind(this);
   }
   componentDidMount() {
     // set values
-    // forEach(this.props.user.user, (value, key) => {
-    //   this.userForm.patchValue({ [key]: value });
-    // });
+    forEach(this.props.user.user, (value, key) => {
+      this.userForm.patchValue({ [key]: value });
+    });
     // TODO: CHANGE TO REAL CUSTOMER STUFF
     // hardcode CustomerID for now
-    // this.userForm.patchValue({
-    //   customerID: "162EC4C8-1E15-45FD-BF60-26FBD8A44042"
-    // });
+    this.userForm.patchValue({
+      customerID: 'AAA5D95C-129F-4837-988C-0BF4AE1F3B67'
+    });
+    this.userForm.patchValue({
+      facilityID: 'BBB5D95C-129F-4837-988C-0BF4AE1F3B67'
+    });
     // console.log(this.userForm.value);
   }
 
@@ -134,13 +144,17 @@ export default class UserQueueForm extends React.Component<Iprops, Istate> {
     }
     console.log('Form values', this.userForm.value);
     this.props.handleSubmit({
-      ...this.props.user.user,
+      id: this.props.user.user.id,
       ...this.userForm.value
     });
   };
   setForm = (form: any) => {
-    console.log(form);
-    this.userForm = form;
+    if (this.state.queueForm.status) {
+      this.userForm = this.state.queueForm;
+    } else {
+      this.userForm = form;
+      this.setState({ queueForm: form });
+    }
     this.userForm.meta = {
       handleCancel: this.props.handleCancel,
       loading: false

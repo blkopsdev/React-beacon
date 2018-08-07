@@ -161,11 +161,11 @@ export function getUserQueue(page: number, search: string) {
   };
 }
 
-export function approveUser(userID: string) {
+export function approveUser(userQueueID: string) {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());
     return axios
-      .post(API.POST.user.approve, userID)
+      .post(API.POST.user.approve, { id: userQueueID })
       .then(data => {
         if (!data.data) {
           throw undefined;

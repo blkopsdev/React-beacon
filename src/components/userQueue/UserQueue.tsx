@@ -64,7 +64,7 @@ class UserQueue extends React.Component<Iprops, Istate> {
       },
       {
         Header: 'Approve?',
-        accessor: 'user',
+        accessor: 'id',
         Cell: this.ApproveCell
       }
     ];
@@ -84,7 +84,7 @@ class UserQueue extends React.Component<Iprops, Istate> {
           onClick={(e: React.MouseEvent<Button>) => {
             this.buttonInAction = true;
             this.props
-              .approveUser(row.value.id, true)
+              .approveUser(row.value, true)
               .then((blah: any) => {
                 this.buttonInAction = false;
               })

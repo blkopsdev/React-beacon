@@ -41,7 +41,8 @@ body {
     // border-bottom: 3px solid @grayBlueShadow;
   }
   &.btn-warning {
-    // background: @yellow;
+    background: @orange;
+    border-color: @darkOrange;
     // border-bottom: 3px solid @yellowShadow;
   }
   &.btn-default {
@@ -63,24 +64,39 @@ body {
 
 .user-form {
   display: inline-block;
+    .form-buttons{
+    margin-top:20px;
+  }
 }
 
 .form-group {
+  margin-bottom: 10px;
   .control-label {
     font-weight: normal;
+    margin-bottom: 0px;
+    text-transform: uppercase;
   }
   .form-control {
     border-right: 8px;
   }
+
 }
 
 .slide-modal {
+  .modal-body{
+    padding: 15px 0px;
+  }
+  .modal-footer{
+    display: none;
+  }
   .modal-dialog {
     transform: translateY(0%) !important;
     width: 400px;
-    margin: 0px auto 30px 320px;
+    margin: 0px auto 0 320px;
+
   }
   .modal-content {
+    background-color: #F5F5F5;
     transition: transform .5s;
     border-radius: 0px;
     min-height: calc(~"100vh - " @headerHeight);

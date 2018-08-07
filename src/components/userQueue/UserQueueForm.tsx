@@ -21,7 +21,7 @@ const TextLabel = ({ handler, meta }: any) => {
     <Col xs={meta.colWidth}>
       <FormGroup bsSize="sm">
         <ControlLabel>{meta.label}</ControlLabel>
-        <h4 className="queue-form-label">{handler().value}</h4>
+        <h5 className="queue-form-label">{handler().value}</h5>
       </FormGroup>
     </Col>
   );
@@ -51,7 +51,7 @@ const fieldConfigControls = {
 
   providedAddress: {
     render: TextLabel,
-    meta: { label: 'User Supplied Facility Address', colWidth: 8 }
+    meta: { label: 'User Supplied Facility Address', colWidth: 12 }
   },
   facilityID: {
     options: {
@@ -73,15 +73,15 @@ const fieldConfigControls = {
     render: ({
       meta: { handleCancel, cancelText, submitText, loading }
     }: any) => (
-      <Col xs={12} className="user-form-buttons">
+      <Col xs={12} className="form-buttons">
         <Button bsStyle="link" type="button" onClick={handleCancel}>
           Cancel
         </Button>
-        <Button bsStyle="primary" type="submit" disabled={loading} className="">
+        <Button bsStyle="warning" type="submit" disabled={loading} className="">
           Save
         </Button>
         <Button
-          bsStyle="primary"
+          bsStyle="warning"
           type="button"
           disabled={loading}
           className="pull-right"

@@ -10,13 +10,13 @@ const testme = () => {
 };
 const TwoPaneLayout = (props: any) => {
   return (
-    <Grid className="modal-container">
+    <Grid className="two-pane-layout modal-container" fluid={true}>
       <Row>
-        <Col xs={4}>
+        <Col className="col-fixed">
           <SideMenu {...props} />
         </Col>
 
-        <Col xs={8}>
+        <Col className="col-fluid">
           <Switch>
             <Route exact path="/queue" component={UserQueue} />
             <Route exact path="/users" component={testme} />

@@ -12,6 +12,7 @@ interface Props extends React.Props<CommonModal> {
   body: JSX.Element;
   footer?: JSX.Element;
   title: string;
+  container: any;
 }
 
 interface State {
@@ -41,6 +42,7 @@ class CommonModal extends React.Component<Props, State> {
         onEntering={() => {
           this.setState({ classNameAnimation: 'after-open' });
         }}
+        container={this.props.container}
       >
         <Modal.Header>
           <Modal.Title>{this.props.title}</Modal.Title>

@@ -152,6 +152,7 @@ class UserQueue extends React.Component<Iprops, Istate> {
             />
           }
           title="Edit and New User"
+          container={document.getElementById('two-pane-layout')}
         />
       </div>
     );

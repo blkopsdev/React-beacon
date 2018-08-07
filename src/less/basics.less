@@ -77,6 +77,8 @@ body {
 .slide-modal{
   .modal-dialog{
     transform: translateY(0%) !important;
+    margin-left: 320px;
+    width: 400px;
   }
   .modal-content{
     transition: transform .5s;
@@ -90,3 +92,12 @@ body {
     transform: translateX(0%);
   }
 }
+.modal-container {
+  position: relative;
+}
+.modal-container .modal, .modal-container .modal-backdrop {
+  position: absolute;
+}
+// .container-fluid{
+//   height: 100vh;
+// }

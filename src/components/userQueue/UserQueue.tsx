@@ -15,6 +15,7 @@ import { Button } from 'react-bootstrap';
 import CommonModal from '../common/CommonModal';
 import UserQueueForm from './UserQueueForm';
 import Banner from '../common/Banner';
+import { FontAwesomeIcon } from '../../../node_modules/@fortawesome/react-fontawesome';
 
 interface Iprops extends RouteComponentProps<{}> {
   getUserQueue: any;
@@ -82,6 +83,8 @@ class UserQueue extends React.Component<Iprops, Istate> {
     return (
       <div>
         <Button
+          bsStyle="link"
+          className="pull-right"
           onClick={(e: React.MouseEvent<Button>) => {
             this.buttonInAction = true;
             this.props
@@ -94,9 +97,11 @@ class UserQueue extends React.Component<Iprops, Istate> {
               });
           }}
         >
-          approve
+          <FontAwesomeIcon icon={['far', 'check']} />
         </Button>
-        <Button>deny</Button>
+        <Button bsStyle="link" className="pull-right">
+          <FontAwesomeIcon icon={['far', 'times']} />
+        </Button>
       </div>
     );
   };

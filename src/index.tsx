@@ -21,9 +21,11 @@ import { faUsers } from '@fortawesome/free-solid-svg-icons';
 import {
   faCog,
   faCalendarCheck,
-  faTh
+  faTh,
+  faCheck,
+  faTimes
 } from '@fortawesome/pro-regular-svg-icons';
-library.add(faCog, faUsers, faCalendarCheck, faTh);
+library.add(faCog, faUsers, faCalendarCheck, faTh, faCheck, faTimes);
 
 import { authContext, isFullyAuthenticated } from './actions/userActions';
 import Dashboard from './components/dashboard/Dashboard';

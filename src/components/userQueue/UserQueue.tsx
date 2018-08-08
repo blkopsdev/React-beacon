@@ -25,7 +25,7 @@ interface Iprops extends RouteComponentProps<{}> {
   getUserQueue: any;
   userQueue: IqueueUser[];
   approveUser: (value: string) => Promise<void>;
-  updateUser: (value: Iuser) => Promise<void>;
+  updateUser: (value: Iuser, v: string) => Promise<void>;
   rejectUser: (value: string) => Promise<void>;
   loading: boolean;
 }
@@ -188,7 +188,11 @@ class UserQueue extends React.Component<Iprops, Istate> {
                 shouldApprove: boolean,
                 queueID: string
               ) => {
-                this.props.updateUser(user);
+                this.props.updateUser(user, queueID).then(() => {
+                  {
+                    /*this.props.getUserQueue(1, '');*/
+                  }
+                });
                 this.setState({ showEditUserModal: false });
                 if (shouldApprove) {
                   this.props.approveUser(queueID);

@@ -1,7 +1,7 @@
 import * as types from '../actions/actionTypes';
 import { IqueueUser } from '../models';
 // import initialState from './initialState';
-// import { keyBy } from 'lodash';
+import { filter } from 'lodash';
 
 export default function userQueue(state: IqueueUser[] = [], action: any) {
   switch (action.type) {
@@ -14,8 +14,14 @@ export default function userQueue(state: IqueueUser[] = [], action: any) {
     //   keyBy(action.queue, (user: Iuser) => user.id)
     // ) as IuserQueue;
     case types.USER_UPDATE_SUCCESS:
-      console.log(action.user);
-      return state;
+      const queuefilterUser = filter(state, u => u.id !== action.queueID);
+      const newQueueObject = { id: action.queueID, user: action.user };
+
+      return [...queuefilterUser, newQueueObject];
+    case types.USER_APPROVE_SUCCESS:
+      return filter(state, u => u.id !== action.userQueueID);
+    case types.USER_REJECT_SUCCESS:
+      return filter(state, u => u.id !== action.userQueueID);
 
     case types.USER_LOGOUT_SUCCESS:
       return {};

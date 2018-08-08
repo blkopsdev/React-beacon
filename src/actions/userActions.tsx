@@ -25,13 +25,13 @@ export function isAuthenticated() {
         isAuth = true;
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
       } else {
-        console.error(`message: ${message}  msg: ${msg}`);
-        if (msg === 'login required') {
-          const tokenT = authContext.getCachedToken(
-            authContext.config.clientId
-          );
-          console.log(`should we try to automatically login here? ${tokenT}`);
-        }
+        // console.error(`message: ${message}  msg: ${msg}`);
+        // if (msg === 'login required') {
+        //   const tokenT = authContext.getCachedToken(
+        //     authContext.config.clientId
+        //   );
+        //   console.log(`should we try to automatically login here? ${tokenT}`);
+        // }
         isAuth = false;
       }
     }
@@ -66,15 +66,7 @@ export function userLogin() {
       })
       .catch((error: any) => {
         dispatch({ type: types.USER_LOGIN_FAILED });
-        let msg =
-          error.response.data ||
-          `Failed to login.  Please try again or contact support. ${
-            error.message
-          }`;
-        if (!navigator.onLine) {
-          msg = 'Please connect to the internet.';
-        }
-        toastr.error('Error', msg, constants.toastrError);
+        handleError(error, 'login');
         throw error;
       });
   };
@@ -122,15 +114,7 @@ export function signUpDirect(tempUser: ItempUser) {
       })
       .catch((error: any) => {
         dispatch({ type: types.USER_SIGNUP_FAILED });
-        let msg =
-          error.response.data ||
-          `Failed to signup.  Please try again or contact support. ${
-            error.message
-          }`;
-        if (!navigator.onLine) {
-          msg = 'Please connect to the internet.';
-        }
-        toastr.error('Error', msg, constants.toastrError);
+        handleError(error, 'sign up');
         throw error;
       });
   };
@@ -151,15 +135,7 @@ export function getUserQueue(page: number, search: string) {
       })
       .catch((error: any) => {
         dispatch({ type: types.USER_QUEUE_FAILED });
-        let msg =
-          error.response.data ||
-          `Failed to get user queue.  Please try again or contact support. ${
-            error.message
-          }`;
-        if (!navigator.onLine) {
-          msg = 'Please connect to the internet.';
-        }
-        toastr.error('Error', msg, constants.toastrError);
+        handleError(error, 'get user queue');
         throw error;
       });
   };
@@ -174,21 +150,13 @@ export function approveUser(userQueueID: string) {
         if (!data.data) {
           throw undefined;
         } else {
-          dispatch({ type: types.USER_APPROVE_SUCCESS, user: data.data });
+          dispatch({ type: types.USER_APPROVE_SUCCESS, userQueueID });
           return data;
         }
       })
       .catch((error: any) => {
         dispatch({ type: types.USER_APPROVE_FAILED });
-        let msg =
-          error.response.data ||
-          `Failed to approve user.  Please try again or contact support. ${
-            error.message
-          }`;
-        if (!navigator.onLine) {
-          msg = 'Please connect to the internet.';
-        }
-        toastr.error('Error', msg, constants.toastrError);
+        handleError(error, 'approve user');
         throw error;
       });
   };
@@ -202,26 +170,18 @@ export function rejectUser(userQueueID: string) {
         if (!data.data) {
           throw undefined;
         } else {
-          dispatch({ type: types.USER_REJECT_SUCCESS, user: data.data });
+          dispatch({ type: types.USER_REJECT_SUCCESS, userQueueID });
           return data;
         }
       })
       .catch((error: any) => {
         dispatch({ type: types.USER_REJECT_FAILED });
-        let msg =
-          error.response.data ||
-          `Failed to reject user.  Please try again or contact support. ${
-            error.message
-          }`;
-        if (!navigator.onLine) {
-          msg = 'Please connect to the internet.';
-        }
-        toastr.error('Error', msg, constants.toastrError);
+        handleError(error, 'reject user');
         throw error;
       });
   };
 }
-export function updateUser(user: Iuser) {
+export function updateUser(user: Iuser, queueID: string) {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());
     return axios
@@ -230,23 +190,34 @@ export function updateUser(user: Iuser) {
         if (!data.data) {
           throw undefined;
         } else {
-          dispatch({ type: types.USER_UPDATE_SUCCESS, user: data.data });
+          dispatch({
+            type: types.USER_UPDATE_SUCCESS,
+            user: data.data,
+            queueID
+          });
           toastr.success('Success', 'Saved user', constants.toastrSuccess);
           return data;
         }
       })
       .catch((error: any) => {
         dispatch({ type: types.USER_UPDATE_FAILED });
-        let msg =
-          error.response.data ||
-          `Failed to update user.  Please try again or contact support. ${
-            error.message
-          }`;
-        if (!navigator.onLine) {
-          msg = 'Please connect to the internet.';
-        }
-        toastr.error('Error', msg, constants.toastrError);
+        handleError(error, 'update user');
         throw error;
       });
   };
+}
+
+function handleError(error: any, message: string) {
+  let msg = '';
+  if (error.response && error.response.data) {
+    msg = error.response.data;
+  } else {
+    msg = `Failed to ${message}.  Please try again or contact support. ${
+      error.message
+    }`;
+  }
+  if (!navigator.onLine) {
+    msg = 'Please connect to the internet.';
+  }
+  toastr.error('Error', msg, constants.toastrError);
 }

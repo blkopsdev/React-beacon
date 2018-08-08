@@ -33,7 +33,7 @@ const fieldConfigControls = {
     render: TextLabel,
     meta: { label: 'User Supplied Customer', colWidth: 12 }
   },
-  customerID: {
+  cust: {
     options: {
       validators: Validators.required
     },
@@ -53,7 +53,7 @@ const fieldConfigControls = {
     render: TextLabel,
     meta: { label: 'User Supplied Facility Address', colWidth: 12 }
   },
-  facilityID: {
+  fac: {
     options: {
       validators: Validators.required
     },
@@ -97,10 +97,10 @@ export default class UserQueueForm extends React.Component<Iprops, Istate> {
     // TODO: CHANGE TO REAL CUSTOMER STUFF
     // hardcode CustomerID for now
     this.userForm.patchValue({
-      customerID: 'AAA5D95C-129F-4837-988C-0BF4AE1F3B67'
+      cust: 'Big Pixel'
     });
     this.userForm.patchValue({
-      facilityID: 'BBB5D95C-129F-4837-988C-0BF4AE1F3B67'
+      fac: 'HQ Raleigh'
     });
     const {
       tempAddress,
@@ -125,18 +125,29 @@ export default class UserQueueForm extends React.Component<Iprops, Istate> {
       return;
     }
     this.props.handleSubmit(
+      // TESTING with hard coded data
       {
         id: this.props.user.user.id,
-        ...this.userForm.value
+        ...this.userForm.value,
+        customerID: 'AAA5D95C-129F-4837-988C-0BF4AE1F3B67',
+        facilityID: 'BBB5D95C-129F-4837-988C-0BF4AE1F3B67'
       },
       shouldApprove,
       this.props.user.id
     );
+    //     this.props.handleSubmit(
+    //   {
+    //     id: this.props.user.user.id,
+    //     ...this.userForm.value
+    //   },
+    //   shouldApprove,
+    //   this.props.user.id
+    // );
   };
   setForm = (form: AbstractControl) => {
     if (
       this.state.queueForm.controls &&
-      this.state.queueForm.controls.facilityID
+      this.state.queueForm.controls.tempCompany
     ) {
       this.userForm = this.state.queueForm;
     } else {

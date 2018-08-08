@@ -6,7 +6,8 @@ import { IqueueUser } from '../models';
 export default function userQueue(state: IqueueUser[] = [], action: any) {
   switch (action.type) {
     case types.USER_QUEUE_SUCCESS:
-      return [...state, ...action.queue];
+      return [...action.queue];
+    // return [...state, ...action.queue];
     // return Object.assign(
     //   {},
     //   state,

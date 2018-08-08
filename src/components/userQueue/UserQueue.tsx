@@ -16,7 +16,7 @@ import { Button } from 'react-bootstrap';
 import CommonModal from '../common/CommonModal';
 import UserQueueForm from './UserQueueForm';
 import Banner from '../common/Banner';
-import { FontAwesomeIcon } from '../../../node_modules/@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import constants from '../../constants/constants';
 import * as moment from 'moment';
 import SearchTableForm from '../common/SearchTableForm';

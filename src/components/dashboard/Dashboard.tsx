@@ -4,14 +4,13 @@ import { InitialState, Iuser } from '../../models';
 import Masonry from 'react-masonry-component';
 import { Link } from 'react-router-dom';
 import constants from '../../constants/constants';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const masonryOptions = {
   transitionDuration: 0
 };
 
 const { tiles } = constants;
-
-const iconImg = require('src/images/Training Icon@2x.png');
 
 interface Iprops extends React.Props<Dashboard> {
   history: History;
@@ -42,7 +41,7 @@ class Dashboard extends React.Component<Iprops, {}> {
             <div className={`tile ${tile.color}`} style={styles}>
               <img src={tile.src} />
               <span className="title">
-                <img src={iconImg} />
+                <FontAwesomeIcon icon={tile.icon} />
                 {tile.title}
               </span>
             </div>

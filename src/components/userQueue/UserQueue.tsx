@@ -139,12 +139,14 @@ class UserQueue extends React.Component<Iprops, Istate> {
           pageSize={this.props.userQueue.length}
           manual // Forces table not to paginate or sort automatically, so we can handle it server-side
           pages={1}
+          showPageSizeOptions={false}
+          className="beacon-table"
         />
         <CommonModal
           modalVisible={this.state.showEditUserModal}
           className="user-edit"
           onHide={() => {
-            this.setState({ showEditUserModal: false });
+            this.setState({ showEditUserModal: false, selectedRow: null });
           }}
           body={
             <UserQueueForm

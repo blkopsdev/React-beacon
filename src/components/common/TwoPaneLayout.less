@@ -1,9 +1,16 @@
 @import '../../less/variables.less';
 @highlightBlue: #38A1DF;
 .two-pane-layout {
+  .col-fixed{
+    z-index: 1060;
+  }
   .side-menu {
+    padding-top: 30px;
     height: calc(~"100vh - " @headerHeight);
     background-color: @textBlue;
+    .svg-inline--fa{
+      margin-right: 15px;
+    }
   }
   .list-group {
     font-size: 20px;
@@ -12,6 +19,7 @@
       background-color: @textBlue;
       color: @white;
       text-transform: uppercase;
+      padding: 5px 15px;
     }
     .list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
       background-color: @highlightBlue;

@@ -13,7 +13,8 @@ const Item = (props: any) => {
   return (
     <LinkContainer to={url}>
       <ListGroupItem>
-        <FontAwesomeIcon icon={icon} /> {title}
+        <FontAwesomeIcon icon={icon} fixedWidth />
+        {title}
       </ListGroupItem>
     </LinkContainer>
   );

@@ -73,19 +73,24 @@ const fieldConfigControls = {
     render: ({
       meta: { handleCancel, cancelText, submitText, loading }
     }: any) => (
-      <Col xs={12} className="form-buttons">
-        <Button bsStyle="link" type="button" onClick={handleCancel}>
+      <Col xs={12} className="form-buttons text-right">
+        <Button
+          bsStyle="link"
+          type="button"
+          className="pull-left"
+          onClick={handleCancel}
+        >
           Cancel
-        </Button>
-        <Button bsStyle="warning" type="submit" disabled={loading} className="">
-          Save
         </Button>
         <Button
           bsStyle="warning"
-          type="button"
+          type="submit"
           disabled={loading}
-          className="pull-right"
+          style={{ marginRight: '20px' }}
         >
+          Save
+        </Button>
+        <Button bsStyle="warning" type="button" disabled={loading}>
           Save & Approve
         </Button>
       </Col>
@@ -165,7 +170,7 @@ export default class UserQueueForm extends React.Component<Iprops, Istate> {
       controls: { ...userBaseConfigControls, ...fieldConfigControls }
     };
     return (
-      <div className="user-form">
+      <div className="user-form queue-form">
         <form onSubmit={this.handleSubmit} className="user-form">
           <FormGenerator onMount={this.setForm} fieldConfig={fieldConfig} />
         </form>

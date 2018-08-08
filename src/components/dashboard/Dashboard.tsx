@@ -27,7 +27,7 @@ class Dashboard extends React.Component<Iprops, {}> {
 
   render() {
     const tileElements = tiles.map((tile: any) => {
-      const shouldDisplay = constants.securityFunctions.hasSecurityFunction(
+      const shouldDisplay = constants.hasSecurityFunction(
         this.props.user,
         tile.securityFunction
       );
@@ -39,7 +39,7 @@ class Dashboard extends React.Component<Iprops, {}> {
       return (
         <div key={tile.icon}>
           <Link to={tile.url}>
-            <div className={tile.class} style={styles}>
+            <div className={`tile ${tile.color}`} style={styles}>
               <img src={tile.src} />
               <span className="title">
                 <img src={iconImg} />

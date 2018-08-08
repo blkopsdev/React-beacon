@@ -7,37 +7,37 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { InitialState, Iuser } from '../../models';
 import { userLogout } from '../../actions/userActions';
-import { isAuthenticated } from '../../constants/adalConfig';
-import FontAwesomeIcon from '@fortawesome/react-fontawesome';
-import * as faCog from '@fortawesome/fontawesome-free-solid/faCog';
+import { isFullyAuthenticated } from '../../actions/userActions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Button } from 'react-bootstrap';
 
 interface Iprops extends React.Props<Header> {
-  userLogout?: any;
-}
-interface Istate {
   user: Iuser;
+  userLogout: any;
 }
 
-class Header extends React.Component<Iprops, Istate> {
+class Header extends React.Component<Iprops, {}> {
   constructor(props: Iprops) {
     super(props);
   }
 
   render() {
-    if (!isAuthenticated()) {
+    if (!isFullyAuthenticated(this.props.user)) {
       return null;
     }
 
     return (
       <span className="profile">
         WELCOME&nbsp;
-        <span className="name"> Fluffy</span>
+        <span className="name">{this.props.user.first}</span>
         <span className="vertical" />
-        <FontAwesomeIcon
-          icon={faCog}
-          size="lg"
+        <Button
+          bsStyle="link"
           onClick={this.props.userLogout}
-        />
+          className="header-settings"
+        >
+          <FontAwesomeIcon icon={['far', 'cog']} size="lg" />
+        </Button>
       </span>
     );
   }

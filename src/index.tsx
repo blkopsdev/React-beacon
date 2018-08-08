@@ -16,7 +16,18 @@ import configureStore from './store/configureStore';
 import { loadState, saveState } from './store/localStorage';
 import { runWithAdal } from 'react-adal';
 import axios from 'axios';
-import { authContext, isAuthenticated } from './constants/adalConfig';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { faUsers } from '@fortawesome/free-solid-svg-icons';
+import {
+  faCog,
+  faCalendarCheck,
+  faTh,
+  faCheck,
+  faTimes
+} from '@fortawesome/pro-regular-svg-icons';
+library.add(faCog, faUsers, faCalendarCheck, faTh, faCheck, faTimes);
+
+import { authContext, isFullyAuthenticated } from './actions/userActions';
 import Dashboard from './components/dashboard/Dashboard';
 import Header from './components/header/Header';
 import SignUpDirect from './components/auth/SignUpDirect';
@@ -65,7 +76,7 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
     <Route
       {...rest}
       render={(props: any) =>
-        store.getState().user.email.length && isAuthenticated() ? (
+        isFullyAuthenticated(store.getState().user) ? (
           <Component {...props} />
         ) : (
           <Redirect
@@ -93,7 +104,7 @@ runWithAdal(
               <Route exact path="/signup" component={SignUpDirect} />
               <PrivateRoute path="/dashboard" component={Dashboard} />
               <PrivateRoute path="/queue" component={TwoPaneLayout} />
-              <PrivateRoute path="/user-management" component={TwoPaneLayout} />
+              <PrivateRoute path="/users" component={TwoPaneLayout} />
               <Route component={NoMatch} />
             </Switch>
             <ReduxToastr position={'top-right'} />

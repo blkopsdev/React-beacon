@@ -18,7 +18,7 @@ import {
 } from '../../actions/redirectToReferrerAction';
 import { Col, Grid, Row, Button } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
-import { isAuthenticated } from '../../constants/adalConfig';
+import { isFullyAuthenticated } from '../../actions/userActions';
 import UserForm from './UserForm';
 
 interface Iprops extends RouteComponentProps<{}> {
@@ -43,13 +43,15 @@ const SignUpSuccess = (props: any) => {
       <h2> Success! </h2>
       <p>
         You have been successfully added into the system. An BeaconMedaes admin
-        will review your application and be in touch with you soon. Please make
-        sure that no-reply@beaconmedaes.com is cleared so that it does not end
-        up in your spam.
+        will review your application and be in touch with you soon.{' '}
+      </p>
+      <p>
+        Please make sure that no-reply@beaconmedaes.com is cleared so that it
+        does not end up in your spam.
       </p>
       <Button
         bsStyle="link"
-        className="pull-right"
+        className="pull-right ok-button"
         style={{ color: 'white' }}
         onClick={props.handleCancel}
       >
@@ -79,7 +81,7 @@ class SignUpDirect extends React.Component<Iprops, Istate> {
     });
   }
   render() {
-    if (this.props.user.email.length && isAuthenticated()) {
+    if (isFullyAuthenticated(this.props.user)) {
       this.props.removeLoginRedirect();
       return <Redirect to={'/dashboard'} />;
     }
@@ -88,7 +90,7 @@ class SignUpDirect extends React.Component<Iprops, Istate> {
     }
 
     return (
-      <div className="loginlayout">
+      <div className="loginlayout signup">
         <Grid>
           <Row>
             <Col>

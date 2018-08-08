@@ -20,28 +20,32 @@ body {
   // font-size: 16px;
   // font-weight: 400;
   text-transform: capitalize;
+  padding: 6px 18px;
+  border-radius: 8px;
   // font-family: @headerFont;
   i {
     // margin-right: 5px;
   }
-  &.btn-lg{
+  &.btn-lg {
     font-size: 20px;
     padding: 12px 18px;
   }
-  &.btn-sm{
+  &.btn-sm {
     padding: 5px 10px;
     font-size: 14px;
   }
-  &.btn-primary{
+  &.btn-primary {
     // color: #fff;
     background: @primaryBlue;
+    border-color: @textBlue;
     // border-bottom: 3px solid @grayBlueShadow;
   }
-  &.btn-warning{
-    // background: @yellow;
+  &.btn-warning {
+    background: @orange;
+    border-color: @darkOrange;
     // border-bottom: 3px solid @yellowShadow;
   }
-  &.btn-default{
+  &.btn-default {
     // color: white;
     // background-color: #aaa;
     // border-bottom: 3px solid #777;
@@ -51,9 +55,146 @@ body {
     border-bottom: 3px solid #840000;
   }
   &.btn-link {
-    // text-decoration: underline;
+    color: @primaryBlue;
   }
-  &:focus{
+  &:focus {
     outline: none !important;
   }
 }
+
+.user-form {
+  display: inline-block;
+  .form-buttons {
+    margin-top: 20px;
+  }
+}
+
+.form-group {
+  margin-bottom: 10px;
+  .control-label {
+    font-weight: normal;
+    margin-bottom: 0px;
+    text-transform: uppercase;
+    line-height: 20px;
+  }
+  .form-control {
+    margin-top: -5px;
+  }
+}
+
+.slide-modal {
+  .modal-body {
+    padding: 15px 0px;
+  }
+  .modal-footer {
+    display: none;
+  }
+  .modal-dialog {
+    transform: translateY(0%) !important;
+    width: 400px;
+    margin: 0px auto 0 320px;
+  }
+  .modal-content {
+    background-color: #F5F5F5;
+    transition: transform .5s;
+    border-radius: 0px;
+    min-height: calc(~"100vh - " @headerHeight);
+  }
+  &.from-left .modal-content {
+    margin-right: auto;
+    transform: translateX(-100%);
+  }
+  &.after-open .modal-content {
+    transform: translateX(0%);
+  }
+}
+
+.modal-container {
+  position: relative;
+}
+
+.modal-container .modal, .modal-container .modal-backdrop {
+  position: absolute;
+}
+
+.container-fluid {
+  height: calc(~"100vh - " @headerHeight);
+}
+
+.banner {
+  height: 60px;
+  width: 100%;
+  img {
+    opacity: .3;
+    max-width: 100%;
+    height: 100%;
+  }
+  span {
+    font-size: 24px;
+    color: #FFFFFF;
+    position: absolute;
+    left: 20px;
+    top: 17px;
+    text-transform: uppercase;
+  }
+}
+
+.ReactTable.beacon-table{
+  &.-striped.dark .rt-tr.-odd {
+    background-color: @dark;
+    &:hover{
+      background-color: fade(@dark, 20%);
+    }
+  }
+  &.-striped.green .rt-tr.-odd {
+    background-color: @green;
+    &:hover{
+      background-color: fade(@green, 20%);
+    }
+  }
+  &.-striped.blue .rt-tr.-odd {
+    background-color: @blue;
+    &:hover{
+      background-color: fade(@blue, 20%);
+    }
+  }
+  &.-striped.orange .rt-tr.-odd {
+    background-color: fade(@orange, 10%);
+    &:hover{
+      background-color: fade(@orange, 20%);
+    }
+  }
+  &.-striped.purple .rt-tr:hover{
+    background-color: fade(@purple, 20%);
+  }
+    &.-striped.dark .rt-tr:hover{
+      background-color: fade(@dark, 20%);
+  }
+  &.-striped.green .rt-tr:hover{
+      background-color: fade(@green, 20%);
+  }
+  &.-striped.blue .rt-tr:hover{
+    background-color: fade(@blue, 20%);
+  }
+  &.-striped.orange .rt-tr:hover{
+      background-color: fade(@orange, 20%);
+  }
+  &.-striped.purple .rt-tr:hover{
+      background-color: fade(@purple, 05%);
+  }
+ .rt-td{
+  padding: 0px 5px;
+ }
+ .rt-tr{
+  cursor: pointer;
+  &:first-child{
+    padding-left: 20px;
+  }
+ }
+ .rt-thead .rt-tr{
+  text-align: left;
+ }
+}
+
+
+

@@ -51,7 +51,6 @@ export function userLogin() {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());
     const token = authContext.getCachedToken(authContext.config.clientId);
-    console.log('token', token);
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
     dispatch({ type: types.AAD_LOGIN_SUCCESS, token });
     return axios
@@ -68,8 +67,10 @@ export function userLogin() {
       .catch((error: any) => {
         dispatch({ type: types.USER_LOGIN_FAILED });
         let msg =
-          error.message ||
-          'Failed to login.  Please try again or contact support.';
+          error.response.data ||
+          `Failed to login.  Please try again or contact support. ${
+            error.message
+          }`;
         if (!navigator.onLine) {
           msg = 'Please connect to the internet.';
         }
@@ -89,7 +90,6 @@ export const getToken = () => {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());
     const token = authContext.getCachedToken(authContext.config.clientId);
-    console.log('token', token);
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
     dispatch({ type: types.AAD_LOGIN_SUCCESS, token });
     // return token;
@@ -123,8 +123,10 @@ export function signUpDirect(tempUser: ItempUser) {
       .catch((error: any) => {
         dispatch({ type: types.USER_SIGNUP_FAILED });
         let msg =
-          error.message ||
-          'Failed to signup.  Please try again or contact support.';
+          error.response.data ||
+          `Failed to signup.  Please try again or contact support. ${
+            error.message
+          }`;
         if (!navigator.onLine) {
           msg = 'Please connect to the internet.';
         }
@@ -150,8 +152,10 @@ export function getUserQueue(page: number, search: string) {
       .catch((error: any) => {
         dispatch({ type: types.USER_QUEUE_FAILED });
         let msg =
-          error.message ||
-          'Failed to get new user queue.  Please try again or contact support.';
+          error.response.data ||
+          `Failed to get user queue.  Please try again or contact support. ${
+            error.message
+          }`;
         if (!navigator.onLine) {
           msg = 'Please connect to the internet.';
         }
@@ -177,7 +181,10 @@ export function approveUser(userQueueID: string) {
       .catch((error: any) => {
         dispatch({ type: types.USER_APPROVE_FAILED });
         let msg =
-          'Failed to approve user.  Please try again or contact support.';
+          error.response.data ||
+          `Failed to approve user.  Please try again or contact support. ${
+            error.message
+          }`;
         if (!navigator.onLine) {
           msg = 'Please connect to the internet.';
         }
@@ -202,8 +209,10 @@ export function rejectUser(userQueueID: string) {
       .catch((error: any) => {
         dispatch({ type: types.USER_REJECT_FAILED });
         let msg =
-          error.message ||
-          'Failed to reject user.  Please try again or contact support.';
+          error.response.data ||
+          `Failed to reject user.  Please try again or contact support. ${
+            error.message
+          }`;
         if (!navigator.onLine) {
           msg = 'Please connect to the internet.';
         }
@@ -229,8 +238,10 @@ export function updateUser(user: Iuser) {
       .catch((error: any) => {
         dispatch({ type: types.USER_UPDATE_FAILED });
         let msg =
-          error.message ||
-          'Failed to update user.  Please try again or contact support.';
+          error.response.data ||
+          `Failed to update user.  Please try again or contact support. ${
+            error.message
+          }`;
         if (!navigator.onLine) {
           msg = 'Please connect to the internet.';
         }

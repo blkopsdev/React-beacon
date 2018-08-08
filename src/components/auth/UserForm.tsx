@@ -60,31 +60,6 @@ const fieldConfigControls = {
     },
     render: FormUtil.TextInput,
     meta: { label: 'Zip', colWidth: 4, type: 'tel' }
-  },
-  $field_0: {
-    isStatic: false,
-    render: ({
-      meta: { handleCancel, cancelText, submitText, loading }
-    }: any) => (
-      <Col xs={12} className="user-form-buttons">
-        <Button
-          bsStyle="link"
-          type="button"
-          onClick={handleCancel}
-          style={{ color: 'white' }}
-        >
-          {cancelText}
-        </Button>
-        <Button
-          bsStyle="primary"
-          type="submit"
-          disabled={loading}
-          className="pull-right"
-        >
-          {submitText}
-        </Button>
-      </Col>
-    )
   }
 };
 
@@ -153,6 +128,25 @@ export default class UserForm extends React.Component<Iprops, Istate> {
       <div className="loginForm">
         <form onSubmit={this.handleSubmit} className="user-form">
           <FormGenerator onMount={this.setForm} fieldConfig={fieldConfig} />
+          <Col xs={12} className="user-form-buttons">
+            <Button
+              bsStyle="link"
+              type="button"
+              onClick={this.props.handleCancel}
+              style={{ color: 'white' }}
+              disabled={this.props.loading}
+            >
+              Cancel
+            </Button>
+            <Button
+              bsStyle="primary"
+              type="submit"
+              disabled={this.props.loading}
+              className="pull-right"
+            >
+              Sign Up
+            </Button>
+          </Col>
         </form>
       </div>
     );

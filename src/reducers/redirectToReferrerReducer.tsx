@@ -8,7 +8,8 @@ export default function redirect(
 ) {
   switch (action.type) {
     case types.SET_REDIRECT_REFERRER:
-      return { ...state, redirectToReferrer: true } as Iredirect;
+      // return { ...state, redirectToReferrer: true } as Iredirect;
+      return initialState.redirect;
     case types.REMOVE_REDIRECT_REFERRER:
       return { ...state, redirectToReferrer: false } as Iredirect;
     case types.SET_REDIRECT_PATHNAME:

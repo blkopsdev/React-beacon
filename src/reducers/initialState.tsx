@@ -19,7 +19,7 @@ export default {
   },
   redirect: {
     redirectToReferrer: false,
-    pathname: '/'
+    pathname: '/dashboard'
   },
   userQueue: []
 };

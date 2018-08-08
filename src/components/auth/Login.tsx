@@ -85,9 +85,10 @@ class Login extends React.Component<Iprops, Istate> {
     };
     const { redirectToReferrer } = this.props.redirect;
 
-    // if (!this.props.user.email.length){
-    //   return <div>loading... </div>;
-    // }
+    // if the user is authenticated but not fully, show loading
+    if (isAuthenticated() && !isFullyAuthenticated(this.props.user)) {
+      return null;
+    }
 
     // if user is authenticated and exists in the backend
     // redirect to the redirect.pathname or the dashboard

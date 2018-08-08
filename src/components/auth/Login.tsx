@@ -67,7 +67,12 @@ class Login extends React.Component<Iprops, Istate> {
   componentDidMount() {
     // store the referring loation in redux
     const { from } = this.props.location.state || { from: { pathname: '/' } };
-    this.props.setRedirectPathname(from.pathname);
+
+    // if we are not already redirecting, then set it
+    if (!this.props.redirect.redirectToReferrer) {
+      this.props.setRedirectPathname(from.pathname);
+    }
+
     // TODO show a toast message if this.props.redirect.pathname does not equal "/"
     // <p>You must log in to view the page at {from.pathname}</p>
   }

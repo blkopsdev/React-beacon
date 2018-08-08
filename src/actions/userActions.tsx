@@ -12,7 +12,7 @@ export const authContext = new AuthenticationContext({
   tenant: constants.adalAuth.tenant,
   clientId: constants.adalAuth.clientId,
   cacheLocation: 'localStorage',
-  redirectUri: `${process.env.REACT_APP_HOST_DOMAIN}/dashboard`
+  redirectUri: `${process.env.REACT_APP_HOST_DOMAIN}`
 });
 
 export function isAuthenticated() {

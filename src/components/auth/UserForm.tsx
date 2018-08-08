@@ -76,22 +76,25 @@ const testUser = {
   tempCompany: 'BP',
   phone: '888-333-1121'
 };
-interface Iprops extends React.Props<{}> {
+interface Iprops extends React.Props<UserForm> {
   handleSubmit: any;
   handleCancel: any;
   loading: boolean;
 }
 interface Istate {
-  signupForm: any;
+  stateForm: any;
+  loading: boolean;
 }
 export default class UserForm extends React.Component<Iprops, Istate> {
   public userForm: AbstractControl;
   constructor(props: Iprops) {
     super(props);
     this.state = {
-      signupForm: {}
+      stateForm: {},
+      loading: false
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.setForm = this.setForm.bind(this);
   }
   componentDidMount() {
     if (process.env.NODE_ENV !== 'production') {
@@ -108,10 +111,27 @@ export default class UserForm extends React.Component<Iprops, Istate> {
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-    console.log('Form values', this.userForm);
-    this.props.handleSubmit(this.userForm.value);
+    console.log('Form values', this.state.stateForm.value);
+    this.setState({ loading: true });
+    this.props
+      .handleSubmit(this.state.stateForm.value)
+      .then(() => {
+        this.setState({ loading: false });
+      })
+      .catch(() => {
+        this.setState({ loading: false });
+      });
   };
   setForm = (form: any) => {
+    if (
+      this.state.stateForm.controls &&
+      this.state.stateForm.controls.tempZip
+    ) {
+      this.userForm = this.state.stateForm;
+    } else {
+      this.userForm = form;
+      this.setState({ stateForm: form });
+    }
     this.userForm = form;
     this.userForm.meta = {
       handleCancel: this.props.handleCancel,
@@ -138,6 +158,12 @@ export default class UserForm extends React.Component<Iprops, Istate> {
             >
               Cancel
             </Button>
+            {this.state.loading && (
+              <div className="spinner">
+                <div className="double-bounce1" />
+                <div className="double-bounce2" />
+              </div>
+            )}
             <Button
               bsStyle="primary"
               type="submit"

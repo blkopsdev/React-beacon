@@ -77,7 +77,7 @@ class SignUpDirect extends React.Component<Iprops, Istate> {
     this.setState({ redirectToLogin: true });
   }
   handleSubmit(newUser: ItempUser) {
-    this.props.signUpDirect(newUser).then(() => {
+    return this.props.signUpDirect(newUser).then(() => {
       this.setState({ showSignupSuccess: true });
     });
   }

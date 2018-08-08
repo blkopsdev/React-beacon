@@ -19,6 +19,7 @@ import Banner from '../common/Banner';
 import { FontAwesomeIcon } from '../../../node_modules/@fortawesome/react-fontawesome';
 import constants from '../../constants/constants';
 import * as moment from 'moment';
+import SearchTableForm from '../common/SearchTableForm';
 
 interface Iprops extends RouteComponentProps<{}> {
   getUserQueue: any;
@@ -158,6 +159,12 @@ class UserQueue extends React.Component<Iprops, Istate> {
     return (
       <div className="user-queue">
         <Banner title="New User Queue" img="http://placekitten.com/1440/60" />
+        <SearchTableForm
+          handleSubmit={(values: any) => {
+            alert(`under construction: ${JSON.stringify(values)}`);
+          }}
+          loading={this.props.loading}
+        />
         <ReactTable
           data={this.props.userQueue}
           columns={this.columns}

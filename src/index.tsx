@@ -17,7 +17,7 @@ import { loadState, saveState } from './store/localStorage';
 import { runWithAdal } from 'react-adal';
 import axios from 'axios';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faUsers } from '@fortawesome/free-solid-svg-icons';
+import { faUsers, faSearch } from '@fortawesome/free-solid-svg-icons';
 import {
   faCog,
   faCalendarCheck,
@@ -25,7 +25,7 @@ import {
   faCheck,
   faTimes
 } from '@fortawesome/pro-regular-svg-icons';
-library.add(faCog, faUsers, faCalendarCheck, faTh, faCheck, faTimes);
+library.add(faCog, faUsers, faCalendarCheck, faTh, faCheck, faTimes, faSearch);
 
 import { authContext, isFullyAuthenticated } from './actions/userActions';
 import Dashboard from './components/dashboard/Dashboard';

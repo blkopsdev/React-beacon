@@ -54,6 +54,26 @@ export const FormUtil = {
       </FormGroup>
     </Col>
   ),
+  TextInputWithoutValidation: ({
+    handler,
+    touched,
+    hasError,
+    meta,
+    pristine,
+    errors,
+    submitted
+  }: any) => (
+    <Col xs={meta.colWidth}>
+      <FormGroup bsSize="sm">
+        <ControlLabel>{meta.label}</ControlLabel>
+        <FormControl
+          type={meta.type}
+          placeholder={meta.placeholder}
+          {...handler()}
+        />
+      </FormGroup>
+    </Col>
+  ),
   TextInputWithButton: ({
     handler,
     touched,

@@ -134,7 +134,10 @@ export default class UserQueueForm extends React.Component<Iprops, Istate> {
     );
   };
   setForm = (form: AbstractControl) => {
-    if (this.state.queueForm.status) {
+    if (
+      this.state.queueForm.controls &&
+      this.state.queueForm.controls.facilityID
+    ) {
       this.userForm = this.state.queueForm;
     } else {
       this.userForm = form;

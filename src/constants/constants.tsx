@@ -25,8 +25,7 @@ const colors = {
 const constants = {
   adalAuth: {
     tenant: 'a675e2fc-4806-4ec9-b49c-b0dc413b0e6b',
-    clientId: 'e5fb8173-e048-4cda-8acd-a8e735b4c927',
-    redirectUri: 'http://localhost:3000'
+    clientId: 'e5fb8173-e048-4cda-8acd-a8e735b4c927'
   },
   toastrError: {
     transitionIn: 'bounceInDown' as transitionInType,

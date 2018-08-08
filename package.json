@@ -18,6 +18,7 @@
     "bootstrap": "^3.3.7",
     "i": "^0.3.6",
     "lodash": "^4.17.10",
+    "moment": "^2.22.2",
     "npm": "^6.3.0",
     "react": "^16.4.0",
     "react-adal": "git+https://github.com/jfbloom22/react-adal.git#master",

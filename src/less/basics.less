@@ -140,8 +140,61 @@ body {
 }
 
 .ReactTable.beacon-table{
-  margin-left: 20px;
+  &.-striped.dark .rt-tr.-odd {
+    background-color: @dark;
+    &:hover{
+      background-color: fade(@dark, 20%);
+    }
+  }
+  &.-striped.green .rt-tr.-odd {
+    background-color: @green;
+    &:hover{
+      background-color: fade(@green, 20%);
+    }
+  }
+  &.-striped.blue .rt-tr.-odd {
+    background-color: @blue;
+    &:hover{
+      background-color: fade(@blue, 20%);
+    }
+  }
+  &.-striped.orange .rt-tr.-odd {
+    background-color: fade(@orange, 10%);
+    &:hover{
+      background-color: fade(@orange, 20%);
+    }
+  }
+  &.-striped.purple .rt-tr:hover{
+    background-color: fade(@purple, 20%);
+  }
+    &.-striped.dark .rt-tr:hover{
+      background-color: fade(@dark, 20%);
+  }
+  &.-striped.green .rt-tr:hover{
+      background-color: fade(@green, 20%);
+  }
+  &.-striped.blue .rt-tr:hover{
+    background-color: fade(@blue, 20%);
+  }
+  &.-striped.orange .rt-tr:hover{
+      background-color: fade(@orange, 20%);
+  }
+  &.-striped.purple .rt-tr:hover{
+      background-color: fade(@purple, 05%);
+  }
  .rt-td{
-  padding: 0px 8px;
+  padding: 0px 5px;
+ }
+ .rt-tr{
+  cursor: pointer;
+  &:first-child{
+    padding-left: 20px;
+  }
+ }
+ .rt-thead .rt-tr{
+  text-align: left;
  }
 }
+
+
+

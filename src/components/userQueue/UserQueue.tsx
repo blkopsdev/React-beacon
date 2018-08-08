@@ -16,6 +16,8 @@ import CommonModal from '../common/CommonModal';
 import UserQueueForm from './UserQueueForm';
 import Banner from '../common/Banner';
 import { FontAwesomeIcon } from '../../../node_modules/@fortawesome/react-fontawesome';
+import constants from '../../constants/constants';
+import * as moment from 'moment';
 
 interface Iprops extends RouteComponentProps<{}> {
   getUserQueue: any;
@@ -62,12 +64,17 @@ class UserQueue extends React.Component<Iprops, Istate> {
       },
       {
         Header: 'Created',
-        accessor: 'createDate'
+        accessor: ({ createDate }: Iuser) => {
+          console.log(createDate);
+          return moment.utc(createDate).format('MM/DD/YYYY hh:mm a');
+        },
+        id: 'created'
       },
       {
         Header: 'Approve?',
         accessor: 'id',
-        Cell: this.ApproveCell
+        Cell: this.ApproveCell,
+        maxWidth: 90
       }
     ];
   }
@@ -81,10 +88,10 @@ class UserQueue extends React.Component<Iprops, Istate> {
   // }
   ApproveCell = (row: any) => {
     return (
-      <div>
+      <div className="text-right approve-buttons">
         <Button
           bsStyle="link"
-          className="pull-right"
+          className=""
           onClick={(e: React.MouseEvent<Button>) => {
             this.buttonInAction = true;
             this.props
@@ -99,7 +106,7 @@ class UserQueue extends React.Component<Iprops, Istate> {
         >
           <FontAwesomeIcon icon={['far', 'check']} />
         </Button>
-        <Button bsStyle="link" className="pull-right">
+        <Button bsStyle="link" className="">
           <FontAwesomeIcon icon={['far', 'times']} />
         </Button>
       </div>
@@ -119,8 +126,9 @@ class UserQueue extends React.Component<Iprops, Istate> {
         },
         style: {
           background:
-            rowInfo.index === this.state.selectedRow ? '#00afec' : 'white',
-          color: rowInfo.index === this.state.selectedRow ? 'white' : 'black'
+            rowInfo.index === this.state.selectedRow
+              ? constants.colors.orangeTr
+              : ''
         }
       };
     } else {
@@ -140,7 +148,7 @@ class UserQueue extends React.Component<Iprops, Istate> {
           manual // Forces table not to paginate or sort automatically, so we can handle it server-side
           pages={1}
           showPageSizeOptions={false}
-          className="beacon-table"
+          className="beacon-table -striped -highlight orange"
         />
         <CommonModal
           modalVisible={this.state.showEditUserModal}

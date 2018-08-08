@@ -68,9 +68,10 @@ fd71f683-7423-4ba0-9ed3-fba0547be076 // cliend ID and Application ID for Native 
 
 ## Envirenment Variables
 Available environments: `development, test, production`
-For development add the appropriate envirement: `export NODE_ENV=development` to your ~/.bash_profile 
-Then restart your terminal window.
-To override on the fly:  `NODE_ENV=production npm start`
+These are not manually configurable.
+Update env variables in the .env file or the .env.development file.
+The node env variables must be set on the server.
+
 
 ## FontAwesome
 * we are using Font Awesome 5 in this project and using the prerelease version of react-fontawesome.  

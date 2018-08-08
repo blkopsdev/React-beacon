@@ -31,6 +31,7 @@ interface Iprops extends RouteComponentProps<{}> {
   user: Iuser;
   redirect: Iredirect;
   signUpDirect: any;
+  loading: boolean;
 }
 interface Istate {
   redirectToLogin: boolean;
@@ -100,6 +101,7 @@ class SignUpDirect extends React.Component<Iprops, Istate> {
                 <UserForm
                   handleSubmit={this.handleSubmit}
                   handleCancel={this.cancel}
+                  loading={this.props.loading}
                 />
               )}
             </Col>
@@ -112,7 +114,8 @@ class SignUpDirect extends React.Component<Iprops, Istate> {
 const mapStateToProps = (state: InitialState, ownProps: any) => {
   return {
     user: state.user,
-    redirect: state.redirect
+    redirect: state.redirect,
+    loading: state.ajaxCallsInProgress > 0
   };
 };
 

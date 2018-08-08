@@ -29,6 +29,7 @@ interface Iprops extends RouteComponentProps<{}> {
   removeLoginRedirect?: any;
   user: Iuser;
   redirect: Iredirect;
+  loading: boolean;
 }
 
 const azure = require('../../images/Azure.png');
@@ -77,6 +78,7 @@ class SignUpWithMS extends React.Component<Iprops, any> {
                   <UserForm
                     handleSubmit={this.login}
                     handleCancel={this.login}
+                    loading={this.props.loading}
                   />
                 )}
                 {!showSignUpForm && (
@@ -103,7 +105,8 @@ class SignUpWithMS extends React.Component<Iprops, any> {
 const mapStateToProps = (state: InitialState, ownProps: any) => {
   return {
     user: state.user,
-    redirect: state.redirect
+    redirect: state.redirect,
+    loading: state.ajaxCallsInProgress > 0
   };
 };
 

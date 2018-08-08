@@ -104,6 +104,7 @@ const testUser = {
 interface Iprops extends React.Props<{}> {
   handleSubmit: any;
   handleCancel: any;
+  loading: boolean;
 }
 interface Istate {
   signupForm: any;
@@ -141,7 +142,7 @@ export default class UserForm extends React.Component<Iprops, Istate> {
       handleCancel: this.props.handleCancel,
       cancelText: 'Cancel',
       submitText: 'Sign Up',
-      loading: false
+      loading: this.props.loading
     };
   };
   render() {

@@ -74,6 +74,7 @@ interface Iprops extends React.Props<UserQueueForm> {
   handleSubmit: any;
   handleCancel: any;
   user: IqueueUser;
+  loading: boolean;
 }
 interface Istate {
   queueForm: any;
@@ -139,6 +140,9 @@ export default class UserQueueForm extends React.Component<Iprops, Istate> {
       this.userForm = form;
       this.setState({ queueForm: form });
     }
+    this.userForm.meta = {
+      loading: this.props.loading
+    };
   };
   render() {
     const fieldConfig = {
@@ -160,7 +164,7 @@ export default class UserQueueForm extends React.Component<Iprops, Istate> {
             <Button
               bsStyle="warning"
               type="submit"
-              disabled={false}
+              disabled={this.props.loading}
               style={{ marginRight: '20px' }}
             >
               Save
@@ -168,7 +172,7 @@ export default class UserQueueForm extends React.Component<Iprops, Istate> {
             <Button
               bsStyle="warning"
               type="button"
-              disabled={false}
+              disabled={this.props.loading}
               onClick={(e: any) => this.handleSubmit(e, true)}
             >
               Save & Approve

@@ -1,6 +1,7 @@
 /*
 * The HeaderMenu only displays if we have an authenticated user.
 * It is responsible for displaying the welcome message and the dropdown menu for logged in users
+* spinner is from : http://tobiasahlin.com/spinkit/
 */
 
 import * as React from 'react';
@@ -14,6 +15,7 @@ import { Button } from 'react-bootstrap';
 interface Iprops extends React.Props<Header> {
   user: Iuser;
   userLogout: any;
+  loading: boolean;
 }
 
 class Header extends React.Component<Iprops, {}> {
@@ -27,17 +29,26 @@ class Header extends React.Component<Iprops, {}> {
     }
 
     return (
-      <span className="profile">
-        WELCOME&nbsp;
-        <span className="name">{this.props.user.first}</span>
-        <span className="vertical" />
-        <Button
-          bsStyle="link"
-          onClick={this.props.userLogout}
-          className="header-settings"
-        >
-          <FontAwesomeIcon icon={['far', 'cog']} size="lg" />
-        </Button>
+      <span>
+        {this.props.loading && (
+          <div className="spinner">
+            <div className="double-bounce1" />
+            <div className="double-bounce2" />
+          </div>
+        )}
+
+        <span className="profile">
+          WELCOME&nbsp;
+          <span className="name">{this.props.user.first}</span>
+          <span className="vertical" />
+          <Button
+            bsStyle="link"
+            onClick={this.props.userLogout}
+            className="header-settings"
+          >
+            <FontAwesomeIcon icon={['far', 'cog']} size="lg" />
+          </Button>
+        </span>
       </span>
     );
   }
@@ -45,7 +56,8 @@ class Header extends React.Component<Iprops, {}> {
 
 const mapStateToProps = (state: InitialState, ownProps: Iprops) => {
   return {
-    user: state.user
+    user: state.user,
+    loading: state.ajaxCallsInProgress > 0
   };
 };
 

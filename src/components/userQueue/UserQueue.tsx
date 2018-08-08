@@ -26,6 +26,7 @@ interface Iprops extends RouteComponentProps<{}> {
   approveUser: (value: string) => Promise<void>;
   updateUser: (value: Iuser) => Promise<void>;
   rejectUser: (value: string) => Promise<void>;
+  loading: boolean;
 }
 
 interface Istate {
@@ -93,6 +94,7 @@ class UserQueue extends React.Component<Iprops, Istate> {
         <Button
           bsStyle="link"
           className=""
+          disabled={this.props.loading}
           onClick={(e: React.MouseEvent<Button>) => {
             this.buttonInAction = true;
             this.props
@@ -110,6 +112,7 @@ class UserQueue extends React.Component<Iprops, Istate> {
         <Button
           bsStyle="link"
           className=""
+          disabled={this.props.loading}
           onClick={(e: React.MouseEvent<Button>) => {
             this.buttonInAction = true;
             this.props
@@ -188,6 +191,7 @@ class UserQueue extends React.Component<Iprops, Istate> {
                 this.setState({ showEditUserModal: false });
               }}
               user={this.props.userQueue[this.state.selectedRow]}
+              loading={this.props.loading}
             />
           }
           title="New User"
@@ -201,7 +205,8 @@ class UserQueue extends React.Component<Iprops, Istate> {
 const mapStateToProps = (state: InitialState, ownProps: any) => {
   return {
     user: state.user,
-    userQueue: state.userQueue
+    userQueue: state.userQueue,
+    loading: state.ajaxCallsInProgress > 0
   };
 };
 export default connect(

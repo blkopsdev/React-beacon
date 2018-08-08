@@ -177,7 +177,6 @@ export function approveUser(userQueueID: string) {
       .catch((error: any) => {
         dispatch({ type: types.USER_APPROVE_FAILED });
         let msg =
-          error.message ||
           'Failed to approve user.  Please try again or contact support.';
         if (!navigator.onLine) {
           msg = 'Please connect to the internet.';
@@ -187,11 +186,11 @@ export function approveUser(userQueueID: string) {
       });
   };
 }
-export function rejectUser(userID: string) {
+export function rejectUser(userQueueID: string) {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());
     return axios
-      .post(API.POST.user.reject, userID)
+      .post(API.POST.user.reject, { id: userQueueID })
       .then(data => {
         if (!data.data) {
           throw undefined;
@@ -223,6 +222,7 @@ export function updateUser(user: Iuser) {
           throw undefined;
         } else {
           dispatch({ type: types.USER_UPDATE_SUCCESS, user: data.data });
+          toastr.success('Success', 'Saved user', constants.toastrSuccess);
           return data;
         }
       })

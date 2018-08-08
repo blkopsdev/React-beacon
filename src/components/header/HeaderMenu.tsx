@@ -29,7 +29,7 @@ class Header extends React.Component<Iprops, {}> {
     return (
       <span className="profile">
         WELCOME&nbsp;
-        <span className="name"> Fluffy</span>
+        <span className="name">{this.props.user.first}</span>
         <span className="vertical" />
         <Button
           bsStyle="link"

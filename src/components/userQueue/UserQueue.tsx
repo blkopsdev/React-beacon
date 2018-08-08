@@ -6,7 +6,8 @@ import { connect } from 'react-redux';
 import {
   getUserQueue,
   approveUser,
-  updateUser
+  updateUser,
+  rejectUser
 } from '../../actions/userActions';
 import { InitialState, IqueueUser, Iuser } from '../../models';
 import { RouteComponentProps } from 'react-router-dom';
@@ -22,8 +23,9 @@ import * as moment from 'moment';
 interface Iprops extends RouteComponentProps<{}> {
   getUserQueue: any;
   userQueue: IqueueUser[];
-  approveUser: any;
-  updateUser: any;
+  approveUser: (value: string) => Promise<void>;
+  updateUser: (value: Iuser) => Promise<void>;
+  rejectUser: (value: string) => Promise<void>;
 }
 
 interface Istate {
@@ -65,7 +67,6 @@ class UserQueue extends React.Component<Iprops, Istate> {
       {
         Header: 'Created',
         accessor: ({ createDate }: Iuser) => {
-          console.log(createDate);
           return moment.utc(createDate).format('MM/DD/YYYY hh:mm a');
         },
         id: 'created'
@@ -95,7 +96,7 @@ class UserQueue extends React.Component<Iprops, Istate> {
           onClick={(e: React.MouseEvent<Button>) => {
             this.buttonInAction = true;
             this.props
-              .approveUser(row.value, true)
+              .approveUser(row.value)
               .then((blah: any) => {
                 this.buttonInAction = false;
               })
@@ -106,7 +107,21 @@ class UserQueue extends React.Component<Iprops, Istate> {
         >
           <FontAwesomeIcon icon={['far', 'check']} />
         </Button>
-        <Button bsStyle="link" className="">
+        <Button
+          bsStyle="link"
+          className=""
+          onClick={(e: React.MouseEvent<Button>) => {
+            this.buttonInAction = true;
+            this.props
+              .rejectUser(row.value)
+              .then((blah: any) => {
+                this.buttonInAction = false;
+              })
+              .catch((err: any) => {
+                this.buttonInAction = false;
+              });
+          }}
+        >
           <FontAwesomeIcon icon={['far', 'times']} />
         </Button>
       </div>
@@ -158,9 +173,16 @@ class UserQueue extends React.Component<Iprops, Istate> {
           }}
           body={
             <UserQueueForm
-              handleSubmit={(user: Iuser) => {
+              handleSubmit={(
+                user: Iuser,
+                shouldApprove: boolean,
+                queueID: string
+              ) => {
                 this.props.updateUser(user);
                 this.setState({ showEditUserModal: false });
+                if (shouldApprove) {
+                  this.props.approveUser(queueID);
+                }
               }}
               handleCancel={() => {
                 this.setState({ showEditUserModal: false });
@@ -187,6 +209,7 @@ export default connect(
   {
     getUserQueue,
     approveUser,
-    updateUser
+    updateUser,
+    rejectUser
   }
 )(UserQueue);

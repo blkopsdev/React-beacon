@@ -67,34 +67,6 @@ const fieldConfigControls = {
         alert('functionality under construction');
       }
     }
-  },
-  $field_0: {
-    isStatic: false,
-    render: ({
-      meta: { handleCancel, cancelText, submitText, loading }
-    }: any) => (
-      <Col xs={12} className="form-buttons text-right">
-        <Button
-          bsStyle="link"
-          type="button"
-          className="pull-left"
-          onClick={handleCancel}
-        >
-          Cancel
-        </Button>
-        <Button
-          bsStyle="warning"
-          type="submit"
-          disabled={loading}
-          style={{ marginRight: '20px' }}
-        >
-          Save
-        </Button>
-        <Button bsStyle="warning" type="button" disabled={loading}>
-          Save & Approve
-        </Button>
-      </Col>
-    )
   }
 };
 
@@ -141,17 +113,24 @@ export default class UserQueueForm extends React.Component<Iprops, Istate> {
     // console.log(this.userForm.value);
   }
 
-  handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
+  handleSubmit = (
+    e: React.MouseEvent<HTMLFormElement>,
+    shouldApprove?: boolean
+  ) => {
     e.preventDefault();
     if (this.userForm.status === 'INVALID') {
       this.userForm.markAsSubmitted();
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-    this.props.handleSubmit({
-      id: this.props.user.user.id,
-      ...this.userForm.value
-    });
+    this.props.handleSubmit(
+      {
+        id: this.props.user.user.id,
+        ...this.userForm.value
+      },
+      shouldApprove,
+      this.props.user.id
+    );
   };
   setForm = (form: AbstractControl) => {
     if (this.state.queueForm.status) {
@@ -160,10 +139,6 @@ export default class UserQueueForm extends React.Component<Iprops, Istate> {
       this.userForm = form;
       this.setState({ queueForm: form });
     }
-    this.userForm.meta = {
-      handleCancel: this.props.handleCancel,
-      loading: false
-    };
   };
   render() {
     const fieldConfig = {
@@ -173,6 +148,32 @@ export default class UserQueueForm extends React.Component<Iprops, Istate> {
       <div className="user-form queue-form">
         <form onSubmit={this.handleSubmit} className="user-form">
           <FormGenerator onMount={this.setForm} fieldConfig={fieldConfig} />
+          <Col xs={12} className="form-buttons text-right">
+            <Button
+              bsStyle="link"
+              type="button"
+              className="pull-left"
+              onClick={this.props.handleCancel}
+            >
+              Cancel
+            </Button>
+            <Button
+              bsStyle="warning"
+              type="submit"
+              disabled={false}
+              style={{ marginRight: '20px' }}
+            >
+              Save
+            </Button>
+            <Button
+              bsStyle="warning"
+              type="button"
+              disabled={false}
+              onClick={(e: any) => this.handleSubmit(e, true)}
+            >
+              Save & Approve
+            </Button>
+          </Col>
         </form>
       </div>
     );

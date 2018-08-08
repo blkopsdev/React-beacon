@@ -50,9 +50,17 @@ fd71f683-7423-4ba0-9ed3-fba0547be076 // cliend ID and Application ID for Native 
       * UserQueueForm
 
 ## How to handle pagination and filtering notes
+### Idea 1
 * QueueReducer - contains an array of all the new users in the queue
 * QueueFilter - keep track of the filter applied to the queue
   - the paging will be stored in a query param?
+
+### Idea 2
+  * have a TwoPaneView reducer where we store
+    - the current tile from constants
+    - the filter
+    - pagination
+
 
 ## Initial Setup
 

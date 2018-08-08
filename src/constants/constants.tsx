@@ -33,6 +33,11 @@ const constants = {
     transitionOut: 'bounceOutUp' as transitionOutType,
     timeOut: 0
   },
+  toastrSuccess: {
+    transitionIn: 'bounceInDown' as transitionInType,
+    transitionOut: 'bounceOutUp' as transitionOutType,
+    timeOut: 3000
+  },
   colors,
   securityFunctions,
   hasSecurityFunction: (user: Iuser, securityFunction: string): boolean => {

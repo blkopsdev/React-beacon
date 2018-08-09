@@ -95,7 +95,7 @@ export const FormUtil = {
         <ControlLabel>{meta.label}</ControlLabel>
         <Button
           bsStyle="link"
-          className="pull-right"
+          className="pull-right right-side"
           onClick={meta.buttonAction}
         >
           {meta.buttonName}

@@ -85,8 +85,20 @@ body {
   }
   .form-control {
     margin-top: -5px;
+    font-size: 1.4rem;
+    font-weight: 400;
+    font-family: 'Open Sans';
+    color: #777;
+    box-shadow: none;
   }
+
 }
+// color transparent here so that bootstrap can override it when it adds a validation color
+// if we put back in the fontawesome icon
+// .form-control-feedback{
+//   color: transparent;
+//   padding: 5px;
+// }
 
 .slide-modal {
   .modal-body {
@@ -146,52 +158,56 @@ body {
 }
 
 .ReactTable.beacon-table{
-  &.-striped.dark .rt-tr.-odd {
+  font-size: 1.4rem;
+  font-weight: 400;
+  border-top: none;
+  &.dark .rt-tr.-odd {
     background-color: @dark;
     &:hover{
       background-color: fade(@dark, 20%);
     }
   }
-  &.-striped.green .rt-tr.-odd {
+  &.green .rt-tr.-odd {
     background-color: @green;
     &:hover{
       background-color: fade(@green, 20%);
     }
   }
-  &.-striped.blue .rt-tr.-odd {
+  &.blue .rt-tr.-odd {
     background-color: @blue;
     &:hover{
       background-color: fade(@blue, 20%);
     }
   }
-  &.-striped.orange .rt-tr.-odd {
-    background-color: fade(@orange, 10%);
+  &.orange .rt-tr.-odd {
+    background-color: fade(@orange, 5%);
     &:hover{
       background-color: fade(@orange, 20%);
     }
   }
-  &.-striped.purple .rt-tr:hover{
+  &.purple .rt-tr:hover{
     background-color: fade(@purple, 20%);
   }
-  &.-striped.dark .rt-tr:hover{
+  &.dark .rt-tr:hover{
     background-color: fade(@dark, 20%);
   }
-  &.-striped.green .rt-tr:hover{
+  &.green .rt-tr:hover{
     background-color: fade(@green, 20%);
   }
-  &.-striped.blue .rt-tr:hover{
+  &.blue .rt-tr:hover{
     background-color: fade(@blue, 20%);
   }
-  &.-striped.orange .rt-tr:hover{
+  &.orange .rt-tr:hover{
     background-color: fade(@orange, 20%);
   }
-  &.-striped.purple .rt-tr:hover{
+  &.purple .rt-tr:hover{
     background-color: fade(@purple, 05%);
   }
   .rt-td{
     padding: 0px 5px;
   }
   .rt-tr{
+    background-color: white;
     cursor: pointer;
     &:first-child{
       padding-left: 20px;
@@ -199,6 +215,23 @@ body {
   }
   .rt-thead .rt-tr{
     text-align: left;
+    font-weight: 600;
+    text-transform: uppercase;
+    background-color: transparent;
+    
+  }
+  .rt-thead .rt-th{
+    border-right: none;
+  }
+  .rt-tbody .rt-tr-group{
+    border-bottom: solid 3px rgba(0,0,0,0.05);
+    background-color: white;
+  }
+  .rt-thead.-header{
+    box-shadow: none;
+  }
+  .-pagination{
+    box-shadow: none;
   }
 }
 

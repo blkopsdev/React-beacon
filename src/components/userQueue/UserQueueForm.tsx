@@ -170,7 +170,7 @@ export default class UserQueueForm extends React.Component<Iprops, Istate> {
             <Button
               bsStyle="link"
               type="button"
-              className="pull-left"
+              className="pull-left left-side"
               onClick={this.props.handleCancel}
             >
               Cancel

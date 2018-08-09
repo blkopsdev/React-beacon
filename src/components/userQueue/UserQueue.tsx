@@ -173,7 +173,7 @@ class UserQueue extends React.Component<Iprops, Istate> {
           manual // Forces table not to paginate or sort automatically, so we can handle it server-side
           pages={1}
           showPageSizeOptions={false}
-          className="beacon-table -striped -highlight orange"
+          className="beacon-table -highlight orange"
         />
         <CommonModal
           modalVisible={this.state.showEditUserModal}

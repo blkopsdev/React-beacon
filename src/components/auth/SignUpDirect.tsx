@@ -53,7 +53,7 @@ const SignUpSuccess = (props: any) => {
       <Button
         bsStyle="link"
         className="pull-right ok-button"
-        style={{ color: 'white' }}
+        style={{ color: 'white', margin: '12px' }}
         onClick={props.handleCancel}
       >
         Ok
@@ -89,21 +89,28 @@ class SignUpDirect extends React.Component<Iprops, Istate> {
     if (this.state.redirectToLogin) {
       return <Redirect to={'/'} />;
     }
-
+    const flipClass = this.state.showSignupSuccess
+      ? 'flip-container flip'
+      : 'flip-container';
     return (
       <div className="loginlayout signup">
         <Grid>
           <Row>
             <Col>
-              {this.state.showSignupSuccess ? (
-                <SignUpSuccess handleCancel={this.cancel} />
-              ) : (
-                <UserForm
-                  handleSubmit={this.handleSubmit}
-                  handleCancel={this.cancel}
-                  loading={this.props.loading}
-                />
-              )}
+              <div className={flipClass}>
+                <div className="flipper">
+                  <div className="front">
+                    <UserForm
+                      handleSubmit={this.handleSubmit}
+                      handleCancel={this.cancel}
+                      loading={this.props.loading}
+                    />
+                  </div>
+                  <div className="back">
+                    <SignUpSuccess handleCancel={this.cancel} />
+                  </div>
+                </div>
+              </div>
             </Col>
           </Row>
         </Grid>

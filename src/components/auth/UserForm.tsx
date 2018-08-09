@@ -155,6 +155,7 @@ export default class UserForm extends React.Component<Iprops, Istate> {
               onClick={this.props.handleCancel}
               style={{ color: 'white' }}
               disabled={this.props.loading}
+              className="left-side"
             >
               Cancel
             </Button>

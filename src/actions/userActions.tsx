@@ -94,7 +94,7 @@ export function userLogout() {
     dispatch({ type: types.USER_LOGOUT_SUCCESS });
     setTimeout(() => {
       authContext.logOut();
-    }, 1000); // give it time to persist this to local storage
+    }, 100); // give it time to persist this to local storage
     // authContext.logOut();
   };
 }

@@ -62,10 +62,13 @@ const fieldConfigControls = {
     meta: { label: 'Zip', colWidth: 4, type: 'tel' }
   }
 };
+const fieldConfig = {
+  controls: { ...userBaseConfigControls, ...fieldConfigControls }
+};
 
 const testUser = {
-  first: 'jim',
-  last: 'bean',
+  first: 'Little',
+  last: 'Pixel',
   email: 'a@test.com',
   position: 'president',
   tempAddress: '12 street',
@@ -73,7 +76,7 @@ const testUser = {
   tempCity: 'mycity',
   tempZip: '77080',
   tempState: 'TX',
-  tempCompany: 'BP',
+  tempCompany: 'BigPixel',
   phone: '888-333-1121'
 };
 interface Iprops extends React.Props<UserForm> {
@@ -82,7 +85,6 @@ interface Iprops extends React.Props<UserForm> {
   loading: boolean;
 }
 interface Istate {
-  stateForm: any;
   loading: boolean;
 }
 export default class UserForm extends React.Component<Iprops, Istate> {
@@ -90,11 +92,9 @@ export default class UserForm extends React.Component<Iprops, Istate> {
   constructor(props: Iprops) {
     super(props);
     this.state = {
-      stateForm: {},
       loading: false
     };
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.setForm = this.setForm.bind(this);
   }
   componentDidMount() {
     if (process.env.NODE_ENV !== 'production') {
@@ -111,10 +111,9 @@ export default class UserForm extends React.Component<Iprops, Istate> {
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-    console.log('Form values', this.state.stateForm.value);
     this.setState({ loading: true });
     this.props
-      .handleSubmit(this.state.stateForm.value)
+      .handleSubmit(this.userForm.value)
       .then(() => {
         this.setState({ loading: false });
       })
@@ -122,16 +121,7 @@ export default class UserForm extends React.Component<Iprops, Istate> {
         this.setState({ loading: false });
       });
   };
-  setForm = (form: any) => {
-    if (
-      this.state.stateForm.controls &&
-      this.state.stateForm.controls.tempZip
-    ) {
-      this.userForm = this.state.stateForm;
-    } else {
-      this.userForm = form;
-      this.setState({ stateForm: form });
-    }
+  setForm = (form: AbstractControl) => {
     this.userForm = form;
     this.userForm.meta = {
       handleCancel: this.props.handleCancel,
@@ -141,9 +131,6 @@ export default class UserForm extends React.Component<Iprops, Istate> {
     };
   };
   render() {
-    const fieldConfig = {
-      controls: { ...userBaseConfigControls, ...fieldConfigControls }
-    };
     return (
       <div className="loginForm">
         <form onSubmit={this.handleSubmit} className="user-form">

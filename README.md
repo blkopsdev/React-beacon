@@ -61,6 +61,11 @@ fd71f683-7423-4ba0-9ed3-fba0547be076 // cliend ID and Application ID for Native 
     - the filter
     - pagination
 
+how to handle custom colors and such per content view.
+we can store the content of the tile object in a reduce.  then reference that reducer for the colors as well as to verify the security functions.
+for the securityfunctions we can either
+a. use a privateRoute
+b. in the component compare the route to the url in the tile object.
 
 ## Initial Setup
 

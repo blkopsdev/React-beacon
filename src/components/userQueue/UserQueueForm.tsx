@@ -69,6 +69,9 @@ const fieldConfigControls = {
     }
   }
 };
+const fieldConfig = {
+  controls: { ...userBaseConfigControls, ...fieldConfigControls }
+};
 
 interface Iprops extends React.Props<UserQueueForm> {
   handleSubmit: any;
@@ -76,16 +79,11 @@ interface Iprops extends React.Props<UserQueueForm> {
   user: IqueueUser;
   loading: boolean;
 }
-interface Istate {
-  queueForm: any;
-}
-export default class UserQueueForm extends React.Component<Iprops, Istate> {
+
+export default class UserQueueForm extends React.Component<Iprops, {}> {
   public userForm: AbstractControl;
   constructor(props: Iprops) {
     super(props);
-    this.state = {
-      queueForm: {}
-    };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setForm = this.setForm.bind(this);
   }
@@ -145,23 +143,12 @@ export default class UserQueueForm extends React.Component<Iprops, Istate> {
     // );
   };
   setForm = (form: AbstractControl) => {
-    if (
-      this.state.queueForm.controls &&
-      this.state.queueForm.controls.tempCompany
-    ) {
-      this.userForm = this.state.queueForm;
-    } else {
-      this.userForm = form;
-      this.setState({ queueForm: form });
-    }
+    this.userForm = form;
     this.userForm.meta = {
       loading: this.props.loading
     };
   };
   render() {
-    const fieldConfig = {
-      controls: { ...userBaseConfigControls, ...fieldConfigControls }
-    };
     return (
       <div className="user-form queue-form">
         <form onSubmit={this.handleSubmit} className="user-form">

@@ -10,10 +10,12 @@ import { FormUtil } from '../common/FormUtil';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // Field config to configure form
-const fieldConfigControls = {
-  search: {
-    render: FormUtil.TextInputWithoutValidation,
-    meta: { label: 'Search', colWidth: 4, type: 'text' }
+const fieldConfig = {
+  controls: {
+    search: {
+      render: FormUtil.TextInputWithoutValidation,
+      meta: { label: 'Search', colWidth: 4, type: 'text' }
+    }
   }
 };
 
@@ -21,40 +23,24 @@ interface Iprops extends React.Props<SearchTableForm> {
   handleSubmit: any;
   loading: boolean;
 }
-interface Istate {
-  stateForm: any;
-}
-export default class SearchTableForm extends React.Component<Iprops, Istate> {
+export default class SearchTableForm extends React.Component<Iprops, {}> {
   public searchForm: AbstractControl;
   constructor(props: Iprops) {
     super(props);
-    this.state = {
-      stateForm: {}
-    };
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.setForm = this.setForm.bind(this);
   }
 
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log('Form values', this.searchForm);
     this.props.handleSubmit(this.searchForm.value);
   };
   setForm = (form: any) => {
-    if (this.state.stateForm.controls && this.state.stateForm.controls.search) {
-      this.searchForm = this.state.stateForm;
-    } else {
-      this.searchForm = form;
-      this.setState({ stateForm: form });
-    }
+    this.searchForm = form;
     this.searchForm.meta = {
       loading: this.props.loading
     };
   };
   render() {
-    const fieldConfig = {
-      controls: { ...fieldConfigControls }
-    };
     return (
       <Row className="search-table-form">
         <form onSubmit={this.handleSubmit}>

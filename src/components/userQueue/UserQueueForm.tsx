@@ -100,13 +100,12 @@ export default class UserQueueForm extends React.Component<Iprops, {}> {
     this.userForm.patchValue({
       fac: 'HQ Raleigh'
     });
-    const {
-      tempAddress,
-      tempAddress2,
-      tempCity,
-      tempState,
-      tempZip
-    } = this.props.user.user;
+    const { tempAddress, tempCity, tempState, tempZip } = this.props.user.user;
+
+    let { tempAddress2 } = this.props.user.user;
+    if (tempAddress2 === null) {
+      tempAddress2 = '';
+    }
     const providedAddress = `${tempAddress} ${tempAddress2} ${tempCity} ${tempState} ${tempZip}`;
     this.userForm.patchValue({ providedAddress });
     // console.log(this.userForm.value);

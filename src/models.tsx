@@ -54,6 +54,16 @@ export interface InitialState {
   redirect: Iredirect;
   userQueue: ItempUser[];
 }
+export interface Itile {
+  icon: string | string[];
+  title: string;
+  src: string;
+  color: string;
+  width: number;
+  height: number;
+  url: string;
+  securityFunction: string;
+}
 
 // these are copied from react-redux-toastr beacuse could not figure out any other way to make typescript happy
 export type transitionInType = 'bounceIn' | 'bounceInDown' | 'fadeIn';

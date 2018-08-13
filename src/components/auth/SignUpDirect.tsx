@@ -47,8 +47,8 @@ const SignUpSuccess = (props: any) => {
         will review your application and be in touch with you soon.{' '}
       </p>
       <p>
-        Please make sure that no-reply@beaconmedaes.com is cleared so that it
-        does not end up in your spam.
+        Please make sure that <br /> no-reply@beaconmedaes.com is cleared so
+        that it does not end up in your spam.
       </p>
       <Button
         bsStyle="link"

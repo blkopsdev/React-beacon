@@ -21,7 +21,10 @@ export default function userQueue(state: IqueueUser[] = [], action: any) {
     // ) as IuserQueue;
     case types.USER_UPDATE_SUCCESS:
       const queuefilterUser = filter(state, u => u.id !== action.queueID);
-      const newQueueObject = { id: action.queueID, user: action.user };
+      const newQueueObject = {
+        id: action.queueID,
+        user: pickBy(action.user, (property, key) => property !== null)
+      };
 
       return [...queuefilterUser, newQueueObject];
     case types.USER_APPROVE_SUCCESS:
@@ -30,7 +33,7 @@ export default function userQueue(state: IqueueUser[] = [], action: any) {
       return filter(state, u => u.id !== action.userQueueID);
 
     case types.USER_LOGOUT_SUCCESS:
-      return {};
+      return [];
     default:
       return state;
   }

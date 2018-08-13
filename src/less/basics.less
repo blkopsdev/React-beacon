@@ -174,7 +174,7 @@ body {
     }
   }
   &.blue .rt-tr.-odd {
-    background-color: @blue;
+    background-color: fade(@blue, 5%);
     &:hover{
       background-color: fade(@blue, 20%);
     }
@@ -185,22 +185,22 @@ body {
       background-color: fade(@orange, 20%);
     }
   }
-  &.purple .rt-tr:hover{
+  &.purple .rt-tr.-even:hover{
     background-color: fade(@purple, 20%);
   }
-  &.dark .rt-tr:hover{
+  &.dark .rt-tr.-even:hover{
     background-color: fade(@dark, 20%);
   }
-  &.green .rt-tr:hover{
+  &.green .rt-tr.-even:hover{
     background-color: fade(@green, 20%);
   }
-  &.blue .rt-tr:hover{
+  &.blue .rt-tr.-even:hover{
     background-color: fade(@blue, 20%);
   }
-  &.orange .rt-tr:hover{
+  &.orange .rt-tr.-even:hover{
     background-color: fade(@orange, 20%);
   }
-  &.purple .rt-tr:hover{
+  &.purple .rt-tr.-even:hover{
     background-color: fade(@purple, 05%);
   }
   .rt-td{

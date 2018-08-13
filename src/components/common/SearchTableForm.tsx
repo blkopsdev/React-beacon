@@ -22,6 +22,7 @@ const fieldConfig = {
 interface Iprops extends React.Props<SearchTableForm> {
   handleSubmit: any;
   loading: boolean;
+  colorButton: string;
 }
 export default class SearchTableForm extends React.Component<Iprops, {}> {
   public searchForm: AbstractControl;
@@ -47,7 +48,7 @@ export default class SearchTableForm extends React.Component<Iprops, {}> {
           <FormGenerator onMount={this.setForm} fieldConfig={fieldConfig} />
           <Col xs={2} className="search-form-button">
             <Button
-              bsStyle="warning" // TODO make this color dynamic
+              bsStyle={this.props.colorButton}
               bsSize="sm"
               type="submit"
               disabled={this.props.loading}

@@ -9,7 +9,7 @@ import {
   updateUser,
   rejectUser
 } from '../../actions/userActions';
-import { InitialState, IqueueUser, Iuser } from '../../models';
+import { InitialState, IqueueUser, Iuser, Itile } from '../../models';
 import { RouteComponentProps } from 'react-router-dom';
 import ReactTable from 'react-table';
 import { Button } from 'react-bootstrap';
@@ -33,6 +33,7 @@ interface Iprops extends RouteComponentProps<{}> {
 interface Istate {
   showEditUserModal: boolean;
   selectedRow: any;
+  currentTile: Itile;
 }
 
 class UserQueue extends React.Component<Iprops, Istate> {
@@ -44,7 +45,17 @@ class UserQueue extends React.Component<Iprops, Istate> {
     this.getTrProps = this.getTrProps.bind(this);
     this.state = {
       showEditUserModal: false,
-      selectedRow: null
+      selectedRow: null,
+      currentTile: {
+        icon: '',
+        title: '',
+        src: '',
+        color: '',
+        width: 359,
+        height: 136,
+        url: '',
+        securityFunction: ''
+      }
     };
     this.columns = [
       {
@@ -82,6 +93,9 @@ class UserQueue extends React.Component<Iprops, Istate> {
     ];
   }
   componentWillMount() {
+    this.setState({
+      currentTile: constants.getTileByURL(this.props.location.pathname)
+    });
     // refresh the userQueue every time the component mounts
     this.props.getUserQueue(1, '');
   }
@@ -146,7 +160,7 @@ class UserQueue extends React.Component<Iprops, Istate> {
         style: {
           background:
             rowInfo.index === this.state.selectedRow
-              ? constants.colors.orangeTr
+              ? constants.colors[`${this.state.currentTile.color}Tr`]
               : ''
         }
       };
@@ -158,12 +172,19 @@ class UserQueue extends React.Component<Iprops, Istate> {
   render() {
     return (
       <div className="user-queue">
-        <Banner title="New User Queue" img="http://placekitten.com/1440/60" />
+        <Banner
+          title="New User Queue"
+          img="http://placekitten.com/1440/60"
+          color={constants.colors[`${this.state.currentTile.color}`]}
+        />
         <SearchTableForm
           handleSubmit={(values: any) => {
             alert(`under construction: ${JSON.stringify(values)}`);
           }}
           loading={this.props.loading}
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
         />
         <ReactTable
           data={this.props.userQueue}
@@ -173,7 +194,7 @@ class UserQueue extends React.Component<Iprops, Istate> {
           manual // Forces table not to paginate or sort automatically, so we can handle it server-side
           pages={1}
           showPageSizeOptions={false}
-          className="beacon-table -highlight orange"
+          className={`beacon-table -highlight ${this.state.currentTile.color}`}
         />
         <CommonModal
           modalVisible={this.state.showEditUserModal}
@@ -203,6 +224,9 @@ class UserQueue extends React.Component<Iprops, Istate> {
               }}
               user={this.props.userQueue[this.state.selectedRow]}
               loading={this.props.loading}
+              colorButton={
+                constants.colors[`${this.state.currentTile.color}Button`]
+              }
             />
           }
           title="New User"

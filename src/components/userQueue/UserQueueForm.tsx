@@ -78,6 +78,7 @@ interface Iprops extends React.Props<UserQueueForm> {
   handleCancel: any;
   user: IqueueUser;
   loading: boolean;
+  colorButton: string;
 }
 
 export default class UserQueueForm extends React.Component<Iprops, {}> {
@@ -100,15 +101,15 @@ export default class UserQueueForm extends React.Component<Iprops, {}> {
     this.userForm.patchValue({
       fac: 'HQ Raleigh'
     });
-    const { tempAddress, tempCity, tempState, tempZip } = this.props.user.user;
-
-    let { tempAddress2 } = this.props.user.user;
-    if (tempAddress2 === null) {
-      tempAddress2 = '';
-    }
+    const {
+      tempAddress,
+      tempAddress2,
+      tempCity,
+      tempState,
+      tempZip
+    } = this.props.user.user;
     const providedAddress = `${tempAddress} ${tempAddress2} ${tempCity} ${tempState} ${tempZip}`;
     this.userForm.patchValue({ providedAddress });
-    // console.log(this.userForm.value);
   }
 
   handleSubmit = (
@@ -162,7 +163,7 @@ export default class UserQueueForm extends React.Component<Iprops, {}> {
               Cancel
             </Button>
             <Button
-              bsStyle="warning"
+              bsStyle={this.props.colorButton}
               type="submit"
               disabled={this.props.loading}
               style={{ marginRight: '20px' }}
@@ -170,7 +171,7 @@ export default class UserQueueForm extends React.Component<Iprops, {}> {
               Save
             </Button>
             <Button
-              bsStyle="warning"
+              bsStyle={this.props.colorButton}
               type="button"
               disabled={this.props.loading}
               onClick={(e: any) => this.handleSubmit(e, true)}

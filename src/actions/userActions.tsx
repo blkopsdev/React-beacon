@@ -47,6 +47,17 @@ export function isFullyAuthenticated(user: Iuser) {
   }
 }
 
+// export function hasSecurityFunction (securityFunction: string) {
+//   return (dispatch: any, getState: any) => {
+//     if (getState().user.securityFunctions.indexOf(securityFunction) >= 0) {
+//       return true;
+//     } else {
+//       return false;
+//     }
+//   }
+
+//   }
+
 export function userLogin() {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());

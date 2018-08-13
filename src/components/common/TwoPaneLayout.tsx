@@ -1,3 +1,7 @@
+/*
+* TwoPaneLayout verifies that the user has access to this feature, then either shows the component or lets them know they do not have access
+*/
+
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Col, Grid, Row } from 'react-bootstrap';

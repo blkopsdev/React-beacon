@@ -32,6 +32,8 @@ import Dashboard from './components/dashboard/Dashboard';
 import Header from './components/header/Header';
 import SignUpDirect from './components/auth/SignUpDirect';
 import TwoPaneLayout from './components/common/TwoPaneLayout';
+import i18n from './i18n';
+import { I18nextProvider } from 'react-i18next';
 
 // import project css
 import 'bootstrap/dist/css/bootstrap.css';
@@ -95,22 +97,24 @@ runWithAdal(
   authContext,
   () => {
     ReactDOM.render(
-      <Provider store={store}>
-        <Router>
-          <div>
-            <Header />
-            <Switch>
-              <Route exact path="/" component={Login} />
-              <Route exact path="/signup" component={SignUpDirect} />
-              <PrivateRoute path="/dashboard" component={Dashboard} />
-              <PrivateRoute path="/queue" component={TwoPaneLayout} />
-              <PrivateRoute path="/users" component={TwoPaneLayout} />{' '}
-              <Route component={NoMatch} />
-            </Switch>
-            <ReduxToastr position={'top-right'} />
-          </div>
-        </Router>
-      </Provider>,
+      <I18nextProvider i18n={i18n}>
+        <Provider store={store}>
+          <Router>
+            <div>
+              <Header />
+              <Switch>
+                <Route exact path="/" component={Login} />
+                <Route exact path="/signup" component={SignUpDirect} />
+                <PrivateRoute path="/dashboard" component={Dashboard} />
+                <PrivateRoute path="/queue" component={TwoPaneLayout} />
+                <PrivateRoute path="/users" component={TwoPaneLayout} />{' '}
+                <Route component={NoMatch} />
+              </Switch>
+              <ReduxToastr position={'top-right'} />
+            </div>
+          </Router>
+        </Provider>
+      </I18nextProvider>,
       document.getElementById('root') as HTMLElement
     );
   },

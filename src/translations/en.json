@@ -1,0 +1,7 @@
+{
+  "auth": {
+    "loginButton": "Login with Azure",
+    "signUp": "Sign Up",
+    "welcome": "Welcome to MyMedGas!"
+  }
+}

@@ -9,7 +9,7 @@ import SideMenu from '../sideMenu/SideMenu';
 import { Route, Switch } from 'react-router-dom';
 import UserQueue from '../userQueue/UserQueue';
 import constants from '../../constants/constants';
-import { InitialState } from '../../models';
+import { IinitialState } from '../../models';
 
 import 'react-table/react-table.css';
 
@@ -71,7 +71,7 @@ const TwoPaneLayout = (props: any) => {
   );
 };
 
-const mapStateToProps = (state: InitialState, ownProps: any) => {
+const mapStateToProps = (state: IinitialState, ownProps: any) => {
   return {
     user: state.user
   };

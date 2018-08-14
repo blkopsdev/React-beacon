@@ -21,5 +21,11 @@ export default {
     redirectToReferrer: false,
     pathname: '/'
   },
-  userQueue: []
+  // userQueue: []
+  userQueue: {
+    search: '',
+    page: 1,
+    totalPages: 1,
+    data: []
+  }
 };

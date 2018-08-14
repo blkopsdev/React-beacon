@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ListGroupItem, ListGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { InitialState, Iuser } from '../../models';
+import { IinitialState, Iuser } from '../../models';
 import { RouteComponentProps } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import { map } from 'lodash';
@@ -61,7 +61,7 @@ class SideMenu extends React.Component<Iprops, {}> {
   }
 }
 
-const mapStateToProps = (state: InitialState, ownProps: Iprops) => {
+const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user
   };

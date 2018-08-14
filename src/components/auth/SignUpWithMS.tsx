@@ -5,7 +5,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { InitialState, Iuser, Iredirect } from '../../models';
+import { IinitialState, Iuser, Iredirect } from '../../models';
 import { adalLogin, userLogin, userLogout } from '../../actions/userActions';
 import {
   setLoginRedirect,
@@ -102,7 +102,7 @@ class SignUpWithMS extends React.Component<Iprops, any> {
     );
   }
 }
-const mapStateToProps = (state: InitialState, ownProps: any) => {
+const mapStateToProps = (state: IinitialState, ownProps: any) => {
   return {
     user: state.user,
     redirect: state.redirect,

@@ -1,9 +1,12 @@
 import * as types from '../actions/actionTypes';
-import { IqueueUser } from '../models';
-// import initialState from './initialState';
+import { IqueueObject, IuserQueue } from '../models';
+import initialState from './initialState';
 import { pickBy, map, filter } from 'lodash';
 
-export default function userQueue(state: IqueueUser[] = [], action: any) {
+function userQueueData(
+  state: IqueueObject[] = [],
+  action: any
+): IqueueObject[] {
   switch (action.type) {
     case types.USER_QUEUE_SUCCESS:
       return map(action.queue, queueObject => {
@@ -12,13 +15,6 @@ export default function userQueue(state: IqueueUser[] = [], action: any) {
           user: pickBy(queueObject.user, (property, key) => property !== null)
         };
       });
-    // return [...action.queue];
-    // return [...state, ...action.queue];
-    // return Object.assign(
-    //   {},
-    //   state,
-    //   keyBy(action.queue, (user: Iuser) => user.id)
-    // ) as IuserQueue;
     case types.USER_UPDATE_SUCCESS:
       const queuefilterUser = filter(state, u => u.id !== action.queueID);
       const newQueueObject = {
@@ -26,7 +22,7 @@ export default function userQueue(state: IqueueUser[] = [], action: any) {
         user: pickBy(action.user, (property, key) => property !== null)
       };
 
-      return [...queuefilterUser, newQueueObject];
+      return [...queuefilterUser, newQueueObject] as IqueueObject[];
     case types.USER_APPROVE_SUCCESS:
       return filter(state, u => u.id !== action.userQueueID);
     case types.USER_REJECT_SUCCESS:
@@ -37,4 +33,49 @@ export default function userQueue(state: IqueueUser[] = [], action: any) {
     default:
       return state;
   }
+}
+
+function userQueuePage(state: number = 1, action: any): number {
+  switch (action.type) {
+    case types.USER_QUEUE_INCREMENT:
+      return state + 1;
+    case types.USER_QUEUE_DECREMENT:
+      if (state > 1) {
+        return state - 1;
+      }
+    default:
+      return state;
+  }
+}
+function userQueueTotalPages(state: number = 1, action: any): number {
+  switch (action.type) {
+    case types.USER_QUEUE_TOTAL_PAGES:
+      if (action.pages && action.pages > 0) {
+        return action.pages;
+      }
+      return state;
+    default:
+      return state;
+  }
+}
+
+function userQueueSearch(state: string = '', action: any): string {
+  switch (action.type) {
+    case types.USER_QUEUE_SEARCH_UPDATE:
+      return action.search;
+    default:
+      return state;
+  }
+}
+
+export default function userQueue(
+  state: IuserQueue = initialState.userQueue,
+  action: any
+) {
+  return {
+    data: userQueueData(state.data, action),
+    page: userQueuePage(state.page, action),
+    totalPages: userQueueTotalPages(state.totalPages, action),
+    search: userQueueSearch(state.search, action)
+  };
 }

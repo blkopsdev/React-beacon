@@ -27,7 +27,7 @@ export interface Iuser {
 // export interface IuserQueue {
 //   [key: string]: Iuser;
 // }
-export interface IqueueUser {
+export interface IqueueObject {
   id: string;
   user: Iuser;
 }
@@ -44,15 +44,22 @@ export interface ItempUser {
   tempZip: string;
 }
 
+export interface IuserQueue {
+  search: string;
+  page: number;
+  data: IqueueObject[];
+  totalPages: number;
+}
+
 export interface Iredirect {
   redirectToReferrer: boolean;
   pathname: string;
 }
-export interface InitialState {
+export interface IinitialState {
   user: Iuser;
   ajaxCallsInProgress: number;
   redirect: Iredirect;
-  userQueue: ItempUser[];
+  userQueue: IuserQueue;
 }
 export interface Itile {
   icon: string | string[];

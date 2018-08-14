@@ -6,7 +6,7 @@
 
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { InitialState, Iuser } from '../../models';
+import { IinitialState, Iuser } from '../../models';
 import { userLogout } from '../../actions/userActions';
 import { isFullyAuthenticated } from '../../actions/userActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -65,7 +65,7 @@ class Header extends React.Component<Iprops, {}> {
   }
 }
 
-const mapStateToProps = (state: InitialState, ownProps: Iprops) => {
+const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0

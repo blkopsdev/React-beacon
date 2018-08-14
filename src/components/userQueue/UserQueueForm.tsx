@@ -17,7 +17,7 @@ import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
-import { IqueueUser } from '../../models';
+import { IqueueObject } from '../../models';
 
 const TextLabel = ({ handler, meta }: any) => {
   return (
@@ -79,7 +79,7 @@ const fieldConfig = {
 interface Iprops extends React.Props<UserQueueForm> {
   handleSubmit: any;
   handleCancel: any;
-  user: IqueueUser;
+  user: IqueueObject;
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { InitialState, Iuser } from '../../models';
+import { IinitialState, Iuser } from '../../models';
 import Masonry from 'react-masonry-component';
 import { Link } from 'react-router-dom';
 import constants from '../../constants/constants';
@@ -67,7 +67,7 @@ class Dashboard extends React.Component<Iprops, {}> {
   }
 }
 
-const mapStateToProps = (state: InitialState, ownProps: Iprops) => {
+const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user
   };

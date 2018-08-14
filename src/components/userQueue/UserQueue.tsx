@@ -8,8 +8,8 @@ import {
   approveUser,
   updateUser,
   rejectUser
-} from '../../actions/userActions';
-import { InitialState, IqueueUser, Iuser, Itile } from '../../models';
+} from '../../actions/userQueueActions';
+import { IinitialState, Iuser, Itile, IuserQueue } from '../../models';
 import { RouteComponentProps } from 'react-router-dom';
 import ReactTable from 'react-table';
 import { Button } from 'react-bootstrap';
@@ -26,7 +26,7 @@ import { TableUtil } from '../common/TableUtil';
 
 interface Iprops extends RouteComponentProps<{}> {
   getUserQueue: any;
-  userQueue: IqueueUser[];
+  userQueue: IuserQueue;
   approveUser: (value: string) => Promise<void>;
   updateUser: (value: Iuser, v: string) => Promise<void>;
   rejectUser: (value: string) => Promise<void>;
@@ -106,6 +106,9 @@ class UserQueue extends React.Component<Iprops, Istate> {
     });
     // refresh the userQueue every time the component mounts
     this.props.getUserQueue(1, '');
+
+    // refresh the list of customers every time the component mounts
+    // this.props.customerGetAll()
   }
 
   // handleTableProps(state: any, rowInfo: any, column: any, instance: any) {
@@ -177,6 +180,10 @@ class UserQueue extends React.Component<Iprops, Istate> {
     }
   };
 
+  onPageChange = (page: number) => {
+    this.props.getUserQueue(page + 1, '');
+  };
+
   render() {
     const { t } = this.props;
     return (
@@ -197,16 +204,17 @@ class UserQueue extends React.Component<Iprops, Istate> {
           t={this.props.t}
         />
         <ReactTable
-          data={this.props.userQueue}
+          data={this.props.userQueue.data}
           columns={this.columns}
           getTrProps={this.getTrProps}
-          pageSize={this.props.userQueue.length}
+          pageSize={this.props.userQueue.data.length}
           manual // Forces table not to paginate or sort automatically, so we can handle it server-side
-          pages={1}
+          pages={this.props.userQueue.totalPages}
           showPageSizeOptions={false}
           className={`beacon-table -highlight ${this.state.currentTile.color}`}
           previousText={t('common:previous')}
           nextText={t('common:next')}
+          onPageChange={this.onPageChange}
         />
         <CommonModal
           modalVisible={this.state.showEditUserModal}
@@ -234,7 +242,7 @@ class UserQueue extends React.Component<Iprops, Istate> {
               handleCancel={() => {
                 this.setState({ showEditUserModal: false });
               }}
-              user={this.props.userQueue[this.state.selectedRow]}
+              user={this.props.userQueue.data[this.state.selectedRow]}
               loading={this.props.loading}
               colorButton={
                 constants.colors[`${this.state.currentTile.color}Button`]
@@ -249,7 +257,7 @@ class UserQueue extends React.Component<Iprops, Istate> {
   }
 }
 
-const mapStateToProps = (state: InitialState, ownProps: any) => {
+const mapStateToProps = (state: IinitialState, ownProps: any) => {
   return {
     user: state.user,
     userQueue: state.userQueue,

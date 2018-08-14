@@ -117,14 +117,14 @@ export const userBaseConfigControls = {
       validators: Validators.required
     },
     render: FormUtil.TextInput,
-    meta: { label: 'First Name', colWidth: 6, type: 'text' }
+    meta: { label: 'first', colWidth: 6, type: 'text' }
   },
   last: {
     options: {
       validators: Validators.required
     },
     render: FormUtil.TextInput,
-    meta: { label: 'Last Name', colWidth: 6, type: 'text' }
+    meta: { label: 'last', colWidth: 6, type: 'text' }
   },
   email: {
     options: {
@@ -136,7 +136,7 @@ export const userBaseConfigControls = {
       ]
     },
     render: FormUtil.TextInput,
-    meta: { label: 'Email', colWidth: 6, type: 'text' }
+    meta: { label: 'email', colWidth: 6, type: 'text' }
   },
   phone: {
     options: {
@@ -149,7 +149,7 @@ export const userBaseConfigControls = {
     },
     render: FormUtil.TextInput,
     meta: {
-      label: 'Phone Number',
+      label: 'phone',
       colWidth: 6,
       type: 'tel',
       placeholder: '***-***-****'
@@ -160,6 +160,6 @@ export const userBaseConfigControls = {
       validators: Validators.required
     },
     render: FormUtil.TextInput,
-    meta: { label: 'Position', colWidth: 12, type: 'text' }
+    meta: { label: 'position', colWidth: 12, type: 'text' }
   }
 };

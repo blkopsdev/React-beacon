@@ -10,10 +10,11 @@ import {
   AbstractControl
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
-import { forEach } from 'lodash';
+import { forEach, mapValues } from 'lodash';
 import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
+import { translate, TranslationFunction, I18n } from 'react-i18next';
 
 // Field config to configure form
 const fieldConfigControls = {
@@ -22,32 +23,32 @@ const fieldConfigControls = {
       validators: Validators.required
     },
     render: FormUtil.TextInput,
-    meta: { label: 'Company Name', colWidth: 12, type: 'text' }
+    meta: { label: 'company', colWidth: 12, type: 'text' }
   },
   tempAddress: {
     options: {
       validators: Validators.required
     },
     render: FormUtil.TextInput,
-    meta: { label: 'Address', colWidth: 8, type: 'text' }
+    meta: { label: 'address', colWidth: 8, type: 'text' }
   },
   tempAddress2: {
     render: FormUtil.TextInput,
-    meta: { label: 'Address 2', colWidth: 4, type: 'text' }
+    meta: { label: 'address2', colWidth: 4, type: 'text' }
   },
   tempCity: {
     options: {
       validators: Validators.required
     },
     render: FormUtil.TextInput,
-    meta: { label: 'City', colWidth: 5, type: 'text' }
+    meta: { label: 'city', colWidth: 5, type: 'text' }
   },
   tempState: {
     options: {
       validators: Validators.required
     },
     render: FormUtil.TextInput,
-    meta: { label: 'State', colWidth: 3, type: 'text' }
+    meta: { label: 'state', colWidth: 3, type: 'text' }
   },
   tempZip: {
     options: {
@@ -59,7 +60,7 @@ const fieldConfigControls = {
       ]
     },
     render: FormUtil.TextInput,
-    meta: { label: 'Zip', colWidth: 4, type: 'tel' }
+    meta: { label: 'zip', colWidth: 4, type: 'tel' }
   }
 };
 const fieldConfig = {
@@ -83,18 +84,35 @@ interface Iprops extends React.Props<UserForm> {
   handleSubmit: any;
   handleCancel: any;
   loading: boolean;
+  t: TranslationFunction;
+  i18n: I18n;
 }
 interface Istate {
   loading: boolean;
+  formConfig: any;
 }
-export default class UserForm extends React.Component<Iprops, Istate> {
+class UserForm extends React.Component<Iprops, Istate> {
   public userForm: AbstractControl;
   constructor(props: Iprops) {
     super(props);
     this.state = {
-      loading: false
+      loading: false,
+      formConfig: {}
     };
     this.handleSubmit = this.handleSubmit.bind(this);
+  }
+  componentWillMount() {
+    const newFormConfigControls = mapValues(fieldConfig.controls, field => {
+      if (field.meta.label) {
+        const newMeta = {
+          ...field.meta,
+          label: this.props.t(field.meta.label)
+        };
+        return { ...field, meta: newMeta };
+      }
+      return field;
+    });
+    this.setState({ formConfig: { controls: newFormConfigControls } });
   }
   componentDidMount() {
     if (process.env.NODE_ENV !== 'production') {
@@ -108,7 +126,7 @@ export default class UserForm extends React.Component<Iprops, Istate> {
     e.preventDefault();
     if (this.userForm.status === 'INVALID') {
       this.userForm.markAsSubmitted();
-      toastr.error('Please check invalid inputs', '', constants.toastrError);
+      toastr.error(this.props.t('validationError'), '', constants.toastrError);
       return;
     }
     this.setState({ loading: true });
@@ -131,10 +149,14 @@ export default class UserForm extends React.Component<Iprops, Istate> {
     };
   };
   render() {
+    const { t } = this.props;
     return (
       <div className="loginForm">
         <form onSubmit={this.handleSubmit} className="user-form">
-          <FormGenerator onMount={this.setForm} fieldConfig={fieldConfig} />
+          <FormGenerator
+            onMount={this.setForm}
+            fieldConfig={this.state.formConfig}
+          />
           <Col xs={12} className="user-form-buttons">
             <Button
               bsStyle="link"
@@ -144,7 +166,7 @@ export default class UserForm extends React.Component<Iprops, Istate> {
               disabled={this.props.loading}
               className="left-side"
             >
-              Cancel
+              {t('cancel')}
             </Button>
             {this.state.loading && (
               <div className="spinner">
@@ -158,7 +180,7 @@ export default class UserForm extends React.Component<Iprops, Istate> {
               disabled={this.props.loading}
               className="pull-right"
             >
-              Sign Up
+              {t('signUp')}
             </Button>
           </Col>
         </form>
@@ -166,3 +188,4 @@ export default class UserForm extends React.Component<Iprops, Istate> {
     );
   }
 }
+export default translate('user')(UserForm);

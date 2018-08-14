@@ -18,6 +18,8 @@ import {
 } from '../../actions/redirectToReferrerAction';
 import { Col, Grid, Row, Button } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
+import { translate, TranslationFunction, I18n } from 'react-i18next';
+
 import { isFullyAuthenticated } from '../../actions/userActions';
 import UserForm from './UserForm';
 
@@ -32,6 +34,8 @@ interface Iprops extends RouteComponentProps<{}> {
   redirect: Iredirect;
   signUpDirect: any;
   loading: boolean;
+  t: TranslationFunction;
+  i18n: I18n;
 }
 interface Istate {
   redirectToLogin: boolean;
@@ -39,16 +43,13 @@ interface Istate {
 }
 
 const SignUpSuccess = (props: any) => {
+  const { t } = props;
   return (
     <div className="loginForm signup-success" style={{ color: 'white' }}>
-      <h2> Success! </h2>
+      <h2>{t('successTitle')}</h2>
+      <p>{t('successBody1')}</p>
       <p>
-        You have been successfully added into the system. An BeaconMedaes admin
-        will review your application and be in touch with you soon.{' '}
-      </p>
-      <p>
-        Please make sure that <br /> no-reply@beaconmedaes.com is cleared so
-        that it does not end up in your spam.
+        {t('successBody2')} <br /> {t('successBody3')}
       </p>
       <Button
         bsStyle="link"
@@ -56,7 +57,7 @@ const SignUpSuccess = (props: any) => {
         style={{ color: 'white', margin: '12px' }}
         onClick={props.handleCancel}
       >
-        Ok
+        {t('ok')}
       </Button>
     </div>
   );
@@ -82,6 +83,7 @@ class SignUpDirect extends React.Component<Iprops, Istate> {
     });
   }
   render() {
+    const { t } = this.props;
     if (isFullyAuthenticated(this.props.user)) {
       this.props.removeLoginRedirect();
       return <Redirect to={'/dashboard'} />;
@@ -107,7 +109,7 @@ class SignUpDirect extends React.Component<Iprops, Istate> {
                     />
                   </div>
                   <div className="back">
-                    <SignUpSuccess handleCancel={this.cancel} />
+                    <SignUpSuccess handleCancel={this.cancel} t={t} />
                   </div>
                 </div>
               </div>
@@ -128,15 +130,17 @@ const mapStateToProps = (state: InitialState, ownProps: any) => {
 
 // export default LoginLayout;
 
-export default connect(
-  mapStateToProps,
-  {
-    userLogin,
-    adalLogin,
-    userLogout,
-    setLoginRedirect,
-    removeLoginRedirect,
-    setRedirectPathname,
-    signUpDirect
-  }
-)(SignUpDirect);
+export default translate('auth')(
+  connect(
+    mapStateToProps,
+    {
+      userLogin,
+      adalLogin,
+      userLogout,
+      setLoginRedirect,
+      removeLoginRedirect,
+      setRedirectPathname,
+      signUpDirect
+    }
+  )(SignUpDirect)
+);

@@ -7,6 +7,7 @@ import { LinkContainer } from 'react-router-bootstrap';
 import { map } from 'lodash';
 import constants from '../../constants/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { translate, TranslationFunction, I18n } from 'react-i18next';
 
 const Item = (props: any) => {
   const { url, title, icon } = props;
@@ -14,13 +15,13 @@ const Item = (props: any) => {
     <LinkContainer to={url}>
       <ListGroupItem>
         <FontAwesomeIcon icon={icon} fixedWidth />
-        {title}
+        {props.t(title)}
       </ListGroupItem>
     </LinkContainer>
   );
 };
 
-const MenuItems = ({ user }: any) => (
+const MenuItems = ({ user, t }: any) => (
   <ListGroup>
     <LinkContainer to={'/dashboard'}>
       <ListGroupItem>
@@ -29,7 +30,7 @@ const MenuItems = ({ user }: any) => (
     </LinkContainer>
     {map(constants.tiles, tile => {
       if (constants.hasSecurityFunction(user, tile.securityFunction)) {
-        return <Item key={tile.url} {...tile} />;
+        return <Item key={tile.url} {...tile} t={t} />;
       } else {
         return '';
       }
@@ -39,6 +40,8 @@ const MenuItems = ({ user }: any) => (
 
 interface Iprops extends RouteComponentProps<SideMenu> {
   user: Iuser;
+  t: TranslationFunction;
+  i18n: I18n;
 }
 
 class SideMenu extends React.Component<Iprops, {}> {
@@ -52,7 +55,7 @@ class SideMenu extends React.Component<Iprops, {}> {
           <Col xs={12}>Welcome {this.props.user.first}</Col>
         </Row>*/}
 
-        <MenuItems user={this.props.user} />
+        <MenuItems user={this.props.user} t={this.props.t} />
       </div>
     );
   }
@@ -64,7 +67,9 @@ const mapStateToProps = (state: InitialState, ownProps: Iprops) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  {}
-)(SideMenu);
+export default translate('tiles')(
+  connect(
+    mapStateToProps,
+    {}
+  )(SideMenu)
+);

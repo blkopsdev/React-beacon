@@ -24,6 +24,7 @@ import {
   isAuthenticated,
   isFullyAuthenticated
 } from '../../actions/userActions';
+import { translate, TranslationFunction, I18n } from 'react-i18next';
 
 interface Iprops extends RouteComponentProps<{}> {
   userLogin?: any;
@@ -34,6 +35,8 @@ interface Iprops extends RouteComponentProps<{}> {
   removeLoginRedirect?: any;
   user: Iuser;
   redirect: Iredirect;
+  t: TranslationFunction;
+  i18n: I18n;
 }
 interface Istate {
   userLoginFailed: boolean;
@@ -84,6 +87,7 @@ class Login extends React.Component<Iprops, Istate> {
     });
   }
   render() {
+    const { t } = this.props;
     // handle potential redirects
     const { from } = { from: { pathname: this.props.redirect.pathname } } || {
       from: { pathname: '/' }
@@ -113,17 +117,18 @@ class Login extends React.Component<Iprops, Istate> {
           <Row>
             <Col>
               <div className="loginForm login">
-                <span className="loginTitle">Welcome to CatCare!</span>
+                <span className="loginTitle">{t('welcome')}</span>
                 <Button
                   bsStyle="default"
                   className="loginBtn"
                   onClick={this.login}
                 >
-                  <img width="20" height="20" src={azure} /> Login with Meozure
+                  <img width="20" height="20" src={azure} />
+                  {t('loginButton')}
                 </Button>
                 <LinkContainer to={'/signup'}>
                   <Button bsStyle="link" className="signupBtn">
-                    Signup
+                    {t('signUp')}
                   </Button>
                 </LinkContainer>
               </div>
@@ -141,16 +146,16 @@ const mapStateToProps = (state: InitialState, ownProps: any) => {
   };
 };
 
-// export default LoginLayout;
-
-export default connect(
-  mapStateToProps,
-  {
-    userLogin,
-    adalLogin,
-    userLogout,
-    setLoginRedirect,
-    removeLoginRedirect,
-    setRedirectPathname
-  }
-)(Login);
+export default translate('auth')(
+  connect(
+    mapStateToProps,
+    {
+      userLogin,
+      adalLogin,
+      userLogout,
+      setLoginRedirect,
+      removeLoginRedirect,
+      setRedirectPathname
+    }
+  )(Login)
+);

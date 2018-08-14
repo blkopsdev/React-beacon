@@ -19,7 +19,7 @@ const colors = {
 const tiles = [
   {
     icon: 'icon-alerts',
-    title: 'Alerts',
+    title: 'alerts',
     src: 'https://placekitten.com/360/136',
     color: 'dark',
     width: 360,
@@ -29,7 +29,7 @@ const tiles = [
   },
   {
     icon: ['far', 'calendar-check'],
-    title: 'Training',
+    title: 'training',
     src: 'https://placekitten.com/360/408',
     color: 'green',
     width: 360,
@@ -39,7 +39,7 @@ const tiles = [
   },
   {
     icon: 'users',
-    title: 'New User Queue',
+    title: 'userQueue',
     src: 'https://placekitten.com/360/408',
     color: 'orange',
     width: 360,
@@ -49,7 +49,7 @@ const tiles = [
   },
   {
     icon: 'icon-maintenance',
-    title: 'Maintenance',
+    title: 'maintenance',
     src: 'https://placekitten.com/360/408',
     color: 'blue',
     width: 360,
@@ -59,7 +59,7 @@ const tiles = [
   },
   {
     icon: 'icon-reports',
-    title: 'Reports',
+    title: 'reports',
     src: 'https://placekitten.com/360/272',
     color: 'orange',
     width: 360,
@@ -69,7 +69,7 @@ const tiles = [
   },
   {
     icon: 'icon-team',
-    title: 'Manage Team',
+    title: 'manageTeam',
     src: 'https://placekitten.com/360/272',
     color: 'blue',
     width: 359,
@@ -79,7 +79,7 @@ const tiles = [
   },
   {
     icon: 'icon-docs',
-    title: 'Documents & Legal',
+    title: 'documents',
     src: 'https://placekitten.com/360/272',
     color: 'purple',
     width: 360,
@@ -89,7 +89,7 @@ const tiles = [
   },
   {
     icon: 'icon-inventory',
-    title: 'Inventory',
+    title: 'inventory',
     src: 'https://placekitten.com/360/408',
     color: 'green',
     width: 360,
@@ -99,7 +99,7 @@ const tiles = [
   },
   {
     icon: 'icon-admin',
-    title: 'Administration',
+    title: 'administration',
     src: 'https://placekitten.com/360/272',
     color: 'purple',
     width: 360,
@@ -109,7 +109,7 @@ const tiles = [
   },
   {
     icon: 'icon-billing',
-    title: 'Billing',
+    title: 'billing',
     src: 'https://placekitten.com/360/408',
     color: 'orange',
     width: 359,
@@ -119,7 +119,7 @@ const tiles = [
   },
   {
     icon: 'icon-groups',
-    title: 'My groups',
+    title: 'groups',
     src: 'https://placekitten.com/360/272',
     color: 'dark',
     width: 360,
@@ -129,7 +129,7 @@ const tiles = [
   },
   {
     icon: 'icon-support',
-    title: 'Support',
+    title: 'support',
     src: 'https://placekitten.com/360/136',
     color: 'dark',
     width: 359,

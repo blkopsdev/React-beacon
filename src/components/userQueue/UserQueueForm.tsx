@@ -7,12 +7,15 @@ import * as React from 'react';
 import {
   Validators,
   FormGenerator,
-  AbstractControl
+  AbstractControl,
+  FieldConfig
 } from 'react-reactive-form';
 import { Col, Button, FormGroup, ControlLabel } from 'react-bootstrap';
 import { forEach } from 'lodash';
 import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
+import { translate, TranslationFunction, I18n } from 'react-i18next';
+
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
 import { IqueueUser } from '../../models';
 
@@ -31,7 +34,7 @@ const TextLabel = ({ handler, meta }: any) => {
 const fieldConfigControls = {
   tempCompany: {
     render: TextLabel,
-    meta: { label: 'User Supplied Customer', colWidth: 12 }
+    meta: { label: 'userQueue:userCustomer', colWidth: 12 }
   },
   cust: {
     options: {
@@ -39,10 +42,10 @@ const fieldConfigControls = {
     },
     render: FormUtil.TextInputWithButton,
     meta: {
-      label: 'Customer',
+      label: 'userQueue:customer',
       colWidth: 12,
       type: 'text',
-      buttonName: 'Add New Customer',
+      buttonName: 'userQueue:addCustomerButton',
       buttonAction: () => {
         alert('functionality under construction');
       }
@@ -51,7 +54,7 @@ const fieldConfigControls = {
 
   providedAddress: {
     render: TextLabel,
-    meta: { label: 'User Supplied Facility Address', colWidth: 12 }
+    meta: { label: 'userQueue:providedAddress', colWidth: 12 }
   },
   fac: {
     options: {
@@ -59,10 +62,10 @@ const fieldConfigControls = {
     },
     render: FormUtil.TextInputWithButton,
     meta: {
-      label: 'Facility',
+      label: 'userQueue:facility',
       colWidth: 12,
       type: 'text',
-      buttonName: 'Add New Facility',
+      buttonName: 'userQueue:facilityButton',
       buttonAction: () => {
         alert('functionality under construction');
       }
@@ -79,15 +82,20 @@ interface Iprops extends React.Props<UserQueueForm> {
   user: IqueueUser;
   loading: boolean;
   colorButton: string;
+  t: TranslationFunction;
+  i18n: I18n;
 }
 
-export default class UserQueueForm extends React.Component<Iprops, {}> {
+class UserQueueForm extends React.Component<Iprops, {}> {
   public userForm: AbstractControl;
+  public fieldConfig: FieldConfig;
   constructor(props: Iprops) {
     super(props);
+    this.fieldConfig = FormUtil.translateForm(fieldConfig, this.props.t);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setForm = this.setForm.bind(this);
   }
+
   componentDidMount() {
     // set values
     forEach(this.props.user.user, (value, key) => {
@@ -149,10 +157,14 @@ export default class UserQueueForm extends React.Component<Iprops, {}> {
     };
   };
   render() {
+    const { t } = this.props;
     return (
       <div className="user-form queue-form">
         <form onSubmit={this.handleSubmit} className="user-form">
-          <FormGenerator onMount={this.setForm} fieldConfig={fieldConfig} />
+          <FormGenerator
+            onMount={this.setForm}
+            fieldConfig={this.fieldConfig}
+          />
           <Col xs={12} className="form-buttons text-right">
             <Button
               bsStyle="link"
@@ -160,7 +172,7 @@ export default class UserQueueForm extends React.Component<Iprops, {}> {
               className="pull-left left-side"
               onClick={this.props.handleCancel}
             >
-              Cancel
+              {t('cancel')}
             </Button>
             <Button
               bsStyle={this.props.colorButton}
@@ -168,7 +180,7 @@ export default class UserQueueForm extends React.Component<Iprops, {}> {
               disabled={this.props.loading}
               style={{ marginRight: '20px' }}
             >
-              Save
+              {t('save')}
             </Button>
             <Button
               bsStyle={this.props.colorButton}
@@ -176,7 +188,7 @@ export default class UserQueueForm extends React.Component<Iprops, {}> {
               disabled={this.props.loading}
               onClick={(e: any) => this.handleSubmit(e, true)}
             >
-              Save & Approve
+              {t('saveApprove')}
             </Button>
           </Col>
         </form>
@@ -184,3 +196,4 @@ export default class UserQueueForm extends React.Component<Iprops, {}> {
     );
   }
 }
+export default translate('user')(UserQueueForm);

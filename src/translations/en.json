@@ -1,0 +1,68 @@
+{
+  "common": {
+    "welcome": "WELCOME",
+    "cancel": "Cancel",
+    "previous": "Previous",
+    "next": "Next",
+    "search": "search"
+  },
+  "auth": {
+    "loginButton": "Login with Azure",
+    "signUp": "Sign Up",
+    "welcome": "Welcome to MyMedGas!",
+    "successTitle": "Success!",
+    "successBody1":
+      "You have been successfully added into the system. An BeaconMedaes admin will review your application and be in touch with you soon.",
+    "successBody2": "Please make sure that",
+    "successBody3":
+      "no-reply@beaconmedaes.com is cleared so that it does not end up in your spam.",
+    "ok": "Ok"
+  },
+  "user": {
+    "cancel": "Cancel",
+    "signUp": "Sign Up",
+    "validationError": "Please check invalid inputs.",
+    "first": "First Name",
+    "last": "Last Name",
+    "email": "Email",
+    "phone": "Phone Number",
+    "position": "Position",
+    "company": "Company Name",
+    "address": "Address",
+    "address2": "Address 2",
+    "city": "City",
+    "state": "State",
+    "zip": "Zip",
+    "save": "Save",
+    "saveApprove": "Save & Approve"
+  },
+  "userQueue": {
+    "bannerTitle": "New User Queue",
+    "editUserModalTitle": "New User",
+    "userCustomer": "User Supplied Customer",
+    "customer": "Customer",
+    "addCustomerButton": "Add New Customer",
+    "providedAddress": "User Supplied Facility Address",
+    "facility": "Facility",
+    "facilityButton": "Add New Facility",
+    "name": "name",
+    "email": "email",
+    "company": "company",
+    "created": "created",
+    "approve": "approve?"
+  },
+  "tiles": {
+    "alerts": "Alerts",
+    "training": "Training",
+    "userQueue": "New User Queue",
+    "maintenance": "Maintenance",
+    "reports": "Reports",
+    "manageTeam": "Manage Team",
+    "documents": "Documents & Legal",
+    "inventory": "Inventory",
+    "administration": "Administration",
+    "billing": "Billing",
+    "groups": "My groups",
+    "support": "Support"
+  }
+}

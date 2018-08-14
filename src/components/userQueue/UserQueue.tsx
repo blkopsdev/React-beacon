@@ -19,7 +19,10 @@ import Banner from '../common/Banner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import constants from '../../constants/constants';
 import * as moment from 'moment';
+import { translate, TranslationFunction, I18n } from 'react-i18next';
+
 import SearchTableForm from '../common/SearchTableForm';
+import { TableUtil } from '../common/TableUtil';
 
 interface Iprops extends RouteComponentProps<{}> {
   getUserQueue: any;
@@ -28,6 +31,8 @@ interface Iprops extends RouteComponentProps<{}> {
   updateUser: (value: Iuser, v: string) => Promise<void>;
   rejectUser: (value: string) => Promise<void>;
   loading: boolean;
+  t: TranslationFunction;
+  i18n: I18n;
 }
 
 interface Istate {
@@ -57,40 +62,43 @@ class UserQueue extends React.Component<Iprops, Istate> {
         securityFunction: ''
       }
     };
-    this.columns = [
-      {
-        id: 'name',
-        Header: 'Name',
-        accessor: 'user',
-        Cell: (row: any) => (
-          <span>
-            {row.value.first} {row.value.last}
-          </span>
-        )
-      },
-      {
-        Header: 'Email',
-        accessor: 'user.email'
-      },
-      {
-        id: 'company',
-        Header: 'Company',
-        accessor: 'user.tempCompany'
-      },
-      {
-        Header: 'Created',
-        accessor: ({ createDate }: Iuser) => {
-          return moment.utc(createDate).format('MM/DD/YYYY hh:mm a');
+    this.columns = TableUtil.translateHeaders(
+      [
+        {
+          id: 'name',
+          Header: 'name',
+          accessor: 'user',
+          Cell: (row: any) => (
+            <span>
+              {row.value.first} {row.value.last}
+            </span>
+          )
         },
-        id: 'created'
-      },
-      {
-        Header: 'Approve?',
-        accessor: 'id',
-        Cell: this.ApproveCell,
-        maxWidth: 90
-      }
-    ];
+        {
+          Header: 'email',
+          accessor: 'user.email'
+        },
+        {
+          id: 'company',
+          Header: 'company',
+          accessor: 'user.tempCompany'
+        },
+        {
+          Header: 'created',
+          accessor: ({ createDate }: Iuser) => {
+            return moment.utc(createDate).format('MM/DD/YYYY hh:mm a');
+          },
+          id: 'created'
+        },
+        {
+          Header: 'approve',
+          accessor: 'id',
+          Cell: this.ApproveCell,
+          maxWidth: 90
+        }
+      ],
+      this.props.t
+    );
   }
   componentWillMount() {
     this.setState({
@@ -170,10 +178,11 @@ class UserQueue extends React.Component<Iprops, Istate> {
   };
 
   render() {
+    const { t } = this.props;
     return (
       <div className="user-queue">
         <Banner
-          title="New User Queue"
+          title={t('bannerTitle')}
           img="http://placekitten.com/1440/60"
           color={constants.colors[`${this.state.currentTile.color}`]}
         />
@@ -185,6 +194,7 @@ class UserQueue extends React.Component<Iprops, Istate> {
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
+          t={this.props.t}
         />
         <ReactTable
           data={this.props.userQueue}
@@ -195,6 +205,8 @@ class UserQueue extends React.Component<Iprops, Istate> {
           pages={1}
           showPageSizeOptions={false}
           className={`beacon-table -highlight ${this.state.currentTile.color}`}
+          previousText={t('common:previous')}
+          nextText={t('common:next')}
         />
         <CommonModal
           modalVisible={this.state.showEditUserModal}
@@ -229,7 +241,7 @@ class UserQueue extends React.Component<Iprops, Istate> {
               }
             />
           }
-          title="New User"
+          title={t('editUserModalTitle')}
           container={document.getElementById('two-pane-layout')}
         />
       </div>
@@ -244,12 +256,14 @@ const mapStateToProps = (state: InitialState, ownProps: any) => {
     loading: state.ajaxCallsInProgress > 0
   };
 };
-export default connect(
-  mapStateToProps,
-  {
-    getUserQueue,
-    approveUser,
-    updateUser,
-    rejectUser
-  }
-)(UserQueue);
+export default translate('userQueue')(
+  connect(
+    mapStateToProps,
+    {
+      getUserQueue,
+      approveUser,
+      updateUser,
+      rejectUser
+    }
+  )(UserQueue)
+);

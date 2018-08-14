@@ -11,11 +11,14 @@ import { userLogout } from '../../actions/userActions';
 import { isFullyAuthenticated } from '../../actions/userActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from 'react-bootstrap';
+import { translate, TranslationFunction, I18n } from 'react-i18next';
 
 interface Iprops extends React.Props<Header> {
   user: Iuser;
   userLogout: any;
   loading: boolean;
+  t: TranslationFunction;
+  i18n: I18n;
 }
 
 class Header extends React.Component<Iprops, {}> {
@@ -24,7 +27,15 @@ class Header extends React.Component<Iprops, {}> {
   }
 
   render() {
-    if (!isFullyAuthenticated(this.props.user)) {
+    const { t } = this.props;
+    if (!isFullyAuthenticated(this.props.user) && this.props.loading) {
+      return (
+        <div className="spinner">
+          <div className="double-bounce1" />
+          <div className="double-bounce2" />
+        </div>
+      );
+    } else if (!isFullyAuthenticated(this.props.user) && !this.props.loading) {
       return null;
     }
 
@@ -38,7 +49,7 @@ class Header extends React.Component<Iprops, {}> {
         )}
 
         <span className="profile">
-          WELCOME&nbsp;
+          {t('welcome')}&nbsp;
           <span className="name">{this.props.user.first}</span>
           <span className="vertical" />
           <Button
@@ -61,7 +72,9 @@ const mapStateToProps = (state: InitialState, ownProps: Iprops) => {
   };
 };
 
-export default connect(
-  mapStateToProps,
-  { userLogout }
-)(Header);
+export default translate('common')(
+  connect(
+    mapStateToProps,
+    { userLogout }
+  )(Header)
+);

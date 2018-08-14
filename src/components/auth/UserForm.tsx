@@ -7,10 +7,11 @@ import * as React from 'react';
 import {
   Validators,
   FormGenerator,
-  AbstractControl
+  AbstractControl,
+  FieldConfig
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
-import { forEach, mapValues } from 'lodash';
+import { forEach } from 'lodash';
 import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
@@ -87,33 +88,16 @@ interface Iprops extends React.Props<UserForm> {
   t: TranslationFunction;
   i18n: I18n;
 }
-interface Istate {
-  loading: boolean;
-  formConfig: any;
-}
-class UserForm extends React.Component<Iprops, Istate> {
+
+class UserForm extends React.Component<Iprops, {}> {
   public userForm: AbstractControl;
+  public fieldConfig: FieldConfig;
   constructor(props: Iprops) {
     super(props);
-    this.state = {
-      loading: false,
-      formConfig: {}
-    };
+    this.fieldConfig = FormUtil.translateForm(fieldConfig, this.props.t);
     this.handleSubmit = this.handleSubmit.bind(this);
   }
-  componentWillMount() {
-    const newFormConfigControls = mapValues(fieldConfig.controls, field => {
-      if (field.meta.label) {
-        const newMeta = {
-          ...field.meta,
-          label: this.props.t(field.meta.label)
-        };
-        return { ...field, meta: newMeta };
-      }
-      return field;
-    });
-    this.setState({ formConfig: { controls: newFormConfigControls } });
-  }
+
   componentDidMount() {
     if (process.env.NODE_ENV !== 'production') {
       forEach(testUser, (value, key) => {
@@ -129,15 +113,7 @@ class UserForm extends React.Component<Iprops, Istate> {
       toastr.error(this.props.t('validationError'), '', constants.toastrError);
       return;
     }
-    this.setState({ loading: true });
-    this.props
-      .handleSubmit(this.userForm.value)
-      .then(() => {
-        this.setState({ loading: false });
-      })
-      .catch(() => {
-        this.setState({ loading: false });
-      });
+    this.props.handleSubmit(this.userForm.value);
   };
   setForm = (form: AbstractControl) => {
     this.userForm = form;
@@ -155,7 +131,7 @@ class UserForm extends React.Component<Iprops, Istate> {
         <form onSubmit={this.handleSubmit} className="user-form">
           <FormGenerator
             onMount={this.setForm}
-            fieldConfig={this.state.formConfig}
+            fieldConfig={this.fieldConfig}
           />
           <Col xs={12} className="user-form-buttons">
             <Button
@@ -168,12 +144,6 @@ class UserForm extends React.Component<Iprops, Istate> {
             >
               {t('cancel')}
             </Button>
-            {this.state.loading && (
-              <div className="spinner">
-                <div className="double-bounce1" />
-                <div className="double-bounce2" />
-              </div>
-            )}
             <Button
               bsStyle="primary"
               type="submit"

@@ -5,6 +5,7 @@ import Masonry from 'react-masonry-component';
 import { Link } from 'react-router-dom';
 import constants from '../../constants/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { translate, TranslationFunction, I18n } from 'react-i18next';
 
 const masonryOptions = {
   transitionDuration: 0
@@ -15,6 +16,8 @@ const { tiles } = constants;
 interface Iprops extends React.Props<Dashboard> {
   history: History;
   user: Iuser;
+  t: TranslationFunction;
+  i18n: I18n;
 }
 // interface Istate {
 // }
@@ -42,7 +45,7 @@ class Dashboard extends React.Component<Iprops, {}> {
               <img src={tile.src} />
               <span className="title">
                 <FontAwesomeIcon icon={tile.icon} />
-                {tile.title}
+                {this.props.t(tile.title)}
               </span>
             </div>
           </Link>
@@ -69,8 +72,9 @@ const mapStateToProps = (state: InitialState, ownProps: Iprops) => {
     user: state.user
   };
 };
-
-export default connect(
-  mapStateToProps,
-  {}
-)(Dashboard);
+export default translate('tiles')(
+  connect(
+    mapStateToProps,
+    {}
+  )(Dashboard)
+);

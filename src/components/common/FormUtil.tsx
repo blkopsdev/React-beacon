@@ -7,7 +7,9 @@ import {
   ControlLabel,
   Button
 } from 'react-bootstrap';
-import { Validators } from 'react-reactive-form';
+import { Validators, FieldConfig } from 'react-reactive-form';
+import { mapValues } from 'lodash';
+import { TranslationFunction } from 'react-i18next';
 
 export const FormUtil = {
   getValidationState: (
@@ -108,7 +110,26 @@ export const FormUtil = {
         <FormControl.Feedback />
       </FormGroup>
     </Col>
-  )
+  ),
+  translateForm: (config: FieldConfig, t: TranslationFunction) => {
+    const newControls = mapValues(config.controls, field => {
+      if (field.meta.label) {
+        let newMeta = {
+          ...field.meta,
+          label: t(field.meta.label)
+        };
+        if (field.meta.buttonName) {
+          newMeta = {
+            ...newMeta,
+            buttonName: t(field.meta.buttonName)
+          };
+        }
+        return { ...field, meta: newMeta };
+      }
+      return field;
+    });
+    return { controls: newControls };
+  }
 };
 // reusable user form elements
 export const userBaseConfigControls = {

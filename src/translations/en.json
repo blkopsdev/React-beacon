@@ -49,7 +49,8 @@
     "email": "email",
     "company": "company",
     "created": "created",
-    "approve": "approve?"
+    "approve": "approve?",
+    "searchPlaceholder": "Search by First, Last, or Email"
   },
   "tiles": {
     "alerts": "Alerts",

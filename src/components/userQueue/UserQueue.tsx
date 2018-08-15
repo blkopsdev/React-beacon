@@ -33,6 +33,7 @@ interface Iprops extends RouteComponentProps<{}> {
   loading: boolean;
   t: TranslationFunction;
   i18n: I18n;
+  setQueueSearch: (value: string) => Promise<void>;
 }
 
 interface Istate {
@@ -110,7 +111,6 @@ class UserQueue extends React.Component<Iprops, Istate> {
     // refresh the list of customers every time the component mounts
     // this.props.customerGetAll()
   }
-
   // handleTableProps(state: any, rowInfo: any, column: any, instance: any) {
 
   // }
@@ -179,9 +179,13 @@ class UserQueue extends React.Component<Iprops, Istate> {
       return {};
     }
   };
-
+  // get the next or previous page of data.  the table is 0 indexed but the API is not
   onPageChange = (page: number) => {
     this.props.getUserQueue(page + 1, '');
+  };
+  onSearchSubmit = ({ search }: { search: string }) => {
+    // this.props.setQueueSearch(search); // if we want to do front end search
+    this.props.getUserQueue(this.props.userQueue.page, search);
   };
 
   render() {
@@ -194,9 +198,7 @@ class UserQueue extends React.Component<Iprops, Istate> {
           color={constants.colors[`${this.state.currentTile.color}`]}
         />
         <SearchTableForm
-          handleSubmit={(values: any) => {
-            alert(`under construction: ${JSON.stringify(values)}`);
-          }}
+          handleSubmit={this.onSearchSubmit}
           loading={this.props.loading}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
@@ -257,6 +259,22 @@ class UserQueue extends React.Component<Iprops, Istate> {
   }
 }
 
+/*
+* if we want to do front end search at some point
+const getFilteredData = (queue: IqueueObject[], f : string) => {
+  const filter = f.toLowerCase();
+  return queue.filter(q => {
+    let found = false;
+    if (q.user.first.toLowerCase().includes(filter)){
+      found = true;
+    }
+
+    return found;
+  })
+}
+    formData: getFilteredData(state.userQueue.data, state.userQueue.search)
+
+*/
 const mapStateToProps = (state: IinitialState, ownProps: any) => {
   return {
     user: state.user,

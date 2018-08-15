@@ -53,7 +53,8 @@ store.subscribe(
     saveState(
       {
         user: store.getState().user,
-        redirect: store.getState().redirect
+        redirect: store.getState().redirect,
+        userQueue: store.getState().userQueue
       },
       'state-core-care'
     );

@@ -124,6 +124,12 @@ export const FormUtil = {
             buttonName: t(field.meta.buttonName)
           };
         }
+        if (field.meta.placeholder) {
+          newMeta = {
+            ...newMeta,
+            placeholder: t(field.meta.placeholder)
+          };
+        }
         return { ...field, meta: newMeta };
       }
       return field;

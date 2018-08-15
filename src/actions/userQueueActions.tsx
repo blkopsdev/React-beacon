@@ -17,6 +17,7 @@ export function getUserQueue(page: number, search: string) {
         } else {
           dispatch({ type: types.USER_QUEUE_SUCCESS, queue: data.data[1] });
           dispatch({ type: types.USER_QUEUE_TOTAL_PAGES, pages: data.data[0] });
+          dispatch({ type: types.USER_QUEUE_SEARCH_UPDATE, search });
           return data;
         }
       })
@@ -93,6 +94,10 @@ export function updateUser(user: Iuser, queueID: string) {
       });
   };
 }
+// This is for front in search, but we are doing server side
+// export const setQueueSearch = (search: string) => ({
+//     type: types.USER_QUEUE_SEARCH_UPDATE, search
+// });
 
 function handleError(error: any, message: string) {
   let msg = '';

@@ -19,7 +19,12 @@ const fieldConfig = {
   controls: {
     search: {
       render: FormUtil.TextInputWithoutValidation,
-      meta: { label: 'common:search', colWidth: 4, type: 'text' }
+      meta: {
+        label: 'common:search',
+        colWidth: 4,
+        type: 'text',
+        placeholder: 'searchPlaceholder'
+      }
     }
   }
 };

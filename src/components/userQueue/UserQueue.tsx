@@ -8,14 +8,16 @@ import {
   approveUser,
   updateUser,
   rejectUser,
-  getCustomers
+  getCustomers,
+  getFacilitiesByCustomer
 } from '../../actions/userQueueActions';
 import {
   IinitialState,
   Iuser,
   Itile,
   IuserQueue,
-  Icustomer
+  Icustomer,
+  Ifacility
 } from '../../models';
 import { RouteComponentProps } from 'react-router-dom';
 import ReactTable from 'react-table';
@@ -38,6 +40,12 @@ const getCustomerOptions = (customers: Icustomer[]) => {
   });
 };
 
+const getFacilitityOptions = (facilities: Ifacility[]) => {
+  return map(facilities, (facility: Ifacility) => {
+    return { value: facility.id, label: facility.name };
+  });
+};
+
 interface Iprops extends RouteComponentProps<{}> {
   getUserQueue: any;
   userQueue: IuserQueue;
@@ -50,6 +58,8 @@ interface Iprops extends RouteComponentProps<{}> {
   setQueueSearch: (value: string) => Promise<void>;
   getCustomers: () => Promise<void>;
   customerOptions: any[];
+  getFacilitiesByCustomer: () => Promise<void>;
+  facilityOptions: any[];
 }
 
 interface Istate {
@@ -265,6 +275,8 @@ class UserQueue extends React.Component<Iprops, Istate> {
                 constants.colors[`${this.state.currentTile.color}Button`]
               }
               customerOptions={this.props.customerOptions}
+              facilityOptions={this.props.facilityOptions}
+              getFacilitiesByCustomer={this.props.getFacilitiesByCustomer}
             />
           }
           title={t('editUserModalTitle')}
@@ -280,7 +292,8 @@ const mapStateToProps = (state: IinitialState, ownProps: any) => {
     user: state.user,
     userQueue: state.userQueue,
     loading: state.ajaxCallsInProgress > 0,
-    customerOptions: getCustomerOptions(state.customers)
+    customerOptions: getCustomerOptions(state.customers),
+    facilityOptions: getFacilitityOptions(state.facilities)
   };
 };
 export default translate('userQueue')(
@@ -291,7 +304,8 @@ export default translate('userQueue')(
       approveUser,
       updateUser,
       rejectUser,
-      getCustomers
+      getCustomers,
+      getFacilitiesByCustomer
     }
   )(UserQueue)
 );

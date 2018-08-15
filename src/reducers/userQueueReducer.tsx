@@ -3,6 +3,8 @@ import { IqueueObject, IuserQueue } from '../models';
 import initialState from './initialState';
 import { pickBy, map, filter } from 'lodash';
 
+const initialQueueObject = { id: '', user: initialState.user }; // provide a queueObject that has all the correct types so that we can avoid "null" values from the API
+
 function userQueueData(
   state: IqueueObject[] = [],
   action: any
@@ -11,6 +13,7 @@ function userQueueData(
     case types.USER_QUEUE_SUCCESS:
       return map(action.queue, queueObject => {
         return {
+          ...initialQueueObject,
           ...queueObject,
           user: pickBy(queueObject.user, (property, key) => property !== null)
         };
@@ -18,6 +21,7 @@ function userQueueData(
     case types.USER_UPDATE_SUCCESS:
       const queuefilterUser = filter(state, u => u.id !== action.queueID);
       const newQueueObject = {
+        ...initialQueueObject,
         id: action.queueID,
         user: pickBy(action.user, (property, key) => property !== null)
       };

@@ -20,6 +20,8 @@ export interface Iuser {
   tempState?: string;
   tempZip?: string;
   createDate?: string;
+  customerID: string;
+  facilityID: string;
 }
 // export interface IuserQueue {
 //   [key: string]: Iuser;
@@ -60,6 +62,7 @@ export interface IinitialState {
   redirect: Iredirect;
   userQueue: IuserQueue;
   customers: Icustomer[];
+  facilities: Ifacility[];
 }
 export interface Itile {
   icon: string | string[];
@@ -76,6 +79,16 @@ export interface Icustomer {
   id: string;
   name: string;
   vat?: string;
+}
+export interface Ifacility {
+  id: string;
+  name: string;
+  customerID: string;
+  address1: string;
+  address2: string;
+  city: string;
+  state: string;
+  postalCode: string;
 }
 
 // these are copied from react-redux-toastr beacuse could not figure out any other way to make typescript happy

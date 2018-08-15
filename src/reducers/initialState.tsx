@@ -15,7 +15,9 @@ export default {
     city: '',
     state: '',
     zip: '',
-    id: ''
+    id: '',
+    facilityID: '',
+    customerID: ''
   },
   redirect: {
     redirectToReferrer: false,
@@ -27,5 +29,6 @@ export default {
     totalPages: 1,
     data: []
   },
-  customers: []
+  customers: [],
+  facilities: []
 };

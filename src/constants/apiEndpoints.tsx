@@ -17,6 +17,9 @@ const API = {
     },
     customer: {
       getall: `${root}customer/getall`
+    },
+    facility: {
+      getbycustomer: `${root}facility/getbycustomer`
     }
   }
 };

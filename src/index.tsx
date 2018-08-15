@@ -54,7 +54,9 @@ store.subscribe(
       {
         user: store.getState().user,
         redirect: store.getState().redirect,
-        userQueue: store.getState().userQueue
+        userQueue: store.getState().userQueue,
+        customers: store.getState().customers
+        // facilities: store.getState().facilities
       },
       'state-core-care'
     );

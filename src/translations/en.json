@@ -5,7 +5,8 @@
     "previous": "Previous",
     "next": "Next",
     "search": "search",
-    "customer": "customer"
+    "customer": "customer",
+    "facility": "facility"
   },
   "auth": {
     "loginButton": "Login with Azure",
@@ -35,7 +36,8 @@
     "state": "State",
     "zip": "Zip",
     "save": "Save",
-    "saveApprove": "Save & Approve"
+    "saveApprove": "Save & Approve",
+    "***-***-****": "***-***-****"
   },
   "userQueue": {
     "bannerTitle": "New User Queue",
@@ -52,7 +54,8 @@
     "created": "created",
     "approve": "approve?",
     "searchPlaceholder": "Search by First, Last, or Email",
-    "customerSearchPlaceholder": "Search..."
+    "customerSearchPlaceholder": "Search...",
+    "facilitySearchPlaceholder": "Search..."
   },
   "tiles": {
     "alerts": "Alerts",

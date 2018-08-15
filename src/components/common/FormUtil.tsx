@@ -13,7 +13,7 @@ import {
   AbstractControl,
   ValidationErrors
 } from 'react-reactive-form';
-import { mapValues } from 'lodash';
+import { mapValues, find } from 'lodash';
 import { TranslationFunction } from 'react-i18next';
 import Select, { components } from 'react-select';
 
@@ -89,41 +89,41 @@ export const FormUtil = {
       </FormGroup>
     </Col>
   ),
-  TextInputWithButton: ({
-    handler,
-    touched,
-    hasError,
-    meta,
-    pristine,
-    errors,
-    submitted
-  }: AbstractControl) => (
-    <Col xs={meta.colWidth}>
-      <FormGroup
-        validationState={FormUtil.getValidationState(
-          pristine,
-          errors,
-          submitted
-        )}
-        bsSize="sm"
-      >
-        <ControlLabel>{meta.label}</ControlLabel>
-        <Button
-          bsStyle="link"
-          className="pull-right right-side"
-          onClick={meta.buttonAction}
-        >
-          {meta.buttonName}
-        </Button>
-        <FormControl
-          type={meta.type}
-          placeholder={meta.placeholder}
-          {...handler()}
-        />
-        <FormControl.Feedback />
-      </FormGroup>
-    </Col>
-  ),
+  // TextInputWithButton: ({
+  //   handler,
+  //   touched,
+  //   hasError,
+  //   meta,
+  //   pristine,
+  //   errors,
+  //   submitted
+  // }: AbstractControl) => (
+  //   <Col xs={meta.colWidth}>
+  //     <FormGroup
+  //       validationState={FormUtil.getValidationState(
+  //         pristine,
+  //         errors,
+  //         submitted
+  //       )}
+  //       bsSize="sm"
+  //     >
+  //       <ControlLabel>{meta.label}</ControlLabel>
+  //       <Button
+  //         bsStyle="link"
+  //         className="pull-right right-side"
+  //         onClick={meta.buttonAction}
+  //       >
+  //         {meta.buttonName}
+  //       </Button>
+  //       <FormControl
+  //         type={meta.type}
+  //         placeholder={meta.placeholder}
+  //         {...handler()}
+  //       />
+  //       <FormControl.Feedback />
+  //     </FormGroup>
+  //   </Col>
+  // ),
   SelectWithButton: ({
     handler,
     touched,
@@ -136,7 +136,8 @@ export const FormUtil = {
     setErrors,
     value
   }: AbstractControl) => {
-    // let className = 'has-success';
+    const defaultValue = find(meta.options, { value: meta.value });
+    // console.log('rendering select', meta.options, value, defaultValue)
     return (
       <Col xs={meta.colWidth}>
         <FormGroup
@@ -156,17 +157,12 @@ export const FormUtil = {
             {meta.buttonName}
           </Button>
           <Select
-            options={meta.customerOptions}
-            className={value ? 'has-success' : ''}
-            onChange={(values: { value: string; label: string }) => {
-              patchValue(values.value);
-              {
-                /*className = 'success'*/
-              }
-            }}
+            options={meta.options}
+            className={value && !pristine ? 'has-success' : ''}
+            defaultValue={defaultValue}
             components={{ Control: ControlComponent }}
             placeholder={meta.placeholder}
-            {...handler}
+            {...handler()}
           />
         </FormGroup>
       </Col>

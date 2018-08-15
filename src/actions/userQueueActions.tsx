@@ -94,6 +94,28 @@ export function updateUser(user: Iuser, queueID: string) {
   };
 }
 
+export function getCustomers() {
+  return (dispatch: any, getState: any) => {
+    dispatch(beginAjaxCall());
+    return axios
+      .get(API.GET.customer.getall)
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({ type: types.GET_CUSTOMERS_SUCCESS, customers: data.data });
+          // dispatch({ type: types.USER_QUEUE_TOTAL_PAGES, pages: data.data[0] });
+          return data;
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.GET_CUSTOMERS_FAILED });
+        handleError(error, 'get companies');
+        throw error;
+      });
+  };
+}
+
 function handleError(error: any, message: string) {
   let msg = '';
   if (error.response && error.response.data) {

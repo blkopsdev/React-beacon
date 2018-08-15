@@ -7,9 +7,16 @@ import {
   getUserQueue,
   approveUser,
   updateUser,
-  rejectUser
+  rejectUser,
+  getCustomers
 } from '../../actions/userQueueActions';
-import { IinitialState, Iuser, Itile, IuserQueue } from '../../models';
+import {
+  IinitialState,
+  Iuser,
+  Itile,
+  IuserQueue,
+  Icustomer
+} from '../../models';
 import { RouteComponentProps } from 'react-router-dom';
 import ReactTable from 'react-table';
 import { Button } from 'react-bootstrap';
@@ -20,9 +27,16 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import constants from '../../constants/constants';
 import * as moment from 'moment';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
+import { map } from 'lodash';
 
 import SearchTableForm from '../common/SearchTableForm';
 import { TableUtil } from '../common/TableUtil';
+
+const getCustomerOptions = (customers: Icustomer[]) => {
+  return map(customers, (cust: Icustomer) => {
+    return { value: cust.id, label: cust.name };
+  });
+};
 
 interface Iprops extends RouteComponentProps<{}> {
   getUserQueue: any;
@@ -34,6 +48,8 @@ interface Iprops extends RouteComponentProps<{}> {
   t: TranslationFunction;
   i18n: I18n;
   setQueueSearch: (value: string) => Promise<void>;
+  getCustomers: () => Promise<void>;
+  customerOptions: any[];
 }
 
 interface Istate {
@@ -109,7 +125,7 @@ class UserQueue extends React.Component<Iprops, Istate> {
     this.props.getUserQueue(1, '');
 
     // refresh the list of customers every time the component mounts
-    // this.props.customerGetAll()
+    this.props.getCustomers();
   }
   // handleTableProps(state: any, rowInfo: any, column: any, instance: any) {
 
@@ -184,7 +200,6 @@ class UserQueue extends React.Component<Iprops, Istate> {
     this.props.getUserQueue(page + 1, '');
   };
   onSearchSubmit = ({ search }: { search: string }) => {
-    // this.props.setQueueSearch(search); // if we want to do front end search
     this.props.getUserQueue(this.props.userQueue.page, search);
   };
 
@@ -249,6 +264,7 @@ class UserQueue extends React.Component<Iprops, Istate> {
               colorButton={
                 constants.colors[`${this.state.currentTile.color}Button`]
               }
+              customerOptions={this.props.customerOptions}
             />
           }
           title={t('editUserModalTitle')}
@@ -263,7 +279,8 @@ const mapStateToProps = (state: IinitialState, ownProps: any) => {
   return {
     user: state.user,
     userQueue: state.userQueue,
-    loading: state.ajaxCallsInProgress > 0
+    loading: state.ajaxCallsInProgress > 0,
+    customerOptions: getCustomerOptions(state.customers)
   };
 };
 export default translate('userQueue')(
@@ -273,7 +290,8 @@ export default translate('userQueue')(
       getUserQueue,
       approveUser,
       updateUser,
-      rejectUser
+      rejectUser,
+      getCustomers
     }
   )(UserQueue)
 );

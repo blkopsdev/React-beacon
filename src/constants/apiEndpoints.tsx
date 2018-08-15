@@ -14,6 +14,9 @@ const API = {
   GET: {
     user: {
       getuserqueue: `${root}user/getuserqueue`
+    },
+    customer: {
+      getall: `${root}customer/getall`
     }
   }
 };

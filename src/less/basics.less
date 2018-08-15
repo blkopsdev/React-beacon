@@ -90,6 +90,16 @@ body {
     font-family: 'Open Sans';
     color: #777;
     box-shadow: none;
+    border-radius: 8px;
+
+    //  overrides for react-select 
+    // TODO need to apply hover border color for success and error, need selected border to match bootstrap
+    min-height: 0; 
+    letter-spacing: normal;
+    &:hover{
+      border-color: none;
+    }
+    div{padding: 0;}
   }
 
 }

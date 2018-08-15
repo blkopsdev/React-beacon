@@ -4,7 +4,8 @@
     "cancel": "Cancel",
     "previous": "Previous",
     "next": "Next",
-    "search": "search"
+    "search": "search",
+    "customer": "customer"
   },
   "auth": {
     "loginButton": "Login with Azure",
@@ -50,7 +51,8 @@
     "company": "company",
     "created": "created",
     "approve": "approve?",
-    "searchPlaceholder": "Search by First, Last, or Email"
+    "searchPlaceholder": "Search by First, Last, or Email",
+    "customerSearchPlaceholder": "Search..."
   },
   "tiles": {
     "alerts": "Alerts",

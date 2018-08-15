@@ -7,14 +7,27 @@ import {
   ControlLabel,
   Button
 } from 'react-bootstrap';
-import { Validators, FieldConfig } from 'react-reactive-form';
+import {
+  Validators,
+  FieldConfig,
+  AbstractControl,
+  ValidationErrors
+} from 'react-reactive-form';
 import { mapValues } from 'lodash';
 import { TranslationFunction } from 'react-i18next';
+import Select, { components } from 'react-select';
+
+// add the bootstrap form-control class to the react-select select component
+const ControlComponent = (props: any) => (
+  <div>
+    <components.Control {...props} className="form-control" />
+  </div>
+);
 
 export const FormUtil = {
   getValidationState: (
     pristine: boolean,
-    error: boolean,
+    error: ValidationErrors,
     submitted: boolean
   ) => {
     if (!pristine && error) {
@@ -36,7 +49,7 @@ export const FormUtil = {
     pristine,
     errors,
     submitted
-  }: any) => (
+  }: AbstractControl) => (
     <Col xs={meta.colWidth}>
       <FormGroup
         validationState={FormUtil.getValidationState(
@@ -64,7 +77,7 @@ export const FormUtil = {
     pristine,
     errors,
     submitted
-  }: any) => (
+  }: AbstractControl) => (
     <Col xs={meta.colWidth}>
       <FormGroup bsSize="sm">
         <ControlLabel>{meta.label}</ControlLabel>
@@ -84,7 +97,7 @@ export const FormUtil = {
     pristine,
     errors,
     submitted
-  }: any) => (
+  }: AbstractControl) => (
     <Col xs={meta.colWidth}>
       <FormGroup
         validationState={FormUtil.getValidationState(
@@ -111,6 +124,54 @@ export const FormUtil = {
       </FormGroup>
     </Col>
   ),
+  SelectWithButton: ({
+    handler,
+    touched,
+    hasError,
+    meta,
+    pristine,
+    errors,
+    submitted,
+    patchValue,
+    setErrors,
+    value
+  }: AbstractControl) => {
+    // let className = 'has-success';
+    return (
+      <Col xs={meta.colWidth}>
+        <FormGroup
+          validationState={FormUtil.getValidationState(
+            pristine,
+            errors,
+            submitted
+          )}
+          bsSize="sm"
+        >
+          <ControlLabel>{meta.label}</ControlLabel>
+          <Button
+            bsStyle="link"
+            className="pull-right right-side"
+            onClick={meta.buttonAction}
+          >
+            {meta.buttonName}
+          </Button>
+          <Select
+            options={meta.customerOptions}
+            className={value ? 'has-success' : ''}
+            onChange={(values: { value: string; label: string }) => {
+              patchValue(values.value);
+              {
+                /*className = 'success'*/
+              }
+            }}
+            components={{ Control: ControlComponent }}
+            placeholder={meta.placeholder}
+            {...handler}
+          />
+        </FormGroup>
+      </Col>
+    );
+  },
   translateForm: (config: FieldConfig, t: TranslationFunction) => {
     const newControls = mapValues(config.controls, field => {
       if (field.meta.label) {

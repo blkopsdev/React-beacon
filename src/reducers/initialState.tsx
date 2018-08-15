@@ -26,5 +26,6 @@ export default {
     page: 1,
     totalPages: 1,
     data: []
-  }
+  },
+  customers: []
 };

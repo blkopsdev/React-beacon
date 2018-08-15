@@ -15,6 +15,7 @@ import { forEach } from 'lodash';
 import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
+// import Select from 'react-select';
 
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
 import { IqueueObject } from '../../models';
@@ -30,50 +31,55 @@ const TextLabel = ({ handler, meta }: any) => {
   );
 };
 
-// Field config to configure form
-const fieldConfigControls = {
-  tempCompany: {
-    render: TextLabel,
-    meta: { label: 'userQueue:userCustomer', colWidth: 12 }
-  },
-  cust: {
-    options: {
-      validators: Validators.required
+const buildFieldConfig = (customerOptions: any[]) => {
+  // Field config to configure form
+  const fieldConfigControls = {
+    tempCompany: {
+      render: TextLabel,
+      meta: { label: 'userQueue:userCustomer', colWidth: 12 }
     },
-    render: FormUtil.TextInputWithButton,
-    meta: {
-      label: 'userQueue:customer',
-      colWidth: 12,
-      type: 'text',
-      buttonName: 'userQueue:addCustomerButton',
-      buttonAction: () => {
-        alert('functionality under construction');
+    customerSelect: {
+      render: FormUtil.SelectWithButton,
+      meta: {
+        customerOptions,
+        label: 'common:customer',
+        type: 'select-multiple',
+        colWidth: 12,
+        placeholder: 'userQueue:customerSearchPlaceholder',
+        buttonName: 'userQueue:addCustomerButton',
+        buttonAction: () => {
+          alert('functionality under construction');
+        }
+      },
+      options: {
+        validators: Validators.required
       }
-    }
-  },
+    },
 
-  providedAddress: {
-    render: TextLabel,
-    meta: { label: 'userQueue:providedAddress', colWidth: 12 }
-  },
-  fac: {
-    options: {
-      validators: Validators.required
+    providedAddress: {
+      render: TextLabel,
+      meta: { label: 'userQueue:providedAddress', colWidth: 12 }
     },
-    render: FormUtil.TextInputWithButton,
-    meta: {
-      label: 'userQueue:facility',
-      colWidth: 12,
-      type: 'text',
-      buttonName: 'userQueue:facilityButton',
-      buttonAction: () => {
-        alert('functionality under construction');
+    fac: {
+      options: {
+        validators: Validators.required
+      },
+      render: FormUtil.TextInputWithButton,
+      meta: {
+        label: 'userQueue:facility',
+        colWidth: 12,
+        type: 'text',
+        buttonName: 'userQueue:facilityButton',
+        buttonAction: () => {
+          alert('functionality under construction');
+        }
       }
     }
-  }
-};
-const fieldConfig = {
-  controls: { ...userBaseConfigControls, ...fieldConfigControls }
+  };
+  const fieldConfig = {
+    controls: { ...userBaseConfigControls, ...fieldConfigControls }
+  };
+  return fieldConfig;
 };
 
 interface Iprops extends React.Props<UserQueueForm> {
@@ -84,6 +90,7 @@ interface Iprops extends React.Props<UserQueueForm> {
   colorButton: string;
   t: TranslationFunction;
   i18n: I18n;
+  customerOptions: any[];
 }
 
 class UserQueueForm extends React.Component<Iprops, {}> {
@@ -91,7 +98,10 @@ class UserQueueForm extends React.Component<Iprops, {}> {
   public fieldConfig: FieldConfig;
   constructor(props: Iprops) {
     super(props);
-    this.fieldConfig = FormUtil.translateForm(fieldConfig, this.props.t);
+    this.fieldConfig = FormUtil.translateForm(
+      buildFieldConfig(this.props.customerOptions),
+      this.props.t
+    );
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setForm = this.setForm.bind(this);
   }
@@ -130,6 +140,7 @@ class UserQueueForm extends React.Component<Iprops, {}> {
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
+    console.log(this.userForm.value);
     this.props.handleSubmit(
       // TESTING with hard coded data
       {
@@ -156,6 +167,7 @@ class UserQueueForm extends React.Component<Iprops, {}> {
       loading: this.props.loading
     };
   };
+
   render() {
     const { t } = this.props;
     return (

@@ -59,6 +59,7 @@ export interface IinitialState {
   ajaxCallsInProgress: number;
   redirect: Iredirect;
   userQueue: IuserQueue;
+  customers: Icustomer[];
 }
 export interface Itile {
   icon: string | string[];
@@ -69,6 +70,12 @@ export interface Itile {
   height: number;
   url: string;
   securityFunction: string;
+}
+
+export interface Icustomer {
+  id: string;
+  name: string;
+  vat?: string;
 }
 
 // these are copied from react-redux-toastr beacuse could not figure out any other way to make typescript happy

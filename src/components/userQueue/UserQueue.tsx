@@ -259,22 +259,6 @@ class UserQueue extends React.Component<Iprops, Istate> {
   }
 }
 
-/*
-* if we want to do front end search at some point
-const getFilteredData = (queue: IqueueObject[], f : string) => {
-  const filter = f.toLowerCase();
-  return queue.filter(q => {
-    let found = false;
-    if (q.user.first.toLowerCase().includes(filter)){
-      found = true;
-    }
-
-    return found;
-  })
-}
-    formData: getFilteredData(state.userQueue.data, state.userQueue.search)
-
-*/
 const mapStateToProps = (state: IinitialState, ownProps: any) => {
   return {
     user: state.user,

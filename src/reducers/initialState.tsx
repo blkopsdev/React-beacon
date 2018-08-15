@@ -23,7 +23,6 @@ export default {
   },
   // userQueue: []
   userQueue: {
-    search: '',
     page: 1,
     totalPages: 1,
     data: []

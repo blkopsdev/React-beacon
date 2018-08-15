@@ -45,7 +45,6 @@ export interface ItempUser {
 }
 
 export interface IuserQueue {
-  search: string;
   page: number;
   data: IqueueObject[];
   totalPages: number;

@@ -59,15 +59,6 @@ function userQueueTotalPages(state: number = 1, action: any): number {
   }
 }
 
-function userQueueSearch(state: string = '', action: any): string {
-  switch (action.type) {
-    case types.USER_QUEUE_SEARCH_UPDATE:
-      return action.search;
-    default:
-      return state;
-  }
-}
-
 export default function userQueue(
   state: IuserQueue = initialState.userQueue,
   action: any
@@ -75,7 +66,6 @@ export default function userQueue(
   return {
     data: userQueueData(state.data, action),
     page: userQueuePage(state.page, action),
-    totalPages: userQueueTotalPages(state.totalPages, action),
-    search: userQueueSearch(state.search, action)
+    totalPages: userQueueTotalPages(state.totalPages, action)
   };
 }

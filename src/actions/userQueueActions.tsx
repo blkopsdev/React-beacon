@@ -86,7 +86,7 @@ export function updateUser(
             user: data.data,
             queueID
           });
-          dispatch({ type: types.TOGGLE_EDIT_USER_MODAL });
+          dispatch({ type: types.TOGGLE_MODAL_EDIT_USER });
           toastr.success('Success', 'Saved user', constants.toastrSuccess);
           if (shouldApprove) {
             return approveUser(queueID);
@@ -150,13 +150,13 @@ export function getFacilitiesByCustomer(customerID: string) {
 }
 
 export const toggleEditUserModal = () => ({
-  type: types.TOGGLE_EDIT_USER_MODAL
+  type: types.TOGGLE_MODAL_EDIT_USER
 });
 export const toggleEditCompanyModal = () => ({
-  type: types.TOGGLE_EDIT_COMPANY_MODAL
+  type: types.TOGGLE_MODAL_EDIT_COMPANY
 });
 export const toggleEditFacilityModal = () => ({
-  type: types.TOGGLE_EDIT_FACILITY_MODAL
+  type: types.TOGGLE_MODAL_EDIT_FACILITY
 });
 
 function handleError(error: any, message: string) {

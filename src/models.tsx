@@ -46,12 +46,6 @@ export interface ItempUser {
   tempZip: string;
 }
 
-export interface IuserQueueModals {
-  showEditUserModal: boolean;
-  showEditCustomerModal: boolean;
-  showEditFacilityModal: boolean;
-}
-
 export interface IuserQueue {
   page: number;
   data: IqueueObject[];
@@ -69,7 +63,9 @@ export interface IinitialState {
   userQueue: IuserQueue;
   customers: Icustomer[];
   facilities: Ifacility[];
-  userQueueModals: IuserQueueModals;
+  showEditUserModal: boolean;
+  showEditCustomerModal: boolean;
+  showEditFacilityModal: boolean;
 }
 export interface Itile {
   icon: string | string[];

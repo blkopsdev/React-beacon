@@ -20,8 +20,7 @@ import {
   Itile,
   IuserQueue,
   Icustomer,
-  Ifacility,
-  IuserQueueModals
+  Ifacility
 } from '../../models';
 import { RouteComponentProps } from 'react-router-dom';
 import ReactTable from 'react-table';
@@ -64,7 +63,7 @@ interface Iprops extends RouteComponentProps<{}> {
   customerOptions: any[];
   getFacilitiesByCustomer: () => Promise<void>;
   facilityOptions: any[];
-  modals: IuserQueueModals;
+  showEditUserModal: boolean;
   toggleEditUserModal: () => void;
   toggleEditCompanyModal: () => void;
   toggleEditFacilityModal: () => void;
@@ -145,9 +144,8 @@ class UserQueue extends React.Component<Iprops, Istate> {
   }
   componentDidUpdate(prevProps: Iprops) {
     if (
-      prevProps.modals.showEditUserModal !==
-        this.props.modals.showEditUserModal &&
-      !this.props.modals.showEditUserModal
+      prevProps.showEditUserModal !== this.props.showEditUserModal &&
+      !this.props.showEditUserModal
     ) {
       this.setState({ selectedRow: null });
     }
@@ -259,7 +257,7 @@ class UserQueue extends React.Component<Iprops, Istate> {
           onPageChange={this.onPageChange}
         />
         <CommonModal
-          modalVisible={this.props.modals.showEditUserModal}
+          modalVisible={this.props.showEditUserModal}
           className="user-edit"
           onHide={this.props.toggleEditUserModal}
           body={
@@ -299,7 +297,7 @@ const mapStateToProps = (state: IinitialState, ownProps: any) => {
     loading: state.ajaxCallsInProgress > 0,
     customerOptions: getCustomerOptions(state.customers),
     facilityOptions: getFacilitityOptions(state.facilities),
-    modals: state.userQueueModals
+    showEditUserModal: state.showEditUserModal
   };
 };
 export default translate('userQueue')(

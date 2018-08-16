@@ -1,15 +1,10 @@
-import * as types from '../actions/actionTypes';
-import { IuserQueueModals } from '../models';
-import initialState from './initialState';
-
-export default function userQueueModals(
-  state: IuserQueueModals = initialState.userQueueModals,
-  action: any
-): IuserQueueModals {
-  switch (action.type) {
-    case types.TOGGLE_EDIT_USER_MODAL:
-      return { ...state, showEditUserModal: !state.showEditUserModal };
-    default:
-      return state;
-  }
+export default function createShowModalWithNamedType(modalName = '') {
+  return function modalToggle(state: boolean = false, action: any) {
+    switch (action.type) {
+      case `TOGGLE_MODAL_${modalName}`:
+        return !state;
+      default:
+        return state;
+    }
+  };
 }

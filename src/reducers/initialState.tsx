@@ -29,6 +29,11 @@ export default {
     totalPages: 1,
     data: []
   },
+  userQueueModals: {
+    showEditUserModal: false,
+    showEditCustomerModal: false,
+    showEditFacilityModal: false
+  },
   customers: [],
   facilities: []
 };

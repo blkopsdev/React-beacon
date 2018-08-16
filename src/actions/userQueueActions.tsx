@@ -68,7 +68,11 @@ export function rejectUser(userQueueID: string) {
       });
   };
 }
-export function updateUser(user: Iuser, queueID: string) {
+export function updateUser(
+  user: Iuser,
+  shouldApprove: boolean,
+  queueID: string
+) {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());
     return axios
@@ -82,7 +86,11 @@ export function updateUser(user: Iuser, queueID: string) {
             user: data.data,
             queueID
           });
+          dispatch({ type: types.TOGGLE_EDIT_USER_MODAL });
           toastr.success('Success', 'Saved user', constants.toastrSuccess);
+          if (shouldApprove) {
+            return approveUser(queueID);
+          }
           return data;
         }
       })
@@ -140,6 +148,16 @@ export function getFacilitiesByCustomer(customerID: string) {
       });
   };
 }
+
+export const toggleEditUserModal = () => ({
+  type: types.TOGGLE_EDIT_USER_MODAL
+});
+export const toggleEditCompanyModal = () => ({
+  type: types.TOGGLE_EDIT_COMPANY_MODAL
+});
+export const toggleEditFacilityModal = () => ({
+  type: types.TOGGLE_EDIT_FACILITY_MODAL
+});
 
 function handleError(error: any, message: string) {
   let msg = '';

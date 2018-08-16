@@ -44,8 +44,7 @@ const TextLabel = ({ handler, meta }: any) => {
 };
 const buildFieldConfig = (
   customerOptions: any[],
-  getFacilitiesByCustomer: (value: string) => Promise<void>,
-  customerID?: string
+  getFacilitiesByCustomer: (value: string) => Promise<void>
 ) => {
   // Field config to configure form
   const fieldConfigControls = {
@@ -66,7 +65,6 @@ const buildFieldConfig = (
         buttonAction: () => {
           alert('functionality under construction');
         },
-        value: customerID,
         loadOptions: (value: any, callback: any) => {
           callback(customerOptions);
         }
@@ -125,8 +123,7 @@ class UserQueueForm extends React.Component<Iprops, Istate> {
     this.fieldConfig = FormUtil.translateForm(
       buildFieldConfig(
         this.props.customerOptions,
-        this.props.getFacilitiesByCustomer,
-        this.props.user.user.customerID
+        this.props.getFacilitiesByCustomer
       ),
       this.props.t
     );
@@ -138,7 +135,13 @@ class UserQueueForm extends React.Component<Iprops, Istate> {
     this.setForm = this.setForm.bind(this);
   }
   componentDidUpdate(prevProps: Iprops) {
-    if (prevProps.facilityOptions !== this.props.facilityOptions) {
+    if (
+      prevProps.facilityOptions.length !== this.props.facilityOptions.length
+    ) {
+      if (!this.props.user) {
+        console.error('missing user');
+        return;
+      }
       const { facilityID } = this.props.user.user;
       if (this.props.facilityOptions.length && facilityID) {
         const facility = find(
@@ -153,6 +156,10 @@ class UserQueueForm extends React.Component<Iprops, Istate> {
   }
 
   componentDidMount() {
+    if (!this.props.user) {
+      console.error('missing user');
+      return;
+    }
     // set values
     forEach(this.props.user.user, (value, key) => {
       this.userForm.patchValue({ [key]: value });

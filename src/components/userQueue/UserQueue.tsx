@@ -9,7 +9,10 @@ import {
   updateUser,
   rejectUser,
   getCustomers,
-  getFacilitiesByCustomer
+  getFacilitiesByCustomer,
+  toggleEditUserModal,
+  toggleEditCompanyModal,
+  toggleEditFacilityModal
 } from '../../actions/userQueueActions';
 import {
   IinitialState,
@@ -17,7 +20,8 @@ import {
   Itile,
   IuserQueue,
   Icustomer,
-  Ifacility
+  Ifacility,
+  IuserQueueModals
 } from '../../models';
 import { RouteComponentProps } from 'react-router-dom';
 import ReactTable from 'react-table';
@@ -60,10 +64,13 @@ interface Iprops extends RouteComponentProps<{}> {
   customerOptions: any[];
   getFacilitiesByCustomer: () => Promise<void>;
   facilityOptions: any[];
+  modals: IuserQueueModals;
+  toggleEditUserModal: () => void;
+  toggleEditCompanyModal: () => void;
+  toggleEditFacilityModal: () => void;
 }
 
 interface Istate {
-  showEditUserModal: boolean;
   selectedRow: any;
   currentTile: Itile;
 }
@@ -76,7 +83,6 @@ class UserQueue extends React.Component<Iprops, Istate> {
     this.ApproveCell = this.ApproveCell.bind(this);
     this.getTrProps = this.getTrProps.bind(this);
     this.state = {
-      showEditUserModal: false,
       selectedRow: null,
       currentTile: {
         icon: '',
@@ -137,6 +143,15 @@ class UserQueue extends React.Component<Iprops, Istate> {
     // refresh the list of customers every time the component mounts
     this.props.getCustomers();
   }
+  componentDidUpdate(prevProps: Iprops) {
+    if (
+      prevProps.modals.showEditUserModal !==
+        this.props.modals.showEditUserModal &&
+      !this.props.modals.showEditUserModal
+    ) {
+      this.setState({ selectedRow: null });
+    }
+  }
   // handleTableProps(state: any, rowInfo: any, column: any, instance: any) {
 
   // }
@@ -189,9 +204,9 @@ class UserQueue extends React.Component<Iprops, Istate> {
         onClick: (e: React.MouseEvent<HTMLFormElement>) => {
           if (!this.buttonInAction) {
             this.setState({
-              selectedRow: rowInfo.index,
-              showEditUserModal: true
+              selectedRow: rowInfo.index
             });
+            this.props.toggleEditUserModal();
           }
         },
         style: {
@@ -244,31 +259,13 @@ class UserQueue extends React.Component<Iprops, Istate> {
           onPageChange={this.onPageChange}
         />
         <CommonModal
-          modalVisible={this.state.showEditUserModal}
+          modalVisible={this.props.modals.showEditUserModal}
           className="user-edit"
-          onHide={() => {
-            this.setState({ showEditUserModal: false, selectedRow: null });
-          }}
+          onHide={this.props.toggleEditUserModal}
           body={
             <UserQueueForm
-              handleSubmit={(
-                user: Iuser,
-                shouldApprove: boolean,
-                queueID: string
-              ) => {
-                this.props.updateUser(user, queueID).then(() => {
-                  {
-                    /*this.props.getUserQueue(1, '');*/
-                  }
-                });
-                this.setState({ showEditUserModal: false });
-                if (shouldApprove) {
-                  this.props.approveUser(queueID);
-                }
-              }}
-              handleCancel={() => {
-                this.setState({ showEditUserModal: false });
-              }}
+              handleSubmit={this.props.updateUser}
+              handleCancel={this.props.toggleEditUserModal}
               user={this.props.userQueue.data[this.state.selectedRow]}
               loading={this.props.loading}
               colorButton={
@@ -282,10 +279,18 @@ class UserQueue extends React.Component<Iprops, Istate> {
           title={t('editUserModalTitle')}
           container={document.getElementById('two-pane-layout')}
         />
+
+        {/*        <AddCustomerModal 
+
+        />*/}
       </div>
     );
   }
 }
+
+/*
+* AddCustomerModal will connect to redux, impliment CommonModal, as well as AddCustomerForm
+*/
 
 const mapStateToProps = (state: IinitialState, ownProps: any) => {
   return {
@@ -293,7 +298,8 @@ const mapStateToProps = (state: IinitialState, ownProps: any) => {
     userQueue: state.userQueue,
     loading: state.ajaxCallsInProgress > 0,
     customerOptions: getCustomerOptions(state.customers),
-    facilityOptions: getFacilitityOptions(state.facilities)
+    facilityOptions: getFacilitityOptions(state.facilities),
+    modals: state.userQueueModals
   };
 };
 export default translate('userQueue')(
@@ -305,7 +311,10 @@ export default translate('userQueue')(
       updateUser,
       rejectUser,
       getCustomers,
-      getFacilitiesByCustomer
+      getFacilitiesByCustomer,
+      toggleEditUserModal,
+      toggleEditCompanyModal,
+      toggleEditFacilityModal
     }
   )(UserQueue)
 );

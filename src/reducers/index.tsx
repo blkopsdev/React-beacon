@@ -6,6 +6,7 @@ import redirect from './redirectToReferrerReducer';
 import userQueue from './userQueueReducer';
 import customers from './customersReducer';
 import facilities from './facilitiesReducer';
+import userQueueModals from './userQueueModalsReducer';
 
 const rootReducer = combineReducers({
   ajaxCallsInProgress,
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
   redirect,
   userQueue,
   customers,
-  facilities
+  facilities,
+  userQueueModals
 });
 
 export default rootReducer;

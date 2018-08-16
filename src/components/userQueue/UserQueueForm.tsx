@@ -3,6 +3,9 @@
 * Edit and approve new users
 * Note: react-reactive-form is used for all form elements except for the facilities select, because we could not
 * figure out how to update the options for the select after the customer was selected.
+* the only problem with this is that the validation is complicated by having one field outside the generated form.
+* TODO a) wait for a response to your question here:  https://github.com/bietkul/react-reactive-form/issues/5
+* 
 */
 
 import * as React from 'react';
@@ -41,10 +44,8 @@ const TextLabel = ({ handler, meta }: any) => {
 };
 const buildFieldConfig = (
   customerOptions: any[],
-  facilityOptions: any[],
   getFacilitiesByCustomer: (value: string) => Promise<void>,
-  customerID?: string,
-  facilityID?: string
+  customerID?: string
 ) => {
   // Field config to configure form
   const fieldConfigControls = {
@@ -79,6 +80,12 @@ const buildFieldConfig = (
             }
           }
         ]
+      }
+    },
+    facilityID: {
+      meta: {},
+      options: {
+        validators: Validators.required
       }
     },
 
@@ -118,10 +125,8 @@ class UserQueueForm extends React.Component<Iprops, Istate> {
     this.fieldConfig = FormUtil.translateForm(
       buildFieldConfig(
         this.props.customerOptions,
-        this.props.facilityOptions,
         this.props.getFacilitiesByCustomer,
-        this.props.user.user.customerID,
-        this.props.user.user.facilityID
+        this.props.user.user.customerID
       ),
       this.props.t
     );
@@ -134,8 +139,8 @@ class UserQueueForm extends React.Component<Iprops, Istate> {
   }
   componentDidUpdate(prevProps: Iprops) {
     if (prevProps.facilityOptions !== this.props.facilityOptions) {
-      if (this.props.facilityOptions.length) {
-        const { facilityID } = this.props.user.user;
+      const { facilityID } = this.props.user.user;
+      if (this.props.facilityOptions.length && facilityID) {
         const facility = find(
           this.props.facilityOptions,
           (option: { value: string; label: string }) => {
@@ -182,7 +187,7 @@ class UserQueueForm extends React.Component<Iprops, Istate> {
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-    // console.log(this.userForm.value);
+    console.log(this.userForm.value);
     this.props.handleSubmit(
       {
         id: this.props.user.user.id,
@@ -205,9 +210,25 @@ class UserQueueForm extends React.Component<Iprops, Istate> {
     const { t } = this.props;
 
     let facilityClassName = '';
-    if (this.state.facility.value && !this.state.pristine) {
+    if (
+      this.userForm &&
+      this.userForm.value.facilityID &&
+      this.userForm.value.facilityID.value &&
+      !this.state.pristine
+    ) {
       facilityClassName = 'has-success';
-    } else if (!this.state.facility.value && !this.state.pristine) {
+    } else if (
+      (this.userForm &&
+        (!this.userForm.value.facilityID ||
+          (this.userForm.value.facilityID &&
+            !this.userForm.value.facilityID.value)) &&
+        !this.state.pristine) ||
+      (this.userForm &&
+        (!this.userForm.value.facilityID ||
+          (this.userForm.value.facilityID &&
+            !this.userForm.value.facilityID.value)) &&
+        this.userForm.submitted)
+    ) {
       facilityClassName = 'has-error';
     }
     return (
@@ -218,7 +239,7 @@ class UserQueueForm extends React.Component<Iprops, Istate> {
             fieldConfig={this.fieldConfig}
           />
           <Col xs={12}>
-            <FormGroup bsSize="sm">
+            <FormGroup bsSize="sm" className={facilityClassName}>
               <ControlLabel>{t('common:facility')}</ControlLabel>
               <Button
                 bsStyle="link"
@@ -230,10 +251,10 @@ class UserQueueForm extends React.Component<Iprops, Istate> {
                 {t('userQueue:facilityButton')}
               </Button>
               <Select
-                className={facilityClassName}
                 options={this.props.facilityOptions}
                 onChange={(facility: any) => {
                   this.setState({ facility });
+                  this.userForm.patchValue({ facilityID: facility });
                 }}
                 components={{ Control: ControlComponent }}
                 placeholder={t('userQueue:facilitySearchPlaceholder')}

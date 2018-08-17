@@ -24,6 +24,7 @@ import { translate, TranslationFunction, I18n } from 'react-i18next';
 import SearchTableForm from '../common/SearchTableForm';
 import { TableUtil } from '../common/TableUtil';
 import EditQueueUserModal from './EditQueueUserModal';
+import EditCustomerModal from '../common/EditCustomerModal';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -242,6 +243,12 @@ class UserQueue extends React.Component<Iprops & IdispatchProps, Istate> {
             constants.colors[`${this.state.currentTile.color}Button`]
           }
           t={this.props.t}
+        />
+        <EditCustomerModal
+          t={this.props.t}
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
         />
       </div>
     );

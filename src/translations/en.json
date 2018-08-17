@@ -6,7 +6,8 @@
     "next": "Next",
     "search": "search",
     "customer": "customer",
-    "facility": "facility"
+    "facility": "facility",
+    "editCustomerModalTitle": "Edit Customer"
   },
   "auth": {
     "loginButton": "Login with Azure",

@@ -29,9 +29,15 @@ export default {
     totalPages: 1,
     data: []
   },
+  userManage: {
+    page: 1,
+    totalPages: 1,
+    data: []
+  },
   customers: [],
   facilities: [],
   showEditUserModal: false,
   showEditCustomerModal: false,
-  showEditFacilityModal: false
+  showEditFacilityModal: false,
+  showEditManageUserModal: false
 };

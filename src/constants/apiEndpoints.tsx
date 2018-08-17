@@ -13,7 +13,8 @@ const API = {
   },
   GET: {
     user: {
-      getuserqueue: `${root}user/getuserqueue`
+      getuserqueue: `${root}user/getuserqueue`,
+      getusersearch: `${root}user/search`
     },
     customer: {
       getall: `${root}customer/getall`

@@ -8,14 +8,15 @@ import { Col, Grid, Row } from 'react-bootstrap';
 import SideMenu from '../sideMenu/SideMenu';
 import { Route, Switch } from 'react-router-dom';
 import UserQueue from '../userQueue/UserQueue';
+import UserManage from '../userManage/UserManage';
 import constants from '../../constants/constants';
 import { IinitialState } from '../../models';
 
 import 'react-table/react-table.css';
 
-const testme = () => {
-  return <h3>Your test is a success</h3>;
-};
+// const testme = () => {
+//   return <h3>Your test is a success</h3>;
+// };
 
 const TwoPaneLayout = (props: any) => {
   const tile = constants.getTileByURL(props.location.pathname);
@@ -63,7 +64,7 @@ const TwoPaneLayout = (props: any) => {
         <Col className="col-fluid">
           <Switch>
             <Route exact path="/queue" component={UserQueue} />
-            <Route exact path="/users" component={testme} />
+            <Route exact path="/users" component={UserManage} />
           </Switch>
         </Col>
       </Row>

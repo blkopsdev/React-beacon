@@ -34,7 +34,7 @@ const tiles = [
     color: 'green',
     width: 360,
     height: 408,
-    url: '/users',
+    url: '/training',
     securityFunction: securityFunctions.manageTrainingPayment
   },
   {
@@ -45,6 +45,16 @@ const tiles = [
     width: 360,
     height: 408,
     url: '/queue',
+    securityFunction: securityFunctions.manageUsers
+  },
+  {
+    icon: ['far', 'hospital'],
+    title: 'userManage',
+    src: 'https://placekitten.com/360/408',
+    color: 'purple',
+    width: 360,
+    height: 408,
+    url: '/users',
     securityFunction: securityFunctions.manageUsers
   },
   {

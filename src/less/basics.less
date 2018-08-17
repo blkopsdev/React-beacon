@@ -59,7 +59,7 @@ body {
     &.left-side {
       padding-left: 0;
     }
-    &.right-side{
+    &.right-side {
       padding-right: 0;
     }
   }
@@ -91,25 +91,25 @@ body {
     color: #777;
     box-shadow: none;
     border-radius: 8px;
-
     //  overrides for react-select 
     // TODO need to apply hover border color for success and error, need selected border to match bootstrap
-    min-height: 0; 
+    min-height: 0;
     letter-spacing: normal;
-    &:hover{
+    &:hover {
       border-color: none;
     }
-    div{padding: 0;}
+    div {
+      padding: 0;
+    }
   }
-
 }
+
 // color transparent here so that bootstrap can override it when it adds a validation color
 // if we put back in the fontawesome icon
 // .form-control-feedback{
 //   color: transparent;
 //   padding: 5px;
 // }
-
 .slide-modal {
   .modal-body {
     padding: 15px 0px;
@@ -126,6 +126,7 @@ body {
     background-color: #F5F5F5;
     transition: transform .5s;
     border-radius: 0px;
+    box-shadow: none;
     min-height: calc(~"100vh - " @headerHeight);
   }
   &.from-left .modal-content {
@@ -135,7 +136,7 @@ body {
   &.after-open .modal-content {
     transform: translateX(0%);
   }
-  &.second-modal{
+  &.second-modal {
     margin: 0px auto 0 396px;
   }
 }
@@ -170,80 +171,79 @@ body {
   }
 }
 
-.ReactTable.beacon-table{
+.ReactTable.beacon-table {
   font-size: 1.4rem;
   font-weight: 400;
   border-top: none;
   &.dark .rt-tr.-odd {
     background-color: @dark;
-    &:hover{
+    &:hover {
       background-color: fade(@dark, 20%);
     }
   }
   &.green .rt-tr.-odd {
     background-color: @green;
-    &:hover{
+    &:hover {
       background-color: fade(@green, 20%);
     }
   }
   &.blue .rt-tr.-odd {
     background-color: fade(@blue, 5%);
-    &:hover{
+    &:hover {
       background-color: fade(@blue, 20%);
     }
   }
   &.orange .rt-tr.-odd {
     background-color: fade(@orange, 5%);
-    &:hover{
+    &:hover {
       background-color: fade(@orange, 20%);
     }
   }
-  &.purple .rt-tr.-even:hover{
+  &.purple .rt-tr.-even:hover {
     background-color: fade(@purple, 20%);
   }
-  &.dark .rt-tr.-even:hover{
+  &.dark .rt-tr.-even:hover {
     background-color: fade(@dark, 20%);
   }
-  &.green .rt-tr.-even:hover{
+  &.green .rt-tr.-even:hover {
     background-color: fade(@green, 20%);
   }
-  &.blue .rt-tr.-even:hover{
+  &.blue .rt-tr.-even:hover {
     background-color: fade(@blue, 20%);
   }
-  &.orange .rt-tr.-even:hover{
+  &.orange .rt-tr.-even:hover {
     background-color: fade(@orange, 20%);
   }
-  &.purple .rt-tr.-even:hover{
+  &.purple .rt-tr.-even:hover {
     background-color: fade(@purple, 05%);
   }
-  .rt-td{
+  .rt-td {
     padding: 0px 5px;
   }
-  .rt-tr{
+  .rt-tr {
     background-color: white;
     cursor: pointer;
-    &:first-child{
+    &:first-child {
       padding-left: 20px;
     }
   }
-  .rt-thead .rt-tr{
+  .rt-thead .rt-tr {
     text-align: left;
     font-weight: 600;
     text-transform: uppercase;
     background-color: transparent;
-    
   }
-  .rt-thead .rt-th{
+  .rt-thead .rt-th {
     border-right: none;
   }
-  .rt-tbody .rt-tr-group{
-    border-bottom: solid 3px rgba(0,0,0,0.05);
+  .rt-tbody .rt-tr-group {
+    border-bottom: solid 3px rgba(0, 0, 0, 0.05);
     background-color: white;
   }
-  .rt-thead.-header{
+  .rt-thead.-header {
     box-shadow: none;
   }
-  .-pagination{
+  .-pagination {
     box-shadow: none;
   }
 }
@@ -257,7 +257,6 @@ body {
   position: absolute;
   top: 0;
   left: 0;
-  
   -webkit-animation: sk-bounce 2.0s infinite ease-in-out;
   animation: sk-bounce 2.0s infinite ease-in-out;
 }
@@ -268,20 +267,21 @@ body {
 }
 
 @-webkit-keyframes sk-bounce {
-  0%, 100% { -webkit-transform: scale(0.0) }
-  50% { -webkit-transform: scale(1.0) }
+  0%, 100% {
+    -webkit-transform: scale(0.0)
+  }
+  50% {
+    -webkit-transform: scale(1.0)
+  }
 }
 
 @keyframes sk-bounce {
-  0%, 100% { 
+  0%, 100% {
     transform: scale(0.0);
     -webkit-transform: scale(0.0);
-  } 50% { 
+  }
+  50% {
     transform: scale(1.0);
     -webkit-transform: scale(1.0);
   }
 }
-
-
-
-

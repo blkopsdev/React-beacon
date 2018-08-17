@@ -52,6 +52,12 @@ export interface IuserQueue {
   totalPages: number;
 }
 
+export interface IuserManage {
+  page: number;
+  data: Iuser[];
+  totalPages: number;
+}
+
 export interface Iredirect {
   redirectToReferrer: boolean;
   pathname: string;
@@ -61,11 +67,13 @@ export interface IinitialState {
   ajaxCallsInProgress: number;
   redirect: Iredirect;
   userQueue: IuserQueue;
+  userManage: IuserManage;
   customers: Icustomer[];
   facilities: Ifacility[];
   showEditUserModal: boolean;
   showEditCustomerModal: boolean;
   showEditFacilityModal: boolean;
+  showEditManageUserModal: boolean;
 }
 export interface Itile {
   icon: string | string[];

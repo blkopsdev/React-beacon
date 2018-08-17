@@ -2,6 +2,16 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 
 iK4uY&QM
 
+## Technical Dept / Ideas for Improvement
+* we can improve how we are passing the types of our redux actions into the controllers.
+1. use "typeof" in the component interfaces
+2. correctly type the actions
+Step two has proven to be rather challenging.
+* official documentation: https://github.com/reduxjs/redux-thunk/blob/master/test/typescript.ts
+* One example:  https://stackoverflow.com/questions/49799736/simplifying-redux-thunk-actions-with-typescript
+* This example appears to be wrong or out of date:  https://gist.github.com/milankorsos/ffb9d32755db0304545f92b11f0e4beb
+* 
+
 ## API documentation:
 Swagger: https://app.swaggerhub.com/apis/Big-Pixel/Core-Care
 

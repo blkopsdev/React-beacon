@@ -9,64 +9,41 @@ import {
   updateUser,
   rejectUser,
   getCustomers,
-  getFacilitiesByCustomer,
-  toggleEditUserModal,
-  toggleEditCompanyModal,
-  toggleEditFacilityModal
+  toggleEditUserModal
 } from '../../actions/userQueueActions';
-import {
-  IinitialState,
-  Iuser,
-  Itile,
-  IuserQueue,
-  Icustomer,
-  Ifacility
-} from '../../models';
+import { IinitialState, Iuser, Itile, IuserQueue } from '../../models';
 import { RouteComponentProps } from 'react-router-dom';
 import ReactTable from 'react-table';
 import { Button } from 'react-bootstrap';
-import CommonModal from '../common/CommonModal';
-import UserQueueForm from './UserQueueForm';
 import Banner from '../common/Banner';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import constants from '../../constants/constants';
 import * as moment from 'moment';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
-import { map } from 'lodash';
 
 import SearchTableForm from '../common/SearchTableForm';
 import { TableUtil } from '../common/TableUtil';
+import EditQueueUserModal from './EditQueueUserModal';
 
-const getCustomerOptions = (customers: Icustomer[]) => {
-  return map(customers, (cust: Icustomer) => {
-    return { value: cust.id, label: cust.name };
-  });
-};
-
-const getFacilitityOptions = (facilities: Ifacility[]) => {
-  return map(facilities, (facility: Ifacility) => {
-    return { value: facility.id, label: facility.name };
-  });
-};
-
-interface Iprops extends RouteComponentProps<{}> {
-  getUserQueue: any;
-  userQueue: IuserQueue;
-  approveUser: (value: string) => Promise<void>;
-  updateUser: (value: Iuser, v: string) => Promise<void>;
-  rejectUser: (value: string) => Promise<void>;
-  loading: boolean;
+interface Iprops extends RouteComponentProps<any> {
+  // Add your regular properties here
   t: TranslationFunction;
   i18n: I18n;
+  showEditUserModal: boolean;
+  showEditCustomerModal: boolean;
+  showEditFacilityModal: boolean;
+  loading: boolean;
+  userQueue: IuserQueue;
+}
+
+interface IdispatchProps {
+  // Add your dispatcher properties here
+  toggleEditUserModal: () => void;
   setQueueSearch: (value: string) => Promise<void>;
   getCustomers: () => Promise<void>;
-  customerOptions: any[];
-  getFacilitiesByCustomer: () => Promise<void>;
-  facilityOptions: any[];
-  showEditUserModal: boolean;
-  toggleEditUserModal: () => void;
-  toggleEditCompanyModal: () => void;
-  toggleEditFacilityModal: () => void;
+  approveUser: typeof approveUser;
+  rejectUser: (value: string) => Promise<void>;
+  getUserQueue: (value: number, anotherValue: string) => void;
 }
 
 interface Istate {
@@ -74,10 +51,10 @@ interface Istate {
   currentTile: Itile;
 }
 
-class UserQueue extends React.Component<Iprops, Istate> {
+class UserQueue extends React.Component<Iprops & IdispatchProps, Istate> {
   public columns: any[];
   public buttonInAction = false;
-  constructor(props: Iprops) {
+  constructor(props: Iprops & IdispatchProps) {
     super(props);
     this.ApproveCell = this.ApproveCell.bind(this);
     this.getTrProps = this.getTrProps.bind(this);
@@ -141,6 +118,7 @@ class UserQueue extends React.Component<Iprops, Istate> {
 
     // refresh the list of customers every time the component mounts
     this.props.getCustomers();
+    // this.props.anotherThunkAction().then(() => {console.log('hello world')})
   }
   componentDidUpdate(prevProps: Iprops) {
     if (
@@ -226,7 +204,7 @@ class UserQueue extends React.Component<Iprops, Istate> {
     this.props.getUserQueue(this.props.userQueue.page, search);
   };
 
-  render() {
+  render(): JSX.Element {
     const { t } = this.props;
     return (
       <div className="user-queue">
@@ -256,31 +234,15 @@ class UserQueue extends React.Component<Iprops, Istate> {
           nextText={t('common:next')}
           onPageChange={this.onPageChange}
         />
-        <CommonModal
-          modalVisible={this.props.showEditUserModal}
-          className="user-edit"
-          onHide={this.props.toggleEditUserModal}
-          body={
-            <UserQueueForm
-              handleSubmit={this.props.updateUser}
-              handleCancel={this.props.toggleEditUserModal}
-              user={this.props.userQueue.data[this.state.selectedRow]}
-              loading={this.props.loading}
-              colorButton={
-                constants.colors[`${this.state.currentTile.color}Button`]
-              }
-              customerOptions={this.props.customerOptions}
-              facilityOptions={this.props.facilityOptions}
-              getFacilitiesByCustomer={this.props.getFacilitiesByCustomer}
-            />
+        <EditQueueUserModal
+          selectedQueueObject={
+            this.props.userQueue.data[this.state.selectedRow]
           }
-          title={t('editUserModalTitle')}
-          container={document.getElementById('two-pane-layout')}
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+          t={this.props.t}
         />
-
-        {/*        <AddCustomerModal 
-
-        />*/}
       </div>
     );
   }
@@ -290,14 +252,14 @@ class UserQueue extends React.Component<Iprops, Istate> {
 * AddCustomerModal will connect to redux, impliment CommonModal, as well as AddCustomerForm
 */
 
-const mapStateToProps = (state: IinitialState, ownProps: any) => {
+const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
     userQueue: state.userQueue,
     loading: state.ajaxCallsInProgress > 0,
-    customerOptions: getCustomerOptions(state.customers),
-    facilityOptions: getFacilitityOptions(state.facilities),
-    showEditUserModal: state.showEditUserModal
+    showEditUserModal: state.showEditUserModal,
+    showEditCustomerModal: state.showEditCustomerModal,
+    showEditFacilityModal: state.showEditFacilityModal
   };
 };
 export default translate('userQueue')(
@@ -309,10 +271,7 @@ export default translate('userQueue')(
       updateUser,
       rejectUser,
       getCustomers,
-      getFacilitiesByCustomer,
-      toggleEditUserModal,
-      toggleEditCompanyModal,
-      toggleEditFacilityModal
+      toggleEditUserModal
     }
   )(UserQueue)
 );

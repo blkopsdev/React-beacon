@@ -4,7 +4,11 @@ import API from '../constants/apiEndpoints';
 import { beginAjaxCall } from './ajaxStatusActions';
 import { toastr } from 'react-redux-toastr';
 import constants from '../constants/constants';
-import { Iuser } from '../models';
+import { Iuser, IinitialState } from '../models';
+import { ThunkAction } from 'redux-thunk';
+// import {AxiosResponse} from 'axios';
+
+type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
 export function getUserQueue(page: number, search: string) {
   return (dispatch: any, getState: any) => {
@@ -28,7 +32,7 @@ export function getUserQueue(page: number, search: string) {
   };
 }
 
-export function approveUser(userQueueID: string) {
+export function approveUser(userQueueID: string): any {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());
     return axios
@@ -48,6 +52,12 @@ export function approveUser(userQueueID: string) {
       });
   };
 }
+
+// export function anotherThunkAction(): ThunkResult<Promise<boolean>> {
+//   return (dispatch, getState) => {
+//     return Promise.resolve(true);
+//   }
+// }
 export function rejectUser(userQueueID: string) {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());
@@ -72,8 +82,8 @@ export function updateUser(
   user: Iuser,
   shouldApprove: boolean,
   queueID: string
-) {
-  return (dispatch: any, getState: any) => {
+): ThunkResult<void> {
+  return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     return axios
       .post(API.POST.user.update, user)
@@ -138,7 +148,7 @@ export function getFacilitiesByCustomer(customerID: string) {
             facilities: data.data
           });
           // dispatch({ type: types.USER_QUEUE_TOTAL_PAGES, pages: data.data[0] });
-          return data;
+          // return data;
         }
       })
       .catch((error: any) => {
@@ -152,8 +162,8 @@ export function getFacilitiesByCustomer(customerID: string) {
 export const toggleEditUserModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_USER
 });
-export const toggleEditCompanyModal = () => ({
-  type: types.TOGGLE_MODAL_EDIT_COMPANY
+export const toggleEditCustomerModal = () => ({
+  type: types.TOGGLE_MODAL_EDIT_CUSTOMER
 });
 export const toggleEditFacilityModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_FACILITY

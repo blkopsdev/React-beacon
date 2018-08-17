@@ -44,7 +44,8 @@ const TextLabel = ({ handler, meta }: any) => {
 };
 const buildFieldConfig = (
   customerOptions: any[],
-  getFacilitiesByCustomer: (value: string) => Promise<void>
+  getFacilitiesByCustomer: (value: string) => Promise<void>,
+  toggleEditCustomerModal: () => void
 ) => {
   // Field config to configure form
   const fieldConfigControls = {
@@ -62,12 +63,7 @@ const buildFieldConfig = (
         colWidth: 12,
         placeholder: 'userQueue:customerSearchPlaceholder',
         buttonName: 'userQueue:addCustomerButton',
-        buttonAction: () => {
-          alert('functionality under construction');
-        },
-        loadOptions: (value: any, callback: any) => {
-          callback(customerOptions);
-        }
+        buttonAction: toggleEditCustomerModal
       },
       options: {
         validators: [
@@ -101,7 +97,7 @@ const buildFieldConfig = (
 interface Iprops extends React.Props<UserQueueForm> {
   handleSubmit: any;
   handleCancel: any;
-  user: IqueueObject;
+  selectedQueueObject: IqueueObject;
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;
@@ -109,6 +105,7 @@ interface Iprops extends React.Props<UserQueueForm> {
   customerOptions: any[];
   getFacilitiesByCustomer: (value: string) => Promise<void>;
   facilityOptions: any[];
+  toggleEditCustomerModal: () => void;
 }
 interface Istate {
   facility: { value: string; label: string };
@@ -123,7 +120,8 @@ class UserQueueForm extends React.Component<Iprops, Istate> {
     this.fieldConfig = FormUtil.translateForm(
       buildFieldConfig(
         this.props.customerOptions,
-        this.props.getFacilitiesByCustomer
+        this.props.getFacilitiesByCustomer,
+        this.props.toggleEditCustomerModal
       ),
       this.props.t
     );
@@ -138,11 +136,11 @@ class UserQueueForm extends React.Component<Iprops, Istate> {
     if (
       prevProps.facilityOptions.length !== this.props.facilityOptions.length
     ) {
-      if (!this.props.user) {
+      if (!this.props.selectedQueueObject) {
         console.error('missing user');
         return;
       }
-      const { facilityID } = this.props.user.user;
+      const { facilityID } = this.props.selectedQueueObject.user;
       if (this.props.facilityOptions.length && facilityID) {
         const facility = find(
           this.props.facilityOptions,
@@ -156,12 +154,12 @@ class UserQueueForm extends React.Component<Iprops, Istate> {
   }
 
   componentDidMount() {
-    if (!this.props.user) {
+    if (!this.props.selectedQueueObject) {
       console.error('missing user');
       return;
     }
     // set values
-    forEach(this.props.user.user, (value, key) => {
+    forEach(this.props.selectedQueueObject.user, (value, key) => {
       this.userForm.patchValue({ [key]: value });
     });
     // TODO: CHANGE TO REAL CUSTOMER STUFF
@@ -176,7 +174,7 @@ class UserQueueForm extends React.Component<Iprops, Istate> {
       tempState,
       tempZip,
       customerID
-    } = this.props.user.user;
+    } = this.props.selectedQueueObject.user;
     const providedAddress = `${tempAddress} ${tempAddress2} ${tempCity} ${tempState} ${tempZip}`;
     this.userForm.patchValue({ providedAddress });
     this.userForm.patchValue({
@@ -197,13 +195,13 @@ class UserQueueForm extends React.Component<Iprops, Istate> {
     console.log(this.userForm.value);
     this.props.handleSubmit(
       {
-        id: this.props.user.user.id,
+        id: this.props.selectedQueueObject.user.id,
         ...this.userForm.value,
         customerID: this.userForm.value.customerID.value,
         facilityID: this.state.facility.value
       },
       shouldApprove,
-      this.props.user.id
+      this.props.selectedQueueObject.id
     );
   };
   setForm = (form: AbstractControl) => {

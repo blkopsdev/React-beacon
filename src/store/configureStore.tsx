@@ -1,5 +1,5 @@
 import { applyMiddleware, createStore } from 'redux';
-import thunk from 'redux-thunk';
+import thunk, { ThunkMiddleware } from 'redux-thunk';
 import { IinitialState } from '../models';
 import rootReducer from '../reducers';
 
@@ -10,7 +10,7 @@ export default function configureStore(intialState: IinitialState) {
       intialState,
       require('redux-devtools-extension').composeWithDevTools(
         applyMiddleware(
-          thunk,
+          thunk as ThunkMiddleware<IinitialState, any>,
           require('redux-immutable-state-invariant').default()
         )
       )

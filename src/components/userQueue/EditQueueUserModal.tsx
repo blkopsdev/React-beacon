@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import {
   updateUser,
   getFacilitiesByCustomer,
-  toggleEditUserModal,
+  toggleEditQueueUserModal,
   toggleEditCustomerModal,
   toggleEditFacilityModal
 } from '../../actions/userQueueActions';
@@ -50,7 +50,7 @@ interface IdispatchProps {
   customerOptions: any[];
   facilityOptions: any[];
   updateUser: typeof updateUser;
-  toggleEditUserModal: () => void;
+  toggleEditQueueUserModal: () => void;
   getFacilitiesByCustomer: () => Promise<void>;
   toggleEditCustomerModal: () => void;
   toggleEditFacilityModal: () => void;
@@ -66,11 +66,11 @@ class EditQueueUserModal extends React.Component<Iprops & IdispatchProps, {}> {
       <CommonModal
         modalVisible={this.props.showEditUserModal}
         className="user-edit"
-        onHide={this.props.toggleEditUserModal}
+        onHide={this.props.toggleEditQueueUserModal}
         body={
           <UserQueueForm
             handleSubmit={this.props.updateUser}
-            handleCancel={this.props.toggleEditUserModal}
+            handleCancel={this.props.toggleEditQueueUserModal}
             selectedQueueObject={this.props.selectedQueueObject}
             loading={this.props.loading}
             colorButton={this.props.colorButton}
@@ -105,7 +105,7 @@ export default connect(
   {
     updateUser,
     getFacilitiesByCustomer,
-    toggleEditUserModal,
+    toggleEditQueueUserModal,
     toggleEditCustomerModal,
     toggleEditFacilityModal
   }

@@ -159,8 +159,8 @@ export function getFacilitiesByCustomer(customerID: string) {
   };
 }
 
-export const toggleEditUserModal = () => ({
-  type: types.TOGGLE_MODAL_EDIT_USER
+export const toggleEditQueueUserModal = () => ({
+  type: types.TOGGLE_MODAL_EDIT_QUEUE_USER
 });
 export const toggleEditCustomerModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_CUSTOMER

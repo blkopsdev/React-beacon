@@ -9,7 +9,7 @@ import {
   updateUser,
   rejectUser,
   getCustomers,
-  toggleEditUserModal
+  toggleEditQueueUserModal
 } from '../../actions/userQueueActions';
 import { IinitialState, Iuser, Itile, IuserQueue } from '../../models';
 import { RouteComponentProps } from 'react-router-dom';
@@ -39,7 +39,7 @@ interface Iprops extends RouteComponentProps<any> {
 
 interface IdispatchProps {
   // Add your dispatcher properties here
-  toggleEditUserModal: () => void;
+  toggleEditQueueUserModal: () => void;
   setQueueSearch: (value: string) => Promise<void>;
   getCustomers: () => Promise<void>;
   approveUser: typeof approveUser;
@@ -183,7 +183,7 @@ class UserQueue extends React.Component<Iprops & IdispatchProps, Istate> {
             this.setState({
               selectedRow: rowInfo.index
             });
-            this.props.toggleEditUserModal();
+            this.props.toggleEditQueueUserModal();
           }
         },
         style: {
@@ -278,7 +278,7 @@ export default translate('userQueue')(
       updateUser,
       rejectUser,
       getCustomers,
-      toggleEditUserModal
+      toggleEditQueueUserModal
     }
   )(UserQueue)
 );

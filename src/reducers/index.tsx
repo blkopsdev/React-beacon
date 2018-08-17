@@ -16,7 +16,7 @@ const rootReducer = combineReducers({
   userQueue,
   customers,
   facilities,
-  showEditUserModal: createShowModalWithNamedType('EDIT_USER'),
+  showEditUserModal: createShowModalWithNamedType('EDIT_QUEUE_USER'),
   showEditCustomerModal: createShowModalWithNamedType('EDIT_CUSTOMER'),
   showEditFacilityModal: createShowModalWithNamedType('EDIT_FACILITY')
 });

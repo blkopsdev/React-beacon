@@ -20,11 +20,26 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import constants from '../../constants/constants';
 import * as moment from 'moment';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
-
+import { FormUtil } from '../common/FormUtil';
 import SearchTableForm from '../common/SearchTableForm';
 import { TableUtil } from '../common/TableUtil';
 import EditQueueUserModal from './EditQueueUserModal';
 import EditCustomerModal from '../common/EditCustomerModal';
+
+// Field config to configure form
+const fieldConfig = {
+  controls: {
+    search: {
+      render: FormUtil.TextInputWithoutValidation,
+      meta: {
+        label: 'common:search',
+        colWidth: 4,
+        type: 'text',
+        placeholder: 'searchPlaceholder'
+      }
+    }
+  }
+};
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -215,6 +230,7 @@ class UserQueue extends React.Component<Iprops & IdispatchProps, Istate> {
           color={constants.colors[`${this.state.currentTile.color}`]}
         />
         <SearchTableForm
+          fieldConfig={fieldConfig}
           handleSubmit={this.onSearchSubmit}
           loading={this.props.loading}
           colorButton={

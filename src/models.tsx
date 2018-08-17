@@ -14,11 +14,13 @@ export interface Iuser {
   state: string;
   zip: string;
   id: string;
+  managerID?: string;
   tempAddress?: string;
   tempAddress2?: string;
   tempCity?: string;
   tempState?: string;
   tempZip?: string;
+  lastLoginDate?: string;
   createDate?: string;
   customerID: string;
   facilityID: string;

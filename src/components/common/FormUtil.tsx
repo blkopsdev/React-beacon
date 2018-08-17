@@ -25,6 +25,12 @@ const ControlComponent = (props: any) => (
 );
 
 export const FormUtil = {
+  convertToOptions: (items: any[]) => {
+    return items.map((item: { id: string; name: string }) => {
+      return { value: item.id, label: item.name };
+    });
+  },
+
   getValidationState: (
     pristine: boolean,
     error: ValidationErrors,
@@ -124,6 +130,43 @@ export const FormUtil = {
   //     </FormGroup>
   //   </Col>
   // ),
+  Select: ({
+    handler,
+    touched,
+    hasError,
+    meta,
+    pristine,
+    errors,
+    submitted,
+    patchValue,
+    setErrors,
+    value
+  }: AbstractControl) => {
+    const defaultValue = find(meta.options, { value: meta.value });
+    // console.log('rendering select', meta.options, value, defaultValue)
+    return (
+      <Col xs={meta.colWidth}>
+        <FormGroup
+          validationState={FormUtil.getValidationState(
+            pristine,
+            errors,
+            submitted
+          )}
+          bsSize="sm"
+        >
+          <ControlLabel>{meta.label}</ControlLabel>
+          <Select
+            options={meta.options}
+            className={value && !pristine ? 'has-success' : ''}
+            defaultValue={defaultValue}
+            components={{ Control: ControlComponent }}
+            placeholder={meta.placeholder}
+            {...handler()}
+          />
+        </FormGroup>
+      </Col>
+    );
+  },
   SelectWithButton: ({
     handler,
     touched,

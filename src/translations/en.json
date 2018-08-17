@@ -70,9 +70,10 @@
     "name": "name",
     "email": "email",
     "company": "company",
-    "created": "created",
-    "approve": "approve?",
+    "manager": "is manager?",
+    "login": "last login",
     "searchPlaceholder": "Search by First, Last, or Email",
+    "customerPlaceholder": "Select Customer",
     "customerSearchPlaceholder": "Search...",
     "facilitySearchPlaceholder": "Search..."
   },

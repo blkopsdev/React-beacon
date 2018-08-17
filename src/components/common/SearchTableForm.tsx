@@ -14,22 +14,8 @@ import { FormUtil } from '../common/FormUtil';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TranslationFunction } from 'react-i18next';
 
-// Field config to configure form
-const fieldConfig = {
-  controls: {
-    search: {
-      render: FormUtil.TextInputWithoutValidation,
-      meta: {
-        label: 'common:search',
-        colWidth: 4,
-        type: 'text',
-        placeholder: 'searchPlaceholder'
-      }
-    }
-  }
-};
-
 interface Iprops extends React.Props<SearchTableForm> {
+  fieldConfig: any;
   handleSubmit: any;
   loading: boolean;
   colorButton: string;
@@ -41,7 +27,7 @@ export default class SearchTableForm extends React.Component<Iprops, {}> {
   constructor(props: Iprops) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.fieldConfig = FormUtil.translateForm(fieldConfig, props.t);
+    this.fieldConfig = FormUtil.translateForm(this.props.fieldConfig, props.t);
   }
 
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {

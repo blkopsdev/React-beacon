@@ -24,7 +24,7 @@ import constants from '../../constants/constants';
 import * as moment from 'moment';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import { find } from 'lodash';
-
+import { FormUtil } from '../common/FormUtil';
 import SearchTableForm from '../common/SearchTableForm';
 import { TableUtil } from '../common/TableUtil';
 import EditUserManageModal from './EditUserManageModal';
@@ -55,6 +55,7 @@ interface Istate {
 
 class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
   public columns: any[];
+  public searchFieldConfig: any;
   public buttonInAction = false;
   constructor(props: Iprops & IdispatchProps) {
     super(props);
@@ -101,20 +102,51 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
                   c.id.trim().toLowerCase() === customerID.trim().toLowerCase()
               );
             }
-            console.log(customerID, cust);
             return cust ? cust.name : '';
           }
         },
         {
-          Header: 'created',
-          accessor: ({ createDate }: Iuser) => {
-            return moment.utc(createDate).format('MM/DD/YYYY hh:mm a');
+          Header: 'manager',
+          accessor: ({ managerID }: Iuser) => {
+            return managerID ? 'Yes' : '';
           },
-          id: 'created'
+          id: 'manager'
+        },
+        {
+          Header: 'login',
+          accessor: ({ lastLoginDate }: Iuser) => {
+            return lastLoginDate
+              ? moment.utc(lastLoginDate).format('MM/DD/YYYY hh:mm a')
+              : 'n/a';
+          },
+          id: 'login'
         }
       ],
       this.props.t
     );
+    this.searchFieldConfig = {
+      controls: {
+        search: {
+          render: FormUtil.TextInputWithoutValidation,
+          meta: {
+            label: 'common:search',
+            colWidth: 4,
+            type: 'text',
+            placeholder: 'searchPlaceholder'
+          }
+        },
+        customerID: {
+          render: FormUtil.Select,
+          meta: {
+            label: 'common:customer',
+            options: FormUtil.convertToOptions(this.props.customers),
+            colWidth: 4,
+            type: 'select',
+            placeholder: 'customerPlaceholder'
+          }
+        }
+      }
+    };
   }
   componentWillMount() {
     this.setState({
@@ -159,8 +191,19 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
   onPageChange = (page: number) => {
     this.props.getUserManage(page + 1, '', '');
   };
-  onSearchSubmit = ({ search }: { search: string }) => {
-    this.props.getUserManage(this.props.userManage.page, search, '');
+  onSearchSubmit = ({
+    search,
+    customerID
+  }: {
+    search: string;
+    customerID: any;
+  }) => {
+    console.log(customerID);
+    this.props.getUserManage(
+      this.props.userManage.page,
+      search,
+      customerID.value
+    );
   };
 
   render(): JSX.Element {
@@ -176,6 +219,7 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
           color={constants.colors[`${this.state.currentTile.color}`]}
         />
         <SearchTableForm
+          fieldConfig={this.searchFieldConfig}
           handleSubmit={this.onSearchSubmit}
           loading={this.props.loading}
           colorButton={

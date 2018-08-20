@@ -17,7 +17,8 @@ export default {
     zip: '',
     id: '',
     facilityID: '',
-    customerID: ''
+    customerID: '',
+    hasTeamMembers: false
   },
   redirect: {
     redirectToReferrer: false,
@@ -39,5 +40,5 @@ export default {
   showEditUserModal: false,
   showEditCustomerModal: false,
   showEditFacilityModal: false,
-  showEditManageUserModal: false
+  showEditQueueUserModal: false
 };

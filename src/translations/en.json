@@ -7,7 +7,9 @@
     "search": "search",
     "customer": "customer",
     "facility": "facility",
-    "editCustomerModalTitle": "Edit Customer"
+    "newCustomerModalTitle": "New Customer",
+    "customerNameLabel": "New Customer Name",
+    "customerVatLabel": "VAT"
   },
   "auth": {
     "loginButton": "Login with Azure",

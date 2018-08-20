@@ -34,7 +34,7 @@ export default class SearchTableForm extends React.Component<Iprops, {}> {
     e.preventDefault();
     this.props.handleSubmit(this.searchForm.value);
   };
-  setForm = (form: any) => {
+  setForm = (form: AbstractControl) => {
     this.searchForm = form;
     this.searchForm.meta = {
       loading: this.props.loading

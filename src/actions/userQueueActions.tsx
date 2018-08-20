@@ -133,6 +133,37 @@ export function getCustomers() {
       });
   };
 }
+export function addCustomer({
+  name,
+  vat
+}: {
+  name: string;
+  vat: string;
+}): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    return axios
+      .post(API.POST.customer.add, { name, vat })
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.CUSTOMER_UPDATE_SUCCESS,
+            customer: data.data
+          });
+          dispatch({ type: types.TOGGLE_MODAL_EDIT_CUSTOMER });
+          toastr.success('Success', 'Saved Customer', constants.toastrSuccess);
+          return data;
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.CUSTOMER_UPDATE_FAILED });
+        handleError(error, 'add customer');
+        throw error;
+      });
+  };
+}
 
 export function getFacilitiesByCustomer(customerID: string) {
   return (dispatch: any, getState: any) => {

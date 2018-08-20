@@ -45,7 +45,7 @@ interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
   t: TranslationFunction;
   i18n: I18n;
-  showEditUserModal: boolean;
+  showEditQueueUserModal: boolean;
   showEditCustomerModal: boolean;
   showEditFacilityModal: boolean;
   loading: boolean;
@@ -138,8 +138,8 @@ class UserQueue extends React.Component<Iprops & IdispatchProps, Istate> {
   }
   componentDidUpdate(prevProps: Iprops) {
     if (
-      prevProps.showEditUserModal !== this.props.showEditUserModal &&
-      !this.props.showEditUserModal
+      prevProps.showEditQueueUserModal !== this.props.showEditQueueUserModal &&
+      !this.props.showEditQueueUserModal
     ) {
       this.setState({ selectedRow: null });
     }
@@ -250,6 +250,7 @@ class UserQueue extends React.Component<Iprops & IdispatchProps, Istate> {
           previousText={t('common:previous')}
           nextText={t('common:next')}
           onPageChange={this.onPageChange}
+          sortable={false}
         />
         <EditQueueUserModal
           selectedQueueObject={
@@ -280,7 +281,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     user: state.user,
     userQueue: state.userQueue,
     loading: state.ajaxCallsInProgress > 0,
-    showEditUserModal: state.showEditUserModal,
+    showEditQueueUserModal: state.showEditQueueUserModal,
     showEditCustomerModal: state.showEditCustomerModal,
     showEditFacilityModal: state.showEditFacilityModal
   };

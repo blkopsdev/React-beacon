@@ -45,7 +45,7 @@ interface Iprops {
 }
 
 interface IdispatchProps {
-  showEditUserModal: boolean;
+  showEditQueueUserModal: boolean;
   loading: boolean;
   customerOptions: any[];
   facilityOptions: any[];
@@ -64,7 +64,7 @@ class EditQueueUserModal extends React.Component<Iprops & IdispatchProps, {}> {
   render() {
     return (
       <CommonModal
-        modalVisible={this.props.showEditUserModal}
+        modalVisible={this.props.showEditQueueUserModal}
         className="user-edit"
         onHide={this.props.toggleEditQueueUserModal}
         body={
@@ -94,7 +94,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     loading: state.ajaxCallsInProgress > 0,
     customerOptions: getCustomerOptions(state.customers),
     facilityOptions: getFacilitityOptions(state.facilities),
-    showEditUserModal: state.showEditUserModal,
+    showEditQueueUserModal: state.showEditQueueUserModal,
     showEditCustomerModal: state.showEditCustomerModal,
     showEditFacilityModal: state.showEditFacilityModal
   };

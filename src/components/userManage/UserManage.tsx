@@ -107,8 +107,8 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
         },
         {
           Header: 'manager',
-          accessor: ({ managerID }: Iuser) => {
-            return managerID ? 'Yes' : '';
+          accessor: ({ hasTeamMembers }: Iuser) => {
+            return hasTeamMembers ? 'Yes' : 'No';
           },
           id: 'manager'
         },
@@ -196,14 +196,10 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
     customerID
   }: {
     search: string;
-    customerID: any;
+    customerID: { value: string; title: string };
   }) => {
-    console.log(customerID);
-    this.props.getUserManage(
-      this.props.userManage.page,
-      search,
-      customerID.value
-    );
+    const custID = customerID ? customerID.value : '';
+    this.props.getUserManage(this.props.userManage.page, search, custID);
   };
 
   render(): JSX.Element {
@@ -239,6 +235,7 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
           previousText={t('common:previous')}
           nextText={t('common:next')}
           onPageChange={this.onPageChange}
+          sortable={false}
         />
         <EditUserManageModal
           selectedUser={this.props.userManage.data[this.state.selectedRow]}

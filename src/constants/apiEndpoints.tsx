@@ -9,6 +9,9 @@ const API = {
       approve: `${root}user/approve`,
       reject: `${root}user/reject`,
       update: `${root}user/update`
+    },
+    customer: {
+      add: `${root}customer/add`
     }
   },
   GET: {

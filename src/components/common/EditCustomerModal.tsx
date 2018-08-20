@@ -6,13 +6,17 @@
 
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { toggleEditCustomerModal } from '../../actions/userQueueActions';
+import {
+  toggleEditCustomerModal,
+  addCustomer
+} from '../../actions/userQueueActions';
 import {
   IinitialState
   // Icustomer
 } from '../../models';
 import CommonModal from '../common/CommonModal';
 import { TranslationFunction } from 'react-i18next';
+import EditCustomerForm from '../common/EditCustomerForm';
 // import { map } from 'lodash';
 
 interface Iprops {
@@ -24,6 +28,7 @@ interface IdispatchProps {
   showEditCustomerModal: boolean;
   loading: boolean;
   toggleEditCustomerModal: () => void;
+  addCustomer: typeof addCustomer;
 }
 
 class EditQueueUserModal extends React.Component<Iprops & IdispatchProps, {}> {
@@ -37,8 +42,15 @@ class EditQueueUserModal extends React.Component<Iprops & IdispatchProps, {}> {
         modalVisible={this.props.showEditCustomerModal}
         className="customer-edit second-modal"
         onHide={this.props.toggleEditCustomerModal}
-        body={<div> make the customer form </div>}
-        title={this.props.t('common:editCustomerModalTitle')}
+        body={
+          <EditCustomerForm
+            handleSubmit={this.props.addCustomer}
+            handleCancel={this.props.toggleEditCustomerModal}
+            colorButton={this.props.colorButton}
+            loading={this.props.loading}
+          />
+        }
+        title={this.props.t('common:newCustomerModalTitle')}
         container={document.getElementById('two-pane-layout')}
       />
     );
@@ -56,6 +68,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
 export default connect(
   mapStateToProps,
   {
-    toggleEditCustomerModal
+    toggleEditCustomerModal,
+    addCustomer
   }
 )(EditQueueUserModal);

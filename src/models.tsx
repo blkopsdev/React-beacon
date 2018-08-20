@@ -24,6 +24,7 @@ export interface Iuser {
   createDate?: string;
   customerID: string;
   facilityID: string;
+  hasTeamMembers: boolean;
 }
 // export interface IuserQueue {
 //   [key: string]: Iuser;
@@ -75,7 +76,7 @@ export interface IinitialState {
   showEditUserModal: boolean;
   showEditCustomerModal: boolean;
   showEditFacilityModal: boolean;
-  showEditManageUserModal: boolean;
+  showEditQueueUserModal: boolean;
 }
 export interface Itile {
   icon: string | string[];

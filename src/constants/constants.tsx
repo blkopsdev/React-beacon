@@ -2,12 +2,23 @@ import { transitionInType, transitionOutType, Iuser, Itile } from '../models';
 import { find } from 'lodash';
 
 const securityFunctions = {
-  manageUsers: 'AA6F93B7-D278-4117-9B14-26DFA795742E',
-  manageTrainingPayment: '3A0D4616-4179-4BA1-98F0-6A929A3A5E0D'
+  ManageUsers: 'AA6F93B7-D278-4117-9B14-26DFA795742E',
+  ManageTrainingPayment: '3A0D4616-4179-4BA1-98F0-6A929A3A5E0D',
+  ManageSecurity = 'B397D3EB-D55E-416A-9C48-AFE858AC5091',
+  ViewInventory = 'A98B1372-81D3-43E1-A81A-3F382CE83542',
+  ManageInventory = 'DD65AB77-23D6-4FE0-9AD7-5729B6E5C40D',
+  QuoteForInvoice = 'DF7EA0C4-98C3-40BF-9E73-03E5BF50F9D0',
+  SignUpTeamMembers = '947CF4F4-10AC-4A38-BA7B-F069605E7A6C',
+  ManageTeamMembers = 'C75A644C-54A5-4EA3-95D2-AB58D2A39E8E',
+  ManageIndividualTraining = '977049C6-3EB6-40CF-938F-C3B766C5EECD',
+  ManageEmployeeTraining = '26785416-C391-4B14-AE9F-B5A56F8D223E',
+  Payment = '655401EA-4AA1-4543-91E0-9F5A3AB754C3'
 };
+
 const colors = {
   green: '#1ABC9C',
   greenButton: 'success', // use the bootstrap success button color
+  greenTr: 'rgba(26,188,156,.2)',
   blue: '#027AC3',
   blueTr: 'rgba(2,122,195,.2)',
   blueButton: 'primary',
@@ -16,6 +27,7 @@ const colors = {
   orangeButton: 'warning',
   purple: '#62499D',
   purpleButton: 'info', // use the bootstrap info button color
+  purpleTr: 'rgba(98,73,157,.2)',
   dark: '#060A33'
 };
 const tiles = [
@@ -37,7 +49,7 @@ const tiles = [
     width: 360,
     height: 408,
     url: '/training',
-    securityFunction: securityFunctions.manageTrainingPayment
+    securityFunction: securityFunctions.ManageTrainingPayment
   },
   {
     icon: 'users',
@@ -47,7 +59,7 @@ const tiles = [
     width: 360,
     height: 408,
     url: '/queue',
-    securityFunction: securityFunctions.manageUsers
+    securityFunction: securityFunctions.ManageUsers
   },
   {
     icon: ['far', 'hospital'],
@@ -57,7 +69,7 @@ const tiles = [
     width: 360,
     height: 408,
     url: '/users',
-    securityFunction: securityFunctions.manageUsers
+    securityFunction: securityFunctions.ManageUsers
   },
   {
     icon: 'icon-maintenance',

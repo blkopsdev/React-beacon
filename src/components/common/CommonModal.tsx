@@ -42,6 +42,11 @@ class CommonModal extends React.Component<Props, State> {
         onEntering={() => {
           this.setState({ classNameAnimation: 'after-open' });
         }}
+        onEntered={() => {
+          setTimeout(() => {
+            this.setState({ classNameAnimation: 'after-open after-entered' });
+          }, 200);
+        }}
         container={this.props.container}
       >
         <Modal.Header>

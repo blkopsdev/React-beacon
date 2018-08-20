@@ -7,6 +7,7 @@ const securityFunctions = {
 };
 const colors = {
   green: '#1ABC9C',
+  greenButton: 'success', // use the bootstrap success button color
   blue: '#027AC3',
   blueTr: 'rgba(2,122,195,.2)',
   blueButton: 'primary',
@@ -14,6 +15,7 @@ const colors = {
   orangeTr: 'rgba(255,166,99,.2)',
   orangeButton: 'warning',
   purple: '#62499D',
+  purpleButton: 'info', // use the bootstrap info button color
   dark: '#060A33'
 };
 const tiles = [

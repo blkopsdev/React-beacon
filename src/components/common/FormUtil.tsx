@@ -16,6 +16,7 @@ import {
 import { mapValues, find } from 'lodash';
 import { TranslationFunction } from 'react-i18next';
 import Select, { components } from 'react-select';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // add the bootstrap form-control class to the react-select select component
 const ControlComponent = (props: any) => (
@@ -24,9 +25,23 @@ const ControlComponent = (props: any) => (
   </div>
 );
 
+// const CustomFeedback = ({type}: any) => {
+//   if (type === 'valid'){
+//     return <FontAwesomeIcon icon={['far', 'check']} />
+//   } else if (type === 'invalid'){
+//     return <FontAwesomeIcon icon={['far', 'times']}  />
+//   } else {
+//     return null;
+//   }
+// }
+
+// <FormControl.Feedback>
+//           <CustomFeedback />
+//          </FormControl.Feedback>
+
 export const FormUtil = {
-  convertToOptions: (items: any[]) => {
-    return items.map((item: { id: string; name: string }) => {
+  convertToOptions: (items: Array<{ id: string; name: string }>) => {
+    return items.map(item => {
       return { value: item.id, label: item.name };
     });
   },

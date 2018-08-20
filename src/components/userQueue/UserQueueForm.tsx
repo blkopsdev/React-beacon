@@ -113,8 +113,8 @@ interface Istate {
 }
 
 class UserQueueForm extends React.Component<Iprops, Istate> {
-  public userForm: AbstractControl;
-  public fieldConfig: FieldConfig;
+  private userForm: AbstractControl;
+  private fieldConfig: FieldConfig;
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(

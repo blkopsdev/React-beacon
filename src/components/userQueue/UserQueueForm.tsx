@@ -13,24 +13,26 @@ import {
   Validators,
   FormGenerator,
   AbstractControl,
-  FieldConfig
+  FieldConfig,
+  Observable
 } from 'react-reactive-form';
 import { Col, Button, FormGroup, ControlLabel } from 'react-bootstrap';
 import { forEach, find } from 'lodash';
 import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
-import Select, { components } from 'react-select';
+// import Select, { components } from 'react-select';
 
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
 import { IqueueObject } from '../../models';
 
-// add the bootstrap form-control class to the react-select select component
-const ControlComponent = (props: any) => (
-  <div>
-    <components.Control {...props} className="form-control" />
-  </div>
-);
+interface IstateChanges extends Observable<any> {
+  next: () => void;
+}
+
+interface AbstractControlEdited extends AbstractControl {
+  stateChanges: IstateChanges;
+}
 
 const TextLabel = ({ handler, meta }: any) => {
   return (
@@ -44,6 +46,7 @@ const TextLabel = ({ handler, meta }: any) => {
 };
 const buildFieldConfig = (
   customerOptions: any[],
+  facilityOptions: any[],
   getFacilitiesByCustomer: (value: string) => Promise<void>,
   toggleEditCustomerModal: () => void
 ) => {
@@ -57,7 +60,6 @@ const buildFieldConfig = (
       render: FormUtil.SelectWithButton,
       meta: {
         options: customerOptions,
-        getFacilitiesByCustomer,
         label: 'common:customer',
 
         colWidth: 12,
@@ -77,7 +79,16 @@ const buildFieldConfig = (
       }
     },
     facilityID: {
-      meta: {},
+      render: FormUtil.SelectWithButton,
+      meta: {
+        options: facilityOptions,
+        label: 'common:facility',
+
+        colWidth: 12,
+        placeholder: 'userQueue:facilitySearchPlaceholder',
+        buttonName: 'userQueue:facilityButton',
+        buttonAction: toggleEditCustomerModal
+      },
       options: {
         validators: Validators.required
       }
@@ -120,6 +131,7 @@ class UserQueueForm extends React.Component<Iprops, Istate> {
     this.fieldConfig = FormUtil.translateForm(
       buildFieldConfig(
         this.props.customerOptions,
+        this.props.facilityOptions,
         this.props.getFacilitiesByCustomer,
         this.props.toggleEditCustomerModal
       ),
@@ -136,20 +148,21 @@ class UserQueueForm extends React.Component<Iprops, Istate> {
     if (
       prevProps.facilityOptions.length !== this.props.facilityOptions.length
     ) {
-      if (!this.props.selectedQueueObject) {
-        console.error('missing user');
-        return;
-      }
-      const { facilityID } = this.props.selectedQueueObject.user;
-      if (this.props.facilityOptions.length && facilityID) {
-        const facility = find(
-          this.props.facilityOptions,
-          (option: { value: string; label: string }) => {
-            return option.value === facilityID;
-          }
-        );
-        this.setState({ facility });
-      }
+      const facilitySelectControl = this.userForm.get(
+        'facilityID'
+      ) as AbstractControlEdited;
+      facilitySelectControl.meta.options = this.props.facilityOptions;
+      facilitySelectControl.stateChanges.next();
+    }
+
+    if (
+      prevProps.customerOptions.length !== this.props.customerOptions.length
+    ) {
+      const customerSelectControl = this.userForm.get(
+        'customerID'
+      ) as AbstractControlEdited;
+      customerSelectControl.meta.options = this.props.customerOptions;
+      customerSelectControl.stateChanges.next();
     }
   }
 
@@ -214,28 +227,6 @@ class UserQueueForm extends React.Component<Iprops, Istate> {
   render() {
     const { t } = this.props;
 
-    let facilityClassName = '';
-    if (
-      this.userForm &&
-      this.userForm.value.facilityID &&
-      this.userForm.value.facilityID.value &&
-      !this.state.pristine
-    ) {
-      facilityClassName = 'has-success';
-    } else if (
-      (this.userForm &&
-        (!this.userForm.value.facilityID ||
-          (this.userForm.value.facilityID &&
-            !this.userForm.value.facilityID.value)) &&
-        !this.state.pristine) ||
-      (this.userForm &&
-        (!this.userForm.value.facilityID ||
-          (this.userForm.value.facilityID &&
-            !this.userForm.value.facilityID.value)) &&
-        this.userForm.submitted)
-    ) {
-      facilityClassName = 'has-error';
-    }
     return (
       <div className="user-form queue-form">
         <form onSubmit={this.handleSubmit} className="user-form">
@@ -243,32 +234,7 @@ class UserQueueForm extends React.Component<Iprops, Istate> {
             onMount={this.setForm}
             fieldConfig={this.fieldConfig}
           />
-          <Col xs={12}>
-            <FormGroup bsSize="sm" className={facilityClassName}>
-              <ControlLabel>{t('common:facility')}</ControlLabel>
-              <Button
-                bsStyle="link"
-                className="pull-right right-side"
-                onClick={() => {
-                  alert('button clicked');
-                }}
-              >
-                {t('userQueue:facilityButton')}
-              </Button>
-              <Select
-                options={this.props.facilityOptions}
-                onChange={(facility: any) => {
-                  this.setState({ facility });
-                  this.userForm.patchValue({ facilityID: facility });
-                }}
-                components={{ Control: ControlComponent }}
-                placeholder={t('userQueue:facilitySearchPlaceholder')}
-                onBlur={() => {
-                  this.setState({ pristine: false });
-                }}
-              />
-            </FormGroup>
-          </Col>
+
           <Col xs={12} className="form-buttons text-right">
             <Button
               bsStyle="link"

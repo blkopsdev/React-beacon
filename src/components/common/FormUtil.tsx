@@ -176,7 +176,6 @@ export const FormUtil = {
             defaultValue={defaultValue}
             components={{ Control: ControlComponent }}
             placeholder={meta.placeholder}
-            isMulti={meta.isMulti}
             {...handler()}
           />
         </FormGroup>
@@ -221,6 +220,7 @@ export const FormUtil = {
             defaultValue={defaultValue}
             components={{ Control: ControlComponent }}
             placeholder={meta.placeholder}
+            isMulti={meta.isMulti}
             {...handler()}
           />
         </FormGroup>

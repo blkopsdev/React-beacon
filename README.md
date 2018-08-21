@@ -14,6 +14,7 @@ Step two has proven to be rather challenging.
 
 ## API documentation:
 Swagger: https://app.swaggerhub.com/apis/Big-Pixel/Core-Care
+REACT_APP_SERVER_DOMAIN=https://virtserver.swaggerhub.com/Big-Pixel/Core-Care/1.0.21/
 
 ## Design Spec
 https://xd.adobe.com/view/98de6938-9789-4098-6f9a-955b46301e31-eeef/

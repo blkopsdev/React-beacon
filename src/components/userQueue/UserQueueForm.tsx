@@ -17,7 +17,7 @@ import {
   Observable
 } from 'react-reactive-form';
 import { Col, Button, FormGroup, ControlLabel } from 'react-bootstrap';
-import { forEach, find, filter } from 'lodash';
+import { forEach, find, filter, map } from 'lodash';
 import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
@@ -89,7 +89,8 @@ const buildFieldConfig = (
         colWidth: 12,
         placeholder: 'userQueue:facilitySearchPlaceholder',
         buttonName: 'userQueue:facilityButton',
-        buttonAction: toggleEditFacilityModal
+        buttonAction: toggleEditFacilityModal,
+        isMulti: true
       },
       options: {
         validators: Validators.required
@@ -149,14 +150,6 @@ class UserQueueForm extends React.Component<Iprops, {}> {
       ) as AbstractControlEdited;
       facilitySelectControl.meta.options = this.props.facilityOptions;
       facilitySelectControl.stateChanges.next();
-      // now select the facility the user just added
-      // might be a better way to do this, but we are comparing the two arrays and finding the new facility
-      const newFacility = filter(this.props.facilityOptions, (obj: any) => {
-        return find(prevProps.facilityOptions, { value: obj.value })
-          ? false
-          : true;
-      });
-      this.userForm.patchValue({ facilityID: newFacility[0] });
     }
 
     if (
@@ -205,7 +198,19 @@ class UserQueueForm extends React.Component<Iprops, {}> {
     this.userForm.patchValue({
       customerID: find(this.props.customerOptions, { value: customerID })
     });
+    this.userForm.patchValue({ facilityID: [] }); // TODO need to select all the facilities from the facilityOptions array
+
+    // TODO listen for new facilities being added.
+    document.addEventListener('newFacility', this.handleNewFacility, false);
   }
+  handleNewFacility = (event: any) => {
+    const facilityID = event.detail;
+    // now select the facility the user just added
+    // might be a better way to do this, but we are comparing the two arrays and finding the new facility
+    const newFacility = find(this.props.facilityOptions, { value: facilityID });
+    const newFacilitiesArray = [...this.userForm.value.facilityID, newFacility];
+    this.userForm.patchValue({ facilityID: newFacilitiesArray });
+  };
 
   handleSubmit = (
     e: React.MouseEvent<HTMLFormElement>,
@@ -218,12 +223,18 @@ class UserQueueForm extends React.Component<Iprops, {}> {
       return;
     }
     console.log(this.userForm.value);
+    const facilitiesArray = map(
+      this.userForm.value.facilityID,
+      (option: { value: string; label: string }) => {
+        return option.value;
+      }
+    );
     this.props.handleSubmit(
       {
         id: this.props.selectedQueueObject.user.id,
         ...this.userForm.value,
         customerID: this.userForm.value.customerID.value,
-        facilityID: this.userForm.value.facilityID.value
+        facilityID: facilitiesArray
       },
       shouldApprove,
       this.props.selectedQueueObject.id

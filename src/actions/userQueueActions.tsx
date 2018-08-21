@@ -179,6 +179,14 @@ export function addFacility(facility: Ifacility): ThunkResult<void> {
           });
           dispatch({ type: types.TOGGLE_MODAL_EDIT_FACILITY });
           toastr.success('Success', 'Saved Facility', constants.toastrSuccess);
+          // wait for the select options to update then trigger an event that a new facility has been added.
+          setTimeout(() => {
+            const event = new CustomEvent('newFacility', {
+              detail: data.data.id
+            });
+            document.dispatchEvent(event);
+          }, 400);
+
           return data;
         }
       })
@@ -227,12 +235,14 @@ export const toggleEditFacilityModal = () => ({
 
 function handleError(error: any, message: string) {
   let msg = '';
-  if (error.response && error.response.data) {
+  if (error && error.response && error.response.data) {
     msg = error.response.data;
-  } else {
+  } else if (error && error.message) {
     msg = `Failed to ${message}.  Please try again or contact support. ${
       error.message
     }`;
+  } else {
+    msg = `Failed to ${message}.  Please try again or contact support.`;
   }
   if (!navigator.onLine) {
     msg = 'Please connect to the internet.';

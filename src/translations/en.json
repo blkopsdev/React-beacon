@@ -9,7 +9,10 @@
     "facility": "facility",
     "newCustomerModalTitle": "New Customer",
     "customerNameLabel": "New Customer Name",
-    "customerVatLabel": "VAT"
+    "customerVatLabel": "VAT",
+    "newFacilityModalTitle": "New Facility",
+    "facilityNameLabel": "New Facility Name",
+    "selectCustomerWarning": "You must select a customer first."
   },
   "auth": {
     "loginButton": "Login with Azure",
@@ -40,7 +43,8 @@
     "zip": "Zip",
     "save": "Save",
     "saveApprove": "Save & Approve",
-    "***-***-****": "***-***-****"
+    "***-***-****": "***-***-****",
+    "country": "Country"
   },
   "userQueue": {
     "bannerTitle": "New User Queue",

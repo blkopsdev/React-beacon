@@ -31,7 +31,7 @@ interface IdispatchProps {
   addCustomer: typeof addCustomer;
 }
 
-class EditQueueUserModal extends React.Component<Iprops & IdispatchProps, {}> {
+class EditCustomerModal extends React.Component<Iprops & IdispatchProps, {}> {
   constructor(props: Iprops & IdispatchProps) {
     super(props);
   }
@@ -71,4 +71,4 @@ export default connect(
     toggleEditCustomerModal,
     addCustomer
   }
-)(EditQueueUserModal);
+)(EditCustomerModal);

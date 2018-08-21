@@ -4,7 +4,7 @@ import API from '../constants/apiEndpoints';
 import { beginAjaxCall } from './ajaxStatusActions';
 import { toastr } from 'react-redux-toastr';
 import constants from '../constants/constants';
-import { Iuser, IinitialState } from '../models';
+import { Iuser, IinitialState, Ifacility } from '../models';
 import { ThunkAction } from 'redux-thunk';
 // import {AxiosResponse} from 'axios';
 
@@ -160,6 +160,31 @@ export function addCustomer({
       .catch((error: any) => {
         dispatch({ type: types.CUSTOMER_UPDATE_FAILED });
         handleError(error, 'add customer');
+        throw error;
+      });
+  };
+}
+export function addFacility(facility: Ifacility): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    return axios
+      .post(API.POST.facility.add, facility)
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.FACILITY_UPDATE_SUCCESS,
+            facility: data.data
+          });
+          dispatch({ type: types.TOGGLE_MODAL_EDIT_FACILITY });
+          toastr.success('Success', 'Saved Facility', constants.toastrSuccess);
+          return data;
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.FACILITY_UPDATE_FAILED });
+        handleError(error, 'add facility');
         throw error;
       });
   };

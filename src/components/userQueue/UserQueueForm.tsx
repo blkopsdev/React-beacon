@@ -17,7 +17,7 @@ import {
   Observable
 } from 'react-reactive-form';
 import { Col, Button, FormGroup, ControlLabel } from 'react-bootstrap';
-import { forEach, find } from 'lodash';
+import { forEach, find, filter } from 'lodash';
 import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
@@ -25,6 +25,7 @@ import { translate, TranslationFunction, I18n } from 'react-i18next';
 
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
 import { IqueueObject } from '../../models';
+import EditFacilityModal from '../common/EditFacilityModal';
 
 interface IstateChanges extends Observable<any> {
   next: () => void;
@@ -48,7 +49,8 @@ const buildFieldConfig = (
   customerOptions: any[],
   facilityOptions: any[],
   getFacilitiesByCustomer: (value: string) => Promise<void>,
-  toggleEditCustomerModal: () => void
+  toggleEditCustomerModal: () => void,
+  toggleEditFacilityModal: () => void
 ) => {
   // Field config to configure form
   const fieldConfigControls = {
@@ -87,7 +89,7 @@ const buildFieldConfig = (
         colWidth: 12,
         placeholder: 'userQueue:facilitySearchPlaceholder',
         buttonName: 'userQueue:facilityButton',
-        buttonAction: toggleEditCustomerModal
+        buttonAction: toggleEditFacilityModal
       },
       options: {
         validators: Validators.required
@@ -117,13 +119,10 @@ interface Iprops extends React.Props<UserQueueForm> {
   getFacilitiesByCustomer: (value: string) => Promise<void>;
   facilityOptions: any[];
   toggleEditCustomerModal: () => void;
-}
-interface Istate {
-  facility: { value: string; label: string };
-  pristine: boolean;
+  toggleEditFacilityModal: () => void;
 }
 
-class UserQueueForm extends React.Component<Iprops, Istate> {
+class UserQueueForm extends React.Component<Iprops, {}> {
   private userForm: AbstractControl;
   private fieldConfig: FieldConfig;
   constructor(props: Iprops) {
@@ -133,14 +132,11 @@ class UserQueueForm extends React.Component<Iprops, Istate> {
         this.props.customerOptions,
         this.props.facilityOptions,
         this.props.getFacilitiesByCustomer,
-        this.props.toggleEditCustomerModal
+        this.props.toggleEditCustomerModal,
+        this.props.toggleEditFacilityModal
       ),
       this.props.t
     );
-    this.state = {
-      facility: { value: '', label: '' },
-      pristine: true
-    };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setForm = this.setForm.bind(this);
   }
@@ -153,6 +149,14 @@ class UserQueueForm extends React.Component<Iprops, Istate> {
       ) as AbstractControlEdited;
       facilitySelectControl.meta.options = this.props.facilityOptions;
       facilitySelectControl.stateChanges.next();
+      // now select the facility the user just added
+      // might be a better way to do this, but we are comparing the two arrays and finding the new facility
+      const newFacility = filter(this.props.facilityOptions, (obj: any) => {
+        return find(prevProps.facilityOptions, { value: obj.value })
+          ? false
+          : true;
+      });
+      this.userForm.patchValue({ facilityID: newFacility[0] });
     }
 
     if (
@@ -163,6 +167,14 @@ class UserQueueForm extends React.Component<Iprops, Istate> {
       ) as AbstractControlEdited;
       customerSelectControl.meta.options = this.props.customerOptions;
       customerSelectControl.stateChanges.next();
+      // now select the customer the user just added
+      // might be a better way to do this, but we are comparing the two arrays and finding the new customer
+      const newCustomer = filter(this.props.customerOptions, (cust: any) => {
+        return find(prevProps.customerOptions, { value: cust.value })
+          ? false
+          : true;
+      });
+      this.userForm.patchValue({ customerID: newCustomer[0] });
     }
   }
 
@@ -211,7 +223,7 @@ class UserQueueForm extends React.Component<Iprops, Istate> {
         id: this.props.selectedQueueObject.user.id,
         ...this.userForm.value,
         customerID: this.userForm.value.customerID.value,
-        facilityID: this.state.facility.value
+        facilityID: this.userForm.value.facilityID.value
       },
       shouldApprove,
       this.props.selectedQueueObject.id
@@ -226,42 +238,52 @@ class UserQueueForm extends React.Component<Iprops, Istate> {
 
   render() {
     const { t } = this.props;
+    const selectedCustomer = this.userForm
+      ? this.userForm.value.customerID
+      : undefined;
 
     return (
-      <div className="user-form queue-form">
-        <form onSubmit={this.handleSubmit} className="user-form">
-          <FormGenerator
-            onMount={this.setForm}
-            fieldConfig={this.fieldConfig}
-          />
+      <div>
+        <div className="user-form queue-form">
+          <form onSubmit={this.handleSubmit} className="user-form">
+            <FormGenerator
+              onMount={this.setForm}
+              fieldConfig={this.fieldConfig}
+            />
 
-          <Col xs={12} className="form-buttons text-right">
-            <Button
-              bsStyle="link"
-              type="button"
-              className="pull-left left-side"
-              onClick={this.props.handleCancel}
-            >
-              {t('cancel')}
-            </Button>
-            <Button
-              bsStyle={this.props.colorButton}
-              type="submit"
-              disabled={this.props.loading}
-              style={{ marginRight: '20px' }}
-            >
-              {t('save')}
-            </Button>
-            <Button
-              bsStyle={this.props.colorButton}
-              type="button"
-              disabled={this.props.loading}
-              onClick={(e: any) => this.handleSubmit(e, true)}
-            >
-              {t('saveApprove')}
-            </Button>
-          </Col>
-        </form>
+            <Col xs={12} className="form-buttons text-right">
+              <Button
+                bsStyle="link"
+                type="button"
+                className="pull-left left-side"
+                onClick={this.props.handleCancel}
+              >
+                {t('cancel')}
+              </Button>
+              <Button
+                bsStyle={this.props.colorButton}
+                type="submit"
+                disabled={this.props.loading}
+                style={{ marginRight: '20px' }}
+              >
+                {t('save')}
+              </Button>
+              <Button
+                bsStyle={this.props.colorButton}
+                type="button"
+                disabled={this.props.loading}
+                onClick={(e: any) => this.handleSubmit(e, true)}
+              >
+                {t('saveApprove')}
+              </Button>
+            </Col>
+          </form>
+        </div>
+        <EditFacilityModal
+          t={this.props.t}
+          colorButton={this.props.colorButton}
+          selectedCustomer={selectedCustomer}
+        />
       </div>
     );
   }

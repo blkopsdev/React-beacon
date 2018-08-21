@@ -40,7 +40,6 @@ const getFacilitityOptions = (facilities: Ifacility[]) => {
 interface Iprops {
   selectedQueueObject: IqueueObject;
   colorButton: any;
-
   t: TranslationFunction;
 }
 
@@ -53,7 +52,7 @@ interface IdispatchProps {
   toggleEditQueueUserModal: () => void;
   getFacilitiesByCustomer: () => Promise<void>;
   toggleEditCustomerModal: () => void;
-  toggleEditFacilityModal: () => void;
+  toggleEditFacilityModal: typeof toggleEditFacilityModal;
 }
 
 class EditQueueUserModal extends React.Component<Iprops & IdispatchProps, {}> {
@@ -78,6 +77,7 @@ class EditQueueUserModal extends React.Component<Iprops & IdispatchProps, {}> {
             facilityOptions={this.props.facilityOptions}
             getFacilitiesByCustomer={this.props.getFacilitiesByCustomer}
             toggleEditCustomerModal={this.props.toggleEditCustomerModal}
+            toggleEditFacilityModal={this.props.toggleEditFacilityModal}
           />
         }
         title={this.props.t('editUserModalTitle')}

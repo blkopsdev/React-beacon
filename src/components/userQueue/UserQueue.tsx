@@ -267,6 +267,7 @@ class UserQueue extends React.Component<Iprops & IdispatchProps, Istate> {
             constants.colors[`${this.state.currentTile.color}Button`]
           }
         />
+        {/*the EditFacility Modal is rendered inside the UserQueueForm because we need to pass the selected customer*/}
       </div>
     );
   }

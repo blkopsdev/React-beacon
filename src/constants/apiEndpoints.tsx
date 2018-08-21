@@ -12,6 +12,9 @@ const API = {
     },
     customer: {
       add: `${root}customer/add`
+    },
+    facility: {
+      add: `${root}facility/add`
     }
   },
   GET: {

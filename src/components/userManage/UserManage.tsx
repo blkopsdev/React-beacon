@@ -136,7 +136,7 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
           }
         },
         customerID: {
-          render: FormUtil.Select,
+          render: FormUtil.SelectWithoutValidation,
           meta: {
             label: 'common:customer',
             options: FormUtil.convertToOptions(this.props.customers),

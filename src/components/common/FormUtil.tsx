@@ -176,6 +176,37 @@ export const FormUtil = {
       </Col>
     );
   },
+  SelectWithoutValidation: ({
+    handler,
+    touched,
+    hasError,
+    meta,
+    pristine,
+    errors,
+    submitted,
+    patchValue,
+    setErrors,
+    value
+  }: AbstractControl) => {
+    const defaultValue = find(meta.options, { value: meta.value });
+    // console.log('rendering select', meta.options, value, defaultValue)
+    return (
+      <Col xs={meta.colWidth}>
+        <FormGroup bsSize="sm">
+          <ControlLabel>{meta.label}</ControlLabel>
+          <Select
+            options={meta.options}
+            defaultValue={defaultValue}
+            components={{ Control: ControlComponent }}
+            placeholder={meta.placeholder}
+            isMulti={meta.isMulti}
+            classNamePrefix="react-select"
+            {...handler()}
+          />
+        </FormGroup>
+      </Col>
+    );
+  },
   SelectWithButton: ({
     handler,
     touched,

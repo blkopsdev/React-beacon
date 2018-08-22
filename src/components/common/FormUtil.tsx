@@ -151,6 +151,8 @@ export const FormUtil = {
   }: AbstractControl) => {
     const defaultValue = find(meta.options, { value: meta.value });
     // console.log('rendering select', meta.options, value, defaultValue)
+    const selectClassName = meta.isMulti ? 'is-multi' : '';
+    const selectValidationClass = value && !pristine ? 'has-success' : '';
     return (
       <Col xs={meta.colWidth}>
         <FormGroup
@@ -164,7 +166,7 @@ export const FormUtil = {
           <ControlLabel>{meta.label}</ControlLabel>
           <Select
             options={meta.options}
-            className={value && !pristine ? 'has-success' : ''}
+            className={`${selectClassName} ${selectValidationClass}`}
             defaultValue={defaultValue}
             components={{ Control: ControlComponent }}
             placeholder={meta.placeholder}
@@ -190,12 +192,14 @@ export const FormUtil = {
   }: AbstractControl) => {
     const defaultValue = find(meta.options, { value: meta.value });
     // console.log('rendering select', meta.options, value, defaultValue)
+    const selectClassName = meta.isMulti ? 'is-multi' : '';
     return (
       <Col xs={meta.colWidth}>
         <FormGroup bsSize="sm">
           <ControlLabel>{meta.label}</ControlLabel>
           <Select
             options={meta.options}
+            className={selectClassName}
             defaultValue={defaultValue}
             components={{ Control: ControlComponent }}
             placeholder={meta.placeholder}
@@ -221,6 +225,8 @@ export const FormUtil = {
   }: AbstractControl) => {
     const defaultValue = find(meta.options, { value: meta.value });
     // console.log('rendering select', meta.options, value, defaultValue)
+    const selectClassName = meta.isMulti ? 'is-multi' : '';
+    const selectValidationClass = value && !pristine ? 'has-success' : '';
     return (
       <Col xs={meta.colWidth}>
         <FormGroup
@@ -241,7 +247,7 @@ export const FormUtil = {
           </Button>
           <Select
             options={meta.options}
-            className={value && !pristine ? 'has-success' : ''}
+            className={`${selectClassName} ${selectValidationClass}`}
             defaultValue={defaultValue}
             components={{ Control: ControlComponent }}
             placeholder={meta.placeholder}

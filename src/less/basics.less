@@ -163,8 +163,9 @@ body {
     padding: 2px;
   }
   .react-select__control{
-    min-height: 40px;
-    height: auto;
+    
+    height: 30px;
+    min-height: 30px;
     //  overrides for react-select 
     // TODO need to apply hover border color for success and error, need selected border to match bootstrap
     letter-spacing: normal;
@@ -175,13 +176,12 @@ body {
       padding: 0;
     }
   }
-}
-.search-table-form{
-  .react-select__control{
-    height: 30px;
-    min-height: 30px;
+  .is-multi .react-select__control{
+    min-height: 40px;
+    height: auto;
   }
 }
+
 
 // color transparent here so that bootstrap can override it when it adds a validation color
 // if we put back in the fontawesome icon

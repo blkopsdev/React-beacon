@@ -72,8 +72,13 @@ const fieldConfig = {
       options: {
         validators: Validators.required
       },
-      render: FormUtil.TextInput,
-      meta: { label: 'user:country', colWidth: 12, type: 'text' }
+      render: FormUtil.Select,
+      meta: {
+        options: constants.countries,
+        label: 'user:country',
+        colWidth: 12,
+        placeholder: 'userQueue:countrySearchPlaceholder'
+      }
     }
   }
 };
@@ -112,7 +117,12 @@ class EditFacilityForm extends React.Component<Iprops, {}> {
       return;
     }
     console.log(this.userForm.value);
-    this.props.handleSubmit(this.userForm.value);
+    const newFacility = {
+      ...this.userForm.value,
+      countryID: this.userForm.value.countryID.value,
+      customerID: this.props.selectedCustomer.value
+    };
+    this.props.handleSubmit(newFacility);
   };
   setForm = (form: AbstractControl) => {
     this.userForm = form;

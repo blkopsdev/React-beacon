@@ -71,7 +71,6 @@ const buildFieldConfig = (
       meta: {
         options: facilityOptions,
         label: 'common:facility',
-
         colWidth: 12,
         placeholder: 'userQueue:facilitySearchPlaceholder',
         buttonName: 'userQueue:facilityButton',

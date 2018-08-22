@@ -209,7 +209,16 @@ const constants = {
         securityFunction: ''
       }
     );
-  }
+  },
+
+  // {value: '', label: ''}
+  countries: [
+    {
+      value: 'abc5d95c-129f-4837-988c-0bf4ae1f3b67',
+      label: 'United States of America'
+    },
+    { value: '1235d95c-129f-4837-988c-0bf4ae1f3b67', label: 'Cuba' }
+  ]
 };
 
 export default constants;

@@ -62,7 +62,8 @@
     "approve": "approve?",
     "searchPlaceholder": "Search by First, Last, or Email",
     "customerSearchPlaceholder": "Search...",
-    "facilitySearchPlaceholder": "Search..."
+    "facilitySearchPlaceholder": "Search...",
+    "countrySearchPlaceholder": "Search..."
   },
   "userManage": {
     "bannerTitle": "Manage Users",

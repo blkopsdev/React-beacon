@@ -177,6 +177,7 @@ export const FormUtil = {
             components={{ Control: ControlComponent }}
             placeholder={meta.placeholder}
             isMulti={meta.isMulti}
+            classNamePrefix="react-select"
             {...handler()}
           />
         </FormGroup>
@@ -222,6 +223,7 @@ export const FormUtil = {
             components={{ Control: ControlComponent }}
             placeholder={meta.placeholder}
             isMulti={meta.isMulti}
+            classNamePrefix="react-select"
             {...handler()}
           />
         </FormGroup>

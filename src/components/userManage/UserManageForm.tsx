@@ -17,7 +17,7 @@ import {
   Observable
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
-import { forEach, find, map } from 'lodash';
+import { forEach, find, map, differenceBy } from 'lodash';
 import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
@@ -123,6 +123,11 @@ class UserManageForm extends React.Component<Iprops, {}> {
   }
   componentDidUpdate(prevProps: Iprops) {
     if (
+      differenceBy(
+        prevProps.facilityOptions,
+        this.props.facilityOptions,
+        'value'
+      ).length ||
       prevProps.facilityOptions.length !== this.props.facilityOptions.length
     ) {
       const facilitySelectControl = this.userForm.get(
@@ -142,8 +147,7 @@ class UserManageForm extends React.Component<Iprops, {}> {
     forEach(this.props.selectedUser, (value, key) => {
       this.userForm.patchValue({ [key]: value });
     });
-    // TODO: CHANGE TO REAL CUSTOMER STUFF
-    // hardcode CustomerID for now
+
     this.userForm.patchValue({
       fac: 'HQ Raleigh'
     });
@@ -194,9 +198,11 @@ class UserManageForm extends React.Component<Iprops, {}> {
       ? this.userForm.value.customerID
       : undefined;
 
+    const formClassName = `user-form manage-form ${this.props.colorButton}`;
+
     return (
       <div>
-        <div className="user-form manage-form">
+        <div className={formClassName}>
           <form onSubmit={this.handleSubmit} className="user-form">
             <FormGenerator
               onMount={this.setForm}

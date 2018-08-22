@@ -17,7 +17,7 @@ import {
   Observable
 } from 'react-reactive-form';
 import { Col, Button, FormGroup, ControlLabel } from 'react-bootstrap';
-import { forEach, find, filter, map } from 'lodash';
+import { forEach, find, filter, map, differenceBy } from 'lodash';
 import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
@@ -143,8 +143,18 @@ class UserQueueForm extends React.Component<Iprops, {}> {
   }
   componentDidUpdate(prevProps: Iprops) {
     if (
+      differenceBy(
+        prevProps.facilityOptions,
+        this.props.facilityOptions,
+        'value'
+      ).length ||
       prevProps.facilityOptions.length !== this.props.facilityOptions.length
     ) {
+      console.log(
+        'received new facilities',
+        this.props.facilityOptions,
+        prevProps.facilityOptions
+      );
       const facilitySelectControl = this.userForm.get(
         'facilityID'
       ) as AbstractControlEdited;
@@ -153,6 +163,11 @@ class UserQueueForm extends React.Component<Iprops, {}> {
     }
 
     if (
+      differenceBy(
+        prevProps.customerOptions,
+        this.props.customerOptions,
+        'value'
+      ).length ||
       prevProps.customerOptions.length !== this.props.customerOptions.length
     ) {
       const customerSelectControl = this.userForm.get(
@@ -180,8 +195,6 @@ class UserQueueForm extends React.Component<Iprops, {}> {
     forEach(this.props.selectedQueueObject.user, (value, key) => {
       this.userForm.patchValue({ [key]: value });
     });
-    // TODO: CHANGE TO REAL CUSTOMER STUFF
-    // hardcode CustomerID for now
     this.userForm.patchValue({
       fac: 'HQ Raleigh'
     });
@@ -200,8 +213,19 @@ class UserQueueForm extends React.Component<Iprops, {}> {
     });
     this.userForm.patchValue({ facilityID: [] }); // TODO need to select all the facilities from the facilityOptions array
 
-    // TODO listen for new facilities being added.
+    // if there is a customerID then get facilities
+    if (customerID.length) {
+      this.props.getFacilitiesByCustomer(customerID);
+    }
+
     document.addEventListener('newFacility', this.handleNewFacility, false);
+    const customerSelectControl = this.userForm.get(
+      'customerID'
+    ) as AbstractControlEdited;
+    customerSelectControl.stateChanges.subscribe(() => {
+      // get
+      console.log('customer changed');
+    });
   }
   handleNewFacility = (event: any) => {
     const facilityID = event.detail;
@@ -253,9 +277,11 @@ class UserQueueForm extends React.Component<Iprops, {}> {
       ? this.userForm.value.customerID
       : undefined;
 
+    const formClassName = `user-form queue-form ${this.props.colorButton}`;
+
     return (
       <div>
-        <div className="user-form queue-form">
+        <div className={formClassName}>
           <form onSubmit={this.handleSubmit} className="user-form">
             <FormGenerator
               onMount={this.setForm}

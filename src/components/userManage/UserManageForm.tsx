@@ -173,7 +173,19 @@ class UserManageForm extends React.Component<Iprops, {}> {
       return find(facilities, { id: fac.value }) ? true : false;
     });
     this.userForm.patchValue({ facilities: facilitiesArray });
+    document.addEventListener('newFacility', this.handleNewFacility, false);
   }
+  componentWillUnmount() {
+    document.removeEventListener('newFacility', this.handleNewFacility, false);
+  }
+  handleNewFacility = (event: any) => {
+    const facilityID = event.detail;
+    // now select the facility the user just added
+    // might be a better way to do this, but we are comparing the two arrays and finding the new facility
+    const newFacility = find(this.props.facilityOptions, { value: facilityID });
+    const newFacilitiesArray = [...this.userForm.value.facilities, newFacility];
+    this.userForm.patchValue({ facilities: newFacilitiesArray });
+  };
 
   handleSubmit = (
     e: React.MouseEvent<HTMLFormElement>,

@@ -242,6 +242,9 @@ class UserQueueForm extends React.Component<Iprops, {}> {
       console.log('customer changed');
     });
   }
+  componentWillUnmount() {
+    document.removeEventListener('newFacility', this.handleNewFacility, false);
+  }
   handleNewFacility = (event: any) => {
     const facilityID = event.detail;
     // now select the facility the user just added

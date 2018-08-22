@@ -81,17 +81,63 @@ body {
   .form-buttons {
     margin-top: 20px;
   }
-  &.warning .react-select__multi-value{
-    background-color: fade(@orange, 30%);
+  .react-toggle-label{
+    margin-left: 10px;
+    vertical-align: top;
+    line-height: 30px;
+
   }
-  &.success .react-select__multi-value{
-    background-color: fade(@green, 30%);
+  &.warning{
+    .react-select__multi-value{
+      background-color: fade(@orange, 30%);
+    }
+    .react-toggle--checked{
+      .react-toggle-track{
+        background-color: fade(@orange, 30%);
+      }
+      &:hover .react-toggle-track{
+        background-color: fade(@darkOrange, 30%);
+      }
+    }
   }
-  &.info .react-select__multi-value{
-    background-color: fade(@purple, 30%);
+  &.success{
+    .react-select__multi-value{
+      background-color: fade(@green, 30%);
+    }
+    .react-toggle--checked{
+      .react-toggle-track{
+        background-color: fade(@green, 30%);
+      }
+      &:hover .react-toggle-track{
+        background-color: fade(@darkGreen, 30%);
+      }
+    }
   }
-  &.primary .react-select__multi-value{
-    background-color: fade(@primaryBlue, 30%);
+  &.info{
+    .react-select__multi-value{
+      background-color: fade(@purple, 30%);
+    }
+    .react-toggle--checked{
+      .react-toggle-track{
+        background-color: fade(@purple, 30%);
+      }
+      &:hover .react-toggle-track{
+        background-color: fade(@darkPurple, 30%);
+      }
+    }
+  }
+  &.primary{
+    .react-select__multi-value{
+      background-color: fade(@primaryBlue, 30%);
+    }
+    .react-toggle--checked{
+      .react-toggle-track{
+        background-color: fade(@primaryBlue, 30%);
+      }
+      &:hover .react-toggle-track{
+        background-color: fade(@darkBlue, 30%);
+      }
+    }
   }
 }
 
@@ -118,6 +164,7 @@ body {
   }
   .react-select__control{
     min-height: 40px;
+    height: auto;
     //  overrides for react-select 
     // TODO need to apply hover border color for success and error, need selected border to match bootstrap
     letter-spacing: normal;

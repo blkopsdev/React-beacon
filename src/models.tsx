@@ -23,7 +23,7 @@ export interface Iuser {
   lastLoginDate?: string;
   createDate?: string;
   customerID: string;
-  facilityID: string;
+  facilities: Array<{ id: string }>;
   hasTeamMembers: boolean;
 }
 // export interface IuserQueue {

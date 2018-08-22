@@ -6,7 +6,6 @@ import { connect } from 'react-redux';
 import {
   getUserQueue,
   approveUser,
-  updateUser,
   rejectUser,
   getCustomers,
   toggleEditQueueUserModal
@@ -293,7 +292,6 @@ export default translate('userQueue')(
     {
       getUserQueue,
       approveUser,
-      updateUser,
       rejectUser,
       getCustomers,
       toggleEditQueueUserModal

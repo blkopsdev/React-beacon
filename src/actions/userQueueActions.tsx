@@ -78,7 +78,7 @@ export function rejectUser(userQueueID: string) {
       });
   };
 }
-export function updateUser(
+export function updateQueueUser(
   user: Iuser,
   shouldApprove: boolean,
   queueID: string
@@ -92,11 +92,11 @@ export function updateUser(
           throw undefined;
         } else {
           dispatch({
-            type: types.USER_UPDATE_SUCCESS,
+            type: types.USER_QUEUE_UPDATE_SUCCESS,
             user: data.data,
             queueID
           });
-          dispatch({ type: types.TOGGLE_MODAL_EDIT_USER });
+          dispatch({ type: types.TOGGLE_MODAL_EDIT_QUEUE_USER });
           toastr.success('Success', 'Saved user', constants.toastrSuccess);
           if (shouldApprove) {
             return approveUser(queueID);
@@ -105,7 +105,7 @@ export function updateUser(
         }
       })
       .catch((error: any) => {
-        dispatch({ type: types.USER_UPDATE_FAILED });
+        dispatch({ type: types.USER_QUEUE_UPDATE_FAILED });
         handleError(error, 'update user');
         throw error;
       });

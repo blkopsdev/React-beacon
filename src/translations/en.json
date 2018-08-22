@@ -44,7 +44,8 @@
     "save": "Save",
     "saveApprove": "Save & Approve",
     "***-***-****": "***-***-****",
-    "country": "Country"
+    "country": "Country",
+    "active": "Is Active?"
   },
   "userQueue": {
     "bannerTitle": "New User Queue",

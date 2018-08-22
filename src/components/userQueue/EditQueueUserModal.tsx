@@ -7,7 +7,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import {
-  updateUser,
+  updateQueueUser,
   getFacilitiesByCustomer,
   toggleEditQueueUserModal,
   toggleEditCustomerModal,
@@ -48,7 +48,7 @@ interface IdispatchProps {
   loading: boolean;
   customerOptions: any[];
   facilityOptions: any[];
-  updateUser: typeof updateUser;
+  updateQueueUser: typeof updateQueueUser;
   toggleEditQueueUserModal: () => void;
   getFacilitiesByCustomer: () => Promise<void>;
   toggleEditCustomerModal: () => void;
@@ -68,7 +68,7 @@ class EditQueueUserModal extends React.Component<Iprops & IdispatchProps, {}> {
         onHide={this.props.toggleEditQueueUserModal}
         body={
           <UserQueueForm
-            handleSubmit={this.props.updateUser}
+            handleSubmit={this.props.updateQueueUser}
             handleCancel={this.props.toggleEditQueueUserModal}
             selectedQueueObject={this.props.selectedQueueObject}
             loading={this.props.loading}
@@ -103,7 +103,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
 export default connect(
   mapStateToProps,
   {
-    updateUser,
+    updateQueueUser,
     getFacilitiesByCustomer,
     toggleEditQueueUserModal,
     toggleEditCustomerModal,

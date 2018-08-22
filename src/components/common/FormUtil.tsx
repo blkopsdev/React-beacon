@@ -16,6 +16,7 @@ import {
 import { mapValues, find } from 'lodash';
 import { TranslationFunction } from 'react-i18next';
 import Select, { components } from 'react-select';
+import Toggle from 'react-toggle';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // add the bootstrap form-control class to the react-select select component
@@ -90,6 +91,32 @@ export const FormUtil = {
       </FormGroup>
     </Col>
   ),
+  Toggle: ({
+    handler,
+    touched,
+    hasError,
+    meta,
+    pristine,
+    errors,
+    submitted,
+    value
+  }: AbstractControl) => (
+    <Col xs={meta.colWidth}>
+      <FormGroup
+        validationState={FormUtil.getValidationState(
+          pristine,
+          errors,
+          submitted
+        )}
+        bsSize="sm"
+      >
+        <label className="control-label">
+          <Toggle icons={false} checked={value} {...handler()} />
+          <span className="react-toggle-label">{meta.label}</span>
+        </label>
+      </FormGroup>
+    </Col>
+  ),
   TextInputWithoutValidation: ({
     handler,
     touched,
@@ -110,41 +137,6 @@ export const FormUtil = {
       </FormGroup>
     </Col>
   ),
-  // TextInputWithButton: ({
-  //   handler,
-  //   touched,
-  //   hasError,
-  //   meta,
-  //   pristine,
-  //   errors,
-  //   submitted
-  // }: AbstractControl) => (
-  //   <Col xs={meta.colWidth}>
-  //     <FormGroup
-  //       validationState={FormUtil.getValidationState(
-  //         pristine,
-  //         errors,
-  //         submitted
-  //       )}
-  //       bsSize="sm"
-  //     >
-  //       <ControlLabel>{meta.label}</ControlLabel>
-  //       <Button
-  //         bsStyle="link"
-  //         className="pull-right right-side"
-  //         onClick={meta.buttonAction}
-  //       >
-  //         {meta.buttonName}
-  //       </Button>
-  //       <FormControl
-  //         type={meta.type}
-  //         placeholder={meta.placeholder}
-  //         {...handler()}
-  //       />
-  //       <FormControl.Feedback />
-  //     </FormGroup>
-  //   </Col>
-  // ),
   Select: ({
     handler,
     touched,

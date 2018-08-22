@@ -17,7 +17,7 @@ import {
   Observable
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
-import { forEach, find, map, differenceBy } from 'lodash';
+import { forEach, find, map, differenceBy, filter } from 'lodash';
 import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
@@ -66,7 +66,7 @@ const buildFieldConfig = (
         ]
       }
     },
-    facilityID: {
+    facilities: {
       render: FormUtil.SelectWithButton,
       meta: {
         options: facilityOptions,
@@ -80,6 +80,10 @@ const buildFieldConfig = (
       options: {
         validators: Validators.required
       }
+    },
+    isActive: {
+      render: FormUtil.Toggle,
+      meta: { label: 'user:active', colWidth: 12 }
     }
   };
   const fieldConfig = {
@@ -122,6 +126,9 @@ class UserManageForm extends React.Component<Iprops, {}> {
     this.setForm = this.setForm.bind(this);
   }
   componentDidUpdate(prevProps: Iprops) {
+    if (!this.props.selectedUser) {
+      return;
+    }
     if (
       differenceBy(
         prevProps.facilityOptions,
@@ -131,11 +138,17 @@ class UserManageForm extends React.Component<Iprops, {}> {
       prevProps.facilityOptions.length !== this.props.facilityOptions.length
     ) {
       const facilitySelectControl = this.userForm.get(
-        'facilityID'
+        'facilities'
       ) as AbstractControlEdited;
       facilitySelectControl.meta.options = this.props.facilityOptions;
       facilitySelectControl.stateChanges.next();
     }
+    const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
+      return find(this.props.selectedUser.facilities, { id: fac.value })
+        ? true
+        : false;
+    });
+    this.userForm.patchValue({ facilities: facilitiesArray });
   }
 
   componentDidMount() {
@@ -148,13 +161,18 @@ class UserManageForm extends React.Component<Iprops, {}> {
       this.userForm.patchValue({ [key]: value });
     });
 
-    this.userForm.patchValue({
-      fac: 'HQ Raleigh'
-    });
-    const { customerID } = this.props.selectedUser;
+    const { customerID, facilities } = this.props.selectedUser;
     this.userForm.patchValue({
       customerID: find(this.props.customerOptions, { value: customerID })
     });
+    // if there is a customerID then get facilities
+    if (customerID.length) {
+      this.props.getFacilitiesByCustomer(customerID);
+    }
+    const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
+      return find(facilities, { id: fac.value }) ? true : false;
+    });
+    this.userForm.patchValue({ facilities: facilitiesArray });
   }
 
   handleSubmit = (
@@ -169,9 +187,9 @@ class UserManageForm extends React.Component<Iprops, {}> {
     }
     console.log(this.userForm.value);
     const facilitiesArray = map(
-      this.userForm.value.facilityID,
+      this.userForm.value.facilities,
       (option: { value: string; label: string }) => {
-        return option.value;
+        return { id: option.value };
       }
     );
     this.props.handleSubmit(
@@ -179,7 +197,7 @@ class UserManageForm extends React.Component<Iprops, {}> {
         id: this.props.selectedUser.id,
         ...this.userForm.value,
         customerID: this.userForm.value.customerID.value,
-        facilityID: facilitiesArray
+        facilities: facilitiesArray
       },
       shouldApprove,
       this.props.selectedUser.id

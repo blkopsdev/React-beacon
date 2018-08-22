@@ -80,7 +80,7 @@ const buildFieldConfig = (
         ]
       }
     },
-    facilityID: {
+    facilities: {
       render: FormUtil.SelectWithButton,
       meta: {
         options: facilityOptions,
@@ -142,6 +142,9 @@ class UserQueueForm extends React.Component<Iprops, {}> {
     this.setForm = this.setForm.bind(this);
   }
   componentDidUpdate(prevProps: Iprops) {
+    if (!this.props.selectedQueueObject) {
+      return;
+    }
     if (
       differenceBy(
         prevProps.facilityOptions,
@@ -156,10 +159,18 @@ class UserQueueForm extends React.Component<Iprops, {}> {
         prevProps.facilityOptions
       );
       const facilitySelectControl = this.userForm.get(
-        'facilityID'
+        'facilities'
       ) as AbstractControlEdited;
       facilitySelectControl.meta.options = this.props.facilityOptions;
       facilitySelectControl.stateChanges.next();
+      const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
+        return find(this.props.selectedQueueObject.user.facilities, {
+          id: fac.value
+        })
+          ? true
+          : false;
+      });
+      this.userForm.patchValue({ facilities: facilitiesArray });
     }
 
     if (
@@ -204,14 +215,18 @@ class UserQueueForm extends React.Component<Iprops, {}> {
       tempCity,
       tempState,
       tempZip,
-      customerID
+      customerID,
+      facilities
     } = this.props.selectedQueueObject.user;
     const providedAddress = `${tempAddress} ${tempAddress2} ${tempCity} ${tempState} ${tempZip}`;
     this.userForm.patchValue({ providedAddress });
     this.userForm.patchValue({
       customerID: find(this.props.customerOptions, { value: customerID })
     });
-    this.userForm.patchValue({ facilityID: [] }); // TODO need to select all the facilities from the facilityOptions array
+    const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
+      return find(facilities, { id: fac.value }) ? true : false;
+    });
+    this.userForm.patchValue({ facilities: facilitiesArray });
 
     // if there is a customerID then get facilities
     if (customerID.length) {
@@ -232,8 +247,8 @@ class UserQueueForm extends React.Component<Iprops, {}> {
     // now select the facility the user just added
     // might be a better way to do this, but we are comparing the two arrays and finding the new facility
     const newFacility = find(this.props.facilityOptions, { value: facilityID });
-    const newFacilitiesArray = [...this.userForm.value.facilityID, newFacility];
-    this.userForm.patchValue({ facilityID: newFacilitiesArray });
+    const newFacilitiesArray = [...this.userForm.value.facilities, newFacility];
+    this.userForm.patchValue({ facilities: newFacilitiesArray });
   };
 
   handleSubmit = (
@@ -248,9 +263,9 @@ class UserQueueForm extends React.Component<Iprops, {}> {
     }
     console.log(this.userForm.value);
     const facilitiesArray = map(
-      this.userForm.value.facilityID,
+      this.userForm.value.facilities,
       (option: { value: string; label: string }) => {
-        return option.value;
+        return { id: option.value };
       }
     );
     this.props.handleSubmit(
@@ -258,7 +273,7 @@ class UserQueueForm extends React.Component<Iprops, {}> {
         id: this.props.selectedQueueObject.user.id,
         ...this.userForm.value,
         customerID: this.userForm.value.customerID.value,
-        facilityID: facilitiesArray
+        facilities: facilitiesArray
       },
       shouldApprove,
       this.props.selectedQueueObject.id

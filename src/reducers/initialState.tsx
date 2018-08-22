@@ -16,7 +16,7 @@ export default {
     state: '',
     zip: '',
     id: '',
-    facilityID: '',
+    facilities: [],
     customerID: '',
     hasTeamMembers: false
   },

@@ -32,16 +32,6 @@ const ControlComponent = (props: any) => (
   </div>
 );
 
-const TextLabel = ({ handler, meta }: any) => {
-  return (
-    <Col xs={meta.colWidth}>
-      <FormGroup bsSize="sm">
-        <ControlLabel>{meta.label}</ControlLabel>
-        <h5 className="manage-form-label">{handler().value}</h5>
-      </FormGroup>
-    </Col>
-  );
-};
 const buildFieldConfig = (
   customerOptions: any[],
   getFacilitiesByCustomer: (value: string) => Promise<void>,
@@ -49,10 +39,6 @@ const buildFieldConfig = (
 ) => {
   // Field config to configure form
   const fieldConfigControls = {
-    tempCompany: {
-      render: TextLabel,
-      meta: { label: 'userManage:userCustomer', colWidth: 12 }
-    },
     customerID: {
       render: FormUtil.SelectWithButton,
       meta: {
@@ -81,11 +67,6 @@ const buildFieldConfig = (
       options: {
         validators: Validators.required
       }
-    },
-
-    providedAddress: {
-      render: TextLabel,
-      meta: { label: 'userManage:providedAddress', colWidth: 12 }
     }
   };
   const fieldConfig = {
@@ -167,16 +148,7 @@ class UserManageForm extends React.Component<Iprops, Istate> {
     this.userForm.patchValue({
       fac: 'HQ Raleigh'
     });
-    const {
-      tempAddress,
-      tempAddress2,
-      tempCity,
-      tempState,
-      tempZip,
-      customerID
-    } = this.props.selectedUser;
-    const providedAddress = `${tempAddress} ${tempAddress2} ${tempCity} ${tempState} ${tempZip}`;
-    this.userForm.patchValue({ providedAddress });
+    const { customerID } = this.props.selectedUser;
     this.userForm.patchValue({
       customerID: find(this.props.customerOptions, { value: customerID })
     });

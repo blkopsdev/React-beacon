@@ -66,7 +66,7 @@
   },
   "userManage": {
     "bannerTitle": "Manage Users",
-    "editUserModalTitle": "New User",
+    "editUserModalTitle": "Edit User",
     "userCustomer": "User Supplied Customer",
     "customer": "Customer",
     "addCustomerButton": "Add New Customer",

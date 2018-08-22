@@ -13,29 +13,33 @@ import {
   Validators,
   FormGenerator,
   AbstractControl,
-  FieldConfig
+  FieldConfig,
+  Observable
 } from 'react-reactive-form';
-import { Col, Button, FormGroup, ControlLabel } from 'react-bootstrap';
-import { forEach, find } from 'lodash';
+import { Col, Button } from 'react-bootstrap';
+import { forEach, find, map } from 'lodash';
 import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
-import Select, { components } from 'react-select';
 
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
 import { Iuser } from '../../models';
+import EditFacilityModal from '../common/EditFacilityModal';
 
-// add the bootstrap form-control class to the react-select select component
-const ControlComponent = (props: any) => (
-  <div>
-    <components.Control {...props} className="form-control" />
-  </div>
-);
+interface IstateChanges extends Observable<any> {
+  next: () => void;
+}
+
+interface AbstractControlEdited extends AbstractControl {
+  stateChanges: IstateChanges;
+}
 
 const buildFieldConfig = (
   customerOptions: any[],
+  facilityOptions: any[],
   getFacilitiesByCustomer: (value: string) => Promise<void>,
-  toggleEditCustomerModal: () => void
+  toggleEditCustomerModal: () => void,
+  toggleEditFacilityModal: () => void
 ) => {
   // Field config to configure form
   const fieldConfigControls = {
@@ -63,7 +67,17 @@ const buildFieldConfig = (
       }
     },
     facilityID: {
-      meta: {},
+      render: FormUtil.SelectWithButton,
+      meta: {
+        options: facilityOptions,
+        label: 'common:facility',
+
+        colWidth: 12,
+        placeholder: 'userQueue:facilitySearchPlaceholder',
+        buttonName: 'userQueue:facilityButton',
+        buttonAction: toggleEditFacilityModal,
+        isMulti: true
+      },
       options: {
         validators: Validators.required
       }
@@ -87,13 +101,10 @@ interface Iprops extends React.Props<UserManageForm> {
   getFacilitiesByCustomer: (value: string) => Promise<void>;
   facilityOptions: any[];
   toggleEditCustomerModal: () => void;
-}
-interface Istate {
-  facility: { value: string; label: string };
-  pristine: boolean;
+  toggleEditFacilityModal: () => void;
 }
 
-class UserManageForm extends React.Component<Iprops, Istate> {
+class UserManageForm extends React.Component<Iprops, {}> {
   public userForm: AbstractControl;
   public fieldConfig: FieldConfig;
   constructor(props: Iprops) {
@@ -101,15 +112,13 @@ class UserManageForm extends React.Component<Iprops, Istate> {
     this.fieldConfig = FormUtil.translateForm(
       buildFieldConfig(
         this.props.customerOptions,
+        this.props.facilityOptions,
         this.props.getFacilitiesByCustomer,
-        this.props.toggleEditCustomerModal
+        this.props.toggleEditCustomerModal,
+        this.props.toggleEditFacilityModal
       ),
       this.props.t
     );
-    this.state = {
-      facility: { value: '', label: '' },
-      pristine: true
-    };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setForm = this.setForm.bind(this);
   }
@@ -117,20 +126,11 @@ class UserManageForm extends React.Component<Iprops, Istate> {
     if (
       prevProps.facilityOptions.length !== this.props.facilityOptions.length
     ) {
-      if (!this.props.selectedUser) {
-        console.error('missing user');
-        return;
-      }
-      const { facilityID } = this.props.selectedUser;
-      if (this.props.facilityOptions.length && facilityID) {
-        const facility = find(
-          this.props.facilityOptions,
-          (option: { value: string; label: string }) => {
-            return option.value === facilityID;
-          }
-        );
-        this.setState({ facility });
-      }
+      const facilitySelectControl = this.userForm.get(
+        'facilityID'
+      ) as AbstractControlEdited;
+      facilitySelectControl.meta.options = this.props.facilityOptions;
+      facilitySelectControl.stateChanges.next();
     }
   }
 
@@ -165,12 +165,18 @@ class UserManageForm extends React.Component<Iprops, Istate> {
       return;
     }
     console.log(this.userForm.value);
+    const facilitiesArray = map(
+      this.userForm.value.facilityID,
+      (option: { value: string; label: string }) => {
+        return option.value;
+      }
+    );
     this.props.handleSubmit(
       {
         id: this.props.selectedUser.id,
         ...this.userForm.value,
         customerID: this.userForm.value.customerID.value,
-        facilityID: this.state.facility.value
+        facilityID: facilitiesArray
       },
       shouldApprove,
       this.props.selectedUser.id
@@ -185,89 +191,42 @@ class UserManageForm extends React.Component<Iprops, Istate> {
 
   render() {
     const { t } = this.props;
+    const selectedCustomer = this.userForm
+      ? this.userForm.value.customerID
+      : undefined;
 
-    let facilityClassName = '';
-    if (
-      this.userForm &&
-      this.userForm.value.facilityID &&
-      this.userForm.value.facilityID.value &&
-      !this.state.pristine
-    ) {
-      facilityClassName = 'has-success';
-    } else if (
-      (this.userForm &&
-        (!this.userForm.value.facilityID ||
-          (this.userForm.value.facilityID &&
-            !this.userForm.value.facilityID.value)) &&
-        !this.state.pristine) ||
-      (this.userForm &&
-        (!this.userForm.value.facilityID ||
-          (this.userForm.value.facilityID &&
-            !this.userForm.value.facilityID.value)) &&
-        this.userForm.submitted)
-    ) {
-      facilityClassName = 'has-error';
-    }
     return (
-      <div className="user-form manage-form">
-        <form onSubmit={this.handleSubmit} className="user-form">
-          <FormGenerator
-            onMount={this.setForm}
-            fieldConfig={this.fieldConfig}
-          />
-          <Col xs={12}>
-            <FormGroup bsSize="sm" className={facilityClassName}>
-              <ControlLabel>{t('common:facility')}</ControlLabel>
+      <div>
+        <div className="user-form manage-form">
+          <form onSubmit={this.handleSubmit} className="user-form">
+            <FormGenerator
+              onMount={this.setForm}
+              fieldConfig={this.fieldConfig}
+            />
+            <Col xs={12} className="form-buttons text-right">
               <Button
                 bsStyle="link"
-                className="pull-right right-side"
-                onClick={() => {
-                  alert('button clicked');
-                }}
+                type="button"
+                className="pull-left left-side"
+                onClick={this.props.handleCancel}
               >
-                {t('userManage:facilityButton')}
+                {t('cancel')}
               </Button>
-              <Select
-                options={this.props.facilityOptions}
-                onChange={(facility: any) => {
-                  this.setState({ facility });
-                  this.userForm.patchValue({ facilityID: facility });
-                }}
-                components={{ Control: ControlComponent }}
-                placeholder={t('userManage:facilitySearchPlaceholder')}
-                onBlur={() => {
-                  this.setState({ pristine: false });
-                }}
-              />
-            </FormGroup>
-          </Col>
-          <Col xs={12} className="form-buttons text-right">
-            <Button
-              bsStyle="link"
-              type="button"
-              className="pull-left left-side"
-              onClick={this.props.handleCancel}
-            >
-              {t('cancel')}
-            </Button>
-            <Button
-              bsStyle={this.props.colorButton}
-              type="submit"
-              disabled={this.props.loading}
-              style={{ marginRight: '20px' }}
-            >
-              {t('save')}
-            </Button>
-            <Button
-              bsStyle={this.props.colorButton}
-              type="button"
-              disabled={this.props.loading}
-              onClick={(e: any) => this.handleSubmit(e, true)}
-            >
-              {t('saveApprove')}
-            </Button>
-          </Col>
-        </form>
+              <Button
+                bsStyle={this.props.colorButton}
+                type="submit"
+                disabled={this.props.loading}
+              >
+                {t('save')}
+              </Button>
+            </Col>
+          </form>
+        </div>
+        <EditFacilityModal
+          t={this.props.t}
+          colorButton={this.props.colorButton}
+          selectedCustomer={selectedCustomer}
+        />
       </div>
     );
   }

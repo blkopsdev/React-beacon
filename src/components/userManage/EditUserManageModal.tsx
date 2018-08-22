@@ -74,6 +74,7 @@ class EditManageUserModal extends React.Component<Iprops & IdispatchProps, {}> {
             facilityOptions={this.props.facilityOptions}
             getFacilitiesByCustomer={this.props.getFacilitiesByCustomer}
             toggleEditCustomerModal={this.props.toggleEditCustomerModal}
+            toggleEditFacilityModal={this.props.toggleEditFacilityModal}
           />
         }
         title={this.props.t('editUserModalTitle')}

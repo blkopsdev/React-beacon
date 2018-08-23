@@ -17,14 +17,15 @@ import { loadState, saveState } from './store/localStorage';
 import { runWithAdal } from 'react-adal';
 import axios from 'axios';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faUsers, faSearch } from '@fortawesome/free-solid-svg-icons';
+import { faUsers, faSearch, faUser } from '@fortawesome/free-solid-svg-icons';
 import {
   faCog,
   faCalendarCheck,
   faTh,
   faCheck,
   faTimes,
-  faHospital
+  faHospital,
+  faSignOut
 } from '@fortawesome/pro-regular-svg-icons';
 library.add(
   faCog,
@@ -34,7 +35,9 @@ library.add(
   faCheck,
   faTimes,
   faSearch,
-  faHospital
+  faHospital,
+  faUser,
+  faSignOut
 );
 
 import { authContext, isFullyAuthenticated } from './actions/userActions';
@@ -121,7 +124,8 @@ runWithAdal(
                 <Route exact path="/signup" component={SignUpDirect} />
                 <PrivateRoute path="/dashboard" component={Dashboard} />
                 <PrivateRoute path="/queue" component={TwoPaneLayout} />
-                <PrivateRoute path="/users" component={TwoPaneLayout} />{' '}
+                <PrivateRoute path="/users" component={TwoPaneLayout} />
+                <PrivateRoute path="/profile" component={TwoPaneLayout} />
                 <Route component={NoMatch} />
               </Switch>
               <ReduxToastr position={'top-right'} />

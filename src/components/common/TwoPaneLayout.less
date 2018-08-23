@@ -1,9 +1,6 @@
 @import '../../less/variables.less';
 @highlightBlue: #38A1DF;
 .two-pane-layout {
-  .col-fixed{
-    z-index: 1060;
-  }
   .side-menu {
     padding-top: 30px;
     height: calc(~"100vh - " @headerHeight);
@@ -34,6 +31,7 @@
     }
   }
   .col-fixed {
+    z-index: 1060;
     position: relative;
     min-height: 1px;
     // padding-right: 15px;
@@ -42,6 +40,7 @@
     width: 100%;
   }
   .col-fluid {
+    z-index: -10;
     position: relative;
     min-height: 1px;
     // padding-right: 15px;

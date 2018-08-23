@@ -3,6 +3,21 @@
   width: 100%;
   height: @headerHeight;
   background-color: @white;
+  border-bottom: 1px solid rgba(0, 0, 0, .15);
+  .white-rectangle{
+    position: absolute;
+    top: -20px;
+    right: 0;
+    z-index: 11;
+    width: 360px;
+    height: 82px;
+    background-color: #fff;
+  }
+  .profile-text{
+    z-index: 100;
+    right: 55px;
+    position: absolute;
+  }
   img {
     height: 53px;
     margin-top: 15px;
@@ -11,7 +26,7 @@
   .profile {
     float: right;
     font-size: 20px;
-    margin-top: 20px;
+    margin-top: 29px;
     // height: 84px;
     vertical-align: middle;
     text-align: center;
@@ -26,9 +41,46 @@
       height: 50px;
       margin-left: 15px;
       margin-right: 10px;
+      vertical-align: top;
     }
   }
-  .header-settings {
+  .header-menu{
+    display: inline-block;
+    .caret{
+      display: none;
+    }
+
+    float: right;
+    margin-top: -8px;
+    .dropdown-toggle{
+      z-index: 13;
+    }
+    .dropdown-menu{
+      top: 61px;
+      left: -93px;
+      z-index: 10;
+      border-radius: 0;
+      border-top: none;
+      border-right: none;
+      transform: translateY(-120%);
+      transition: transform .5s ease-in-out;
+
+      display: block;
+      box-shadow: none;
+      li > a{
+        color: @primaryBlue;
+        font-size: 1.5rem;
+      }
+      
+    }
+    .dropdown-menu.menu-open{
+      transform: translateY(0%);
+      transition: transform .5s ease-in-out, z-index .5s steps(2) 1s;
+      z-index: 10;
+    }
+  }
+
+  .header-menu-button {
     color: @darkGrey;
     font-size: 1.1em;
   }
@@ -48,54 +100,33 @@
     height: 33%;
     background-color: @darkGrey;
     float: left;
-    -webkit-animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
-            animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out; 
+    animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out; 
   }
   .sk-cube-grid .sk-cube1 {
-    -webkit-animation-delay: 0.2s;
+    animation-delay: 0.2s; }
+    .sk-cube-grid .sk-cube2 {
+      animation-delay: 0.3s; }
+      .sk-cube-grid .sk-cube3 {
+        animation-delay: 0.4s; }
+        .sk-cube-grid .sk-cube4 {
+          animation-delay: 0.1s; }
+          .sk-cube-grid .sk-cube5 {
             animation-delay: 0.2s; }
-  .sk-cube-grid .sk-cube2 {
-    -webkit-animation-delay: 0.3s;
-            animation-delay: 0.3s; }
-  .sk-cube-grid .sk-cube3 {
-    -webkit-animation-delay: 0.4s;
-            animation-delay: 0.4s; }
-  .sk-cube-grid .sk-cube4 {
-    -webkit-animation-delay: 0.1s;
-            animation-delay: 0.1s; }
-  .sk-cube-grid .sk-cube5 {
-    -webkit-animation-delay: 0.2s;
-            animation-delay: 0.2s; }
-  .sk-cube-grid .sk-cube6 {
-    -webkit-animation-delay: 0.3s;
-            animation-delay: 0.3s; }
-  .sk-cube-grid .sk-cube7 {
-    -webkit-animation-delay: 0s;
-            animation-delay: 0s; }
-  .sk-cube-grid .sk-cube8 {
-    -webkit-animation-delay: 0.1s;
-            animation-delay: 0.1s; }
-  .sk-cube-grid .sk-cube9 {
-    -webkit-animation-delay: 0.2s;
-            animation-delay: 0.2s; }
+            .sk-cube-grid .sk-cube6 {
+              animation-delay: 0.3s; }
+              .sk-cube-grid .sk-cube7 {
+                animation-delay: 0s; }
+                .sk-cube-grid .sk-cube8 {
+                  animation-delay: 0.1s; }
+                  .sk-cube-grid .sk-cube9 {
+                    animation-delay: 0.2s; }
 
-  @-webkit-keyframes sk-cubeGridScaleDelay {
-    0%, 70%, 100% {
-      -webkit-transform: scale3D(1, 1, 1);
-              transform: scale3D(1, 1, 1);
-    } 35% {
-      -webkit-transform: scale3D(0, 0, 1);
-              transform: scale3D(0, 0, 1); 
-    }
-  }
 
-  @keyframes sk-cubeGridScaleDelay {
-    0%, 70%, 100% {
-      -webkit-transform: scale3D(1, 1, 1);
-              transform: scale3D(1, 1, 1);
-    } 35% {
-      -webkit-transform: scale3D(0, 0, 1);
-              transform: scale3D(0, 0, 1);
-    } 
-  }
-}
+                    @keyframes sk-cubeGridScaleDelay {
+                      0%, 70%, 100% {
+                        transform: scale3D(1, 1, 1);
+                      } 35% {
+                        transform: scale3D(0, 0, 1);
+                      } 
+                    }
+                  }

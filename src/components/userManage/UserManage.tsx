@@ -202,7 +202,7 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
     this.props.getUserManage(this.props.userManage.page, search, custID);
   };
 
-  render(): JSX.Element {
+  render() {
     // if (this.props.userManage.data.length === 0) {
     //   return <div>EFF</div>;
     // }

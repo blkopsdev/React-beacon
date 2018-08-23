@@ -20,6 +20,13 @@ export default function user(state: Iuser = initialState.user, action: any) {
       return { ...state, ...action.user, securityFunctions } as Iuser;
     case types.AAD_LOGIN_SUCCESS:
       return Object.assign({}, state, { token: action.token });
+
+    case types.USER_UPDATE_PROFILE_SUCCESS:
+      const securityFs = map(action.user.securityFunctions, securityF => {
+        return securityF.toUpperCase();
+      });
+      return { ...state, ...action.user, securityFs } as Iuser;
+
     case types.USER_LOGOUT_SUCCESS:
       return initialState.user;
     default:

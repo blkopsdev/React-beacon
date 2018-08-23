@@ -10,7 +10,7 @@ import { IinitialState, Iuser } from '../../models';
 import { userLogout } from '../../actions/userActions';
 import { isFullyAuthenticated } from '../../actions/userActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { Button } from 'react-bootstrap';
+import { ButtonToolbar, Dropdown, MenuItem } from 'react-bootstrap';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 
 interface Iprops extends React.Props<Header> {
@@ -20,11 +20,29 @@ interface Iprops extends React.Props<Header> {
   t: TranslationFunction;
   i18n: I18n;
 }
+interface Istate {
+  menuOpen: boolean;
+}
 
-class Header extends React.Component<Iprops, {}> {
+class Header extends React.Component<Iprops, Istate> {
   constructor(props: Iprops) {
     super(props);
+    this.state = {
+      menuOpen: false
+    };
   }
+  handleMenuSelect = (eventKey: any) => {
+    switch (eventKey) {
+      case '1':
+        console.log('open profile');
+        break;
+      case '2':
+        this.props.userLogout();
+        break;
+      default:
+        break;
+    }
+  };
 
   render() {
     const { t } = this.props;
@@ -45,7 +63,7 @@ class Header extends React.Component<Iprops, {}> {
     } else if (!isFullyAuthenticated(this.props.user) && !this.props.loading) {
       return null;
     }
-
+    const menuClass = this.state.menuOpen ? 'menu-open' : '';
     return (
       <span>
         {this.props.loading && (
@@ -63,16 +81,36 @@ class Header extends React.Component<Iprops, {}> {
         )}
 
         <span className="profile">
-          {t('welcome')}&nbsp;
-          <span className="name">{this.props.user.first}</span>
-          <span className="vertical" />
-          <Button
-            bsStyle="link"
-            onClick={this.props.userLogout}
-            className="header-settings"
-          >
-            <FontAwesomeIcon icon={['far', 'cog']} size="lg" />
-          </Button>
+          <span className="profile-text">
+            {t('welcome')}&nbsp;
+            <span className="name">{this.props.user.first}</span>
+            <span className="vertical" />
+          </span>
+          <ButtonToolbar className="header-menu">
+            <Dropdown
+              onToggle={isOpen => {
+                console.log('menu toggle', isOpen);
+                this.setState({ menuOpen: isOpen });
+              }}
+              id="header-dropdown"
+              onSelect={this.handleMenuSelect}
+            >
+              <Dropdown.Toggle bsStyle="link" className="header-menu-button">
+                <FontAwesomeIcon icon={['far', 'cog']} size="lg" />
+              </Dropdown.Toggle>
+              <div className="white-rectangle" />
+              <Dropdown.Menu className={menuClass}>
+                <MenuItem eventKey="1">
+                  <FontAwesomeIcon icon="user" fixedWidth /> &nbsp;{' '}
+                  {t('profile')}
+                </MenuItem>
+                <MenuItem eventKey="2">
+                  <FontAwesomeIcon icon={['far', 'sign-out']} fixedWidth />{' '}
+                  &nbsp; {t('logout')}
+                </MenuItem>
+              </Dropdown.Menu>
+            </Dropdown>
+          </ButtonToolbar>
         </span>
       </span>
     );

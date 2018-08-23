@@ -8,7 +8,8 @@ const API = {
       signup: `${root}user/signup`,
       approve: `${root}user/approve`,
       reject: `${root}user/reject`,
-      update: `${root}user/update`
+      update: `${root}user/update`,
+      updateprofile: `${root}user/updateprofile`
     },
     customer: {
       add: `${root}customer/add`

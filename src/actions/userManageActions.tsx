@@ -64,6 +64,30 @@ export function updateUser(user: Iuser): ThunkResult<void> {
       });
   };
 }
+export function updateUserProfile(user: Iuser): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    return axios
+      .post(API.POST.user.updateprofile, user)
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.USER_UPDATE_PROFILE_SUCCESS,
+            user: data.data
+          });
+          toastr.success('Success', 'Saved profile', constants.toastrSuccess);
+          return data;
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.USER_UPDATE_PROFILE_FAILED });
+        handleError(error, 'update profile');
+        throw error;
+      });
+  };
+}
 
 // export function getCustomers() {
 //   return (dispatch: any, getState: any) => {

@@ -35,13 +35,6 @@ const MenuItems = ({ user, t }: any) => (
         return '';
       }
     })}
-    <Item
-      key="/profile"
-      t={t}
-      title="Manage Profile"
-      icon="user"
-      url="/profile"
-    />
   </ListGroup>
 );
 

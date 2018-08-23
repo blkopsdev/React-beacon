@@ -1,11 +1,6 @@
 /* 
 * UserManageForm 
-* Edit and approve new users
-* Note: react-reactive-form is used for all form elements except for the facilities select, because we could not
-* figure out how to update the options for the select after the customer was selected.
-* the only problem with this is that the validation is complicated by having one field outside the generated form.
-* TODO a) wait for a response to your question here:  https://github.com/bietkul/react-reactive-form/issues/5
-* 
+* Edit existing users
 */
 
 import * as React from 'react';

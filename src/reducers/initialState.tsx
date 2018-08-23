@@ -40,5 +40,6 @@ export default {
   showEditUserModal: false,
   showEditCustomerModal: false,
   showEditFacilityModal: false,
-  showEditQueueUserModal: false
+  showEditQueueUserModal: false,
+  showEditProfileModal: false
 };

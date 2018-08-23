@@ -6,7 +6,11 @@ import { toastr } from 'react-redux-toastr';
 import constants from '../constants/constants';
 import * as AuthenticationContext from 'adal-angular';
 
-import { ItempUser, Iuser } from '../models';
+import { ItempUser, Iuser, IinitialState } from '../models';
+import { ThunkAction } from 'redux-thunk';
+// import {AxiosResponse} from 'axios';
+
+type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
 export const authContext = new AuthenticationContext({
   tenant: constants.adalAuth.tenant,
@@ -126,6 +130,35 @@ export function signUpDirect(tempUser: ItempUser) {
       .catch((error: any) => {
         dispatch({ type: types.USER_SIGNUP_FAILED });
         handleError(error, 'sign up');
+        throw error;
+      });
+  };
+}
+
+export const toggleEditProfileModal = () => ({
+  type: types.TOGGLE_MODAL_EDIT_PROFILE
+});
+
+export function updateUserProfile(user: Iuser): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    return axios
+      .post(API.POST.user.updateprofile, user)
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.USER_UPDATE_PROFILE_SUCCESS,
+            user: data.data
+          });
+          toastr.success('Success', 'Saved profile', constants.toastrSuccess);
+          return data;
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.USER_UPDATE_PROFILE_FAILED });
+        handleError(error, 'update profile');
         throw error;
       });
   };

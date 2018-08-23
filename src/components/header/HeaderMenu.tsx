@@ -7,19 +7,22 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { IinitialState, Iuser } from '../../models';
-import { userLogout } from '../../actions/userActions';
+import { userLogout, toggleEditProfileModal } from '../../actions/userActions';
 import { isFullyAuthenticated } from '../../actions/userActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ButtonToolbar, Dropdown, MenuItem } from 'react-bootstrap';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
+import EditProfileModal from './EditProfileModal';
 
-interface Iprops extends React.Props<Header> {
+interface Iprops {
   user: Iuser;
   userLogout: any;
   loading: boolean;
   t: TranslationFunction;
   i18n: I18n;
+  toggleEditProfileModal: any;
 }
+
 interface Istate {
   menuOpen: boolean;
 }
@@ -35,6 +38,7 @@ class Header extends React.Component<Iprops, Istate> {
     switch (eventKey) {
       case '1':
         console.log('open profile');
+        this.props.toggleEditProfileModal();
         break;
       case '2':
         this.props.userLogout();
@@ -89,7 +93,6 @@ class Header extends React.Component<Iprops, Istate> {
           <ButtonToolbar className="header-menu">
             <Dropdown
               onToggle={isOpen => {
-                console.log('menu toggle', isOpen);
                 this.setState({ menuOpen: isOpen });
               }}
               id="header-dropdown"
@@ -112,6 +115,7 @@ class Header extends React.Component<Iprops, Istate> {
             </Dropdown>
           </ButtonToolbar>
         </span>
+        <EditProfileModal t={this.props.t} colorButton="warning" />
       </span>
     );
   }
@@ -127,6 +131,6 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
 export default translate('common')(
   connect(
     mapStateToProps,
-    { userLogout }
+    { userLogout, toggleEditProfileModal }
   )(Header)
 );

@@ -125,7 +125,6 @@ runWithAdal(
                 <PrivateRoute path="/dashboard" component={Dashboard} />
                 <PrivateRoute path="/queue" component={TwoPaneLayout} />
                 <PrivateRoute path="/users" component={TwoPaneLayout} />
-                <PrivateRoute path="/profile" component={TwoPaneLayout} />
                 <Route component={NoMatch} />
               </Switch>
               <ReduxToastr position={'top-right'} />

@@ -77,6 +77,7 @@ export interface IinitialState {
   showEditCustomerModal: boolean;
   showEditFacilityModal: boolean;
   showEditQueueUserModal: boolean;
+  showEditProfileModal: boolean;
 }
 export interface Itile {
   icon: string | string[];

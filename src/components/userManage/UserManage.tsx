@@ -29,6 +29,7 @@ import SearchTableForm from '../common/SearchTableForm';
 import { TableUtil } from '../common/TableUtil';
 import EditUserManageModal from './EditUserManageModal';
 import EditCustomerModal from '../common/EditCustomerModal';
+import { closeAllModals } from '../../actions/commonActions';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -46,6 +47,7 @@ interface IdispatchProps {
   toggleEditUserModal: () => void;
   getUserManage: (value: number, search: string, customerID: string) => void;
   customers: Icustomer[];
+  closeAllModals: typeof closeAllModals;
 }
 
 interface Istate {
@@ -163,6 +165,9 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
       this.setState({ selectedRow: null });
     }
   }
+  componentWillUnmount() {
+    this.props.closeAllModals();
+  }
 
   getTrProps = (state: any, rowInfo: any) => {
     // console.log("ROWINFO", rowInfo);
@@ -276,7 +281,8 @@ export default translate('userManage')(
     {
       getUserManage,
       updateUser,
-      toggleEditUserModal
+      toggleEditUserModal,
+      closeAllModals
     }
   )(UserManage)
 );

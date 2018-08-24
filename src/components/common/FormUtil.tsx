@@ -111,7 +111,12 @@ export const FormUtil = {
         bsSize="sm"
       >
         <label className="control-label">
-          <Toggle icons={false} checked={value} {...handler()} />
+          <Toggle
+            icons={false}
+            checked={value}
+            {...handler()}
+            className="beacon-toggle"
+          />
           <span className="react-toggle-label">{meta.label}</span>
         </label>
       </FormGroup>
@@ -205,6 +210,7 @@ export const FormUtil = {
             placeholder={meta.placeholder}
             isMulti={meta.isMulti}
             classNamePrefix="react-select"
+            isClearable={true}
             {...handler()}
           />
         </FormGroup>

@@ -207,6 +207,9 @@ body {
     border-radius: 0px;
     box-shadow: none;
     min-height: calc(~"100vh - " @headerHeight);
+    border: none;
+    border-left: 2px #4E5254 solid;
+
   }
   &.from-left .modal-content {
     margin-right: auto;
@@ -253,11 +256,23 @@ body {
     text-transform: uppercase;
   }
 }
+.beacon-toggle{
+  &.react-toggle--focus .react-toggle-thumb{
+    box-shadow: none;
+  }
+  .react-toggle-thumb{
+    border-color: @primaryBlue;
+  }
+}
 
 .ReactTable.beacon-table {
   font-size: 1.4rem;
   font-weight: 400;
   border-top: none;
+  margin-bottom: 90px; // space for the "no rows found" message
+  .rt-noData{
+    transform: translate(-50%, 80%);
+  }
   &.dark .rt-tr.-odd {
     background-color: @dark;
     &:hover {
@@ -282,6 +297,12 @@ body {
       background-color: fade(@orange, 20%);
     }
   }
+  &.purple .rt-tr.-odd {
+    background-color: fade(@purple, 5%);
+    &:hover {
+      background-color: fade(@purple, 20%);
+    }
+  }
   &.purple .rt-tr.-even:hover {
     background-color: fade(@purple, 20%);
   }
@@ -301,7 +322,8 @@ body {
     background-color: fade(@purple, 05%);
   }
   .rt-td {
-    padding: 0px 5px;
+    padding: 5px 5px 0 5px;
+    min-height: 38px;
   }
   .rt-tr {
     background-color: white;

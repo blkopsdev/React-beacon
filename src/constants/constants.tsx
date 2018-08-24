@@ -54,20 +54,20 @@ const tiles = [
   {
     icon: 'users',
     title: 'userQueue',
-    src: 'https://placekitten.com/360/408',
+    src: 'https://placekitten.com/360/270',
     color: 'orange',
     width: 360,
-    height: 408,
+    height: 270,
     url: '/queue',
     securityFunction: securityFunctions.ManageUsers
   },
   {
     icon: ['far', 'hospital'],
     title: 'userManage',
-    src: 'https://placekitten.com/360/408',
+    src: 'https://placekitten.com/360/270',
     color: 'purple',
     width: 360,
-    height: 408,
+    height: 270,
     url: '/users',
     securityFunction: securityFunctions.ManageUsers
   },

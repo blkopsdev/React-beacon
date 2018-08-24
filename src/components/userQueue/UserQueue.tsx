@@ -24,6 +24,7 @@ import SearchTableForm from '../common/SearchTableForm';
 import { TableUtil } from '../common/TableUtil';
 import EditQueueUserModal from './EditQueueUserModal';
 import EditCustomerModal from '../common/EditCustomerModal';
+import { closeAllModals } from '../../actions/commonActions';
 
 // Field config to configure form
 const fieldConfig = {
@@ -59,6 +60,7 @@ interface IdispatchProps {
   approveUser: typeof approveUser;
   rejectUser: (value: string) => Promise<void>;
   getUserQueue: (value: number, anotherValue: string) => void;
+  closeAllModals: typeof closeAllModals;
 }
 
 interface Istate {
@@ -143,6 +145,9 @@ class UserQueue extends React.Component<Iprops & IdispatchProps, Istate> {
       this.setState({ selectedRow: null });
     }
   }
+  componentWillUnmount() {
+    this.props.closeAllModals();
+  }
   // handleTableProps(state: any, rowInfo: any, column: any, instance: any) {
 
   // }
@@ -152,6 +157,7 @@ class UserQueue extends React.Component<Iprops & IdispatchProps, Istate> {
         <Button
           bsStyle="link"
           className=""
+          bsSize="sm"
           disabled={this.props.loading}
           onClick={(e: React.MouseEvent<Button>) => {
             this.buttonInAction = true;
@@ -170,6 +176,7 @@ class UserQueue extends React.Component<Iprops & IdispatchProps, Istate> {
         <Button
           bsStyle="link"
           className=""
+          bsSize="sm"
           disabled={this.props.loading}
           onClick={(e: React.MouseEvent<Button>) => {
             this.buttonInAction = true;
@@ -294,7 +301,8 @@ export default translate('userQueue')(
       approveUser,
       rejectUser,
       getCustomers,
-      toggleEditQueueUserModal
+      toggleEditQueueUserModal,
+      closeAllModals
     }
   )(UserQueue)
 );

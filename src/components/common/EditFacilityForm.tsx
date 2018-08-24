@@ -161,7 +161,6 @@ class EditFacilityForm extends React.Component<Iprops, {}> {
               bsStyle={this.props.colorButton}
               type="submit"
               disabled={this.props.loading}
-              style={{ marginRight: '20px' }}
             >
               {t('save')}
             </Button>

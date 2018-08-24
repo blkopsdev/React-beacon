@@ -39,7 +39,7 @@
     float: left;
     width: 100%;
   }
-  .col-fluid {
+  .col-fluid { // the main content area
     position: relative;
     min-height: 1px;
     // padding-right: 15px;
@@ -47,6 +47,7 @@
     float: left;
     width: 100%;
     overflow: hidden;
+    min-height: 80vh
   }
   @media (min-width: 768px) and (max-width: 991px) {
     .col-fixed {
@@ -80,6 +81,9 @@
     .search-form-button{
       margin-top: 22px;
       padding-left: 0;
+    }
+    .react-select__menu{
+      z-index: 5;
     }
   }
 }

@@ -45,11 +45,12 @@
     "saveApprove": "Save & Approve",
     "***-***-****": "***-***-****",
     "country": "Country",
-    "active": "Is Active?"
+    "active": "Is Active?",
+    "editProfileModalTitle": "My Profile"
   },
   "userQueue": {
     "bannerTitle": "New User Queue",
-    "editUserModalTitle": "New User",
+    "newUserModalTitle": "New User",
     "userCustomer": "User Supplied Customer",
     "customer": "Customer",
     "addCustomerButton": "Add New Customer",

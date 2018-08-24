@@ -38,7 +38,7 @@ interface Iprops {
 interface IdispatchProps {
   showEditProfileModal: boolean;
   loading: boolean;
-  customerOptions: any[];
+  customers: any[];
   facilityOptions: any[];
   updateUserProfile: typeof updateUserProfile;
   toggleEditProfileModal: () => void;
@@ -63,13 +63,13 @@ class EditManageUserModal extends React.Component<Iprops & IdispatchProps, {}> {
             handleCancel={this.props.toggleEditProfileModal}
             loading={this.props.loading}
             colorButton={this.props.colorButton}
-            customer={this.props.customerOptions}
+            customers={this.props.customers}
             facilities={this.props.facilityOptions}
             facilityOptions={this.props.facilityOptions}
             user={this.props.user}
           />
         }
-        title={this.props.t('editUserModalTitle')}
+        title={this.props.t('user:editProfileModalTitle')}
         container={document.getElementById('two-pane-layout')}
       />
     );
@@ -81,7 +81,8 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     user: state.user,
     userManage: state.userManage,
     loading: state.ajaxCallsInProgress > 0,
-    customerOptions: getCustomerOptions(state.customers),
+    // customerOptions: getCustomerOptions(state.customers),
+    customers: state.customers,
     facilityOptions: getFacilitityOptions(state.facilities),
     showEditProfileModal: state.showEditProfileModal
   };

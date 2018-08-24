@@ -14,7 +14,7 @@ import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import { Iuser } from '../../models';
-import { forEach } from 'lodash';
+import { forEach, find } from 'lodash';
 
 import { userBaseConfigControls } from '../common/FormUtil';
 
@@ -37,16 +37,22 @@ interface Iprops extends React.Props<UserProfileForm> {
   colorButton: string;
   t: TranslationFunction;
   i18n: I18n;
-  customer: any;
+  customers: any[];
   facilities: any;
   user: Iuser;
   facilityOptions: any[];
 }
+interface Istate {
+  customer: any;
+}
 
-class UserProfileForm extends React.Component<Iprops, {}> {
+class UserProfileForm extends React.Component<Iprops, Istate> {
   public userForm: AbstractControl;
   constructor(props: Iprops) {
     super(props);
+    this.state = {
+      customer: {}
+    };
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setForm = this.setForm.bind(this);
@@ -63,6 +69,14 @@ class UserProfileForm extends React.Component<Iprops, {}> {
     const emailControl = this.userForm.get('email') as AbstractControlEdited;
     emailControl.disable();
     emailControl.stateChanges.next();
+
+    // get the customer name
+    const customer = find(this.props.customers, {
+      id: this.props.user.customerID
+    });
+    if (customer) {
+      this.setState({ customer });
+    }
   }
 
   handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
@@ -95,6 +109,9 @@ class UserProfileForm extends React.Component<Iprops, {}> {
         <div className={formClassName}>
           <form onSubmit={this.handleSubmit} className="user-form">
             <FormGenerator onMount={this.setForm} fieldConfig={fieldConfig} />
+            <Col xs={12}>
+              <label>Company: </label> {this.state.customer.name}
+            </Col>
             <Col xs={12} className="form-buttons text-right">
               <Button
                 bsStyle="link"

@@ -68,6 +68,7 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
         icon: '',
         title: '',
         src: '',
+        srcBanner: '',
         color: '',
         width: 359,
         height: 136,
@@ -216,7 +217,7 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
       <div className="user-manage">
         <Banner
           title={t('bannerTitle')}
-          img="http://placekitten.com/1440/60"
+          img={this.state.currentTile.srcBanner}
           color={constants.colors[`${this.state.currentTile.color}`]}
         />
         <SearchTableForm
@@ -241,6 +242,7 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
           nextText={t('common:next')}
           onPageChange={this.onPageChange}
           sortable={false}
+          noDataText={t('common:noDataText')}
         />
         <EditUserManageModal
           selectedUser={this.props.userManage.data[this.state.selectedRow]}

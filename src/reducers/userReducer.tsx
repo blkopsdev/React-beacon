@@ -17,6 +17,7 @@ export default function user(state: Iuser = initialState.user, action: any) {
           return securityF.toUpperCase();
         }
       );
+      // console.error('reducer data', state, action.user)
       return { ...state, ...action.user, securityFunctions } as Iuser;
     case types.AAD_LOGIN_SUCCESS:
       return Object.assign({}, state, { token: action.token });

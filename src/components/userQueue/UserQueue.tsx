@@ -81,6 +81,7 @@ class UserQueue extends React.Component<Iprops & IdispatchProps, Istate> {
         icon: '',
         title: '',
         src: '',
+        srcBanner: '',
         color: '',
         width: 359,
         height: 136,
@@ -232,7 +233,7 @@ class UserQueue extends React.Component<Iprops & IdispatchProps, Istate> {
       <div className="user-queue">
         <Banner
           title={t('bannerTitle')}
-          img="http://placekitten.com/1440/60"
+          img={this.state.currentTile.srcBanner}
           color={constants.colors[`${this.state.currentTile.color}`]}
         />
         <SearchTableForm
@@ -257,6 +258,7 @@ class UserQueue extends React.Component<Iprops & IdispatchProps, Istate> {
           nextText={t('common:next')}
           onPageChange={this.onPageChange}
           sortable={false}
+          noDataText={t('common:noDataText')}
         />
         <EditQueueUserModal
           selectedQueueObject={

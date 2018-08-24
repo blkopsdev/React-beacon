@@ -317,8 +317,9 @@ export const userBaseConfigControls = {
       ]
     },
     render: FormUtil.TextInput,
-    meta: { label: 'email', colWidth: 6, type: 'text' }
+    meta: { label: 'email', colWidth: 12, type: 'text' }
   },
+
   phone: {
     options: {
       validators: [
@@ -341,6 +342,6 @@ export const userBaseConfigControls = {
       validators: Validators.required
     },
     render: FormUtil.TextInput,
-    meta: { label: 'position', colWidth: 12, type: 'text' }
+    meta: { label: 'position', colWidth: 6, type: 'text' }
   }
 };

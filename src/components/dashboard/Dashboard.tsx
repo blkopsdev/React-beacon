@@ -43,7 +43,7 @@ class Dashboard extends React.Component<Iprops, {}> {
         <div key={tile.icon}>
           <Link to={tile.url}>
             <div className={`tile ${tile.color}`} style={styles}>
-              <img src={tile.src} />
+              <img src={tile.src} style={styles} />
               <span className="title">
                 <FontAwesomeIcon icon={tile.icon} />
                 {this.props.t(tile.title)}

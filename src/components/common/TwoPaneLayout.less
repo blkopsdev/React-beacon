@@ -1,5 +1,5 @@
 @import '../../less/variables.less';
-@highlightBlue: #38A1DF;
+
 .two-pane-layout {
   .side-menu {
     padding-top: 30px;
@@ -18,7 +18,10 @@
       text-transform: uppercase;
       padding: 5px 15px;
     }
-    .list-group-item.active, .list-group-item.active:hover, .list-group-item.active:focus {
+    .list-group-item.active, .list-group-item.active:focus {
+      background-color: darken(@textBlue, 15%);
+    }
+    .list-group-item:hover {
       background-color: @highlightBlue;
     }
     .list-group-item:first-child {
@@ -79,7 +82,7 @@
     margin-bottom: 10px;
     padding-left:22px;
     .search-form-button{
-      margin-top: 22px;
+      margin-top: 24px;
       padding-left: 0;
     }
     .react-select__menu{

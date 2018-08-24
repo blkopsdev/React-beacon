@@ -19,6 +19,8 @@ export default function customers(
         (property, key) => property !== null
       );
       return [...customersFiltered, updatedCustomer] as Icustomer[];
+    case types.USER_LOGOUT_SUCCESS:
+      return initialState.customers;
 
     default:
       return state;

@@ -71,6 +71,7 @@ export function userLogin() {
     return axios
       .post(API.POST.user.login)
       .then(data => {
+        console.log('login data', data.data);
         if (!data.data) {
           throw undefined;
         } else {
@@ -105,12 +106,11 @@ export const getToken = () => {
 
 export function userLogout() {
   return (dispatch: any, getState: any) => {
-    dispatch(beginAjaxCall());
     dispatch({ type: types.USER_LOGOUT_SUCCESS });
+    localStorage.removeItem('state-core-care');
     setTimeout(() => {
       authContext.logOut();
     }, 100); // give it time to persist this to local storage
-    // authContext.logOut();
   };
 }
 

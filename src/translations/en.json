@@ -12,7 +12,8 @@
     "customerVatLabel": "VAT",
     "newFacilityModalTitle": "New Facility",
     "facilityNameLabel": "New Facility Name",
-    "selectCustomerWarning": "You must select a customer first."
+    "selectCustomerWarning": "You must select a customer first.",
+    "noDataText": "Sorry! We could not find and rows that matched that search."
   },
   "auth": {
     "loginButton": "Login with Azure",

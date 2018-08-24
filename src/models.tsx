@@ -83,6 +83,7 @@ export interface Itile {
   icon: string | string[];
   title: string;
   src: string;
+  srcBanner: string;
   color: string;
   width: number;
   height: number;

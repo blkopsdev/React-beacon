@@ -1,18 +1,63 @@
 import { transitionInType, transitionOutType, Iuser, Itile } from '../models';
 import { find } from 'lodash';
+import { emptyTile } from '../reducers/initialState';
 
 const securityFunctions = {
-  ManageUsers: 'AA6F93B7-D278-4117-9B14-26DFA795742E',
-  ManageTrainingPayment: '3A0D4616-4179-4BA1-98F0-6A929A3A5E0D',
-  ManageSecurity: 'B397D3EB-D55E-416A-9C48-AFE858AC5091',
-  ViewInventory: 'A98B1372-81D3-43E1-A81A-3F382CE83542',
-  ManageInventory: 'DD65AB77-23D6-4FE0-9AD7-5729B6E5C40D',
-  QuoteForInvoice: 'DF7EA0C4-98C3-40BF-9E73-03E5BF50F9D0',
-  SignUpTeamMembers: '947CF4F4-10AC-4A38-BA7B-F069605E7A6C',
-  ManageTeamMembers: 'C75A644C-54A5-4EA3-95D2-AB58D2A39E8E',
-  ManageIndividualTraining: '977049C6-3EB6-40CF-938F-C3B766C5EECD',
-  ManageEmployeeTraining: '26785416-C391-4B14-AE9F-B5A56F8D223E',
-  Payment: '655401EA-4AA1-4543-91E0-9F5A3AB754C3'
+  ManageUsers: {
+    id: 'AA6F93B7-D278-4117-9B14-26DFA795742E',
+    name: 'ManageUsers',
+    description: ''
+  },
+  ManageTrainingPayment: {
+    id: '3A0D4616-4179-4BA1-98F0-6A929A3A5E0D',
+    name: 'ManageTrainingPayment',
+    description: ''
+  },
+  ManageSecurity: {
+    id: 'B397D3EB-D55E-416A-9C48-AFE858AC5091',
+    name: 'ManageSecurity',
+    description: ''
+  },
+  ViewInventory: {
+    id: 'A98B1372-81D3-43E1-A81A-3F382CE83542',
+    name: 'ViewInventory',
+    description: ''
+  },
+  ManageInventory: {
+    id: 'DD65AB77-23D6-4FE0-9AD7-5729B6E5C40D',
+    name: 'ManageInventory',
+    description: ''
+  },
+  QuoteForInvoice: {
+    id: 'DF7EA0C4-98C3-40BF-9E73-03E5BF50F9D0',
+    name: 'QuoteForInvoice',
+    description: ''
+  },
+  SignUpTeamMembers: {
+    id: '947CF4F4-10AC-4A38-BA7B-F069605E7A6C',
+    name: 'SignUpTeamMembers',
+    description: ''
+  },
+  ManageTeamMembers: {
+    id: 'C75A644C-54A5-4EA3-95D2-AB58D2A39E8E',
+    name: 'ManageTeamMembers',
+    description: ''
+  },
+  ManageIndividualTraining: {
+    id: '977049C6-3EB6-40CF-938F-C3B766C5EECD',
+    name: 'ManageIndividualTraining',
+    description: ''
+  },
+  ManageEmployeeTraining: {
+    id: '26785416-C391-4B14-AE9F-B5A56F8D223E',
+    name: 'ManageEmployeeTraining',
+    description: ''
+  },
+  Payment: {
+    id: '655401EA-4AA1-4543-91E0-9F5A3AB754C3',
+    name: 'Payment',
+    description: ''
+  }
 };
 
 const colors = {
@@ -40,7 +85,8 @@ const tiles = [
     width: 360,
     height: 136,
     url: '/alerts',
-    securityFunction: ''
+    securityFunction: '',
+    description: ''
   },
   {
     icon: ['far', 'calendar-check'],
@@ -51,7 +97,8 @@ const tiles = [
     width: 360,
     height: 408,
     url: '/training',
-    securityFunction: securityFunctions.ManageTrainingPayment
+    securityFunction: securityFunctions.ManageTrainingPayment.id,
+    description: ''
   },
   {
     icon: 'users',
@@ -62,7 +109,8 @@ const tiles = [
     width: 360,
     height: 400,
     url: '/queue',
-    securityFunction: securityFunctions.ManageUsers
+    securityFunction: securityFunctions.ManageUsers.id,
+    description: ''
   },
   {
     icon: ['far', 'hospital'],
@@ -73,7 +121,8 @@ const tiles = [
     width: 360,
     height: 400,
     url: '/users',
-    securityFunction: securityFunctions.ManageUsers
+    securityFunction: securityFunctions.ManageUsers.id,
+    description: ''
   },
   {
     icon: 'icon-maintenance',
@@ -95,7 +144,8 @@ const tiles = [
     width: 360,
     height: 272,
     url: '/reports',
-    securityFunction: ''
+    securityFunction: '',
+    description: ''
   },
   {
     icon: 'icon-team',
@@ -106,7 +156,8 @@ const tiles = [
     width: 359,
     height: 272,
     url: '/team',
-    securityFunction: ''
+    securityFunction: '',
+    description: ''
   },
   {
     icon: 'icon-docs',
@@ -117,7 +168,8 @@ const tiles = [
     width: 360,
     height: 272,
     url: '/docs',
-    securityFunction: ''
+    securityFunction: '',
+    description: ''
   },
   {
     icon: 'icon-inventory',
@@ -128,7 +180,8 @@ const tiles = [
     width: 360,
     height: 408,
     url: '/inventory',
-    securityFunction: ''
+    securityFunction: '',
+    description: ''
   },
   {
     icon: 'icon-admin',
@@ -139,7 +192,8 @@ const tiles = [
     width: 360,
     height: 272,
     url: '/admin',
-    securityFunction: ''
+    securityFunction: '',
+    description: ''
   },
   {
     icon: 'icon-billing',
@@ -150,7 +204,8 @@ const tiles = [
     width: 359,
     height: 408,
     url: '/billing',
-    securityFunction: ''
+    securityFunction: '',
+    description: ''
   },
   {
     icon: 'icon-groups',
@@ -161,7 +216,8 @@ const tiles = [
     width: 360,
     height: 272,
     url: '/groups',
-    securityFunction: ''
+    securityFunction: '',
+    description: ''
   },
   {
     icon: 'icon-support',
@@ -172,7 +228,8 @@ const tiles = [
     width: 359,
     height: 136,
     url: '/support',
-    securityFunction: ''
+    securityFunction: '',
+    description: ''
   }
 ];
 
@@ -210,19 +267,12 @@ const constants = {
     }
   },
   getTileByURL: (url: string): Itile => {
-    return (
-      find(tiles, { url }) || {
-        icon: '',
-        title: '',
-        src: '',
-        srcBanner: '',
-        color: '',
-        width: 359,
-        height: 136,
-        url: '',
-        securityFunction: ''
-      }
-    );
+    const foundTile = find(tiles, { url });
+    if (foundTile && foundTile.url.length) {
+      return foundTile as Itile;
+    } else {
+      return emptyTile;
+    }
   },
 
   // {value: '', label: ''}

@@ -8,18 +8,26 @@ function userManageData(state: Iuser[] = [], action: any): Iuser[] {
     case types.USER_MANAGE_SUCCESS:
       // return action.users;
       return map(action.users, user => {
+        const securityFunctions = map(user.securityFunctions, securityF => {
+          return securityF.toUpperCase();
+        });
         return {
           ...initialState.user,
-          ...pickBy(user, (property, key) => property !== null)
+          ...pickBy(user, (property, key) => property !== null),
+          securityFunctions
         };
       });
     case types.USER_UPDATE_SUCCESS:
       const filteredUsers = filter(state, u => u.id !== action.user.id);
+      const securityFunc = map(action.user.securityFunctions, securityF => {
+        return securityF.toUpperCase();
+      });
+      const updatedUser = {
+        ...pickBy(action.user, (property, key) => property !== null),
+        securityFunctions: securityFunc
+      };
 
-      return [
-        ...filteredUsers,
-        pickBy(action.user, (property, key) => property !== null)
-      ] as Iuser[];
+      return [...filteredUsers, updatedUser] as Iuser[];
 
     case types.USER_LOGOUT_SUCCESS:
       return [];

@@ -78,6 +78,7 @@ export interface IinitialState {
   showEditFacilityModal: boolean;
   showEditQueueUserModal: boolean;
   showEditProfileModal: boolean;
+  showSecurityFunctionsModal: boolean;
 }
 export interface Itile {
   icon: string | string[];
@@ -89,6 +90,7 @@ export interface Itile {
   height: number;
   url: string;
   securityFunction: string;
+  description: string;
 }
 
 export interface Icustomer {

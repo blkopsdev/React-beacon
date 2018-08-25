@@ -11,24 +11,12 @@ import {
   toggleEditProfileModal,
   updateUserProfile
 } from '../../actions/userActions';
-import { IinitialState, Icustomer, Ifacility, Iuser } from '../../models';
+import { IinitialState, Iuser } from '../../models';
 // import constants from '../../constants/constants';
 import CommonModal from '../common/CommonModal';
 import UserProfileForm from './UserProfileForm';
 import { TranslationFunction } from 'react-i18next';
-import { map } from 'lodash';
-
-const getCustomerOptions = (customers: Icustomer[]) => {
-  return map(customers, (cust: Icustomer) => {
-    return { value: cust.id, label: cust.name };
-  });
-};
-
-const getFacilitityOptions = (facilities: Ifacility[]) => {
-  return map(facilities, (facility: Ifacility) => {
-    return { value: facility.id, label: facility.name };
-  });
-};
+import { FormUtil } from '../common/FormUtil';
 
 interface Iprops {
   colorButton: any;
@@ -84,9 +72,8 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     user: state.user,
     userManage: state.userManage,
     loading: state.ajaxCallsInProgress > 0,
-    // customerOptions: getCustomerOptions(state.customers),
     customers: state.customers,
-    facilityOptions: getFacilitityOptions(state.facilities),
+    facilityOptions: FormUtil.convertToOptions(state.facilities),
     showEditProfileModal: state.showEditProfileModal
   };
 };
@@ -95,8 +82,6 @@ export default connect(
   mapStateToProps,
   {
     toggleEditProfileModal,
-    getFacilitityOptions,
-    getCustomerOptions,
     getFacilitiesByCustomer,
     updateUserProfile
   }

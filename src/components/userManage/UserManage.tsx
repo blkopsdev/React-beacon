@@ -6,7 +6,8 @@ import { connect } from 'react-redux';
 import {
   getUserManage,
   updateUser,
-  toggleEditUserModal
+  toggleEditUserModal,
+  toggleSecurityFunctionsModal
 } from '../../actions/userManageActions';
 import {
   IinitialState,
@@ -15,6 +16,8 @@ import {
   IuserManage,
   Icustomer
 } from '../../models';
+import CommonModal from '../common/CommonModal';
+import { emptyTile } from '../../reducers/initialState';
 import { RouteComponentProps } from 'react-router-dom';
 import ReactTable from 'react-table';
 // import { Button } from "react-bootstrap";
@@ -38,6 +41,7 @@ interface Iprops extends RouteComponentProps<any> {
   showEditUserModal: boolean;
   showEditCustomerModal: boolean;
   showEditFacilityModal: boolean;
+  showSecurityFunctionsModal: boolean;
   loading: boolean;
   userManage: IuserManage;
 }
@@ -45,6 +49,7 @@ interface Iprops extends RouteComponentProps<any> {
 interface IdispatchProps {
   // Add your dispatcher properties here
   toggleEditUserModal: () => void;
+  toggleSecurityFunctionsModal: () => void;
   getUserManage: (value: number, search: string, customerID: string) => void;
   customers: Icustomer[];
   closeAllModals: typeof closeAllModals;
@@ -64,17 +69,7 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
     this.getTrProps = this.getTrProps.bind(this);
     this.state = {
       selectedRow: null,
-      currentTile: {
-        icon: '',
-        title: '',
-        src: '',
-        srcBanner: '',
-        color: '',
-        width: 359,
-        height: 136,
-        url: '',
-        securityFunction: ''
-      }
+      currentTile: emptyTile
     };
     this.columns = TableUtil.translateHeaders(
       [
@@ -257,6 +252,14 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
             constants.colors[`${this.state.currentTile.color}Button`]
           }
         />
+        <CommonModal
+          modalVisible={this.props.showSecurityFunctionsModal}
+          className="security-modal second-modal"
+          onHide={this.props.toggleSecurityFunctionsModal}
+          body={<div> security functions </div>}
+          title={t('securityFunctionsModalTitle')}
+          container={document.getElementById('two-pane-layout')}
+        />
       </div>
     );
   }
@@ -274,7 +277,8 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     loading: state.ajaxCallsInProgress > 0,
     showEditUserModal: state.showEditUserModal,
     showEditCustomerModal: state.showEditCustomerModal,
-    showEditFacilityModal: state.showEditFacilityModal
+    showEditFacilityModal: state.showEditFacilityModal,
+    showSecurityFunctionsModal: state.showSecurityFunctionsModal
   };
 };
 export default translate('userManage')(
@@ -284,6 +288,7 @@ export default translate('userManage')(
       getUserManage,
       updateUser,
       toggleEditUserModal,
+      toggleSecurityFunctionsModal,
       closeAllModals
     }
   )(UserManage)

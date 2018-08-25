@@ -121,6 +121,9 @@ export const toggleEditCustomerModal = () => ({
 export const toggleEditFacilityModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_FACILITY
 });
+export const toggleSecurityFunctionsModal = () => ({
+  type: types.TOGGLE_MODAL_SECURITY_FUNCTIONS
+});
 
 function handleError(error: any, message: string) {
   let msg = '';

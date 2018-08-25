@@ -8,31 +8,20 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import {
   updateUser,
-  toggleEditUserModal
+  toggleEditUserModal,
+  toggleSecurityFunctionsModal
 } from '../../actions/userManageActions';
 import {
   getFacilitiesByCustomer,
   toggleEditCustomerModal,
   toggleEditFacilityModal
 } from '../../actions/userQueueActions';
-import { IinitialState, Icustomer, Ifacility, Iuser } from '../../models';
+import { IinitialState, Iuser } from '../../models';
 // import constants from '../../constants/constants';
 import CommonModal from '../common/CommonModal';
 import UserManageForm from './UserManageForm';
 import { TranslationFunction } from 'react-i18next';
-import { map } from 'lodash';
-
-const getCustomerOptions = (customers: Icustomer[]) => {
-  return map(customers, (cust: Icustomer) => {
-    return { value: cust.id, label: cust.name };
-  });
-};
-
-const getFacilitityOptions = (facilities: Ifacility[]) => {
-  return map(facilities, (facility: Ifacility) => {
-    return { value: facility.id, label: facility.name };
-  });
-};
+import { FormUtil } from '../common/FormUtil';
 
 interface Iprops {
   selectedUser: Iuser;
@@ -50,6 +39,7 @@ interface IdispatchProps {
   getFacilitiesByCustomer: () => Promise<void>;
   toggleEditCustomerModal: () => void;
   toggleEditFacilityModal: () => void;
+  toggleSecurityFunctionsModal: () => void;
 }
 
 class EditManageUserModal extends React.Component<Iprops & IdispatchProps, {}> {
@@ -75,6 +65,9 @@ class EditManageUserModal extends React.Component<Iprops & IdispatchProps, {}> {
             getFacilitiesByCustomer={this.props.getFacilitiesByCustomer}
             toggleEditCustomerModal={this.props.toggleEditCustomerModal}
             toggleEditFacilityModal={this.props.toggleEditFacilityModal}
+            toggleSecurityFunctionsModal={
+              this.props.toggleSecurityFunctionsModal
+            }
           />
         }
         title={this.props.t('editUserModalTitle')}
@@ -89,8 +82,8 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     user: state.user,
     userManage: state.userManage,
     loading: state.ajaxCallsInProgress > 0,
-    customerOptions: getCustomerOptions(state.customers),
-    facilityOptions: getFacilitityOptions(state.facilities),
+    customerOptions: FormUtil.convertToOptions(state.customers),
+    facilityOptions: FormUtil.convertToOptions(state.facilities),
     showEditUserModal: state.showEditUserModal,
     showEditCustomerModal: state.showEditCustomerModal,
     showEditFacilityModal: state.showEditFacilityModal
@@ -102,10 +95,9 @@ export default connect(
   {
     updateUser,
     toggleEditUserModal,
-    getFacilitityOptions,
-    getCustomerOptions,
     getFacilitiesByCustomer,
     toggleEditCustomerModal,
-    toggleEditFacilityModal
+    toggleEditFacilityModal,
+    toggleSecurityFunctionsModal
   }
 )(EditManageUserModal);

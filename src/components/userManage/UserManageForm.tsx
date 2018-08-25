@@ -21,6 +21,11 @@ import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
 import { Iuser } from '../../models';
 import EditFacilityModal from '../common/EditFacilityModal';
 
+// passing in an object, but we need an array back
+const securityOptions = [
+  ...FormUtil.convertToOptions(constants.securityFunctions)
+];
+
 interface IstateChanges extends Observable<any> {
   next: () => void;
 }
@@ -34,7 +39,8 @@ const buildFieldConfig = (
   facilityOptions: any[],
   getFacilitiesByCustomer: (value: string) => Promise<void>,
   toggleEditCustomerModal: () => void,
-  toggleEditFacilityModal: () => void
+  toggleEditFacilityModal: () => void,
+  toggleSecurityFunctionsModal: () => void
 ) => {
   // Field config to configure form
   const fieldConfigControls = {
@@ -76,6 +82,21 @@ const buildFieldConfig = (
         validators: Validators.required
       }
     },
+    securityFunctions: {
+      render: FormUtil.SelectWithButton,
+      meta: {
+        options: securityOptions,
+        label: 'userManage:securityLabel',
+        colWidth: 12,
+        placeholder: 'userManage:securitySearchPlaceholder',
+        buttonName: 'userManage:securityButton',
+        buttonAction: toggleSecurityFunctionsModal,
+        isMulti: true
+      },
+      options: {
+        validators: Validators.required
+      }
+    },
     isActive: {
       render: FormUtil.Toggle,
       meta: { label: 'user:active', colWidth: 12 }
@@ -100,6 +121,7 @@ interface Iprops extends React.Props<UserManageForm> {
   facilityOptions: any[];
   toggleEditCustomerModal: () => void;
   toggleEditFacilityModal: () => void;
+  toggleSecurityFunctionsModal: () => void;
 }
 
 class UserManageForm extends React.Component<Iprops, {}> {
@@ -113,7 +135,8 @@ class UserManageForm extends React.Component<Iprops, {}> {
         this.props.facilityOptions,
         this.props.getFacilitiesByCustomer,
         this.props.toggleEditCustomerModal,
-        this.props.toggleEditFacilityModal
+        this.props.toggleEditFacilityModal,
+        this.props.toggleSecurityFunctionsModal
       ),
       this.props.t
     );
@@ -156,7 +179,11 @@ class UserManageForm extends React.Component<Iprops, {}> {
       this.userForm.patchValue({ [key]: value });
     });
 
-    const { customerID, facilities } = this.props.selectedUser;
+    const {
+      customerID,
+      facilities,
+      securityFunctions
+    } = this.props.selectedUser;
     this.userForm.patchValue({
       customerID: find(this.props.customerOptions, { value: customerID })
     });
@@ -169,6 +196,11 @@ class UserManageForm extends React.Component<Iprops, {}> {
     });
     this.userForm.patchValue({ facilities: facilitiesArray });
     document.addEventListener('newFacility', this.handleNewFacility, false);
+
+    const securityFunctionsArray = filter(securityOptions, (sec: any) => {
+      return securityFunctions.indexOf(sec.value) !== -1 ? true : false;
+    });
+    this.userForm.patchValue({ securityFunctions: securityFunctionsArray });
   }
   componentWillUnmount() {
     document.removeEventListener('newFacility', this.handleNewFacility, false);
@@ -199,12 +231,19 @@ class UserManageForm extends React.Component<Iprops, {}> {
         return { id: option.value };
       }
     );
+    const securityFunctionsArray = map(
+      this.userForm.value.securityFunctions,
+      (option: { value: string; label: string }) => {
+        return { id: option.value };
+      }
+    );
     this.props.handleSubmit(
       {
         id: this.props.selectedUser.id,
         ...this.userForm.value,
         customerID: this.userForm.value.customerID.value,
-        facilities: facilitiesArray
+        facilities: facilitiesArray,
+        securityFunctions: securityFunctionsArray
       },
       shouldApprove,
       this.props.selectedUser.id

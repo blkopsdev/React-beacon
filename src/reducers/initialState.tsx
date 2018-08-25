@@ -41,5 +41,19 @@ export default {
   showEditCustomerModal: false,
   showEditFacilityModal: false,
   showEditQueueUserModal: false,
-  showEditProfileModal: false
+  showEditProfileModal: false,
+  showSecurityFunctionsModal: false
+};
+
+export const emptyTile = {
+  icon: '',
+  title: '',
+  src: '',
+  srcBanner: '',
+  color: '',
+  width: 359,
+  height: 136,
+  url: '',
+  securityFunction: '',
+  description: ''
 };

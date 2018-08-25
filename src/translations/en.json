@@ -85,7 +85,11 @@
     "searchPlaceholder": "Search by First, Last, or Email",
     "customerPlaceholder": "Select Customer",
     "customerSearchPlaceholder": "Search...",
-    "facilitySearchPlaceholder": "Search..."
+    "facilitySearchPlaceholder": "Search...",
+    "securitySearchPlaceholder": "Search...",
+    "securityButton": "Security Descriptions",
+    "securityFunctionsModalTitle": "Security Descriptions",
+    "securityLabel": "Security"
   },
   "tiles": {
     "alerts": "Alerts",

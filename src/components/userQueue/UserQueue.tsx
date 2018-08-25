@@ -11,6 +11,7 @@ import {
   toggleEditQueueUserModal
 } from '../../actions/userQueueActions';
 import { IinitialState, Iuser, Itile, IuserQueue } from '../../models';
+import { emptyTile } from '../../reducers/initialState';
 import { RouteComponentProps } from 'react-router-dom';
 import ReactTable from 'react-table';
 import { Button } from 'react-bootstrap';
@@ -77,17 +78,7 @@ class UserQueue extends React.Component<Iprops & IdispatchProps, Istate> {
     this.getTrProps = this.getTrProps.bind(this);
     this.state = {
       selectedRow: null,
-      currentTile: {
-        icon: '',
-        title: '',
-        src: '',
-        srcBanner: '',
-        color: '',
-        width: 359,
-        height: 136,
-        url: '',
-        securityFunction: ''
-      }
+      currentTile: emptyTile
     };
     this.columns = TableUtil.translateHeaders(
       [

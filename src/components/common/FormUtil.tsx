@@ -13,7 +13,7 @@ import {
   AbstractControl,
   ValidationErrors
 } from 'react-reactive-form';
-import { mapValues, find } from 'lodash';
+import { mapValues, find, map } from 'lodash';
 import { TranslationFunction } from 'react-i18next';
 import Select, { components } from 'react-select';
 import Toggle from 'react-toggle';
@@ -40,9 +40,10 @@ const ControlComponent = (props: any) => (
 //           <CustomFeedback />
 //          </FormControl.Feedback>
 
+// TODO add a type that accepts an array or an object:  Array<{ id: string; name: string }>
 export const FormUtil = {
-  convertToOptions: (items: Array<{ id: string; name: string }>) => {
-    return items.map(item => {
+  convertToOptions: (items: any) => {
+    return map(items, (item: any) => {
       return { value: item.id, label: item.name };
     });
   },

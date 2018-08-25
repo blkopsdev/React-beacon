@@ -7,16 +7,18 @@ import * as React from 'react';
 import {
   FormGenerator,
   AbstractControl,
-  Observable
+  Observable,
+  Validators,
+  FieldConfig
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
 import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import { Iuser } from '../../models';
-import { forEach, find } from 'lodash';
+import { forEach, find, differenceBy, filter } from 'lodash';
 
-import { userBaseConfigControls } from '../common/FormUtil';
+import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
 
 interface IstateChanges extends Observable<any> {
   next: () => void;
@@ -26,8 +28,34 @@ interface AbstractControlEdited extends AbstractControl {
   stateChanges: IstateChanges;
 }
 
-const fieldConfig = {
-  controls: { ...userBaseConfigControls }
+const buildFieldConfig = (facilityOptions: any[]) => {
+  // Field config to configure form
+  const fieldConfigControls = {
+    customer: {
+      options: {
+        validators: Validators.required
+      },
+      render: FormUtil.TextInput,
+      meta: { label: 'company', colWidth: 12, type: 'text' }
+    },
+    facilities: {
+      render: FormUtil.Select,
+      meta: {
+        options: facilityOptions,
+        label: 'common:facility',
+        colWidth: 12,
+        placeholder: 'userQueue:facilitySearchPlaceholder',
+        isMulti: true
+      },
+      options: {
+        validators: Validators.required
+      }
+    }
+  };
+  const fieldConfig = {
+    controls: { ...userBaseConfigControls, ...fieldConfigControls }
+  };
+  return fieldConfig as FieldConfig;
 };
 
 interface Iprops extends React.Props<UserProfileForm> {
@@ -42,24 +70,20 @@ interface Iprops extends React.Props<UserProfileForm> {
   user: Iuser;
   facilityOptions: any[];
 }
-interface Istate {
-  customer: any;
-}
 
-class UserProfileForm extends React.Component<Iprops, Istate> {
+class UserProfileForm extends React.Component<Iprops, {}> {
   public userForm: AbstractControl;
+  private fieldConfig: FieldConfig;
   constructor(props: Iprops) {
     super(props);
-    this.state = {
-      customer: {}
-    };
+    this.fieldConfig = FormUtil.translateForm(
+      buildFieldConfig(this.props.facilityOptions),
+      this.props.t
+    );
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setForm = this.setForm.bind(this);
   }
-  // componentDidUpdate(prevProps: Iprops) {
-
-  // }
 
   componentDidMount() {
     // set values
@@ -68,14 +92,51 @@ class UserProfileForm extends React.Component<Iprops, Istate> {
     });
     const emailControl = this.userForm.get('email') as AbstractControlEdited;
     emailControl.disable();
-    emailControl.stateChanges.next();
 
     // get the customer name
-    const customer = find(this.props.customers, {
+    const customer: any = find(this.props.customers, {
       id: this.props.user.customerID
+    }) || { name: '' };
+    if (customer && customer.name.length) {
+      this.userForm.patchValue({ customer: customer.name });
+    }
+    const customerControl = this.userForm.get(
+      'customer'
+    ) as AbstractControlEdited;
+    customerControl.disable();
+
+    const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
+      return find(this.props.user.facilities, { id: fac.value }) ? true : false;
     });
-    if (customer) {
-      this.setState({ customer });
+    this.userForm.patchValue({ facilities: facilitiesArray });
+  }
+  componentDidUpdate(prevProps: Iprops) {
+    if (
+      differenceBy(
+        prevProps.facilityOptions,
+        this.props.facilityOptions,
+        'value'
+      ).length ||
+      prevProps.facilityOptions.length !== this.props.facilityOptions.length
+    ) {
+      console.log(
+        'received new facilities',
+        this.props.facilityOptions,
+        prevProps.facilityOptions
+      );
+      const facilitySelectControl = this.userForm.get(
+        'facilities'
+      ) as AbstractControlEdited;
+      facilitySelectControl.meta.options = this.props.facilityOptions;
+      facilitySelectControl.stateChanges.next();
+      const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
+        return find(this.props.user.facilities, {
+          id: fac.value
+        })
+          ? true
+          : false;
+      });
+      this.userForm.patchValue({ facilities: facilitiesArray });
     }
   }
 
@@ -108,10 +169,10 @@ class UserProfileForm extends React.Component<Iprops, Istate> {
       <div>
         <div className={formClassName}>
           <form onSubmit={this.handleSubmit} className="user-form">
-            <FormGenerator onMount={this.setForm} fieldConfig={fieldConfig} />
-            <Col xs={12}>
-              <label>Company: </label> {this.state.customer.name}
-            </Col>
+            <FormGenerator
+              onMount={this.setForm}
+              fieldConfig={this.fieldConfig}
+            />
             <Col xs={12} className="form-buttons text-right">
               <Button
                 bsStyle="link"

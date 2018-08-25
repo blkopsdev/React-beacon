@@ -206,9 +206,6 @@ class UserQueueForm extends React.Component<Iprops, {}> {
     forEach(this.props.selectedQueueObject.user, (value, key) => {
       this.userForm.patchValue({ [key]: value });
     });
-    this.userForm.patchValue({
-      fac: 'HQ Raleigh'
-    });
     const {
       tempAddress,
       tempAddress2,

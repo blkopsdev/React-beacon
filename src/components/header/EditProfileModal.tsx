@@ -42,13 +42,16 @@ interface IdispatchProps {
   facilityOptions: any[];
   updateUserProfile: typeof updateUserProfile;
   toggleEditProfileModal: () => void;
-  getFacilitiesByCustomer: () => Promise<void>;
+  getFacilitiesByCustomer: (value: string) => Promise<void>;
   user: Iuser;
 }
 
 class EditManageUserModal extends React.Component<Iprops & IdispatchProps, {}> {
   constructor(props: Iprops & IdispatchProps) {
     super(props);
+  }
+  componentWillMount() {
+    this.props.getFacilitiesByCustomer(this.props.user.customerID);
   }
 
   render() {

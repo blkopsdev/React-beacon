@@ -80,7 +80,7 @@ class EditQueueUserModal extends React.Component<Iprops & IdispatchProps, {}> {
             toggleEditFacilityModal={this.props.toggleEditFacilityModal}
           />
         }
-        title={this.props.t('editUserModalTitle')}
+        title={this.props.t('newUserModalTitle')}
         container={document.getElementById('two-pane-layout')}
       />
     );

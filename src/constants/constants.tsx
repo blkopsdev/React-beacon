@@ -97,7 +97,7 @@ const tiles = [
     width: 360,
     height: 408,
     url: '/training',
-    securityFunction: securityFunctions.ManageTrainingPayment.id,
+    securityFunction: '',
     description: ''
   },
   {

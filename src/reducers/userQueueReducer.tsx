@@ -11,7 +11,7 @@ function userQueueData(
     case types.USER_QUEUE_SUCCESS:
       return map(action.queue, queueObject => {
         return {
-          id: '',
+          id: queueObject.id,
           user: {
             ...initialState.user,
             ...pickBy(queueObject.user, (property, key) => property !== null)

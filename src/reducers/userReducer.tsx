@@ -1,7 +1,7 @@
 import * as types from '../actions/actionTypes';
 import { Iuser } from '../models';
 import initialState from './initialState';
-import { map } from 'lodash';
+import { map, pickBy } from 'lodash';
 
 export default function user(state: Iuser = initialState.user, action: any) {
   switch (action.type) {
@@ -17,16 +17,28 @@ export default function user(state: Iuser = initialState.user, action: any) {
           return securityF.toUpperCase();
         }
       );
+      const cleanUser = pickBy(
+        action.user,
+        (property, key) => property !== null
+      ); // get rid of null values
       // console.error('reducer data', state, action.user)
-      return { ...state, ...action.user, securityFunctions } as Iuser;
+      return { ...state, ...cleanUser, securityFunctions } as Iuser;
     case types.AAD_LOGIN_SUCCESS:
       return Object.assign({}, state, { token: action.token });
 
     case types.USER_UPDATE_PROFILE_SUCCESS:
+      const pickedUser = pickBy(
+        action.user,
+        (property, key) => property !== null
+      ); // get rid of null values
       const securityFs = map(action.user.securityFunctions, securityF => {
         return securityF.toUpperCase();
       });
-      return { ...state, ...action.user, securityFs } as Iuser;
+      return {
+        ...state,
+        ...pickedUser,
+        securityFunctions: securityFs
+      } as Iuser;
 
     case types.USER_LOGOUT_SUCCESS:
       return initialState.user;

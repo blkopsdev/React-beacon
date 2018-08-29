@@ -121,6 +121,7 @@ interface Iprops extends React.Props<UserQueueForm> {
   facilityOptions: any[];
   toggleEditCustomerModal: () => void;
   toggleEditFacilityModal: () => void;
+  approveUser: (userQueueID: string) => void;
 }
 
 class UserQueueForm extends React.Component<Iprops, {}> {
@@ -238,6 +239,9 @@ class UserQueueForm extends React.Component<Iprops, {}> {
       // get
       console.log('customer changed');
     });
+
+    const emailControl = this.userForm.get('email') as AbstractControlEdited;
+    emailControl.disable();
   }
   componentWillUnmount() {
     document.removeEventListener('newFacility', this.handleNewFacility, false);
@@ -268,16 +272,22 @@ class UserQueueForm extends React.Component<Iprops, {}> {
         return { id: option.value };
       }
     );
-    this.props.handleSubmit(
-      {
-        id: this.props.selectedQueueObject.user.id,
-        ...this.userForm.value,
-        customerID: this.userForm.value.customerID.value,
-        facilities: facilitiesArray
-      },
-      shouldApprove,
-      this.props.selectedQueueObject.id
-    );
+    this.props
+      .handleSubmit(
+        {
+          id: this.props.selectedQueueObject.user.id,
+          ...this.userForm.value,
+          customerID: this.userForm.value.customerID.value,
+          facilities: facilitiesArray,
+          email: this.props.selectedQueueObject.user.email // have to add back the email because disabling the input removes it
+        },
+        this.props.selectedQueueObject.id
+      )
+      .then(() => {
+        if (shouldApprove) {
+          this.props.approveUser(this.props.selectedQueueObject.id);
+        }
+      });
   };
   setForm = (form: AbstractControl) => {
     this.userForm = form;

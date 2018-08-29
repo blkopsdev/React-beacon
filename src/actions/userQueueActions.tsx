@@ -80,7 +80,6 @@ export function rejectUser(userQueueID: string) {
 }
 export function updateQueueUser(
   user: Iuser,
-  shouldApprove: boolean,
   queueID: string
 ): ThunkResult<void> {
   return (dispatch, getState) => {
@@ -98,9 +97,6 @@ export function updateQueueUser(
           });
           dispatch({ type: types.TOGGLE_MODAL_EDIT_QUEUE_USER });
           toastr.success('Success', 'Saved user', constants.toastrSuccess);
-          if (shouldApprove) {
-            return approveUser(queueID);
-          }
           return data;
         }
       })

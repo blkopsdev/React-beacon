@@ -16,7 +16,7 @@ import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import { Iuser } from '../../models';
-import { forEach, find, differenceBy, filter } from 'lodash';
+import { forEach, find, differenceBy, filter, map } from 'lodash';
 
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
 
@@ -148,9 +148,17 @@ class UserProfileForm extends React.Component<Iprops, {}> {
       return;
     }
     console.log(this.userForm.value);
+    const facilitiesArray = map(
+      this.userForm.value.facilities,
+      (option: { value: string; label: string }) => {
+        return { id: option.value };
+      }
+    );
     this.props.handleSubmit({
       ...this.props.user,
-      ...this.userForm.value
+      ...this.userForm.value,
+      facilities: facilitiesArray,
+      email: this.props.user.email // have to add back the email because disabling the input removes it
     });
   };
   setForm = (form: AbstractControl) => {

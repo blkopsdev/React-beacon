@@ -11,7 +11,8 @@ import {
   getFacilitiesByCustomer,
   toggleEditQueueUserModal,
   toggleEditCustomerModal,
-  toggleEditFacilityModal
+  toggleEditFacilityModal,
+  approveUser
 } from '../../actions/userQueueActions';
 import {
   IinitialState,
@@ -53,6 +54,7 @@ interface IdispatchProps {
   getFacilitiesByCustomer: () => Promise<void>;
   toggleEditCustomerModal: () => void;
   toggleEditFacilityModal: typeof toggleEditFacilityModal;
+  approveUser: typeof approveUser;
 }
 
 class EditQueueUserModal extends React.Component<Iprops & IdispatchProps, {}> {
@@ -78,6 +80,7 @@ class EditQueueUserModal extends React.Component<Iprops & IdispatchProps, {}> {
             getFacilitiesByCustomer={this.props.getFacilitiesByCustomer}
             toggleEditCustomerModal={this.props.toggleEditCustomerModal}
             toggleEditFacilityModal={this.props.toggleEditFacilityModal}
+            approveUser={this.props.approveUser}
           />
         }
         title={this.props.t('newUserModalTitle')}
@@ -107,6 +110,7 @@ export default connect(
     getFacilitiesByCustomer,
     toggleEditQueueUserModal,
     toggleEditCustomerModal,
-    toggleEditFacilityModal
+    toggleEditFacilityModal,
+    approveUser
   }
 )(EditQueueUserModal);

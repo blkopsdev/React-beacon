@@ -201,6 +201,9 @@ class UserManageForm extends React.Component<Iprops, {}> {
       return securityFunctions.indexOf(sec.value) !== -1 ? true : false;
     });
     this.userForm.patchValue({ securityFunctions: securityFunctionsArray });
+
+    const emailControl = this.userForm.get('email') as AbstractControlEdited;
+    emailControl.disable();
   }
   componentWillUnmount() {
     document.removeEventListener('newFacility', this.handleNewFacility, false);
@@ -243,7 +246,8 @@ class UserManageForm extends React.Component<Iprops, {}> {
         ...this.userForm.value,
         customerID: this.userForm.value.customerID.value,
         facilities: facilitiesArray,
-        securityFunctions: securityFunctionsArray
+        securityFunctions: securityFunctionsArray,
+        email: this.props.selectedUser.email // have to add back the email because disabling the input removes it
       },
       shouldApprove,
       this.props.selectedUser.id

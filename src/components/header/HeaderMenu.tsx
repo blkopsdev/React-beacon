@@ -37,7 +37,6 @@ class Header extends React.Component<Iprops, Istate> {
   handleMenuSelect = (eventKey: any) => {
     switch (eventKey) {
       case '1':
-        console.log('open profile');
         this.props.toggleEditProfileModal();
         break;
       case '2':

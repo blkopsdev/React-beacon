@@ -9,6 +9,7 @@ import {
   toggleEditUserModal,
   toggleSecurityFunctionsModal
 } from '../../actions/userManageActions';
+import { getCustomers } from '../../actions/userQueueActions';
 import {
   IinitialState,
   Iuser,
@@ -54,6 +55,7 @@ interface IdispatchProps {
   getUserManage: (value: number, search: string, customerID: string) => void;
   customers: Icustomer[];
   closeAllModals: typeof closeAllModals;
+  getCustomers: typeof getCustomers;
 }
 
 interface Istate {
@@ -153,6 +155,8 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
     });
     // refresh the userManage every time the component mounts
     this.props.getUserManage(1, '', '');
+    // refresh the list of customers every time the component mounts
+    this.props.getCustomers();
   }
   componentDidUpdate(prevProps: Iprops) {
     if (
@@ -290,7 +294,8 @@ export default translate('userManage')(
       updateUser,
       toggleEditUserModal,
       toggleSecurityFunctionsModal,
-      closeAllModals
+      closeAllModals,
+      getCustomers
     }
   )(UserManage)
 );

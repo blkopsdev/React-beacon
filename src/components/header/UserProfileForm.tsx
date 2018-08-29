@@ -69,6 +69,7 @@ interface Iprops extends React.Props<UserProfileForm> {
   facilities: any;
   user: Iuser;
   facilityOptions: any[];
+  getFacilitiesByCustomer: (value: string) => void;
 }
 
 class UserProfileForm extends React.Component<Iprops, {}> {
@@ -83,6 +84,10 @@ class UserProfileForm extends React.Component<Iprops, {}> {
 
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setForm = this.setForm.bind(this);
+  }
+
+  componentWillMount() {
+    this.props.getFacilitiesByCustomer(this.props.user.customerID);
   }
 
   componentDidMount() {
@@ -119,11 +124,6 @@ class UserProfileForm extends React.Component<Iprops, {}> {
       ).length ||
       prevProps.facilityOptions.length !== this.props.facilityOptions.length
     ) {
-      console.log(
-        'received new facilities',
-        this.props.facilityOptions,
-        prevProps.facilityOptions
-      );
       const facilitySelectControl = this.userForm.get(
         'facilities'
       ) as AbstractControlEdited;

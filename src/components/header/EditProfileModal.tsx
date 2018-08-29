@@ -38,9 +38,9 @@ class EditManageUserModal extends React.Component<Iprops & IdispatchProps, {}> {
   constructor(props: Iprops & IdispatchProps) {
     super(props);
   }
-  componentWillMount() {
-    this.props.getFacilitiesByCustomer(this.props.user.customerID);
-  }
+  // componentWillMount() {
+
+  // }
 
   render() {
     return (
@@ -58,6 +58,7 @@ class EditManageUserModal extends React.Component<Iprops & IdispatchProps, {}> {
             facilities={this.props.facilityOptions}
             facilityOptions={this.props.facilityOptions}
             user={this.props.user}
+            getFacilitiesByCustomer={this.props.getFacilitiesByCustomer}
           />
         }
         title={this.props.t('user:editProfileModalTitle')}

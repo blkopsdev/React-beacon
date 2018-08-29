@@ -12,7 +12,7 @@ import {
   Observable
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
-import { forEach, find, map, differenceBy, filter } from 'lodash';
+import { forEach, find, map, differenceBy, filter, includes } from 'lodash';
 import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
@@ -198,9 +198,15 @@ class UserManageForm extends React.Component<Iprops, {}> {
     document.addEventListener('newFacility', this.handleNewFacility, false);
 
     const securityFunctionsArray = filter(securityOptions, (sec: any) => {
-      return securityFunctions.indexOf(sec.value) !== -1 ? true : false;
+      return includes(securityFunctions, sec.value);
     });
-    this.userForm.patchValue({ securityFunctions: securityFunctionsArray });
+    const securityfunctionsArrayTranslated = map(
+      securityFunctionsArray,
+      option => ({ value: option.value, label: this.props.t(option.label) })
+    );
+    this.userForm.patchValue({
+      securityFunctions: securityfunctionsArrayTranslated
+    });
 
     const emailControl = this.userForm.get('email') as AbstractControlEdited;
     emailControl.disable();
@@ -237,7 +243,7 @@ class UserManageForm extends React.Component<Iprops, {}> {
     const securityFunctionsArray = map(
       this.userForm.value.securityFunctions,
       (option: { value: string; label: string }) => {
-        return { id: option.value };
+        return option.value;
       }
     );
     this.props.handleSubmit(

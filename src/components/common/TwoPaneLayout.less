@@ -8,31 +8,32 @@
     .svg-inline--fa{
       margin-right: 15px;
     }
+    .list-group {
+      font-size: 20px;
+      .list-group-item {
+        border: none;
+        background-color: @textBlue;
+        color: @white;
+        text-transform: uppercase;
+        padding: 5px 15px;
+      }
+      .list-group-item.active, .list-group-item.active:focus {
+        background-color: darken(@textBlue, 15%);
+      }
+      .list-group-item:hover {
+        background-color: @highlightBlue;
+      }
+      .list-group-item:first-child {
+        border-top-left-radius: 0px;
+        border-top-right-radius: 0px;
+      }
+      .list-group-item:last-child {
+        border-bottom-right-radius: 0px;
+        border-bottom-left-radius: 0px;
+      }
+    }
   }
-  .list-group {
-    font-size: 20px;
-    .list-group-item {
-      border: none;
-      background-color: @textBlue;
-      color: @white;
-      text-transform: uppercase;
-      padding: 5px 15px;
-    }
-    .list-group-item.active, .list-group-item.active:focus {
-      background-color: darken(@textBlue, 15%);
-    }
-    .list-group-item:hover {
-      background-color: @highlightBlue;
-    }
-    .list-group-item:first-child {
-      border-top-left-radius: 0px;
-      border-top-right-radius: 0px;
-    }
-    .list-group-item:last-child {
-      border-bottom-right-radius: 0px;
-      border-bottom-left-radius: 0px;
-    }
-  }
+
   .col-fixed {
     z-index: 1060;
     position: relative;

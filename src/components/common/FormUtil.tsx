@@ -285,6 +285,14 @@ export const FormUtil = {
             placeholder: t(field.meta.placeholder)
           };
         }
+        // select options
+        if (field.meta.options && field.meta.options.length) {
+          const newOptions = map(field.meta.options, option => ({
+            value: option.value,
+            label: t(option.label)
+          }));
+          newMeta = { ...newMeta, options: newOptions };
+        }
         return { ...field, meta: newMeta };
       }
       return field;

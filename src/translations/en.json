@@ -105,5 +105,19 @@
     "billing": "Billing",
     "groups": "My groups",
     "support": "Support"
+  },
+  "securityF": {
+    "ManageUsers": "Manage Users",
+    "ManageTrainingPayment": "Training",
+    "ManageSecurity": "Manage Security",
+    "ViewInventory": "View Inventory",
+    "ManageInventory": "Manage Inventory",
+    "QuoteForInvoice": "Quote For Invoice",
+    "SignUpTeamMembers": "Sign Up TeamMembers",
+    "inventory": "Inventory",
+    "ManageTeamMembers": "Manage Team Members",
+    "ManageIndividualTraining": "Manage Individual Training",
+    "ManageEmployeeTraining": "Manage Employee Training",
+    "Payment": "Payment"
   }
 }

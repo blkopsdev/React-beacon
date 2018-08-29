@@ -6,58 +6,63 @@ import { toastr } from 'react-redux-toastr';
 const securityFunctions = {
   ManageUsers: {
     id: 'AA6F93B7-D278-4117-9B14-26DFA795742E',
-    name: 'ManageUsers',
-    description: ''
+    name: 'securityF:ManageUsers',
+    description:
+      'Approve and reject users as well as add and update customer and facility records.'
   },
   ManageTrainingPayment: {
     id: '3A0D4616-4179-4BA1-98F0-6A929A3A5E0D',
-    name: 'ManageTrainingPayment',
-    description: ''
+    name: 'securityF:ManageTrainingPayment',
+    description: 'Allows user to update their payment method.'
   },
   ManageSecurity: {
     id: 'B397D3EB-D55E-416A-9C48-AFE858AC5091',
-    name: 'ManageSecurity',
-    description: ''
+    name: 'securityF:ManageSecurity',
+    description: "Allows user to manage other user's security functions."
   },
   ViewInventory: {
     id: 'A98B1372-81D3-43E1-A81A-3F382CE83542',
-    name: 'ViewInventory',
-    description: ''
+    name: 'securityF:ViewInventory',
+    description:
+      "Allows the user to see a read-only view of the facility's current inventory."
   },
   ManageInventory: {
     id: 'DD65AB77-23D6-4FE0-9AD7-5729B6E5C40D',
-    name: 'ManageInventory',
-    description: ''
+    name: 'securityF:ManageInventory',
+    description:
+      'Allows the user to view, add, and manage the inventory for the facility.'
   },
   QuoteForInvoice: {
     id: 'DF7EA0C4-98C3-40BF-9E73-03E5BF50F9D0',
-    name: 'QuoteForInvoice',
-    description: ''
+    name: 'securityF:QuoteForInvoice',
+    description: 'Allows the user to request a quote from Beacon for products.'
   },
   SignUpTeamMembers: {
     id: '947CF4F4-10AC-4A38-BA7B-F069605E7A6C',
-    name: 'SignUpTeamMembers',
-    description: ''
+    name: 'securityF:SignUpTeamMembers',
+    description: 'Allows the users to create other users underneath them.'
   },
   ManageTeamMembers: {
     id: 'C75A644C-54A5-4EA3-95D2-AB58D2A39E8E',
-    name: 'ManageTeamMembers',
-    description: ''
+    name: 'securityF:ManageTeamMembers',
+    description:
+      'Allows the user to edit the information about a user on their team.'
   },
   ManageIndividualTraining: {
     id: '977049C6-3EB6-40CF-938F-C3B766C5EECD',
-    name: 'ManageIndividualTraining',
-    description: ''
+    name: 'securityF:ManageIndividualTraining',
+    description: 'Allows the user to view and sign up for their own training.'
   },
   ManageEmployeeTraining: {
     id: '26785416-C391-4B14-AE9F-B5A56F8D223E',
-    name: 'ManageEmployeeTraining',
-    description: ''
+    name: 'securityF:ManageEmployeeTraining',
+    description:
+      'Allows the user to manage and sign up for training for other people on their team.'
   },
   Payment: {
     id: '655401EA-4AA1-4543-91E0-9F5A3AB754C3',
-    name: 'Payment',
-    description: ''
+    name: 'securityF:Payment',
+    description: 'TBD'
   }
 };
 

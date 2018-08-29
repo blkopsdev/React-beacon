@@ -33,6 +33,7 @@ import { TableUtil } from '../common/TableUtil';
 import EditUserManageModal from './EditUserManageModal';
 import EditCustomerModal from '../common/EditCustomerModal';
 import { closeAllModals } from '../../actions/commonActions';
+import SecurityFunctionsList from './SecurityFunctionsList';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -256,7 +257,7 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
           modalVisible={this.props.showSecurityFunctionsModal}
           className="security-modal second-modal"
           onHide={this.props.toggleSecurityFunctionsModal}
-          body={<div> security functions </div>}
+          body={<SecurityFunctionsList t={this.props.t} />}
           title={t('securityFunctionsModalTitle')}
           container={document.getElementById('two-pane-layout')}
         />

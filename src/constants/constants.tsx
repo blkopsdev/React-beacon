@@ -1,6 +1,7 @@
 import { transitionInType, transitionOutType, Iuser, Itile } from '../models';
 import { find } from 'lodash';
 import { emptyTile } from '../reducers/initialState';
+import { toastr } from 'react-redux-toastr';
 
 const securityFunctions = {
   ManageUsers: {
@@ -282,7 +283,23 @@ const constants = {
       label: 'United States of America'
     },
     { value: '1235d95c-129f-4837-988c-0bf4ae1f3b67', label: 'Cuba' }
-  ]
+  ],
+  handleError(error: any, message: string) {
+    let msg = '';
+    if (error && error.response && error.response.data) {
+      msg = `Failed to ${message}. ${error.response.data}`;
+    } else if (error && error.message) {
+      msg = `Failed to ${message}.  Please try again or contact support. ${
+        error.message
+      }`;
+    } else {
+      msg = `Failed to ${message}.  Please try again or contact support.`;
+    }
+    if (!navigator.onLine) {
+      msg = 'Please connect to the internet.';
+    }
+    toastr.error('Error', msg, constants.toastrError);
+  }
 };
 
 export default constants;

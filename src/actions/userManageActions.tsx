@@ -33,7 +33,7 @@ export function getUserManage(
       })
       .catch((error: any) => {
         dispatch({ type: types.USER_MANAGE_FAILED });
-        handleError(error, 'get user queue');
+        constants.handleError(error, 'get user queue');
         throw error;
       });
   };
@@ -59,7 +59,7 @@ export function updateUser(user: Iuser): ThunkResult<void> {
       })
       .catch((error: any) => {
         dispatch({ type: types.USER_UPDATE_FAILED });
-        handleError(error, 'update user');
+        constants.handleError(error, 'update user');
         throw error;
       });
   };
@@ -81,7 +81,7 @@ export function updateUser(user: Iuser): ThunkResult<void> {
 //       })
 //       .catch((error: any) => {
 //         dispatch({ type: types.GET_CUSTOMERS_FAILED });
-//         handleError(error, 'get companies');
+//         constants.handleError(error, 'get companies');
 //         throw error;
 //       });
 //   };
@@ -106,7 +106,7 @@ export function updateUser(user: Iuser): ThunkResult<void> {
 //       })
 //       .catch((error: any) => {
 //         dispatch({ type: types.GET_FACILITIES_FAILED });
-//         handleError(error, 'get facilities');
+//         constants.handleError(error, 'get facilities');
 //         throw error;
 //       });
 //   };
@@ -124,20 +124,3 @@ export const toggleEditFacilityModal = () => ({
 export const toggleSecurityFunctionsModal = () => ({
   type: types.TOGGLE_MODAL_SECURITY_FUNCTIONS
 });
-
-function handleError(error: any, message: string) {
-  let msg = '';
-  if (error && error.response && error.response.data) {
-    msg = error.response.data;
-  } else if (error && error.message) {
-    msg = `Failed to ${message}.  Please try again or contact support. ${
-      error.message
-    }`;
-  } else {
-    msg = `Failed to ${message}.  Please try again or contact support.`;
-  }
-  if (!navigator.onLine) {
-    msg = 'Please connect to the internet.';
-  }
-  toastr.error('Error', msg, constants.toastrError);
-}

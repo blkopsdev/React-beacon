@@ -81,7 +81,7 @@ export function userLogin() {
       })
       .catch((error: any) => {
         dispatch({ type: types.USER_LOGIN_FAILED });
-        handleError(error, 'login');
+        constants.handleError(error, 'login');
         throw error;
       });
   };
@@ -128,7 +128,7 @@ export function signUpDirect(tempUser: ItempUser) {
       })
       .catch((error: any) => {
         dispatch({ type: types.USER_SIGNUP_FAILED });
-        handleError(error, 'sign up');
+        constants.handleError(error, 'sign up');
         throw error;
       });
   };
@@ -157,25 +157,8 @@ export function updateUserProfile(user: Iuser): ThunkResult<void> {
       })
       .catch((error: any) => {
         dispatch({ type: types.USER_UPDATE_PROFILE_FAILED });
-        handleError(error, 'update profile');
+        constants.handleError(error, 'update profile');
         throw error;
       });
   };
-}
-
-function handleError(error: any, message: string) {
-  let msg = '';
-  if (error && error.response && error.response.data) {
-    msg = error.response.data;
-  } else if (error && error.message) {
-    msg = `Failed to ${message}.  Please try again or contact support. ${
-      error.message
-    }`;
-  } else {
-    msg = `Failed to ${message}.  Please try again or contact support.`;
-  }
-  if (!navigator.onLine) {
-    msg = 'Please connect to the internet.';
-  }
-  toastr.error('Error', msg, constants.toastrError);
 }

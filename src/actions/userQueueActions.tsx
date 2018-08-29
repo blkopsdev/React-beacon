@@ -26,7 +26,7 @@ export function getUserQueue(page: number, search: string) {
       })
       .catch((error: any) => {
         dispatch({ type: types.USER_QUEUE_FAILED });
-        handleError(error, 'get user queue');
+        constants.handleError(error, 'get user queue');
         throw error;
       });
   };
@@ -35,22 +35,25 @@ export function getUserQueue(page: number, search: string) {
 export function approveUser(userQueueID: string): any {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());
-    return axios
-      .post(API.POST.user.approve, { id: userQueueID })
-      .then(data => {
-        if (!data.data) {
-          throw undefined;
-        } else {
-          dispatch({ type: types.USER_APPROVE_SUCCESS, userQueueID });
-          return data;
-        }
-      })
-      .catch((error: any) => {
-        dispatch({ type: types.USER_APPROVE_FAILED });
-        handleError(error, 'approve user');
-        throw error;
-      });
+    return handleApproveUser(userQueueID, dispatch);
   };
+}
+function handleApproveUser(userQueueID: string, dispatch: any) {
+  return axios
+    .post(API.POST.user.approve, { id: userQueueID })
+    .then(data => {
+      if (!data.data) {
+        throw undefined;
+      } else {
+        dispatch({ type: types.USER_APPROVE_SUCCESS, userQueueID });
+        return data;
+      }
+    })
+    .catch((error: any) => {
+      dispatch({ type: types.USER_APPROVE_FAILED });
+      constants.handleError(error, 'approve user');
+      throw error;
+    });
 }
 
 // export function anotherThunkAction(): ThunkResult<Promise<boolean>> {
@@ -73,13 +76,14 @@ export function rejectUser(userQueueID: string) {
       })
       .catch((error: any) => {
         dispatch({ type: types.USER_REJECT_FAILED });
-        handleError(error, 'reject user');
+        constants.handleError(error, 'reject user');
         throw error;
       });
   };
 }
 export function updateQueueUser(
   user: Iuser,
+  shouldApprove: boolean,
   queueID: string
 ): ThunkResult<void> {
   return (dispatch, getState) => {
@@ -97,12 +101,16 @@ export function updateQueueUser(
           });
           dispatch({ type: types.TOGGLE_MODAL_EDIT_QUEUE_USER });
           toastr.success('Success', 'Saved user', constants.toastrSuccess);
+          if (shouldApprove) {
+            dispatch(beginAjaxCall());
+            handleApproveUser(queueID, dispatch); // don't return this because if we do, we will see two errors
+          }
           return data;
         }
       })
       .catch((error: any) => {
         dispatch({ type: types.USER_QUEUE_UPDATE_FAILED });
-        handleError(error, 'update user');
+        constants.handleError(error, 'update user');
         throw error;
       });
   };
@@ -124,7 +132,7 @@ export function getCustomers() {
       })
       .catch((error: any) => {
         dispatch({ type: types.GET_CUSTOMERS_FAILED });
-        handleError(error, 'get companies');
+        constants.handleError(error, 'get companies');
         throw error;
       });
   };
@@ -155,7 +163,7 @@ export function addCustomer({
       })
       .catch((error: any) => {
         dispatch({ type: types.CUSTOMER_UPDATE_FAILED });
-        handleError(error, 'add customer');
+        constants.handleError(error, 'add customer');
         throw error;
       });
   };
@@ -188,7 +196,7 @@ export function addFacility(facility: Ifacility): ThunkResult<void> {
       })
       .catch((error: any) => {
         dispatch({ type: types.FACILITY_UPDATE_FAILED });
-        handleError(error, 'add facility');
+        constants.handleError(error, 'add facility');
         throw error;
       });
   };
@@ -213,7 +221,7 @@ export function getFacilitiesByCustomer(customerID: string) {
       })
       .catch((error: any) => {
         dispatch({ type: types.GET_FACILITIES_FAILED });
-        handleError(error, 'get facilities');
+        constants.handleError(error, 'get facilities');
         throw error;
       });
   };
@@ -228,20 +236,3 @@ export const toggleEditCustomerModal = () => ({
 export const toggleEditFacilityModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_FACILITY
 });
-
-function handleError(error: any, message: string) {
-  let msg = '';
-  if (error && error.response && error.response.data) {
-    msg = error.response.data;
-  } else if (error && error.message) {
-    msg = `Failed to ${message}.  Please try again or contact support. ${
-      error.message
-    }`;
-  } else {
-    msg = `Failed to ${message}.  Please try again or contact support.`;
-  }
-  if (!navigator.onLine) {
-    msg = 'Please connect to the internet.';
-  }
-  toastr.error('Error', msg, constants.toastrError);
-}

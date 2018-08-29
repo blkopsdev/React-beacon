@@ -272,22 +272,17 @@ class UserQueueForm extends React.Component<Iprops, {}> {
         return { id: option.value };
       }
     );
-    this.props
-      .handleSubmit(
-        {
-          id: this.props.selectedQueueObject.user.id,
-          ...this.userForm.value,
-          customerID: this.userForm.value.customerID.value,
-          facilities: facilitiesArray,
-          email: this.props.selectedQueueObject.user.email // have to add back the email because disabling the input removes it
-        },
-        this.props.selectedQueueObject.id
-      )
-      .then(() => {
-        if (shouldApprove) {
-          this.props.approveUser(this.props.selectedQueueObject.id);
-        }
-      });
+    this.props.handleSubmit(
+      {
+        id: this.props.selectedQueueObject.user.id,
+        ...this.userForm.value,
+        customerID: this.userForm.value.customerID.value,
+        facilities: facilitiesArray,
+        email: this.props.selectedQueueObject.user.email // have to add back the email because disabling the input removes it
+      },
+      shouldApprove,
+      this.props.selectedQueueObject.id
+    );
   };
   setForm = (form: AbstractControl) => {
     this.userForm = form;

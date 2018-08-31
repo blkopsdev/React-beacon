@@ -25,9 +25,6 @@ https://github.com/thebigpixel/Beacon-CoreCare-API/blob/David-Dev/Data/Constants
 
 ## Random notes
 
- 135 hours for the project.  6 weeks
- plus addendum 87 hours
-
  ### Azure Active Directory Test Data:
  Display name
 CoreCare-AD-Dev

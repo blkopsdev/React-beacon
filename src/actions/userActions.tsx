@@ -67,7 +67,7 @@ export function userLogin() {
     dispatch(beginAjaxCall());
     const token = authContext.getCachedToken(authContext.config.clientId);
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-    dispatch({ type: types.AAD_LOGIN_SUCCESS, token });
+    dispatch({ type: types.AAD_LOGIN, token });
     return axios
       .post(API.POST.user.login)
       .then(data => {
@@ -88,17 +88,18 @@ export function userLogin() {
 }
 export function adalLogin() {
   return (dispatch: any, getState: any) => {
-    dispatch(beginAjaxCall());
+    // dispatch(beginAjaxCall()); removing loading here beacuse when we come back from adal login,
+    // is when the success is called and it closses loading while userLogin is still waiting.
     authContext.login();
   };
 }
 
 export const getToken = () => {
   return (dispatch: any, getState: any) => {
-    dispatch(beginAjaxCall());
+    // dispatch(beginAjaxCall()); see comment above in adalLogin
     const token = authContext.getCachedToken(authContext.config.clientId);
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-    dispatch({ type: types.AAD_LOGIN_SUCCESS, token });
+    dispatch({ type: types.AAD_LOGIN, token });
     // return token;
   };
 };

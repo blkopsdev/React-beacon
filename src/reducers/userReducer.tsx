@@ -23,7 +23,7 @@ export default function user(state: Iuser = initialState.user, action: any) {
       ); // get rid of null values
       // console.error('reducer data', state, action.user)
       return { ...state, ...cleanUser, securityFunctions } as Iuser;
-    case types.AAD_LOGIN_SUCCESS:
+    case types.AAD_LOGIN:
       return Object.assign({}, state, { token: action.token });
 
     case types.USER_UPDATE_PROFILE_SUCCESS:

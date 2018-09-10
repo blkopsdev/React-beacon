@@ -7,7 +7,8 @@ import { connect } from 'react-redux';
 import {
   getUserManage,
   updateUser,
-  toggleEditUserModal
+  toggleEditUserModal,
+  toggleSaveUserModal
 } from '../../actions/teamManageActions';
 import {
   IinitialState,
@@ -19,7 +20,7 @@ import {
 import { emptyTile } from '../../reducers/initialState';
 import { RouteComponentProps } from 'react-router-dom';
 import ReactTable from 'react-table';
-// import { Button } from "react-bootstrap";
+import { Button } from 'react-bootstrap';
 import Banner from '../common/Banner';
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import constants from '../../constants/constants';
@@ -30,6 +31,7 @@ import { FormUtil } from '../common/FormUtil';
 import SearchTableForm from '../common/SearchTableForm';
 import { TableUtil } from '../common/TableUtil';
 import EditUserManageModal from './EditTeamManageModal';
+import SaveUserManageModal from './SaveTeamManageModal';
 import { closeAllModals } from '../../actions/commonActions';
 
 interface Iprops extends RouteComponentProps<any> {
@@ -44,6 +46,7 @@ interface Iprops extends RouteComponentProps<any> {
 interface IdispatchProps {
   // Add your dispatcher properties here
   toggleEditUserModal: () => void;
+  toggleSaveUserModal: () => void;
   toggleSecurityFunctionsModal: () => void;
   getUserManage: (value: number, search: string, customerID: string) => void;
   customers: Icustomer[];
@@ -210,6 +213,13 @@ class TeamManage extends React.Component<Iprops & IdispatchProps, Istate> {
           }
           t={this.props.t}
         />
+        <Button
+          className="table-add-button"
+          bsStyle={this.state.currentTile.color}
+          onClick={this.props.toggleSaveUserModal}
+        >
+          {t('newTeamMember')}
+        </Button>
         <ReactTable
           data={this.props.userManage.data}
           columns={this.columns}
@@ -227,6 +237,12 @@ class TeamManage extends React.Component<Iprops & IdispatchProps, Istate> {
         />
         <EditUserManageModal
           selectedUser={this.props.userManage.data[this.state.selectedRow]}
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+          t={this.props.t}
+        />
+        <SaveUserManageModal
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
@@ -257,6 +273,7 @@ export default translate('userManage')(
       getUserManage,
       updateUser,
       toggleEditUserModal,
+      toggleSaveUserModal,
       closeAllModals
     }
   )(TeamManage)

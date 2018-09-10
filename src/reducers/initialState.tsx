@@ -48,7 +48,8 @@ export default {
   showEditQueueUserModal: false,
   showEditProfileModal: false,
   showSecurityFunctionsModal: false,
-  showEditTeamModal: false
+  showEditTeamModal: false,
+  showSaveTeamModal: false
 };
 
 export const emptyTile = {

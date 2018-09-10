@@ -86,6 +86,7 @@ export interface IinitialState {
   showEditProfileModal: boolean;
   showSecurityFunctionsModal: boolean;
   showEditTeamModal: boolean;
+  showSaveTeamModal: boolean;
 }
 export interface Itile {
   icon: string | string[];

@@ -28,6 +28,16 @@ function teamManageData(state: Iuser[] = [], action: any): Iuser[] {
       };
 
       return [...filteredUsers, updatedUser] as Iuser[];
+    case types.TEAM_SAVE_SUCCESS:
+      const securityFunct = map(action.user.securityFunctions, securityF => {
+        return securityF.toUpperCase();
+      });
+      const updatedTeamMember = {
+        ...pickBy(action.user, (property, key) => property !== null),
+        securityFunctions: securityFunct
+      };
+
+      return [...state, updatedTeamMember] as Iuser[];
 
     case types.USER_LOGOUT_SUCCESS:
       return [];

@@ -30,7 +30,7 @@ interface AbstractControlEdited extends AbstractControl {
 interface Iprops {
   handleSubmit: any;
   handleCancel: any;
-  selectedUser: Iuser;
+  selectedUser?: Iuser;
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;
@@ -57,7 +57,7 @@ class TeamManageForm extends React.Component<Iprops, {}> {
 
   componentDidMount() {
     if (!this.props.selectedUser) {
-      console.error('missing user');
+      console.log('adding a new user');
       return;
     }
     // set values
@@ -80,15 +80,19 @@ class TeamManageForm extends React.Component<Iprops, {}> {
       return;
     }
     console.log(this.userForm.value);
-    this.props.handleSubmit(
-      {
-        id: this.props.selectedUser.id,
-        ...this.userForm.value,
-        email: this.props.selectedUser.email // have to add back the email because disabling the input removes it
-      },
-      shouldApprove,
-      this.props.selectedUser.id
-    );
+    if (this.props.selectedUser) {
+      this.props.handleSubmit(
+        {
+          id: this.props.selectedUser.id,
+          ...this.userForm.value,
+          email: this.props.selectedUser.email // have to add back the email because disabling the input removes it
+        },
+        shouldApprove,
+        this.props.selectedUser.id
+      );
+    } else {
+      this.props.handleSubmit(this.userForm.value);
+    }
   };
   setForm = (form: AbstractControl) => {
     this.userForm = form;

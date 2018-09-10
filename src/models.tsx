@@ -60,6 +60,11 @@ export interface IuserManage {
   data: Iuser[];
   totalPages: number;
 }
+export interface IteamManage {
+  page: number;
+  data: Iuser[];
+  totalPages: number;
+}
 
 export interface Iredirect {
   redirectToReferrer: boolean;
@@ -71,6 +76,7 @@ export interface IinitialState {
   redirect: Iredirect;
   userQueue: IuserQueue;
   userManage: IuserManage;
+  teamManage: IteamManage;
   customers: Icustomer[];
   facilities: Ifacility[];
   showEditUserModal: boolean;
@@ -79,6 +85,7 @@ export interface IinitialState {
   showEditQueueUserModal: boolean;
   showEditProfileModal: boolean;
   showSecurityFunctionsModal: boolean;
+  showEditTeamModal: boolean;
 }
 export interface Itile {
   icon: string | string[];

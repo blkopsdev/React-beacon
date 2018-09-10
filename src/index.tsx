@@ -1,3 +1,8 @@
+/*
+* Index is the entry point for the app. 
+* Initial routes are here and secondary routes are in TwoPanelLayout
+*/
+
 import { throttle } from 'lodash';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
@@ -125,6 +130,7 @@ runWithAdal(
                 <PrivateRoute path="/dashboard" component={Dashboard} />
                 <PrivateRoute path="/queue" component={TwoPaneLayout} />
                 <PrivateRoute path="/users" component={TwoPaneLayout} />
+                <PrivateRoute path="/team" component={TwoPaneLayout} />
                 <Route component={NoMatch} />
               </Switch>
               <ReduxToastr position={'top-right'} />

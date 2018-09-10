@@ -35,6 +35,11 @@ export default {
     totalPages: 1,
     data: []
   },
+  teamManage: {
+    page: 1,
+    totalPages: 1,
+    data: []
+  },
   customers: [],
   facilities: [],
   showEditUserModal: false,
@@ -42,7 +47,8 @@ export default {
   showEditFacilityModal: false,
   showEditQueueUserModal: false,
   showEditProfileModal: false,
-  showSecurityFunctionsModal: false
+  showSecurityFunctionsModal: false,
+  showEditTeamModal: false
 };
 
 export const emptyTile = {

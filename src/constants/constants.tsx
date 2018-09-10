@@ -154,7 +154,7 @@ const tiles = [
     description: ''
   },
   {
-    icon: 'icon-team',
+    icon: 'users',
     title: 'manageTeam',
     src: 'https://placekitten.com/360/272',
     srcBanner: '',
@@ -162,7 +162,7 @@ const tiles = [
     width: 359,
     height: 272,
     url: '/team',
-    securityFunction: '',
+    securityFunction: securityFunctions.ManageTeamMembers.id,
     description: ''
   },
   {

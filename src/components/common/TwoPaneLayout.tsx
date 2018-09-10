@@ -9,6 +9,7 @@ import SideMenu from '../sideMenu/SideMenu';
 import { Route, Switch } from 'react-router-dom';
 import UserQueue from '../userQueue/UserQueue';
 import UserManage from '../userManage/UserManage';
+import TeamManage from '../teamManage/TeamManage';
 import constants from '../../constants/constants';
 import { IinitialState } from '../../models';
 
@@ -65,6 +66,7 @@ const TwoPaneLayout = (props: any) => {
           <Switch>
             <Route exact path="/queue" component={UserQueue} />
             <Route exact path="/users" component={UserManage} />
+            <Route exact path="/team" component={TeamManage} />
           </Switch>
         </Col>
       </Row>

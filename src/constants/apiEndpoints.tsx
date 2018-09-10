@@ -9,7 +9,9 @@ const API = {
       approve: `${root}user/approve`,
       reject: `${root}user/reject`,
       update: `${root}user/update`,
-      updateprofile: `${root}user/updateprofile`
+      updateprofile: `${root}user/updateprofile`,
+      updateteam: `${root}user/updateteammember`,
+      saveteam: `${root}user/updateteammember`
     },
     customer: {
       add: `${root}customer/add`
@@ -21,7 +23,8 @@ const API = {
   GET: {
     user: {
       getuserqueue: `${root}user/getuserqueue`,
-      getusersearch: `${root}user/search`
+      getusersearch: `${root}user/search`,
+      getteamsearch: `${root}user/searchteam`
     },
     customer: {
       getall: `${root}customer/getall`

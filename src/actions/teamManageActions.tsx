@@ -52,7 +52,7 @@ export function updateUser(user: Iuser): ThunkResult<void> {
             type: types.TEAM_UPDATE_SUCCESS,
             user: data.data
           });
-          dispatch({ type: types.TOGGLE_MODAL_EDIT_USER });
+          dispatch({ type: types.TOGGLE_MODAL_EDIT_TEAM });
           toastr.success('Success', 'Saved user', constants.toastrSuccess);
           return data;
         }
@@ -81,7 +81,7 @@ export function saveTeamUser(user: Iuser): ThunkResult<void> {
             type: types.TEAM_SAVE_SUCCESS,
             user: data.data
           });
-          dispatch({ type: types.TOGGLE_MODAL_EDIT_USER });
+          dispatch({ type: types.TOGGLE_MODAL_EDIT_TEAM });
           toastr.success('Success', 'Saved user', constants.toastrSuccess);
           return data;
         }
@@ -96,7 +96,4 @@ export function saveTeamUser(user: Iuser): ThunkResult<void> {
 
 export const toggleEditUserModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_TEAM
-});
-export const toggleSaveUserModal = () => ({
-  type: types.TOGGLE_MODAL_SAVE_TEAM
 });

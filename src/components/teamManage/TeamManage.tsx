@@ -7,8 +7,7 @@ import { connect } from 'react-redux';
 import {
   getUserManage,
   updateUser,
-  toggleEditUserModal,
-  toggleSaveUserModal
+  toggleEditUserModal
 } from '../../actions/teamManageActions';
 import {
   IinitialState,
@@ -26,12 +25,11 @@ import Banner from '../common/Banner';
 import constants from '../../constants/constants';
 import * as moment from 'moment';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
-import { find } from 'lodash';
+// import { find } from 'lodash';
 import { FormUtil } from '../common/FormUtil';
 import SearchTableForm from '../common/SearchTableForm';
 import { TableUtil } from '../common/TableUtil';
 import EditUserManageModal from './EditTeamManageModal';
-import SaveUserManageModal from './SaveTeamManageModal';
 import { closeAllModals } from '../../actions/commonActions';
 
 interface Iprops extends RouteComponentProps<any> {
@@ -46,7 +44,6 @@ interface Iprops extends RouteComponentProps<any> {
 interface IdispatchProps {
   // Add your dispatcher properties here
   toggleEditUserModal: () => void;
-  toggleSaveUserModal: () => void;
   toggleSecurityFunctionsModal: () => void;
   getUserManage: (value: number, search: string, customerID: string) => void;
   customers: Icustomer[];
@@ -84,22 +81,6 @@ class TeamManage extends React.Component<Iprops & IdispatchProps, Istate> {
         {
           Header: 'email',
           accessor: 'email'
-        },
-        {
-          id: 'company',
-          Header: 'company',
-          accessor: ({ customerID }: Iuser) => {
-            // !TODO move this to a reducer?
-            let cust;
-            if (customerID) {
-              cust = find(
-                this.props.customers,
-                c =>
-                  c.id.trim().toLowerCase() === customerID.trim().toLowerCase()
-              );
-            }
-            return cust ? cust.name : '';
-          }
         },
         {
           Header: 'manager',
@@ -216,7 +197,7 @@ class TeamManage extends React.Component<Iprops & IdispatchProps, Istate> {
         <Button
           className="table-add-button"
           bsStyle={constants.colors[`${this.state.currentTile.color}Button`]}
-          onClick={this.props.toggleSaveUserModal}
+          onClick={this.props.toggleEditUserModal}
         >
           {t('teamManage:newTeamMember')}
         </Button>
@@ -242,12 +223,6 @@ class TeamManage extends React.Component<Iprops & IdispatchProps, Istate> {
           }
           t={this.props.t}
         />
-        <SaveUserManageModal
-          colorButton={
-            constants.colors[`${this.state.currentTile.color}Button`]
-          }
-          t={this.props.t}
-        />
       </div>
     );
   }
@@ -266,14 +241,13 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     showEditUserModal: state.showEditTeamModal
   };
 };
-export default translate('userManage')(
+export default translate('teamManage')(
   connect(
     mapStateToProps,
     {
       getUserManage,
       updateUser,
       toggleEditUserModal,
-      toggleSaveUserModal,
       closeAllModals
     }
   )(TeamManage)

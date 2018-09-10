@@ -94,7 +94,8 @@
   "teamManage": {
     "newTeamMember": "New Team Member",
     "editTeamModalTitle": "Edit Team Member",
-    "saveTeamModalTitle": "Add New Team Member"
+    "saveTeamModalTitle": "Add New Team Member",
+    "bannerTitle": "Manage Team"
   },
   "tiles": {
     "alerts": "Alerts",

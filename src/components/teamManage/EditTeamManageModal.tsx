@@ -48,7 +48,7 @@ class EditManageTeamModal extends React.Component<Iprops & IdispatchProps, {}> {
             colorButton={this.props.colorButton}
           />
         }
-        title={this.props.t('editUserModalTitle')}
+        title={this.props.t('teamManage:editTeamModalTitle')}
         container={document.getElementById('two-pane-layout')}
       />
     );

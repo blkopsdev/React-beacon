@@ -215,10 +215,10 @@ class TeamManage extends React.Component<Iprops & IdispatchProps, Istate> {
         />
         <Button
           className="table-add-button"
-          bsStyle={this.state.currentTile.color}
+          bsStyle={constants.colors[`${this.state.currentTile.color}Button`]}
           onClick={this.props.toggleSaveUserModal}
         >
-          {t('newTeamMember')}
+          {t('teamManage:newTeamMember')}
         </Button>
         <ReactTable
           data={this.props.userManage.data}

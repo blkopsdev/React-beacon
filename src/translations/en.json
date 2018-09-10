@@ -91,6 +91,11 @@
     "securityFunctionsModalTitle": "Security Descriptions",
     "securityLabel": "Security"
   },
+  "teamManage": {
+    "newTeamMember": "New Team Member",
+    "editTeamModalTitle": "Edit Team Member",
+    "saveTeamModalTitle": "Add New Team Member"
+  },
   "tiles": {
     "alerts": "Alerts",
     "training": "Training",

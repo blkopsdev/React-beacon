@@ -46,7 +46,7 @@ class SaveManageTeamModal extends React.Component<Iprops & IdispatchProps, {}> {
             colorButton={this.props.colorButton}
           />
         }
-        title={this.props.t('editUserModalTitle')}
+        title={this.props.t('teamManage:saveTeamModalTitle')}
         container={document.getElementById('two-pane-layout')}
       />
     );

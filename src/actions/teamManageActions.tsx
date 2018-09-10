@@ -98,5 +98,5 @@ export const toggleEditUserModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_TEAM
 });
 export const toggleSaveUserModal = () => ({
-  type: types.TOGGLE_MODAL_EDIT_TEAM
+  type: types.TOGGLE_MODAL_SAVE_TEAM
 });

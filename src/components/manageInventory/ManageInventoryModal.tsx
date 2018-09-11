@@ -5,20 +5,20 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import {
-  updateUser,
-  saveTeamUser,
-  toggleEditUserModal
-} from '../../actions/teamManageActions';
-import { IinitialState, Iuser } from '../../models';
+  updateProduct,
+  saveProduct,
+  toggleEditInventoryModal
+} from '../../actions/manageInventoryActions';
+import { IinitialState, Iproduct } from '../../models';
 // import constants from '../../constants/constants';
 import CommonModal from '../common/CommonModal';
-import UserManageForm from './ManageInventoryForm';
+import ManageInventoryForm from './ManageInventoryForm';
 import { TranslationFunction } from 'react-i18next';
 import { FormUtil } from '../common/FormUtil';
 import { getFacilitiesByCustomer } from '../../actions/userQueueActions';
 
 interface Iprops {
-  selectedUser: Iuser;
+  selectedItem: Iproduct;
   colorButton: any;
   t: TranslationFunction;
 }
@@ -28,11 +28,10 @@ interface IdispatchProps {
   loading: boolean;
   customerOptions: any[];
   facilityOptions: any[];
-  updateUser: typeof updateUser;
-  saveTeamUser: typeof saveTeamUser;
-  toggleEditUserModal: () => void;
+  updateProduct: typeof updateProduct;
+  saveProduct: typeof saveProduct;
+  toggleEditInventoryModal: typeof toggleEditInventoryModal;
   getFacilitiesByCustomer: () => Promise<void>;
-  user: Iuser;
 }
 
 class ManageInventoryModal extends React.Component<
@@ -46,29 +45,28 @@ class ManageInventoryModal extends React.Component<
   render() {
     let submitFunc;
     let modalTitle;
-    if (this.props.selectedUser) {
-      submitFunc = this.props.updateUser;
-      modalTitle = this.props.t('teamManage:editTeamModalTitle');
+    if (this.props.selectedItem) {
+      submitFunc = this.props.updateProduct;
+      modalTitle = this.props.t('manageInventory:editModalTitle');
     } else {
-      submitFunc = this.props.saveTeamUser;
-      modalTitle = this.props.t('teamManage:saveTeamModalTitle');
+      submitFunc = this.props.saveProduct;
+      modalTitle = this.props.t('manageInventory:saveModalTitle');
     }
     return (
       <CommonModal
         modalVisible={this.props.showEditUserModal}
         className="user-edit"
-        onHide={this.props.toggleEditUserModal}
+        onHide={this.props.toggleEditInventoryModal}
         body={
-          <UserManageForm
+          <ManageInventoryForm
             handleSubmit={submitFunc}
-            handleCancel={this.props.toggleEditUserModal}
-            selectedUser={this.props.selectedUser}
+            handleCancel={this.props.toggleEditInventoryModal}
+            selectedItem={this.props.selectedItem}
             loading={this.props.loading}
             colorButton={this.props.colorButton}
             customerOptions={this.props.customerOptions}
             facilityOptions={this.props.facilityOptions}
             getFacilitiesByCustomer={this.props.getFacilitiesByCustomer}
-            user={this.props.user}
           />
         }
         title={modalTitle}
@@ -85,16 +83,16 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     loading: state.ajaxCallsInProgress > 0,
     customerOptions: FormUtil.convertToOptions(state.customers),
     facilityOptions: FormUtil.convertToOptions(state.facilities),
-    showEditUserModal: state.showEditTeamModal
+    showEditUserModal: state.showEditInventoryModal
   };
 };
 
 export default connect(
   mapStateToProps,
   {
-    updateUser,
-    saveTeamUser,
-    toggleEditUserModal,
+    updateProduct,
+    saveProduct,
+    toggleEditInventoryModal,
     getFacilitiesByCustomer
   }
 )(ManageInventoryModal);

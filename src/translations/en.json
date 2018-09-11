@@ -97,6 +97,11 @@
     "saveTeamModalTitle": "Add New Team Member",
     "bannerTitle": "Manage Team"
   },
+  "manageInventory": {
+    "newProduct": "new Product",
+    "editModalTitle": "Edit Product",
+    "saveModalTitle": "Save New Product"
+  },
   "tiles": {
     "alerts": "Alerts",
     "training": "Training",

@@ -6,13 +6,12 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import {
   getInventory,
-  updateUser,
   toggleEditInventoryModal
 } from '../../actions/manageInventoryActions';
 import {
   IinitialState,
   Itile,
-  IteamManage,
+  ImanageInventory,
   Icustomer,
   Iproduct
 } from '../../models';
@@ -37,12 +36,12 @@ interface Iprops extends RouteComponentProps<any> {
   i18n: I18n;
   showEditModal: boolean;
   loading: boolean;
-  userManage: IteamManage;
+  userManage: ImanageInventory;
 }
 
 interface IdispatchProps {
   // Add your dispatcher properties here
-  toggleEditUserModal: () => void;
+  toggleEditInventoryModal: typeof toggleEditInventoryModal;
   toggleSecurityFunctionsModal: () => void;
   getInventory: typeof getInventory;
   customers: Icustomer[];
@@ -112,6 +111,8 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       currentTile: constants.getTileByURL(this.props.location.pathname)
     });
     // refresh the userManage every time the component mounts
+
+    // TODO get inventory commented out temporarily because the API is busted.
     this.props.getInventory(
       1,
       '',
@@ -142,7 +143,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
             this.setState({
               selectedRow: rowInfo.index
             });
-            this.props.toggleEditUserModal();
+            this.props.toggleEditInventoryModal();
           }
         },
         style: {
@@ -207,9 +208,9 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         <Button
           className="table-add-button"
           bsStyle={constants.colors[`${this.state.currentTile.color}Button`]}
-          onClick={this.props.toggleEditUserModal}
+          onClick={this.props.toggleEditInventoryModal}
         >
-          {t('teamManage:newTeamMember')}
+          {t('manageInventory:newProduct')}
         </Button>
         <ReactTable
           data={this.props.userManage.data}
@@ -227,7 +228,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           noDataText={t('common:noDataText')}
         />
         <EditModal
-          selectedUser={this.props.userManage.data[this.state.selectedRow]}
+          selectedItem={this.props.userManage.data[this.state.selectedRow]}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
@@ -256,7 +257,6 @@ export default translate('teamManage')(
     mapStateToProps,
     {
       getInventory,
-      updateUser,
       toggleEditInventoryModal,
       closeAllModals
     }

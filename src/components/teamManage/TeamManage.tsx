@@ -6,7 +6,6 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import {
   getUserManage,
-  updateUser,
   toggleEditUserModal
 } from '../../actions/teamManageActions';
 import {
@@ -246,7 +245,6 @@ export default translate('teamManage')(
     mapStateToProps,
     {
       getUserManage,
-      updateUser,
       toggleEditUserModal,
       closeAllModals
     }

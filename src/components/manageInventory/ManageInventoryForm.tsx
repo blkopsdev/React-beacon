@@ -12,13 +12,15 @@ import {
   Observable
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
-import { forEach, differenceBy, filter, find, map } from 'lodash';
+// import { forEach, differenceBy, filter, find, map } from 'lodash';
+import { forEach, differenceBy, map } from 'lodash';
+
 import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
-import { Iuser } from '../../models';
+import { Iproduct } from '../../models';
 
 const buildFieldConfig = (facilityOptions: any[]) => {
   const fieldConfigControls = {
@@ -59,7 +61,7 @@ interface AbstractControlEdited extends AbstractControl {
 interface Iprops {
   handleSubmit: any;
   handleCancel: any;
-  selectedUser?: Iuser;
+  selectedItem?: Iproduct;
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;
@@ -67,7 +69,6 @@ interface Iprops {
   customerOptions: any[];
   getFacilitiesByCustomer: (value: string) => Promise<void>;
   facilityOptions: any[];
-  user: Iuser;
 }
 
 class ManageInventoryForm extends React.Component<Iprops, {}> {
@@ -100,55 +101,41 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
     }
 
     // update the selected options if there is a selected user
-    if (typeof this.props.selectedUser !== 'undefined') {
-      const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
-        if (typeof this.props.selectedUser !== 'undefined') {
-          return find(this.props.selectedUser.facilities, { id: fac.value })
-            ? true
-            : false;
-        } else {
-          return false;
-        }
-      });
-      this.userForm.patchValue({ facilities: facilitiesArray });
-    }
+    // if (typeof this.props.selectedItem !== 'undefined') {
+    //   const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
+    //     if (typeof this.props.selectedItem !== 'undefined') {
+    //       return find(this.props.selectedItem.facilities, { id: fac.value })
+    //         ? true
+    //         : false;
+    //     } else {
+    //       return false;
+    //     }
+    //   });
+    // this.userForm.patchValue({ facilities: facilitiesArray });
+    // }
   }
 
   componentDidMount() {
-    // get the customer name
-    const { customerID } = this.props.user;
-    const customer: any = find(this.props.customerOptions, {
-      value: customerID
-    }) || { name: '' };
-    if (customer && customer.label.length) {
-      this.userForm.patchValue({ customer: customer.label });
-    }
-    const customerControl = this.userForm.get(
-      'customer'
-    ) as AbstractControlEdited;
-    customerControl.disable();
+    // const customer: any = find(this.props.customerOptions, {
+    //   value: customerID
+    // }) || { name: '' };
+    // if (customer && customer.label.length) {
+    //   this.userForm.patchValue({ customer: customer.label });
+    // }
+    // const customerControl = this.userForm.get(
+    //   'customer'
+    // ) as AbstractControlEdited;
+    // customerControl.disable();
     // if there is a customerID then get facilities
-    if (customerID.length) {
-      this.props.getFacilitiesByCustomer(customerID);
-    }
 
-    if (!this.props.selectedUser) {
+    if (!this.props.selectedItem) {
       console.log('adding a new user');
       return;
     } else {
-      const { facilities } = this.props.selectedUser;
-
-      const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
-        return find(facilities, { id: fac.value }) ? true : false;
-      });
-      this.userForm.patchValue({ facilities: facilitiesArray });
       // set values
-      forEach(this.props.selectedUser, (value, key) => {
+      forEach(this.props.selectedItem, (value, key) => {
         this.userForm.patchValue({ [key]: value });
       });
-
-      const emailControl = this.userForm.get('email') as AbstractControlEdited;
-      emailControl.disable();
     }
   }
 
@@ -170,17 +157,15 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
       }
     );
 
-    if (this.props.selectedUser) {
+    if (this.props.selectedItem) {
       this.props.handleSubmit(
         {
-          id: this.props.selectedUser.id,
+          id: this.props.selectedItem.id,
           ...this.userForm.value,
-          facilities: facilitiesArray,
-          customerID: this.props.user.customerID,
-          email: this.props.selectedUser.email // have to add back the email because disabling the input removes it
+          facilities: facilitiesArray
         },
         shouldApprove,
-        this.props.selectedUser.id
+        this.props.selectedItem.id
       );
     } else {
       this.props.handleSubmit({

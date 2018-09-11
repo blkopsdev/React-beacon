@@ -46,7 +46,7 @@ export function getInventory(
   };
 }
 
-export function updateUser(user: Iuser): ThunkResult<void> {
+export function updateProduct(user: Iuser): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     return axios
@@ -73,9 +73,9 @@ export function updateUser(user: Iuser): ThunkResult<void> {
 }
 
 /*
-* save (add) a new team member
+* save (add) a new product
 */
-export function saveTeamUser(user: Iuser): ThunkResult<void> {
+export function saveProduct(user: Iuser): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     return axios

@@ -11,7 +11,7 @@ const headerImg = require('src/images/BeaconLogo@2x.png');
 const Header = (props: any) => {
   return (
     <div className="header">
-      <Link to={'dashboard'}>
+      <Link to={'/dashboard'}>
         <img src={headerImg} />
       </Link>
       <HeaderMenu {...props} />

@@ -10,6 +10,7 @@ import { Route, Switch } from 'react-router-dom';
 import UserQueue from '../userQueue/UserQueue';
 import UserManage from '../userManage/UserManage';
 import TeamManage from '../teamManage/TeamManage';
+import ManageInventory from '../manageInventory/ManageInventory';
 import constants from '../../constants/constants';
 import { IinitialState } from '../../models';
 
@@ -67,6 +68,7 @@ const TwoPaneLayout = (props: any) => {
             <Route exact path="/queue" component={UserQueue} />
             <Route exact path="/users" component={UserManage} />
             <Route exact path="/team" component={TeamManage} />
+            <Route exact path="/inventory" component={ManageInventory} />
           </Switch>
         </Col>
       </Row>

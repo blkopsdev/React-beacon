@@ -48,6 +48,73 @@ export interface ItempUser {
   tempState: string;
   tempZip: string;
 }
+interface IbaseDataObject {
+  id: string;
+  name: string;
+  createDate: string;
+  updateDate: string;
+  creatorID: string;
+  updaterID: string;
+}
+// export interface ImainCategory extends IbaseDataObject {}
+export interface Isubcategory extends IbaseDataObject {
+  mainCategoryID: string;
+  mainCategory: IbaseDataObject;
+}
+// export interface Istandard extends IbaseDataObject {}
+export interface Ibrand extends IbaseDataObject {
+  code: string;
+}
+// export interface Imanufacturer extends IbaseDataObject {}
+export interface IgasType extends IbaseDataObject {
+  code: string;
+}
+// export interface Ipower extends IbaseDataObject {}
+export interface IsystemSize extends IbaseDataObject {
+  code: string;
+}
+export interface IproductGroup extends IbaseDataObject {
+  code: string;
+}
+export interface IinstallBase extends IbaseDataObject {
+  code: string;
+
+  productID: string;
+  product: Iproduct;
+  facilityID: string;
+  facility: Ifacility;
+  nickname: string;
+  remarks: string;
+  serialNumber: string;
+  rfid: string;
+  installDate: string;
+  prodDate: string;
+}
+
+export interface Iproduct {
+  id: string;
+  name: string;
+  sku: string;
+  description: string;
+  imagePath: string;
+  subcategoryID: string;
+  standardID: string;
+  brandID: string;
+  manufacturerID: string;
+  gasTypeID: string;
+  powerID: string;
+  systemSizeID: string;
+  productGroupID: string;
+  subcategory: Isubcategory;
+  standard: IbaseDataObject;
+  Brand: Ibrand;
+  Manufacturer: IbaseDataObject;
+  GasType: IgasType;
+  Power: IbaseDataObject;
+  SystemSize: IsystemSize;
+  ProductGroup: IproductGroup;
+  Installs: IinstallBase;
+}
 
 export interface IuserQueue {
   page: number;
@@ -65,6 +132,11 @@ export interface IteamManage {
   data: Iuser[];
   totalPages: number;
 }
+export interface ImanageInventory {
+  page: number;
+  data: Iproduct[];
+  totalPages: number;
+}
 
 export interface Iredirect {
   redirectToReferrer: boolean;
@@ -77,6 +149,7 @@ export interface IinitialState {
   userQueue: IuserQueue;
   userManage: IuserManage;
   teamManage: IteamManage;
+  manageInventory: ImanageInventory;
   customers: Icustomer[];
   facilities: Ifacility[];
   showEditUserModal: boolean;
@@ -86,6 +159,7 @@ export interface IinitialState {
   showEditProfileModal: boolean;
   showSecurityFunctionsModal: boolean;
   showEditTeamModal: boolean;
+  showEditInventoryModal: boolean;
 }
 export interface Itile {
   icon: string | string[];

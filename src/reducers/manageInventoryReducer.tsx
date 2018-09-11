@@ -1,23 +1,18 @@
 import * as types from '../actions/actionTypes';
-import { Iuser, IuserManage } from '../models';
+import { Iproduct, ImanageInventory } from '../models';
 import initialState from './initialState';
 import { pickBy, map, filter } from 'lodash';
 
-function teamManageData(state: Iuser[] = [], action: any): Iuser[] {
+function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
   switch (action.type) {
-    case types.TEAM_MANAGE_SUCCESS:
-      // return action.users;
-      return map(action.team, user => {
-        const securityFunctions = map(user.securityFunctions, securityF => {
-          return securityF.toUpperCase();
-        });
-        return {
-          ...initialState.user,
-          ...pickBy(user, (property, key) => property !== null),
-          securityFunctions
-        };
-      });
-    case types.TEAM_UPDATE_SUCCESS:
+    case types.GET_INVENTORY_SUCCESS:
+      return action.inventory;
+    // return map(action.data, d => {
+    //   return {
+    //     ...pickBy(d, (property, key) => property !== null)
+    //   };
+    // });
+    case types.INVENTORY_UPDATE_SUCCESS:
       const filteredUsers = filter(state, u => u.id !== action.user.id);
       const securityFunc = map(action.user.securityFunctions, securityF => {
         return securityF.toUpperCase();
@@ -27,8 +22,8 @@ function teamManageData(state: Iuser[] = [], action: any): Iuser[] {
         securityFunctions: securityFunc
       };
 
-      return [...filteredUsers, updatedUser] as Iuser[];
-    case types.TEAM_SAVE_SUCCESS:
+      return [...filteredUsers, updatedUser] as Iproduct[];
+    case types.INVENTORY_SAVE_SUCCESS:
       const securityFunct = map(action.user.securityFunctions, securityF => {
         return securityF.toUpperCase();
       });
@@ -37,7 +32,7 @@ function teamManageData(state: Iuser[] = [], action: any): Iuser[] {
         securityFunctions: securityFunct
       };
 
-      return [...state, updatedTeamMember] as Iuser[];
+      return [...state, updatedTeamMember] as Iproduct[];
 
     case types.USER_LOGOUT_SUCCESS:
       return [];
@@ -46,11 +41,11 @@ function teamManageData(state: Iuser[] = [], action: any): Iuser[] {
   }
 }
 
-function userManagePage(state: number = 1, action: any): number {
+function pageReducer(state: number = 1, action: any): number {
   switch (action.type) {
-    case types.TEAM_MANAGE_INCREMENT:
+    case types.INVENTORY_INCREMENT:
       return state + 1;
-    case types.TEAM_MANAGE_DECREMENT:
+    case types.INVENTORY_DECREMENT:
       if (state > 1) {
         return state - 1;
       }
@@ -58,9 +53,9 @@ function userManagePage(state: number = 1, action: any): number {
       return state;
   }
 }
-function userManageTotalPages(state: number = 1, action: any): number {
+function totalPagesReducer(state: number = 1, action: any): number {
   switch (action.type) {
-    case types.TEAM_MANAGE_TOTAL_PAGES:
+    case types.INVENTORY_TOTAL_PAGES:
       if (action.pages && action.pages > 0) {
         return action.pages;
       }
@@ -70,13 +65,13 @@ function userManageTotalPages(state: number = 1, action: any): number {
   }
 }
 
-export default function userManage(
-  state: IuserManage = initialState.userManage,
+export default function ManageInventory(
+  state: ImanageInventory = initialState.manageInventory,
   action: any
 ) {
   return {
-    data: teamManageData(state.data, action),
-    page: userManagePage(state.page, action),
-    totalPages: userManageTotalPages(state.totalPages, action)
+    data: dataReducer(state.data, action),
+    page: pageReducer(state.page, action),
+    totalPages: totalPagesReducer(state.totalPages, action)
   };
 }

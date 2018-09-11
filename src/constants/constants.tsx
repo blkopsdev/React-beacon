@@ -186,7 +186,7 @@ const tiles = [
     width: 360,
     height: 408,
     url: '/inventory',
-    securityFunction: '',
+    securityFunction: securityFunctions.ViewInventory.id,
     description: ''
   },
   {

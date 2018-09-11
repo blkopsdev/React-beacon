@@ -9,6 +9,7 @@ import customers from './customersReducer';
 import facilities from './facilitiesReducer';
 import createShowModalWithNamedType from './userQueueModalsReducer';
 import teamManage from './teamManageReducer';
+import manageInventory from './manageInventoryReducer';
 
 const rootReducer = combineReducers({
   ajaxCallsInProgress,
@@ -20,13 +21,17 @@ const rootReducer = combineReducers({
   teamManage,
   customers,
   facilities,
+  manageInventory,
   showEditQueueUserModal: createShowModalWithNamedType('EDIT_QUEUE_USER'),
   showEditCustomerModal: createShowModalWithNamedType('EDIT_CUSTOMER'),
   showEditFacilityModal: createShowModalWithNamedType('EDIT_FACILITY'),
   showEditUserModal: createShowModalWithNamedType('EDIT_USER'),
   showEditTeamModal: createShowModalWithNamedType('EDIT_TEAM'),
   showEditProfileModal: createShowModalWithNamedType('EDIT_PROFILE'),
-  showSecurityFunctionsModal: createShowModalWithNamedType('SECURITY_FUNCTIONS')
+  showSecurityFunctionsModal: createShowModalWithNamedType(
+    'SECURITY_FUNCTIONS'
+  ),
+  showEditInventoryModal: createShowModalWithNamedType('EDIT_INVENTORY')
 });
 
 export default rootReducer;

@@ -31,6 +31,9 @@ const API = {
     },
     facility: {
       getbycustomer: `${root}facility/getbycustomer`
+    },
+    inventory: {
+      getinventory: `${root}inventory/search`
     }
   }
 };

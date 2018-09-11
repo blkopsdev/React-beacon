@@ -40,6 +40,11 @@ export default {
     totalPages: 1,
     data: []
   },
+  manageInventory: {
+    page: 1,
+    totalPages: 1,
+    data: []
+  },
   customers: [],
   facilities: [],
   showEditUserModal: false,
@@ -48,7 +53,8 @@ export default {
   showEditQueueUserModal: false,
   showEditProfileModal: false,
   showSecurityFunctionsModal: false,
-  showEditTeamModal: false
+  showEditTeamModal: false,
+  showEditInventoryModal: false
 };
 
 export const emptyTile = {

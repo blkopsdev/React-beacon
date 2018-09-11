@@ -1,5 +1,15 @@
 import * as types from '../actions/actionTypes';
-import { Iproduct, ImanageInventory } from '../models';
+import {
+  Iproduct,
+  ImanageInventory,
+  IproductInfo,
+  Ibrand,
+  IgasType,
+  IbaseDataObject,
+  IproductGroup,
+  Isubcategory,
+  IsystemSize
+} from '../models';
 import initialState from './initialState';
 import { pickBy, map, filter } from 'lodash';
 
@@ -74,4 +84,40 @@ export default function ManageInventory(
     page: pageReducer(state.page, action),
     totalPages: totalPagesReducer(state.totalPages, action)
   };
+}
+/*
+Brand, GasType, Main Category, Manufacturer, Power, Product Group, Standard, Subcategory, System Size 
+*/
+export function productInfo(
+  state: IproductInfo = initialState.productInfo,
+  action: any
+) {
+  switch (action.type) {
+    case types.GET_PRODUCT_INFO_SUCCESS:
+      const pi = action.data;
+      const brands = pi[0] as Ibrand[];
+      const gasTypes = pi[1] as IgasType[];
+      const mainCategories = pi[2] as IbaseDataObject[];
+      const manufacturers = pi[3] as IbaseDataObject[];
+      const powers = pi[4] as IbaseDataObject[];
+      const productGroups = pi[5] as IproductGroup[];
+      const standards = pi[6] as IbaseDataObject[];
+      const subcategories = pi[7] as Isubcategory[];
+      const systemSizes = pi[8] as IsystemSize[];
+
+      return {
+        brands,
+        gasTypes,
+        mainCategories,
+        manufacturers,
+        powers,
+        productGroups,
+        standards,
+        subcategories,
+        systemSizes
+      };
+
+    default:
+      return state;
+  }
 }

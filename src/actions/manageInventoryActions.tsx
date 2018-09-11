@@ -10,6 +10,29 @@ import { ThunkAction } from 'redux-thunk';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
+export function getProductInfo() {
+  return (dispatch: any, getState: any) => {
+    dispatch(beginAjaxCall());
+    return axios
+      .get(API.GET.inventory.getproductinfo)
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.GET_PRODUCT_INFO_SUCCESS,
+            data: data.data
+          });
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.GET_PRODUCT_INFO_FAILED });
+        constants.handleError(error, 'get product info');
+        throw error;
+      });
+  };
+}
+
 export function getInventory(
   page: number,
   search: string,

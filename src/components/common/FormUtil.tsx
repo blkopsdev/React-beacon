@@ -44,7 +44,7 @@ const ControlComponent = (props: any) => (
 export const FormUtil = {
   convertToOptions: (items: any) => {
     return map(items, (item: any) => {
-      return { value: item.id, label: item.name };
+      return { value: item.id, label: item.name || item.code };
     });
   },
 

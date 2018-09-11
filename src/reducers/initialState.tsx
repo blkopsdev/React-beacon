@@ -47,6 +47,17 @@ export default {
   },
   customers: [],
   facilities: [],
+  productInfo: {
+    brands: [],
+    gasTypes: [],
+    manufacturers: [],
+    mainCategories: [],
+    powers: [],
+    productGroups: [],
+    standards: [],
+    subcategories: [],
+    systemSizes: []
+  },
   showEditUserModal: false,
   showEditCustomerModal: false,
   showEditFacilityModal: false,

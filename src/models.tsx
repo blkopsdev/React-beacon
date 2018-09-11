@@ -48,7 +48,7 @@ export interface ItempUser {
   tempState: string;
   tempZip: string;
 }
-interface IbaseDataObject {
+export interface IbaseDataObject {
   id: string;
   name: string;
   createDate: string;
@@ -142,6 +142,17 @@ export interface Iredirect {
   redirectToReferrer: boolean;
   pathname: string;
 }
+export interface IproductInfo {
+  brands: Ibrand[];
+  gasTypes: IgasType[];
+  manufacturers: IbaseDataObject[];
+  mainCategories: IbaseDataObject[];
+  powers: IbaseDataObject[];
+  productGroups: IproductGroup[];
+  standards: IbaseDataObject[];
+  subcategories: Isubcategory[];
+  systemSizes: IsystemSize[];
+}
 export interface IinitialState {
   user: Iuser;
   ajaxCallsInProgress: number;
@@ -160,6 +171,7 @@ export interface IinitialState {
   showSecurityFunctionsModal: boolean;
   showEditTeamModal: boolean;
   showEditInventoryModal: boolean;
+  productInfo: IproductInfo;
 }
 export interface Itile {
   icon: string | string[];
@@ -188,6 +200,11 @@ export interface Ifacility {
   city: string;
   state: string;
   postalCode: string;
+}
+
+export interface Ioption {
+  value: string;
+  label: string;
 }
 
 // these are copied from react-redux-toastr beacuse could not figure out any other way to make typescript happy

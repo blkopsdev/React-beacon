@@ -6,14 +6,16 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import {
   getInventory,
-  toggleEditInventoryModal
+  toggleEditInventoryModal,
+  getProductInfo
 } from '../../actions/manageInventoryActions';
 import {
   IinitialState,
   Itile,
   ImanageInventory,
   Icustomer,
-  Iproduct
+  Iproduct,
+  Ioption
 } from '../../models';
 import { emptyTile } from '../../reducers/initialState';
 import { RouteComponentProps } from 'react-router-dom';
@@ -23,7 +25,7 @@ import Banner from '../common/Banner';
 // import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import constants from '../../constants/constants';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
-// import { find } from 'lodash';
+import { find } from 'lodash';
 import { FormUtil } from '../common/FormUtil';
 import SearchTableForm from '../common/SearchTableForm';
 import { TableUtil } from '../common/TableUtil';
@@ -42,19 +44,22 @@ interface Iprops extends RouteComponentProps<any> {
 interface IdispatchProps {
   // Add your dispatcher properties here
   toggleEditInventoryModal: typeof toggleEditInventoryModal;
+  getProductInfo: typeof getProductInfo;
   toggleSecurityFunctionsModal: () => void;
   getInventory: typeof getInventory;
   customers: Icustomer[];
   closeAllModals: typeof closeAllModals;
+  productGroupOptions: Ioption[];
+  manufacturerOptions: Ioption[];
 }
 
 interface Istate {
   selectedRow: any;
   currentTile: Itile;
+  columns: any;
 }
 
 class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
-  public columns: any[];
   public searchFieldConfig: any;
   public buttonInAction = false;
   constructor(props: Iprops & IdispatchProps) {
@@ -62,36 +67,10 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     this.getTrProps = this.getTrProps.bind(this);
     this.state = {
       selectedRow: null,
-      currentTile: emptyTile
+      currentTile: emptyTile,
+      columns: []
     };
-    this.columns = TableUtil.translateHeaders(
-      [
-        {
-          Header: 'SKU',
-          accessor: 'sku'
-        },
-        {
-          Header: 'Name',
-          accessor: 'name'
-        },
-        {
-          Header: 'Product Group',
-          accessor: ({ productGroupID }: Iproduct) => {
-            return productGroupID; // TODO find the name of the product group
-            // return hasTeamMembers ? 'Yes' : 'No';
-          },
-          id: 'productGroup'
-        },
-        {
-          Header: 'Manufacturer',
-          accessor: ({ manufacturerID }: Iproduct) => {
-            return manufacturerID; // TODO get the name of the manufacturer
-          },
-          id: 'manufacturer'
-        }
-      ],
-      this.props.t
-    );
+
     this.searchFieldConfig = {
       controls: {
         search: {
@@ -110,6 +89,9 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     this.setState({
       currentTile: constants.getTileByURL(this.props.location.pathname)
     });
+    this.setColumns();
+
+    this.props.getProductInfo();
     // refresh the userManage every time the component mounts
 
     // TODO get inventory commented out temporarily because the API is busted.
@@ -122,18 +104,68 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     );
     // refresh the list of customers every time the component mounts
   }
-  componentDidUpdate(prevProps: Iprops) {
+  componentDidUpdate(prevProps: Iprops & IdispatchProps) {
     if (
       prevProps.showEditModal !== this.props.showEditModal &&
       !this.props.showEditModal
     ) {
       this.setState({ selectedRow: null });
     }
+
+    if (
+      prevProps.productGroupOptions.length !==
+        this.props.productGroupOptions.length ||
+      prevProps.manufacturerOptions.length !==
+        this.props.manufacturerOptions.length
+    ) {
+      console.log('re setting columns');
+      this.setColumns();
+    }
   }
   componentWillUnmount() {
     this.props.closeAllModals();
   }
 
+  /*
+  * Set Columns sets columns to state
+  * setting columns here in order to reset them if and after we receive productGroup and manufacturer options
+  */
+  setColumns = () => {
+    const columns = TableUtil.translateHeaders(
+      [
+        {
+          Header: 'SKU',
+          accessor: 'sku'
+        },
+        {
+          Header: 'Name',
+          accessor: 'name'
+        },
+        {
+          Header: 'Product Group',
+          accessor: ({ productGroupID }: Iproduct) => {
+            const productGroup = find(this.props.productGroupOptions, {
+              value: productGroupID
+            });
+            return productGroup ? productGroup.label : '';
+          },
+          id: 'productGroup'
+        },
+        {
+          Header: 'Manufacturer',
+          accessor: ({ manufacturerID }: Iproduct) => {
+            const manufacturer = find(this.props.manufacturerOptions, {
+              value: manufacturerID
+            });
+            return manufacturer ? manufacturer.label : '';
+          },
+          id: 'manufacturer'
+        }
+      ],
+      this.props.t
+    );
+    this.setState({ columns });
+  };
   getTrProps = (state: any, rowInfo: any) => {
     // console.log("ROWINFO", rowInfo);
     if (rowInfo) {
@@ -214,7 +246,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         </Button>
         <ReactTable
           data={this.props.userManage.data}
-          columns={this.columns}
+          columns={this.state.columns}
           getTrProps={this.getTrProps}
           pageSize={this.props.userManage.data.length}
           manual // Forces table not to paginate or sort automatically, so we can handle it server-side
@@ -249,7 +281,13 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     userManage: state.manageInventory,
     customers: state.customers,
     loading: state.ajaxCallsInProgress > 0,
-    showEditModal: state.showEditInventoryModal
+    showEditModal: state.showEditInventoryModal,
+    productGroupOptions: FormUtil.convertToOptions(
+      state.productInfo.productGroups
+    ),
+    manufacturerOptions: FormUtil.convertToOptions(
+      state.productInfo.manufacturers
+    )
   };
 };
 export default translate('teamManage')(
@@ -258,7 +296,8 @@ export default translate('teamManage')(
     {
       getInventory,
       toggleEditInventoryModal,
-      closeAllModals
+      closeAllModals,
+      getProductInfo
     }
   )(ManageInventory)
 );

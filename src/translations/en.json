@@ -7,6 +7,8 @@
     "search": "search",
     "customer": "customer",
     "facility": "facility",
+    "productGroup": "Product Group",
+    "manufacturer": "Manufacturer",
     "newCustomerModalTitle": "New Customer",
     "customerNameLabel": "New Customer Name",
     "customerVatLabel": "VAT",
@@ -98,9 +100,14 @@
     "bannerTitle": "Manage Team"
   },
   "manageInventory": {
+    "bannerTitle": "Manage Inventory",
     "newProduct": "new Product",
     "editModalTitle": "Edit Product",
-    "saveModalTitle": "Save New Product"
+    "saveModalTitle": "Save New Product",
+    "facilityPlaceholder": "Search...",
+    "searchPlaceholder": "Search...",
+    "productGroupPlaceholder": "Search...",
+    "manufacturerPlaceholder": "Search..."
   },
   "tiles": {
     "alerts": "Alerts",

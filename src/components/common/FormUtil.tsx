@@ -198,9 +198,9 @@ export const FormUtil = {
   }: AbstractControl) => {
     const defaultValue = find(meta.options, { value: meta.value });
     // console.log('rendering select', meta.options, value, defaultValue)
-    const selectClassName = meta.isMulti ? 'is-multi' : '';
+    const selectClassName = meta.isMulti ? `is-multi` : ``;
     return (
-      <Col xs={meta.colWidth}>
+      <Col xs={meta.colWidth} className={meta.className || ''}>
         <FormGroup bsSize="sm">
           <ControlLabel>{meta.label}</ControlLabel>
           <Select
@@ -214,6 +214,44 @@ export const FormUtil = {
             isClearable={true}
             {...handler()}
           />
+        </FormGroup>
+      </Col>
+    );
+  },
+  SelectWithoutValidationLeftLabel: ({
+    handler,
+    touched,
+    hasError,
+    meta,
+    pristine,
+    errors,
+    submitted,
+    patchValue,
+    setErrors,
+    value
+  }: AbstractControl) => {
+    const defaultValue = find(meta.options, { value: meta.value });
+    // console.log('rendering select', meta.options, value, defaultValue)
+    const selectClassName = meta.isMulti ? `is-multi` : ``;
+    return (
+      <Col xs={meta.colWidth} className={meta.className || ''}>
+        <FormGroup bsSize="sm">
+          <Col xs={2}>
+            <ControlLabel>{meta.label}</ControlLabel>
+          </Col>
+          <Col xs={10}>
+            <Select
+              options={meta.options}
+              className={selectClassName}
+              defaultValue={defaultValue}
+              components={{ Control: ControlComponent }}
+              placeholder={meta.placeholder}
+              isMulti={meta.isMulti}
+              classNamePrefix="react-select"
+              isClearable={true}
+              {...handler()}
+            />
+          </Col>
         </FormGroup>
       </Col>
     );

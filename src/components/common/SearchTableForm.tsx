@@ -48,7 +48,7 @@ export default class SearchTableForm extends React.Component<Iprops, {}> {
             onMount={this.setForm}
             fieldConfig={this.fieldConfig}
           />
-          <Col xs={2} className="search-form-button">
+          <Col xs={1} className="search-form-button">
             <Button
               bsStyle={this.props.colorButton}
               bsSize="sm"

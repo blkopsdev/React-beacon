@@ -8,12 +8,11 @@ import {
   Validators,
   FormGenerator,
   AbstractControl,
-  FieldConfig,
-  Observable
+  FieldConfig
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
 // import { forEach, differenceBy, filter, find, map } from 'lodash';
-import { forEach, differenceBy, map } from 'lodash';
+import { forEach, map } from 'lodash';
 
 import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
@@ -50,13 +49,13 @@ const buildFieldConfig = (facilityOptions: any[]) => {
   };
 };
 
-interface IstateChanges extends Observable<any> {
-  next: () => void;
-}
+// interface IstateChanges extends Observable<any> {
+//   next: () => void;
+// }
 
-interface AbstractControlEdited extends AbstractControl {
-  stateChanges: IstateChanges;
-}
+// interface AbstractControlEdited extends AbstractControl {
+//   stateChanges: IstateChanges;
+// }
 
 interface Iprops {
   handleSubmit: any;
@@ -67,7 +66,6 @@ interface Iprops {
   t: TranslationFunction;
   i18n: I18n;
   customerOptions: any[];
-  getFacilitiesByCustomer: (value: string) => Promise<void>;
   facilityOptions: any[];
 }
 
@@ -84,22 +82,22 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
     this.setForm = this.setForm.bind(this);
   }
   componentDidUpdate(prevProps: Iprops) {
-    if (
-      differenceBy(
-        prevProps.facilityOptions,
-        this.props.facilityOptions,
-        'value'
-      ).length ||
-      prevProps.facilityOptions.length !== this.props.facilityOptions.length
-    ) {
-      // update the options
-      const facilitySelectControl = this.userForm.get(
-        'facilities'
-      ) as AbstractControlEdited;
-      facilitySelectControl.meta.options = this.props.facilityOptions;
-      facilitySelectControl.stateChanges.next();
-    }
-
+    // commmented out updating the facilities because we are using the facilities from the logged in user object.  this should not change
+    // if (
+    //   differenceBy(
+    //     prevProps.facilityOptions,
+    //     this.props.facilityOptions,
+    //     'value'
+    //   ).length ||
+    //   prevProps.facilityOptions.length !== this.props.facilityOptions.length
+    // ) {
+    //   // update the options
+    //   const facilitySelectControl = this.userForm.get(
+    //     'facilities'
+    //   ) as AbstractControlEdited;
+    //   facilitySelectControl.meta.options = this.props.facilityOptions;
+    //   facilitySelectControl.stateChanges.next();
+    // }
     // update the selected options if there is a selected user
     // if (typeof this.props.selectedItem !== 'undefined') {
     //   const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {

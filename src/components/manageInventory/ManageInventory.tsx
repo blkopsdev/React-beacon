@@ -22,7 +22,6 @@ import { RouteComponentProps } from 'react-router-dom';
 import ReactTable from 'react-table';
 import { Button } from 'react-bootstrap';
 import Banner from '../common/Banner';
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import constants from '../../constants/constants';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import { find } from 'lodash';
@@ -31,6 +30,7 @@ import SearchTableForm from '../common/SearchTableForm';
 import { TableUtil } from '../common/TableUtil';
 import EditModal from './ManageInventoryModal';
 import { closeAllModals } from '../../actions/commonActions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -51,6 +51,7 @@ interface IdispatchProps {
   closeAllModals: typeof closeAllModals;
   productGroupOptions: Ioption[];
   manufacturerOptions: Ioption[];
+  facilityOptions: Ioption[];
 }
 
 interface Istate {
@@ -61,6 +62,7 @@ interface Istate {
 
 class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
   public searchFieldConfig: any;
+  public searchFieldConfigBanner: any;
   public buttonInAction = false;
   constructor(props: Iprops & IdispatchProps) {
     super(props);
@@ -77,9 +79,40 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           render: FormUtil.TextInputWithoutValidation,
           meta: {
             label: 'common:search',
-            colWidth: 4,
+            colWidth: 3,
             type: 'text',
             placeholder: 'searchPlaceholder'
+          }
+        },
+        productGroupID: {
+          render: FormUtil.SelectWithoutValidation,
+          meta: {
+            label: 'common:productGroup',
+            options: this.props.facilityOptions,
+            colWidth: 3,
+            type: 'select',
+            placeholder: 'productGroupPlaceholder'
+          }
+        },
+        manufacturerID: {
+          render: FormUtil.SelectWithoutValidation,
+          meta: {
+            label: 'common:manufacturer',
+            options: this.props.facilityOptions,
+            colWidth: 3,
+            type: 'select',
+            placeholder: 'manufacturerPlaceholder'
+          }
+        },
+        facilityID: {
+          render: FormUtil.SelectWithoutValidationLeftLabel,
+          meta: {
+            label: 'common:facility',
+            options: this.props.facilityOptions,
+            colWidth: 5,
+            type: 'select',
+            placeholder: 'facilityPlaceholder',
+            className: 'banner-input'
           }
         }
       }
@@ -217,9 +250,6 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
   };
 
   render() {
-    // if (this.props.userManage.data.length === 0) {
-    //   return <div>EFF</div>;
-    // }
     const { t } = this.props;
     return (
       <div className="user-manage">
@@ -237,6 +267,14 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           }
           t={this.props.t}
         />
+        <Button
+          className="request-for-quote-cart-button"
+          bsStyle="primary"
+          onClick={this.props.toggleEditInventoryModal}
+        >
+          <FontAwesomeIcon icon="shopping-cart" />
+        </Button>
+
         <Button
           className="table-add-button"
           bsStyle={constants.colors[`${this.state.currentTile.color}Button`]}
@@ -282,6 +320,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     customers: state.customers,
     loading: state.ajaxCallsInProgress > 0,
     showEditModal: state.showEditInventoryModal,
+    facilityOptions: FormUtil.convertToOptions(state.user.facilities),
     productGroupOptions: FormUtil.convertToOptions(
       state.productInfo.productGroups
     ),
@@ -290,7 +329,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     )
   };
 };
-export default translate('teamManage')(
+export default translate('manageInventory')(
   connect(
     mapStateToProps,
     {

@@ -15,7 +15,6 @@ import CommonModal from '../common/CommonModal';
 import ManageInventoryForm from './ManageInventoryForm';
 import { TranslationFunction } from 'react-i18next';
 import { FormUtil } from '../common/FormUtil';
-import { getFacilitiesByCustomer } from '../../actions/userQueueActions';
 
 interface Iprops {
   selectedItem: Iproduct;
@@ -31,7 +30,6 @@ interface IdispatchProps {
   updateProduct: typeof updateProduct;
   saveProduct: typeof saveProduct;
   toggleEditInventoryModal: typeof toggleEditInventoryModal;
-  getFacilitiesByCustomer: () => Promise<void>;
 }
 
 class ManageInventoryModal extends React.Component<
@@ -66,7 +64,6 @@ class ManageInventoryModal extends React.Component<
             colorButton={this.props.colorButton}
             customerOptions={this.props.customerOptions}
             facilityOptions={this.props.facilityOptions}
-            getFacilitiesByCustomer={this.props.getFacilitiesByCustomer}
           />
         }
         title={modalTitle}
@@ -82,7 +79,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     userManage: state.teamManage,
     loading: state.ajaxCallsInProgress > 0,
     customerOptions: FormUtil.convertToOptions(state.customers),
-    facilityOptions: FormUtil.convertToOptions(state.facilities),
+    facilityOptions: FormUtil.convertToOptions(state.user.facilities),
     showEditUserModal: state.showEditInventoryModal
   };
 };
@@ -92,7 +89,6 @@ export default connect(
   {
     updateProduct,
     saveProduct,
-    toggleEditInventoryModal,
-    getFacilitiesByCustomer
+    toggleEditInventoryModal
   }
 )(ManageInventoryModal);

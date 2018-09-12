@@ -22,7 +22,12 @@ import { loadState, saveState } from './store/localStorage';
 import { runWithAdal } from 'react-adal';
 import axios from 'axios';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { faUsers, faSearch, faUser } from '@fortawesome/free-solid-svg-icons';
+import {
+  faUsers,
+  faSearch,
+  faUser,
+  faShoppingCart
+} from '@fortawesome/free-solid-svg-icons';
 import {
   faCog,
   faCalendarCheck,
@@ -42,7 +47,8 @@ library.add(
   faSearch,
   faHospital,
   faUser,
-  faSignOut
+  faSignOut,
+  faShoppingCart
 );
 
 import { authContext, isFullyAuthenticated } from './actions/userActions';

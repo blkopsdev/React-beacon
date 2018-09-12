@@ -13,9 +13,10 @@ import { Col, Button, Row } from 'react-bootstrap';
 import { FormUtil } from '../common/FormUtil';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TranslationFunction } from 'react-i18next';
+import { forEach } from 'lodash';
 
 interface Iprops extends React.Props<SearchTableForm> {
-  fieldConfig: any;
+  fieldConfig: FieldConfig;
   handleSubmit: any;
   loading: boolean;
   colorButton: string;
@@ -29,7 +30,13 @@ export default class SearchTableForm extends React.Component<Iprops, {}> {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.fieldConfig = FormUtil.translateForm(this.props.fieldConfig, props.t);
   }
-
+  componentDidMount() {
+    forEach(this.props.fieldConfig.controls, (input: any, key) => {
+      if (input.meta && input.meta.defaultValue) {
+        this.searchForm.patchValue({ [key]: input.meta.defaultValue });
+      }
+    });
+  }
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.props.handleSubmit(this.searchForm.value);

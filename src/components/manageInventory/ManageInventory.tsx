@@ -15,8 +15,10 @@ import {
   ImanageInventory,
   Icustomer,
   Iproduct,
-  Ioption
+  Ioption,
+  Iuser
 } from '../../models';
+import { FieldConfig } from 'react-reactive-form';
 import { emptyTile } from '../../reducers/initialState';
 import { RouteComponentProps } from 'react-router-dom';
 import ReactTable from 'react-table';
@@ -52,6 +54,7 @@ interface IdispatchProps {
   productGroupOptions: Ioption[];
   manufacturerOptions: Ioption[];
   facilityOptions: Ioption[];
+  user: Iuser;
 }
 
 interface Istate {
@@ -84,7 +87,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
             placeholder: 'searchPlaceholder'
           }
         },
-        productGroupID: {
+        productGroup: {
           render: FormUtil.SelectWithoutValidation,
           meta: {
             label: 'common:productGroup',
@@ -94,7 +97,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
             placeholder: 'productGroupPlaceholder'
           }
         },
-        manufacturerID: {
+        manufacturer: {
           render: FormUtil.SelectWithoutValidation,
           meta: {
             label: 'common:manufacturer',
@@ -104,7 +107,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
             placeholder: 'manufacturerPlaceholder'
           }
         },
-        facilityID: {
+        facility: {
           render: FormUtil.SelectWithoutValidationLeftLabel,
           meta: {
             label: 'common:facility',
@@ -112,11 +115,12 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
             colWidth: 5,
             type: 'select',
             placeholder: 'facilityPlaceholder',
-            className: 'banner-input'
+            className: 'banner-input',
+            defaultValue: this.props.facilityOptions[0]
           }
         }
       }
-    };
+    } as FieldConfig;
   }
   componentWillMount() {
     this.setState({
@@ -228,18 +232,18 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
   };
   onSearchSubmit = ({
     search,
-    facilityID,
-    manufacturerID,
-    productGroupID
+    facility,
+    manufacturer,
+    productGroup
   }: {
     search: string;
-    facilityID: { value: string; title: string };
-    manufacturerID: { value: string; title: string };
-    productGroupID: { value: string; title: string };
+    facility: { value: string; title: string };
+    manufacturer: { value: string; title: string };
+    productGroup: { value: string; title: string };
   }) => {
-    const fID = facilityID ? facilityID.value : '';
-    const manID = manufacturerID ? manufacturerID.value : '';
-    const pgID = productGroupID ? productGroupID.value : '';
+    const fID = facility ? facility.value : '';
+    const manID = manufacturer ? manufacturer.value : '';
+    const pgID = productGroup ? productGroup.value : '';
     this.props.getInventory(
       this.props.userManage.page,
       search,

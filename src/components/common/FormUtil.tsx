@@ -230,6 +230,7 @@ export const FormUtil = {
     setErrors,
     value
   }: AbstractControl) => {
+    // TODO get rid of this because default values do not work for some unknwon reason.  we patch the values instead
     const defaultValue = find(meta.options, { value: meta.value });
     // console.log('rendering select', meta.options, value, defaultValue)
     const selectClassName = meta.isMulti ? `is-multi` : ``;

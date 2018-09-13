@@ -17,6 +17,7 @@ import { mapValues, find, map } from 'lodash';
 import { TranslationFunction } from 'react-i18next';
 import Select, { components } from 'react-select';
 import Toggle from 'react-toggle';
+import { Ioption } from '../../models';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // add the bootstrap form-control class to the react-select select component
@@ -42,7 +43,7 @@ const ControlComponent = (props: any) => (
 
 // TODO add a type that accepts an array or an object:  Array<{ id: string; name: string }>
 export const FormUtil = {
-  convertToOptions: (items: any) => {
+  convertToOptions: (items: any): Ioption[] => {
     return map(items, (item: any) => {
       return { value: item.id, label: item.name || item.code };
     });
@@ -84,8 +85,8 @@ export const FormUtil = {
       >
         <ControlLabel>{meta.label}</ControlLabel>
         <FormControl
-          type={meta.type}
           placeholder={meta.placeholder}
+          componentClass={meta.type}
           {...handler()}
         />
         <FormControl.Feedback />
@@ -135,11 +136,7 @@ export const FormUtil = {
     <Col xs={meta.colWidth}>
       <FormGroup bsSize="sm">
         <ControlLabel>{meta.label}</ControlLabel>
-        <FormControl
-          type={meta.type}
-          placeholder={meta.placeholder}
-          {...handler()}
-        />
+        <FormControl placeholder={meta.placeholder} {...handler()} />
       </FormGroup>
     </Col>
   ),

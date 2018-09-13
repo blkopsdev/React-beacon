@@ -9,7 +9,7 @@ import {
   saveProduct,
   toggleEditInventoryModal
 } from '../../actions/manageInventoryActions';
-import { IinitialState, Iproduct } from '../../models';
+import { IinitialState, Iproduct, IproductInfo } from '../../models';
 // import constants from '../../constants/constants';
 import CommonModal from '../common/CommonModal';
 import ManageInventoryForm from './ManageInventoryForm';
@@ -30,6 +30,7 @@ interface IdispatchProps {
   updateProduct: typeof updateProduct;
   saveProduct: typeof saveProduct;
   toggleEditInventoryModal: typeof toggleEditInventoryModal;
+  productInfo: IproductInfo;
 }
 
 class ManageInventoryModal extends React.Component<
@@ -64,6 +65,7 @@ class ManageInventoryModal extends React.Component<
             colorButton={this.props.colorButton}
             customerOptions={this.props.customerOptions}
             facilityOptions={this.props.facilityOptions}
+            productInfo={this.props.productInfo}
           />
         }
         title={modalTitle}
@@ -80,7 +82,8 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     loading: state.ajaxCallsInProgress > 0,
     customerOptions: FormUtil.convertToOptions(state.customers),
     facilityOptions: FormUtil.convertToOptions(state.user.facilities),
-    showEditUserModal: state.showEditInventoryModal
+    showEditUserModal: state.showEditInventoryModal,
+    productInfo: state.productInfo
   };
 };
 

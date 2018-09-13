@@ -12,32 +12,154 @@ import {
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
 // import { forEach, differenceBy, filter, find, map } from 'lodash';
-import { forEach, map } from 'lodash';
+import { forEach, find } from 'lodash';
 
 import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 
-import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
-import { Iproduct } from '../../models';
+import { FormUtil } from '../common/FormUtil';
+import { Iproduct, Ioption, IproductInfo } from '../../models';
+/*
+sku(pin): "Test-124"
+name(pin): "Test Product"
+description(pin): "Test Product"
+imagePath(pin): "/image.png"
+subcategoryID(pin): "bbbe934e-f5c1-45cb-b850-71d3d4c31f96"
+standardID(pin): "444e934e-f5c1-45cb-b850-71d3d4c31f96"
+brandID(pin): "ccce934e-f5c1-45cb-b850-71d3d4c31f96"
+manufacturerID(pin): "ddde934e-f5c1-45cb-b850-71d3d4c31f96"
+gasTypeID(pin): "eeee934e-f5c1-45cb-b850-71d3d4c31f96"
+powerID(pin): "fffe934e-f5c1-45cb-b850-71d3d4c31f96"
+systemSizeID(pin): "111e934e-f5c1-45cb-b850-71d3d4c31f96"
+productGroupID(pin): "222e934e-f5c1-45cb-b850-71d3d4c31f96"
+createDate(pin): "2018-08-28T19:35:34.6532093"
+updateDate(pin): "2018-09-13T00:55:53.5339951"
+*/
 
-const buildFieldConfig = (facilityOptions: any[]) => {
+const buildFieldConfig = (productInfo: IproductInfo) => {
   const fieldConfigControls = {
-    customer: {
+    name: {
       options: {
         validators: Validators.required
       },
       render: FormUtil.TextInput,
-      meta: { label: 'company', colWidth: 12, type: 'text' }
+      meta: { label: 'name', colWidth: 12, type: 'input' }
     },
-    facilities: {
+    sku: {
+      options: {
+        validators: Validators.required
+      },
+      render: FormUtil.TextInput,
+      meta: { label: 'sku', colWidth: 12, type: 'input' }
+    },
+    description: {
+      options: {
+        validators: Validators.required
+      },
+      render: FormUtil.TextInput,
+      inputType: 'textarea',
+      meta: { label: 'description', colWidth: 12, type: 'textarea' }
+    },
+    productGroupID: {
       render: FormUtil.Select,
       meta: {
-        options: facilityOptions,
-        label: 'common:facility',
+        options: productInfo.productGroupOptions,
+        label: 'common:productGroup',
         colWidth: 12,
-        placeholder: 'userQueue:facilitySearchPlaceholder',
-        isMulti: true
+        placeholder: 'common:searchPlaceholder',
+        isMulti: false
+      },
+      options: {
+        validators: Validators.required
+      }
+    },
+    brandID: {
+      render: FormUtil.Select,
+      meta: {
+        options: productInfo.brandOptions,
+        label: 'common:brand',
+        colWidth: 12,
+        placeholder: 'common:searchPlaceholder',
+        isMulti: false
+      },
+      options: {
+        validators: Validators.required
+      }
+    },
+    manufacturerID: {
+      render: FormUtil.Select,
+      meta: {
+        options: productInfo.manufacturerOptions,
+        label: 'common:manufacturer',
+        colWidth: 12,
+        placeholder: 'common:searchPlaceholder',
+        isMulti: false
+      },
+      options: {
+        validators: Validators.required
+      }
+    },
+    subcategoryID: {
+      render: FormUtil.Select,
+      meta: {
+        options: productInfo.subcategoryOptions,
+        label: 'common:subcategory',
+        colWidth: 6,
+        placeholder: 'common:searchPlaceholder',
+        isMulti: false
+      },
+      options: {
+        validators: Validators.required
+      }
+    },
+    gasTypeID: {
+      render: FormUtil.Select,
+      meta: {
+        options: productInfo.gasTypeOptions,
+        label: 'common:gasType',
+        colWidth: 12,
+        placeholder: 'common:searchPlaceholder',
+        isMulti: false
+      },
+      options: {
+        validators: Validators.required
+      }
+    },
+    powerID: {
+      render: FormUtil.Select,
+      meta: {
+        options: productInfo.powerOptions,
+        label: 'common:power',
+        colWidth: 12,
+        placeholder: 'common:searchPlaceholder',
+        isMulti: false
+      },
+      options: {
+        validators: Validators.required
+      }
+    },
+    systemSizeID: {
+      render: FormUtil.Select,
+      meta: {
+        options: productInfo.systemSizeOptions,
+        label: 'common:systemSize',
+        colWidth: 6,
+        placeholder: 'common:searchPlaceholder',
+        isMulti: false
+      },
+      options: {
+        validators: Validators.required
+      }
+    },
+    standardID: {
+      render: FormUtil.Select,
+      meta: {
+        options: productInfo.standardOptions,
+        label: 'common:standard',
+        colWidth: 6,
+        placeholder: 'common:searchPlaceholder',
+        isMulti: false
       },
       options: {
         validators: Validators.required
@@ -45,7 +167,7 @@ const buildFieldConfig = (facilityOptions: any[]) => {
     }
   };
   return {
-    controls: { ...userBaseConfigControls, ...fieldConfigControls }
+    controls: { ...fieldConfigControls }
   };
 };
 
@@ -65,8 +187,9 @@ interface Iprops {
   colorButton: string;
   t: TranslationFunction;
   i18n: I18n;
-  customerOptions: any[];
-  facilityOptions: any[];
+  productInfo: IproductInfo;
+  customerOptions: Ioption[];
+  facilityOptions: Ioption[];
 }
 
 class ManageInventoryForm extends React.Component<Iprops, {}> {
@@ -75,7 +198,7 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(
-      buildFieldConfig(this.props.facilityOptions),
+      buildFieldConfig(this.props.productInfo),
       this.props.t
     );
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -132,8 +255,22 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
     } else {
       // set values
       forEach(this.props.selectedItem, (value, key) => {
-        this.userForm.patchValue({ [key]: value });
+        if (typeof value === 'string' && key.split('ID').length === 0) {
+          this.userForm.patchValue({ [key]: value });
+        } else if (value !== null) {
+          this.userForm.patchValue({
+            [key]: find(
+              this.props.productInfo[`${key.split('ID')[0]}Options`],
+              { value }
+            )
+          });
+        }
       });
+      //   const {productGroupID, brandID, manufacturerID, subcategoryID, gasTypeID, powerID, systemSizeID, standardID} = this.userForm.value
+
+      //   this.userForm.patchValue({
+      //   customerID: find(this.props.selectedItem, { value: productGroupID })
+      // });
     }
   }
 
@@ -148,29 +285,33 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
       return;
     }
     console.log(this.userForm.value);
-    const facilitiesArray = map(
-      this.userForm.value.facilities,
-      (option: { value: string; label: string }) => {
-        return { id: option.value };
-      }
-    );
+    const {
+      productGroupID,
+      brandID,
+      manufacturerID,
+      subcategoryID,
+      gasTypeID,
+      powerID,
+      systemSizeID,
+      standardID
+    } = this.userForm.value;
+
+    let newItem = {
+      ...this.userForm.value,
+      productGroupID: productGroupID.value,
+      brandID: brandID.value,
+      manufacturerID: manufacturerID.value,
+      subcategoryID: subcategoryID.value,
+      gasTypeID: gasTypeID.value,
+      powerID: powerID.value,
+      systemSizeID: systemSizeID.value,
+      standardID: standardID.value
+    };
 
     if (this.props.selectedItem) {
-      this.props.handleSubmit(
-        {
-          id: this.props.selectedItem.id,
-          ...this.userForm.value,
-          facilities: facilitiesArray
-        },
-        shouldApprove,
-        this.props.selectedItem.id
-      );
-    } else {
-      this.props.handleSubmit({
-        ...this.userForm.value,
-        facilities: facilitiesArray
-      });
+      newItem = { ...newItem, id: this.props.selectedItem.id };
     }
+    this.props.handleSubmit(newItem);
   };
   setForm = (form: AbstractControl) => {
     this.userForm = form;

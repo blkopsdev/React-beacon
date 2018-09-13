@@ -13,6 +13,7 @@ import {
 } from '../models';
 import initialState, { initialOption } from './initialState';
 import { pickBy, map, filter } from 'lodash';
+import { FormUtil } from '../components/common/FormUtil';
 
 function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
   switch (action.type) {
@@ -122,6 +123,17 @@ export function productInfo(
       const subcategories = pi[7] as Isubcategory[];
       const systemSizes = pi[8] as IsystemSize[];
 
+      // an options version of each one
+      const brandOptions = FormUtil.convertToOptions(pi[0]);
+      const gasTypeOptions = FormUtil.convertToOptions(pi[1]);
+      const mainCategoryOptions = FormUtil.convertToOptions(pi[2]);
+      const manufacturerOptions = FormUtil.convertToOptions(pi[3]);
+      const powerOptions = FormUtil.convertToOptions(pi[4]);
+      const productGroupOptions = FormUtil.convertToOptions(pi[5]);
+      const standardOptions = FormUtil.convertToOptions(pi[6]);
+      const subcategoryOptions = FormUtil.convertToOptions(pi[7]);
+      const systemSizeOptions = FormUtil.convertToOptions(pi[8]);
+
       return {
         brands,
         gasTypes,
@@ -131,7 +143,16 @@ export function productInfo(
         productGroups,
         standards,
         subcategories,
-        systemSizes
+        systemSizes,
+        brandOptions,
+        gasTypeOptions,
+        mainCategoryOptions,
+        manufacturerOptions,
+        powerOptions,
+        productGroupOptions,
+        standardOptions,
+        subcategoryOptions,
+        systemSizeOptions
       };
     case types.USER_LOGOUT_SUCCESS:
       return initialState.productInfo;

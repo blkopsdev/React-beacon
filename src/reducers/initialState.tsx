@@ -59,7 +59,16 @@ export default {
     productGroups: [],
     standards: [],
     subcategories: [],
-    systemSizes: []
+    systemSizes: [],
+    brandOptions: [],
+    gasTypeOptions: [],
+    mainCategoryOptions: [],
+    manufacturerOptions: [],
+    powerOptions: [],
+    productGroupOptions: [],
+    standardOptions: [],
+    subcategoryOptions: [],
+    systemSizeOptions: []
   },
   showEditUserModal: false,
   showEditCustomerModal: false,

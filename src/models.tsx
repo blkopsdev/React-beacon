@@ -107,13 +107,13 @@ export interface Iproduct {
   productGroupID: string;
   subcategory: Isubcategory;
   standard: IbaseDataObject;
-  Brand: Ibrand;
-  Manufacturer: IbaseDataObject;
-  GasType: IgasType;
-  Power: IbaseDataObject;
-  SystemSize: IsystemSize;
-  ProductGroup: IproductGroup;
-  Installs: IinstallBase;
+  brand: Ibrand;
+  manufacturer: IbaseDataObject;
+  gasType: IgasType;
+  power: IbaseDataObject;
+  systemSize: IsystemSize;
+  productGroup: IproductGroup;
+  installs: IinstallBase;
 }
 
 export interface IuserQueue {
@@ -153,6 +153,15 @@ export interface IproductInfo {
   standards: IbaseDataObject[];
   subcategories: Isubcategory[];
   systemSizes: IsystemSize[];
+  brandOptions: Ioption[];
+  gasTypeOptions: Ioption[];
+  mainCategoryOptions: Ioption[];
+  manufacturerOptions: Ioption[];
+  powerOptions: Ioption[];
+  productGroupOptions: Ioption[];
+  standardOptions: Ioption[];
+  subcategoryOptions: Ioption[];
+  systemSizeOptions: Ioption[];
 }
 export interface IinitialState {
   user: Iuser;

@@ -7,7 +7,8 @@ import { connect } from 'react-redux';
 import {
   getInventory,
   toggleEditInventoryModal,
-  getProductInfo
+  getProductInfo,
+  setSelectedFacility
 } from '../../actions/manageInventoryActions';
 import {
   IinitialState,
@@ -22,7 +23,7 @@ import { FieldConfig } from 'react-reactive-form';
 import { emptyTile } from '../../reducers/initialState';
 import { RouteComponentProps } from 'react-router-dom';
 import ReactTable from 'react-table';
-import { Button } from 'react-bootstrap';
+import { Button, Col } from 'react-bootstrap';
 import Banner from '../common/Banner';
 import constants from '../../constants/constants';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
@@ -55,6 +56,7 @@ interface IdispatchProps {
   manufacturerOptions: Ioption[];
   facilityOptions: Ioption[];
   user: Iuser;
+  setSelectedFacility: typeof setSelectedFacility;
 }
 
 interface Istate {
@@ -64,7 +66,7 @@ interface Istate {
 }
 
 class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
-  public searchFieldConfig: any;
+  // public searchFieldConfig: any;
   public searchFieldConfigBanner: any;
   public buttonInAction = false;
   constructor(props: Iprops & IdispatchProps) {
@@ -75,71 +77,26 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       currentTile: emptyTile,
       columns: []
     };
-
-    this.searchFieldConfig = {
-      controls: {
-        search: {
-          render: FormUtil.TextInputWithoutValidation,
-          meta: {
-            label: 'common:search',
-            colWidth: 3,
-            type: 'text',
-            placeholder: 'searchPlaceholder'
-          }
-        },
-        productGroup: {
-          render: FormUtil.SelectWithoutValidation,
-          meta: {
-            label: 'common:productGroup',
-            options: this.props.facilityOptions,
-            colWidth: 3,
-            type: 'select',
-            placeholder: 'productGroupPlaceholder'
-          }
-        },
-        manufacturer: {
-          render: FormUtil.SelectWithoutValidation,
-          meta: {
-            label: 'common:manufacturer',
-            options: this.props.facilityOptions,
-            colWidth: 3,
-            type: 'select',
-            placeholder: 'manufacturerPlaceholder'
-          }
-        },
-        facility: {
-          render: FormUtil.SelectWithoutValidationLeftLabel,
-          meta: {
-            label: 'common:facility',
-            options: this.props.facilityOptions,
-            colWidth: 5,
-            type: 'select',
-            placeholder: 'facilityPlaceholder',
-            className: 'banner-input',
-            defaultValue: this.props.facilityOptions[0]
-          }
-        }
-      }
-    } as FieldConfig;
   }
   componentWillMount() {
     this.setState({
       currentTile: constants.getTileByURL(this.props.location.pathname)
     });
     this.setColumns();
-
+    // get product info every time the component mounts
     this.props.getProductInfo();
-    // refresh the userManage every time the component mounts
-
-    // TODO get inventory commented out temporarily because the API is busted.
+    // get inventory every time the component mounts
     this.props.getInventory(
       1,
       '',
-      'bbb5d95c-129f-4837-988c-0bf4ae1f3b67',
+      `${
+        this.props.userManage.selectedFacility.value.length
+          ? this.props.userManage.selectedFacility.value
+          : this.props.facilityOptions[0].value
+      }`,
       '',
       ''
     );
-    // refresh the list of customers every time the component mounts
   }
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
     if (
@@ -252,9 +209,80 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       pgID
     );
   };
-
+  onSearchValuechanges = (value: any, key: string) => {
+    if (key === 'facility') {
+      this.props.setSelectedFacility(value);
+    }
+  };
+  // TODO  hide facilities if only one
+  // scroll content area only
   render() {
+    if (this.props.productGroupOptions.length === 0) {
+      return (
+        <Col xs={12}>
+          <h4> loading... </h4>
+        </Col>
+      );
+    }
     const { t } = this.props;
+
+    const mainSearchControls = {
+      search: {
+        render: FormUtil.TextInputWithoutValidation,
+        meta: {
+          label: 'common:search',
+          colWidth: 3,
+          type: 'text',
+          placeholder: 'searchPlaceholder'
+        }
+      },
+      productGroup: {
+        render: FormUtil.SelectWithoutValidation,
+        meta: {
+          label: 'common:productGroup',
+          options: this.props.productGroupOptions,
+          colWidth: 3,
+          type: 'select',
+          placeholder: 'productGroupPlaceholder'
+        }
+      },
+      manufacturer: {
+        render: FormUtil.SelectWithoutValidation,
+        meta: {
+          label: 'common:manufacturer',
+          options: this.props.manufacturerOptions,
+          colWidth: 3,
+          type: 'select',
+          placeholder: 'manufacturerPlaceholder'
+        }
+      }
+    };
+    // only add the facility control if there is more than 1
+    const facility = {
+      render: FormUtil.SelectWithoutValidationLeftLabel,
+      meta: {
+        label: 'common:facility',
+        options: this.props.facilityOptions,
+        colWidth: 5,
+        type: 'select',
+        placeholder: 'facilityPlaceholder',
+        className: 'banner-input',
+        isClearable: false,
+        defaultValue: this.props.userManage.selectedFacility.value.length
+          ? this.props.userManage.selectedFacility
+          : this.props.facilityOptions[0]
+      }
+    };
+
+    let searchFieldConfig = {
+      controls: { ...mainSearchControls }
+    } as FieldConfig;
+    if (this.props.facilityOptions.length > 1) {
+      searchFieldConfig = {
+        controls: { ...mainSearchControls, facility }
+      } as FieldConfig;
+    }
+
     return (
       <div className="user-manage">
         <Banner
@@ -263,12 +291,14 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           color={constants.colors[`${this.state.currentTile.color}`]}
         />
         <SearchTableForm
-          fieldConfig={this.searchFieldConfig}
+          fieldConfig={searchFieldConfig}
           handleSubmit={this.onSearchSubmit}
           loading={this.props.loading}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
+          subscribeValueChanges={true}
+          onValueChanges={this.onSearchValuechanges}
           t={this.props.t}
         />
         <Button
@@ -340,7 +370,8 @@ export default translate('manageInventory')(
       getInventory,
       toggleEditInventoryModal,
       closeAllModals,
-      getProductInfo
+      getProductInfo,
+      setSelectedFacility
     }
   )(ManageInventory)
 );

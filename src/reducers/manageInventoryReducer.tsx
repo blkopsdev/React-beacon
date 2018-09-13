@@ -8,9 +8,10 @@ import {
   IbaseDataObject,
   IproductGroup,
   Isubcategory,
-  IsystemSize
+  IsystemSize,
+  Ioption
 } from '../models';
-import initialState from './initialState';
+import initialState, { initialOption } from './initialState';
 import { pickBy, map, filter } from 'lodash';
 
 function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
@@ -59,6 +60,8 @@ function pageReducer(state: number = 1, action: any): number {
       if (state > 1) {
         return state - 1;
       }
+    case types.USER_LOGOUT_SUCCESS:
+      return 1;
     default:
       return state;
   }
@@ -70,6 +73,19 @@ function totalPagesReducer(state: number = 1, action: any): number {
         return action.pages;
       }
       return state;
+    case types.USER_LOGOUT_SUCCESS:
+      return 1;
+    default:
+      return state;
+  }
+}
+
+function selectedReducer(state: Ioption = initialOption, action: any): Ioption {
+  switch (action.type) {
+    case types.SET_SELECTED_FACILITY:
+      return action.facility;
+    case types.USER_LOGOUT_SUCCESS:
+      return initialOption;
     default:
       return state;
   }
@@ -82,7 +98,8 @@ export default function ManageInventory(
   return {
     data: dataReducer(state.data, action),
     page: pageReducer(state.page, action),
-    totalPages: totalPagesReducer(state.totalPages, action)
+    totalPages: totalPagesReducer(state.totalPages, action),
+    selectedFacility: selectedReducer(state.selectedFacility, action)
   };
 }
 /*
@@ -116,7 +133,8 @@ export function productInfo(
         subcategories,
         systemSizes
       };
-
+    case types.USER_LOGOUT_SUCCESS:
+      return initialState.productInfo;
     default:
       return state;
   }

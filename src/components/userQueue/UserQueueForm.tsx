@@ -164,6 +164,7 @@ class UserQueueForm extends React.Component<Iprops, {}> {
       ) as AbstractControlEdited;
       facilitySelectControl.meta.options = this.props.facilityOptions;
       facilitySelectControl.stateChanges.next();
+      // update which options are selected
       const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
         return find(this.props.selectedQueueObject.user.facilities, {
           id: fac.value

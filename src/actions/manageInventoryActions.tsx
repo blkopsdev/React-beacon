@@ -4,7 +4,7 @@ import API from '../constants/apiEndpoints';
 import { beginAjaxCall } from './ajaxStatusActions';
 import { toastr } from 'react-redux-toastr';
 import constants from '../constants/constants';
-import { Iuser, IinitialState } from '../models';
+import { Iuser, IinitialState, Ioption } from '../models';
 import { ThunkAction } from 'redux-thunk';
 // import {AxiosResponse} from 'axios';
 
@@ -126,4 +126,9 @@ export function saveProduct(user: Iuser): ThunkResult<void> {
 
 export const toggleEditInventoryModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_INVENTORY
+});
+
+export const setSelectedFacility = (facility: Ioption) => ({
+  type: types.SET_SELECTED_FACILITY,
+  facility
 });

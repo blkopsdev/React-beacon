@@ -44,6 +44,8 @@ function userManagePage(state: number = 1, action: any): number {
       if (state > 1) {
         return state - 1;
       }
+    case types.USER_LOGOUT_SUCCESS:
+      return 1;
     default:
       return state;
   }
@@ -55,6 +57,8 @@ function userManageTotalPages(state: number = 1, action: any): number {
         return action.pages;
       }
       return state;
+    case types.USER_LOGOUT_SUCCESS:
+      return 1;
     default:
       return state;
   }

@@ -249,7 +249,7 @@ export const FormUtil = {
               placeholder={meta.placeholder}
               isMulti={meta.isMulti}
               classNamePrefix="react-select"
-              isClearable={true}
+              isClearable={meta.isClearable}
               {...handler()}
             />
           </Col>

@@ -1,3 +1,5 @@
+export const initialOption = { value: '', label: '' };
+
 export default {
   ajaxCallsInProgress: 0,
   user: {
@@ -43,7 +45,8 @@ export default {
   manageInventory: {
     page: 1,
     totalPages: 1,
-    data: []
+    data: [],
+    selectedFacility: initialOption
   },
   customers: [],
   facilities: [],

@@ -136,6 +136,7 @@ export interface ImanageInventory {
   page: number;
   data: Iproduct[];
   totalPages: number;
+  selectedFacility: Ioption;
 }
 
 export interface Iredirect {

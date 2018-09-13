@@ -80,7 +80,11 @@ store.subscribe(
         user: store.getState().user,
         redirect: store.getState().redirect,
         userQueue: store.getState().userQueue,
-        customers: store.getState().customers
+        customers: store.getState().customers,
+        userManage: store.getState().userManage,
+        teamManage: store.getState().teamManage,
+        manageInventory: store.getState().manageInventory,
+        productInfo: store.getState().productInfo
         // facilities: store.getState().facilities
       },
       'state-core-care'

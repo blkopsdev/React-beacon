@@ -21,10 +21,13 @@ interface Iprops extends React.Props<SearchTableForm> {
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;
+  onValueChanges?: any;
+  subscribeValueChanges?: boolean;
 }
 export default class SearchTableForm extends React.Component<Iprops, {}> {
   public searchForm: AbstractControl;
   public fieldConfig: FieldConfig;
+  private subscription: any;
   constructor(props: Iprops) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -35,7 +38,19 @@ export default class SearchTableForm extends React.Component<Iprops, {}> {
       if (input.meta && input.meta.defaultValue) {
         this.searchForm.patchValue({ [key]: input.meta.defaultValue });
       }
+      if (this.props.subscribeValueChanges) {
+        this.subscription = this.searchForm
+          .get(key)
+          .valueChanges.subscribe((value: any) => {
+            this.props.onValueChanges(value, key);
+          });
+      }
     });
+  }
+  componentWillUnmount() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
   }
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();

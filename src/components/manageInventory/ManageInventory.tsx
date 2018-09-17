@@ -23,7 +23,7 @@ import {
 import { FieldConfig } from 'react-reactive-form';
 import { emptyTile } from '../../reducers/initialState';
 import { RouteComponentProps } from 'react-router-dom';
-import ReactTable from 'react-table';
+import ReactTable, { RowInfo, FinalState } from 'react-table';
 import { Button, Col } from 'react-bootstrap';
 import Banner from '../common/Banner';
 import constants from '../../constants/constants';
@@ -35,6 +35,7 @@ import { TableUtil } from '../common/TableUtil';
 import EditProductModal from './EditProductModal';
 import { closeAllModals } from '../../actions/commonActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { InstallationsExpander } from './InstallsExpander';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -73,9 +74,8 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
   public buttonInAction = false;
   constructor(props: Iprops & IdispatchProps) {
     super(props);
-    this.getTrProps = this.getTrProps.bind(this);
     this.state = {
-      selectedRow: null,
+      selectedRow: {},
       currentTile: emptyTile,
       columns: []
     };
@@ -105,7 +105,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       prevProps.showEditProductModal !== this.props.showEditProductModal &&
       !this.props.showEditProductModal
     ) {
-      this.setState({ selectedRow: null });
+      this.setState({ selectedRow: {} });
     }
 
     // we only need to check the productGroup options because both manufacturers and productGroup options are received in the same API response
@@ -164,23 +164,21 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     );
     this.setState({ columns });
   };
-  getTrProps = (state: any, rowInfo: any) => {
-    // console.log("ROWINFO", rowInfo);
+  getTrProps = (state: FinalState, rowInfo: RowInfo) => {
+    // console.log("ROWINFO", rowInfo, state);
     if (rowInfo) {
       return {
         onClick: (e: React.MouseEvent<HTMLFormElement>) => {
-          if (!this.buttonInAction) {
-            this.setState({
-              selectedRow: rowInfo.index
-            });
-            this.props.toggleEditProductModal();
-          }
+          this.setState({
+            selectedRow: {
+              [rowInfo.viewIndex]: !this.state.selectedRow[rowInfo.viewIndex]
+            }
+          });
         },
         style: {
-          background:
-            rowInfo.index === this.state.selectedRow
-              ? constants.colors[`${this.state.currentTile.color}Tr`]
-              : ''
+          background: this.state.selectedRow[rowInfo.viewIndex]
+            ? constants.colors[`${this.state.currentTile.color}Tr`]
+            : ''
         }
       };
     } else {
@@ -334,6 +332,14 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           onPageChange={this.onPageChange}
           sortable={false}
           noDataText={t('common:noDataText')}
+          expanded={this.state.selectedRow}
+          SubComponent={(rowInfo: RowInfo) => (
+            <InstallationsExpander
+              {...rowInfo}
+              addToQuote={() => console.log('add to quote clicked')}
+              addInstallation={() => console.log('add install clicked')}
+            />
+          )}
         />
         <EditProductModal
           selectedItem={this.props.userManage.data[this.state.selectedRow]}

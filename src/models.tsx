@@ -113,7 +113,7 @@ export interface Iproduct {
   power: IbaseDataObject;
   systemSize: IsystemSize;
   productGroup: IproductGroup;
-  installs: IinstallBase;
+  installs: IinstallBase[];
 }
 
 export interface IuserQueue {

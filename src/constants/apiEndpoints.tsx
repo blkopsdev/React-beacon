@@ -18,6 +18,10 @@ const API = {
     },
     facility: {
       add: `${root}facility/add`
+    },
+    inventory: {
+      updateproduct: `${root}inventory/updateproduct`,
+      addproduct: `${root}inventory/addproduct`
     }
   },
   GET: {

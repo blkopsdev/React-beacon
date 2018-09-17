@@ -6,7 +6,8 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import {
   getInventory,
-  toggleEditInventoryModal,
+  toggleEditProductModal,
+  toggleEditInstallModal,
   getProductInfo,
   setSelectedFacility
 } from '../../actions/manageInventoryActions';
@@ -31,7 +32,7 @@ import { find } from 'lodash';
 import { FormUtil } from '../common/FormUtil';
 import SearchTableForm from '../common/SearchTableForm';
 import { TableUtil } from '../common/TableUtil';
-import EditModal from './ManageInventoryModal';
+import EditProductModal from './EditProductModal';
 import { closeAllModals } from '../../actions/commonActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -39,14 +40,15 @@ interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
   t: TranslationFunction;
   i18n: I18n;
-  showEditModal: boolean;
+  showEditProductModal: boolean;
   loading: boolean;
   userManage: ImanageInventory;
 }
 
 interface IdispatchProps {
   // Add your dispatcher properties here
-  toggleEditInventoryModal: typeof toggleEditInventoryModal;
+  toggleEditProductModal: typeof toggleEditProductModal;
+  toggleEditInstallModal: typeof toggleEditInstallModal;
   getProductInfo: typeof getProductInfo;
   toggleSecurityFunctionsModal: () => void;
   getInventory: typeof getInventory;
@@ -100,12 +102,14 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
   }
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
     if (
-      prevProps.showEditModal !== this.props.showEditModal &&
-      !this.props.showEditModal
+      prevProps.showEditProductModal !== this.props.showEditProductModal &&
+      !this.props.showEditProductModal
     ) {
       this.setState({ selectedRow: null });
     }
 
+    // we only need to check the productGroup options because both manufacturers and productGroup options are received in the same API response
+    // and before they are received, there will not be any length.
     if (
       prevProps.productGroupOptions.length !==
         this.props.productGroupOptions.length ||
@@ -169,7 +173,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
             this.setState({
               selectedRow: rowInfo.index
             });
-            this.props.toggleEditInventoryModal();
+            this.props.toggleEditProductModal();
           }
         },
         style: {
@@ -304,7 +308,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         <Button
           className="request-for-quote-cart-button"
           bsStyle="primary"
-          onClick={this.props.toggleEditInventoryModal}
+          onClick={this.props.toggleEditProductModal}
         >
           <FontAwesomeIcon icon="shopping-cart" />
         </Button>
@@ -312,7 +316,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         <Button
           className="table-add-button"
           bsStyle={constants.colors[`${this.state.currentTile.color}Button`]}
-          onClick={this.props.toggleEditInventoryModal}
+          onClick={this.props.toggleEditProductModal}
         >
           {t('manageInventory:newProduct')}
         </Button>
@@ -331,7 +335,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           sortable={false}
           noDataText={t('common:noDataText')}
         />
-        <EditModal
+        <EditProductModal
           selectedItem={this.props.userManage.data[this.state.selectedRow]}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
@@ -353,7 +357,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     userManage: state.manageInventory,
     customers: state.customers,
     loading: state.ajaxCallsInProgress > 0,
-    showEditModal: state.showEditInventoryModal,
+    showEditProductModal: state.showEditProductModal,
     facilityOptions: FormUtil.convertToOptions(state.user.facilities),
     productGroupOptions: FormUtil.convertToOptions(
       state.productInfo.productGroups
@@ -368,7 +372,8 @@ export default translate('manageInventory')(
     mapStateToProps,
     {
       getInventory,
-      toggleEditInventoryModal,
+      toggleEditProductModal,
+      toggleEditInstallModal,
       closeAllModals,
       getProductInfo,
       setSelectedFacility

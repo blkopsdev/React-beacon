@@ -180,7 +180,8 @@ export interface IinitialState {
   showEditProfileModal: boolean;
   showSecurityFunctionsModal: boolean;
   showEditTeamModal: boolean;
-  showEditInventoryModal: boolean;
+  showEditProductModal: boolean;
+  showEditInstallModal: boolean;
   productInfo: IproductInfo;
 }
 export interface Itile {

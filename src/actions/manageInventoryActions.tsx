@@ -4,7 +4,7 @@ import API from '../constants/apiEndpoints';
 import { beginAjaxCall } from './ajaxStatusActions';
 import { toastr } from 'react-redux-toastr';
 import constants from '../constants/constants';
-import { Iuser, IinitialState, Ioption } from '../models';
+import { Iproduct, IinitialState, Ioption } from '../models';
 import { ThunkAction } from 'redux-thunk';
 // import {AxiosResponse} from 'axios';
 
@@ -69,27 +69,27 @@ export function getInventory(
   };
 }
 
-export function updateProduct(user: Iuser): ThunkResult<void> {
+export function updateProduct(product: Iproduct): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     return axios
-      .post(API.POST.user.updateteam, user)
+      .post(API.POST.inventory.updateproduct, product)
       .then(data => {
         if (!data.data) {
           throw undefined;
         } else {
           dispatch({
-            type: types.TEAM_UPDATE_SUCCESS,
-            user: data.data
+            type: types.PRODUCT_UPDATE_SUCCESS,
+            product: data.data
           });
-          dispatch({ type: types.TOGGLE_MODAL_EDIT_TEAM });
-          toastr.success('Success', 'Saved user', constants.toastrSuccess);
+          dispatch({ type: types.TOGGLE_MODAL_EDIT_PRODUCT });
+          toastr.success('Success', 'Saved product', constants.toastrSuccess);
           return data;
         }
       })
       .catch((error: any) => {
         dispatch({ type: types.TEAM_UPDATE_FAILED });
-        constants.handleError(error, 'update user');
+        constants.handleError(error, 'update product');
         throw error;
       });
   };
@@ -98,34 +98,38 @@ export function updateProduct(user: Iuser): ThunkResult<void> {
 /*
 * save (add) a new product
 */
-export function saveProduct(user: Iuser): ThunkResult<void> {
+export function saveProduct(product: Iproduct): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     return axios
-      .post(API.POST.user.saveteam, user)
+      .post(API.POST.inventory.addproduct, product)
       .then(data => {
         if (!data.data) {
           throw undefined;
         } else {
           dispatch({
-            type: types.TEAM_SAVE_SUCCESS,
-            user: data.data
+            type: types.PRODUCT_ADD_SUCCESS,
+            product: data.data
           });
-          dispatch({ type: types.TOGGLE_MODAL_EDIT_TEAM });
-          toastr.success('Success', 'Saved user', constants.toastrSuccess);
+          dispatch({ type: types.TOGGLE_MODAL_EDIT_PRODUCT });
+          toastr.success('Success', 'Saved product', constants.toastrSuccess);
           return data;
         }
       })
       .catch((error: any) => {
-        dispatch({ type: types.TEAM_SAVE_FAILED });
-        constants.handleError(error, 'save user');
+        dispatch({ type: types.PRODUCT_ADD_FAILED });
+        constants.handleError(error, 'save product');
         throw error;
       });
   };
 }
 
-export const toggleEditInventoryModal = () => ({
-  type: types.TOGGLE_MODAL_EDIT_INVENTORY
+export const toggleEditProductModal = () => ({
+  type: types.TOGGLE_MODAL_EDIT_PRODUCT
+});
+
+export const toggleEditInstallModal = () => ({
+  type: types.TOGGLE_MODAL_EDIT_INSTALL
 });
 
 export const setSelectedFacility = (facility: Ioption) => ({

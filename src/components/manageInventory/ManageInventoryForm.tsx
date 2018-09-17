@@ -255,7 +255,8 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
     } else {
       // set values
       forEach(this.props.selectedItem, (value, key) => {
-        if (typeof value === 'string' && key.split('ID').length === 0) {
+        if (typeof value === 'string' && key.split('ID').length === 1) {
+          // it is a string and did Not find 'ID'
           this.userForm.patchValue({ [key]: value });
         } else if (value !== null) {
           this.userForm.patchValue({

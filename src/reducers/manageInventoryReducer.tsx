@@ -24,18 +24,14 @@ function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
     //     ...pickBy(d, (property, key) => property !== null)
     //   };
     // });
-    case types.INVENTORY_UPDATE_SUCCESS:
-      const filteredUsers = filter(state, u => u.id !== action.user.id);
-      const securityFunc = map(action.user.securityFunctions, securityF => {
-        return securityF.toUpperCase();
-      });
-      const updatedUser = {
-        ...pickBy(action.user, (property, key) => property !== null),
-        securityFunctions: securityFunc
+    case types.PRODUCT_UPDATE_SUCCESS:
+      const filteredProducts = filter(state, p => p.id !== action.product.id);
+      const updatedProduct = {
+        ...pickBy(action.product, (property, key) => property !== null)
       };
 
-      return [...filteredUsers, updatedUser] as Iproduct[];
-    case types.INVENTORY_SAVE_SUCCESS:
+      return [...filteredProducts, updatedProduct] as Iproduct[];
+    case types.PRODUCT_ADD_SUCCESS:
       const securityFunct = map(action.user.securityFunctions, securityF => {
         return securityF.toUpperCase();
       });

@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import {
   updateProduct,
   saveProduct,
-  toggleEditInventoryModal
+  toggleEditProductModal
 } from '../../actions/manageInventoryActions';
 import { IinitialState, Iproduct, IproductInfo } from '../../models';
 // import constants from '../../constants/constants';
@@ -23,13 +23,13 @@ interface Iprops {
 }
 
 interface IdispatchProps {
-  showEditUserModal: boolean;
+  showModal: boolean;
   loading: boolean;
   customerOptions: any[];
   facilityOptions: any[];
   updateProduct: typeof updateProduct;
   saveProduct: typeof saveProduct;
-  toggleEditInventoryModal: typeof toggleEditInventoryModal;
+  toggleEditProductModal: typeof toggleEditProductModal;
   productInfo: IproductInfo;
 }
 
@@ -53,13 +53,13 @@ class ManageInventoryModal extends React.Component<
     }
     return (
       <CommonModal
-        modalVisible={this.props.showEditUserModal}
+        modalVisible={this.props.showModal}
         className="user-edit"
-        onHide={this.props.toggleEditInventoryModal}
+        onHide={this.props.toggleEditProductModal}
         body={
           <ManageInventoryForm
             handleSubmit={submitFunc}
-            handleCancel={this.props.toggleEditInventoryModal}
+            handleCancel={this.props.toggleEditProductModal}
             selectedItem={this.props.selectedItem}
             loading={this.props.loading}
             colorButton={this.props.colorButton}
@@ -82,7 +82,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     loading: state.ajaxCallsInProgress > 0,
     customerOptions: FormUtil.convertToOptions(state.customers),
     facilityOptions: FormUtil.convertToOptions(state.user.facilities),
-    showEditUserModal: state.showEditInventoryModal,
+    showModal: state.showEditProductModal,
     productInfo: state.productInfo
   };
 };
@@ -92,6 +92,6 @@ export default connect(
   {
     updateProduct,
     saveProduct,
-    toggleEditInventoryModal
+    toggleEditProductModal
   }
 )(ManageInventoryModal);

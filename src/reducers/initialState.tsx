@@ -77,7 +77,8 @@ export default {
   showEditProfileModal: false,
   showSecurityFunctionsModal: false,
   showEditTeamModal: false,
-  showEditInventoryModal: false
+  showEditProductModal: false,
+  showEditInstallModal: false
 };
 
 export const emptyTile = {

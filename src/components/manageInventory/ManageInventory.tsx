@@ -66,6 +66,7 @@ interface Istate {
   selectedRow: any;
   currentTile: Itile;
   columns: any;
+  selectedProduct: any;
 }
 
 class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
@@ -77,7 +78,8 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     this.state = {
       selectedRow: {},
       currentTile: emptyTile,
-      columns: []
+      columns: [],
+      selectedProduct: {}
     };
   }
   componentWillMount() {
@@ -101,12 +103,12 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     );
   }
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
-    if (
-      prevProps.showEditProductModal !== this.props.showEditProductModal &&
-      !this.props.showEditProductModal
-    ) {
-      this.setState({ selectedRow: {} });
-    }
+    // if (
+    //   prevProps.showEditProductModal !== this.props.showEditProductModal &&
+    //   !this.props.showEditProductModal
+    // ) {
+    //   this.setState({ selectedRow: {}, selectedProduct: {} });
+    // }
 
     // we only need to check the productGroup options because both manufacturers and productGroup options are received in the same API response
     // and before they are received, there will not be any length.
@@ -123,6 +125,10 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
   componentWillUnmount() {
     this.props.closeAllModals();
   }
+  editProduct = () => {
+    // console.log(this.state.selectedProduct)
+    this.props.toggleEditProductModal();
+  };
 
   /*
   * Set Columns sets columns to state
@@ -172,7 +178,8 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           this.setState({
             selectedRow: {
               [rowInfo.viewIndex]: !this.state.selectedRow[rowInfo.viewIndex]
-            }
+            },
+            selectedProduct: rowInfo.original
           });
         },
         style: {
@@ -338,11 +345,14 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
               {...rowInfo}
               addToQuote={() => console.log('add to quote clicked')}
               addInstallation={() => console.log('add install clicked')}
+              editProduct={this.editProduct}
+              t={this.props.t}
             />
           )}
+          resizable={false}
         />
         <EditProductModal
-          selectedItem={this.props.userManage.data[this.state.selectedRow]}
+          selectedItem={this.state.selectedProduct}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }

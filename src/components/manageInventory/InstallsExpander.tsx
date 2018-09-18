@@ -10,6 +10,8 @@ import ReactTable, {
 import { Button } from 'react-bootstrap';
 // import { LinkContainer } from "react-router-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { TranslationFunction } from 'react-i18next';
+
 // import { Iproduct, IinstallBase } from "../../models";
 
 export const expanderToggle = (props: RowRenderProps) => {
@@ -27,25 +29,40 @@ export const expanderToggle = (props: RowRenderProps) => {
     </div>
   );
 };
+interface ExpanderProps extends RowInfo {
+  addToQuote: () => void;
+  addInstallation: () => void;
+  editProduct: () => void;
+  t: TranslationFunction;
+}
 
-const ExpanderButtonBar = (props: RowRenderProps) => {
-  if (props.index === 0) {
+/*
+* The Installations Expander
+*/
+export const InstallationsExpander = (props: ExpanderProps) => {
+  // console.log(props.original, `${props.original.class.id}/${props.original.userID}`);
+  // console.log(props);
+
+  const ExpanderButtonBar = (eProps: RowRenderProps) => {
     return (
       <span
         className="expander-button-bar text-right"
         style={{ position: 'absolute', top: 0, left: 0, width: '100%' }}
       >
-        <Button bsSize="sm" bsStyle="link">
-          Edit Product
+        <Button bsStyle="link" onClick={props.editProduct}>
+          {props.t('Edit Product')}
+        </Button>
+        <Button bsStyle="link" onClick={props.addToQuote}>
+          {props.t('Add to Quote')}
+        </Button>
+        <Button bsStyle="link" onClick={props.addInstallation}>
+          {props.t('Add Installation')}
         </Button>
       </span>
     );
-  } else {
-    return '';
-  }
-};
+  };
 
-/*
+  /*
 * TODO add the location column
   {
     Header: "Location",
@@ -54,52 +71,35 @@ const ExpanderButtonBar = (props: RowRenderProps) => {
   },
 */
 
-const expanderColumns = [
-  {
-    Header: '',
-    minWidth: 20,
-    id: 'indent-column-button-bar',
-    Cell: ExpanderButtonBar
-  },
-  {
-    Header: 'S/N',
-    accessor: 'serialNumber',
-    minWidth: 100
-  },
-  {
-    Header: 'Nickname',
-    accessor: 'nickname',
-    minWidth: 100
-  },
-  {
-    Header: 'RFID',
-    accessor: 'rfid',
-    minWidth: 100
-  },
+  const expanderColumns = [
+    {
+      Footer: ExpanderButtonBar,
+      minWidth: 20,
+      id: 'indent-column-button-bar'
+    },
+    {
+      Header: 'S/N',
+      accessor: 'serialNumber',
+      minWidth: 100
+    },
+    {
+      Header: 'Nickname',
+      accessor: 'nickname',
+      minWidth: 100
+    },
+    {
+      Header: 'RFID',
+      accessor: 'rfid',
+      minWidth: 100
+    },
 
-  {
-    Header: '',
-    id: 'contact-button',
-    minWidth: 25
-  }
-] as Column[];
+    {
+      Header: '',
+      id: 'contact-button',
+      minWidth: 25
+    }
+  ] as Column[];
 
-interface ExpanderProps extends RowInfo {
-  addToQuote: () => void;
-  addInstallation: () => void;
-}
-
-/*
-* The Installations Expander
-*/
-export const InstallationsExpander = (props: ExpanderProps) => {
-  // console.log(props.original, `${props.original.class.id}/${props.original.userID}`);
-  console.log(props);
-
-  /*
-* assign the correct color to the table cell for teachers and students
-* assign the function to open the ModalQuizResultPreview for teachers only
-*/
   const expanderHandleTdProps = (
     state: FinalState,
     rowInfo: RowInfo,
@@ -145,6 +145,7 @@ export const InstallationsExpander = (props: ExpanderProps) => {
           showPageSizeOptions={false}
           getTdProps={expanderHandleTdProps}
           noDataText="No installations found."
+          resizable={false}
         />
       </div>
     );

@@ -250,6 +250,7 @@ class UserQueue extends React.Component<Iprops & IdispatchProps, Istate> {
           onPageChange={this.onPageChange}
           sortable={false}
           noDataText={t('common:noDataText')}
+          resizable={false}
         />
         <EditQueueUserModal
           selectedQueueObject={

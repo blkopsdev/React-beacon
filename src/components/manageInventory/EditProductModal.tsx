@@ -12,7 +12,7 @@ import {
 import { IinitialState, Iproduct, IproductInfo } from '../../models';
 // import constants from '../../constants/constants';
 import CommonModal from '../common/CommonModal';
-import ManageInventoryForm from './ManageInventoryForm';
+import EditProductForm from './EditProductForm';
 import { TranslationFunction } from 'react-i18next';
 import { FormUtil } from '../common/FormUtil';
 
@@ -57,7 +57,7 @@ class ManageInventoryModal extends React.Component<
         className="user-edit"
         onHide={this.props.toggleEditProductModal}
         body={
-          <ManageInventoryForm
+          <EditProductForm
             handleSubmit={submitFunc}
             handleCancel={this.props.toggleEditProductModal}
             selectedItem={this.props.selectedItem}

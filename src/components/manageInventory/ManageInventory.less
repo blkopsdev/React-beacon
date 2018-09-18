@@ -1,7 +1,25 @@
 @import '../../less/variables.less';
 
 .ReactTable.beacon-table .attempts-expander {
-     .rt-thead .rt-tr {
-        margin-top: 40px;
-     }
+  .rt-thead .rt-tr {
+    margin-top: 50px;
+  }
+  .rt-tfoot{
+    position: absolute;
+    width: 100%;
+    top: 0;
+    left: 0;
+    box-shadow: none;
+    .rt-tr{
+      background-color: #F5F5F5;
+    }
+
+    .rt-td{
+      border: none;
+      min-height: 50px;
+    }
+    .btn{
+      margin-top: 5px;
+    }
+  }
 }

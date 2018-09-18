@@ -214,6 +214,7 @@ class TeamManage extends React.Component<Iprops & IdispatchProps, Istate> {
           onPageChange={this.onPageChange}
           sortable={false}
           noDataText={t('common:noDataText')}
+          resizable={false}
         />
         <EditUserManageModal
           selectedUser={this.props.userManage.data[this.state.selectedRow]}

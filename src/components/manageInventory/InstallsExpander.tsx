@@ -12,7 +12,8 @@ import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TranslationFunction } from 'react-i18next';
 
-// import { Iproduct, IinstallBase } from "../../models";
+import { Iproduct } from '../../models';
+// IinstallBase
 
 export const expanderToggle = (props: RowRenderProps) => {
   return (
@@ -32,7 +33,7 @@ export const expanderToggle = (props: RowRenderProps) => {
 interface ExpanderProps extends RowInfo {
   addToQuote: () => void;
   addInstallation: () => void;
-  editProduct: () => void;
+  editProduct: (product: Iproduct) => void;
   t: TranslationFunction;
 }
 
@@ -49,7 +50,10 @@ export const InstallationsExpander = (props: ExpanderProps) => {
         className="expander-button-bar text-right"
         style={{ position: 'absolute', top: 0, left: 0, width: '100%' }}
       >
-        <Button bsStyle="link" onClick={props.editProduct}>
+        <Button
+          bsStyle="link"
+          onClick={() => props.editProduct(props.original)}
+        >
           {props.t('Edit Product')}
         </Button>
         <Button bsStyle="link" onClick={props.addToQuote}>

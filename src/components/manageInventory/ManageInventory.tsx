@@ -103,12 +103,12 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     );
   }
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
-    // if (
-    //   prevProps.showEditProductModal !== this.props.showEditProductModal &&
-    //   !this.props.showEditProductModal
-    // ) {
-    //   this.setState({ selectedRow: {}, selectedProduct: {} });
-    // }
+    if (
+      prevProps.showEditProductModal !== this.props.showEditProductModal &&
+      !this.props.showEditProductModal
+    ) {
+      this.setState({ selectedProduct: {} });
+    }
 
     // we only need to check the productGroup options because both manufacturers and productGroup options are received in the same API response
     // and before they are received, there will not be any length.
@@ -125,8 +125,12 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
   componentWillUnmount() {
     this.props.closeAllModals();
   }
-  editProduct = () => {
-    // console.log(this.state.selectedProduct)
+
+  /*
+  * set the selected product to state and open the modal
+  */
+  editProduct = (product: Iproduct) => {
+    this.setState({ selectedProduct: product });
     this.props.toggleEditProductModal();
   };
 

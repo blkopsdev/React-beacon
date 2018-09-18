@@ -26,7 +26,9 @@ import {
   faUsers,
   faSearch,
   faUser,
-  faShoppingCart
+  faShoppingCart,
+  faChevronDown,
+  faChevronRight
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faCog,
@@ -48,7 +50,9 @@ library.add(
   faHospital,
   faUser,
   faSignOut,
-  faShoppingCart
+  faShoppingCart,
+  faChevronDown,
+  faChevronRight
 );
 
 import { authContext, isFullyAuthenticated } from './actions/userActions';
@@ -145,7 +149,10 @@ runWithAdal(
 
                 <Route component={NoMatch} />
               </Switch>
-              <ReduxToastr position={'top-right'} />
+              <ReduxToastr
+                position={'top-right'}
+                preventDuplicates={process.env.NODE_ENV === 'production'}
+              />
             </div>
           </Router>
         </Provider>

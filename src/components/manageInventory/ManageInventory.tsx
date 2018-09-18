@@ -23,7 +23,7 @@ import {
 import { FieldConfig } from 'react-reactive-form';
 import { emptyTile } from '../../reducers/initialState';
 import { RouteComponentProps } from 'react-router-dom';
-import ReactTable, { RowInfo, FinalState } from 'react-table';
+import ReactTable, { RowInfo, FinalState, RowRenderProps } from 'react-table';
 import { Button, Col } from 'react-bootstrap';
 import Banner from '../common/Banner';
 import constants from '../../constants/constants';
@@ -127,11 +127,40 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
   }
 
   /*
-  * set the selected product to state and open the modal
+  * indicate the toggle position and handle the click
+  * we set buttonInAction in order to prevent the the edit product modal opening when the row is clicked
+  * TODO animate the arrow:
+      transition: all .3s cubic-bezier(.175,.885,.32,1.275);
+          transform: translate(-50%,-50%) rotate(-90deg);
+              transform: translate(-50%,-50%) rotate(0);
   */
-  editProduct = (product: Iproduct) => {
-    this.setState({ selectedProduct: product });
-    this.props.toggleEditProductModal();
+  expanderToggle = (props: RowRenderProps) => {
+    const handleToggle = () => {
+      this.buttonInAction = true;
+      this.setState(
+        {
+          selectedRow: {
+            [props.viewIndex || 0]: !this.state.selectedRow[
+              props.viewIndex || 0
+            ]
+          }
+        },
+        () => (this.buttonInAction = false)
+      );
+    };
+    return (
+      <div onClick={handleToggle}>
+        {props.isExpanded ? (
+          <span>
+            <FontAwesomeIcon icon="chevron-down" />
+          </span>
+        ) : (
+          <span>
+            <FontAwesomeIcon icon="chevron-right" />
+          </span>
+        )}
+      </div>
+    );
   };
 
   /*
@@ -168,23 +197,38 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
             return manufacturer ? manufacturer.label : '';
           },
           id: 'manufacturer'
+        },
+        {
+          id: 'expander-toggle',
+          Cell: this.expanderToggle,
+          minWidth: 20,
+          style: {
+            cursor: 'pointer',
+            textAlign: 'center',
+            userSelect: 'none'
+          }
         }
       ],
       this.props.t
     );
     this.setState({ columns });
   };
+
+  /*
+  * Handle user clicking on a product row
+  * set the selected product to state and open the modal
+  */
   getTrProps = (state: FinalState, rowInfo: RowInfo) => {
     // console.log("ROWINFO", rowInfo, state);
     if (rowInfo) {
       return {
         onClick: (e: React.MouseEvent<HTMLFormElement>) => {
-          this.setState({
-            selectedRow: {
-              [rowInfo.viewIndex]: !this.state.selectedRow[rowInfo.viewIndex]
-            },
-            selectedProduct: rowInfo.original
-          });
+          if (!this.buttonInAction) {
+            this.setState({
+              selectedProduct: rowInfo.original
+            });
+            this.props.toggleEditProductModal();
+          }
         },
         style: {
           background: this.state.selectedRow[rowInfo.viewIndex]
@@ -243,7 +287,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       search: {
         render: FormUtil.TextInputWithoutValidation,
         meta: {
-          label: 'common:search',
+          label: 'common:searchProduct',
           colWidth: 3,
           type: 'text',
           placeholder: 'searchPlaceholder'
@@ -343,17 +387,16 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           onPageChange={this.onPageChange}
           sortable={false}
           noDataText={t('common:noDataText')}
-          expanded={this.state.selectedRow}
           SubComponent={(rowInfo: RowInfo) => (
             <InstallationsExpander
               {...rowInfo}
               addToQuote={() => console.log('add to quote clicked')}
               addInstallation={() => console.log('add install clicked')}
-              editProduct={this.editProduct}
               t={this.props.t}
             />
           )}
           resizable={false}
+          expanded={this.state.selectedRow}
         />
         <EditProductModal
           selectedItem={this.state.selectedProduct}

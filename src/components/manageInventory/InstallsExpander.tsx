@@ -9,31 +9,12 @@ import ReactTable, {
 // import * as moment from 'moment';
 import { Button } from 'react-bootstrap';
 // import { LinkContainer } from "react-router-bootstrap";
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TranslationFunction } from 'react-i18next';
 
-import { Iproduct } from '../../models';
-// IinstallBase
-
-export const expanderToggle = (props: RowRenderProps) => {
-  return (
-    <div>
-      {props.isExpanded ? (
-        <span>
-          <FontAwesomeIcon icon="chevron-down" />
-        </span>
-      ) : (
-        <span>
-          <FontAwesomeIcon icon="chevron-right" />
-        </span>
-      )}
-    </div>
-  );
-};
 interface ExpanderProps extends RowInfo {
   addToQuote: () => void;
   addInstallation: () => void;
-  editProduct: (product: Iproduct) => void;
   t: TranslationFunction;
 }
 
@@ -50,12 +31,6 @@ export const InstallationsExpander = (props: ExpanderProps) => {
         className="expander-button-bar text-right"
         style={{ position: 'absolute', top: 0, left: 0, width: '100%' }}
       >
-        <Button
-          bsStyle="link"
-          onClick={() => props.editProduct(props.original)}
-        >
-          {props.t('Edit Product')}
-        </Button>
         <Button bsStyle="link" onClick={props.addToQuote}>
           {props.t('Add to Quote')}
         </Button>

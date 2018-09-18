@@ -16,7 +16,8 @@
     "facilityNameLabel": "New Facility Name",
     "selectCustomerWarning": "You must select a customer first.",
     "noDataText": "Sorry! We could not find and rows that matched that search.",
-    "searchPlaceholder": "Search..."
+    "searchPlaceholder": "Search...",
+    "searchProduct": "Item Number or Name"
   },
   "auth": {
     "loginButton": "Login with Azure",

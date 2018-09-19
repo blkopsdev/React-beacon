@@ -38,7 +38,8 @@ import {
   faCheck,
   faTimes,
   faHospital,
-  faSignOut
+  faSignOut,
+  faListAlt
 } from '@fortawesome/pro-regular-svg-icons';
 library.add(
   faCog,
@@ -54,7 +55,8 @@ library.add(
   faShoppingCart,
   faChevronDown,
   faChevronRight,
-  faEnvelope
+  faEnvelope,
+  faListAlt
 );
 
 import { authContext, isFullyAuthenticated } from './actions/userActions';

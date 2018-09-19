@@ -78,12 +78,11 @@ class ManageInventoryModal extends React.Component<
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
-    userManage: state.teamManage,
     loading: state.ajaxCallsInProgress > 0,
     customerOptions: FormUtil.convertToOptions(state.customers),
     facilityOptions: FormUtil.convertToOptions(state.user.facilities),
     showModal: state.showEditProductModal,
-    productInfo: state.productInfo
+    productInfo: state.manageInventory.productInfo
   };
 };
 

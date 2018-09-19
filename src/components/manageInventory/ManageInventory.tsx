@@ -11,6 +11,7 @@ import {
   getProductInfo,
   setSelectedFacility
 } from '../../actions/manageInventoryActions';
+import { addToCart } from '../../actions/shoppingCartActions';
 import {
   IinitialState,
   Itile,
@@ -59,6 +60,7 @@ interface IdispatchProps {
   facilityOptions: Ioption[];
   user: Iuser;
   setSelectedFacility: typeof setSelectedFacility;
+  addToCart: typeof addToCart;
 }
 
 interface Istate {
@@ -383,7 +385,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           SubComponent={(rowInfo: RowInfo) => (
             <InstallationsExpander
               {...rowInfo}
-              addToQuote={() => console.log('add to quote clicked')}
+              addToQuote={this.props.addToCart}
               addInstallation={() => console.log('add install clicked')}
               t={this.props.t}
             />
@@ -415,7 +417,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     loading: state.ajaxCallsInProgress > 0,
     showEditProductModal: state.showEditProductModal,
     facilityOptions: FormUtil.convertToOptions(state.user.facilities),
-    productInfo: state.productInfo
+    productInfo: state.manageInventory.productInfo
   };
 };
 export default translate('manageInventory')(
@@ -427,7 +429,8 @@ export default translate('manageInventory')(
       toggleEditInstallModal,
       closeAllModals,
       getProductInfo,
-      setSelectedFacility
+      setSelectedFacility,
+      addToCart
     }
   )(ManageInventory)
 );

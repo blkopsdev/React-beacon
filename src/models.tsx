@@ -151,6 +151,7 @@ export interface ImanageInventory {
   totalPages: number;
   selectedFacility: Ioption;
   cart: IshoppingCart;
+  productInfo: IproductInfo;
 }
 
 export interface Iredirect {
@@ -197,7 +198,6 @@ export interface IinitialState {
   showEditTeamModal: boolean;
   showEditProductModal: boolean;
   showEditInstallModal: boolean;
-  productInfo: IproductInfo;
 }
 export interface Itile {
   icon: string | string[];

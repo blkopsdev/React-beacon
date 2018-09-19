@@ -1,7 +1,7 @@
 import {
   ADD_TO_CART,
   CHECKOUT_REQUEST,
-  CHECKOUT_FAILURE
+  CHECKOUT_FAILED
 } from '../actions/actionTypes';
 import initialState from './initialState';
 import { IshoppingCart, Iquantity } from '../models';
@@ -37,10 +37,10 @@ const quantityById = (
   }
 };
 
-export const getQuantity = (state: IshoppingCart, productID: string) =>
+export const getQuantity = (state: IshoppingCart, productID: string): number =>
   state.quantityByID[productID] || 0;
 
-export const getAddedIds = (state: IshoppingCart) => state.addedIDs;
+export const getAddedIDs = (state: IshoppingCart) => state.addedIDs;
 
 const cart = (
   state: IshoppingCart = initialState.manageInventory.cart,
@@ -49,7 +49,7 @@ const cart = (
   switch (action.type) {
     case CHECKOUT_REQUEST:
       return initialState;
-    case CHECKOUT_FAILURE:
+    case CHECKOUT_FAILED:
       return action.cart;
     default:
       return {

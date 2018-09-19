@@ -13,7 +13,7 @@ import { Button } from 'react-bootstrap';
 import { TranslationFunction } from 'react-i18next';
 
 interface ExpanderProps extends RowInfo {
-  addToQuote: () => void;
+  addToQuote: (id: string) => void;
   addInstallation: () => void;
   t: TranslationFunction;
 }
@@ -31,7 +31,10 @@ export const InstallationsExpander = (props: ExpanderProps) => {
         className="expander-button-bar text-right"
         style={{ position: 'absolute', top: 0, left: 0, width: '100%' }}
       >
-        <Button bsStyle="link" onClick={props.addToQuote}>
+        <Button
+          bsStyle="link"
+          onClick={() => props.addToQuote(props.original.id)}
+        >
           {props.t('Add to Quote')}
         </Button>
         <Button bsStyle="link" onClick={props.addInstallation}>

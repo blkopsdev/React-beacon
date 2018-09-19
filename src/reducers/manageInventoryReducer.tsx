@@ -14,7 +14,7 @@ import {
 import initialState, { initialOption } from './initialState';
 import { pickBy, map, filter, keyBy } from 'lodash';
 import { FormUtil } from '../components/common/FormUtil';
-import cart from './cartReducer';
+import cartReducer, { getAddedIDs, getQuantity } from './cartReducer';
 
 function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
   switch (action.type) {
@@ -100,7 +100,8 @@ export default function ManageInventory(
     page: pageReducer(state.page, action),
     totalPages: totalPagesReducer(state.totalPages, action),
     selectedFacility: selectedReducer(state.selectedFacility, action),
-    cart: cart(state.cart, action)
+    cart: cartReducer(state.cart, action),
+    productInfo: productInfo(state.productInfo, action)
     // quoteRequestItems: quoteRequestReducer(state.quoteRequestItems, action)
   };
 }
@@ -108,7 +109,7 @@ export default function ManageInventory(
 Brand, GasType, Main Category, Manufacturer, Power, Product Group, Standard, Subcategory, System Size 
 */
 export function productInfo(
-  state: IproductInfo = initialState.productInfo,
+  state: IproductInfo = initialState.manageInventory.productInfo,
   action: any
 ): IproductInfo {
   switch (action.type) {
@@ -156,8 +157,23 @@ export function productInfo(
         systemSizeOptions
       };
     case types.USER_LOGOUT_SUCCESS:
-      return initialState.productInfo;
+      return initialState.manageInventory.productInfo;
     default:
       return state;
   }
 }
+
+// getters for shopping cart
+// const getAddedIds = (cart: IshoppingCart) => getAddedIDs(cart)
+// const getQuantity = (cart: IshoppingCart, id: string) => getQuantity(cart, id)
+const getProduct = (productInfoState: IproductInfo, id: string) =>
+  productInfoState.productGroups[id];
+
+// export const getTotal = (manageInventory: ImanageInventory) =>
+//   getAddedIds(manageInventory.cart)
+
+export const getCartProducts = (state: ImanageInventory) =>
+  getAddedIDs(state.cart).map(id => ({
+    ...getProduct(state.productInfo, id),
+    quantity: getQuantity(state.cart, id)
+  }));

@@ -12,8 +12,9 @@ import {
   Ioption
 } from '../models';
 import initialState, { initialOption } from './initialState';
-import { pickBy, map, filter } from 'lodash';
+import { pickBy, map, filter, keyBy } from 'lodash';
 import { FormUtil } from '../components/common/FormUtil';
+import cart from './cartReducer';
 
 function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
   switch (action.type) {
@@ -88,6 +89,8 @@ function selectedReducer(state: Ioption = initialOption, action: any): Ioption {
   }
 }
 
+// function quoteRequestReducer( state: )
+
 export default function ManageInventory(
   state: ImanageInventory = initialState.manageInventory,
   action: any
@@ -96,7 +99,9 @@ export default function ManageInventory(
     data: dataReducer(state.data, action),
     page: pageReducer(state.page, action),
     totalPages: totalPagesReducer(state.totalPages, action),
-    selectedFacility: selectedReducer(state.selectedFacility, action)
+    selectedFacility: selectedReducer(state.selectedFacility, action),
+    cart: cart(state.cart, action)
+    // quoteRequestItems: quoteRequestReducer(state.quoteRequestItems, action)
   };
 }
 /*
@@ -105,19 +110,19 @@ Brand, GasType, Main Category, Manufacturer, Power, Product Group, Standard, Sub
 export function productInfo(
   state: IproductInfo = initialState.productInfo,
   action: any
-) {
+): IproductInfo {
   switch (action.type) {
     case types.GET_PRODUCT_INFO_SUCCESS:
       const pi = action.data;
-      const brands = pi[0] as Ibrand[];
-      const gasTypes = pi[1] as IgasType[];
-      const mainCategories = pi[2] as IbaseDataObject[];
-      const manufacturers = pi[3] as IbaseDataObject[];
-      const powers = pi[4] as IbaseDataObject[];
-      const productGroups = pi[5] as IproductGroup[];
-      const standards = pi[6] as IbaseDataObject[];
-      const subcategories = pi[7] as Isubcategory[];
-      const systemSizes = pi[8] as IsystemSize[];
+      const brands = keyBy(pi[0], (item: Ibrand) => item.id);
+      const gasTypes = keyBy(pi[1], (item: IgasType) => item.id);
+      const mainCategories = keyBy(pi[2], (item: IbaseDataObject) => item.id);
+      const manufacturers = keyBy(pi[3], (item: IbaseDataObject) => item.id);
+      const powers = keyBy(pi[4], (item: IbaseDataObject) => item.id);
+      const productGroups = keyBy(pi[5], (item: IproductGroup) => item.id);
+      const standards = keyBy(pi[6], (item: IbaseDataObject) => item.id);
+      const subcategories = keyBy(pi[7], (item: Isubcategory) => item.id);
+      const systemSizes = keyBy(pi[8], (item: IsystemSize) => item.id);
 
       // an options version of each one
       const brandOptions = FormUtil.convertToOptions(pi[0]);

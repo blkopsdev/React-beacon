@@ -18,7 +18,8 @@ import {
   Icustomer,
   Iproduct,
   Ioption,
-  Iuser
+  Iuser,
+  IproductInfo
 } from '../../models';
 import { FieldConfig } from 'react-reactive-form';
 import { emptyTile } from '../../reducers/initialState';
@@ -28,7 +29,6 @@ import { Button, Col } from 'react-bootstrap';
 import Banner from '../common/Banner';
 import constants from '../../constants/constants';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
-import { find } from 'lodash';
 import { FormUtil } from '../common/FormUtil';
 import SearchTableForm from '../common/SearchTableForm';
 import { TableUtil } from '../common/TableUtil';
@@ -55,8 +55,7 @@ interface IdispatchProps {
   getInventory: typeof getInventory;
   customers: Icustomer[];
   closeAllModals: typeof closeAllModals;
-  productGroupOptions: Ioption[];
-  manufacturerOptions: Ioption[];
+  productInfo: IproductInfo;
   facilityOptions: Ioption[];
   user: Iuser;
   setSelectedFacility: typeof setSelectedFacility;
@@ -113,10 +112,10 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     // we only need to check the productGroup options because both manufacturers and productGroup options are received in the same API response
     // and before they are received, there will not be any length.
     if (
-      prevProps.productGroupOptions.length !==
-        this.props.productGroupOptions.length ||
-      prevProps.manufacturerOptions.length !==
-        this.props.manufacturerOptions.length
+      prevProps.productInfo.productGroupOptions.length !==
+        this.props.productInfo.productGroupOptions.length ||
+      prevProps.productInfo.manufacturerOptions.length !==
+        this.props.productInfo.manufacturerOptions.length
     ) {
       console.log('re setting columns');
       this.setColumns();
@@ -181,20 +180,14 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         {
           Header: 'Product Group',
           accessor: ({ productGroupID }: Iproduct) => {
-            const productGroup = find(this.props.productGroupOptions, {
-              value: productGroupID
-            });
-            return productGroup ? productGroup.label : '';
+            return this.props.productInfo.productGroups[productGroupID].name;
           },
           id: 'productGroup'
         },
         {
           Header: 'Manufacturer',
           accessor: ({ manufacturerID }: Iproduct) => {
-            const manufacturer = find(this.props.manufacturerOptions, {
-              value: manufacturerID
-            });
-            return manufacturer ? manufacturer.label : '';
+            return this.props.productInfo.manufacturers[manufacturerID].name;
           },
           id: 'manufacturer'
         },
@@ -274,7 +267,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
   // TODO  hide facilities if only one
   // scroll content area only
   render() {
-    if (this.props.productGroupOptions.length === 0) {
+    if (this.props.productInfo.productGroupOptions.length === 0) {
       return (
         <Col xs={12}>
           <h4> loading... </h4>
@@ -297,7 +290,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         render: FormUtil.SelectWithoutValidation,
         meta: {
           label: 'common:productGroup',
-          options: this.props.productGroupOptions,
+          options: this.props.productInfo.productGroupOptions,
           colWidth: 3,
           type: 'select',
           placeholder: 'productGroupPlaceholder'
@@ -307,7 +300,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         render: FormUtil.SelectWithoutValidation,
         meta: {
           label: 'common:manufacturer',
-          options: this.props.manufacturerOptions,
+          options: this.props.productInfo.manufacturerOptions,
           colWidth: 3,
           type: 'select',
           placeholder: 'manufacturerPlaceholder'
@@ -422,12 +415,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     loading: state.ajaxCallsInProgress > 0,
     showEditProductModal: state.showEditProductModal,
     facilityOptions: FormUtil.convertToOptions(state.user.facilities),
-    productGroupOptions: FormUtil.convertToOptions(
-      state.productInfo.productGroups
-    ),
-    manufacturerOptions: FormUtil.convertToOptions(
-      state.productInfo.manufacturers
-    )
+    productInfo: state.productInfo
   };
 };
 export default translate('manageInventory')(

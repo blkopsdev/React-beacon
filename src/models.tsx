@@ -1,3 +1,5 @@
+import { ThunkAction } from 'redux-thunk';
+
 export interface Iuser {
   password: string;
   username: string;
@@ -136,11 +138,19 @@ export interface IteamManage {
   data: Iuser[];
   totalPages: number;
 }
+export interface Iquantity {
+  [key: string]: number;
+}
+export interface IshoppingCart {
+  addedIDs: string[];
+  quantityByID: Iquantity;
+}
 export interface ImanageInventory {
   page: number;
   data: Iproduct[];
   totalPages: number;
   selectedFacility: Ioption;
+  cart: IshoppingCart;
 }
 
 export interface Iredirect {
@@ -148,15 +158,15 @@ export interface Iredirect {
   pathname: string;
 }
 export interface IproductInfo {
-  brands: Ibrand[];
-  gasTypes: IgasType[];
-  manufacturers: IbaseDataObject[];
-  mainCategories: IbaseDataObject[];
-  powers: IbaseDataObject[];
-  productGroups: IproductGroup[];
-  standards: IbaseDataObject[];
-  subcategories: Isubcategory[];
-  systemSizes: IsystemSize[];
+  brands: { [key: string]: Ibrand };
+  gasTypes: { [key: string]: IgasType };
+  manufacturers: { [key: string]: IbaseDataObject };
+  mainCategories: { [key: string]: IbaseDataObject };
+  powers: { [key: string]: IbaseDataObject };
+  productGroups: { [key: string]: IproductGroup };
+  standards: { [key: string]: IbaseDataObject };
+  subcategories: { [key: string]: Isubcategory };
+  systemSizes: { [key: string]: IsystemSize };
   brandOptions: Ioption[];
   gasTypeOptions: Ioption[];
   mainCategoryOptions: Ioption[];
@@ -167,6 +177,7 @@ export interface IproductInfo {
   subcategoryOptions: Ioption[];
   systemSizeOptions: Ioption[];
 }
+
 export interface IinitialState {
   user: Iuser;
   ajaxCallsInProgress: number;
@@ -225,3 +236,5 @@ export interface Ioption {
 // these are copied from react-redux-toastr beacuse could not figure out any other way to make typescript happy
 export type transitionInType = 'bounceIn' | 'bounceInDown' | 'fadeIn';
 export type transitionOutType = 'bounceOut' | 'bounceOutUp' | 'fadeOut';
+
+export type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;

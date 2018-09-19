@@ -107,6 +107,16 @@ export default function ManageInventory(
       state.showEditQuoteModal,
       action,
       'EDIT_QUOTE'
+    ),
+    showEditProductModal: modalToggleWithName(
+      state.showEditProductModal,
+      action,
+      'EDIT_PRODUCT'
+    ),
+    showEditInstallModal: modalToggleWithName(
+      state.showEditInstallModal,
+      action,
+      'EDIT_INSTALL'
     )
     // quoteRequestItems: quoteRequestReducer(state.quoteRequestItems, action)
   };

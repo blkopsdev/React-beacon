@@ -240,6 +240,35 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       return {};
     }
   };
+
+  /*
+  * Handle user clicking on an install row
+  * set the selected install to state and open the modal
+  */
+  getExpanderTrProps = (state: FinalState, rowInfo: RowInfo) => {
+    // console.log("ROWINFO", rowInfo, state);
+    if (rowInfo) {
+      return {
+        onClick: (e: React.MouseEvent<HTMLFormElement>) => {
+          if (!this.buttonInAction) {
+            this.setState({
+              selectedProduct: rowInfo.original
+            });
+            this.props.toggleEditProductModal();
+          }
+        },
+        style: {
+          background: this.state.selectedRow[rowInfo.viewIndex]
+            ? constants.colors[`${this.state.currentTile.color}Tr`]
+            : ''
+        }
+      };
+    } else {
+      return {};
+    }
+  };
+
+  // handleEditInstall = (e: React.MouseEvent<HTMLFormElement>)
   // get the next or previous page of data.  the table is 0 indexed but the API is not
   onPageChange = (page: number) => {
     this.props.getInventory(page + 1, '', '', '', '');
@@ -392,8 +421,9 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
             <InstallationsExpander
               {...rowInfo}
               addToQuote={this.props.addToCart}
-              addInstallation={() => console.log('add install clicked')}
+              addInstallation={this.props.toggleEditInstallModal}
               t={this.props.t}
+              getExpanderTrProps={this.getExpanderTrProps}
             />
           )}
           resizable={false}
@@ -427,7 +457,8 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     userManage: state.manageInventory,
     customers: state.customers,
     loading: state.ajaxCallsInProgress > 0,
-    showEditProductModal: state.showEditProductModal,
+    showEditProductModal: state.manageInventory.showEditProductModal,
+    showEditInstallModal: state.manageInventory.showEditInstallModal,
     facilityOptions: FormUtil.convertToOptions(state.user.facilities),
     productInfo: state.manageInventory.productInfo,
     cartTotal: getTotal(state.manageInventory)

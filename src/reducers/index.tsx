@@ -29,11 +29,7 @@ const rootReducer = combineReducers({
   showEditUserModal: createShowModalWithNamedType('EDIT_USER'),
   showEditTeamModal: createShowModalWithNamedType('EDIT_TEAM'),
   showEditProfileModal: createShowModalWithNamedType('EDIT_PROFILE'),
-  showSecurityFunctionsModal: createShowModalWithNamedType(
-    'SECURITY_FUNCTIONS'
-  ),
-  showEditProductModal: createShowModalWithNamedType('EDIT_PRODUCT'),
-  showEditInstallModal: createShowModalWithNamedType('EDIT_INSTALL')
+  showSecurityFunctionsModal: createShowModalWithNamedType('SECURITY_FUNCTIONS')
 });
 
 export default rootReducer;

@@ -38,7 +38,7 @@ const API = {
       getbycustomer: `${root}facility/getbycustomer`
     },
     inventory: {
-      getinventory: `${root}inventory/search`,
+      getinventory: `${root}inventory/search`, // unused
       getproductinfo: `${root}inventory/getproductinfo`
     }
   }

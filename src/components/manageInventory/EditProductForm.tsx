@@ -345,10 +345,7 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
     }
   };
 
-  handleSubmit = (
-    e: React.MouseEvent<HTMLFormElement>,
-    shouldApprove?: boolean
-  ) => {
+  handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (this.userForm.status === 'INVALID') {
       this.userForm.markAsSubmitted();

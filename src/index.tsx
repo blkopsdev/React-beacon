@@ -28,7 +28,8 @@ import {
   faUser,
   faShoppingCart,
   faChevronDown,
-  faChevronRight
+  faChevronRight,
+  faEnvelope
 } from '@fortawesome/free-solid-svg-icons';
 import {
   faCog,
@@ -52,7 +53,8 @@ library.add(
   faSignOut,
   faShoppingCart,
   faChevronDown,
-  faChevronRight
+  faChevronRight,
+  faEnvelope
 );
 
 import { authContext, isFullyAuthenticated } from './actions/userActions';

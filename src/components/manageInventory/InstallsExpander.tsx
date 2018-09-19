@@ -9,13 +9,17 @@ import ReactTable, {
 // import * as moment from 'moment';
 import { Button } from 'react-bootstrap';
 // import { LinkContainer } from "react-router-bootstrap";
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TranslationFunction } from 'react-i18next';
 
 interface ExpanderProps extends RowInfo {
   addToQuote: (id: string) => void;
   addInstallation: () => void;
   t: TranslationFunction;
+  getExpanderTrProps: (
+    state: FinalState,
+    rowInfo: RowInfo
+  ) => object | undefined;
 }
 
 /*
@@ -78,6 +82,11 @@ export const InstallationsExpander = (props: ExpanderProps) => {
     {
       Header: '',
       id: 'contact-button',
+      Cell: (
+        <span>
+          <FontAwesomeIcon icon="envelope" />{' '}
+        </span>
+      ),
       minWidth: 25
     }
   ] as Column[];
@@ -88,18 +97,16 @@ export const InstallationsExpander = (props: ExpanderProps) => {
     column: Column,
     instance: any
   ) => {
-    if (
-      column &&
-      column.id &&
-      rowInfo.row[column.id] &&
-      rowInfo.row[column.id].className
-    ) {
+    if (column && column.id && column.id === 'contact-button') {
       return {
         onClick: (
           e: React.MouseEvent<HTMLFormElement>,
           handleOriginal: () => void
         ) => {
-          console.log('clocked add to quote');
+          console.log(
+            'clicked contact support about install',
+            rowInfo.original.id
+          );
           if (handleOriginal) {
             handleOriginal();
           }
@@ -128,6 +135,7 @@ export const InstallationsExpander = (props: ExpanderProps) => {
           getTdProps={expanderHandleTdProps}
           noDataText="No installations found."
           resizable={false}
+          getTrProps={props.getExpanderTrProps}
         />
       </div>
     );

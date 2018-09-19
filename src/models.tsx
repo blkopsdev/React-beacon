@@ -152,6 +152,8 @@ export interface ImanageInventory {
   selectedFacility: Ioption;
   cart: IshoppingCart;
   productInfo: IproductInfo;
+  showEditProductModal: boolean;
+  showEditInstallModal: boolean;
   showEditQuoteModal: boolean;
 }
 
@@ -197,8 +199,6 @@ export interface IinitialState {
   showEditProfileModal: boolean;
   showSecurityFunctionsModal: boolean;
   showEditTeamModal: boolean;
-  showEditProductModal: boolean;
-  showEditInstallModal: boolean;
 }
 export interface Itile {
   icon: string | string[];

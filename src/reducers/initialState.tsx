@@ -43,6 +43,8 @@ export default {
     data: []
   },
   manageInventory: {
+    showEditProductModal: false,
+    showEditInstallModal: false,
     showEditQuoteModal: false,
     page: 1,
     totalPages: 1,
@@ -81,9 +83,7 @@ export default {
   showEditQueueUserModal: false,
   showEditProfileModal: false,
   showSecurityFunctionsModal: false,
-  showEditTeamModal: false,
-  showEditProductModal: false,
-  showEditInstallModal: false
+  showEditTeamModal: false
 };
 
 export const emptyTile = {

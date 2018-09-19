@@ -1,6 +1,5 @@
 /* 
-* Manage Inventory Form 
-* Edit inventory items
+* Edit Quote Form
 */
 
 import * as React from 'react';
@@ -27,22 +26,6 @@ interface IstateChanges extends Observable<any> {
 interface AbstractControlEdited extends AbstractControl {
   stateChanges: IstateChanges;
 }
-/*
-sku(pin): "Test-124"
-name(pin): "Test Product"
-description(pin): "Test Product"
-imagePath(pin): "/image.png"
-subcategoryID(pin): "bbbe934e-f5c1-45cb-b850-71d3d4c31f96"
-standardID(pin): "444e934e-f5c1-45cb-b850-71d3d4c31f96"
-brandID(pin): "ccce934e-f5c1-45cb-b850-71d3d4c31f96"
-manufacturerID(pin): "ddde934e-f5c1-45cb-b850-71d3d4c31f96"
-gasTypeID(pin): "eeee934e-f5c1-45cb-b850-71d3d4c31f96"
-powerID(pin): "fffe934e-f5c1-45cb-b850-71d3d4c31f96"
-systemSizeID(pin): "111e934e-f5c1-45cb-b850-71d3d4c31f96"
-productGroupID(pin): "222e934e-f5c1-45cb-b850-71d3d4c31f96"
-createDate(pin): "2018-08-28T19:35:34.6532093"
-updateDate(pin): "2018-09-13T00:55:53.5339951"
-*/
 
 const buildFieldConfig = (
   productInfo: IproductInfo,
@@ -218,11 +201,10 @@ interface Iprops {
   t: TranslationFunction;
   i18n: I18n;
   productInfo: IproductInfo;
-  customerOptions: Ioption[];
   facilityOptions: Ioption[];
 }
 
-class ManageInventoryForm extends React.Component<Iprops, {}> {
+class EditQuoteForm extends React.Component<Iprops, {}> {
   public userForm: AbstractControl;
   public fieldConfig: FieldConfig;
   constructor(props: Iprops) {
@@ -345,10 +327,7 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
     }
   };
 
-  handleSubmit = (
-    e: React.MouseEvent<HTMLFormElement>,
-    shouldApprove?: boolean
-  ) => {
+  handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (this.userForm.status === 'INVALID') {
       this.userForm.markAsSubmitted();
@@ -356,33 +335,8 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
       return;
     }
     console.log(this.userForm.value);
-    const {
-      productGroupID,
-      brandID,
-      manufacturerID,
-      subcategoryID,
-      gasTypeID,
-      powerID,
-      systemSizeID,
-      standardID
-    } = this.userForm.value;
 
-    let newItem = {
-      ...this.userForm.value,
-      productGroupID: productGroupID.value,
-      brandID: brandID.value,
-      manufacturerID: manufacturerID.value,
-      subcategoryID: subcategoryID.value,
-      gasTypeID: gasTypeID.value,
-      powerID: powerID.value,
-      systemSizeID: systemSizeID.value,
-      standardID: standardID.value
-    };
-
-    if (this.props.selectedItem) {
-      newItem = { ...newItem, id: this.props.selectedItem.id };
-    }
-    this.props.handleSubmit(newItem);
+    this.props.handleSubmit(this.userForm.value);
   };
   setForm = (form: AbstractControl) => {
     this.userForm = form;
@@ -427,4 +381,4 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
     );
   }
 }
-export default translate('manageInventory')(ManageInventoryForm);
+export default translate('user')(EditQuoteForm);

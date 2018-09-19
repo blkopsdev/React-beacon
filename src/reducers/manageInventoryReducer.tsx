@@ -15,6 +15,7 @@ import initialState, { initialOption } from './initialState';
 import { pickBy, map, filter, keyBy } from 'lodash';
 import { FormUtil } from '../components/common/FormUtil';
 import cartReducer, { getAddedIDs, getQuantity } from './cartReducer';
+import { modalToggleWithName } from './userQueueModalsReducer';
 
 function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
   switch (action.type) {
@@ -101,7 +102,12 @@ export default function ManageInventory(
     totalPages: totalPagesReducer(state.totalPages, action),
     selectedFacility: selectedReducer(state.selectedFacility, action),
     cart: cartReducer(state.cart, action),
-    productInfo: productInfo(state.productInfo, action)
+    productInfo: productInfo(state.productInfo, action),
+    showEditQuoteModal: modalToggleWithName(
+      state.showEditQuoteModal,
+      action,
+      'EDIT_QUOTE'
+    )
     // quoteRequestItems: quoteRequestReducer(state.quoteRequestItems, action)
   };
 }
@@ -169,8 +175,11 @@ export function productInfo(
 const getProduct = (productInfoState: IproductInfo, id: string) =>
   productInfoState.productGroups[id];
 
-// export const getTotal = (manageInventory: ImanageInventory) =>
-//   getAddedIds(manageInventory.cart)
+export const getTotal = (state: ImanageInventory) =>
+  state.cart.addedIDs.reduce(
+    (total, id) => total + getQuantity(state.cart, id),
+    0
+  );
 
 export const getCartProducts = (state: ImanageInventory) =>
   getAddedIDs(state.cart).map(id => ({

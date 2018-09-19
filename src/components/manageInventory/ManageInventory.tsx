@@ -8,9 +8,11 @@ import {
   getInventory,
   toggleEditProductModal,
   toggleEditInstallModal,
+  toggleEditQuoteModal,
   getProductInfo,
   setSelectedFacility
 } from '../../actions/manageInventoryActions';
+import { getTotal } from '../../reducers/manageInventoryReducer';
 import { addToCart } from '../../actions/shoppingCartActions';
 import {
   IinitialState,
@@ -26,7 +28,7 @@ import { FieldConfig } from 'react-reactive-form';
 import { emptyTile } from '../../reducers/initialState';
 import { RouteComponentProps } from 'react-router-dom';
 import ReactTable, { RowInfo, FinalState, RowRenderProps } from 'react-table';
-import { Button, Col } from 'react-bootstrap';
+import { Button, Col, Badge } from 'react-bootstrap';
 import Banner from '../common/Banner';
 import constants from '../../constants/constants';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
@@ -34,6 +36,7 @@ import { FormUtil } from '../common/FormUtil';
 import SearchTableForm from '../common/SearchTableForm';
 import { TableUtil } from '../common/TableUtil';
 import EditProductModal from './EditProductModal';
+import EditQuoteModal from '../shoppingCart/EditQuoteModal';
 import { closeAllModals } from '../../actions/commonActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { InstallationsExpander } from './InstallsExpander';
@@ -51,6 +54,7 @@ interface IdispatchProps {
   // Add your dispatcher properties here
   toggleEditProductModal: typeof toggleEditProductModal;
   toggleEditInstallModal: typeof toggleEditInstallModal;
+  toggleEditQuoteModal: typeof toggleEditQuoteModal;
   getProductInfo: typeof getProductInfo;
   toggleSecurityFunctionsModal: () => void;
   getInventory: typeof getInventory;
@@ -61,6 +65,7 @@ interface IdispatchProps {
   user: Iuser;
   setSelectedFacility: typeof setSelectedFacility;
   addToCart: typeof addToCart;
+  cartTotal: number;
 }
 
 interface Istate {
@@ -356,9 +361,10 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         <Button
           className="request-for-quote-cart-button"
           bsStyle="primary"
-          onClick={this.props.toggleEditProductModal}
+          onClick={this.props.toggleEditQuoteModal}
         >
           <FontAwesomeIcon icon="shopping-cart" />
+          <Badge>{this.props.cartTotal} </Badge>
         </Button>
 
         <Button
@@ -400,6 +406,12 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           }
           t={this.props.t}
         />
+        <EditQuoteModal
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+          t={this.props.t}
+        />
       </div>
     );
   }
@@ -417,7 +429,8 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     loading: state.ajaxCallsInProgress > 0,
     showEditProductModal: state.showEditProductModal,
     facilityOptions: FormUtil.convertToOptions(state.user.facilities),
-    productInfo: state.manageInventory.productInfo
+    productInfo: state.manageInventory.productInfo,
+    cartTotal: getTotal(state.manageInventory)
   };
 };
 export default translate('manageInventory')(
@@ -427,6 +440,7 @@ export default translate('manageInventory')(
       getInventory,
       toggleEditProductModal,
       toggleEditInstallModal,
+      toggleEditQuoteModal,
       closeAllModals,
       getProductInfo,
       setSelectedFacility,

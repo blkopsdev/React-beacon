@@ -12,3 +12,18 @@ export default function createShowModalWithNamedType(modalName = '') {
     }
   };
 }
+
+export function modalToggleWithName(
+  state: boolean = false,
+  action: any,
+  modalName: string
+) {
+  switch (action.type) {
+    case `TOGGLE_MODAL_${modalName}`:
+      return !state;
+    case types.CLOSE_ALL_MODALS:
+      return false;
+    default:
+      return state;
+  }
+}

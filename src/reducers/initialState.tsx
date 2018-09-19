@@ -43,6 +43,7 @@ export default {
     data: []
   },
   manageInventory: {
+    showEditQuoteModal: false,
     page: 1,
     totalPages: 1,
     data: [],

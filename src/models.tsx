@@ -152,6 +152,7 @@ export interface ImanageInventory {
   selectedFacility: Ioption;
   cart: IshoppingCart;
   productInfo: IproductInfo;
+  showEditQuoteModal: boolean;
 }
 
 export interface Iredirect {

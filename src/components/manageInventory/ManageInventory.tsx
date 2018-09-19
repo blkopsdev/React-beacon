@@ -368,7 +368,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
 
         <Button
           className="table-add-button"
-          bsStyle={constants.colors[`${this.state.currentTile.color}Button`]}
+          bsStyle="link"
           onClick={this.props.toggleEditProductModal}
         >
           {t('manageInventory:newProduct')}

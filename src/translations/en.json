@@ -17,7 +17,8 @@
     "selectCustomerWarning": "You must select a customer first.",
     "noDataText": "Sorry! We could not find and rows that matched that search.",
     "searchPlaceholder": "Search...",
-    "searchProduct": "Item Number or Name"
+    "searchProduct": "Item Number or Name",
+    "mainCategory": "Main Category"
   },
   "auth": {
     "loginButton": "Login with Azure",

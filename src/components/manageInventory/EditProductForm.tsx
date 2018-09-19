@@ -8,18 +8,25 @@ import {
   Validators,
   FormGenerator,
   AbstractControl,
-  FieldConfig
+  FieldConfig,
+  Observable
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
 // import { forEach, differenceBy, filter, find, map } from 'lodash';
-import { forEach, find } from 'lodash';
+import { forEach, find, filter } from 'lodash';
 
 import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 
 import { FormUtil } from '../common/FormUtil';
-import { Iproduct, Ioption, IproductInfo } from '../../models';
+import { Iproduct, Ioption, IproductInfo, Isubcategory } from '../../models';
+interface IstateChanges extends Observable<any> {
+  next: () => void;
+}
+interface AbstractControlEdited extends AbstractControl {
+  stateChanges: IstateChanges;
+}
 /*
 sku(pin): "Test-124"
 name(pin): "Test Product"
@@ -37,7 +44,10 @@ createDate(pin): "2018-08-28T19:35:34.6532093"
 updateDate(pin): "2018-09-13T00:55:53.5339951"
 */
 
-const buildFieldConfig = (productInfo: IproductInfo) => {
+const buildFieldConfig = (
+  productInfo: IproductInfo,
+  filterSubcategories: (id: string) => void
+) => {
   const fieldConfigControls = {
     name: {
       options: {
@@ -100,10 +110,30 @@ const buildFieldConfig = (productInfo: IproductInfo) => {
         validators: Validators.required
       }
     },
+    mainCategoryID: {
+      render: FormUtil.Select,
+      meta: {
+        options: productInfo.mainCategoryOptions,
+        label: 'common:mainCategory',
+        colWidth: 6,
+        placeholder: 'common:searchPlaceholder',
+        isMulti: false
+      },
+      options: {
+        validators: [
+          Validators.required,
+          (c: any) => {
+            if (c.value && c.value.value) {
+              filterSubcategories(c.value.value);
+            }
+          }
+        ]
+      }
+    },
     subcategoryID: {
       render: FormUtil.Select,
       meta: {
-        options: productInfo.subcategoryOptions,
+        // options: productInfo.subcategoryOptions,
         label: 'common:subcategory',
         colWidth: 6,
         placeholder: 'common:searchPlaceholder',
@@ -198,7 +228,7 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(
-      buildFieldConfig(this.props.productInfo),
+      buildFieldConfig(this.props.productInfo, this.filterSubcategories),
       this.props.t
     );
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -265,6 +295,16 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
               { value }
             )
           });
+          // special set for mainCategory
+          if (key === 'subcategory') {
+            const { mainCategoryID } = value || ('' as any);
+            this.userForm.patchValue({
+              mainCategoryID: find(
+                this.props.productInfo[`mainCategoryOptions`],
+                { value: mainCategoryID }
+              )
+            });
+          }
         }
       });
       //   const {productGroupID, brandID, manufacturerID, subcategoryID, gasTypeID, powerID, systemSizeID, standardID} = this.userForm.value
@@ -274,6 +314,36 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
       // });
     }
   }
+  filterSubcategories = (mainCategoryID: string) => {
+    if (mainCategoryID) {
+      const filteredSubcategories = filter(
+        this.props.productInfo.subcategories,
+        (sub: Isubcategory) => {
+          return sub.mainCategoryID === mainCategoryID;
+        }
+      );
+      const subcategoryControl = this.userForm.get(
+        'subcategoryID'
+      ) as AbstractControlEdited;
+      subcategoryControl.meta.options = FormUtil.convertToOptions(
+        filteredSubcategories
+      );
+      subcategoryControl.stateChanges.next();
+      // try to set the value to the one selected by the user
+      if (this.props.selectedItem) {
+        const newSubcategory =
+          find(subcategoryControl.meta.options, {
+            value: this.props.selectedItem.subcategoryID
+          }) || {};
+        this.userForm.patchValue({ subcategoryID: newSubcategory });
+      } else {
+        // subcategoryControl.reset();
+        // subcategoryControl.markAsPristine();
+        // subcategoryControl.stateChanges.next();
+        this.userForm.patchValue({ subcategoryID: null });
+      }
+    }
+  };
 
   handleSubmit = (
     e: React.MouseEvent<HTMLFormElement>,

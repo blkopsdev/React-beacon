@@ -106,14 +106,18 @@ export interface Iproduct {
   systemSizeID: string;
   productGroupID: string;
   subcategory: Isubcategory;
-  standard: IbaseDataObject;
-  brand: Ibrand;
-  manufacturer: IbaseDataObject;
-  gasType: IgasType;
-  power: IbaseDataObject;
-  systemSize: IsystemSize;
-  productGroup: IproductGroup;
+  // standard: IbaseDataObject;
+  // brand: Ibrand;
+  // manufacturer: IbaseDataObject;
+  // gasType: IgasType;
+  // power: IbaseDataObject;
+  // systemSize: IsystemSize;
+  // productGroup: IproductGroup;
   installs: IinstallBase[];
+}
+export interface IquoteItem {
+  productID: string;
+  quantity: number;
 }
 
 export interface IuserQueue {

@@ -112,7 +112,11 @@ export function saveProduct(product: Iproduct): ThunkResult<void> {
             product: data.data
           });
           dispatch({ type: types.TOGGLE_MODAL_EDIT_PRODUCT });
-          toastr.success('Success', 'Saved product', constants.toastrSuccess);
+          toastr.success(
+            'Success',
+            'Submitted new product for approval.',
+            constants.toastrSuccess
+          );
           return data;
         }
       })
@@ -124,7 +128,10 @@ export function saveProduct(product: Iproduct): ThunkResult<void> {
   };
 }
 
-export function updateInstall(install: IinstallBase): ThunkResult<void> {
+export function updateInstall(
+  install: IinstallBase,
+  productID: string
+): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     return axios
@@ -155,9 +162,12 @@ export function updateInstall(install: IinstallBase): ThunkResult<void> {
 }
 
 /*
-* save (add) a new product
+* save (add) an install (an install might have a quantity greater than 1 so we might be adding multiple installs)
 */
-export function saveInstall(install: IinstallBase): ThunkResult<void> {
+export function saveInstall(
+  install: IinstallBase,
+  productID: string
+): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     return axios
@@ -168,16 +178,17 @@ export function saveInstall(install: IinstallBase): ThunkResult<void> {
         } else {
           dispatch({
             type: types.INSTALL_ADD_SUCCESS,
-            install: data.data
+            installs: data.data,
+            productID
           });
           dispatch({ type: types.TOGGLE_MODAL_EDIT_INSTALL });
-          toastr.success('Success', 'Saved product', constants.toastrSuccess);
+          toastr.success('Success', 'Saved install', constants.toastrSuccess);
           return data;
         }
       })
       .catch((error: any) => {
         dispatch({ type: types.INSTALL_ADD_FAILED });
-        constants.handleError(error, 'save product');
+        constants.handleError(error, 'save install');
         throw error;
       });
   };

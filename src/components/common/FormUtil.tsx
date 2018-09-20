@@ -87,6 +87,7 @@ export const FormUtil = {
         <FormControl
           placeholder={meta.placeholder}
           componentClass={meta.componentClass}
+          type={meta.type || 'text'}
           {...handler()}
         />
         <FormControl.Feedback />

@@ -22,27 +22,32 @@ import { Ioption, IproductInfo, IinstallBase, Iproduct } from '../../models';
 
 const buildFieldConfig = (productInfo: IproductInfo) => {
   const fieldConfigControls = {
-    serialNumber: {
+    nickname: {
       options: {
         validators: Validators.required
       },
+      render: FormUtil.TextInput,
+      meta: { label: 'nickname', colWidth: 12, type: 'input' }
+    },
+    serialNumber: {
       render: FormUtil.TextInput,
       meta: { label: 'serial number', colWidth: 6, type: 'input' }
     },
     rfid: {
-      options: {
-        validators: Validators.required
-      },
       render: FormUtil.TextInput,
       meta: { label: 'rfid', colWidth: 6, type: 'input' }
     },
     remarks: {
+      render: FormUtil.TextInput,
+      meta: { label: 'remarks', colWidth: 12, componentClass: 'textarea' }
+    },
+    quantity: {
       options: {
-        validators: Validators.required
+        validators: Validators.min(1)
       },
       render: FormUtil.TextInput,
-      inputType: 'textarea',
-      meta: { label: 'remarks', colWidth: 12, type: 'textarea' }
+      inputType: 'number',
+      meta: { label: 'quantity', colWidth: 6, type: 'number', defaultValue: 1 }
     }
   };
   return {
@@ -79,15 +84,25 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
   // componentDidUpdate(prevProps: Iprops) {}
 
   componentDidMount() {
-    if (!this.props.selectedItem) {
-      console.log('adding a new user');
-      return;
+    if (!this.props.selectedProduct.id) {
+      console.error('missing product');
+      toastr.error(
+        'Error',
+        'Missing product, please try again or contact support.',
+        constants.toastrError
+      );
+      this.props.handleCancel();
+    }
+    if (
+      !this.props.selectedItem ||
+      (this.props.selectedItem && !this.props.selectedItem.id)
+    ) {
+      console.log('adding a new install');
+      this.userForm.patchValue({ quantity: 1 });
     } else {
       // set values
       forEach(this.props.selectedItem, (value, key) => {
-        if (typeof value === 'string') {
-          this.userForm.patchValue({ [key]: value });
-        }
+        this.userForm.patchValue({ [key]: value });
       });
     }
   }
@@ -110,7 +125,7 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
     if (this.props.selectedItem) {
       newItem = { ...newItem, id: this.props.selectedItem.id };
     }
-    this.props.handleSubmit(newItem);
+    this.props.handleSubmit(newItem, this.props.selectedProduct.id);
   };
   setForm = (form: AbstractControl) => {
     this.userForm = form;

@@ -215,7 +215,6 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
   componentDidMount() {
     if (!this.props.selectedItem) {
       console.log('adding a new user');
-      return;
     } else {
       // set values
       forEach(this.props.selectedItem, (value, key) => {

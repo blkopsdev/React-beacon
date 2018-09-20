@@ -9,7 +9,8 @@ import {
   IproductGroup,
   Isubcategory,
   IsystemSize,
-  Ioption
+  Ioption,
+  IinstallBase
 } from '../models';
 import initialState, { initialOption } from './initialState';
 import { pickBy, map, filter, keyBy, find } from 'lodash';
@@ -20,12 +21,12 @@ import { modalToggleWithName } from './userQueueModalsReducer';
 function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
   switch (action.type) {
     case types.GET_INVENTORY_SUCCESS:
-      return action.inventory;
-    // return map(action.data, d => {
-    //   return {
-    //     ...pickBy(d, (property, key) => property !== null)
-    //   };
-    // });
+      // return action.inventory;
+      return map(action.inventory, d => {
+        return {
+          ...(pickBy(d, (property, key) => property !== null) as Iproduct)
+        };
+      });
     case types.PRODUCT_UPDATE_SUCCESS:
       const filteredProducts = filter(state, p => p.id !== action.product.id);
       const updatedProduct = {
@@ -34,15 +35,14 @@ function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
 
       return [...filteredProducts, updatedProduct] as Iproduct[];
     case types.PRODUCT_ADD_SUCCESS:
-      const securityFunct = map(action.user.securityFunctions, securityF => {
-        return securityF.toUpperCase();
-      });
-      const updatedTeamMember = {
-        ...pickBy(action.user, (property, key) => property !== null),
-        securityFunctions: securityFunct
-      };
+      // const updatedProductB = {
+      //   ...pickBy(action.product, (property, key) => property !== null)
+      // };
 
-      return [...state, updatedTeamMember] as Iproduct[];
+      // return [...state, updatedProductB] as Iproduct[];
+
+      // TODO not showing added product until we build the queue
+      return state;
     case types.INSTALL_UPDATE_SUCCESS:
       const filteredProductsI = filter(
         state,
@@ -60,6 +60,35 @@ function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
         const newInstalls = { ...filteredInstalls, updatedInstall };
         const updatedProductI = { ...oldProduct, installs: newInstalls };
         return [...filteredProductsI, updatedProductI] as Iproduct[];
+      }
+      return state;
+
+    /*
+    * It is possible to add multiple installs at the same time.
+    */
+    case types.INSTALL_ADD_SUCCESS:
+      // const filteredProductsJ = filter(
+      //   state,
+      //   p => p.id !== action.productID
+      // );
+      const oldProductB = find(state, o => o.id === action.productID);
+      if (oldProductB) {
+        const installsToAdd = map(action.installs, install => {
+          return { ...pickBy(install, (property, key) => property !== null) };
+        });
+        const newInstalls = [
+          ...oldProductB.installs,
+          ...installsToAdd
+        ] as IinstallBase[];
+        // const updatedProductE = { ...oldProductB, installs: newInstalls };
+        return map(state, pr => {
+          if (pr.id === action.productID) {
+            return { ...pr, installs: newInstalls };
+          } else {
+            return pr;
+          }
+        });
+        // return [...filteredProductsJ, updatedProductE] as Iproduct[];
       }
       return state;
 

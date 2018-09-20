@@ -69,6 +69,7 @@ interface IdispatchProps {
   setSelectedFacility: typeof setSelectedFacility;
   addToCart: typeof addToCart;
   cartTotal: number;
+  tableData: Iproduct[];
 }
 
 interface Istate {
@@ -94,6 +95,8 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     };
   }
   componentWillMount() {
+    // since the install modal depends on a selected product in state, we need to make sure and start off with the modals closed
+    // this.props.closeAllModals();
     this.setState({
       currentTile: constants.getTileByURL(this.props.location.pathname)
     });
@@ -133,6 +136,11 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     ) {
       console.log('re setting columns');
       this.setColumns();
+    }
+
+    // update the table when we get new products or new installs
+    if (prevProps.tableData !== this.props.tableData) {
+      console.log('DATA CHANGED');
     }
   }
   componentWillUnmount() {
@@ -264,7 +272,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         onClick: (e: React.MouseEvent<HTMLFormElement>) => {
           if (!this.buttonInAction) {
             // grab the product by using the productID from installbase
-            const selectedProduct = find(this.props.userManage.data, {
+            const selectedProduct = find(this.props.tableData, {
               id: rowInfo.original.productID
             });
             this.setState({
@@ -424,10 +432,10 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           {t('manageInventory:newProduct')}
         </Button>
         <ReactTable
-          data={this.props.userManage.data}
+          data={this.props.tableData}
           columns={this.state.columns}
           getTrProps={this.getTrProps}
-          pageSize={this.props.userManage.data.length}
+          pageSize={this.props.tableData.length}
           manual // Forces table not to paginate or sort automatically, so we can handle it server-side
           pages={this.props.userManage.totalPages}
           showPageSizeOptions={false}
@@ -496,7 +504,8 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     showEditInstallModal: state.manageInventory.showEditInstallModal,
     facilityOptions: FormUtil.convertToOptions(state.user.facilities),
     productInfo: state.manageInventory.productInfo,
-    cartTotal: getTotal(state.manageInventory)
+    cartTotal: getTotal(state.manageInventory),
+    tableData: state.manageInventory.data
   };
 };
 export default translate('manageInventory')(

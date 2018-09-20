@@ -81,6 +81,9 @@ const buildFieldConfig = (
   const fieldConfigControls = {
     message: {
       render: FormUtil.TextInputWithoutValidation,
+      options: {
+        validators: Validators.required
+      },
       meta: { label: 'message', colWidth: 12, componentClass: 'textarea' }
     }
   };

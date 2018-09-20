@@ -44,7 +44,7 @@ class ManageInventoryModal extends React.Component<
   render() {
     let submitFunc;
     let modalTitle;
-    if (this.props.selectedItem) {
+    if (this.props.selectedItem && this.props.selectedItem.id) {
       submitFunc = this.props.updateProduct;
       modalTitle = this.props.t('manageInventory:editModalTitle');
     } else {

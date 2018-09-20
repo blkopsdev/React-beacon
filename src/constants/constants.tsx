@@ -178,7 +178,7 @@ const tiles = [
     description: ''
   },
   {
-    icon: 'icon-inventory',
+    icon: ['far', 'list-alt'],
     title: 'inventory',
     src: 'https://placekitten.com/360/408',
     srcBanner: '',

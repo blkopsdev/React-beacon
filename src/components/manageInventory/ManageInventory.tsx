@@ -36,16 +36,19 @@ import { FormUtil } from '../common/FormUtil';
 import SearchTableForm from '../common/SearchTableForm';
 import { TableUtil } from '../common/TableUtil';
 import EditProductModal from './EditProductModal';
+import EditInstallModal from './EditInstallModal';
 import EditQuoteModal from '../shoppingCart/EditQuoteModal';
 import { closeAllModals } from '../../actions/commonActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { InstallationsExpander } from './InstallsExpander';
+import { find } from 'lodash';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
   t: TranslationFunction;
   i18n: I18n;
   showEditProductModal: boolean;
+  showEditInstallModal: boolean;
   loading: boolean;
   userManage: ImanageInventory;
 }
@@ -73,6 +76,7 @@ interface Istate {
   currentTile: Itile;
   columns: any;
   selectedProduct: any;
+  selectedInstall: any;
 }
 
 class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
@@ -85,7 +89,8 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       selectedRow: {},
       currentTile: emptyTile,
       columns: [],
-      selectedProduct: {}
+      selectedProduct: {},
+      selectedInstall: {}
     };
   }
   componentWillMount() {
@@ -114,6 +119,13 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       !this.props.showEditProductModal
     ) {
       this.setState({ selectedProduct: {} });
+    }
+
+    if (
+      prevProps.showEditInstallModal !== this.props.showEditInstallModal &&
+      !this.props.showEditInstallModal
+    ) {
+      this.setState({ selectedProduct: {}, selectedInstall: {} });
     }
 
     // we only need to check the productGroup options because both manufacturers and productGroup options are received in the same API response
@@ -256,10 +268,15 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       return {
         onClick: (e: React.MouseEvent<HTMLFormElement>) => {
           if (!this.buttonInAction) {
-            this.setState({
-              selectedProduct: rowInfo.original
+            // grab the product by using the productID from installbase
+            const selectedProduct = find(this.props.userManage.data, {
+              id: rowInfo.original.productID
             });
-            this.props.toggleEditProductModal();
+            this.setState({
+              selectedProduct,
+              selectedInstall: rowInfo.original
+            });
+            this.props.toggleEditInstallModal();
           }
         },
         style: {
@@ -429,7 +446,14 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
             <InstallationsExpander
               {...rowInfo}
               addToQuote={this.props.addToCart}
-              addInstallation={this.props.toggleEditInstallModal}
+              addInstallation={() => {
+                this.setState(
+                  { selectedProduct: rowInfo.original, selectedInstall: {} },
+                  () => {
+                    this.props.toggleEditInstallModal();
+                  }
+                );
+              }}
               t={this.props.t}
               getExpanderTrProps={this.getExpanderTrProps}
             />
@@ -445,6 +469,14 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           t={this.props.t}
         />
         <EditQuoteModal
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+          t={this.props.t}
+        />
+        <EditInstallModal
+          selectedProduct={this.state.selectedProduct}
+          selectedItem={this.state.selectedInstall}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }

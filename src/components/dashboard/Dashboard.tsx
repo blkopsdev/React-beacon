@@ -40,7 +40,7 @@ class Dashboard extends React.Component<Iprops, {}> {
         height: tile.height
       };
       return (
-        <div key={tile.icon}>
+        <div key={tile.title}>
           <Link to={tile.url}>
             <div className={`tile ${tile.color}`} style={styles}>
               <img src={tile.src} style={styles} />

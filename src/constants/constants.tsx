@@ -255,7 +255,7 @@ const constants = {
   toastrError: {
     transitionIn: 'bounceInDown' as transitionInType,
     transitionOut: 'bounceOutUp' as transitionOutType,
-    timeOut: 0
+    timeOut: 8000
   },
   toastrSuccess: {
     transitionIn: 'bounceInDown' as transitionInType,

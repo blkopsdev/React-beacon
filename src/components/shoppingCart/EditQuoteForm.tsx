@@ -9,7 +9,6 @@ import {
   FieldConfig,
   Validators
 } from 'react-reactive-form';
-// import { Col, Button, Row, Badge } from 'react-bootstrap';
 import {
   Col,
   Button,
@@ -80,10 +79,6 @@ const buildFieldConfig = (
     };
   });
   const fieldConfigControls = {
-    //     other:{
-    //   render: FormUtil.TextInputWithoutValidation,
-    //   meta: { label: 'message', colWidth: 12}
-    // },
     message: {
       render: FormUtil.TextInputWithoutValidation,
       inputType: 'textarea',
@@ -94,37 +89,6 @@ const buildFieldConfig = (
     controls: { ...productControls, ...fieldConfigControls }
   };
 };
-
-// const ProductItem = ({
-//   name,
-//   quantity,
-//   id
-// }: {
-//   name: string;
-//   quantity: number;
-//   id: string;
-// }) => {
-//   return (
-//     <Row key={id}>
-//       <Col xs={8} className="quote-item-name">
-//         {' '}
-//         <h5>{name}</h5>{' '}
-//       </Col>
-//       <Col xs={4} className="quote-item-buttons">
-//         <Button bsStyle="link" bsSize="sm">
-//           <FontAwesomeIcon icon={['far', 'plus']} />
-//         </Button>
-//         <Button bsStyle="link" bsSize="sm">
-//           <FontAwesomeIcon icon={['far', 'minus']} />
-//         </Button>
-//         <Badge>{quantity}</Badge>
-//         <Button bsStyle="link" bsSize="sm">
-//           <FontAwesomeIcon icon={['far', 'times']} />
-//         </Button>
-//       </Col>
-//     </Row>
-//   );
-// };
 
 interface Iprops {
   handleSubmit: any;
@@ -141,54 +105,23 @@ interface Iprops {
   deleteFromCart: any;
 }
 interface Istate {
-  fieldConfig: any;
+  fieldConfig: FieldConfig;
 }
 
 class EditQuoteForm extends React.Component<Iprops, Istate> {
   public userForm: AbstractControl;
-  public fieldConfig: FieldConfig;
   private subscription: any;
   constructor(props: Iprops) {
     super(props);
-    this.fieldConfig = FormUtil.translateForm(
-      buildFieldConfig(this.props.cart.productsByID, this.props.deleteFromCart),
-      this.props.t
-    );
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setForm = this.setForm.bind(this);
     this.state = {
-      fieldConfig: FormUtil.translateForm(
-        buildFieldConfig(
-          this.props.cart.productsByID,
-          this.props.deleteFromCart
-        ),
-        this.props.t
-      )
+      fieldConfig: { controls: {} }
     };
   }
   // TODO keep the message somewhere, patch the value
   componentDidMount() {
-    this.setState({
-      fieldConfig: FormUtil.translateForm(
-        buildFieldConfig(
-          this.props.cart.productsByID,
-          this.props.deleteFromCart
-        ),
-        this.props.t
-      )
-    });
-    forEach(this.fieldConfig.controls, (input: any, key) => {
-      if (this.userForm && input.meta && input.meta.defaultValue) {
-        this.userForm.patchValue({ [key]: input.meta.defaultValue });
-      }
-      if (this.userForm && this.props.cart.addedIDs.length) {
-        this.subscription = this.userForm
-          .get(key)
-          .valueChanges.subscribe((value: any) => {
-            this.props.updateQuantityCart(value, key);
-          });
-      }
-    });
+    this.setFormConfig();
   }
   componentWillUnmount() {
     if (this.subscription) {
@@ -196,19 +129,9 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
     }
   }
   componentDidUpdate(prevProps: Iprops) {
-    if (prevProps.cart.productsByID !== this.props.cart.productsByID) {
+    if (prevProps.cart.addedIDs.length !== this.props.cart.addedIDs.length) {
       console.log('products changed');
-      // this.fieldConfig = FormUtil.translateForm(buildFieldConfig(this.props.cart.productsByID, this.props.deleteFromCart), this.props.t);
-      // this.forceUpdate();
-      this.setState({
-        fieldConfig: FormUtil.translateForm(
-          buildFieldConfig(
-            this.props.cart.productsByID,
-            this.props.deleteFromCart
-          ),
-          this.props.t
-        )
-      });
+      this.setFormConfig();
     }
   }
 
@@ -222,11 +145,43 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
     console.log(this.userForm.value);
 
     this.props.handleSubmit({
-      ...this.userForm.value,
+      message: this.userForm.value.message,
       facilityID: this.props.selectedFacilityID
     });
   };
+  setFormConfig = () => {
+    this.setState(
+      {
+        fieldConfig: FormUtil.translateForm(
+          buildFieldConfig(
+            this.props.cart.productsByID,
+            this.props.deleteFromCart
+          ),
+          this.props.t
+        )
+      },
+      () => {
+        forEach(this.state.fieldConfig.controls, (input: any, key) => {
+          if (this.userForm && input.meta && input.meta.defaultValue) {
+            this.userForm.patchValue({ [key]: input.meta.defaultValue });
+          }
+          if (
+            this.userForm &&
+            this.props.cart.addedIDs.length &&
+            key !== 'message'
+          ) {
+            this.subscription = this.userForm
+              .get(key)
+              .valueChanges.subscribe((value: any) => {
+                this.props.updateQuantityCart(parseInt(value, 10), key);
+              });
+          }
+        });
+      }
+    );
+  };
   setForm = (form: AbstractControl) => {
+    console.log('setting form');
     this.userForm = form;
     this.userForm.meta = {
       loading: this.props.loading
@@ -246,12 +201,6 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
       <div>
         <div className={formClassName}>
           <form onSubmit={this.handleSubmit} className="user-form">
-            {/*<Col xs={12}>
-              {map(this.props.cart.productsByID, (product, key) => {
-                console.log(product, key, this.props.productInfo.productGroups);
-                return <ProductItem {...product} />;
-              })}
-            </Col>*/}
             <FormGenerator
               onMount={this.setForm}
               fieldConfig={this.state.fieldConfig}

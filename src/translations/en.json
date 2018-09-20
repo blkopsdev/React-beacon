@@ -107,6 +107,8 @@
     "newProduct": "new Product",
     "editModalTitle": "Edit Product",
     "saveModalTitle": "Save New Product",
+    "editInstallModalTitle": "Manage Installation",
+    "saveInstallModalTitle": "Manage Installation",
     "facilityPlaceholder": "Search...",
     "searchPlaceholder": "Search...",
     "productGroupPlaceholder": "Search...",

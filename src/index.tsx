@@ -40,7 +40,8 @@ import {
   faPlus,
   faMinus,
   faHospital,
-  faSignOut
+  faSignOut,
+  faListAlt
 } from '@fortawesome/pro-regular-svg-icons';
 library.add(
   faCog,
@@ -57,6 +58,7 @@ library.add(
   faChevronDown,
   faChevronRight,
   faEnvelope,
+  faListAlt,
   faPlus,
   faMinus
 );

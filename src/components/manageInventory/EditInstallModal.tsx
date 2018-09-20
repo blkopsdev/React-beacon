@@ -13,7 +13,8 @@ import {
   IinitialState,
   Iproduct,
   IproductInfo,
-  IinstallBase
+  IinstallBase,
+  Ioption
 } from '../../models';
 // import constants from '../../constants/constants';
 import CommonModal from '../common/CommonModal';
@@ -31,12 +32,12 @@ interface Iprops {
 interface IdispatchProps {
   showModal: boolean;
   loading: boolean;
-  customerOptions: any[];
   facilityOptions: any[];
   updateInstall: typeof updateInstall;
   saveInstall: typeof saveInstall;
   toggleEditInstallModal: typeof toggleEditInstallModal;
   productInfo: IproductInfo;
+  selectedFacility: Ioption;
 }
 
 class ManageInstallModal extends React.Component<Iprops & IdispatchProps, {}> {
@@ -47,7 +48,7 @@ class ManageInstallModal extends React.Component<Iprops & IdispatchProps, {}> {
   render() {
     let submitFunc;
     let modalTitle;
-    if (this.props.selectedItem.productID) {
+    if (this.props.selectedItem.id) {
       submitFunc = this.props.updateInstall;
       modalTitle = this.props.t('manageInventory:editInstallModalTitle');
     } else {
@@ -66,9 +67,10 @@ class ManageInstallModal extends React.Component<Iprops & IdispatchProps, {}> {
             selectedItem={this.props.selectedItem}
             loading={this.props.loading}
             colorButton={this.props.colorButton}
-            customerOptions={this.props.customerOptions}
             facilityOptions={this.props.facilityOptions}
             productInfo={this.props.productInfo}
+            selectedFacility={this.props.selectedFacility}
+            selectedProduct={this.props.selectedProduct}
           />
         }
         title={modalTitle}
@@ -82,10 +84,10 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
-    customerOptions: FormUtil.convertToOptions(state.customers),
     facilityOptions: FormUtil.convertToOptions(state.user.facilities),
     showModal: state.manageInventory.showEditInstallModal,
-    productInfo: state.manageInventory.productInfo
+    productInfo: state.manageInventory.productInfo,
+    selectedFacility: state.manageInventory.selectedFacility
   };
 };
 

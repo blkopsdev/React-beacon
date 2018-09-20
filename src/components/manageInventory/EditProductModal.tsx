@@ -9,7 +9,7 @@ import {
   saveProduct,
   toggleEditProductModal
 } from '../../actions/manageInventoryActions';
-import { IinitialState, Iproduct, IproductInfo } from '../../models';
+import { IinitialState, Iproduct, IproductInfo, Ioption } from '../../models';
 // import constants from '../../constants/constants';
 import CommonModal from '../common/CommonModal';
 import EditProductForm from './EditProductForm';
@@ -25,12 +25,12 @@ interface Iprops {
 interface IdispatchProps {
   showModal: boolean;
   loading: boolean;
-  customerOptions: any[];
   facilityOptions: any[];
   updateProduct: typeof updateProduct;
   saveProduct: typeof saveProduct;
   toggleEditProductModal: typeof toggleEditProductModal;
   productInfo: IproductInfo;
+  selectedFacility: Ioption;
 }
 
 class ManageInventoryModal extends React.Component<
@@ -63,9 +63,9 @@ class ManageInventoryModal extends React.Component<
             selectedItem={this.props.selectedItem}
             loading={this.props.loading}
             colorButton={this.props.colorButton}
-            customerOptions={this.props.customerOptions}
             facilityOptions={this.props.facilityOptions}
             productInfo={this.props.productInfo}
+            selectedFacility={this.props.selectedFacility}
           />
         }
         title={modalTitle}
@@ -79,10 +79,10 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
-    customerOptions: FormUtil.convertToOptions(state.customers),
     facilityOptions: FormUtil.convertToOptions(state.user.facilities),
     showModal: state.manageInventory.showEditProductModal,
-    productInfo: state.manageInventory.productInfo
+    productInfo: state.manageInventory.productInfo,
+    selectedFacility: state.manageInventory.selectedFacility
   };
 };
 

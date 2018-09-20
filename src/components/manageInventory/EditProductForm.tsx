@@ -27,22 +27,6 @@ interface IstateChanges extends Observable<any> {
 interface AbstractControlEdited extends AbstractControl {
   stateChanges: IstateChanges;
 }
-/*
-sku(pin): "Test-124"
-name(pin): "Test Product"
-description(pin): "Test Product"
-imagePath(pin): "/image.png"
-subcategoryID(pin): "bbbe934e-f5c1-45cb-b850-71d3d4c31f96"
-standardID(pin): "444e934e-f5c1-45cb-b850-71d3d4c31f96"
-brandID(pin): "ccce934e-f5c1-45cb-b850-71d3d4c31f96"
-manufacturerID(pin): "ddde934e-f5c1-45cb-b850-71d3d4c31f96"
-gasTypeID(pin): "eeee934e-f5c1-45cb-b850-71d3d4c31f96"
-powerID(pin): "fffe934e-f5c1-45cb-b850-71d3d4c31f96"
-systemSizeID(pin): "111e934e-f5c1-45cb-b850-71d3d4c31f96"
-productGroupID(pin): "222e934e-f5c1-45cb-b850-71d3d4c31f96"
-createDate(pin): "2018-08-28T19:35:34.6532093"
-updateDate(pin): "2018-09-13T00:55:53.5339951"
-*/
 
 const buildFieldConfig = (
   productInfo: IproductInfo,
@@ -200,14 +184,6 @@ const buildFieldConfig = (
   };
 };
 
-// interface IstateChanges extends Observable<any> {
-//   next: () => void;
-// }
-
-// interface AbstractControlEdited extends AbstractControl {
-//   stateChanges: IstateChanges;
-// }
-
 interface Iprops {
   handleSubmit: any;
   handleCancel: any;
@@ -217,8 +193,8 @@ interface Iprops {
   t: TranslationFunction;
   i18n: I18n;
   productInfo: IproductInfo;
-  customerOptions: Ioption[];
   facilityOptions: Ioption[];
+  selectedFacility: Ioption;
 }
 
 class ManageInventoryForm extends React.Component<Iprops, {}> {
@@ -233,51 +209,10 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setForm = this.setForm.bind(this);
   }
-  componentDidUpdate(prevProps: Iprops) {
-    // commmented out updating the facilities because we are using the facilities from the logged in user object.  this should not change
-    // if (
-    //   differenceBy(
-    //     prevProps.facilityOptions,
-    //     this.props.facilityOptions,
-    //     'value'
-    //   ).length ||
-    //   prevProps.facilityOptions.length !== this.props.facilityOptions.length
-    // ) {
-    //   // update the options
-    //   const facilitySelectControl = this.userForm.get(
-    //     'facilities'
-    //   ) as AbstractControlEdited;
-    //   facilitySelectControl.meta.options = this.props.facilityOptions;
-    //   facilitySelectControl.stateChanges.next();
-    // }
-    // update the selected options if there is a selected user
-    // if (typeof this.props.selectedItem !== 'undefined') {
-    //   const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
-    //     if (typeof this.props.selectedItem !== 'undefined') {
-    //       return find(this.props.selectedItem.facilities, { id: fac.value })
-    //         ? true
-    //         : false;
-    //     } else {
-    //       return false;
-    //     }
-    //   });
-    // this.userForm.patchValue({ facilities: facilitiesArray });
-    // }
-  }
+  // componentDidUpdate(prevProps: Iprops) {
+  // }
 
   componentDidMount() {
-    // const customer: any = find(this.props.customerOptions, {
-    //   value: customerID
-    // }) || { name: '' };
-    // if (customer && customer.label.length) {
-    //   this.userForm.patchValue({ customer: customer.label });
-    // }
-    // const customerControl = this.userForm.get(
-    //   'customer'
-    // ) as AbstractControlEdited;
-    // customerControl.disable();
-    // if there is a customerID then get facilities
-
     if (!this.props.selectedItem) {
       console.log('adding a new user');
       return;
@@ -306,11 +241,6 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
           }
         }
       });
-      //   const {productGroupID, brandID, manufacturerID, subcategoryID, gasTypeID, powerID, systemSizeID, standardID} = this.userForm.value
-
-      //   this.userForm.patchValue({
-      //   customerID: find(this.props.selectedItem, { value: productGroupID })
-      // });
     }
   }
   filterSubcategories = (mainCategoryID: string) => {
@@ -372,7 +302,8 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
       gasTypeID: gasTypeID.value,
       powerID: powerID.value,
       systemSizeID: systemSizeID.value,
-      standardID: standardID.value
+      standardID: standardID.value,
+      facilityID: this.props.selectedFacility.value
     };
 
     if (this.props.selectedItem) {

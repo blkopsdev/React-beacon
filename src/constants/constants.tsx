@@ -156,8 +156,8 @@ const tiles = [
   {
     icon: 'users',
     title: 'manageTeam',
-    src: 'https://placekitten.com/360/272',
-    srcBanner: '',
+    src: require('src/images/beaconManageTeam.jpg'),
+    srcBanner: require('src/images/beaconManageTeamHeader.jpg'),
     color: 'blue',
     width: 359,
     height: 272,
@@ -180,8 +180,8 @@ const tiles = [
   {
     icon: ['far', 'list-alt'],
     title: 'inventory',
-    src: 'https://placekitten.com/360/408',
-    srcBanner: '',
+    src: require('src/images/beaconManageInventory.jpg'),
+    srcBanner: require('src/images/beaconManageInventoryHeader.jpg'),
     color: 'green',
     width: 360,
     height: 408,

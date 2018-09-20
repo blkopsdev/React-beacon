@@ -101,17 +101,12 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     // get product info every time the component mounts
     this.props.getProductInfo();
     // get inventory every time the component mounts
-    this.props.getInventory(
-      1,
-      '',
-      `${
-        this.props.userManage.selectedFacility.value.length
-          ? this.props.userManage.selectedFacility.value
-          : this.props.facilityOptions[0].value
-      }`,
-      '',
-      ''
-    );
+    const facility = this.props.userManage.selectedFacility.value.length
+      ? this.props.userManage.selectedFacility
+      : this.props.facilityOptions[0];
+
+    this.props.setSelectedFacility(facility);
+    this.props.getInventory(1, '', facility.value, '', '');
   }
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
     if (

@@ -9,45 +9,16 @@ import {
   FormGenerator,
   AbstractControl,
   FieldConfig
-  // Observable
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
-// import { forEach, differenceBy, filter, find, map } from 'lodash';
-import { forEach, find } from 'lodash';
+import { forEach } from 'lodash';
 
 import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 
 import { FormUtil } from '../common/FormUtil';
-import {
-  // Iproduct,
-  Ioption,
-  IproductInfo,
-  IinstallBase
-} from '../../models';
-// interface IstateChanges extends Observable<any> {
-//   next: () => void;
-// }
-// interface AbstractControlEdited extends AbstractControl {
-//   stateChanges: IstateChanges;
-// }
-/*
-sku(pin): "Test-124"
-name(pin): "Test Product"
-description(pin): "Test Product"
-imagePath(pin): "/image.png"
-subcategoryID(pin): "bbbe934e-f5c1-45cb-b850-71d3d4c31f96"
-standardID(pin): "444e934e-f5c1-45cb-b850-71d3d4c31f96"
-brandID(pin): "ccce934e-f5c1-45cb-b850-71d3d4c31f96"
-manufacturerID(pin): "ddde934e-f5c1-45cb-b850-71d3d4c31f96"
-gasTypeID(pin): "eeee934e-f5c1-45cb-b850-71d3d4c31f96"
-powerID(pin): "fffe934e-f5c1-45cb-b850-71d3d4c31f96"
-systemSizeID(pin): "111e934e-f5c1-45cb-b850-71d3d4c31f96"
-productGroupID(pin): "222e934e-f5c1-45cb-b850-71d3d4c31f96"
-createDate(pin): "2018-08-28T19:35:34.6532093"
-updateDate(pin): "2018-09-13T00:55:53.5339951"
-*/
+import { Ioption, IproductInfo, IinstallBase, Iproduct } from '../../models';
 
 const buildFieldConfig = (productInfo: IproductInfo) => {
   const fieldConfigControls = {
@@ -79,14 +50,6 @@ const buildFieldConfig = (productInfo: IproductInfo) => {
   };
 };
 
-// interface IstateChanges extends Observable<any> {
-//   next: () => void;
-// }
-
-// interface AbstractControlEdited extends AbstractControl {
-//   stateChanges: IstateChanges;
-// }
-
 interface Iprops {
   handleSubmit: any;
   handleCancel: any;
@@ -96,8 +59,9 @@ interface Iprops {
   t: TranslationFunction;
   i18n: I18n;
   productInfo: IproductInfo;
-  customerOptions: Ioption[];
   facilityOptions: Ioption[];
+  selectedFacility: Ioption;
+  selectedProduct: Iproduct;
 }
 
 class ManageInstallForm extends React.Component<Iprops, {}> {
@@ -121,33 +85,10 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
     } else {
       // set values
       forEach(this.props.selectedItem, (value, key) => {
-        if (typeof value === 'string' && key.split('ID').length === 1) {
-          // it is a string and did Not find 'ID'
+        if (typeof value === 'string') {
           this.userForm.patchValue({ [key]: value });
-        } else if (value !== null) {
-          this.userForm.patchValue({
-            [key]: find(
-              this.props.productInfo[`${key.split('ID')[0]}Options`],
-              { value }
-            )
-          });
-          // special set for mainCategory
-          if (key === 'subcategory') {
-            const { mainCategoryID } = value || ('' as any);
-            this.userForm.patchValue({
-              mainCategoryID: find(
-                this.props.productInfo[`mainCategoryOptions`],
-                { value: mainCategoryID }
-              )
-            });
-          }
         }
       });
-      //   const {productGroupID, brandID, manufacturerID, subcategoryID, gasTypeID, powerID, systemSizeID, standardID} = this.userForm.value
-
-      //   this.userForm.patchValue({
-      //   customerID: find(this.props.selectedItem, { value: productGroupID })
-      // });
     }
   }
 
@@ -159,27 +100,11 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
       return;
     }
     console.log(this.userForm.value);
-    const {
-      productGroupID,
-      brandID,
-      manufacturerID,
-      subcategoryID,
-      gasTypeID,
-      powerID,
-      systemSizeID,
-      standardID
-    } = this.userForm.value;
 
     let newItem = {
       ...this.userForm.value,
-      productGroupID: productGroupID.value,
-      brandID: brandID.value,
-      manufacturerID: manufacturerID.value,
-      subcategoryID: subcategoryID.value,
-      gasTypeID: gasTypeID.value,
-      powerID: powerID.value,
-      systemSizeID: systemSizeID.value,
-      standardID: standardID.value
+      facilityID: this.props.selectedFacility.value,
+      productID: this.props.selectedProduct.id
     };
 
     if (this.props.selectedItem) {

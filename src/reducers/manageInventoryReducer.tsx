@@ -12,7 +12,7 @@ import {
   Ioption
 } from '../models';
 import initialState, { initialOption } from './initialState';
-import { pickBy, map, filter, keyBy } from 'lodash';
+import { pickBy, map, filter, keyBy, find } from 'lodash';
 import { FormUtil } from '../components/common/FormUtil';
 import cartReducer, { getAddedIDs, getQuantity } from './cartReducer';
 import { modalToggleWithName } from './userQueueModalsReducer';
@@ -43,6 +43,25 @@ function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
       };
 
       return [...state, updatedTeamMember] as Iproduct[];
+    case types.INSTALL_UPDATE_SUCCESS:
+      const filteredProductsI = filter(
+        state,
+        p => p.id !== action.install.productID
+      );
+      const oldProduct = find(state, o => o.id === action.install.productID);
+      if (oldProduct) {
+        const filteredInstalls = filter(
+          oldProduct.installs,
+          i => i.id !== action.install.id
+        );
+        const updatedInstall = {
+          ...pickBy(action.install, (property, key) => property !== null)
+        };
+        const newInstalls = { ...filteredInstalls, updatedInstall };
+        const updatedProductI = { ...oldProduct, installs: newInstalls };
+        return [...filteredProductsI, updatedProductI] as Iproduct[];
+      }
+      return state;
 
     case types.USER_LOGOUT_SUCCESS:
       return [];

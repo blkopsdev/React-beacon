@@ -8,6 +8,7 @@ import {
   addToCart,
   decreaseFromCart,
   deleteFromCart,
+  updateQuantityCart,
   checkout
 } from '../../actions/shoppingCartActions';
 import { toggleEditQuoteModal } from '../../actions/manageInventoryActions';
@@ -34,6 +35,7 @@ interface IdispatchProps {
   facilityOptions: any[];
   productInfo: IproductInfo;
   addToCart: typeof addToCart;
+  updateQuantityCart: typeof updateQuantityCart;
   decreaseFromCart: typeof decreaseFromCart;
   deleteFromCart: typeof deleteFromCart;
   checkout: typeof checkout;
@@ -67,6 +69,8 @@ class EditQuoteModal extends React.Component<Iprops & IdispatchProps, {}> {
                 ? this.props.selectedFacility.value
                 : this.props.facilityOptions[0].value
             }
+            updateQuantityCart={this.props.updateQuantityCart}
+            deleteFromCart={this.props.deleteFromCart}
           />
         }
         title={this.props.t('manageInventory:requestForQuote')}
@@ -95,6 +99,7 @@ export default connect(
     decreaseFromCart,
     deleteFromCart,
     toggleEditQuoteModal,
-    checkout
+    checkout,
+    updateQuantityCart
   }
 )(EditQuoteModal);

@@ -17,6 +17,11 @@ export const decreaseFromCart = (productID: string) => ({
   type: types.DECREASE_FROM_CART,
   productID
 });
+export const updateQuantityCart = (quantity: number, productID: string) => ({
+  type: types.UPDATE_QUANTITY_CART,
+  productID,
+  quantity
+});
 export const deleteFromCart = (productID: string) => ({
   type: types.DELETE_FROM_CART,
   productID

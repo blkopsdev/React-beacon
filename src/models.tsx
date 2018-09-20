@@ -27,6 +27,7 @@ export interface Iuser {
   customerID: string;
   facilities: Array<{ id: string }>;
   hasTeamMembers: boolean;
+  appVersion: string;
 }
 // export interface IuserQueue {
 //   [key: string]: Iuser;

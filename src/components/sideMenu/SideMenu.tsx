@@ -38,7 +38,7 @@ const MenuItems = ({ user, t }: any) => (
   </ListGroup>
 );
 
-interface Iprops extends RouteComponentProps<SideMenu> {
+interface Iprops extends RouteComponentProps<{}> {
   user: Iuser;
   t: TranslationFunction;
   i18n: I18n;

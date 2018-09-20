@@ -1,16 +1,16 @@
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
-iK4uY&QM
-
 ## Technical Dept / Ideas for Improvement
 * we can improve how we are passing the types of our redux actions into the controllers.
 1. use "typeof" in the component interfaces
 2. correctly type the actions
-Step two has proven to be rather challenging.
-* official documentation: https://github.com/reduxjs/redux-thunk/blob/master/test/typescript.ts
-* One example:  https://stackoverflow.com/questions/49799736/simplifying-redux-thunk-actions-with-typescript
-* This example appears to be wrong or out of date:  https://gist.github.com/milankorsos/ffb9d32755db0304545f92b11f0e4beb
-* 
+  Step two has proven to be rather challenging.
+  - official documentation: https://github.com/reduxjs/redux-thunk/blob/master/test/typescript.ts
+  - One example:  https://stackoverflow.com/questions/49799736/simplifying-redux-thunk-actions-with-typescript
+  - This example appears to be wrong or out of date:  https://gist.github.com/milankorsos/ffb9d32755db0304545f92b11f0e4beb
+3. group the main components and their reducers into a single top level reducer in redux
+    - move the modal toggls into the appropriate reducer
+    - rename to follow a convention
 
 ## API documentation:
 Swagger: https://app.swaggerhub.com/apis/Big-Pixel/Core-Care
@@ -50,7 +50,7 @@ fd71f683-7423-4ba0-9ed3-fba0547be076 // cliend ID and Application ID for Native 
 * Header - layout
   - ProfileItem - connected
 * Dashboard - connected
-* TwoPaneLayout - layout
+* TwoPaneLayout - connected (secondary routing is here)
   - SideMenu
   - Training
     + TrainingListItem
@@ -61,32 +61,11 @@ fd71f683-7423-4ba0-9ed3-fba0547be076 // cliend ID and Application ID for Native 
     + editUserModal - connected
       * UserQueueForm
 
-## How to handle pagination and filtering notes
-### Idea 1
-* QueueReducer - contains an array of all the new users in the queue
-* QueueFilter - keep track of the filter applied to the queue
-  - the paging will be stored in a query param?
-
-### Idea 2
-  * have a TwoPaneView reducer where we store
-    - the filter
-    - pagination
-
-### Idea 3
-* have a reducer for each table
-* that reducer uses the filter and pagination reducers
-
-### Idea 4
-* seperate reducers for each table
-  - userQueueReducer
-    + search
-    + page
-    + data
-
 
 ## Initial Setup
 
 `npm install`
+createa a .env.development.local file for local development
 
 ## Envirenment Variables
 Available environments: `development, test, production`

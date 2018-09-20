@@ -20,7 +20,8 @@ export default {
     id: '',
     facilities: [],
     customerID: '',
-    hasTeamMembers: false
+    hasTeamMembers: false,
+    appVersion: ''
   },
   redirect: {
     redirectToReferrer: false,

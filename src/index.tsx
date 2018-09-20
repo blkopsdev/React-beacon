@@ -68,6 +68,8 @@ import SignUpDirect from './components/auth/SignUpDirect';
 import TwoPaneLayout from './components/common/TwoPaneLayout';
 import i18n from './i18n';
 import { I18nextProvider } from 'react-i18next';
+import { Iuser } from './models';
+import * as types from './actions/actionTypes';
 
 // import project css
 import 'react-toggle/style.css';
@@ -112,15 +114,44 @@ const NoMatch = ({ location }: any) => {
     </h3>
   );
 };
+/*
+  * Check the app version.  If it has changed, log the user out.  
+  * This helps avoid breaking changes in the Redux store
+  * if we wanted to improve this we could choose to not to log the user out on incremental "." updates
+  * Also we might figure out a way to move this to the userActions
+  */
+const checkAppVersion = (user: Iuser) => {
+  if (user.appVersion && user.appVersion === process.env.REACT_APP_VERSION) {
+    console.log('app is up to date:', process.env.REACT_APP_VERSION);
+  } else {
+    store.dispatch({
+      type: types.USER_LOGOUT_SUCCESS
+    });
+    localStorage.removeItem('state-core-care');
+    setTimeout(() => {
+      authContext.logOut();
+    }, 100); // give it time to persist this to local storage
+    console.error(
+      `App has been updated from: ${user.appVersion} to: ${
+        process.env.REACT_APP_VERSION
+      }, logging out`
+    );
+  }
+};
 
 // TODO if an API call is unauthenticated redirect to the login page
 
 const PrivateRoute = ({ component: Component, ...rest }: any) => {
+  const user = store.getState().user;
+  const authenticated = isFullyAuthenticated(user);
+  if (authenticated) {
+    checkAppVersion(user);
+  }
   return (
     <Route
       {...rest}
       render={(props: any) =>
-        isFullyAuthenticated(store.getState().user) ? (
+        authenticated ? (
           <Component {...props} />
         ) : (
           <Redirect

@@ -22,7 +22,9 @@ const API = {
     inventory: {
       updateproduct: `${root}inventory/updateproduct`,
       addproduct: `${root}inventory/addproduct`,
-      quote: `${root}inventory/quote`
+      quote: `${root}inventory/quote`,
+      updateinstall: `${root}inventory/update`,
+      addinstall: `${root}inventory/add`
     }
   },
   GET: {

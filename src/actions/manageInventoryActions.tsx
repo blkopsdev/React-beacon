@@ -4,7 +4,7 @@ import API from '../constants/apiEndpoints';
 import { beginAjaxCall } from './ajaxStatusActions';
 import { toastr } from 'react-redux-toastr';
 import constants from '../constants/constants';
-import { Iproduct, IinitialState, Ioption } from '../models';
+import { Iproduct, IinitialState, Ioption, IinstallBase } from '../models';
 import { ThunkAction } from 'redux-thunk';
 // import {AxiosResponse} from 'axios';
 
@@ -118,6 +118,65 @@ export function saveProduct(product: Iproduct): ThunkResult<void> {
       })
       .catch((error: any) => {
         dispatch({ type: types.PRODUCT_ADD_FAILED });
+        constants.handleError(error, 'save product');
+        throw error;
+      });
+  };
+}
+
+export function updateInstall(install: IinstallBase): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    return axios
+      .post(API.POST.inventory.updateinstall, install)
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.INSTALL_UPDATE_SUCCESS,
+            install: data.data
+          });
+          dispatch({ type: types.TOGGLE_MODAL_EDIT_INSTALL });
+          toastr.success(
+            'Success',
+            'Saved installation',
+            constants.toastrSuccess
+          );
+          return data;
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.INSTALL_UPDATE_FAILED });
+        constants.handleError(error, 'update installation');
+        throw error;
+      });
+  };
+}
+
+/*
+* save (add) a new product
+*/
+export function saveInstall(install: IinstallBase): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    return axios
+      .post(API.POST.inventory.addinstall, install)
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.INSTALL_ADD_SUCCESS,
+            install: data.data
+          });
+          dispatch({ type: types.TOGGLE_MODAL_EDIT_INSTALL });
+          toastr.success('Success', 'Saved product', constants.toastrSuccess);
+          return data;
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.INSTALL_ADD_FAILED });
         constants.handleError(error, 'save product');
         throw error;
       });

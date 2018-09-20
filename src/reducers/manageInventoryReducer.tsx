@@ -91,6 +91,22 @@ function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
         // return [...filteredProductsJ, updatedProductE] as Iproduct[];
       }
       return state;
+    case types.INSTALL_DELETE_SUCCESS:
+      const oldProductE = find(state, o => o.id === action.productID);
+      if (oldProductE) {
+        const filteredInstalls = filter(
+          oldProductE.installs,
+          ins => ins.id !== action.installID
+        );
+        return map(state, pr => {
+          if (pr.id === action.productID) {
+            return { ...pr, installs: filteredInstalls };
+          } else {
+            return pr;
+          }
+        });
+      }
+      return state;
 
     case types.USER_LOGOUT_SUCCESS:
       return [];

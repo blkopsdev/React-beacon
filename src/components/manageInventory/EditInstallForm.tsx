@@ -58,7 +58,7 @@ const buildFieldConfig = (productInfo: IproductInfo) => {
 interface Iprops {
   handleSubmit: any;
   handleCancel: any;
-  selectedItem?: IinstallBase;
+  selectedItem: IinstallBase;
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;
@@ -67,6 +67,7 @@ interface Iprops {
   facilityOptions: Ioption[];
   selectedFacility: Ioption;
   selectedProduct: Iproduct;
+  deleteInstall: (id: string, prodID: string) => void;
 }
 
 class ManageInstallForm extends React.Component<Iprops, {}> {
@@ -104,6 +105,8 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
       forEach(this.props.selectedItem, (value, key) => {
         this.userForm.patchValue({ [key]: value });
       });
+      const quantityControl = this.userForm.get('quantity');
+      quantityControl.disable();
     }
   }
 
@@ -155,6 +158,21 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
                 onClick={this.props.handleCancel}
               >
                 {t('cancel')}
+              </Button>
+              <Button
+                bsStyle="warning"
+                style={{ marginRight: '15px' }}
+                type="button"
+                className=""
+                disabled={this.props.selectedItem.id === undefined}
+                onClick={() =>
+                  this.props.deleteInstall(
+                    this.props.selectedItem.id,
+                    this.props.selectedProduct.id
+                  )
+                }
+              >
+                {t('delete')}
               </Button>
               <Button
                 bsStyle={this.props.colorButton}

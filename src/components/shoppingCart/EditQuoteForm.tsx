@@ -40,11 +40,15 @@ const NumberInputWithButton = ({
     bsSize="sm"
     validationState={FormUtil.getValidationState(pristine, errors, submitted)}
   >
-    <Col xs={9}>
+    <Col xs={8}>
       <ControlLabel>{meta.label}</ControlLabel>
     </Col>
-    <Col xs={3} style={{ textAlign: 'center' }}>
+    <Col
+      xs={4}
+      style={{ textAlign: 'center', paddingRight: '0', paddingLeft: '0' }}
+    >
       <FormControl
+        style={{ width: '50%', display: 'inline' }}
         placeholder={meta.placeholder}
         type="number"
         {...handler()}

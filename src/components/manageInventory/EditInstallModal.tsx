@@ -7,7 +7,8 @@ import { connect } from 'react-redux';
 import {
   updateInstall,
   saveInstall,
-  toggleEditInstallModal
+  toggleEditInstallModal,
+  deleteInstall
 } from '../../actions/manageInventoryActions';
 import {
   IinitialState,
@@ -38,6 +39,7 @@ interface IdispatchProps {
   toggleEditInstallModal: typeof toggleEditInstallModal;
   productInfo: IproductInfo;
   selectedFacility: Ioption;
+  deleteInstall: typeof deleteInstall;
 }
 
 class ManageInstallModal extends React.Component<Iprops & IdispatchProps, {}> {
@@ -58,7 +60,7 @@ class ManageInstallModal extends React.Component<Iprops & IdispatchProps, {}> {
     return (
       <CommonModal
         modalVisible={this.props.showModal}
-        className="user-edit"
+        className="install-edit"
         onHide={this.props.toggleEditInstallModal}
         body={
           <EditInstallForm
@@ -71,6 +73,7 @@ class ManageInstallModal extends React.Component<Iprops & IdispatchProps, {}> {
             productInfo={this.props.productInfo}
             selectedFacility={this.props.selectedFacility}
             selectedProduct={this.props.selectedProduct}
+            deleteInstall={this.props.deleteInstall}
           />
         }
         title={modalTitle}
@@ -96,6 +99,7 @@ export default connect(
   {
     updateInstall,
     saveInstall,
-    toggleEditInstallModal
+    toggleEditInstallModal,
+    deleteInstall
   }
 )(ManageInstallModal);

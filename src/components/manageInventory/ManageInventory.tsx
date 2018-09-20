@@ -96,7 +96,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
   }
   componentWillMount() {
     // since the install modal depends on a selected product in state, we need to make sure and start off with the modals closed
-    // this.props.closeAllModals();
+    this.props.closeAllModals();
     this.setState({
       currentTile: constants.getTileByURL(this.props.location.pathname)
     });
@@ -281,11 +281,6 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
             });
             this.props.toggleEditInstallModal();
           }
-        },
-        style: {
-          background: this.state.selectedRow[rowInfo.viewIndex]
-            ? constants.colors[`${this.state.currentTile.color}Tr`]
-            : ''
         }
       };
     } else {

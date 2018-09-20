@@ -193,6 +193,29 @@ export function saveInstall(
       });
   };
 }
+export function deleteInstall(
+  installID: string,
+  productID: string
+): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    return axios
+      .post(API.POST.inventory.deleteInstall, { id: installID })
+      .then(data => {
+        dispatch({
+          type: types.INSTALL_DELETE_SUCCESS,
+          installID,
+          productID
+        });
+        dispatch({ type: types.TOGGLE_MODAL_EDIT_INSTALL });
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.INSTALL_DELETE_FAILED });
+        constants.handleError(error, 'delete install');
+        throw error;
+      });
+  };
+}
 
 export const toggleEditProductModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_PRODUCT

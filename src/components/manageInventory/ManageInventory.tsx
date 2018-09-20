@@ -199,6 +199,11 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           id: 'manufacturer'
         },
         {
+          Header: 'Quantity',
+          accessor: 'quantity',
+          minWidth: 50
+        },
+        {
           id: 'expander-toggle',
           Cell: this.expanderToggle,
           minWidth: 20,
@@ -296,8 +301,11 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     );
   };
   onSearchValuechanges = (value: any, key: string) => {
+    // set the selection to redux
+    // update the table data
     if (key === 'facility') {
       this.props.setSelectedFacility(value);
+      this.props.getInventory(1, '', value.value, '', '');
     }
   };
   // TODO  hide facilities if only one

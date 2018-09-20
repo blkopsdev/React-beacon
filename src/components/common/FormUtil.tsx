@@ -86,7 +86,7 @@ export const FormUtil = {
         <ControlLabel>{meta.label}</ControlLabel>
         <FormControl
           placeholder={meta.placeholder}
-          componentClass={meta.type}
+          componentClass={meta.componentClass}
           {...handler()}
         />
         <FormControl.Feedback />
@@ -138,7 +138,7 @@ export const FormUtil = {
         <ControlLabel>{meta.label}</ControlLabel>
         <FormControl
           placeholder={meta.placeholder}
-          componentClass={meta.type}
+          componentClass={meta.componentClass}
           {...handler()}
         />
       </FormGroup>

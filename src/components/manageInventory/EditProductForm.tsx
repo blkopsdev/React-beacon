@@ -68,8 +68,7 @@ const buildFieldConfig = (
         validators: Validators.required
       },
       render: FormUtil.TextInput,
-      inputType: 'textarea',
-      meta: { label: 'description', colWidth: 12, type: 'textarea' }
+      meta: { label: 'description', colWidth: 12, componentClass: 'textarea' }
     },
     productGroupID: {
       render: FormUtil.Select,

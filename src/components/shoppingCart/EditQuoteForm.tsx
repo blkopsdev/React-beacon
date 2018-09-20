@@ -81,8 +81,7 @@ const buildFieldConfig = (
   const fieldConfigControls = {
     message: {
       render: FormUtil.TextInputWithoutValidation,
-      inputType: 'textarea',
-      meta: { label: 'message', colWidth: 12, type: 'textarea' }
+      meta: { label: 'message', colWidth: 12, componentClass: 'textarea' }
     }
   };
   return {

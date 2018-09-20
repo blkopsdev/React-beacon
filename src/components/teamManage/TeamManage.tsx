@@ -107,7 +107,6 @@ class TeamManage extends React.Component<Iprops & IdispatchProps, Istate> {
           meta: {
             label: 'common:search',
             colWidth: 4,
-            type: 'text',
             placeholder: 'searchPlaceholder'
           }
         }

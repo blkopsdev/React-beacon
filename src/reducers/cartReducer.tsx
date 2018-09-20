@@ -1,6 +1,6 @@
 import * as types from '../actions/actionTypes';
 import initialState from './initialState';
-import { IshoppingCart, Iquantity } from '../models';
+import { IshoppingCart, Iproduct } from '../models';
 import { filter } from 'lodash';
 
 const addedIds = (
@@ -9,10 +9,10 @@ const addedIds = (
 ) => {
   switch (action.type) {
     case types.ADD_TO_CART:
-      if (state.indexOf(action.productID) !== -1) {
+      if (state.indexOf(action.product.id) !== -1) {
         return state;
       }
-      return [...state, action.productID];
+      return [...state, action.product.id];
     case types.DELETE_FROM_CART:
       if (state.indexOf(action.productID) !== -1) {
         return state;
@@ -23,21 +23,29 @@ const addedIds = (
   }
 };
 
-const quantityById = (
-  state: Iquantity = initialState.manageInventory.cart.quantityByID,
+const productsByID = (
+  state: { [key: string]: Iproduct } = initialState.manageInventory.cart
+    .productsByID,
   action: any
 ) => {
   switch (action.type) {
     case types.ADD_TO_CART:
-      const { productID } = action;
+      const { product } = action;
       return {
         ...state,
-        [productID]: (state[productID] || 0) + 1
+        [product.id]: {
+          ...product,
+          quantity: (state[product.id] ? state[product.id].quantity : 0) + 1
+        }
       };
     case types.DECREASE_FROM_CART:
       return {
         ...state,
-        [action.productID]: (state[action.productID] || 1) - 1
+        [action.productID]: {
+          ...state[action.productID],
+          quantity:
+            (state[action.productID] ? state[action.productID].quantity : 1) - 1
+        }
       };
     default:
       return state;
@@ -45,7 +53,7 @@ const quantityById = (
 };
 
 export const getQuantity = (state: IshoppingCart, productID: string): number =>
-  state.quantityByID[productID] || 0;
+  state.productsByID[productID].quantity || 0;
 
 export const getAddedIDs = (state: IshoppingCart) => state.addedIDs;
 
@@ -54,14 +62,14 @@ const cart = (
   action: any
 ): IshoppingCart => {
   switch (action.type) {
-    case types.CHECKOUT_REQUEST:
-      return initialState;
+    case types.CHECKOUT_SUCCESS:
+      return initialState.manageInventory.cart;
     case types.CHECKOUT_FAILED:
-      return action.cart;
+      return state;
     default:
       return {
         addedIDs: addedIds(state.addedIDs, action),
-        quantityByID: quantityById(state.quantityByID, action)
+        productsByID: productsByID(state.productsByID, action)
       };
   }
 };

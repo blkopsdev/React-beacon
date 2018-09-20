@@ -116,6 +116,7 @@ export interface Iproduct {
   // systemSize: IsystemSize;
   // productGroup: IproductGroup;
   installs: IinstallBase[];
+  quantity: number;
 }
 export interface IquoteItem {
   productID: string;
@@ -138,12 +139,10 @@ export interface IteamManage {
   data: Iuser[];
   totalPages: number;
 }
-export interface Iquantity {
-  [key: string]: number;
-}
+
 export interface IshoppingCart {
   addedIDs: string[];
-  quantityByID: Iquantity;
+  productsByID: { [key: string]: Iproduct };
 }
 export interface ImanageInventory {
   page: number;

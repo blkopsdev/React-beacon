@@ -4,13 +4,14 @@ import axios from 'axios';
 import { beginAjaxCall } from './ajaxStatusActions';
 
 import * as types from './actionTypes';
-import { Iproduct, ThunkResult } from '../models';
-import { toastr } from 'react-redux-toastr';
+import { ThunkResult, Iproduct } from '../models';
+// import { toastr } from "react-redux-toastr";
 import constants from '../constants/constants';
+import { map } from 'lodash';
 
-export const addToCart = (productID: string) => ({
+export const addToCart = (product: Iproduct) => ({
   type: types.ADD_TO_CART,
-  productID
+  product
 });
 export const decreaseFromCart = (productID: string) => ({
   type: types.DECREASE_FROM_CART,
@@ -21,31 +22,33 @@ export const deleteFromCart = (productID: string) => ({
   productID
 });
 
-export const checkout = (
-  QuoteItems: Iproduct[],
-  facilityID: string,
-  message: string
-): ThunkResult<void> => {
+export const checkout = ({
+  message,
+  facilityID
+}: {
+  message: string;
+  facilityID: string;
+}): ThunkResult<void> => {
   return (dispatch, getState) => {
+    const QuoteItems = map(
+      getState().manageInventory.cart.productsByID,
+      (product, key) => {
+        return { productID: key, quantity: product.quantity };
+      }
+    );
     dispatch(beginAjaxCall());
+    dispatch({ type: types.TOGGLE_MODAL_EDIT_QUOTE });
     return axios
       .post(API.POST.inventory.quote, { QuoteItems, facilityID, message })
       .then(data => {
-        if (!data.data) {
-          throw undefined;
-        } else {
-          dispatch({
-            type: types.CHECKOUT_SUCCESS,
-            product: data.data
-          });
-          dispatch({ type: types.TOGGLE_MODAL_EDIT_QUOTE });
-          toastr.success('Success', 'Saved product', constants.toastrSuccess);
-          return data;
-        }
+        dispatch({
+          type: types.CHECKOUT_SUCCESS
+        });
+        // toastr.success("Success", "requested quote", constants.toastrSuccess);
       })
       .catch((error: any) => {
         dispatch({ type: types.CHECKOUT_FAILED });
-        constants.handleError(error, 'save product');
+        constants.handleError(error, 'requesting quote');
         throw error;
       });
   };

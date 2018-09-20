@@ -13,7 +13,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TranslationFunction } from 'react-i18next';
 
 interface ExpanderProps extends RowInfo {
-  addToQuote: (id: string) => void;
+  addToQuote: (product: any) => void;
   addInstallation: () => void;
   t: TranslationFunction;
   getExpanderTrProps: (
@@ -35,10 +35,7 @@ export const InstallationsExpander = (props: ExpanderProps) => {
         className="expander-button-bar text-right"
         style={{ position: 'absolute', top: 0, left: 0, width: '100%' }}
       >
-        <Button
-          bsStyle="link"
-          onClick={() => props.addToQuote(props.original.id)}
-        >
+        <Button bsStyle="link" onClick={() => props.addToQuote(props.original)}>
           {props.t('Add to Quote')}
         </Button>
         <Button bsStyle="link" onClick={props.addInstallation}>

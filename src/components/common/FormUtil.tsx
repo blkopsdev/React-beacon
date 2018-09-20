@@ -136,7 +136,11 @@ export const FormUtil = {
     <Col xs={meta.colWidth}>
       <FormGroup bsSize="sm">
         <ControlLabel>{meta.label}</ControlLabel>
-        <FormControl placeholder={meta.placeholder} {...handler()} />
+        <FormControl
+          placeholder={meta.placeholder}
+          componentClass={meta.type}
+          {...handler()}
+        />
       </FormGroup>
     </Col>
   ),

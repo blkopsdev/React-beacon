@@ -11,7 +11,12 @@ import {
   checkout
 } from '../../actions/shoppingCartActions';
 import { toggleEditQuoteModal } from '../../actions/manageInventoryActions';
-import { IinitialState, IproductInfo } from '../../models';
+import {
+  IinitialState,
+  IproductInfo,
+  IshoppingCart,
+  Ioption
+} from '../../models';
 // import constants from '../../constants/constants';
 import CommonModal from '../common/CommonModal';
 import EditQuoteForm from './EditQuoteForm';
@@ -33,6 +38,8 @@ interface IdispatchProps {
   deleteFromCart: typeof deleteFromCart;
   checkout: typeof checkout;
   toggleEditQuoteModal: typeof toggleEditQuoteModal;
+  cart: IshoppingCart;
+  selectedFacility: Ioption;
 }
 
 class EditQuoteModal extends React.Component<Iprops & IdispatchProps, {}> {
@@ -54,6 +61,12 @@ class EditQuoteModal extends React.Component<Iprops & IdispatchProps, {}> {
             colorButton={this.props.colorButton}
             facilityOptions={this.props.facilityOptions}
             productInfo={this.props.productInfo}
+            cart={this.props.cart}
+            selectedFacilityID={
+              this.props.selectedFacility.value.length
+                ? this.props.selectedFacility.value
+                : this.props.facilityOptions[0].value
+            }
           />
         }
         title={this.props.t('manageInventory:requestForQuote')}
@@ -67,10 +80,11 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
-    customerOptions: FormUtil.convertToOptions(state.customers),
     facilityOptions: FormUtil.convertToOptions(state.user.facilities),
     showModal: state.manageInventory.showEditQuoteModal,
-    productInfo: state.manageInventory.productInfo
+    productInfo: state.manageInventory.productInfo,
+    cart: state.manageInventory.cart,
+    selectedFacility: state.manageInventory.selectedFacility
   };
 };
 

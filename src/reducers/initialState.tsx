@@ -52,7 +52,7 @@ export default {
     selectedFacility: initialOption,
     cart: {
       addedIDs: [],
-      quantityByID: {}
+      productsByID: {}
     },
     productInfo: {
       brands: {},

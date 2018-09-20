@@ -110,7 +110,11 @@
     "facilityPlaceholder": "Search...",
     "searchPlaceholder": "Search...",
     "productGroupPlaceholder": "Search...",
-    "manufacturerPlaceholder": "Search..."
+    "manufacturerPlaceholder": "Search...",
+    "requestForQuote": "Request For Quote",
+    "emptyQuoteMessage": "Please add some items to request a quote.",
+    "request": "Request Quote",
+    "message": "Comments / Questions"
   },
   "tiles": {
     "alerts": "Alerts",

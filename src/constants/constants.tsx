@@ -184,7 +184,7 @@ const tiles = [
     srcBanner: require('src/images/beaconManageInventoryHeader.jpg'),
     color: 'green',
     width: 360,
-    height: 408,
+    height: 400,
     url: '/inventory',
     securityFunction: securityFunctions.ViewInventory.id,
     description: ''

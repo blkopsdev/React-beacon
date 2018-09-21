@@ -29,15 +29,18 @@ function teamManageData(state: Iuser[] = [], action: any): Iuser[] {
 
       return [...filteredUsers, updatedUser] as Iuser[];
     case types.TEAM_SAVE_SUCCESS:
-      const securityFunct = map(action.user.securityFunctions, securityF => {
-        return securityF.toUpperCase();
-      });
-      const updatedTeamMember = {
-        ...pickBy(action.user, (property, key) => property !== null),
-        securityFunctions: securityFunct
-      };
+      // const securityFunct = map(action.user.securityFunctions, securityF => {
+      //   return securityF.toUpperCase();
+      // });
+      // const updatedTeamMember = {
+      //   ...pickBy(action.user, (property, key) => property !== null),
+      //   securityFunctions: securityFunct
+      // };
 
-      return [...state, updatedTeamMember] as Iuser[];
+      // return [...state, updatedTeamMember] as Iuser[];
+
+      // TODO not adding them for now until after they are approved
+      return state;
 
     case types.USER_LOGOUT_SUCCESS:
       return [];

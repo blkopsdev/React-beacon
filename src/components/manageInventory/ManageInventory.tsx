@@ -22,7 +22,8 @@ import {
   Iproduct,
   Ioption,
   Iuser,
-  IproductInfo
+  IproductInfo,
+  IinstallBase
 } from '../../models';
 import { FieldConfig } from 'react-reactive-form';
 import { emptyTile } from '../../reducers/initialState';
@@ -215,7 +216,10 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         },
         {
           Header: 'Quantity',
-          accessor: 'quantity',
+          id: 'quantity',
+          accessor: ({ installs }: { installs: IinstallBase[] }) => {
+            return installs.length; // using this rather than data.quantity because when we add new installs, we don't want to update the quantity on the product
+          },
           minWidth: 50
         },
         {

@@ -120,7 +120,7 @@ class TeamManageForm extends React.Component<Iprops, {}> {
     const customer: any = find(this.props.customerOptions, {
       value: customerID
     }) || { name: '' };
-    if (customer && customer.label.length) {
+    if (customer && customer.label && customer.label.length) {
       this.userForm.patchValue({ customer: customer.label });
     }
     const customerControl = this.userForm.get(

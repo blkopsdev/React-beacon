@@ -23,9 +23,6 @@ import { Ioption, IproductInfo, IinstallBase, Iproduct } from '../../models';
 const buildFieldConfig = (productInfo: IproductInfo) => {
   const fieldConfigControls = {
     nickname: {
-      options: {
-        validators: Validators.required
-      },
       render: FormUtil.TextInput,
       meta: { label: 'nickname', colWidth: 12, type: 'input' }
     },
@@ -43,7 +40,7 @@ const buildFieldConfig = (productInfo: IproductInfo) => {
     },
     quantity: {
       options: {
-        validators: Validators.min(1)
+        validators: [Validators.min(1), Validators.max(1000)]
       },
       render: FormUtil.TextInput,
       inputType: 'number',

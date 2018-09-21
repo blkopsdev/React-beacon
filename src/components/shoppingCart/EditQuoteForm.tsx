@@ -72,7 +72,7 @@ const buildFieldConfig = (
     return {
       render: NumberInputWithButton,
       options: {
-        validators: Validators.min(1)
+        validators: [Validators.min(1), Validators.max(1000)]
       },
       meta: {
         label: prod.name,

@@ -56,8 +56,11 @@ function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
         );
         const updatedInstall = {
           ...pickBy(action.install, (property, key) => property !== null)
-        };
-        const newInstalls = { ...filteredInstalls, updatedInstall };
+        } as IinstallBase;
+        const newInstalls: IinstallBase[] = [
+          ...filteredInstalls,
+          updatedInstall
+        ];
         const updatedProductI = { ...oldProduct, installs: newInstalls };
         return [...filteredProductsI, updatedProductI] as Iproduct[];
       }

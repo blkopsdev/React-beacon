@@ -159,8 +159,8 @@ const tiles = [
     src: require('src/images/beaconManageTeam.jpg'),
     srcBanner: require('src/images/beaconManageTeamHeader.jpg'),
     color: 'blue',
-    width: 359,
-    height: 272,
+    width: 360,
+    height: 400,
     url: '/team',
     securityFunction: securityFunctions.ManageTeamMembers.id,
     description: ''

@@ -118,17 +118,22 @@ export const InstallationsExpander = (props: ExpanderProps) => {
   // if (props.installs && props.installs){
   //     installs = props.installs;
   // }
+
+  // if there are no installs display a blank one so that the buttons display
+  let installs = props.original.installs;
+  if (installs.length === 0) {
+    installs = [{ serialNumber: '', nickname: '', rfid: '' }];
+  }
   if (props.original && props.original.installs) {
     return (
       <div>
         <ReactTable
           className={'attempts-expander'}
-          data={props.original.installs}
+          data={installs}
           columns={expanderColumns}
-          pageSize={props.original.installs.length}
+          defaultPageSize={10}
+          rowsText="installs"
           key={props.original.installs.length}
-          showPagination={false}
-          showPageSizeOptions={false}
           getTdProps={expanderHandleTdProps}
           noDataText="No installations found."
           resizable={false}

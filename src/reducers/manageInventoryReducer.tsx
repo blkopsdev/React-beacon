@@ -21,27 +21,35 @@ import { modalToggleWithName } from './userQueueModalsReducer';
 function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
   switch (action.type) {
     case types.GET_INVENTORY_SUCCESS:
-      // return action.inventory;
       return map(action.inventory, d => {
         return {
           ...(pickBy(d, (property, key) => property !== null) as Iproduct)
         };
       });
     case types.PRODUCT_UPDATE_SUCCESS:
-      const filteredProducts = filter(state, p => p.id !== action.product.id);
-      const updatedProduct = {
-        ...pickBy(action.product, (property, key) => property !== null)
-      };
+      const updatedProduct = pickBy(
+        action.product,
+        (property, key) => property !== null
+      );
 
-      return [...filteredProducts, updatedProduct] as Iproduct[];
+      return map(state, pr => {
+        if (pr.id === updatedProduct.id) {
+          return { ...pr, ...updatedProduct };
+        } else {
+          return pr;
+        }
+      });
+
     case types.PRODUCT_ADD_SUCCESS:
-      // const updatedProductB = {
-      //   ...pickBy(action.product, (property, key) => property !== null)
-      // };
-
-      // return [...state, updatedProductB] as Iproduct[];
-
       // TODO not showing added product until we build the queue
+      // return map(state, pr => {
+      //   if (pr.id === action.product.id){
+      //     return pickBy(action.product, (property, key) => property !== null) as Iproduct
+      //   } else {
+      //     return pr;
+      //   }
+      // })
+
       return state;
     case types.INSTALL_UPDATE_SUCCESS:
       const filteredProductsI = filter(
@@ -70,10 +78,6 @@ function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
     * It is possible to add multiple installs at the same time.
     */
     case types.INSTALL_ADD_SUCCESS:
-      // const filteredProductsJ = filter(
-      //   state,
-      //   p => p.id !== action.productID
-      // );
       const oldProductB = find(state, o => o.id === action.productID);
       if (oldProductB) {
         const installsToAdd = map(action.installs, install => {
@@ -83,7 +87,6 @@ function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
           ...oldProductB.installs,
           ...installsToAdd
         ] as IinstallBase[];
-        // const updatedProductE = { ...oldProductB, installs: newInstalls };
         return map(state, pr => {
           if (pr.id === action.productID) {
             return { ...pr, installs: newInstalls };
@@ -91,7 +94,6 @@ function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
             return pr;
           }
         });
-        // return [...filteredProductsJ, updatedProductE] as Iproduct[];
       }
       return state;
     case types.INSTALL_DELETE_SUCCESS:

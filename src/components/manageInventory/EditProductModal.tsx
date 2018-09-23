@@ -42,13 +42,10 @@ class ManageInventoryModal extends React.Component<
   }
 
   render() {
-    let submitFunc;
     let modalTitle;
     if (this.props.selectedItem && this.props.selectedItem.id) {
-      submitFunc = this.props.updateProduct;
       modalTitle = this.props.t('manageInventory:editModalTitle');
     } else {
-      submitFunc = this.props.saveProduct;
       modalTitle = this.props.t('manageInventory:saveModalTitle');
     }
     return (
@@ -56,18 +53,7 @@ class ManageInventoryModal extends React.Component<
         modalVisible={this.props.showModal}
         className="user-edit"
         onHide={this.props.toggleEditProductModal}
-        body={
-          <EditProductForm
-            handleSubmit={submitFunc}
-            handleCancel={this.props.toggleEditProductModal}
-            selectedItem={this.props.selectedItem}
-            loading={this.props.loading}
-            colorButton={this.props.colorButton}
-            facilityOptions={this.props.facilityOptions}
-            productInfo={this.props.productInfo}
-            selectedFacility={this.props.selectedFacility}
-          />
-        }
+        body={<EditProductForm {...this.props} />}
         title={modalTitle}
         container={document.getElementById('two-pane-layout')}
       />

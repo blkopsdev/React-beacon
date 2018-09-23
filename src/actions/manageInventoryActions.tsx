@@ -88,7 +88,7 @@ export function updateProduct(product: Iproduct): ThunkResult<void> {
         }
       })
       .catch((error: any) => {
-        dispatch({ type: types.TEAM_UPDATE_FAILED });
+        dispatch({ type: types.PRODUCT_UPDATE_FAILED });
         constants.handleError(error, 'update product');
         throw error;
       });

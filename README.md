@@ -73,6 +73,10 @@ These are not manually configurable.
 Update env variables in the .env file or the .env.development file.
 The node env variables must be set on the server.
 
+## Suggested dev tools
+https://github.com/Galooshi/import-js
+jsprettier
+
 
 ## FontAwesome
 * we are using Font Awesome 5 in this project and using the prerelease version of react-fontawesome.  

@@ -2,13 +2,6 @@
 * Edit Quote Form
 */
 
-import * as React from 'react';
-import {
-  FormGenerator,
-  AbstractControl,
-  FieldConfig,
-  Validators
-} from 'react-reactive-form';
 import {
   Col,
   Button,
@@ -16,16 +9,21 @@ import {
   ControlLabel,
   FormControl
 } from 'react-bootstrap';
-
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  FormGenerator,
+  AbstractControl,
+  FieldConfig,
+  Validators
+} from 'react-reactive-form';
 import { mapValues, forEach } from 'lodash';
-
-import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
+import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
 import { Ioption, IproductInfo, IshoppingCart, Iproduct } from '../../models';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import constants from '../../constants/constants';
 
 const NumberInputWithButton = ({
   handler,

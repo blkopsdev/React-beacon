@@ -3,7 +3,7 @@
 * Edit inventory items
 */
 
-import * as React from 'react';
+import { Col, Button } from 'react-bootstrap';
 import {
   Validators,
   FormGenerator,
@@ -11,16 +11,20 @@ import {
   FieldConfig,
   Observable
 } from 'react-reactive-form';
-import { Col, Button } from 'react-bootstrap';
-// import { forEach, differenceBy, filter, find, map } from 'lodash';
 import { forEach, find, filter } from 'lodash';
-
-import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
+import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
 import { Iproduct, Ioption, IproductInfo, Isubcategory } from '../../models';
+import {
+  saveProduct,
+  toggleEditProductModal,
+  updateProduct
+} from '../../actions/manageInventoryActions';
+import constants from '../../constants/constants';
+
 interface IstateChanges extends Observable<any> {
   next: () => void;
 }
@@ -185,8 +189,7 @@ const buildFieldConfig = (
 };
 
 interface Iprops {
-  handleSubmit: any;
-  handleCancel: any;
+  toggleEditProductModal: typeof toggleEditProductModal;
   selectedItem?: Iproduct;
   loading: boolean;
   colorButton: string;
@@ -195,6 +198,8 @@ interface Iprops {
   productInfo: IproductInfo;
   facilityOptions: Ioption[];
   selectedFacility: Ioption;
+  saveProduct: typeof saveProduct;
+  updateProduct: typeof updateProduct;
 }
 
 class ManageInventoryForm extends React.Component<Iprops, {}> {
@@ -206,7 +211,6 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
       buildFieldConfig(this.props.productInfo, this.filterSubcategories),
       this.props.t
     );
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.setForm = this.setForm.bind(this);
   }
   // componentDidUpdate(prevProps: Iprops) {
@@ -308,7 +312,12 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
     if (this.props.selectedItem) {
       newItem = { ...newItem, id: this.props.selectedItem.id };
     }
-    this.props.handleSubmit(newItem);
+
+    if (this.props.selectedItem && this.props.selectedItem.id) {
+      this.props.updateProduct(newItem);
+    } else {
+      this.props.saveProduct(newItem);
+    }
   };
   setForm = (form: AbstractControl) => {
     this.userForm = form;
@@ -335,7 +344,7 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
                 bsStyle="link"
                 type="button"
                 className="pull-left left-side"
-                onClick={this.props.handleCancel}
+                onClick={this.props.toggleEditProductModal}
               >
                 {t('cancel')}
               </Button>

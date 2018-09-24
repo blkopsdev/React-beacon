@@ -127,6 +127,20 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
     }
     this.props.handleSubmit(newItem, this.props.selectedProduct.id);
   };
+  handleDelete = () => {
+    const toastrConfirmOptions = {
+      onOk: () => {
+        this.props.deleteInstall(
+          this.props.selectedItem.id,
+          this.props.selectedProduct.id
+        );
+      },
+      onCancel: () => console.log('CANCEL: clicked'),
+      okText: this.props.t('installDeleteOk'),
+      cancelText: this.props.t('common:cancel')
+    };
+    toastr.confirm(this.props.t('installDeleteConfirm'), toastrConfirmOptions);
+  };
   setForm = (form: AbstractControl) => {
     this.userForm = form;
     this.userForm.meta = {
@@ -162,12 +176,7 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
                 type="button"
                 className=""
                 disabled={this.props.selectedItem.id === undefined}
-                onClick={() =>
-                  this.props.deleteInstall(
-                    this.props.selectedItem.id,
-                    this.props.selectedProduct.id
-                  )
-                }
+                onClick={this.handleDelete}
               >
                 {t('common:delete')}
               </Button>

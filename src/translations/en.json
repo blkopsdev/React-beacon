@@ -143,7 +143,9 @@
     "quantity": "Quantity",
     "rfid": "RFID",
     "remarks": "Remarks",
-    "serialNumber": "Serial Number"
+    "serialNumber": "Serial Number",
+    "installDeleteConfirm": "Are you sure?",
+    "installDeleteOk": "Delete Install"
   },
   "tiles": {
     "alerts": "Alerts",

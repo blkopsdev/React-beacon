@@ -208,6 +208,7 @@ export function deleteInstall(
           productID
         });
         dispatch({ type: types.TOGGLE_MODAL_EDIT_INSTALL });
+        toastr.success('Success', 'Install deleted', constants.toastrSuccess);
       })
       .catch((error: any) => {
         dispatch({ type: types.INSTALL_DELETE_FAILED });

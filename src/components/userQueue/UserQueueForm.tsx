@@ -209,11 +209,11 @@ class UserQueueForm extends React.Component<Iprops, {}> {
       this.userForm.patchValue({ [key]: value });
     });
     const {
-      tempAddress,
-      tempAddress2,
-      tempCity,
-      tempState,
-      tempZip,
+      tempAddress = 'none',
+      tempAddress2 = '',
+      tempCity = '',
+      tempState = '',
+      tempZip = '',
       customerID,
       facilities
     } = this.props.selectedQueueObject.user;

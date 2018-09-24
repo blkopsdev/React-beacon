@@ -193,29 +193,29 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     const columns = TableUtil.translateHeaders(
       [
         {
-          Header: 'SKU',
+          Header: 'sku',
           accessor: 'sku'
         },
         {
-          Header: 'Name',
+          Header: 'name',
           accessor: 'name'
         },
         {
-          Header: 'Product Group',
+          Header: 'productGroup',
           accessor: ({ productGroupID }: Iproduct) => {
             return this.props.productInfo.productGroups[productGroupID].name;
           },
           id: 'productGroup'
         },
         {
-          Header: 'Manufacturer',
+          Header: 'manufacturer',
           accessor: ({ manufacturerID }: Iproduct) => {
             return this.props.productInfo.manufacturers[manufacturerID].name;
           },
           id: 'manufacturer'
         },
         {
-          Header: 'Quantity',
+          Header: 'quantity',
           id: 'quantity',
           accessor: ({ installs }: { installs: IinstallBase[] }) => {
             return installs.length; // using this rather than data.quantity because when we add new installs, we don't want to update the quantity on the product

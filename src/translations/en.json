@@ -18,7 +18,11 @@
     "noDataText": "Sorry! We could not find and rows that matched that search.",
     "searchPlaceholder": "Search...",
     "searchProduct": "Item Number or Name",
-    "mainCategory": "Main Category"
+    "profile": "Profile",
+    "logout": "Logout",
+    "delete": "Delete",
+    "save": "Save",
+    "login": "Login"
   },
   "auth": {
     "loginButton": "Login with Azure",
@@ -34,6 +38,7 @@
   },
   "user": {
     "cancel": "Cancel",
+    "name": "Name",
     "signUp": "Sign Up",
     "validationError": "Please check invalid inputs.",
     "first": "First Name",
@@ -101,7 +106,8 @@
     "editTeamModalTitle": "Edit Team Member",
     "saveTeamModalTitle": "Add New Team Member",
     "bannerTitle": "Manage Team",
-    "searchPlaceholder": "Search..."
+    "searchPlaceholder": "Search...",
+    "manager": "Manager"
   },
   "manageInventory": {
     "bannerTitle": "Manage Inventory",
@@ -117,7 +123,27 @@
     "requestForQuote": "Request For Quote",
     "emptyQuoteMessage": "Please add some items to request a quote.",
     "request": "Request Quote",
-    "message": "Comments / Questions"
+    "message": "Comments / Questions",
+    "nickname": "Nickname",
+    "sku": "SKU",
+    "name": "Name",
+    "productGroup": "Product Group",
+    "manufacturer": "Manufacturer",
+    "quantity": "Quantity",
+    "addToQuote": "Add To Quote",
+    "addInstallation": "Add Installation",
+    "description": "Description",
+    "brand": "Brand",
+    "subcategory": "Sub Category",
+    "gasType": "Gas Type",
+    "power": "Power",
+    "systemSize": "System Size",
+    "standard": "Standard ",
+    "mainCategory": "Main Category",
+    "quantity": "Quantity",
+    "rfid": "RFID",
+    "remarks": "Remarks",
+    "serialNumber": "Serial Number"
   },
   "tiles": {
     "alerts": "Alerts",

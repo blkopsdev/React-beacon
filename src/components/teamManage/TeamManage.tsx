@@ -69,7 +69,7 @@ class TeamManage extends React.Component<Iprops & IdispatchProps, Istate> {
       [
         {
           id: 'name',
-          Header: 'name',
+          Header: 'user:name',
           // accessor: "user",
           Cell: (row: any) => (
             <span>
@@ -78,7 +78,7 @@ class TeamManage extends React.Component<Iprops & IdispatchProps, Istate> {
           )
         },
         {
-          Header: 'email',
+          Header: 'user:email',
           accessor: 'email'
         },
         {
@@ -89,7 +89,7 @@ class TeamManage extends React.Component<Iprops & IdispatchProps, Istate> {
           id: 'manager'
         },
         {
-          Header: 'login',
+          Header: 'common:login',
           accessor: ({ lastLoginDate }: Iuser) => {
             return lastLoginDate
               ? moment.utc(lastLoginDate).format('MM/DD/YYYY hh:mm a')

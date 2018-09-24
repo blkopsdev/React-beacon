@@ -28,7 +28,7 @@ const buildFieldConfig = (productInfo: IproductInfo) => {
     },
     serialNumber: {
       render: FormUtil.TextInput,
-      meta: { label: 'serial number', colWidth: 6, type: 'input' }
+      meta: { label: 'serialNumber', colWidth: 6, type: 'input' }
     },
     rfid: {
       render: FormUtil.TextInput,
@@ -154,7 +154,7 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
                 className="pull-left left-side"
                 onClick={this.props.handleCancel}
               >
-                {t('cancel')}
+                {t('common:cancel')}
               </Button>
               <Button
                 bsStyle="warning"
@@ -169,14 +169,14 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
                   )
                 }
               >
-                {t('delete')}
+                {t('common:delete')}
               </Button>
               <Button
                 bsStyle={this.props.colorButton}
                 type="submit"
                 disabled={this.props.loading}
               >
-                {t('save')}
+                {t('common:save')}
               </Button>
             </Col>
           </form>
@@ -185,4 +185,4 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
     );
   }
 }
-export default translate('manageInstall')(ManageInstallForm);
+export default translate('manageInventory')(ManageInstallForm);

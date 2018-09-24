@@ -62,7 +62,7 @@ const buildFieldConfig = (
       render: FormUtil.Select,
       meta: {
         options: productInfo.productGroupOptions,
-        label: 'common:productGroup',
+        label: 'productGroup',
         colWidth: 12,
         placeholder: 'common:searchPlaceholder',
         isMulti: false
@@ -75,7 +75,7 @@ const buildFieldConfig = (
       render: FormUtil.Select,
       meta: {
         options: productInfo.brandOptions,
-        label: 'common:brand',
+        label: 'brand',
         colWidth: 12,
         placeholder: 'common:searchPlaceholder',
         isMulti: false
@@ -88,7 +88,7 @@ const buildFieldConfig = (
       render: FormUtil.Select,
       meta: {
         options: productInfo.manufacturerOptions,
-        label: 'common:manufacturer',
+        label: 'manufacturer',
         colWidth: 12,
         placeholder: 'common:searchPlaceholder',
         isMulti: false
@@ -101,7 +101,7 @@ const buildFieldConfig = (
       render: FormUtil.Select,
       meta: {
         options: productInfo.mainCategoryOptions,
-        label: 'common:mainCategory',
+        label: 'mainCategory',
         colWidth: 6,
         placeholder: 'common:searchPlaceholder',
         isMulti: false
@@ -121,7 +121,7 @@ const buildFieldConfig = (
       render: FormUtil.Select,
       meta: {
         // options: productInfo.subcategoryOptions,
-        label: 'common:subcategory',
+        label: 'subcategory',
         colWidth: 6,
         placeholder: 'common:searchPlaceholder',
         isMulti: false
@@ -134,7 +134,7 @@ const buildFieldConfig = (
       render: FormUtil.Select,
       meta: {
         options: productInfo.gasTypeOptions,
-        label: 'common:gasType',
+        label: 'gasType',
         colWidth: 12,
         placeholder: 'common:searchPlaceholder',
         isMulti: false
@@ -147,7 +147,7 @@ const buildFieldConfig = (
       render: FormUtil.Select,
       meta: {
         options: productInfo.powerOptions,
-        label: 'common:power',
+        label: 'power',
         colWidth: 12,
         placeholder: 'common:searchPlaceholder',
         isMulti: false
@@ -160,7 +160,7 @@ const buildFieldConfig = (
       render: FormUtil.Select,
       meta: {
         options: productInfo.systemSizeOptions,
-        label: 'common:systemSize',
+        label: 'systemSize',
         colWidth: 6,
         placeholder: 'common:searchPlaceholder',
         isMulti: false
@@ -173,7 +173,7 @@ const buildFieldConfig = (
       render: FormUtil.Select,
       meta: {
         options: productInfo.standardOptions,
-        label: 'common:standard',
+        label: 'standard',
         colWidth: 6,
         placeholder: 'common:searchPlaceholder',
         isMulti: false
@@ -346,14 +346,14 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
                 className="pull-left left-side"
                 onClick={this.props.toggleEditProductModal}
               >
-                {t('cancel')}
+                {t('common:cancel')}
               </Button>
               <Button
                 bsStyle={this.props.colorButton}
                 type="submit"
                 disabled={this.props.loading}
               >
-                {t('save')}
+                {t('common:save')}
               </Button>
             </Col>
           </form>

@@ -82,7 +82,7 @@ const buildFieldConfig = (
   });
   const fieldConfigControls = {
     message: {
-      render: FormUtil.TextInputWithoutValidation,
+      render: FormUtil.TextInput,
       options: {
         validators: Validators.required
       },
@@ -217,7 +217,7 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
                 className="pull-left left-side"
                 onClick={this.props.handleCancel}
               >
-                {t('cancel')}
+                {t('common:cancel')}
               </Button>
               <Button
                 bsStyle={this.props.colorButton}

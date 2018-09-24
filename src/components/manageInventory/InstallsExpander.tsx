@@ -36,10 +36,10 @@ export const InstallationsExpander = (props: ExpanderProps) => {
         style={{ position: 'absolute', top: 0, left: 0, width: '100%' }}
       >
         <Button bsStyle="link" onClick={() => props.addToQuote(props.original)}>
-          {props.t('Add to Quote')}
+          {props.t('addToQuote')}
         </Button>
         <Button bsStyle="link" onClick={props.addInstallation}>
-          {props.t('Add Installation')}
+          {props.t('addInstallation')}
         </Button>
       </span>
     );

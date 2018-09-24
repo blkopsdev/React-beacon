@@ -52,25 +52,26 @@ function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
 
       return state;
     case types.INSTALL_UPDATE_SUCCESS:
-      const filteredProductsI = filter(
-        state,
-        p => p.id !== action.install.productID
-      );
       const oldProduct = find(state, o => o.id === action.install.productID);
       if (oldProduct) {
-        const filteredInstalls = filter(
-          oldProduct.installs,
-          i => i.id !== action.install.id
-        );
-        const updatedInstall = {
-          ...pickBy(action.install, (property, key) => property !== null)
-        } as IinstallBase;
-        const newInstalls: IinstallBase[] = [
-          ...filteredInstalls,
-          updatedInstall
-        ];
-        const updatedProductI = { ...oldProduct, installs: newInstalls };
-        return [...filteredProductsI, updatedProductI] as Iproduct[];
+        const newInstalls = map(oldProduct.installs, install => {
+          if (install.id === action.install.id) {
+            return pickBy(
+              action.install,
+              (property, key) => property !== null
+            ) as IinstallBase;
+          } else {
+            return install;
+          }
+        });
+
+        return map(state, pr => {
+          if (pr.id === action.install.productID) {
+            return { ...oldProduct, installs: newInstalls };
+          } else {
+            return pr;
+          }
+        });
       }
       return state;
 
@@ -81,7 +82,7 @@ function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
       const oldProductB = find(state, o => o.id === action.productID);
       if (oldProductB) {
         const installsToAdd = map(action.installs, install => {
-          return { ...pickBy(install, (property, key) => property !== null) };
+          return pickBy(install, (property, key) => property !== null);
         });
         const newInstalls = [
           ...oldProductB.installs,

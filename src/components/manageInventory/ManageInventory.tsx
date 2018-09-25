@@ -308,7 +308,10 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     manufacturer: { value: string; title: string };
     productGroup: { value: string; title: string };
   }) => {
-    const fID = facility ? facility.value : '';
+    const backupfID = this.props.userManage.selectedFacility.value.length
+      ? this.props.userManage.selectedFacility.value
+      : this.props.facilityOptions[0].value;
+    const fID = facility ? facility.value : backupfID;
     const manID = manufacturer ? manufacturer.value : '';
     const pgID = productGroup ? productGroup.value : '';
     this.props.getInventory(

@@ -3,7 +3,7 @@
 * Edit existing users
 */
 
-import * as React from 'react';
+import { Col, Button } from 'react-bootstrap';
 import {
   Validators,
   FormGenerator,
@@ -11,15 +11,24 @@ import {
   FieldConfig,
   Observable
 } from 'react-reactive-form';
-import { Col, Button } from 'react-bootstrap';
 import { forEach, find, map, differenceBy, filter, includes } from 'lodash';
-import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
+import * as React from 'react';
 
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
 import { Iuser } from '../../models';
+import {
+  toggleEditCustomerModal,
+  toggleEditFacilityModal
+} from '../../actions/commonActions';
+import {
+  toggleEditUserModal,
+  updateUser,
+  toggleSecurityFunctionsModal
+} from '../../actions/userManageActions';
 import EditFacilityModal from '../common/EditFacilityModal';
+import constants from '../../constants/constants';
 
 // passing in an object, but we need an array back
 const securityOptions = [
@@ -38,9 +47,9 @@ const buildFieldConfig = (
   customerOptions: any[],
   facilityOptions: any[],
   getFacilitiesByCustomer: (value: string) => Promise<void>,
-  toggleEditCustomerModal: () => void,
-  toggleEditFacilityModal: () => void,
-  toggleSecurityFunctionsModal: () => void
+  toggleEditCustomerModalCB: typeof toggleEditCustomerModal,
+  toggleEditFacilityModalCB: typeof toggleEditFacilityModal,
+  toggleSecurityFunctionsModalCB: typeof toggleSecurityFunctionsModal
 ) => {
   // Field config to configure form
   const fieldConfigControls = {
@@ -54,7 +63,7 @@ const buildFieldConfig = (
         colWidth: 12,
         placeholder: 'userManage:customerSearchPlaceholder',
         buttonName: 'userManage:addCustomerButton',
-        buttonAction: toggleEditCustomerModal
+        buttonAction: toggleEditCustomerModalCB
       },
       options: {
         validators: [
@@ -75,7 +84,7 @@ const buildFieldConfig = (
         colWidth: 12,
         placeholder: 'userQueue:facilitySearchPlaceholder',
         buttonName: 'userQueue:facilityButton',
-        buttonAction: toggleEditFacilityModal,
+        buttonAction: toggleEditFacilityModalCB,
         isMulti: true
       },
       options: {
@@ -90,7 +99,7 @@ const buildFieldConfig = (
         colWidth: 12,
         placeholder: 'userManage:securitySearchPlaceholder',
         buttonName: 'userManage:securityButton',
-        buttonAction: toggleSecurityFunctionsModal,
+        buttonAction: toggleSecurityFunctionsModalCB,
         isMulti: true
       },
       options: {
@@ -109,8 +118,6 @@ const buildFieldConfig = (
 };
 
 interface Iprops extends React.Props<UserManageForm> {
-  handleSubmit: any;
-  handleCancel: any;
   selectedUser: Iuser;
   loading: boolean;
   colorButton: string;
@@ -119,9 +126,11 @@ interface Iprops extends React.Props<UserManageForm> {
   customerOptions: any[];
   getFacilitiesByCustomer: (value: string) => Promise<void>;
   facilityOptions: any[];
-  toggleEditCustomerModal: () => void;
-  toggleEditFacilityModal: () => void;
-  toggleSecurityFunctionsModal: () => void;
+  updateUser: typeof updateUser;
+  toggleEditUserModal: typeof toggleEditUserModal;
+  toggleEditCustomerModal: typeof toggleEditCustomerModal;
+  toggleEditFacilityModal: typeof toggleEditFacilityModal;
+  toggleSecurityFunctionsModal: typeof toggleSecurityFunctionsModal;
 }
 
 class UserManageForm extends React.Component<Iprops, {}> {
@@ -246,18 +255,14 @@ class UserManageForm extends React.Component<Iprops, {}> {
         return option.value;
       }
     );
-    this.props.handleSubmit(
-      {
-        id: this.props.selectedUser.id,
-        ...this.userForm.value,
-        customerID: this.userForm.value.customerID.value,
-        facilities: facilitiesArray,
-        securityFunctions: securityFunctionsArray,
-        email: this.props.selectedUser.email // have to add back the email because disabling the input removes it
-      },
-      shouldApprove,
-      this.props.selectedUser.id
-    );
+    this.props.updateUser({
+      id: this.props.selectedUser.id,
+      ...this.userForm.value,
+      customerID: this.userForm.value.customerID.value,
+      facilities: facilitiesArray,
+      securityFunctions: securityFunctionsArray,
+      email: this.props.selectedUser.email // have to add back the email because disabling the input removes it
+    });
   };
   setForm = (form: AbstractControl) => {
     this.userForm = form;
@@ -287,7 +292,7 @@ class UserManageForm extends React.Component<Iprops, {}> {
                 bsStyle="link"
                 type="button"
                 className="pull-left left-side"
-                onClick={this.props.handleCancel}
+                onClick={this.props.toggleEditUserModal}
               >
                 {t('cancel')}
               </Button>

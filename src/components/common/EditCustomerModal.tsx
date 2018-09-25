@@ -4,19 +4,19 @@
 * spinner is from : http://tobiasahlin.com/spinkit/
 */
 
-import * as React from 'react';
+import { TranslationFunction } from 'react-i18next';
 import { connect } from 'react-redux';
-import {
-  toggleEditCustomerModal,
-  addCustomer
-} from '../../actions/userQueueActions';
+import * as React from 'react';
+
 import {
   IinitialState
   // Icustomer
 } from '../../models';
+import { addCustomer } from '../../actions/userQueueActions';
+import { toggleEditCustomerModal } from '../../actions/commonActions';
 import CommonModal from '../common/CommonModal';
-import { TranslationFunction } from 'react-i18next';
 import EditCustomerForm from '../common/EditCustomerForm';
+
 // import { map } from 'lodash';
 
 interface Iprops {
@@ -27,7 +27,7 @@ interface Iprops {
 interface IdispatchProps {
   showEditCustomerModal: boolean;
   loading: boolean;
-  toggleEditCustomerModal: () => void;
+  toggleEditCustomerModal: typeof toggleEditCustomerModal;
   addCustomer: typeof addCustomer;
 }
 

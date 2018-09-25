@@ -8,7 +8,7 @@
 * 
 */
 
-import * as React from 'react';
+import { Col, Button, FormGroup, ControlLabel } from 'react-bootstrap';
 import {
   Validators,
   FormGenerator,
@@ -16,16 +16,23 @@ import {
   FieldConfig,
   Observable
 } from 'react-reactive-form';
-import { Col, Button, FormGroup, ControlLabel } from 'react-bootstrap';
 import { forEach, find, filter, map, differenceBy } from 'lodash';
-import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
-// import Select, { components } from 'react-select';
+import * as React from 'react';
 
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
 import { IqueueObject } from '../../models';
+import {
+  toggleEditQueueUserModal,
+  updateQueueUser
+} from '../../actions/userQueueActions';
+import {
+  toggleEditCustomerModal,
+  toggleEditFacilityModal
+} from '../../actions/commonActions';
 import EditFacilityModal from '../common/EditFacilityModal';
+import constants from '../../constants/constants';
 
 interface IstateChanges extends Observable<any> {
   next: () => void;
@@ -49,8 +56,8 @@ const buildFieldConfig = (
   customerOptions: any[],
   facilityOptions: any[],
   getFacilitiesByCustomer: (value: string) => Promise<void>,
-  toggleEditCustomerModal: () => void,
-  toggleEditFacilityModal: () => void
+  toggleEditCustomerModalCB: typeof toggleEditCustomerModal,
+  toggleEditFacilityModalCB: typeof toggleEditFacilityModal
 ) => {
   // Field config to configure form
   const fieldConfigControls = {
@@ -67,7 +74,7 @@ const buildFieldConfig = (
         colWidth: 12,
         placeholder: 'userQueue:customerSearchPlaceholder',
         buttonName: 'userQueue:addCustomerButton',
-        buttonAction: toggleEditCustomerModal
+        buttonAction: toggleEditCustomerModalCB
       },
       options: {
         validators: [
@@ -89,7 +96,7 @@ const buildFieldConfig = (
         colWidth: 12,
         placeholder: 'userQueue:facilitySearchPlaceholder',
         buttonName: 'userQueue:facilityButton',
-        buttonAction: toggleEditFacilityModal,
+        buttonAction: toggleEditFacilityModalCB,
         isMulti: true
       },
       options: {
@@ -109,8 +116,6 @@ const buildFieldConfig = (
 };
 
 interface Iprops extends React.Props<UserQueueForm> {
-  handleSubmit: any;
-  handleCancel: any;
   selectedQueueObject: IqueueObject;
   loading: boolean;
   colorButton: string;
@@ -119,8 +124,10 @@ interface Iprops extends React.Props<UserQueueForm> {
   customerOptions: any[];
   getFacilitiesByCustomer: (value: string) => Promise<void>;
   facilityOptions: any[];
-  toggleEditCustomerModal: () => void;
-  toggleEditFacilityModal: () => void;
+  toggleEditCustomerModal: typeof toggleEditCustomerModal;
+  toggleEditFacilityModal: typeof toggleEditFacilityModal;
+  toggleEditQueueUserModal: typeof toggleEditQueueUserModal;
+  updateQueueUser: typeof updateQueueUser;
   approveUser: (userQueueID: string) => void;
 }
 
@@ -258,7 +265,7 @@ class UserQueueForm extends React.Component<Iprops, {}> {
 
   handleSubmit = (
     e: React.MouseEvent<HTMLFormElement>,
-    shouldApprove?: boolean
+    shouldApprove: boolean = false
   ) => {
     e.preventDefault();
     if (this.userForm.status === 'INVALID') {
@@ -273,7 +280,7 @@ class UserQueueForm extends React.Component<Iprops, {}> {
         return { id: option.value };
       }
     );
-    this.props.handleSubmit(
+    this.props.updateQueueUser(
       {
         id: this.props.selectedQueueObject.user.id,
         ...this.userForm.value,
@@ -314,7 +321,7 @@ class UserQueueForm extends React.Component<Iprops, {}> {
                 bsStyle="link"
                 type="button"
                 className="pull-left left-side"
-                onClick={this.props.handleCancel}
+                onClick={this.props.toggleEditQueueUserModal}
               >
                 {t('cancel')}
               </Button>

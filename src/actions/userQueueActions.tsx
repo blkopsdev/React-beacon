@@ -230,9 +230,3 @@ export function getFacilitiesByCustomer(customerID: string) {
 export const toggleEditQueueUserModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_QUEUE_USER
 });
-export const toggleEditCustomerModal = () => ({
-  type: types.TOGGLE_MODAL_EDIT_CUSTOMER
-});
-export const toggleEditFacilityModal = () => ({
-  type: types.TOGGLE_MODAL_EDIT_FACILITY
-});

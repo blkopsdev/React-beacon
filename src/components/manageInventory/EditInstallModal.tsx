@@ -1,5 +1,5 @@
 /*
-* Manage Inventory Modal
+* Manage Install Modal - Container
 */
 
 import * as React from 'react';
@@ -48,13 +48,10 @@ class ManageInstallModal extends React.Component<Iprops & IdispatchProps, {}> {
   }
 
   render() {
-    let submitFunc;
     let modalTitle;
     if (this.props.selectedItem.id) {
-      submitFunc = this.props.updateInstall;
       modalTitle = this.props.t('manageInventory:editInstallModalTitle');
     } else {
-      submitFunc = this.props.saveInstall;
       modalTitle = this.props.t('manageInventory:saveInstallModalTitle');
     }
     return (
@@ -62,20 +59,7 @@ class ManageInstallModal extends React.Component<Iprops & IdispatchProps, {}> {
         modalVisible={this.props.showModal}
         className="install-edit"
         onHide={this.props.toggleEditInstallModal}
-        body={
-          <EditInstallForm
-            handleSubmit={submitFunc}
-            handleCancel={this.props.toggleEditInstallModal}
-            selectedItem={this.props.selectedItem}
-            loading={this.props.loading}
-            colorButton={this.props.colorButton}
-            facilityOptions={this.props.facilityOptions}
-            productInfo={this.props.productInfo}
-            selectedFacility={this.props.selectedFacility}
-            selectedProduct={this.props.selectedProduct}
-            deleteInstall={this.props.deleteInstall}
-          />
-        }
+        body={<EditInstallForm {...this.props} />}
         title={modalTitle}
         container={document.getElementById('two-pane-layout')}
       />

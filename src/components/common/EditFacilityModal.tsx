@@ -4,15 +4,14 @@
 * this modal is rendered inside the UserQueueForm component because we pass the selectedCustomer
 */
 
-import * as React from 'react';
-import { connect } from 'react-redux';
-import {
-  toggleEditFacilityModal,
-  addFacility
-} from '../../actions/userQueueActions';
-import { IinitialState } from '../../models';
-import CommonModal from '../common/CommonModal';
 import { TranslationFunction } from 'react-i18next';
+import { connect } from 'react-redux';
+import * as React from 'react';
+
+import { IinitialState } from '../../models';
+import { addFacility } from '../../actions/userQueueActions';
+import { toggleEditFacilityModal } from '../../actions/commonActions';
+import CommonModal from '../common/CommonModal';
 import EditFacilityForm from '../common/EditFacilityForm';
 
 interface Iprops {
@@ -24,7 +23,7 @@ interface Iprops {
 interface IdispatchProps {
   showEditFacilityModal: boolean;
   loading: boolean;
-  toggleEditFacilityModal: () => void;
+  toggleEditFacilityModal: typeof toggleEditFacilityModal;
   addFacility: typeof addFacility;
 }
 

@@ -39,7 +39,7 @@ export function getUserManage(
   };
 }
 
-export function updateUser(user: Iuser): ThunkResult<void> {
+export function updateTeamUser(user: Iuser): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     return axios
@@ -94,6 +94,6 @@ export function saveTeamUser(user: Iuser): ThunkResult<void> {
   };
 }
 
-export const toggleEditUserModal = () => ({
+export const toggleEditTeamUserModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_TEAM
 });

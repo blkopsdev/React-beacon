@@ -1,13 +1,13 @@
 /*
-* The Manage Team user modal
+* The Manage Team user modal - Container
 */
 
 import * as React from 'react';
 import { connect } from 'react-redux';
 import {
-  updateUser,
+  updateTeamUser,
   saveTeamUser,
-  toggleEditUserModal
+  toggleEditTeamUserModal
 } from '../../actions/teamManageActions';
 import { IinitialState, Iuser } from '../../models';
 // import constants from '../../constants/constants';
@@ -28,10 +28,10 @@ interface IdispatchProps {
   loading: boolean;
   customerOptions: any[];
   facilityOptions: any[];
-  updateUser: typeof updateUser;
+  updateTeamUser: typeof updateTeamUser;
   saveTeamUser: typeof saveTeamUser;
-  toggleEditUserModal: () => void;
-  getFacilitiesByCustomer: () => Promise<void>;
+  toggleEditTeamUserModal: typeof toggleEditTeamUserModal;
+  getFacilitiesByCustomer: typeof getFacilitiesByCustomer;
   user: Iuser;
 }
 
@@ -41,33 +41,18 @@ class EditManageTeamModal extends React.Component<Iprops & IdispatchProps, {}> {
   }
 
   render() {
-    let submitFunc;
     let modalTitle;
     if (this.props.selectedUser) {
-      submitFunc = this.props.updateUser;
       modalTitle = this.props.t('teamManage:editTeamModalTitle');
     } else {
-      submitFunc = this.props.saveTeamUser;
       modalTitle = this.props.t('teamManage:saveTeamModalTitle');
     }
     return (
       <CommonModal
         modalVisible={this.props.showEditUserModal}
         className="user-edit"
-        onHide={this.props.toggleEditUserModal}
-        body={
-          <UserManageForm
-            handleSubmit={submitFunc}
-            handleCancel={this.props.toggleEditUserModal}
-            selectedUser={this.props.selectedUser}
-            loading={this.props.loading}
-            colorButton={this.props.colorButton}
-            customerOptions={this.props.customerOptions}
-            facilityOptions={this.props.facilityOptions}
-            getFacilitiesByCustomer={this.props.getFacilitiesByCustomer}
-            user={this.props.user}
-          />
-        }
+        onHide={this.props.toggleEditTeamUserModal}
+        body={<UserManageForm {...this.props} />}
         title={modalTitle}
         container={document.getElementById('two-pane-layout')}
       />
@@ -89,9 +74,9 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
 export default connect(
   mapStateToProps,
   {
-    updateUser,
+    updateTeamUser,
     saveTeamUser,
-    toggleEditUserModal,
+    toggleEditTeamUserModal,
     getFacilitiesByCustomer
   }
 )(EditManageTeamModal);

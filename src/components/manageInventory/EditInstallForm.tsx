@@ -3,22 +3,26 @@
 * Edit Install items
 */
 
-import * as React from 'react';
+import { Col, Button } from 'react-bootstrap';
 import {
   Validators,
   FormGenerator,
   AbstractControl,
   FieldConfig
 } from 'react-reactive-form';
-import { Col, Button } from 'react-bootstrap';
 import { forEach } from 'lodash';
-
-import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
+import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
 import { Ioption, IproductInfo, IinstallBase, Iproduct } from '../../models';
+import {
+  saveInstall,
+  toggleEditInstallModal,
+  updateInstall
+} from '../../actions/manageInventoryActions';
+import constants from '../../constants/constants';
 
 const buildFieldConfig = (productInfo: IproductInfo) => {
   const fieldConfigControls = {
@@ -53,8 +57,9 @@ const buildFieldConfig = (productInfo: IproductInfo) => {
 };
 
 interface Iprops {
-  handleSubmit: any;
-  handleCancel: any;
+  updateInstall: typeof updateInstall;
+  saveInstall: typeof saveInstall;
+  toggleEditInstallModal: typeof toggleEditInstallModal;
   selectedItem: IinstallBase;
   loading: boolean;
   colorButton: string;
@@ -89,7 +94,7 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
         'Missing product, please try again or contact support.',
         constants.toastrError
       );
-      this.props.handleCancel();
+      this.props.toggleEditInstallModal();
     }
     if (
       !this.props.selectedItem ||
@@ -124,8 +129,10 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
 
     if (this.props.selectedItem) {
       newItem = { ...newItem, id: this.props.selectedItem.id };
+      this.props.updateInstall(newItem, this.props.selectedProduct.id);
+    } else {
+      this.props.saveInstall(newItem, this.props.selectedProduct.id);
     }
-    this.props.handleSubmit(newItem, this.props.selectedProduct.id);
   };
   handleDelete = () => {
     const toastrConfirmOptions = {
@@ -166,7 +173,7 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
                 bsStyle="link"
                 type="button"
                 className="pull-left left-side"
-                onClick={this.props.handleCancel}
+                onClick={this.props.toggleEditInstallModal}
               >
                 {t('common:cancel')}
               </Button>

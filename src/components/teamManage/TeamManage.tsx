@@ -6,7 +6,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import {
   getUserManage,
-  toggleEditUserModal
+  toggleEditTeamUserModal
 } from '../../actions/teamManageActions';
 import {
   IinitialState,
@@ -42,9 +42,8 @@ interface Iprops extends RouteComponentProps<any> {
 
 interface IdispatchProps {
   // Add your dispatcher properties here
-  toggleEditUserModal: () => void;
-  toggleSecurityFunctionsModal: () => void;
-  getUserManage: (value: number, search: string, customerID: string) => void;
+  toggleEditTeamUserModal: typeof toggleEditTeamUserModal;
+  getUserManage: typeof getUserManage;
   customers: Icustomer[];
   closeAllModals: typeof closeAllModals;
 }
@@ -142,7 +141,7 @@ class TeamManage extends React.Component<Iprops & IdispatchProps, Istate> {
             this.setState({
               selectedRow: rowInfo.index
             });
-            this.props.toggleEditUserModal();
+            this.props.toggleEditTeamUserModal();
           }
         },
         style: {
@@ -195,7 +194,7 @@ class TeamManage extends React.Component<Iprops & IdispatchProps, Istate> {
         <Button
           className="table-add-button"
           bsStyle={constants.colors[`${this.state.currentTile.color}Button`]}
-          onClick={this.props.toggleEditUserModal}
+          onClick={this.props.toggleEditTeamUserModal}
         >
           {t('teamManage:newTeamMember')}
         </Button>
@@ -245,7 +244,7 @@ export default translate('teamManage')(
     mapStateToProps,
     {
       getUserManage,
-      toggleEditUserModal,
+      toggleEditTeamUserModal,
       closeAllModals
     }
   )(TeamManage)

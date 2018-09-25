@@ -4,24 +4,24 @@
 * spinner is from : http://tobiasahlin.com/spinkit/
 */
 
-import * as React from 'react';
+import { TranslationFunction } from 'react-i18next';
 import { connect } from 'react-redux';
+import * as React from 'react';
+
+import { FormUtil } from '../common/FormUtil';
+import { IinitialState, Iuser } from '../../models';
+import { getFacilitiesByCustomer } from '../../actions/userQueueActions';
+import {
+  toggleEditCustomerModal,
+  toggleEditFacilityModal
+} from '../../actions/commonActions';
 import {
   updateUser,
   toggleEditUserModal,
   toggleSecurityFunctionsModal
 } from '../../actions/userManageActions';
-import {
-  getFacilitiesByCustomer,
-  toggleEditCustomerModal,
-  toggleEditFacilityModal
-} from '../../actions/userQueueActions';
-import { IinitialState, Iuser } from '../../models';
-// import constants from '../../constants/constants';
 import CommonModal from '../common/CommonModal';
 import UserManageForm from './UserManageForm';
-import { TranslationFunction } from 'react-i18next';
-import { FormUtil } from '../common/FormUtil';
 
 interface Iprops {
   selectedUser: Iuser;
@@ -35,11 +35,11 @@ interface IdispatchProps {
   customerOptions: any[];
   facilityOptions: any[];
   updateUser: typeof updateUser;
-  toggleEditUserModal: () => void;
-  getFacilitiesByCustomer: () => Promise<void>;
-  toggleEditCustomerModal: () => void;
-  toggleEditFacilityModal: () => void;
-  toggleSecurityFunctionsModal: () => void;
+  toggleEditUserModal: typeof toggleEditUserModal;
+  getFacilitiesByCustomer: (value: string) => Promise<void>;
+  toggleEditCustomerModal: typeof toggleEditCustomerModal;
+  toggleEditFacilityModal: typeof toggleEditFacilityModal;
+  toggleSecurityFunctionsModal: typeof toggleSecurityFunctionsModal;
 }
 
 class EditManageUserModal extends React.Component<Iprops & IdispatchProps, {}> {
@@ -53,23 +53,7 @@ class EditManageUserModal extends React.Component<Iprops & IdispatchProps, {}> {
         modalVisible={this.props.showEditUserModal}
         className="user-edit"
         onHide={this.props.toggleEditUserModal}
-        body={
-          <UserManageForm
-            handleSubmit={this.props.updateUser}
-            handleCancel={this.props.toggleEditUserModal}
-            selectedUser={this.props.selectedUser}
-            loading={this.props.loading}
-            colorButton={this.props.colorButton}
-            customerOptions={this.props.customerOptions}
-            facilityOptions={this.props.facilityOptions}
-            getFacilitiesByCustomer={this.props.getFacilitiesByCustomer}
-            toggleEditCustomerModal={this.props.toggleEditCustomerModal}
-            toggleEditFacilityModal={this.props.toggleEditFacilityModal}
-            toggleSecurityFunctionsModal={
-              this.props.toggleSecurityFunctionsModal
-            }
-          />
-        }
+        body={<UserManageForm {...this.props} />}
         title={this.props.t('editUserModalTitle')}
         container={document.getElementById('two-pane-layout')}
       />

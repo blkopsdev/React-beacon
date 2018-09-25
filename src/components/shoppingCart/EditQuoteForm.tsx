@@ -23,6 +23,8 @@ import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
 import { Ioption, IproductInfo, IshoppingCart, Iproduct } from '../../models';
+import { checkout } from '../../actions/shoppingCartActions';
+import { toggleEditQuoteModal } from '../../actions/manageInventoryActions';
 import constants from '../../constants/constants';
 
 const NumberInputWithButton = ({
@@ -95,8 +97,8 @@ const buildFieldConfig = (
 };
 
 interface Iprops {
-  handleSubmit: any;
-  handleCancel: any;
+  checkout: typeof checkout;
+  toggleEditQuoteModal: typeof toggleEditQuoteModal;
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;
@@ -104,7 +106,7 @@ interface Iprops {
   productInfo: IproductInfo;
   facilityOptions: Ioption[];
   cart: IshoppingCart;
-  selectedFacilityID: string;
+  selectedFacility: Ioption;
   updateQuantityCart: any;
   deleteFromCart: any;
 }
@@ -148,9 +150,11 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
     }
     console.log(this.userForm.value);
 
-    this.props.handleSubmit({
+    this.props.checkout({
       message: this.userForm.value.message,
-      facilityID: this.props.selectedFacilityID
+      facilityID: this.props.selectedFacility.value.length
+        ? this.props.selectedFacility.value
+        : this.props.facilityOptions[0].value
     });
   };
   setFormConfig = () => {
@@ -215,7 +219,7 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
                 bsStyle="link"
                 type="button"
                 className="pull-left left-side"
-                onClick={this.props.handleCancel}
+                onClick={this.props.toggleEditQuoteModal}
               >
                 {t('common:cancel')}
               </Button>

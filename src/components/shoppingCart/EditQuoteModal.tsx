@@ -1,5 +1,5 @@
 /*
-* Edit Quote Modal
+* Edit Quote Modal - Container
 */
 
 import * as React from 'react';
@@ -55,24 +55,7 @@ class EditQuoteModal extends React.Component<Iprops & IdispatchProps, {}> {
         modalVisible={this.props.showModal}
         className="user-edit"
         onHide={this.props.toggleEditQuoteModal}
-        body={
-          <EditQuoteForm
-            handleSubmit={this.props.checkout}
-            handleCancel={this.props.toggleEditQuoteModal}
-            loading={this.props.loading}
-            colorButton={this.props.colorButton}
-            facilityOptions={this.props.facilityOptions}
-            productInfo={this.props.productInfo}
-            cart={this.props.cart}
-            selectedFacilityID={
-              this.props.selectedFacility.value.length
-                ? this.props.selectedFacility.value
-                : this.props.facilityOptions[0].value
-            }
-            updateQuantityCart={this.props.updateQuantityCart}
-            deleteFromCart={this.props.deleteFromCart}
-          />
-        }
+        body={<EditQuoteForm {...this.props} />}
         title={this.props.t('manageInventory:requestForQuote')}
         container={document.getElementById('two-pane-layout')}
       />

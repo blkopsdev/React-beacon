@@ -3,7 +3,7 @@
 * Edit team members
 */
 
-import * as React from 'react';
+import { Col, Button } from 'react-bootstrap';
 import {
   Validators,
   FormGenerator,
@@ -11,14 +11,20 @@ import {
   FieldConfig,
   Observable
 } from 'react-reactive-form';
-import { Col, Button } from 'react-bootstrap';
 import { forEach, differenceBy, filter, find, map } from 'lodash';
-import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
+import * as React from 'react';
 
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
 import { Iuser } from '../../models';
+import { getFacilitiesByCustomer } from '../../actions/userQueueActions';
+import {
+  saveTeamUser,
+  toggleEditTeamUserModal,
+  updateTeamUser
+} from '../../actions/teamManageActions';
+import constants from '../../constants/constants';
 
 const buildFieldConfig = (facilityOptions: any[]) => {
   const fieldConfigControls = {
@@ -57,15 +63,16 @@ interface AbstractControlEdited extends AbstractControl {
 }
 
 interface Iprops {
-  handleSubmit: any;
-  handleCancel: any;
+  updateTeamUser: typeof updateTeamUser;
+  saveTeamUser: typeof saveTeamUser;
+  toggleEditTeamUserModal: typeof toggleEditTeamUserModal;
   selectedUser?: Iuser;
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;
   i18n: I18n;
   customerOptions: any[];
-  getFacilitiesByCustomer: (value: string) => Promise<void>;
+  getFacilitiesByCustomer: typeof getFacilitiesByCustomer;
   facilityOptions: any[];
   user: Iuser;
 }
@@ -171,19 +178,15 @@ class TeamManageForm extends React.Component<Iprops, {}> {
     );
 
     if (this.props.selectedUser) {
-      this.props.handleSubmit(
-        {
-          id: this.props.selectedUser.id,
-          ...this.userForm.value,
-          facilities: facilitiesArray,
-          customerID: this.props.user.customerID,
-          email: this.props.selectedUser.email // have to add back the email because disabling the input removes it
-        },
-        shouldApprove,
-        this.props.selectedUser.id
-      );
+      this.props.updateTeamUser({
+        id: this.props.selectedUser.id,
+        ...this.userForm.value,
+        facilities: facilitiesArray,
+        customerID: this.props.user.customerID,
+        email: this.props.selectedUser.email // have to add back the email because disabling the input removes it
+      });
     } else {
-      this.props.handleSubmit({
+      this.props.saveTeamUser({
         ...this.userForm.value,
         facilities: facilitiesArray
       });
@@ -214,7 +217,7 @@ class TeamManageForm extends React.Component<Iprops, {}> {
                 bsStyle="link"
                 type="button"
                 className="pull-left left-side"
-                onClick={this.props.handleCancel}
+                onClick={this.props.toggleEditTeamUserModal}
               >
                 {t('cancel')}
               </Button>

@@ -68,12 +68,6 @@ export function updateUser(user: Iuser): ThunkResult<void> {
 export const toggleEditUserModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_USER
 });
-export const toggleEditCustomerModal = () => ({
-  type: types.TOGGLE_MODAL_EDIT_CUSTOMER
-});
-export const toggleEditFacilityModal = () => ({
-  type: types.TOGGLE_MODAL_EDIT_FACILITY
-});
 export const toggleSecurityFunctionsModal = () => ({
   type: types.TOGGLE_MODAL_SECURITY_FUNCTIONS
 });

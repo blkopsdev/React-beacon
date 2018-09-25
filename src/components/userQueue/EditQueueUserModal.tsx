@@ -4,27 +4,30 @@
 * spinner is from : http://tobiasahlin.com/spinkit/
 */
 
-import * as React from 'react';
+import { TranslationFunction } from 'react-i18next';
 import { connect } from 'react-redux';
+import { map } from 'lodash';
+import * as React from 'react';
+
+import {
+  Icustomer,
+  Ifacility,
+  IinitialState,
+  Ioption,
+  IqueueObject
+} from '../../models';
+import {
+  toggleEditCustomerModal,
+  toggleEditFacilityModal
+} from '../../actions/commonActions';
 import {
   updateQueueUser,
   getFacilitiesByCustomer,
   toggleEditQueueUserModal,
-  toggleEditCustomerModal,
-  toggleEditFacilityModal,
   approveUser
 } from '../../actions/userQueueActions';
-import {
-  IinitialState,
-  Icustomer,
-  Ifacility,
-  IqueueObject
-} from '../../models';
-// import constants from '../../constants/constants';
 import CommonModal from '../common/CommonModal';
 import UserQueueForm from './UserQueueForm';
-import { TranslationFunction } from 'react-i18next';
-import { map } from 'lodash';
 
 const getCustomerOptions = (customers: Icustomer[]) => {
   return map(customers, (cust: Icustomer) => {
@@ -47,12 +50,12 @@ interface Iprops {
 interface IdispatchProps {
   showEditQueueUserModal: boolean;
   loading: boolean;
-  customerOptions: any[];
-  facilityOptions: any[];
+  customerOptions: Ioption[];
+  facilityOptions: Ioption[];
   updateQueueUser: typeof updateQueueUser;
-  toggleEditQueueUserModal: () => void;
+  toggleEditQueueUserModal: typeof toggleEditQueueUserModal;
   getFacilitiesByCustomer: () => Promise<void>;
-  toggleEditCustomerModal: () => void;
+  toggleEditCustomerModal: typeof toggleEditCustomerModal;
   toggleEditFacilityModal: typeof toggleEditFacilityModal;
   approveUser: typeof approveUser;
 }
@@ -68,21 +71,7 @@ class EditQueueUserModal extends React.Component<Iprops & IdispatchProps, {}> {
         modalVisible={this.props.showEditQueueUserModal}
         className="user-edit"
         onHide={this.props.toggleEditQueueUserModal}
-        body={
-          <UserQueueForm
-            handleSubmit={this.props.updateQueueUser}
-            handleCancel={this.props.toggleEditQueueUserModal}
-            selectedQueueObject={this.props.selectedQueueObject}
-            loading={this.props.loading}
-            colorButton={this.props.colorButton}
-            customerOptions={this.props.customerOptions}
-            facilityOptions={this.props.facilityOptions}
-            getFacilitiesByCustomer={this.props.getFacilitiesByCustomer}
-            toggleEditCustomerModal={this.props.toggleEditCustomerModal}
-            toggleEditFacilityModal={this.props.toggleEditFacilityModal}
-            approveUser={this.props.approveUser}
-          />
-        }
+        body={<UserQueueForm {...this.props} />}
         title={this.props.t('newUserModalTitle')}
         container={document.getElementById('two-pane-layout')}
       />

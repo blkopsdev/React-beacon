@@ -15,7 +15,7 @@ import { Col, Button } from 'react-bootstrap';
 import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
-import { Iuser } from '../../models';
+import { Iuser, Icustomer } from '../../models';
 import { forEach, find, differenceBy, filter, map } from 'lodash';
 
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
@@ -65,7 +65,7 @@ interface Iprops extends React.Props<UserProfileForm> {
   colorButton: string;
   t: TranslationFunction;
   i18n: I18n;
-  customers: any[];
+  customers: Icustomer[];
   facilities: any;
   user: Iuser;
   facilityOptions: any[];
@@ -99,9 +99,11 @@ class UserProfileForm extends React.Component<Iprops, {}> {
     emailControl.disable();
 
     // get the customer name
-    const customer: any = find(this.props.customers, {
-      id: this.props.user.customerID
-    }) || { name: '' };
+    const customer = (find(
+      this.props.customers,
+      (cust: Icustomer) => cust.id === this.props.user.customerID
+    ) as Icustomer) || { name: '' };
+
     if (customer && customer.name.length) {
       this.userForm.patchValue({ customer: customer.name });
     }

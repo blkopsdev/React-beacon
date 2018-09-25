@@ -22,15 +22,15 @@ import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
-import { IqueueObject } from '../../models';
-import {
-  toggleEditQueueUserModal,
-  updateQueueUser
-} from '../../actions/userQueueActions';
+import { Ioption, IqueueObject } from '../../models';
 import {
   toggleEditCustomerModal,
   toggleEditFacilityModal
 } from '../../actions/commonActions';
+import {
+  toggleEditQueueUserModal,
+  updateQueueUser
+} from '../../actions/userQueueActions';
 import EditFacilityModal from '../common/EditFacilityModal';
 import constants from '../../constants/constants';
 
@@ -227,7 +227,10 @@ class UserQueueForm extends React.Component<Iprops, {}> {
     const providedAddress = `${tempAddress} ${tempAddress2} ${tempCity} ${tempState} ${tempZip}`;
     this.userForm.patchValue({ providedAddress });
     this.userForm.patchValue({
-      customerID: find(this.props.customerOptions, { value: customerID })
+      customerID: find(
+        this.props.customerOptions,
+        (cust: Ioption) => cust.value === customerID
+      )
     });
     const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
       return find(facilities, { id: fac.value }) ? true : false;

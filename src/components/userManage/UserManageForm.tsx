@@ -17,7 +17,7 @@ import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
-import { Iuser } from '../../models';
+import { Ioption, Iuser } from '../../models';
 import {
   toggleEditCustomerModal,
   toggleEditFacilityModal
@@ -194,7 +194,10 @@ class UserManageForm extends React.Component<Iprops, {}> {
       securityFunctions
     } = this.props.selectedUser;
     this.userForm.patchValue({
-      customerID: find(this.props.customerOptions, { value: customerID })
+      customerID: find(
+        this.props.customerOptions,
+        (cust: Ioption) => cust.value === customerID
+      )
     });
     // if there is a customerID then get facilities
     if (customerID.length) {

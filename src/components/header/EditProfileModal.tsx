@@ -4,19 +4,19 @@
 * spinner is from : http://tobiasahlin.com/spinkit/
 */
 
-import * as React from 'react';
+import { TranslationFunction } from 'react-i18next';
 import { connect } from 'react-redux';
+import * as React from 'react';
+
+import { FormUtil } from '../common/FormUtil';
+import { IinitialState, Iuser } from '../../models';
 import { getFacilitiesByCustomer } from '../../actions/userQueueActions';
 import {
   toggleEditProfileModal,
   updateUserProfile
 } from '../../actions/userActions';
-import { IinitialState, Iuser } from '../../models';
-// import constants from '../../constants/constants';
 import CommonModal from '../common/CommonModal';
 import UserProfileForm from './UserProfileForm';
-import { TranslationFunction } from 'react-i18next';
-import { FormUtil } from '../common/FormUtil';
 
 interface Iprops {
   colorButton: any;

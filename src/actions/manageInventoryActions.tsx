@@ -4,7 +4,7 @@ import API from '../constants/apiEndpoints';
 import { beginAjaxCall } from './ajaxStatusActions';
 import { toastr } from 'react-redux-toastr';
 import constants from '../constants/constants';
-import { Iproduct, IinitialState, Ioption, IinstallBase } from '../models';
+import { Iproduct, IinitialState, IinstallBase } from '../models';
 import { ThunkAction } from 'redux-thunk';
 // import {AxiosResponse} from 'axios';
 
@@ -33,15 +33,21 @@ export function getProductInfo() {
   };
 }
 
-export function getInventory(
-  page: number,
-  search: string,
-  facilityID: string,
-  manufacturerID: string,
-  productGroupID: string
-) {
-  return (dispatch: any, getState: any) => {
+export function getInventory(): ThunkResult<void> {
+  return (dispatch, getState) => {
     dispatch(beginAjaxCall());
+    const {
+      page,
+      search,
+      facility,
+      manufacturer,
+      productGroup
+    } = getState().manageInventory.tableFilters;
+    const facilityID = facility
+      ? facility.value
+      : getState().user.facilities[0].id;
+    const manufacturerID = manufacturer ? manufacturer.value : '';
+    const productGroupID = productGroup ? productGroup.value : '';
     return axios
       .get(API.GET.inventory.getinventory, {
         params: { page, search, facilityID, manufacturerID, productGroupID }
@@ -228,9 +234,4 @@ export const toggleEditInstallModal = () => ({
 
 export const toggleEditQuoteModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_QUOTE
-});
-
-export const setSelectedFacility = (facility: Ioption) => ({
-  type: types.SET_SELECTED_FACILITY,
-  facility
 });

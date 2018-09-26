@@ -2,19 +2,24 @@
 * Manage Inventory Modal
 */
 
-import * as React from 'react';
+import { TranslationFunction } from 'react-i18next';
 import { connect } from 'react-redux';
+import * as React from 'react';
+
+import { FormUtil } from '../common/FormUtil';
+import {
+  IinitialState,
+  Iproduct,
+  IproductInfo,
+  ItableFilters
+} from '../../models';
 import {
   updateProduct,
   saveProduct,
   toggleEditProductModal
 } from '../../actions/manageInventoryActions';
-import { IinitialState, Iproduct, IproductInfo, Ioption } from '../../models';
-// import constants from '../../constants/constants';
 import CommonModal from '../common/CommonModal';
 import EditProductForm from './EditProductForm';
-import { TranslationFunction } from 'react-i18next';
-import { FormUtil } from '../common/FormUtil';
 
 interface Iprops {
   selectedItem: Iproduct;
@@ -30,7 +35,7 @@ interface IdispatchProps {
   saveProduct: typeof saveProduct;
   toggleEditProductModal: typeof toggleEditProductModal;
   productInfo: IproductInfo;
-  selectedFacility: Ioption;
+  tableFilters: ItableFilters;
 }
 
 class ManageInventoryModal extends React.Component<
@@ -68,7 +73,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     facilityOptions: FormUtil.convertToOptions(state.user.facilities),
     showModal: state.manageInventory.showEditProductModal,
     productInfo: state.manageInventory.productInfo,
-    selectedFacility: state.manageInventory.selectedFacility
+    tableFilters: state.manageInventory.tableFilters
   };
 };
 

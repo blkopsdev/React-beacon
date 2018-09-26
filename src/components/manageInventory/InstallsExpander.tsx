@@ -120,28 +120,29 @@ export const InstallationsExpander = (props: ExpanderProps) => {
   // }
 
   // if there are no installs display a blank one so that the buttons display
-  let installs = props.original.installs;
-  if (installs.length === 0) {
-    installs = [{ serialNumber: '', nickname: '', rfid: '' }];
-  }
-  if (props.original && props.original.installs) {
-    return (
-      <div>
-        <ReactTable
-          className={'attempts-expander'}
-          data={installs}
-          columns={expanderColumns}
-          defaultPageSize={10}
-          rowsText="installs"
-          key={props.original.installs.length}
-          getTdProps={expanderHandleTdProps}
-          noDataText="No installations found."
-          resizable={false}
-          getTrProps={props.getExpanderTrProps}
-        />
-      </div>
-    );
-  } else {
-    return null;
-  }
+  // let installs = props.original.installs;
+  // if (installs.length === 0) {
+  //   installs = [{ serialNumber: '', nickname: '', rfid: '' }];
+  // }
+  // if (props.original && props.original.installs) {
+  return (
+    <div>
+      <ReactTable
+        className={'attempts-expander'}
+        data={props.original.installs}
+        sortable={false}
+        columns={expanderColumns}
+        defaultPageSize={props.original.installs.length || 1}
+        rowsText="installs"
+        key={props.original.installs.length}
+        getTdProps={expanderHandleTdProps}
+        noDataText="No installations found."
+        resizable={false}
+        getTrProps={props.getExpanderTrProps}
+      />
+    </div>
+  );
+  // } else {
+  // return null;
+  // }
 };

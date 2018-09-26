@@ -1,4 +1,6 @@
-import * as types from '../actions/actionTypes';
+import { pickBy, map, filter, keyBy, find } from 'lodash';
+
+import { FormUtil } from '../components/common/FormUtil';
 import {
   Iproduct,
   ImanageInventory,
@@ -9,14 +11,15 @@ import {
   IproductGroup,
   Isubcategory,
   IsystemSize,
-  Ioption,
   IinstallBase
 } from '../models';
-import initialState, { initialOption } from './initialState';
-import { pickBy, map, filter, keyBy, find } from 'lodash';
-import { FormUtil } from '../components/common/FormUtil';
+import {
+  createTableFiltersWithName,
+  modalToggleWithName
+} from './commonReducers';
 import cartReducer, { getAddedIDs, getQuantity } from './cartReducer';
-import { modalToggleWithName } from './userQueueModalsReducer';
+import initialState from './initialState';
+import * as types from '../actions/actionTypes';
 
 function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
   switch (action.type) {
@@ -149,19 +152,6 @@ function totalPagesReducer(state: number = 1, action: any): number {
   }
 }
 
-function selectedReducer(state: Ioption = initialOption, action: any): Ioption {
-  switch (action.type) {
-    case types.SET_SELECTED_FACILITY:
-      return action.facility;
-    case types.USER_LOGOUT_SUCCESS:
-      return initialOption;
-    default:
-      return state;
-  }
-}
-
-// function quoteRequestReducer( state: )
-
 export default function ManageInventory(
   state: ImanageInventory = initialState.manageInventory,
   action: any
@@ -170,7 +160,6 @@ export default function ManageInventory(
     data: dataReducer(state.data, action),
     page: pageReducer(state.page, action),
     totalPages: totalPagesReducer(state.totalPages, action),
-    selectedFacility: selectedReducer(state.selectedFacility, action),
     cart: cartReducer(state.cart, action),
     productInfo: productInfo(state.productInfo, action),
     showEditQuoteModal: modalToggleWithName(
@@ -187,6 +176,11 @@ export default function ManageInventory(
       state.showEditInstallModal,
       action,
       'EDIT_INSTALL'
+    ),
+    tableFilters: createTableFiltersWithName(
+      state.tableFilters,
+      action,
+      'MANAGE_INVENTORY'
     )
     // quoteRequestItems: quoteRequestReducer(state.quoteRequestItems, action)
   };

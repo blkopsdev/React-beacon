@@ -17,7 +17,13 @@ import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
-import { Iproduct, Ioption, IproductInfo, Isubcategory } from '../../models';
+import {
+  Ioption,
+  Iproduct,
+  IproductInfo,
+  Isubcategory,
+  ItableFilters
+} from '../../models';
 import {
   saveProduct,
   toggleEditProductModal,
@@ -197,7 +203,7 @@ interface Iprops {
   i18n: I18n;
   productInfo: IproductInfo;
   facilityOptions: Ioption[];
-  selectedFacility: Ioption;
+  tableFilters: ItableFilters;
   saveProduct: typeof saveProduct;
   updateProduct: typeof updateProduct;
 }
@@ -285,38 +291,48 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
       return;
     }
     console.log(this.userForm.value);
-    const {
-      productGroupID,
-      brandID,
-      manufacturerID,
-      subcategoryID,
-      gasTypeID,
-      powerID,
-      systemSizeID,
-      standardID
-    } = this.userForm.value;
 
-    let newItem = {
-      ...this.userForm.value,
-      productGroupID: productGroupID.value,
-      brandID: brandID.value,
-      manufacturerID: manufacturerID.value,
-      subcategoryID: subcategoryID.value,
-      gasTypeID: gasTypeID.value,
-      powerID: powerID.value,
-      systemSizeID: systemSizeID.value,
-      standardID: standardID.value,
-      facilityID: this.props.selectedFacility.value
-    };
+    if (this.props.tableFilters.facility) {
+      const {
+        productGroupID,
+        brandID,
+        manufacturerID,
+        subcategoryID,
+        gasTypeID,
+        powerID,
+        systemSizeID,
+        standardID
+      } = this.userForm.value;
 
-    if (this.props.selectedItem) {
-      newItem = { ...newItem, id: this.props.selectedItem.id };
-    }
+      let newItem = {
+        ...this.userForm.value,
+        productGroupID: productGroupID.value,
+        brandID: brandID.value,
+        manufacturerID: manufacturerID.value,
+        subcategoryID: subcategoryID.value,
+        gasTypeID: gasTypeID.value,
+        powerID: powerID.value,
+        systemSizeID: systemSizeID.value,
+        standardID: standardID.value,
+        facilityID: this.props.tableFilters.facility.value
+      };
 
-    if (this.props.selectedItem && this.props.selectedItem.id) {
-      this.props.updateProduct(newItem);
+      if (this.props.selectedItem) {
+        newItem = { ...newItem, id: this.props.selectedItem.id };
+      }
+
+      if (this.props.selectedItem && this.props.selectedItem.id) {
+        this.props.updateProduct(newItem);
+      } else {
+        this.props.saveProduct(newItem);
+      }
     } else {
-      this.props.saveProduct(newItem);
+      console.error('missing facility, unable to save install');
+      toastr.error(
+        'Error',
+        'Missing facility, please try again or contact support',
+        constants.toastrError
+      );
     }
   };
   setForm = (form: AbstractControl) => {

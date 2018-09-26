@@ -1,5 +1,14 @@
 import { ThunkAction } from 'redux-thunk';
 
+export interface ItableFilters {
+  search: string;
+  page: number;
+  facility?: Ioption;
+  customer?: Ioption;
+  productGroup?: Ioption;
+  manufacturer?: Ioption;
+}
+
 export interface Iuser {
   password: string;
   username: string;
@@ -149,12 +158,12 @@ export interface ImanageInventory {
   page: number;
   data: Iproduct[];
   totalPages: number;
-  selectedFacility: Ioption;
   cart: IshoppingCart;
   productInfo: IproductInfo;
   showEditProductModal: boolean;
   showEditInstallModal: boolean;
   showEditQuoteModal: boolean;
+  tableFilters: ItableFilters;
 }
 
 export interface Iredirect {

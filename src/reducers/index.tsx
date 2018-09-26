@@ -1,15 +1,16 @@
-import { reducer as toastr } from 'react-redux-toastr';
 import { combineReducers } from 'redux';
+import { reducer as toastr } from 'react-redux-toastr';
+
+import { createShowModalWithNamedType } from './commonReducers';
 import ajaxCallsInProgress from './ajaxStatusReducer';
-import user from './userReducer';
-import redirect from './redirectToReferrerReducer';
-import userQueue from './userQueueReducer';
-import userManage from './userManageReducer';
 import customers from './customersReducer';
 import facilities from './facilitiesReducer';
-import createShowModalWithNamedType from './userQueueModalsReducer';
-import teamManage from './teamManageReducer';
 import manageInventory, { productInfo } from './manageInventoryReducer';
+import redirect from './redirectToReferrerReducer';
+import teamManage from './teamManageReducer';
+import user from './userReducer';
+import userManage from './userManageReducer';
+import userQueue from './userQueueReducer';
 
 const rootReducer = combineReducers({
   ajaxCallsInProgress,

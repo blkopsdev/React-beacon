@@ -2,47 +2,48 @@
 * hopsital Managers manage their team
 * Note: did minimal renaming from the UserManage component
 */
-import * as React from 'react';
+import { Button, Col, Badge } from 'react-bootstrap';
+import { FieldConfig } from 'react-reactive-form';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { find } from 'lodash';
+import { translate, TranslationFunction, I18n } from 'react-i18next';
+import * as React from 'react';
+import ReactTable, { RowInfo, FinalState, RowRenderProps } from 'react-table';
+
+import { FormUtil } from '../common/FormUtil';
+import {
+  Icustomer,
+  IinitialState,
+  IinstallBase,
+  ImanageInventory,
+  Ioption,
+  Iproduct,
+  IproductInfo,
+  ItableFilters,
+  Itile,
+  Iuser
+} from '../../models';
+import { InstallationsExpander } from './InstallsExpander';
+import { TableUtil } from '../common/TableUtil';
+import { addToCart } from '../../actions/shoppingCartActions';
+import { closeAllModals, setTableFilter } from '../../actions/commonActions';
+import { emptyTile } from '../../reducers/initialState';
 import {
   getInventory,
   toggleEditProductModal,
   toggleEditInstallModal,
   toggleEditQuoteModal,
-  getProductInfo,
-  setSelectedFacility
+  getProductInfo
 } from '../../actions/manageInventoryActions';
 import { getTotal } from '../../reducers/manageInventoryReducer';
-import { addToCart } from '../../actions/shoppingCartActions';
-import {
-  IinitialState,
-  Itile,
-  ImanageInventory,
-  Icustomer,
-  Iproduct,
-  Ioption,
-  Iuser,
-  IproductInfo,
-  IinstallBase
-} from '../../models';
-import { FieldConfig } from 'react-reactive-form';
-import { emptyTile } from '../../reducers/initialState';
-import { RouteComponentProps } from 'react-router-dom';
-import ReactTable, { RowInfo, FinalState, RowRenderProps } from 'react-table';
-import { Button, Col, Badge } from 'react-bootstrap';
 import Banner from '../common/Banner';
-import constants from '../../constants/constants';
-import { translate, TranslationFunction, I18n } from 'react-i18next';
-import { FormUtil } from '../common/FormUtil';
-import SearchTableForm from '../common/SearchTableForm';
-import { TableUtil } from '../common/TableUtil';
-import EditProductModal from './EditProductModal';
 import EditInstallModal from './EditInstallModal';
+import EditProductModal from './EditProductModal';
 import EditQuoteModal from '../shoppingCart/EditQuoteModal';
-import { closeAllModals } from '../../actions/commonActions';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { InstallationsExpander } from './InstallsExpander';
-import { find } from 'lodash';
+import SearchTableForm from '../common/SearchTableForm';
+import constants from '../../constants/constants';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -67,10 +68,11 @@ interface IdispatchProps {
   productInfo: IproductInfo;
   facilityOptions: Ioption[];
   user: Iuser;
-  setSelectedFacility: typeof setSelectedFacility;
   addToCart: typeof addToCart;
   cartTotal: number;
   tableData: Iproduct[];
+  setTableFilter: typeof setTableFilter;
+  tableFilters: ItableFilters;
 }
 
 interface Istate {
@@ -102,15 +104,20 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       currentTile: constants.getTileByURL(this.props.location.pathname)
     });
     this.setColumns();
-    // get product info every time the component mounts
     this.props.getProductInfo();
-    // get inventory every time the component mounts
-    const facility = this.props.userManage.selectedFacility.value.length
-      ? this.props.userManage.selectedFacility
+    // set the facility to the filters so that it is available in the EditInstallForm
+    const facility = this.props.userManage.tableFilters.facility
+      ? this.props.userManage.tableFilters.facility
       : this.props.facilityOptions[0];
-
-    this.props.setSelectedFacility(facility);
-    this.props.getInventory(1, '', facility.value, '', '');
+    this.props.setTableFilter({
+      facility,
+      customer: undefined,
+      productGroup: undefined,
+      search: '',
+      manufacturer: undefined,
+      page: 1
+    });
+    this.props.getInventory();
   }
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
     if (
@@ -142,6 +149,15 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     // update the table when we get new products or new installs
     if (prevProps.tableData !== this.props.tableData) {
       console.log('DATA CHANGED');
+    }
+
+    // TODO remove all the params from getinventory
+    if (
+      prevProps.userManage.tableFilters.facility &&
+      prevProps.userManage.tableFilters.facility !==
+        this.props.userManage.tableFilters.facility
+    ) {
+      this.props.getInventory();
     }
   }
   componentWillUnmount() {
@@ -295,39 +311,26 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
   // handleEditInstall = (e: React.MouseEvent<HTMLFormElement>)
   // get the next or previous page of data.  the table is 0 indexed but the API is not
   onPageChange = (page: number) => {
-    this.props.getInventory(page + 1, '', '', '', '');
+    this.props.setTableFilter({ page });
   };
-  onSearchSubmit = ({
-    search,
-    facility,
-    manufacturer,
-    productGroup
-  }: {
-    search: string;
-    facility: { value: string; title: string };
-    manufacturer: { value: string; title: string };
-    productGroup: { value: string; title: string };
-  }) => {
-    const backupfID = this.props.userManage.selectedFacility.value.length
-      ? this.props.userManage.selectedFacility.value
-      : this.props.facilityOptions[0].value;
-    const fID = facility ? facility.value : backupfID;
-    const manID = manufacturer ? manufacturer.value : '';
-    const pgID = productGroup ? productGroup.value : '';
-    this.props.getInventory(
-      this.props.userManage.page,
-      search,
-      fID,
-      manID,
-      pgID
-    );
-  };
+
   onSearchValuechanges = (value: any, key: string) => {
     // set the selection to redux
-    // update the table data
-    if (key === 'facility') {
-      this.props.setSelectedFacility(value);
-      this.props.getInventory(1, '', value.value, '', '');
+    switch (key) {
+      case 'facility':
+        this.props.setTableFilter({ facility: value, page: 1 });
+        break;
+      case 'search':
+        this.props.setTableFilter({ search: value, page: 1 });
+        break;
+      case 'productGroup':
+        this.props.setTableFilter({ productGroup: value, page: 1 });
+        break;
+      case 'manufacturer':
+        this.props.setTableFilter({ manufacturer: value, page: 1 });
+        break;
+      default:
+        break;
     }
   };
   // TODO  hide facilities if only one
@@ -384,8 +387,8 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         placeholder: 'facilityPlaceholder',
         className: 'banner-input',
         isClearable: false,
-        defaultValue: this.props.userManage.selectedFacility.value.length
-          ? this.props.userManage.selectedFacility
+        defaultValue: this.props.userManage.tableFilters.facility
+          ? this.props.userManage.tableFilters.facility.value
           : this.props.facilityOptions[0]
       }
     };
@@ -408,7 +411,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         />
         <SearchTableForm
           fieldConfig={searchFieldConfig}
-          handleSubmit={this.onSearchSubmit}
+          handleSubmit={this.props.getInventory}
           loading={this.props.loading}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
@@ -507,7 +510,8 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     facilityOptions: FormUtil.convertToOptions(state.user.facilities),
     productInfo: state.manageInventory.productInfo,
     cartTotal: getTotal(state.manageInventory),
-    tableData: state.manageInventory.data
+    tableData: state.manageInventory.data,
+    tableFilters: state.manageInventory.tableFilters
   };
 };
 export default translate('manageInventory')(
@@ -520,8 +524,8 @@ export default translate('manageInventory')(
       toggleEditQuoteModal,
       closeAllModals,
       getProductInfo,
-      setSelectedFacility,
-      addToCart
+      addToCart,
+      setTableFilter
     }
   )(ManageInventory)
 );

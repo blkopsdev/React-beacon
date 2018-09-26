@@ -1,4 +1,5 @@
 export const initialOption = { value: '', label: '' };
+export const initialTableFilters = { search: '', page: 1 };
 
 export default {
   ajaxCallsInProgress: 0,
@@ -50,7 +51,6 @@ export default {
     page: 1,
     totalPages: 1,
     data: [],
-    selectedFacility: initialOption,
     cart: {
       addedIDs: [],
       productsByID: {}
@@ -74,7 +74,8 @@ export default {
       standardOptions: [],
       subcategoryOptions: [],
       systemSizeOptions: []
-    }
+    },
+    tableFilters: initialTableFilters
   },
   customers: [],
   facilities: [],

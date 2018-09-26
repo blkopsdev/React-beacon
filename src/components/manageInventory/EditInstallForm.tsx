@@ -16,7 +16,13 @@ import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
-import { Ioption, IproductInfo, IinstallBase, Iproduct } from '../../models';
+import {
+  IinstallBase,
+  Ioption,
+  Iproduct,
+  IproductInfo,
+  ItableFilters
+} from '../../models';
 import {
   saveInstall,
   toggleEditInstallModal,
@@ -67,7 +73,7 @@ interface Iprops {
   i18n: I18n;
   productInfo: IproductInfo;
   facilityOptions: Ioption[];
-  selectedFacility: Ioption;
+  tableFilters: ItableFilters;
   selectedProduct: Iproduct;
   deleteInstall: (id: string, prodID: string) => void;
 }
@@ -120,18 +126,26 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
       return;
     }
     console.log(this.userForm.value);
+    if (this.props.tableFilters.facility) {
+      let newItem = {
+        ...this.userForm.value,
+        facilityID: this.props.tableFilters.facility.value,
+        productID: this.props.selectedProduct.id
+      };
 
-    let newItem = {
-      ...this.userForm.value,
-      facilityID: this.props.selectedFacility.value,
-      productID: this.props.selectedProduct.id
-    };
-
-    if (this.props.selectedItem) {
-      newItem = { ...newItem, id: this.props.selectedItem.id };
-      this.props.updateInstall(newItem, this.props.selectedProduct.id);
+      if (this.props.selectedItem) {
+        newItem = { ...newItem, id: this.props.selectedItem.id };
+        this.props.updateInstall(newItem, this.props.selectedProduct.id);
+      } else {
+        this.props.saveInstall(newItem, this.props.selectedProduct.id);
+      }
     } else {
-      this.props.saveInstall(newItem, this.props.selectedProduct.id);
+      console.error('missing facility, unable to save install');
+      toastr.error(
+        'Error',
+        'Missing facility, please try again or contact support',
+        constants.toastrError
+      );
     }
   };
   handleDelete = () => {

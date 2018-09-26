@@ -22,7 +22,13 @@ import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
-import { Ioption, IproductInfo, IshoppingCart, Iproduct } from '../../models';
+import {
+  Ioption,
+  Iproduct,
+  IproductInfo,
+  IshoppingCart,
+  ItableFilters
+} from '../../models';
 import { checkout } from '../../actions/shoppingCartActions';
 import { toggleEditQuoteModal } from '../../actions/manageInventoryActions';
 import constants from '../../constants/constants';
@@ -106,7 +112,7 @@ interface Iprops {
   productInfo: IproductInfo;
   facilityOptions: Ioption[];
   cart: IshoppingCart;
-  selectedFacility: Ioption;
+  tableFilters: ItableFilters;
   updateQuantityCart: any;
   deleteFromCart: any;
 }
@@ -152,8 +158,8 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
 
     this.props.checkout({
       message: this.userForm.value.message,
-      facilityID: this.props.selectedFacility.value.length
-        ? this.props.selectedFacility.value
+      facilityID: this.props.tableFilters.facility
+        ? this.props.tableFilters.facility.value
         : this.props.facilityOptions[0].value
     });
   };

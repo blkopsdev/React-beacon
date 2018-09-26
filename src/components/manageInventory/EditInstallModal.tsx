@@ -2,26 +2,26 @@
 * Manage Install Modal - Container
 */
 
-import * as React from 'react';
+import { TranslationFunction } from 'react-i18next';
 import { connect } from 'react-redux';
+import * as React from 'react';
+
+import { FormUtil } from '../common/FormUtil';
+import {
+  IinitialState,
+  IinstallBase,
+  Iproduct,
+  IproductInfo,
+  ItableFilters
+} from '../../models';
 import {
   updateInstall,
   saveInstall,
   toggleEditInstallModal,
   deleteInstall
 } from '../../actions/manageInventoryActions';
-import {
-  IinitialState,
-  Iproduct,
-  IproductInfo,
-  IinstallBase,
-  Ioption
-} from '../../models';
-// import constants from '../../constants/constants';
 import CommonModal from '../common/CommonModal';
 import EditInstallForm from './EditInstallForm';
-import { TranslationFunction } from 'react-i18next';
-import { FormUtil } from '../common/FormUtil';
 
 interface Iprops {
   selectedProduct: Iproduct;
@@ -38,8 +38,8 @@ interface IdispatchProps {
   saveInstall: typeof saveInstall;
   toggleEditInstallModal: typeof toggleEditInstallModal;
   productInfo: IproductInfo;
-  selectedFacility: Ioption;
   deleteInstall: typeof deleteInstall;
+  tableFilters: ItableFilters;
 }
 
 class ManageInstallModal extends React.Component<Iprops & IdispatchProps, {}> {
@@ -74,7 +74,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     facilityOptions: FormUtil.convertToOptions(state.user.facilities),
     showModal: state.manageInventory.showEditInstallModal,
     productInfo: state.manageInventory.productInfo,
-    selectedFacility: state.manageInventory.selectedFacility
+    tableFilters: state.manageInventory.tableFilters
   };
 };
 

@@ -7,19 +7,19 @@ import customers from './customersReducer';
 import facilities from './facilitiesReducer';
 import manageInventory, { productInfo } from './manageInventoryReducer';
 import redirect from './redirectToReferrerReducer';
-import teamManage from './teamManageReducer';
+import manageTeam from './manageTeamReducer';
 import user from './userReducer';
-import userManage from './userManageReducer';
-import userQueue from './userQueueReducer';
+import manageUser from './manageUserReducer';
+import manageUserQueue from './manageUserQueueReducer';
 
 const rootReducer = combineReducers({
   ajaxCallsInProgress,
   toastr,
   user,
   redirect,
-  userQueue,
-  userManage,
-  teamManage,
+  manageUserQueue,
+  manageUser,
+  manageTeam,
   customers,
   facilities,
   manageInventory,

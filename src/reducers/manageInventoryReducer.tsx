@@ -3,7 +3,7 @@ import { pickBy, map, filter, keyBy, find } from 'lodash';
 import { FormUtil } from '../components/common/FormUtil';
 import {
   Iproduct,
-  ImanageInventory,
+  ImanageInventoryReducer,
   IproductInfo,
   Ibrand,
   IgasType,
@@ -153,7 +153,7 @@ function totalPagesReducer(state: number = 1, action: any): number {
 }
 
 export default function ManageInventory(
-  state: ImanageInventory = initialState.manageInventory,
+  state: ImanageInventoryReducer = initialState.manageInventory,
   action: any
 ) {
   return {
@@ -249,13 +249,13 @@ export function productInfo(
 const getProduct = (productInfoState: IproductInfo, id: string) =>
   productInfoState.productGroups[id];
 
-export const getTotal = (state: ImanageInventory) =>
+export const getTotal = (state: ImanageInventoryReducer) =>
   state.cart.addedIDs.reduce(
     (total, id) => total + getQuantity(state.cart, id),
     0
   );
 
-export const getCartProducts = (state: ImanageInventory) =>
+export const getCartProducts = (state: ImanageInventoryReducer) =>
   getAddedIDs(state.cart).map(id => ({
     ...getProduct(state.productInfo, id),
     quantity: getQuantity(state.cart, id)

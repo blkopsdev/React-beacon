@@ -29,19 +29,19 @@ export default {
     pathname: '/'
   },
   // userQueue: []
-  userQueue: {
+  manageUserQueue: {
     page: 1,
     totalPages: 1,
     data: [],
     showEditQueueUserModal: false
   },
-  userManage: {
+  manageUser: {
     page: 1,
     totalPages: 1,
     data: [],
     showEditUserModal: false
   },
-  teamManage: {
+  manageTeam: {
     page: 1,
     totalPages: 1,
     data: [],

@@ -1,6 +1,6 @@
 import { pickBy, map, filter } from 'lodash';
 
-import { IqueueObject, IuserQueue } from '../models';
+import { IqueueObject, ImanageUserQueueReducer } from '../models';
 import { modalToggleWithName } from './commonReducers';
 import initialState from './initialState';
 import * as types from '../actions/actionTypes';
@@ -72,7 +72,7 @@ function userQueueTotalPages(state: number = 1, action: any): number {
 }
 
 export default function userQueue(
-  state: IuserQueue = initialState.userQueue,
+  state: ImanageUserQueueReducer = initialState.manageUserQueue,
   action: any
 ) {
   return {

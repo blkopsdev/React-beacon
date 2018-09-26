@@ -15,7 +15,7 @@ import {
   IinitialState,
   Iuser,
   Itile,
-  IteamManage,
+  ImanageTeamReducer,
   Icustomer
 } from '../../models';
 import { TableUtil } from '../common/TableUtil';
@@ -36,7 +36,7 @@ interface Iprops extends RouteComponentProps<any> {
   i18n: I18n;
   showEditUserModal: boolean;
   loading: boolean;
-  userManage: IteamManage;
+  userManage: ImanageTeamReducer;
 }
 
 interface IdispatchProps {
@@ -232,10 +232,10 @@ class TeamManage extends React.Component<Iprops & IdispatchProps, Istate> {
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
-    userManage: state.teamManage,
+    userManage: state.manageTeam,
     customers: state.customers,
     loading: state.ajaxCallsInProgress > 0,
-    showEditUserModal: state.teamManage.showEditTeamModal
+    showEditUserModal: state.manageTeam.showEditTeamModal
   };
 };
 export default translate('teamManage')(

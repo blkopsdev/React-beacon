@@ -63,11 +63,11 @@ class EditTeamMemberModal extends React.Component<Iprops & IdispatchProps, {}> {
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
-    userManage: state.teamManage,
+    userManage: state.manageTeam,
     loading: state.ajaxCallsInProgress > 0,
     customerOptions: FormUtil.convertToOptions(state.customers),
     facilityOptions: FormUtil.convertToOptions(state.facilities),
-    showEditUserModal: state.teamManage.showEditTeamModal
+    showEditUserModal: state.manageTeam.showEditTeamModal
   };
 };
 

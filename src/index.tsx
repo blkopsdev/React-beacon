@@ -93,10 +93,10 @@ store.subscribe(
       {
         user: store.getState().user,
         redirect: store.getState().redirect,
-        userQueue: store.getState().userQueue,
+        manageUserQueue: store.getState().manageUserQueue,
         customers: store.getState().customers,
-        userManage: store.getState().userManage,
-        teamManage: store.getState().teamManage,
+        manageUser: store.getState().manageUser,
+        manageTeam: store.getState().manageTeam,
         manageInventory: store.getState().manageInventory,
         productInfo: store.getState().productInfo
         // facilities: store.getState().facilities

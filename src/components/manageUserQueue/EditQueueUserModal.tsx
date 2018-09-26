@@ -82,11 +82,11 @@ class EditQueueUserModal extends React.Component<Iprops & IdispatchProps, {}> {
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
-    userQueue: state.userQueue,
+    userQueue: state.manageUserQueue,
     loading: state.ajaxCallsInProgress > 0,
     customerOptions: getCustomerOptions(state.customers),
     facilityOptions: getFacilitityOptions(state.facilities),
-    showEditQueueUserModal: state.userQueue.showEditQueueUserModal,
+    showEditQueueUserModal: state.manageUserQueue.showEditQueueUserModal,
     showEditCustomerModal: state.showEditCustomerModal,
     showEditFacilityModal: state.showEditFacilityModal
   };

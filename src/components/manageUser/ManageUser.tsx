@@ -14,7 +14,7 @@ import {
   IinitialState,
   Iuser,
   Itile,
-  IuserManage,
+  ImanageUserReducer,
   Icustomer
 } from '../../models';
 import CommonModal from '../common/CommonModal';
@@ -45,7 +45,7 @@ interface Iprops extends RouteComponentProps<any> {
   showEditFacilityModal: boolean;
   showSecurityFunctionsModal: boolean;
   loading: boolean;
-  userManage: IuserManage;
+  userManage: ImanageUserReducer;
 }
 
 interface IdispatchProps {
@@ -278,10 +278,10 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
-    userManage: state.userManage,
+    userManage: state.manageUser,
     customers: state.customers,
     loading: state.ajaxCallsInProgress > 0,
-    showEditUserModal: state.userManage.showEditUserModal,
+    showEditUserModal: state.manageUser.showEditUserModal,
     showEditCustomerModal: state.showEditCustomerModal,
     showEditFacilityModal: state.showEditFacilityModal,
     showSecurityFunctionsModal: state.showSecurityFunctionsModal

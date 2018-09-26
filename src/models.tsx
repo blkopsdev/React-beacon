@@ -49,10 +49,10 @@ export interface Iuser {
   hasTeamMembers: boolean;
   appVersion: string;
 }
-// export interface IuserQueue {
+// export interface ImanageUserQueueReducer {
 //   [key: string]: Iuser;
 // }
-// export interface IuserQueue {
+// export interface ImanageUserQueueReducer {
 //   [key: string]: Iuser;
 // }
 export interface IqueueObject {
@@ -144,20 +144,20 @@ export interface IquoteItem {
   quantity: number;
 }
 
-export interface IuserQueue {
+export interface ImanageUserQueueReducer {
   page: number;
   data: IqueueObject[];
   totalPages: number;
   showEditQueueUserModal: boolean;
 }
 
-export interface IuserManage {
+export interface ImanageUserReducer {
   page: number;
   data: Iuser[];
   totalPages: number;
   showEditUserModal: boolean;
 }
-export interface IteamManage {
+export interface ImanageTeamReducer {
   page: number;
   data: Iuser[];
   totalPages: number;
@@ -168,7 +168,7 @@ export interface IshoppingCart {
   addedIDs: string[];
   productsByID: { [key: string]: Iproduct };
 }
-export interface ImanageInventory {
+export interface ImanageInventoryReducer {
   page: number;
   data: Iproduct[];
   totalPages: number;
@@ -209,10 +209,10 @@ export interface IinitialState {
   user: Iuser;
   ajaxCallsInProgress: number;
   redirect: Iredirect;
-  userQueue: IuserQueue;
-  userManage: IuserManage;
-  teamManage: IteamManage;
-  manageInventory: ImanageInventory;
+  manageUserQueue: ImanageUserQueueReducer;
+  manageUser: ImanageUserReducer;
+  manageTeam: ImanageTeamReducer;
+  manageInventory: ImanageInventoryReducer;
   customers: Icustomer[];
   facilities: Ifacility[];
   showEditCustomerModal: boolean;

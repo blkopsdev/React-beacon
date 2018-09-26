@@ -1,6 +1,6 @@
 import { pickBy, map, filter } from 'lodash';
 
-import { Iuser, IuserManage } from '../models';
+import { Iuser, ImanageUserReducer } from '../models';
 import { modalToggleWithName } from './commonReducers';
 import initialState from './initialState';
 import * as types from '../actions/actionTypes';
@@ -67,7 +67,7 @@ function userManageTotalPages(state: number = 1, action: any): number {
 }
 
 export default function userManage(
-  state: IuserManage = initialState.userManage,
+  state: ImanageUserReducer = initialState.manageUser,
   action: any
 ) {
   return {

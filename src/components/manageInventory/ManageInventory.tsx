@@ -22,7 +22,7 @@ import {
   Icustomer,
   IinitialState,
   IinstallBase,
-  ImanageInventory,
+  ImanageInventoryReducer,
   Ioption,
   Iproduct,
   IproductInfo,
@@ -57,7 +57,7 @@ interface Iprops extends RouteComponentProps<any> {
   showEditProductModal: boolean;
   showEditInstallModal: boolean;
   loading: boolean;
-  userManage: ImanageInventory;
+  userManage: ImanageInventoryReducer;
 }
 
 interface IdispatchProps {

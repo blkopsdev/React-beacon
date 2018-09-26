@@ -11,7 +11,12 @@ import ReactTable from 'react-table';
 import * as moment from 'moment';
 
 import { FormUtil } from '../common/FormUtil';
-import { IinitialState, Iuser, Itile, IuserQueue } from '../../models';
+import {
+  IinitialState,
+  Iuser,
+  Itile,
+  ImanageUserQueueReducer
+} from '../../models';
 import { TableUtil } from '../common/TableUtil';
 import { closeAllModals } from '../../actions/commonActions';
 import { emptyTile } from '../../reducers/initialState';
@@ -51,7 +56,7 @@ interface Iprops extends RouteComponentProps<any> {
   showEditCustomerModal: boolean;
   showEditFacilityModal: boolean;
   loading: boolean;
-  userQueue: IuserQueue;
+  userQueue: ImanageUserQueueReducer;
 }
 
 interface IdispatchProps {
@@ -281,9 +286,9 @@ class ManageUserQueue extends React.Component<Iprops & IdispatchProps, Istate> {
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
-    userQueue: state.userQueue,
+    userQueue: state.manageUserQueue,
     loading: state.ajaxCallsInProgress > 0,
-    showEditQueueUserModal: state.userQueue.showEditQueueUserModal,
+    showEditQueueUserModal: state.manageUserQueue.showEditQueueUserModal,
     showEditCustomerModal: state.showEditCustomerModal,
     showEditFacilityModal: state.showEditFacilityModal
   };

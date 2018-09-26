@@ -71,7 +71,6 @@ class EditManageUserModal extends React.Component<Iprops & IdispatchProps, {}> {
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
-    userManage: state.userManage,
     loading: state.ajaxCallsInProgress > 0,
     customers: state.customers,
     facilityOptions: FormUtil.convertToOptions(state.facilities),

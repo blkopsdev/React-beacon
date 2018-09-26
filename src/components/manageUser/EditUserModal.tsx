@@ -21,7 +21,7 @@ import {
   toggleSecurityFunctionsModal
 } from '../../actions/userManageActions';
 import CommonModal from '../common/CommonModal';
-import UserManageForm from './UserManageForm';
+import EditUserForm from './EditUserForm';
 
 interface Iprops {
   selectedUser: Iuser;
@@ -53,7 +53,7 @@ class EditManageUserModal extends React.Component<Iprops & IdispatchProps, {}> {
         modalVisible={this.props.showEditUserModal}
         className="user-edit"
         onHide={this.props.toggleEditUserModal}
-        body={<UserManageForm {...this.props} />}
+        body={<EditUserForm {...this.props} />}
         title={this.props.t('editUserModalTitle')}
         container={document.getElementById('two-pane-layout')}
       />

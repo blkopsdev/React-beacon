@@ -1,5 +1,5 @@
 /* 
-* TeamManageForm 
+* EditTeamMemberForm 
 * Edit team members
 */
 
@@ -77,7 +77,7 @@ interface Iprops {
   user: Iuser;
 }
 
-class TeamManageForm extends React.Component<Iprops, {}> {
+class EditTeamMemberForm extends React.Component<Iprops, {}> {
   public userForm: AbstractControl;
   public fieldConfig: FieldConfig;
   constructor(props: Iprops) {
@@ -236,4 +236,4 @@ class TeamManageForm extends React.Component<Iprops, {}> {
     );
   }
 }
-export default translate('user')(TeamManageForm);
+export default translate('user')(EditTeamMemberForm);

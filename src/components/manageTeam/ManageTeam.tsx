@@ -2,12 +2,15 @@
 * hopsital Managers manage their team
 * Note: did minimal renaming from the UserManage component
 */
-import * as React from 'react';
+import { Button } from 'react-bootstrap';
+import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
-import {
-  getUserManage,
-  toggleEditTeamUserModal
-} from '../../actions/teamManageActions';
+import { translate, TranslationFunction, I18n } from 'react-i18next';
+import * as React from 'react';
+import ReactTable from 'react-table';
+import * as moment from 'moment';
+
+import { FormUtil } from '../common/FormUtil';
 import {
   IinitialState,
   Iuser,
@@ -15,21 +18,17 @@ import {
   IteamManage,
   Icustomer
 } from '../../models';
-import { emptyTile } from '../../reducers/initialState';
-import { RouteComponentProps } from 'react-router-dom';
-import ReactTable from 'react-table';
-import { Button } from 'react-bootstrap';
-import Banner from '../common/Banner';
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import constants from '../../constants/constants';
-import * as moment from 'moment';
-import { translate, TranslationFunction, I18n } from 'react-i18next';
-// import { find } from 'lodash';
-import { FormUtil } from '../common/FormUtil';
-import SearchTableForm from '../common/SearchTableForm';
 import { TableUtil } from '../common/TableUtil';
-import EditUserManageModal from './EditTeamManageModal';
 import { closeAllModals } from '../../actions/commonActions';
+import { emptyTile } from '../../reducers/initialState';
+import {
+  getUserManage,
+  toggleEditTeamUserModal
+} from '../../actions/teamManageActions';
+import Banner from '../common/Banner';
+import EditTeamMemberModal from './EditTeamMemberModal';
+import SearchTableForm from '../common/SearchTableForm';
+import constants from '../../constants/constants';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -214,7 +213,7 @@ class TeamManage extends React.Component<Iprops & IdispatchProps, Istate> {
           noDataText={t('common:noDataText')}
           resizable={false}
         />
-        <EditUserManageModal
+        <EditTeamMemberModal
           selectedUser={this.props.userManage.data[this.state.selectedRow]}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]

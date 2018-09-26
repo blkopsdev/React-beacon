@@ -1,5 +1,5 @@
 /* 
-* UserManageForm 
+* EditUserForm 
 * Edit existing users
 */
 
@@ -117,7 +117,7 @@ const buildFieldConfig = (
   return fieldConfig as FieldConfig;
 };
 
-interface Iprops extends React.Props<UserManageForm> {
+interface Iprops extends React.Props<EditUserForm> {
   selectedUser: Iuser;
   loading: boolean;
   colorButton: string;
@@ -133,7 +133,7 @@ interface Iprops extends React.Props<UserManageForm> {
   toggleSecurityFunctionsModal: typeof toggleSecurityFunctionsModal;
 }
 
-class UserManageForm extends React.Component<Iprops, {}> {
+class EditUserForm extends React.Component<Iprops, {}> {
   public userForm: AbstractControl;
   public fieldConfig: FieldConfig;
   constructor(props: Iprops) {
@@ -318,4 +318,4 @@ class UserManageForm extends React.Component<Iprops, {}> {
     );
   }
 }
-export default translate('user')(UserManageForm);
+export default translate('user')(EditUserForm);

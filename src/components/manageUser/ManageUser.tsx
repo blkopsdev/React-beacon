@@ -31,7 +31,7 @@ import { find } from 'lodash';
 import { FormUtil } from '../common/FormUtil';
 import SearchTableForm from '../common/SearchTableForm';
 import { TableUtil } from '../common/TableUtil';
-import EditUserManageModal from './EditUserManageModal';
+import EditUserModal from './EditUserModal';
 import EditCustomerModal from '../common/EditCustomerModal';
 import { closeAllModals } from '../../actions/commonActions';
 import SecurityFunctionsList from './SecurityFunctionsList';
@@ -245,7 +245,7 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
           noDataText={t('common:noDataText')}
           resizable={false}
         />
-        <EditUserManageModal
+        <EditUserModal
           selectedUser={this.props.userManage.data[this.state.selectedRow]}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]

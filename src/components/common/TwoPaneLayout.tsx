@@ -7,9 +7,9 @@ import { connect } from 'react-redux';
 import { Col, Grid, Row } from 'react-bootstrap';
 import SideMenu from '../sideMenu/SideMenu';
 import { Route, Switch } from 'react-router-dom';
-import UserQueue from '../userQueue/UserQueue';
-import UserManage from '../userManage/UserManage';
-import TeamManage from '../teamManage/TeamManage';
+import ManageUserQueue from '../manageUserQueue/ManageUserQueue';
+import ManageUser from '../manageUser/ManageUser';
+import ManageTeam from '../manageTeam/ManageTeam';
 import ManageInventory from '../manageInventory/ManageInventory';
 import constants from '../../constants/constants';
 import { IinitialState } from '../../models';
@@ -65,9 +65,9 @@ const TwoPaneLayout = (props: any) => {
 
         <Col className="col-fluid">
           <Switch>
-            <Route exact path="/queue" component={UserQueue} />
-            <Route exact path="/users" component={UserManage} />
-            <Route exact path="/team" component={TeamManage} />
+            <Route exact path="/queue" component={ManageUserQueue} />
+            <Route exact path="/users" component={ManageUser} />
+            <Route exact path="/team" component={ManageTeam} />
             <Route exact path="/inventory" component={ManageInventory} />
           </Switch>
         </Col>

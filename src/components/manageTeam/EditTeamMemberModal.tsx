@@ -2,20 +2,20 @@
 * The Manage Team user modal - Container
 */
 
-import * as React from 'react';
+import { TranslationFunction } from 'react-i18next';
 import { connect } from 'react-redux';
+import * as React from 'react';
+
+import { FormUtil } from '../common/FormUtil';
+import { IinitialState, Iuser } from '../../models';
+import { getFacilitiesByCustomer } from '../../actions/userQueueActions';
 import {
   updateTeamUser,
   saveTeamUser,
   toggleEditTeamUserModal
 } from '../../actions/teamManageActions';
-import { IinitialState, Iuser } from '../../models';
-// import constants from '../../constants/constants';
 import CommonModal from '../common/CommonModal';
-import UserManageForm from './TeamManageForm';
-import { TranslationFunction } from 'react-i18next';
-import { FormUtil } from '../common/FormUtil';
-import { getFacilitiesByCustomer } from '../../actions/userQueueActions';
+import UserManageForm from './EditTeamMemberForm';
 
 interface Iprops {
   selectedUser: Iuser;
@@ -35,7 +35,7 @@ interface IdispatchProps {
   user: Iuser;
 }
 
-class EditManageTeamModal extends React.Component<Iprops & IdispatchProps, {}> {
+class EditTeamMemberModal extends React.Component<Iprops & IdispatchProps, {}> {
   constructor(props: Iprops & IdispatchProps) {
     super(props);
   }
@@ -79,4 +79,4 @@ export default connect(
     toggleEditTeamUserModal,
     getFacilitiesByCustomer
   }
-)(EditManageTeamModal);
+)(EditTeamMemberModal);

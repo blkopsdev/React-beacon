@@ -1,8 +1,20 @@
 /*
 * The New User Queue
 */
-import * as React from 'react';
+import { Button } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { translate, TranslationFunction, I18n } from 'react-i18next';
+import * as React from 'react';
+import ReactTable from 'react-table';
+import * as moment from 'moment';
+
+import { FormUtil } from '../common/FormUtil';
+import { IinitialState, Iuser, Itile, IuserQueue } from '../../models';
+import { TableUtil } from '../common/TableUtil';
+import { closeAllModals } from '../../actions/commonActions';
+import { emptyTile } from '../../reducers/initialState';
 import {
   getUserQueue,
   approveUser,
@@ -10,22 +22,11 @@ import {
   getCustomers,
   toggleEditQueueUserModal
 } from '../../actions/userQueueActions';
-import { IinitialState, Iuser, Itile, IuserQueue } from '../../models';
-import { emptyTile } from '../../reducers/initialState';
-import { RouteComponentProps } from 'react-router-dom';
-import ReactTable from 'react-table';
-import { Button } from 'react-bootstrap';
 import Banner from '../common/Banner';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import constants from '../../constants/constants';
-import * as moment from 'moment';
-import { translate, TranslationFunction, I18n } from 'react-i18next';
-import { FormUtil } from '../common/FormUtil';
-import SearchTableForm from '../common/SearchTableForm';
-import { TableUtil } from '../common/TableUtil';
-import EditQueueUserModal from './EditQueueUserModal';
 import EditCustomerModal from '../common/EditCustomerModal';
-import { closeAllModals } from '../../actions/commonActions';
+import EditQueueUserModal from './EditQueueUserModal';
+import SearchTableForm from '../common/SearchTableForm';
+import constants from '../../constants/constants';
 
 // Field config to configure form
 const fieldConfig = {
@@ -69,7 +70,7 @@ interface Istate {
   currentTile: Itile;
 }
 
-class UserQueue extends React.Component<Iprops & IdispatchProps, Istate> {
+class ManageUserQueue extends React.Component<Iprops & IdispatchProps, Istate> {
   public columns: any[];
   public buttonInAction = false;
   constructor(props: Iprops & IdispatchProps) {
@@ -298,5 +299,5 @@ export default translate('userQueue')(
       toggleEditQueueUserModal,
       closeAllModals
     }
-  )(UserQueue)
+  )(ManageUserQueue)
 );

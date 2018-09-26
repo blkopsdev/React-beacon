@@ -282,7 +282,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     user: state.user,
     userQueue: state.userQueue,
     loading: state.ajaxCallsInProgress > 0,
-    showEditQueueUserModal: state.showEditQueueUserModal,
+    showEditQueueUserModal: state.userQueue.showEditQueueUserModal,
     showEditCustomerModal: state.showEditCustomerModal,
     showEditFacilityModal: state.showEditFacilityModal
   };

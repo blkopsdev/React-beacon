@@ -1,7 +1,9 @@
-import * as types from '../actions/actionTypes';
-import { Iuser, IuserManage } from '../models';
-import initialState from './initialState';
 import { pickBy, map, filter } from 'lodash';
+
+import { IteamManage, Iuser } from '../models';
+import { modalToggleWithName } from './commonReducers';
+import initialState from './initialState';
+import * as types from '../actions/actionTypes';
 
 function teamManageData(state: Iuser[] = [], action: any): Iuser[] {
   switch (action.type) {
@@ -74,12 +76,17 @@ function userManageTotalPages(state: number = 1, action: any): number {
 }
 
 export default function userManage(
-  state: IuserManage = initialState.userManage,
+  state: IteamManage = initialState.teamManage,
   action: any
 ) {
   return {
     data: teamManageData(state.data, action),
     page: userManagePage(state.page, action),
-    totalPages: userManageTotalPages(state.totalPages, action)
+    totalPages: userManageTotalPages(state.totalPages, action),
+    showEditTeamModal: modalToggleWithName(
+      state.showEditTeamModal,
+      action,
+      'EDIT_TEAM'
+    )
   };
 }

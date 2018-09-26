@@ -32,17 +32,20 @@ export default {
   userQueue: {
     page: 1,
     totalPages: 1,
-    data: []
+    data: [],
+    showEditQueueUserModal: false
   },
   userManage: {
     page: 1,
     totalPages: 1,
-    data: []
+    data: [],
+    showEditUserModal: false
   },
   teamManage: {
     page: 1,
     totalPages: 1,
-    data: []
+    data: [],
+    showEditTeamModal: false
   },
   manageInventory: {
     showEditProductModal: false,
@@ -79,13 +82,12 @@ export default {
   },
   customers: [],
   facilities: [],
-  showEditUserModal: false,
+
   showEditCustomerModal: false,
   showEditFacilityModal: false,
-  showEditQueueUserModal: false,
+
   showEditProfileModal: false,
-  showSecurityFunctionsModal: false,
-  showEditTeamModal: false
+  showSecurityFunctionsModal: false
 };
 
 export const emptyTile = {

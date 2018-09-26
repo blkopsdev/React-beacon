@@ -148,17 +148,20 @@ export interface IuserQueue {
   page: number;
   data: IqueueObject[];
   totalPages: number;
+  showEditQueueUserModal: boolean;
 }
 
 export interface IuserManage {
   page: number;
   data: Iuser[];
   totalPages: number;
+  showEditUserModal: boolean;
 }
 export interface IteamManage {
   page: number;
   data: Iuser[];
   totalPages: number;
+  showEditTeamModal: boolean;
 }
 
 export interface IshoppingCart {
@@ -212,13 +215,10 @@ export interface IinitialState {
   manageInventory: ImanageInventory;
   customers: Icustomer[];
   facilities: Ifacility[];
-  showEditUserModal: boolean;
   showEditCustomerModal: boolean;
   showEditFacilityModal: boolean;
-  showEditQueueUserModal: boolean;
   showEditProfileModal: boolean;
   showSecurityFunctionsModal: boolean;
-  showEditTeamModal: boolean;
 }
 export interface Itile {
   icon: string | string[];

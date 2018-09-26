@@ -1,7 +1,9 @@
-import * as types from '../actions/actionTypes';
-import { IqueueObject, IuserQueue } from '../models';
-import initialState from './initialState';
 import { pickBy, map, filter } from 'lodash';
+
+import { IqueueObject, IuserQueue } from '../models';
+import { modalToggleWithName } from './commonReducers';
+import initialState from './initialState';
+import * as types from '../actions/actionTypes';
 
 function userQueueData(
   state: IqueueObject[] = [],
@@ -76,6 +78,11 @@ export default function userQueue(
   return {
     data: userQueueData(state.data, action),
     page: userQueuePage(state.page, action),
-    totalPages: userQueueTotalPages(state.totalPages, action)
+    totalPages: userQueueTotalPages(state.totalPages, action),
+    showEditQueueUserModal: modalToggleWithName(
+      state.showEditQueueUserModal,
+      action,
+      'EDIT_QUEUE_USER'
+    )
   };
 }

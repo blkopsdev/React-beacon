@@ -236,7 +236,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     userManage: state.teamManage,
     customers: state.customers,
     loading: state.ajaxCallsInProgress > 0,
-    showEditUserModal: state.showEditTeamModal
+    showEditUserModal: state.teamManage.showEditTeamModal
   };
 };
 export default translate('teamManage')(

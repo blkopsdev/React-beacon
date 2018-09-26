@@ -67,7 +67,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     loading: state.ajaxCallsInProgress > 0,
     customerOptions: FormUtil.convertToOptions(state.customers),
     facilityOptions: FormUtil.convertToOptions(state.facilities),
-    showEditUserModal: state.showEditTeamModal
+    showEditUserModal: state.teamManage.showEditTeamModal
   };
 };
 

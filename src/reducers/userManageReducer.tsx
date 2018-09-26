@@ -1,7 +1,9 @@
-import * as types from '../actions/actionTypes';
-import { Iuser, IuserManage } from '../models';
-import initialState from './initialState';
 import { pickBy, map, filter } from 'lodash';
+
+import { Iuser, IuserManage } from '../models';
+import { modalToggleWithName } from './commonReducers';
+import initialState from './initialState';
+import * as types from '../actions/actionTypes';
 
 function userManageData(state: Iuser[] = [], action: any): Iuser[] {
   switch (action.type) {
@@ -71,6 +73,11 @@ export default function userManage(
   return {
     data: userManageData(state.data, action),
     page: userManagePage(state.page, action),
-    totalPages: userManageTotalPages(state.totalPages, action)
+    totalPages: userManageTotalPages(state.totalPages, action),
+    showEditUserModal: modalToggleWithName(
+      state.showEditUserModal,
+      action,
+      'EDIT_USER'
+    )
   };
 }

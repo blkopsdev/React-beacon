@@ -1,4 +1,4 @@
-import { ItableFilters } from '../models';
+import { ItableFiltersReducer } from '../models';
 import { initialTableFilters } from './initialState';
 import * as types from '../actions/actionTypes';
 
@@ -31,13 +31,13 @@ export function modalToggleWithName(
 }
 
 export function createTableFiltersWithName(
-  state: ItableFilters = initialTableFilters,
+  state: ItableFiltersReducer = initialTableFilters,
   action: any,
   tableName: string
 ) {
   switch (action.type) {
     case `SET_TABLE_FILTER_${tableName}`:
-      return { ...state, ...action.filters } as ItableFilters;
+      return { ...state, ...action.filters } as ItableFiltersReducer;
     default:
       return state;
   }

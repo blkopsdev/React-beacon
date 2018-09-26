@@ -21,7 +21,7 @@ import {
   Ioption,
   Iproduct,
   IproductInfo,
-  ItableFilters
+  ItableFiltersReducer
 } from '../../models';
 import {
   saveInstall,
@@ -73,7 +73,7 @@ interface Iprops {
   i18n: I18n;
   productInfo: IproductInfo;
   facilityOptions: Ioption[];
-  tableFilters: ItableFilters;
+  tableFilters: ItableFiltersReducer;
   selectedProduct: Iproduct;
   deleteInstall: (id: string, prodID: string) => void;
 }

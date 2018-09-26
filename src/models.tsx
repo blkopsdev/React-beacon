@@ -1,12 +1,23 @@
 import { ThunkAction } from 'redux-thunk';
+import { SortingRule } from 'react-table';
 
-export interface ItableFilters {
+export interface ItableFiltersReducer {
   search: string;
   page: number;
   facility?: Ioption;
   customer?: Ioption;
   productGroup?: Ioption;
   manufacturer?: Ioption;
+  sorted?: SortingRule[];
+}
+export interface ItableFiltersParams {
+  search?: string;
+  page?: number;
+  facility?: Ioption;
+  customer?: Ioption;
+  productGroup?: Ioption;
+  manufacturer?: Ioption;
+  sorted?: SortingRule[];
 }
 
 export interface Iuser {
@@ -163,7 +174,7 @@ export interface ImanageInventory {
   showEditProductModal: boolean;
   showEditInstallModal: boolean;
   showEditQuoteModal: boolean;
-  tableFilters: ItableFilters;
+  tableFilters: ItableFiltersReducer;
 }
 
 export interface Iredirect {

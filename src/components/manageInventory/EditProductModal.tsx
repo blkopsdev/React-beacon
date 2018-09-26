@@ -11,7 +11,7 @@ import {
   IinitialState,
   Iproduct,
   IproductInfo,
-  ItableFilters
+  ItableFiltersReducer
 } from '../../models';
 import {
   updateProduct,
@@ -35,7 +35,7 @@ interface IdispatchProps {
   saveProduct: typeof saveProduct;
   toggleEditProductModal: typeof toggleEditProductModal;
   productInfo: IproductInfo;
-  tableFilters: ItableFilters;
+  tableFilters: ItableFiltersReducer;
 }
 
 class ManageInventoryModal extends React.Component<

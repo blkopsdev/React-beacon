@@ -12,7 +12,7 @@ import {
   IinstallBase,
   Iproduct,
   IproductInfo,
-  ItableFilters
+  ItableFiltersReducer
 } from '../../models';
 import {
   updateInstall,
@@ -39,7 +39,7 @@ interface IdispatchProps {
   toggleEditInstallModal: typeof toggleEditInstallModal;
   productInfo: IproductInfo;
   deleteInstall: typeof deleteInstall;
-  tableFilters: ItableFilters;
+  tableFilters: ItableFiltersReducer;
 }
 
 class ManageInstallModal extends React.Component<Iprops & IdispatchProps, {}> {

@@ -11,7 +11,7 @@ import {
   IinitialState,
   IproductInfo,
   IshoppingCart,
-  ItableFilters
+  ItableFiltersReducer
 } from '../../models';
 import {
   addToCart,
@@ -41,7 +41,7 @@ interface IdispatchProps {
   checkout: typeof checkout;
   toggleEditQuoteModal: typeof toggleEditQuoteModal;
   cart: IshoppingCart;
-  tableFilters: ItableFilters;
+  tableFilters: ItableFiltersReducer;
 }
 
 class EditQuoteModal extends React.Component<Iprops & IdispatchProps, {}> {

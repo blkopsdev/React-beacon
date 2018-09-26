@@ -22,7 +22,7 @@ import {
   Iproduct,
   IproductInfo,
   Isubcategory,
-  ItableFilters
+  ItableFiltersReducer
 } from '../../models';
 import {
   saveProduct,
@@ -203,7 +203,7 @@ interface Iprops {
   i18n: I18n;
   productInfo: IproductInfo;
   facilityOptions: Ioption[];
-  tableFilters: ItableFilters;
+  tableFilters: ItableFiltersReducer;
   saveProduct: typeof saveProduct;
   updateProduct: typeof updateProduct;
 }

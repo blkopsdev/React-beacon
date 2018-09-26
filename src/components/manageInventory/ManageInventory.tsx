@@ -26,7 +26,7 @@ import {
   Ioption,
   Iproduct,
   IproductInfo,
-  ItableFilters,
+  ItableFiltersReducer,
   Itile,
   Iuser
 } from '../../models';
@@ -77,7 +77,7 @@ interface IdispatchProps {
   cartTotal: number;
   tableData: Iproduct[];
   setTableFilter: typeof setTableFilter;
-  tableFilters: ItableFilters;
+  tableFilters: ItableFiltersReducer;
 }
 
 interface Istate {
@@ -92,6 +92,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
   // public searchFieldConfig: any;
   public searchFieldConfigBanner: any;
   public buttonInAction = false;
+  private setTableFilterTimeout: any;
   constructor(props: Iprops & IdispatchProps) {
     super(props);
     this.state = {
@@ -109,20 +110,9 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       currentTile: constants.getTileByURL(this.props.location.pathname)
     });
     this.setColumns();
+  }
+  componentDidMount() {
     this.props.getProductInfo();
-    // set the facility to the filters so that it is available in the EditInstallForm
-    const facility = this.props.userManage.tableFilters.facility
-      ? this.props.userManage.tableFilters.facility
-      : this.props.facilityOptions[0];
-    this.props.setTableFilter({
-      facility,
-      customer: undefined,
-      productGroup: undefined,
-      search: '',
-      manufacturer: undefined,
-      page: 1
-    });
-    this.props.getInventory();
   }
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
     if (
@@ -156,18 +146,31 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       console.log('DATA CHANGED');
     }
 
-    // TODO remove all the params from getinventory
-    if (
-      prevProps.userManage.tableFilters.facility &&
-      prevProps.userManage.tableFilters.facility !==
-        this.props.userManage.tableFilters.facility
-    ) {
+    // automatically get inventory every time a fitler changes
+    if (prevProps.userManage.tableFilters !== this.props.tableFilters) {
       this.props.getInventory();
     }
   }
   componentWillUnmount() {
     this.props.closeAllModals();
   }
+
+  /*
+  * Reset the table filters (not used currently)
+  */
+  resetTableFilters = () => {
+    const facility = this.props.userManage.tableFilters.facility
+      ? this.props.userManage.tableFilters.facility
+      : this.props.facilityOptions[0];
+    this.props.setTableFilter({
+      facility,
+      customer: undefined,
+      productGroup: undefined,
+      search: '',
+      manufacturer: undefined,
+      page: 1
+    });
+  };
 
   /*
   * indicate the toggle position and handle the click
@@ -313,7 +316,6 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     }
   };
 
-  // handleEditInstall = (e: React.MouseEvent<HTMLFormElement>)
   // get the next or previous page of data.  the table is 0 indexed but the API is not
   onPageChange = (page: number) => {
     const newPage = page + 1;
@@ -321,14 +323,16 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
   };
 
   onSearchValuechanges = (value: any, key: string) => {
-    console.log('search change' + key);
     // set the selection to redux
     switch (key) {
       case 'facility':
         this.props.setTableFilter({ facility: value, page: 1 });
         break;
       case 'search':
-        this.props.setTableFilter({ search: value, page: 1 }); // this causes performance issues
+        clearTimeout(this.setTableFilterTimeout);
+        this.setTableFilterTimeout = setTimeout(() => {
+          this.props.setTableFilter({ search: value, page: 1 }); // this causes performance issues so we use a rudamentary debounce
+        }, 200);
         break;
       case 'productGroup':
         this.props.setTableFilter({ productGroup: value, page: 1 });
@@ -341,11 +345,13 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     }
   };
   onFetchData = (state: FinalState, instance: Instance) => {
-    // console.log(state)
+    const { sorted } = state;
+    if (sorted) {
+      this.props.setTableFilter({ sorted });
+    }
     this.props.getInventory();
     this.setState({ selectedRow: {} });
   };
-  // scroll content area only
   render() {
     console.log('rendering inventory table');
     if (this.props.productInfo.productGroupOptions.length === 0) {
@@ -364,7 +370,8 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           label: 'common:searchProduct',
           colWidth: 3,
           type: 'text',
-          placeholder: 'searchPlaceholder'
+          placeholder: 'searchPlaceholder',
+          defaultValue: this.props.tableFilters.search
         }
       },
       productGroup: {
@@ -374,7 +381,8 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           options: this.props.productInfo.productGroupOptions,
           colWidth: 3,
           type: 'select',
-          placeholder: 'productGroupPlaceholder'
+          placeholder: 'productGroupPlaceholder',
+          defaultValue: this.props.tableFilters.productGroup
         }
       },
       manufacturer: {
@@ -384,7 +392,8 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           options: this.props.productInfo.manufacturerOptions,
           colWidth: 3,
           type: 'select',
-          placeholder: 'manufacturerPlaceholder'
+          placeholder: 'manufacturerPlaceholder',
+          defaultValue: this.props.tableFilters.manufacturer
         }
       }
     };
@@ -463,6 +472,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           nextText={t('common:next')}
           onPageChange={this.onPageChange}
           sortable={false}
+          multiSort={false}
           noDataText={t('common:noDataText')}
           SubComponent={(rowInfo: RowInfo) => (
             <InstallationsExpander

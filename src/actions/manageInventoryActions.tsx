@@ -78,6 +78,7 @@ export function getInventory(): ThunkResult<void> {
 export function updateProduct(product: Iproduct): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
+    dispatch({ type: types.TOGGLE_MODAL_EDIT_PRODUCT });
     return axios
       .post(API.POST.inventory.updateproduct, product)
       .then(data => {
@@ -88,9 +89,7 @@ export function updateProduct(product: Iproduct): ThunkResult<void> {
             type: types.PRODUCT_UPDATE_SUCCESS,
             product: data.data
           });
-          dispatch({ type: types.TOGGLE_MODAL_EDIT_PRODUCT });
-          toastr.success('Success', 'Saved product', constants.toastrSuccess);
-          return data;
+          // toastr.success('Success', 'Saved product', constants.toastrSuccess);
         }
       })
       .catch((error: any) => {
@@ -107,6 +106,7 @@ export function updateProduct(product: Iproduct): ThunkResult<void> {
 export function saveProduct(product: Iproduct): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
+    dispatch({ type: types.TOGGLE_MODAL_EDIT_PRODUCT });
     return axios
       .post(API.POST.inventory.addproduct, product)
       .then(data => {
@@ -117,13 +117,11 @@ export function saveProduct(product: Iproduct): ThunkResult<void> {
             type: types.PRODUCT_ADD_SUCCESS,
             product: data.data
           });
-          dispatch({ type: types.TOGGLE_MODAL_EDIT_PRODUCT });
           toastr.success(
             'Success',
             'Submitted new product for approval.',
             constants.toastrSuccess
           );
-          return data;
         }
       })
       .catch((error: any) => {
@@ -140,6 +138,7 @@ export function updateInstall(
 ): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
+    dispatch({ type: types.TOGGLE_MODAL_EDIT_INSTALL });
     return axios
       .post(API.POST.inventory.updateinstall, install)
       .then(data => {
@@ -150,13 +149,12 @@ export function updateInstall(
             type: types.INSTALL_UPDATE_SUCCESS,
             install: data.data
           });
-          dispatch({ type: types.TOGGLE_MODAL_EDIT_INSTALL });
-          toastr.success(
-            'Success',
-            'Saved installation',
-            constants.toastrSuccess
-          );
-          return data;
+
+          // toastr.success(
+          //   'Success',
+          //   'Saved installation',
+          //   constants.toastrSuccess
+          // );
         }
       })
       .catch((error: any) => {
@@ -176,6 +174,7 @@ export function saveInstall(
 ): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
+    dispatch({ type: types.TOGGLE_MODAL_EDIT_INSTALL });
     return axios
       .post(API.POST.inventory.addinstall, install)
       .then(data => {
@@ -187,9 +186,7 @@ export function saveInstall(
             installs: data.data,
             productID
           });
-          dispatch({ type: types.TOGGLE_MODAL_EDIT_INSTALL });
-          toastr.success('Success', 'Saved install', constants.toastrSuccess);
-          return data;
+          // toastr.success('Success', 'Saved install', constants.toastrSuccess);
         }
       })
       .catch((error: any) => {
@@ -205,6 +202,7 @@ export function deleteInstall(
 ): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
+    dispatch({ type: types.TOGGLE_MODAL_EDIT_INSTALL });
     return axios
       .post(API.POST.inventory.deleteInstall, { id: installID })
       .then(data => {
@@ -213,8 +211,7 @@ export function deleteInstall(
           installID,
           productID
         });
-        dispatch({ type: types.TOGGLE_MODAL_EDIT_INSTALL });
-        toastr.success('Success', 'Install deleted', constants.toastrSuccess);
+        // toastr.success('Success', 'Install deleted', constants.toastrSuccess);
       })
       .catch((error: any) => {
         dispatch({ type: types.INSTALL_DELETE_FAILED });

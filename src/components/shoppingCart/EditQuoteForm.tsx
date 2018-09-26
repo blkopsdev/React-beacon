@@ -27,7 +27,7 @@ import {
   Iproduct,
   IproductInfo,
   IshoppingCart,
-  ItableFilters
+  ItableFiltersReducer
 } from '../../models';
 import { checkout } from '../../actions/shoppingCartActions';
 import { toggleEditQuoteModal } from '../../actions/manageInventoryActions';
@@ -112,7 +112,7 @@ interface Iprops {
   productInfo: IproductInfo;
   facilityOptions: Ioption[];
   cart: IshoppingCart;
-  tableFilters: ItableFilters;
+  tableFilters: ItableFiltersReducer;
   updateQuantityCart: any;
   deleteFromCart: any;
 }

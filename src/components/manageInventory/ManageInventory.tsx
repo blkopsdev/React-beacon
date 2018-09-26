@@ -321,13 +321,14 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
   };
 
   onSearchValuechanges = (value: any, key: string) => {
+    console.log('search change' + key);
     // set the selection to redux
     switch (key) {
       case 'facility':
         this.props.setTableFilter({ facility: value, page: 1 });
         break;
       case 'search':
-        this.props.setTableFilter({ search: value, page: 1 });
+        this.props.setTableFilter({ search: value, page: 1 }); // this causes performance issues
         break;
       case 'productGroup':
         this.props.setTableFilter({ productGroup: value, page: 1 });
@@ -414,7 +415,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     }
 
     return (
-      <div className="user-manage">
+      <div className="manage-inventory">
         <Banner
           title={t('bannerTitle')}
           img={this.state.currentTile.srcBanner}

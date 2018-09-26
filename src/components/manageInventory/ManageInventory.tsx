@@ -10,7 +10,12 @@ import { connect } from 'react-redux';
 import { find } from 'lodash';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
-import ReactTable, { RowInfo, FinalState, RowRenderProps } from 'react-table';
+import ReactTable, {
+  RowInfo,
+  FinalState,
+  RowRenderProps,
+  Instance
+} from 'react-table';
 
 import { FormUtil } from '../common/FormUtil';
 import {
@@ -311,7 +316,8 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
   // handleEditInstall = (e: React.MouseEvent<HTMLFormElement>)
   // get the next or previous page of data.  the table is 0 indexed but the API is not
   onPageChange = (page: number) => {
-    this.props.setTableFilter({ page });
+    const newPage = page + 1;
+    this.props.setTableFilter({ page: newPage });
   };
 
   onSearchValuechanges = (value: any, key: string) => {
@@ -333,9 +339,14 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         break;
     }
   };
-  // TODO  hide facilities if only one
+  onFetchData = (state: FinalState, instance: Instance) => {
+    // console.log(state)
+    this.props.getInventory();
+    this.setState({ selectedRow: {} });
+  };
   // scroll content area only
   render() {
+    console.log('rendering inventory table');
     if (this.props.productInfo.productGroupOptions.length === 0) {
       return (
         <Col xs={12}>
@@ -438,9 +449,11 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         </Button>
         <ReactTable
           data={this.props.tableData}
+          onFetchData={this.onFetchData}
           columns={this.state.columns}
           getTrProps={this.getTrProps}
           pageSize={this.props.tableData.length}
+          page={this.props.tableFilters.page - 1}
           manual // Forces table not to paginate or sort automatically, so we can handle it server-side
           pages={this.props.userManage.totalPages}
           showPageSizeOptions={false}

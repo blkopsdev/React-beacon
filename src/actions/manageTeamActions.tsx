@@ -41,6 +41,7 @@ export function getUserManage(): ThunkResult<void> {
 export function updateTeamUser(user: Iuser): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
+    dispatch({ type: types.TOGGLE_MODAL_EDIT_TEAM });
     return axios
       .post(API.POST.user.updateteam, user)
       .then(data => {
@@ -51,8 +52,8 @@ export function updateTeamUser(user: Iuser): ThunkResult<void> {
             type: types.TEAM_UPDATE_SUCCESS,
             user: data.data
           });
-          dispatch({ type: types.TOGGLE_MODAL_EDIT_TEAM });
-          toastr.success('Success', 'Saved user', constants.toastrSuccess);
+
+          // toastr.success('Success', 'Saved user', constants.toastrSuccess);
           return data;
         }
       })

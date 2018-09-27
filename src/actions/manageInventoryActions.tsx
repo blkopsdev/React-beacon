@@ -113,7 +113,6 @@ export function updateProduct(product: Iproduct): ThunkResult<void> {
 export function saveProduct(product: Iproduct): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
-    dispatch({ type: types.TOGGLE_MODAL_EDIT_PRODUCT });
     return axios
       .post(API.POST.inventory.addproduct, product)
       .then(data => {
@@ -124,6 +123,7 @@ export function saveProduct(product: Iproduct): ThunkResult<void> {
             type: types.PRODUCT_ADD_SUCCESS,
             product: data.data
           });
+          dispatch({ type: types.TOGGLE_MODAL_EDIT_PRODUCT });
           toastr.success(
             'Success',
             'Submitted new product for approval.',

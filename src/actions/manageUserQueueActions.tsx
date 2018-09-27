@@ -1,5 +1,5 @@
 import { ThunkAction } from 'redux-thunk';
-import { toastr } from 'react-redux-toastr';
+// import { toastr } from 'react-redux-toastr';
 import axios from 'axios';
 
 import { IinitialState, ItableFiltersParams, Iuser } from '../models';
@@ -91,6 +91,7 @@ export function updateQueueUser(
 ): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
+    dispatch({ type: types.TOGGLE_MODAL_EDIT_QUEUE_USER });
     return axios
       .post(API.POST.user.update, user)
       .then(data => {
@@ -102,8 +103,8 @@ export function updateQueueUser(
             user: data.data,
             queueID
           });
-          dispatch({ type: types.TOGGLE_MODAL_EDIT_QUEUE_USER });
-          toastr.success('Success', 'Saved user', constants.toastrSuccess);
+
+          // toastr.success('Success', 'Saved user', constants.toastrSuccess);
           if (shouldApprove) {
             dispatch(beginAjaxCall());
             handleApproveUser(queueID, dispatch); // don't return this because if we do, we will see two errors

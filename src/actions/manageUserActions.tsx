@@ -1,8 +1,9 @@
 import { ThunkAction } from 'redux-thunk';
-// import { toastr } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import axios from 'axios';
 
 import { IinitialState, ItableFiltersParams, Iuser } from '../models';
+import { authContext } from './userActions';
 import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
 import constants from '../constants/constants';
@@ -38,7 +39,29 @@ export function getUserManage(): ThunkResult<void> {
       });
   };
 }
-
+/*
+  * If the user updates themselves, log them out so that the changes are actually reflected
+  */
+const checkForLoggedInUser = (
+  userID: string,
+  updatedUserID: string,
+  dispatch: any
+) => {
+  if (userID === updatedUserID) {
+    toastr.warning(
+      'Logging out',
+      'Updating currently logged in user requires logging out.',
+      constants.toastrSuccess
+    );
+    setTimeout(() => {
+      dispatch({ type: types.USER_LOGOUT_SUCCESS });
+      localStorage.removeItem('state-core-care');
+      setTimeout(() => {
+        authContext.logOut();
+      }, 100); // give it time to persist this to local storage
+    }, 5000);
+  }
+};
 export function updateUser(user: Iuser): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
@@ -55,7 +78,7 @@ export function updateUser(user: Iuser): ThunkResult<void> {
           });
 
           // toastr.success('Success', 'Saved user', constants.toastrSuccess);
-          return data;
+          checkForLoggedInUser(user.id, getState().user.id, dispatch);
         }
       })
       .catch((error: any) => {

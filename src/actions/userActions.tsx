@@ -62,8 +62,8 @@ export function isFullyAuthenticated(user: Iuser) {
 
 //   }
 
-export function userLogin() {
-  return (dispatch: any, getState: any) => {
+export function userLogin(): ThunkResult<void> {
+  return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     const token = authContext.getCachedToken(authContext.config.clientId);
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
@@ -86,16 +86,16 @@ export function userLogin() {
       });
   };
 }
-export function adalLogin() {
-  return (dispatch: any, getState: any) => {
+export function adalLogin(): ThunkResult<void> {
+  return (dispatch, getState) => {
     // dispatch(beginAjaxCall()); removing loading here beacuse when we come back from adal login,
     // is when the success is called and it closses loading while userLogin is still waiting.
     authContext.login();
   };
 }
 
-export const getToken = () => {
-  return (dispatch: any, getState: any) => {
+export const getToken = (): ThunkResult<void> => {
+  return (dispatch, getState) => {
     // dispatch(beginAjaxCall()); see comment above in adalLogin
     const token = authContext.getCachedToken(authContext.config.clientId);
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
@@ -104,8 +104,8 @@ export const getToken = () => {
   };
 };
 
-export function userLogout() {
-  return (dispatch: any, getState: any) => {
+export function userLogout(): ThunkResult<void> {
+  return (dispatch, getState) => {
     dispatch({ type: types.USER_LOGOUT_SUCCESS });
     localStorage.removeItem('state-core-care');
     setTimeout(() => {
@@ -114,8 +114,8 @@ export function userLogout() {
   };
 }
 
-export function signUpDirect(tempUser: ItempUser) {
-  return (dispatch: any, getState: any) => {
+export function signUpDirect(tempUser: ItempUser): ThunkResult<void> {
+  return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     return axios
       .post(API.POST.user.signup, tempUser)

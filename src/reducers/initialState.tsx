@@ -80,6 +80,12 @@ export default {
     },
     tableFilters: initialTableFilters
   },
+  manageProductQueue: {
+    showApproveProductModal: false,
+    totalPages: 1,
+    data: [],
+    tableFilters: initialTableFilters
+  },
   customers: [],
   facilities: [],
 

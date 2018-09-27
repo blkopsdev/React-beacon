@@ -26,7 +26,8 @@ const API = {
       updateinstall: `${root}inventory/update`,
       addinstall: `${root}inventory/add`,
       deleteInstall: `${root}inventory/delete`,
-      installContact: `${root}inventory/contact`
+      installContact: `${root}inventory/contact`,
+      approveproduct: `${root}inventory/approve`
     }
   },
   GET: {
@@ -43,7 +44,8 @@ const API = {
     },
     inventory: {
       getinventory: `${root}inventory/search`, // unused
-      getproductinfo: `${root}inventory/getproductinfo`
+      getproductinfo: `${root}inventory/getproductinfo`,
+      getproductqueue: `${root}inventory/getproductqueue`
     }
   }
 };

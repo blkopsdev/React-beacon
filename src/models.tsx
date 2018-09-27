@@ -139,6 +139,7 @@ export interface Iproduct {
   installs: IinstallBase[];
   quantity: number;
 }
+
 export interface IquoteItem {
   productID: string;
   quantity: number;
@@ -180,6 +181,20 @@ export interface ImanageInventoryReducer {
   tableFilters: ItableFiltersReducer;
 }
 
+export interface IproductQueueObject {
+  id: string;
+  productID: string;
+  createDate: string;
+  creatorID: string;
+  product: Iproduct;
+}
+export interface ImanageProductQueueReducer {
+  data: IproductQueueObject[];
+  totalPages: number;
+  showApproveProductModal: boolean;
+  tableFilters: ItableFiltersReducer;
+}
+
 export interface Iredirect {
   redirectToReferrer: boolean;
   pathname: string;
@@ -213,6 +228,7 @@ export interface IinitialState {
   manageUser: ImanageUserReducer;
   manageTeam: ImanageTeamReducer;
   manageInventory: ImanageInventoryReducer;
+  manageProductQueue: ImanageProductQueueReducer;
   customers: Icustomer[];
   facilities: Ifacility[];
   showEditCustomerModal: boolean;

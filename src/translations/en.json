@@ -147,6 +147,31 @@
     "installDeleteConfirm": "Are you sure?",
     "installDeleteOk": "Delete Install"
   },
+  "manageProductQueue": {
+    "bannerTitle": "New Product Queue",
+    "editModalTitle": "Edit Product",
+    "searchPlaceholder": "SKU, Product Name...",
+    "message": "Comments / Questions",
+    "nickname": "Nickname",
+    "sku": "SKU",
+    "name": "Name",
+    "productGroup": "Product Group",
+    "manufacturer": "Manufacturer",
+    "quantity": "Quantity",
+    "addToQuote": "Add To Quote",
+    "addInstallation": "Add Installation",
+    "description": "Description",
+    "brand": "Brand",
+    "subcategory": "Sub Category",
+    "gasType": "Gas Type",
+    "power": "Power",
+    "systemSize": "System Size",
+    "standard": "Standard ",
+    "mainCategory": "Main Category",
+    "rfid": "RFID",
+    "remarks": "Remarks",
+    "serialNumber": "Serial Number"
+  },
   "tiles": {
     "alerts": "Alerts",
     "training": "Training",
@@ -157,6 +182,7 @@
     "manageTeam": "Manage Team",
     "documents": "Documents & Legal",
     "inventory": "Inventory",
+    "productqueue": "New Product Queue",
     "administration": "Administration",
     "billing": "Billing",
     "groups": "My groups",
@@ -174,6 +200,7 @@
     "ManageTeamMembers": "Manage Team Members",
     "ManageIndividualTraining": "Manage Individual Training",
     "ManageEmployeeTraining": "Manage Employee Training",
+    "ManageProductQueue": "Manage Product Queue",
     "Payment": "Payment"
   }
 }

@@ -176,6 +176,7 @@ export interface ImanageInventoryReducer {
   showEditProductModal: boolean;
   showEditInstallModal: boolean;
   showEditQuoteModal: boolean;
+  showInstallContactModal: boolean;
   tableFilters: ItableFiltersReducer;
 }
 

@@ -228,6 +228,45 @@ export function deleteInstall(
   };
 }
 
+export function installContact(
+  installBaseID: string,
+  message: string
+): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    dispatch({ type: types.TOGGLE_MODAL_INSTALL_CONTACT });
+    const facility = getState().manageInventory.tableFilters.facility;
+    const facilityID = facility
+      ? facility.value
+      : getState().user.facilities[0].id;
+    return axios
+      .post(API.POST.inventory.installContact, {
+        facilityID,
+        installBaseID,
+        message
+      })
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.INSTALL_CONTACT_SUCCESS
+          });
+          toastr.success(
+            'Contacted Support',
+            'We will respond within 24 hours.',
+            constants.toastrSuccess
+          );
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.INSTALL_CONTACT_FAILED });
+        constants.handleError(error, 'contact support');
+        throw error;
+      });
+  };
+}
+
 export const toggleEditProductModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_PRODUCT
 });
@@ -238,6 +277,9 @@ export const toggleEditInstallModal = () => ({
 
 export const toggleEditQuoteModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_QUOTE
+});
+export const toggleInstallContactModal = () => ({
+  type: types.TOGGLE_MODAL_INSTALL_CONTACT
 });
 
 export const setTableFilter = (filters: ItableFiltersParams) => ({

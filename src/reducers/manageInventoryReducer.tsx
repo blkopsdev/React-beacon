@@ -162,6 +162,11 @@ export default function ManageInventory(
       action,
       'EDIT_INSTALL'
     ),
+    showInstallContactModal: modalToggleWithName(
+      state.showInstallContactModal,
+      action,
+      'INSTALL_CONTACT'
+    ),
     tableFilters: createTableFiltersWithName(
       state.tableFilters,
       action,

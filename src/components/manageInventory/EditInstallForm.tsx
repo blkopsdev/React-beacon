@@ -20,7 +20,6 @@ import {
   IinstallBase,
   Ioption,
   Iproduct,
-  IproductInfo,
   ItableFiltersReducer
 } from '../../models';
 import {
@@ -30,7 +29,7 @@ import {
 } from '../../actions/manageInventoryActions';
 import constants from '../../constants/constants';
 
-const buildFieldConfig = (productInfo: IproductInfo) => {
+const buildFieldConfig = () => {
   const fieldConfigControls = {
     nickname: {
       render: FormUtil.TextInput,
@@ -71,7 +70,6 @@ interface Iprops {
   colorButton: string;
   t: TranslationFunction;
   i18n: I18n;
-  productInfo: IproductInfo;
   facilityOptions: Ioption[];
   tableFilters: ItableFiltersReducer;
   selectedProduct: Iproduct;
@@ -83,10 +81,7 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
   public fieldConfig: FieldConfig;
   constructor(props: Iprops) {
     super(props);
-    this.fieldConfig = FormUtil.translateForm(
-      buildFieldConfig(this.props.productInfo),
-      this.props.t
-    );
+    this.fieldConfig = FormUtil.translateForm(buildFieldConfig(), this.props.t);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setForm = this.setForm.bind(this);
   }

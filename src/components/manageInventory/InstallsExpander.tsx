@@ -15,6 +15,7 @@ import { TranslationFunction } from 'react-i18next';
 interface ExpanderProps extends RowInfo {
   addToQuote: (product: any) => void;
   addInstallation: () => void;
+  contactAboutInstall: (install: any) => void;
   t: TranslationFunction;
   getExpanderTrProps: (
     state: FinalState,
@@ -104,6 +105,7 @@ export const InstallationsExpander = (props: ExpanderProps) => {
             'clicked contact support about install',
             rowInfo.original.id
           );
+          props.contactAboutInstall(rowInfo.original);
           if (handleOriginal) {
             handleOriginal();
           }

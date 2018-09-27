@@ -51,6 +51,7 @@ export default {
     showEditProductModal: false,
     showEditInstallModal: false,
     showEditQuoteModal: false,
+    showInstallContactModal: false,
     totalPages: 1,
     data: [],
     cart: {

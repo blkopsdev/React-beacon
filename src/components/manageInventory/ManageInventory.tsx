@@ -37,11 +37,12 @@ import { closeAllModals } from '../../actions/commonActions';
 import { emptyTile } from '../../reducers/initialState';
 import {
   getInventory,
-  toggleEditProductModal,
-  toggleEditInstallModal,
-  toggleEditQuoteModal,
   getProductInfo,
-  setTableFilter
+  setTableFilter,
+  toggleInstallContactModal,
+  toggleEditInstallModal,
+  toggleEditProductModal,
+  toggleEditQuoteModal
 } from '../../actions/manageInventoryActions';
 import { getTotal } from '../../reducers/manageInventoryReducer';
 import Banner from '../common/Banner';
@@ -79,6 +80,7 @@ interface IdispatchProps {
   tableData: Iproduct[];
   setTableFilter: typeof setTableFilter;
   tableFilters: ItableFiltersReducer;
+  toggleInstallContactModal: typeof toggleInstallContactModal;
 }
 
 interface Istate {
@@ -335,6 +337,12 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     }
     return searchFieldConfig;
   };
+  contactAboutInstall = (install: IinstallBase) => {
+    this.buttonInAction = true;
+    this.setState({ selectedInstall: install }, () => {
+      this.buttonInAction = false;
+    });
+  };
 
   /*
   * Handle user clicking on a product row
@@ -494,6 +502,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           SubComponent={(rowInfo: RowInfo) => (
             <InstallationsExpander
               {...rowInfo}
+              contactAboutInstall={this.contactAboutInstall}
               addToQuote={this.props.addToCart}
               addInstallation={() => {
                 this.setState(
@@ -548,6 +557,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     loading: state.ajaxCallsInProgress > 0,
     showEditProductModal: state.manageInventory.showEditProductModal,
     showEditInstallModal: state.manageInventory.showEditInstallModal,
+    showInstallContactModal: state.manageInventory.showInstallContactModal,
     facilityOptions: FormUtil.convertToOptions(state.user.facilities),
     productInfo: state.manageInventory.productInfo,
     cartTotal: getTotal(state.manageInventory),
@@ -566,7 +576,8 @@ export default translate('manageInventory')(
       closeAllModals,
       getProductInfo,
       addToCart,
-      setTableFilter
+      setTableFilter,
+      toggleInstallContactModal
     }
   )(ManageInventory)
 );

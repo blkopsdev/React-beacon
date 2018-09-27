@@ -25,7 +25,8 @@ const API = {
       quote: `${root}inventory/quote`,
       updateinstall: `${root}inventory/update`,
       addinstall: `${root}inventory/add`,
-      deleteInstall: `${root}inventory/delete`
+      deleteInstall: `${root}inventory/delete`,
+      installContact: `${root}inventory/contact`
     }
   },
   GET: {

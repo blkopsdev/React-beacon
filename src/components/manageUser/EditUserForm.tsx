@@ -123,9 +123,9 @@ interface Iprops extends React.Props<EditUserForm> {
   colorButton: string;
   t: TranslationFunction;
   i18n: I18n;
-  customerOptions: any[];
+  customerOptions: Ioption[];
   getFacilitiesByCustomer: (value: string) => Promise<void>;
-  facilityOptions: any[];
+  facilityOptions: Ioption[];
   updateUser: typeof updateUser;
   toggleEditUserModal: typeof toggleEditUserModal;
   toggleEditCustomerModal: typeof toggleEditCustomerModal;
@@ -169,13 +169,35 @@ class EditUserForm extends React.Component<Iprops, {}> {
       ) as AbstractControlEdited;
       facilitySelectControl.meta.options = this.props.facilityOptions;
       facilitySelectControl.stateChanges.next();
+      const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
+        return find(this.props.selectedUser.facilities, { id: fac.value })
+          ? true
+          : false;
+      });
+      this.userForm.patchValue({ facilities: facilitiesArray });
     }
-    const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
-      return find(this.props.selectedUser.facilities, { id: fac.value })
-        ? true
-        : false;
-    });
-    this.userForm.patchValue({ facilities: facilitiesArray });
+    if (
+      differenceBy(
+        prevProps.customerOptions,
+        this.props.customerOptions,
+        'value'
+      ).length ||
+      prevProps.customerOptions.length !== this.props.customerOptions.length
+    ) {
+      const customerSelectControl = this.userForm.get(
+        'customerID'
+      ) as AbstractControlEdited;
+      customerSelectControl.meta.options = this.props.customerOptions;
+      customerSelectControl.stateChanges.next();
+      // now select the customer the user just added
+      // might be a better way to do this, but we are comparing the two arrays and finding the new customer
+      const newCustomer = filter(this.props.customerOptions, (cust: any) => {
+        return find(prevProps.customerOptions, { value: cust.value })
+          ? false
+          : true;
+      });
+      this.userForm.patchValue({ customerID: newCustomer[0] });
+    }
   }
 
   componentDidMount() {

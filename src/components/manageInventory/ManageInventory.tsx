@@ -117,6 +117,13 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
   componentDidMount() {
     this.props.getProductInfo();
     this.props.getInventory();
+    // make sure there is a facility set to the table search filters so that it can be used in the EditProductForm
+    if (!this.props.tableFilters.facility) {
+      const facility = this.props.tableFilters.facility
+        ? this.props.tableFilters.facility
+        : this.props.facilityOptions[0];
+      this.props.setTableFilter({ facility });
+    }
   }
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
     if (

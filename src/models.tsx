@@ -145,23 +145,23 @@ export interface IquoteItem {
 }
 
 export interface ImanageUserQueueReducer {
-  page: number;
   data: IqueueObject[];
   totalPages: number;
   showEditQueueUserModal: boolean;
+  tableFilters: ItableFiltersReducer;
 }
 
 export interface ImanageUserReducer {
-  page: number;
   data: Iuser[];
   totalPages: number;
   showEditUserModal: boolean;
+  tableFilters: ItableFiltersReducer;
 }
 export interface ImanageTeamReducer {
-  page: number;
   data: Iuser[];
   totalPages: number;
   showEditTeamModal: boolean;
+  tableFilters: ItableFiltersReducer;
 }
 
 export interface IshoppingCart {
@@ -169,7 +169,6 @@ export interface IshoppingCart {
   productsByID: { [key: string]: Iproduct };
 }
 export interface ImanageInventoryReducer {
-  page: number;
   data: Iproduct[];
   totalPages: number;
   cart: IshoppingCart;

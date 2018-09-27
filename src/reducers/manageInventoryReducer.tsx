@@ -124,20 +124,6 @@ function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
   }
 }
 
-function pageReducer(state: number = 1, action: any): number {
-  switch (action.type) {
-    case types.INVENTORY_INCREMENT:
-      return state + 1;
-    case types.INVENTORY_DECREMENT:
-      if (state > 1) {
-        return state - 1;
-      }
-    case types.USER_LOGOUT_SUCCESS:
-      return 1;
-    default:
-      return state;
-  }
-}
 function totalPagesReducer(state: number = 1, action: any): number {
   switch (action.type) {
     case types.INVENTORY_TOTAL_PAGES:
@@ -158,7 +144,6 @@ export default function ManageInventory(
 ) {
   return {
     data: dataReducer(state.data, action),
-    page: pageReducer(state.page, action),
     totalPages: totalPagesReducer(state.totalPages, action),
     cart: cartReducer(state.cart, action),
     productInfo: productInfo(state.productInfo, action),

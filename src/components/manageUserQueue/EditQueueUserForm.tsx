@@ -30,7 +30,7 @@ import {
 import {
   toggleEditQueueUserModal,
   updateQueueUser
-} from '../../actions/userQueueActions';
+} from '../../actions/manageUserQueueActions';
 import EditFacilityModal from '../common/EditFacilityModal';
 import constants from '../../constants/constants';
 

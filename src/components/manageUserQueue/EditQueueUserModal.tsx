@@ -17,15 +17,15 @@ import {
   IqueueObject
 } from '../../models';
 import {
+  getFacilitiesByCustomer,
   toggleEditCustomerModal,
   toggleEditFacilityModal
 } from '../../actions/commonActions';
 import {
   updateQueueUser,
-  getFacilitiesByCustomer,
   toggleEditQueueUserModal,
   approveUser
-} from '../../actions/userQueueActions';
+} from '../../actions/manageUserQueueActions';
 import CommonModal from '../common/CommonModal';
 import EditQueueUserForm from './EditQueueUserForm';
 

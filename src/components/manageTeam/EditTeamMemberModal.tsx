@@ -8,12 +8,12 @@ import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
 import { IinitialState, Iuser } from '../../models';
-import { getFacilitiesByCustomer } from '../../actions/userQueueActions';
+import { getFacilitiesByCustomer } from '../../actions/commonActions';
 import {
   updateTeamUser,
   saveTeamUser,
   toggleEditTeamUserModal
-} from '../../actions/teamManageActions';
+} from '../../actions/manageTeamActions';
 import CommonModal from '../common/CommonModal';
 import UserManageForm from './EditTeamMemberForm';
 

@@ -1,61 +1,65 @@
 /*
 * The New User Manage
 */
-import * as React from 'react';
+import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { find } from 'lodash';
+import { translate, TranslationFunction, I18n } from 'react-i18next';
+import * as React from 'react';
+import ReactTable, { SortingRule, FinalState, RowInfo } from 'react-table';
+import * as moment from 'moment';
+
+import { FormUtil } from '../common/FormUtil';
+import {
+  Icustomer,
+  IinitialState,
+  ImanageUserReducer,
+  ItableFiltersReducer,
+  Itile,
+  Iuser
+} from '../../models';
+import { TableUtil } from '../common/TableUtil';
+import { closeAllModals, getCustomers } from '../../actions/commonActions';
+import { emptyTile } from '../../reducers/initialState';
 import {
   getUserManage,
-  updateUser,
+  setTableFilter,
   toggleEditUserModal,
-  toggleSecurityFunctionsModal
-} from '../../actions/userManageActions';
-import { getCustomers } from '../../actions/userQueueActions';
-import {
-  IinitialState,
-  Iuser,
-  Itile,
-  ImanageUserReducer,
-  Icustomer
-} from '../../models';
-import CommonModal from '../common/CommonModal';
-import { emptyTile } from '../../reducers/initialState';
-import { RouteComponentProps } from 'react-router-dom';
-import ReactTable from 'react-table';
-// import { Button } from "react-bootstrap";
+  toggleSecurityFunctionsModal,
+  updateUser
+} from '../../actions/manageUserActions';
 import Banner from '../common/Banner';
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import constants from '../../constants/constants';
-import * as moment from 'moment';
-import { translate, TranslationFunction, I18n } from 'react-i18next';
-import { find } from 'lodash';
-import { FormUtil } from '../common/FormUtil';
-import SearchTableForm from '../common/SearchTableForm';
-import { TableUtil } from '../common/TableUtil';
-import EditUserModal from './EditUserModal';
+import CommonModal from '../common/CommonModal';
 import EditCustomerModal from '../common/EditCustomerModal';
-import { closeAllModals } from '../../actions/commonActions';
+import EditUserModal from './EditUserModal';
+import SearchTableForm from '../common/SearchTableForm';
 import SecurityFunctionsList from './SecurityFunctionsList';
+import constants from '../../constants/constants';
+import { FieldConfig } from 'react-reactive-form';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
   t: TranslationFunction;
   i18n: I18n;
-  showEditUserModal: boolean;
-  showEditCustomerModal: boolean;
-  showEditFacilityModal: boolean;
-  showSecurityFunctionsModal: boolean;
   loading: boolean;
-  userManage: ImanageUserReducer;
 }
 
 interface IdispatchProps {
   // Add your dispatcher properties here
-  toggleEditUserModal: () => void;
-  toggleSecurityFunctionsModal: () => void;
-  getUserManage: (value: number, search: string, customerID: string) => void;
+  toggleEditUserModal: typeof toggleEditUserModal;
+  toggleSecurityFunctionsModal: typeof toggleSecurityFunctionsModal;
+  getUserManage: typeof getUserManage;
   customers: Icustomer[];
   closeAllModals: typeof closeAllModals;
   getCustomers: typeof getCustomers;
+  userManage: ImanageUserReducer;
+  showEditUserModal: boolean;
+  showEditCustomerModal: boolean;
+  showEditFacilityModal: boolean;
+  showSecurityFunctionsModal: boolean;
+  setTableFilter: typeof setTableFilter;
+  tableFilters: ItableFiltersReducer;
+  tableData: Iuser[];
 }
 
 interface Istate {
@@ -65,8 +69,9 @@ interface Istate {
 
 class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
   public columns: any[];
-  public searchFieldConfig: any;
+  public searchFieldConfig: FieldConfig;
   public buttonInAction = false;
+  private setTableFilterTimeout: any;
   constructor(props: Iprops & IdispatchProps) {
     super(props);
     this.getTrProps = this.getTrProps.bind(this);
@@ -133,17 +138,19 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
             label: 'common:search',
             colWidth: 4,
             type: 'text',
-            placeholder: 'searchPlaceholder'
+            placeholder: 'searchPlaceholder',
+            defaultValue: this.props.tableFilters.search
           }
         },
-        customerID: {
+        customer: {
           render: FormUtil.SelectWithoutValidation,
           meta: {
             label: 'common:customer',
             options: FormUtil.convertToOptions(this.props.customers),
             colWidth: 4,
             type: 'select',
-            placeholder: 'customerPlaceholder'
+            placeholder: 'customerPlaceholder',
+            defaultValue: this.props.tableFilters.customer
           }
         }
       }
@@ -153,24 +160,35 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
     this.setState({
       currentTile: constants.getTileByURL(this.props.location.pathname)
     });
+  }
+  componentDidMount() {
     // refresh the userManage every time the component mounts
-    this.props.getUserManage(1, '', '');
+    this.props.getUserManage();
     // refresh the list of customers every time the component mounts
     this.props.getCustomers();
   }
-  componentDidUpdate(prevProps: Iprops) {
+  componentDidUpdate(prevProps: Iprops & IdispatchProps) {
     if (
       prevProps.showEditUserModal !== this.props.showEditUserModal &&
       !this.props.showEditUserModal
     ) {
       this.setState({ selectedRow: null });
     }
+    // automatically get inventory every time a fitler changes
+    if (prevProps.tableFilters !== this.props.tableFilters) {
+      this.props.getUserManage();
+    }
   }
   componentWillUnmount() {
     this.props.closeAllModals();
   }
 
-  getTrProps = (state: any, rowInfo: any) => {
+  /*
+  * (reusable)
+  * Handle user clicking on a product row
+  * set the selected product to state and open the modal
+  */
+  getTrProps = (state: FinalState, rowInfo: RowInfo) => {
     // console.log("ROWINFO", rowInfo);
     if (rowInfo) {
       return {
@@ -193,25 +211,47 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
       return {};
     }
   };
-  // get the next or previous page of data.  the table is 0 indexed but the API is not
+  /*
+  * (reusable)
+  * get the next or previous page of data.  the table is 0 indexed but the API is not
+  */
   onPageChange = (page: number) => {
-    this.props.getUserManage(page + 1, '', '');
+    const newPage = page + 1;
+    this.props.setTableFilter({ page: newPage });
   };
-  onSearchSubmit = ({
-    search,
-    customerID
-  }: {
-    search: string;
-    customerID: { value: string; title: string };
-  }) => {
-    const custID = customerID ? customerID.value : '';
-    this.props.getUserManage(this.props.userManage.page, search, custID);
+  /*
+  * (reusable)
+  * set the table filters to redux on each value change
+  */
+  onSearchValueChanges = (value: any, key: string) => {
+    switch (key) {
+      case 'customer':
+        this.props.setTableFilter({ customer: value, page: 1 });
+        break;
+      case 'search':
+        clearTimeout(this.setTableFilterTimeout);
+        this.setTableFilterTimeout = setTimeout(() => {
+          this.props.setTableFilter({ search: value, page: 1 }); // this causes performance issues so we use a rudamentary debounce
+        }, constants.tableSearchDebounceTime);
+        break;
+      default:
+        break;
+    }
+  };
+  /*
+  * (reusable)
+  * set the sorted changes to redux
+  */
+  onSortedChanged = (
+    newSorted: SortingRule[],
+    column: any,
+    shiftKey: boolean
+  ) => {
+    this.props.setTableFilter({ sorted: newSorted });
+    this.setState({ selectedRow: {} });
   };
 
   render() {
-    // if (this.props.userManage.data.length === 0) {
-    //   return <div>EFF</div>;
-    // }
     const { t } = this.props;
     return (
       <div className="user-manage">
@@ -222,18 +262,22 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
         />
         <SearchTableForm
           fieldConfig={this.searchFieldConfig}
-          handleSubmit={this.onSearchSubmit}
+          handleSubmit={this.props.getUserManage}
           loading={this.props.loading}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
           t={this.props.t}
+          subscribeValueChanges={true}
+          onValueChanges={this.onSearchValueChanges}
         />
         <ReactTable
-          data={this.props.userManage.data}
+          data={this.props.tableData}
+          onSortedChange={this.onSortedChanged}
           columns={this.columns}
           getTrProps={this.getTrProps}
-          pageSize={this.props.userManage.data.length}
+          pageSize={this.props.tableData.length}
+          page={this.props.tableFilters.page - 1}
           manual // Forces table not to paginate or sort automatically, so we can handle it server-side
           pages={this.props.userManage.totalPages}
           showPageSizeOptions={false}
@@ -246,7 +290,7 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
           resizable={false}
         />
         <EditUserModal
-          selectedUser={this.props.userManage.data[this.state.selectedRow]}
+          selectedUser={this.props.tableData[this.state.selectedRow]}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
@@ -284,7 +328,9 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     showEditUserModal: state.manageUser.showEditUserModal,
     showEditCustomerModal: state.showEditCustomerModal,
     showEditFacilityModal: state.showEditFacilityModal,
-    showSecurityFunctionsModal: state.showSecurityFunctionsModal
+    showSecurityFunctionsModal: state.showSecurityFunctionsModal,
+    tableData: state.manageUser.data,
+    tableFilters: state.manageUser.tableFilters
   };
 };
 export default translate('userManage')(
@@ -296,7 +342,8 @@ export default translate('userManage')(
       toggleEditUserModal,
       toggleSecurityFunctionsModal,
       closeAllModals,
-      getCustomers
+      getCustomers,
+      setTableFilter
     }
   )(UserManage)
 );

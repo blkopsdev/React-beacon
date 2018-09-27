@@ -10,7 +10,7 @@ import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
 import { IinitialState, Iuser } from '../../models';
-import { getFacilitiesByCustomer } from '../../actions/userQueueActions';
+import { getFacilitiesByCustomer } from '../../actions/commonActions';
 import {
   toggleEditProfileModal,
   updateUserProfile

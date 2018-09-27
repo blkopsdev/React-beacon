@@ -18,12 +18,12 @@ import * as React from 'react';
 
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
 import { Ioption, Iuser } from '../../models';
-import { getFacilitiesByCustomer } from '../../actions/userQueueActions';
+import { getFacilitiesByCustomer } from '../../actions/commonActions';
 import {
   saveTeamUser,
   toggleEditTeamUserModal,
   updateTeamUser
-} from '../../actions/teamManageActions';
+} from '../../actions/manageTeamActions';
 import constants from '../../constants/constants';
 
 const buildFieldConfig = (facilityOptions: any[]) => {

@@ -26,7 +26,7 @@ import {
   toggleEditUserModal,
   updateUser,
   toggleSecurityFunctionsModal
-} from '../../actions/userManageActions';
+} from '../../actions/manageUserActions';
 import EditFacilityModal from '../common/EditFacilityModal';
 import constants from '../../constants/constants';
 

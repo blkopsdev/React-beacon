@@ -30,28 +30,27 @@ export default {
   },
   // userQueue: []
   manageUserQueue: {
-    page: 1,
     totalPages: 1,
     data: [],
-    showEditQueueUserModal: false
+    showEditQueueUserModal: false,
+    tableFilters: initialTableFilters
   },
   manageUser: {
-    page: 1,
     totalPages: 1,
     data: [],
-    showEditUserModal: false
+    showEditUserModal: false,
+    tableFilters: initialTableFilters
   },
   manageTeam: {
-    page: 1,
     totalPages: 1,
     data: [],
-    showEditTeamModal: false
+    showEditTeamModal: false,
+    tableFilters: initialTableFilters
   },
   manageInventory: {
     showEditProductModal: false,
     showEditInstallModal: false,
     showEditQuoteModal: false,
-    page: 1,
     totalPages: 1,
     data: [],
     cart: {

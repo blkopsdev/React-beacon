@@ -10,8 +10,8 @@ import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
 import { IinitialState, Iuser } from '../../models';
-import { getFacilitiesByCustomer } from '../../actions/userQueueActions';
 import {
+  getFacilitiesByCustomer,
   toggleEditCustomerModal,
   toggleEditFacilityModal
 } from '../../actions/commonActions';
@@ -19,7 +19,7 @@ import {
   updateUser,
   toggleEditUserModal,
   toggleSecurityFunctionsModal
-} from '../../actions/userManageActions';
+} from '../../actions/manageUserActions';
 import CommonModal from '../common/CommonModal';
 import EditUserForm from './EditUserForm';
 

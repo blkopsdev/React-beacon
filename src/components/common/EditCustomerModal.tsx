@@ -12,8 +12,10 @@ import {
   IinitialState
   // Icustomer
 } from '../../models';
-import { addCustomer } from '../../actions/userQueueActions';
-import { toggleEditCustomerModal } from '../../actions/commonActions';
+import {
+  addCustomer,
+  toggleEditCustomerModal
+} from '../../actions/commonActions';
 import CommonModal from '../common/CommonModal';
 import EditCustomerForm from '../common/EditCustomerForm';
 

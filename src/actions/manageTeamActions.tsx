@@ -1,22 +1,21 @@
-import axios from 'axios';
-import * as types from './actionTypes';
-import API from '../constants/apiEndpoints';
-import { beginAjaxCall } from './ajaxStatusActions';
-import { toastr } from 'react-redux-toastr';
-import constants from '../constants/constants';
-import { Iuser, IinitialState } from '../models';
 import { ThunkAction } from 'redux-thunk';
+import { toastr } from 'react-redux-toastr';
+import axios from 'axios';
+
+import { IinitialState, ItableFiltersParams, Iuser } from '../models';
+import { beginAjaxCall } from './ajaxStatusActions';
+import API from '../constants/apiEndpoints';
+import constants from '../constants/constants';
+import * as types from './actionTypes';
+
 // import {AxiosResponse} from 'axios';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
-export function getUserManage(
-  page: number,
-  search: string,
-  customerID: string
-) {
-  return (dispatch: any, getState: any) => {
+export function getUserManage(): ThunkResult<void> {
+  return (dispatch, getState) => {
     dispatch(beginAjaxCall());
+    const { page, search } = getState().manageTeam.tableFilters;
     return axios
       .get(API.GET.user.getteamsearch, { params: { page, search } })
       .then(data => {
@@ -96,4 +95,9 @@ export function saveTeamUser(user: Iuser): ThunkResult<void> {
 
 export const toggleEditTeamUserModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_TEAM
+});
+
+export const setTableFilter = (filters: ItableFiltersParams) => ({
+  type: types.SET_TABLE_FILTER_MANAGE_TEAM,
+  filters
 });

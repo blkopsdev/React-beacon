@@ -1,17 +1,24 @@
-import axios from 'axios';
-import * as types from './actionTypes';
-import API from '../constants/apiEndpoints';
-import { beginAjaxCall } from './ajaxStatusActions';
-import { toastr } from 'react-redux-toastr';
-import constants from '../constants/constants';
-import { Iproduct, IinitialState, IinstallBase } from '../models';
 import { ThunkAction } from 'redux-thunk';
+import { toastr } from 'react-redux-toastr';
+import axios from 'axios';
+
+import {
+  IinitialState,
+  IinstallBase,
+  Iproduct,
+  ItableFiltersParams
+} from '../models';
+import { beginAjaxCall } from './ajaxStatusActions';
+import API from '../constants/apiEndpoints';
+import constants from '../constants/constants';
+import * as types from './actionTypes';
+
 // import {AxiosResponse} from 'axios';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
-export function getProductInfo() {
-  return (dispatch: any, getState: any) => {
+export function getProductInfo(): ThunkResult<void> {
+  return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     return axios
       .get(API.GET.inventory.getproductinfo)
@@ -231,4 +238,9 @@ export const toggleEditInstallModal = () => ({
 
 export const toggleEditQuoteModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_QUOTE
+});
+
+export const setTableFilter = (filters: ItableFiltersParams) => ({
+  type: types.SET_TABLE_FILTER_MANAGE_INVENTORY,
+  filters
 });

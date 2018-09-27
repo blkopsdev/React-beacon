@@ -94,7 +94,12 @@ const buildFieldConfig = (
       options: {
         validators: Validators.required
       },
-      meta: { label: 'message', colWidth: 12, componentClass: 'textarea' }
+      meta: {
+        label: 'message',
+        colWidth: 12,
+        componentClass: 'textarea',
+        rows: 8
+      }
     }
   };
   return {

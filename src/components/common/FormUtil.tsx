@@ -88,6 +88,7 @@ export const FormUtil = {
           placeholder={meta.placeholder}
           componentClass={meta.componentClass}
           type={meta.type || 'text'}
+          rows={meta.rows}
           {...handler()}
         />
         <FormControl.Feedback />

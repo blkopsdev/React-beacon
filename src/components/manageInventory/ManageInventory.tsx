@@ -51,6 +51,7 @@ import EditProductModal from './EditProductModal';
 import EditQuoteModal from '../shoppingCart/EditQuoteModal';
 import SearchTableForm from '../common/SearchTableForm';
 import constants from '../../constants/constants';
+import InstallContactModal from './InstallContactModal';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -339,8 +340,15 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
   };
   contactAboutInstall = (install: IinstallBase) => {
     this.buttonInAction = true;
-    this.setState({ selectedInstall: install }, () => {
+
+    // grab the product by using the productID from installbase
+    const selectedProduct = find(this.props.tableData, {
+      id: install.productID
+    });
+
+    this.setState({ selectedInstall: install, selectedProduct }, () => {
       this.buttonInAction = false;
+      this.props.toggleInstallContactModal();
     });
   };
 
@@ -535,6 +543,14 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         <EditInstallModal
           selectedProduct={this.state.selectedProduct}
           selectedItem={this.state.selectedInstall}
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+          t={this.props.t}
+        />
+        <InstallContactModal
+          selectedProduct={this.state.selectedProduct}
+          selectedInstall={this.state.selectedInstall}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }

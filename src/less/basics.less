@@ -191,9 +191,22 @@ body {
 //   color: transparent;
 //   padding: 5px;
 // }
+//fade(#F5F5F5, 90%)
 .slide-modal {
+  overflow: hidden;
   .modal-body {
     padding: 15px 0px;
+    overflow-y: auto;
+    height: calc(100vh - @headerHeight - 60px);
+    .form-buttons{
+      position: fixed;
+      bottom: 0;
+      padding-bottom: 10px;
+      padding-top: 10px;
+      background-color: #F5F5F5;
+      border-top: 1px solid darken(#F5F5F5, 10%)
+
+    }
   }
   .modal-footer {
     display: none;

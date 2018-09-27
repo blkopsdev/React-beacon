@@ -246,18 +246,14 @@ export function installContact(
         message
       })
       .then(data => {
-        if (!data.data) {
-          throw undefined;
-        } else {
-          dispatch({
-            type: types.INSTALL_CONTACT_SUCCESS
-          });
-          toastr.success(
-            'Contacted Support',
-            'We will respond within 24 hours.',
-            constants.toastrSuccess
-          );
-        }
+        dispatch({
+          type: types.INSTALL_CONTACT_SUCCESS
+        });
+        toastr.success(
+          'Contacted Beacon',
+          'We will respond within 24 hours.',
+          constants.toastrSuccess
+        );
       })
       .catch((error: any) => {
         dispatch({ type: types.INSTALL_CONTACT_FAILED });

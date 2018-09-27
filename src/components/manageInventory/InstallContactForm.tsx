@@ -4,7 +4,7 @@
 * 
 */
 
-import { Col, Button } from 'react-bootstrap';
+import { Button, Col, ControlLabel, FormGroup } from 'react-bootstrap';
 import {
   FormGenerator,
   AbstractControl,
@@ -16,37 +16,33 @@ import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
-import { IproductInfo, IinstallBase } from '../../models';
+import { IinstallBase } from '../../models';
 import {
   installContact,
-  toggleEditInstallModal
+  toggleInstallContactModal
 } from '../../actions/manageInventoryActions';
 import constants from '../../constants/constants';
 
-const buildFieldConfig = () => {
-  const fieldConfigControls = {
-    message: {
-      render: FormUtil.TextInput,
-      options: {
-        validators: Validators.required
-      },
-      meta: { label: 'message', colWidth: 12, componentClass: 'textarea' }
-    }
-  };
-  return {
-    controls: { ...fieldConfigControls }
-  };
+const TextLabel = ({ handler, meta }: any) => {
+  return (
+    <Col xs={meta.colWidth}>
+      <FormGroup bsSize="sm">
+        <ControlLabel>{meta.label}</ControlLabel>
+        <h5 className="queue-form-label">{meta.defaultValue}</h5>
+      </FormGroup>
+    </Col>
+  );
 };
 
 interface Iprops {
-  toggleEditQuoteModal: typeof toggleEditInstallModal;
+  toggleInstallContactModal: typeof toggleInstallContactModal;
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;
   i18n: I18n;
-  productInfo: IproductInfo;
   installContact: typeof installContact;
   selectedInstall: IinstallBase;
+  productName: string;
 }
 
 class InstallContactform extends React.Component<Iprops, {}> {
@@ -54,8 +50,39 @@ class InstallContactform extends React.Component<Iprops, {}> {
   public fieldConfig: FieldConfig;
   constructor(props: Iprops) {
     super(props);
-    this.fieldConfig = FormUtil.translateForm(buildFieldConfig(), this.props.t);
+    this.fieldConfig = FormUtil.translateForm(
+      this.buildFieldConfig(),
+      this.props.t
+    );
   }
+
+  buildFieldConfig = () => {
+    const fieldConfigControls = {
+      install: {
+        render: TextLabel,
+        meta: {
+          label: 'productInfoLabel',
+          colWidth: 12,
+          defaultValue: this.props.productName
+        }
+      },
+      message: {
+        render: FormUtil.TextInput,
+        options: {
+          validators: Validators.required
+        },
+        meta: {
+          label: 'contactMessageLabel',
+          colWidth: 12,
+          componentClass: 'textarea',
+          rows: 8
+        }
+      }
+    };
+    return {
+      controls: { ...fieldConfigControls }
+    };
+  };
 
   handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -97,7 +124,7 @@ class InstallContactform extends React.Component<Iprops, {}> {
                 bsStyle="link"
                 type="button"
                 className="pull-left left-side"
-                onClick={this.props.toggleEditQuoteModal}
+                onClick={this.props.toggleInstallContactModal}
               >
                 {t('common:cancel')}
               </Button>
@@ -106,7 +133,7 @@ class InstallContactform extends React.Component<Iprops, {}> {
                 type="submit"
                 disabled={this.props.loading}
               >
-                {t('contact')}
+                {t('contactButton')}
               </Button>
             </Col>
           </form>

@@ -145,7 +145,11 @@
     "remarks": "Remarks",
     "serialNumber": "Serial Number",
     "installDeleteConfirm": "Are you sure?",
-    "installDeleteOk": "Delete Install"
+    "installDeleteOk": "Delete Install",
+    "installContactTitle": "Contact Beacon",
+    "productInfoLabel": "Product Information",
+    "contactMessageLabel": "comments / questions",
+    "contactButton": "contact beacon"
   },
   "tiles": {
     "alerts": "Alerts",

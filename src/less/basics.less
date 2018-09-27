@@ -271,6 +271,8 @@ body {
   font-size: 1.4rem;
   font-weight: 400;
   border-top: none;
+  max-height: calc(100vh - @maxTableHeightDifference);
+  overflow: auto;
 
   // margin-bottom: 90px; // space for the "no rows found" message
   .rt-noData{

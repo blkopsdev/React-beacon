@@ -2,20 +2,20 @@
 * The Manage Team user modal - Container
 */
 
-import * as React from 'react';
+import { TranslationFunction } from 'react-i18next';
 import { connect } from 'react-redux';
+import * as React from 'react';
+
+import { FormUtil } from '../common/FormUtil';
+import { IinitialState, Iuser } from '../../models';
+import { getFacilitiesByCustomer } from '../../actions/commonActions';
 import {
   updateTeamUser,
   saveTeamUser,
   toggleEditTeamUserModal
-} from '../../actions/teamManageActions';
-import { IinitialState, Iuser } from '../../models';
-// import constants from '../../constants/constants';
+} from '../../actions/manageTeamActions';
 import CommonModal from '../common/CommonModal';
-import UserManageForm from './TeamManageForm';
-import { TranslationFunction } from 'react-i18next';
-import { FormUtil } from '../common/FormUtil';
-import { getFacilitiesByCustomer } from '../../actions/userQueueActions';
+import UserManageForm from './EditTeamMemberForm';
 
 interface Iprops {
   selectedUser: Iuser;
@@ -35,7 +35,7 @@ interface IdispatchProps {
   user: Iuser;
 }
 
-class EditManageTeamModal extends React.Component<Iprops & IdispatchProps, {}> {
+class EditTeamMemberModal extends React.Component<Iprops & IdispatchProps, {}> {
   constructor(props: Iprops & IdispatchProps) {
     super(props);
   }
@@ -63,11 +63,11 @@ class EditManageTeamModal extends React.Component<Iprops & IdispatchProps, {}> {
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
-    userManage: state.teamManage,
+    userManage: state.manageTeam,
     loading: state.ajaxCallsInProgress > 0,
     customerOptions: FormUtil.convertToOptions(state.customers),
     facilityOptions: FormUtil.convertToOptions(state.facilities),
-    showEditUserModal: state.showEditTeamModal
+    showEditUserModal: state.manageTeam.showEditTeamModal
   };
 };
 
@@ -79,4 +79,4 @@ export default connect(
     toggleEditTeamUserModal,
     getFacilitiesByCustomer
   }
-)(EditManageTeamModal);
+)(EditTeamMemberModal);

@@ -49,10 +49,10 @@ export interface Iuser {
   hasTeamMembers: boolean;
   appVersion: string;
 }
-// export interface IuserQueue {
+// export interface ImanageUserQueueReducer {
 //   [key: string]: Iuser;
 // }
-// export interface IuserQueue {
+// export interface ImanageUserQueueReducer {
 //   [key: string]: Iuser;
 // }
 export interface IqueueObject {
@@ -144,29 +144,31 @@ export interface IquoteItem {
   quantity: number;
 }
 
-export interface IuserQueue {
-  page: number;
+export interface ImanageUserQueueReducer {
   data: IqueueObject[];
   totalPages: number;
+  showEditQueueUserModal: boolean;
+  tableFilters: ItableFiltersReducer;
 }
 
-export interface IuserManage {
-  page: number;
+export interface ImanageUserReducer {
   data: Iuser[];
   totalPages: number;
+  showEditUserModal: boolean;
+  tableFilters: ItableFiltersReducer;
 }
-export interface IteamManage {
-  page: number;
+export interface ImanageTeamReducer {
   data: Iuser[];
   totalPages: number;
+  showEditTeamModal: boolean;
+  tableFilters: ItableFiltersReducer;
 }
 
 export interface IshoppingCart {
   addedIDs: string[];
   productsByID: { [key: string]: Iproduct };
 }
-export interface ImanageInventory {
-  page: number;
+export interface ImanageInventoryReducer {
   data: Iproduct[];
   totalPages: number;
   cart: IshoppingCart;
@@ -206,19 +208,16 @@ export interface IinitialState {
   user: Iuser;
   ajaxCallsInProgress: number;
   redirect: Iredirect;
-  userQueue: IuserQueue;
-  userManage: IuserManage;
-  teamManage: IteamManage;
-  manageInventory: ImanageInventory;
+  manageUserQueue: ImanageUserQueueReducer;
+  manageUser: ImanageUserReducer;
+  manageTeam: ImanageTeamReducer;
+  manageInventory: ImanageInventoryReducer;
   customers: Icustomer[];
   facilities: Ifacility[];
-  showEditUserModal: boolean;
   showEditCustomerModal: boolean;
   showEditFacilityModal: boolean;
-  showEditQueueUserModal: boolean;
   showEditProfileModal: boolean;
   showSecurityFunctionsModal: boolean;
-  showEditTeamModal: boolean;
 }
 export interface Itile {
   icon: string | string[];

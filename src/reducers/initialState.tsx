@@ -29,26 +29,28 @@ export default {
     pathname: '/'
   },
   // userQueue: []
-  userQueue: {
-    page: 1,
+  manageUserQueue: {
     totalPages: 1,
-    data: []
+    data: [],
+    showEditQueueUserModal: false,
+    tableFilters: initialTableFilters
   },
-  userManage: {
-    page: 1,
+  manageUser: {
     totalPages: 1,
-    data: []
+    data: [],
+    showEditUserModal: false,
+    tableFilters: initialTableFilters
   },
-  teamManage: {
-    page: 1,
+  manageTeam: {
     totalPages: 1,
-    data: []
+    data: [],
+    showEditTeamModal: false,
+    tableFilters: initialTableFilters
   },
   manageInventory: {
     showEditProductModal: false,
     showEditInstallModal: false,
     showEditQuoteModal: false,
-    page: 1,
     totalPages: 1,
     data: [],
     cart: {
@@ -79,13 +81,12 @@ export default {
   },
   customers: [],
   facilities: [],
-  showEditUserModal: false,
+
   showEditCustomerModal: false,
   showEditFacilityModal: false,
-  showEditQueueUserModal: false,
+
   showEditProfileModal: false,
-  showSecurityFunctionsModal: false,
-  showEditTeamModal: false
+  showSecurityFunctionsModal: false
 };
 
 export const emptyTile = {

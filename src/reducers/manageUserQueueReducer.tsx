@@ -1,7 +1,12 @@
-import * as types from '../actions/actionTypes';
-import { IqueueObject, IuserQueue } from '../models';
-import initialState from './initialState';
 import { pickBy, map, filter } from 'lodash';
+
+import { IqueueObject, ImanageUserQueueReducer } from '../models';
+import {
+  createTableFiltersWithName,
+  modalToggleWithName
+} from './commonReducers';
+import initialState from './initialState';
+import * as types from '../actions/actionTypes';
 
 function userQueueData(
   state: IqueueObject[] = [],
@@ -41,20 +46,6 @@ function userQueueData(
   }
 }
 
-function userQueuePage(state: number = 1, action: any): number {
-  switch (action.type) {
-    case types.USER_QUEUE_INCREMENT:
-      return state + 1;
-    case types.USER_QUEUE_DECREMENT:
-      if (state > 1) {
-        return state - 1;
-      }
-    case types.USER_LOGOUT_SUCCESS:
-      return 1;
-    default:
-      return state;
-  }
-}
 function userQueueTotalPages(state: number = 1, action: any): number {
   switch (action.type) {
     case types.USER_QUEUE_TOTAL_PAGES:
@@ -70,12 +61,21 @@ function userQueueTotalPages(state: number = 1, action: any): number {
 }
 
 export default function userQueue(
-  state: IuserQueue = initialState.userQueue,
+  state: ImanageUserQueueReducer = initialState.manageUserQueue,
   action: any
 ) {
   return {
     data: userQueueData(state.data, action),
-    page: userQueuePage(state.page, action),
-    totalPages: userQueueTotalPages(state.totalPages, action)
+    totalPages: userQueueTotalPages(state.totalPages, action),
+    showEditQueueUserModal: modalToggleWithName(
+      state.showEditQueueUserModal,
+      action,
+      'EDIT_QUEUE_USER'
+    ),
+    tableFilters: createTableFiltersWithName(
+      state.tableFilters,
+      action,
+      'MANAGE_USER_QUEUE'
+    )
   };
 }

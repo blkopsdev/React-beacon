@@ -7,28 +7,25 @@ import customers from './customersReducer';
 import facilities from './facilitiesReducer';
 import manageInventory, { productInfo } from './manageInventoryReducer';
 import redirect from './redirectToReferrerReducer';
-import teamManage from './teamManageReducer';
+import manageTeam from './manageTeamReducer';
 import user from './userReducer';
-import userManage from './userManageReducer';
-import userQueue from './userQueueReducer';
+import manageUser from './manageUserReducer';
+import manageUserQueue from './manageUserQueueReducer';
 
 const rootReducer = combineReducers({
   ajaxCallsInProgress,
   toastr,
   user,
   redirect,
-  userQueue,
-  userManage,
-  teamManage,
+  manageUserQueue,
+  manageUser,
+  manageTeam,
   customers,
   facilities,
   manageInventory,
   productInfo,
-  showEditQueueUserModal: createShowModalWithNamedType('EDIT_QUEUE_USER'),
   showEditCustomerModal: createShowModalWithNamedType('EDIT_CUSTOMER'),
   showEditFacilityModal: createShowModalWithNamedType('EDIT_FACILITY'),
-  showEditUserModal: createShowModalWithNamedType('EDIT_USER'),
-  showEditTeamModal: createShowModalWithNamedType('EDIT_TEAM'),
   showEditProfileModal: createShowModalWithNamedType('EDIT_PROFILE'),
   showSecurityFunctionsModal: createShowModalWithNamedType('SECURITY_FUNCTIONS')
 });

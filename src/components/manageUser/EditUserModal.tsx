@@ -10,8 +10,8 @@ import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
 import { IinitialState, Iuser } from '../../models';
-import { getFacilitiesByCustomer } from '../../actions/userQueueActions';
 import {
+  getFacilitiesByCustomer,
   toggleEditCustomerModal,
   toggleEditFacilityModal
 } from '../../actions/commonActions';
@@ -19,9 +19,9 @@ import {
   updateUser,
   toggleEditUserModal,
   toggleSecurityFunctionsModal
-} from '../../actions/userManageActions';
+} from '../../actions/manageUserActions';
 import CommonModal from '../common/CommonModal';
-import UserManageForm from './UserManageForm';
+import EditUserForm from './EditUserForm';
 
 interface Iprops {
   selectedUser: Iuser;
@@ -53,7 +53,7 @@ class EditManageUserModal extends React.Component<Iprops & IdispatchProps, {}> {
         modalVisible={this.props.showEditUserModal}
         className="user-edit"
         onHide={this.props.toggleEditUserModal}
-        body={<UserManageForm {...this.props} />}
+        body={<EditUserForm {...this.props} />}
         title={this.props.t('editUserModalTitle')}
         container={document.getElementById('two-pane-layout')}
       />
@@ -64,11 +64,11 @@ class EditManageUserModal extends React.Component<Iprops & IdispatchProps, {}> {
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
-    userManage: state.userManage,
+    userManage: state.manageUser,
     loading: state.ajaxCallsInProgress > 0,
     customerOptions: FormUtil.convertToOptions(state.customers),
     facilityOptions: FormUtil.convertToOptions(state.facilities),
-    showEditUserModal: state.showEditUserModal,
+    showEditUserModal: state.manageUser.showEditUserModal,
     showEditCustomerModal: state.showEditCustomerModal,
     showEditFacilityModal: state.showEditFacilityModal
   };

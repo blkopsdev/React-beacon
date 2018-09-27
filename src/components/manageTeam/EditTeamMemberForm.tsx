@@ -1,5 +1,5 @@
 /* 
-* TeamManageForm 
+* EditTeamMemberForm 
 * Edit team members
 */
 
@@ -18,12 +18,12 @@ import * as React from 'react';
 
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
 import { Ioption, Iuser } from '../../models';
-import { getFacilitiesByCustomer } from '../../actions/userQueueActions';
+import { getFacilitiesByCustomer } from '../../actions/commonActions';
 import {
   saveTeamUser,
   toggleEditTeamUserModal,
   updateTeamUser
-} from '../../actions/teamManageActions';
+} from '../../actions/manageTeamActions';
 import constants from '../../constants/constants';
 
 const buildFieldConfig = (facilityOptions: any[]) => {
@@ -77,7 +77,7 @@ interface Iprops {
   user: Iuser;
 }
 
-class TeamManageForm extends React.Component<Iprops, {}> {
+class EditTeamMemberForm extends React.Component<Iprops, {}> {
   public userForm: AbstractControl;
   public fieldConfig: FieldConfig;
   constructor(props: Iprops) {
@@ -236,4 +236,4 @@ class TeamManageForm extends React.Component<Iprops, {}> {
     );
   }
 }
-export default translate('user')(TeamManageForm);
+export default translate('user')(EditTeamMemberForm);

@@ -9,8 +9,10 @@ import { connect } from 'react-redux';
 import * as React from 'react';
 
 import { IinitialState } from '../../models';
-import { addFacility } from '../../actions/userQueueActions';
-import { toggleEditFacilityModal } from '../../actions/commonActions';
+import {
+  addFacility,
+  toggleEditFacilityModal
+} from '../../actions/commonActions';
 import CommonModal from '../common/CommonModal';
 import EditFacilityForm from '../common/EditFacilityForm';
 

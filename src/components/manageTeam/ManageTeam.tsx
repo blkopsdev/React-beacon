@@ -2,42 +2,42 @@
 * hopsital Managers manage their team
 * Note: did minimal renaming from the UserManage component
 */
-import * as React from 'react';
+import { Button } from 'react-bootstrap';
+import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
+import { translate, TranslationFunction, I18n } from 'react-i18next';
+import * as React from 'react';
+import ReactTable, { SortingRule, FinalState, RowInfo } from 'react-table';
+import * as moment from 'moment';
+import { FieldConfig } from 'react-reactive-form';
+
+import { FormUtil } from '../common/FormUtil';
+import {
+  Icustomer,
+  IinitialState,
+  ImanageTeamReducer,
+  ItableFiltersReducer,
+  Itile,
+  Iuser
+} from '../../models';
+import { TableUtil } from '../common/TableUtil';
+import { closeAllModals } from '../../actions/commonActions';
+import { emptyTile } from '../../reducers/initialState';
 import {
   getUserManage,
-  toggleEditTeamUserModal
-} from '../../actions/teamManageActions';
-import {
-  IinitialState,
-  Iuser,
-  Itile,
-  IteamManage,
-  Icustomer
-} from '../../models';
-import { emptyTile } from '../../reducers/initialState';
-import { RouteComponentProps } from 'react-router-dom';
-import ReactTable from 'react-table';
-import { Button } from 'react-bootstrap';
+  toggleEditTeamUserModal,
+  setTableFilter
+} from '../../actions/manageTeamActions';
 import Banner from '../common/Banner';
-// import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import constants from '../../constants/constants';
-import * as moment from 'moment';
-import { translate, TranslationFunction, I18n } from 'react-i18next';
-// import { find } from 'lodash';
-import { FormUtil } from '../common/FormUtil';
+import EditTeamMemberModal from './EditTeamMemberModal';
 import SearchTableForm from '../common/SearchTableForm';
-import { TableUtil } from '../common/TableUtil';
-import EditUserManageModal from './EditTeamManageModal';
-import { closeAllModals } from '../../actions/commonActions';
+import constants from '../../constants/constants';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
   t: TranslationFunction;
   i18n: I18n;
-  showEditUserModal: boolean;
   loading: boolean;
-  userManage: IteamManage;
 }
 
 interface IdispatchProps {
@@ -46,6 +46,11 @@ interface IdispatchProps {
   getUserManage: typeof getUserManage;
   customers: Icustomer[];
   closeAllModals: typeof closeAllModals;
+  userManage: ImanageTeamReducer;
+  showEditUserModal: boolean;
+  setTableFilter: typeof setTableFilter;
+  tableFilters: ItableFiltersReducer;
+  tableData: Iuser[];
 }
 
 interface Istate {
@@ -55,8 +60,10 @@ interface Istate {
 
 class TeamManage extends React.Component<Iprops & IdispatchProps, Istate> {
   public columns: any[];
-  public searchFieldConfig: any;
+  public searchFieldConfig: FieldConfig;
   public buttonInAction = false;
+  private setTableFilterTimeout: any;
+
   constructor(props: Iprops & IdispatchProps) {
     super(props);
     this.getTrProps = this.getTrProps.bind(this);
@@ -106,7 +113,8 @@ class TeamManage extends React.Component<Iprops & IdispatchProps, Istate> {
           meta: {
             label: 'common:search',
             colWidth: 4,
-            placeholder: 'searchPlaceholder'
+            placeholder: 'searchPlaceholder',
+            defaultValue: this.props.tableFilters.search
           }
         }
       }
@@ -116,23 +124,33 @@ class TeamManage extends React.Component<Iprops & IdispatchProps, Istate> {
     this.setState({
       currentTile: constants.getTileByURL(this.props.location.pathname)
     });
-    // refresh the userManage every time the component mounts
-    this.props.getUserManage(1, '', '');
-    // refresh the list of customers every time the component mounts
   }
-  componentDidUpdate(prevProps: Iprops) {
+  componentDidMount() {
+    // refresh the userManage every time the component mounts
+    this.props.getUserManage();
+  }
+  componentDidUpdate(prevProps: Iprops & IdispatchProps) {
     if (
       prevProps.showEditUserModal !== this.props.showEditUserModal &&
       !this.props.showEditUserModal
     ) {
       this.setState({ selectedRow: null });
     }
+    // automatically get inventory every time a fitler changes
+    if (prevProps.tableFilters !== this.props.tableFilters) {
+      this.props.getUserManage();
+    }
   }
   componentWillUnmount() {
     this.props.closeAllModals();
   }
 
-  getTrProps = (state: any, rowInfo: any) => {
+  /*
+  * (reusable)
+  * Handle user clicking on a product row
+  * set the selected product to state and open the modal
+  */
+  getTrProps = (state: FinalState, rowInfo: RowInfo) => {
     // console.log("ROWINFO", rowInfo);
     if (rowInfo) {
       return {
@@ -155,25 +173,45 @@ class TeamManage extends React.Component<Iprops & IdispatchProps, Istate> {
       return {};
     }
   };
-  // get the next or previous page of data.  the table is 0 indexed but the API is not
+  /*
+  * (reusable)
+  * get the next or previous page of data.  the table is 0 indexed but the API is not
+  */
   onPageChange = (page: number) => {
-    this.props.getUserManage(page + 1, '', '');
+    const newPage = page + 1;
+    this.props.setTableFilter({ page: newPage });
   };
-  onSearchSubmit = ({
-    search,
-    customerID
-  }: {
-    search: string;
-    customerID: { value: string; title: string };
-  }) => {
-    const custID = customerID ? customerID.value : '';
-    this.props.getUserManage(this.props.userManage.page, search, custID);
+
+  /*
+  * (reusable)
+  * set the table filters to redux on each value change
+  */
+  onSearchValueChanges = (value: any, key: string) => {
+    switch (key) {
+      case 'search':
+        clearTimeout(this.setTableFilterTimeout);
+        this.setTableFilterTimeout = setTimeout(() => {
+          this.props.setTableFilter({ search: value, page: 1 }); // this causes performance issues so we use a rudamentary debounce
+        }, constants.tableSearchDebounceTime);
+        break;
+      default:
+        break;
+    }
+  };
+  /*
+  * (reusable)
+  * set the sorted changes to redux
+  */
+  onSortedChanged = (
+    newSorted: SortingRule[],
+    column: any,
+    shiftKey: boolean
+  ) => {
+    this.props.setTableFilter({ sorted: newSorted });
+    this.setState({ selectedRow: {} });
   };
 
   render() {
-    // if (this.props.userManage.data.length === 0) {
-    //   return <div>EFF</div>;
-    // }
     const { t } = this.props;
     return (
       <div className="user-manage">
@@ -184,12 +222,14 @@ class TeamManage extends React.Component<Iprops & IdispatchProps, Istate> {
         />
         <SearchTableForm
           fieldConfig={this.searchFieldConfig}
-          handleSubmit={this.onSearchSubmit}
+          handleSubmit={this.props.getUserManage}
           loading={this.props.loading}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
           t={this.props.t}
+          subscribeValueChanges={true}
+          onValueChanges={this.onSearchValueChanges}
         />
         <Button
           className="table-add-button"
@@ -199,12 +239,14 @@ class TeamManage extends React.Component<Iprops & IdispatchProps, Istate> {
           {t('teamManage:newTeamMember')}
         </Button>
         <ReactTable
-          data={this.props.userManage.data}
+          data={this.props.tableData}
+          onSortedChange={this.onSortedChanged}
           columns={this.columns}
           getTrProps={this.getTrProps}
-          pageSize={this.props.userManage.data.length}
+          pageSize={this.props.tableData.length}
           manual // Forces table not to paginate or sort automatically, so we can handle it server-side
           pages={this.props.userManage.totalPages}
+          page={this.props.tableFilters.page - 1}
           showPageSizeOptions={false}
           className={`beacon-table -highlight ${this.state.currentTile.color}`}
           previousText={t('common:previous')}
@@ -214,8 +256,8 @@ class TeamManage extends React.Component<Iprops & IdispatchProps, Istate> {
           noDataText={t('common:noDataText')}
           resizable={false}
         />
-        <EditUserManageModal
-          selectedUser={this.props.userManage.data[this.state.selectedRow]}
+        <EditTeamMemberModal
+          selectedUser={this.props.tableData[this.state.selectedRow]}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
@@ -233,10 +275,12 @@ class TeamManage extends React.Component<Iprops & IdispatchProps, Istate> {
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
-    userManage: state.teamManage,
+    userManage: state.manageTeam,
     customers: state.customers,
     loading: state.ajaxCallsInProgress > 0,
-    showEditUserModal: state.showEditTeamModal
+    showEditUserModal: state.manageTeam.showEditTeamModal,
+    tableData: state.manageTeam.data,
+    tableFilters: state.manageTeam.tableFilters
   };
 };
 export default translate('teamManage')(
@@ -245,7 +289,8 @@ export default translate('teamManage')(
     {
       getUserManage,
       toggleEditTeamUserModal,
-      closeAllModals
+      closeAllModals,
+      setTableFilter
     }
   )(TeamManage)
 );

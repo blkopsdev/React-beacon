@@ -10,7 +10,7 @@ import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
 import { IinitialState, Iuser } from '../../models';
-import { getFacilitiesByCustomer } from '../../actions/userQueueActions';
+import { getFacilitiesByCustomer } from '../../actions/commonActions';
 import {
   toggleEditProfileModal,
   updateUserProfile
@@ -71,7 +71,6 @@ class EditManageUserModal extends React.Component<Iprops & IdispatchProps, {}> {
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
-    userManage: state.userManage,
     loading: state.ajaxCallsInProgress > 0,
     customers: state.customers,
     facilityOptions: FormUtil.convertToOptions(state.facilities),

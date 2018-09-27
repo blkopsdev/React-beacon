@@ -17,17 +17,17 @@ import {
   IqueueObject
 } from '../../models';
 import {
+  getFacilitiesByCustomer,
   toggleEditCustomerModal,
   toggleEditFacilityModal
 } from '../../actions/commonActions';
 import {
   updateQueueUser,
-  getFacilitiesByCustomer,
   toggleEditQueueUserModal,
   approveUser
-} from '../../actions/userQueueActions';
+} from '../../actions/manageUserQueueActions';
 import CommonModal from '../common/CommonModal';
-import UserQueueForm from './UserQueueForm';
+import EditQueueUserForm from './EditQueueUserForm';
 
 const getCustomerOptions = (customers: Icustomer[]) => {
   return map(customers, (cust: Icustomer) => {
@@ -71,7 +71,7 @@ class EditQueueUserModal extends React.Component<Iprops & IdispatchProps, {}> {
         modalVisible={this.props.showEditQueueUserModal}
         className="user-edit"
         onHide={this.props.toggleEditQueueUserModal}
-        body={<UserQueueForm {...this.props} />}
+        body={<EditQueueUserForm {...this.props} />}
         title={this.props.t('newUserModalTitle')}
         container={document.getElementById('two-pane-layout')}
       />
@@ -82,11 +82,11 @@ class EditQueueUserModal extends React.Component<Iprops & IdispatchProps, {}> {
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
-    userQueue: state.userQueue,
+    userQueue: state.manageUserQueue,
     loading: state.ajaxCallsInProgress > 0,
     customerOptions: getCustomerOptions(state.customers),
     facilityOptions: getFacilitityOptions(state.facilities),
-    showEditQueueUserModal: state.showEditQueueUserModal,
+    showEditQueueUserModal: state.manageUserQueue.showEditQueueUserModal,
     showEditCustomerModal: state.showEditCustomerModal,
     showEditFacilityModal: state.showEditFacilityModal
   };

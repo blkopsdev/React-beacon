@@ -304,7 +304,8 @@ const constants = {
       msg = 'Please connect to the internet.';
     }
     toastr.error('Error', msg, constants.toastrError);
-  }
+  },
+  tableSearchDebounceTime: 300
 };
 
 export default constants;

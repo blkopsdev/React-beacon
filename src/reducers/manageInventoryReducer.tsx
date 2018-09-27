@@ -3,7 +3,7 @@ import { pickBy, map, filter, keyBy, find } from 'lodash';
 import { FormUtil } from '../components/common/FormUtil';
 import {
   Iproduct,
-  ImanageInventory,
+  ImanageInventoryReducer,
   IproductInfo,
   Ibrand,
   IgasType,
@@ -124,20 +124,6 @@ function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
   }
 }
 
-function pageReducer(state: number = 1, action: any): number {
-  switch (action.type) {
-    case types.INVENTORY_INCREMENT:
-      return state + 1;
-    case types.INVENTORY_DECREMENT:
-      if (state > 1) {
-        return state - 1;
-      }
-    case types.USER_LOGOUT_SUCCESS:
-      return 1;
-    default:
-      return state;
-  }
-}
 function totalPagesReducer(state: number = 1, action: any): number {
   switch (action.type) {
     case types.INVENTORY_TOTAL_PAGES:
@@ -153,12 +139,11 @@ function totalPagesReducer(state: number = 1, action: any): number {
 }
 
 export default function ManageInventory(
-  state: ImanageInventory = initialState.manageInventory,
+  state: ImanageInventoryReducer = initialState.manageInventory,
   action: any
 ) {
   return {
     data: dataReducer(state.data, action),
-    page: pageReducer(state.page, action),
     totalPages: totalPagesReducer(state.totalPages, action),
     cart: cartReducer(state.cart, action),
     productInfo: productInfo(state.productInfo, action),
@@ -249,13 +234,13 @@ export function productInfo(
 const getProduct = (productInfoState: IproductInfo, id: string) =>
   productInfoState.productGroups[id];
 
-export const getTotal = (state: ImanageInventory) =>
+export const getTotal = (state: ImanageInventoryReducer) =>
   state.cart.addedIDs.reduce(
     (total, id) => total + getQuantity(state.cart, id),
     0
   );
 
-export const getCartProducts = (state: ImanageInventory) =>
+export const getCartProducts = (state: ImanageInventoryReducer) =>
   getAddedIDs(state.cart).map(id => ({
     ...getProduct(state.productInfo, id),
     quantity: getQuantity(state.cart, id)

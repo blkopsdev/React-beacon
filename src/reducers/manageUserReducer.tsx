@@ -1,7 +1,12 @@
-import * as types from '../actions/actionTypes';
-import { Iuser, IuserManage } from '../models';
-import initialState from './initialState';
 import { pickBy, map, filter } from 'lodash';
+
+import { Iuser, ImanageUserReducer } from '../models';
+import {
+  createTableFiltersWithName,
+  modalToggleWithName
+} from './commonReducers';
+import initialState from './initialState';
+import * as types from '../actions/actionTypes';
 
 function userManageData(state: Iuser[] = [], action: any): Iuser[] {
   switch (action.type) {
@@ -36,20 +41,6 @@ function userManageData(state: Iuser[] = [], action: any): Iuser[] {
   }
 }
 
-function userManagePage(state: number = 1, action: any): number {
-  switch (action.type) {
-    case types.USER_MANAGE_INCREMENT:
-      return state + 1;
-    case types.USER_MANAGE_DECREMENT:
-      if (state > 1) {
-        return state - 1;
-      }
-    case types.USER_LOGOUT_SUCCESS:
-      return 1;
-    default:
-      return state;
-  }
-}
 function userManageTotalPages(state: number = 1, action: any): number {
   switch (action.type) {
     case types.USER_MANAGE_TOTAL_PAGES:
@@ -65,12 +56,21 @@ function userManageTotalPages(state: number = 1, action: any): number {
 }
 
 export default function userManage(
-  state: IuserManage = initialState.userManage,
+  state: ImanageUserReducer = initialState.manageUser,
   action: any
 ) {
   return {
     data: userManageData(state.data, action),
-    page: userManagePage(state.page, action),
-    totalPages: userManageTotalPages(state.totalPages, action)
+    totalPages: userManageTotalPages(state.totalPages, action),
+    showEditUserModal: modalToggleWithName(
+      state.showEditUserModal,
+      action,
+      'EDIT_USER'
+    ),
+    tableFilters: createTableFiltersWithName(
+      state.tableFilters,
+      action,
+      'MANAGE_USER'
+    )
   };
 }

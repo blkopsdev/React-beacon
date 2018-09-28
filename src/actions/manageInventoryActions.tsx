@@ -99,7 +99,8 @@ export function updateProduct(
         } else {
           dispatch({
             type: types.PRODUCT_UPDATE_SUCCESS,
-            product: data.data
+            product: data.data,
+            queueID
           });
           // toastr.success('Success', 'Saved product', constants.toastrSuccess);
           if (shouldApprove && queueID) {

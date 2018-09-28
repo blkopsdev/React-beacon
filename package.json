@@ -1,6 +1,6 @@
 {
   "name": "beacon-m",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.2.0",

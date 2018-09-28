@@ -23,6 +23,14 @@ function dataReducer(
           ) as IproductQueueObject)
         };
       });
+    case types.PRODUCT_UPDATE_SUCCESS:
+      return map(state, pr => {
+        if (pr.id === action.queueID) {
+          return { ...pr, product: action.product };
+        } else {
+          return pr;
+        }
+      });
     case types.PRODUCT_APPROVE_SUCCESS:
       return filter(state, u => u.id !== action.productQueueID);
     case types.USER_LOGOUT_SUCCESS:

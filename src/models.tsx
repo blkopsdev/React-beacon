@@ -48,6 +48,7 @@ export interface Iuser {
   facilities: Array<{ id: string }>;
   hasTeamMembers: boolean;
   appVersion: string;
+  manager?: any;
 }
 // export interface ImanageUserQueueReducer {
 //   [key: string]: Iuser;

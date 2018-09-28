@@ -314,6 +314,16 @@ class UserQueueForm extends React.Component<Iprops, {}> {
       <div>
         <div className={formClassName}>
           <form onSubmit={this.handleSubmit} className="user-form">
+            {this.props.selectedQueueObject &&
+              this.props.selectedQueueObject.user.managerID && (
+                <Col xs={12}>
+                  <h5>
+                    User Created By:{' '}
+                    {this.props.selectedQueueObject.user.manager.first}{' '}
+                    {this.props.selectedQueueObject.user.manager.last}
+                  </h5>
+                </Col>
+              )}
             <FormGenerator
               onMount={this.setForm}
               fieldConfig={this.fieldConfig}

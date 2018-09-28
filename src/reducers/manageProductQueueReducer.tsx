@@ -24,7 +24,7 @@ function dataReducer(
         };
       });
     case types.PRODUCT_APPROVE_SUCCESS:
-      return filter(state, u => u.id !== action.userQueueID);
+      return filter(state, u => u.id !== action.productQueueID);
     case types.USER_LOGOUT_SUCCESS:
       return [];
     default:

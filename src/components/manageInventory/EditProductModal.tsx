@@ -11,7 +11,8 @@ import {
   IinitialState,
   Iproduct,
   IproductInfo,
-  ItableFiltersReducer
+  ItableFiltersReducer,
+  IproductQueueObject
 } from '../../models';
 import {
   updateProduct,
@@ -23,6 +24,7 @@ import EditProductForm from './EditProductForm';
 
 interface Iprops {
   selectedItem: Iproduct;
+  selectedQueueObject?: IproductQueueObject;
   colorButton: any;
   t: TranslationFunction;
 }
@@ -49,6 +51,8 @@ class ManageInventoryModal extends React.Component<
   render() {
     let modalTitle;
     if (this.props.selectedItem && this.props.selectedItem.id) {
+      modalTitle = this.props.t('manageProductQueue:editModalTitle');
+    } else if (this.props.selectedItem && this.props.selectedItem.id) {
       modalTitle = this.props.t('manageInventory:editModalTitle');
     } else {
       modalTitle = this.props.t('manageInventory:saveModalTitle');

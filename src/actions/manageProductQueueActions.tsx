@@ -2,7 +2,7 @@ import { ThunkAction } from 'redux-thunk';
 // import { toastr } from "react-redux-toastr";
 import axios from 'axios';
 
-import { IinitialState, Iproduct, ItableFiltersParams } from '../models';
+import { IinitialState, ItableFiltersParams } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
 import constants from '../constants/constants';
@@ -15,7 +15,7 @@ type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 export function getProductQueue(): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
-    const { page, search } = getState().manageInventory.tableFilters;
+    const { page, search } = getState().manageProductQueue.tableFilters;
     return axios
       .get(API.GET.inventory.getproductqueue, {
         params: { page, search }
@@ -43,28 +43,24 @@ export function getProductQueue(): ThunkResult<void> {
   };
 }
 
-export function approveProduct(product: Iproduct): ThunkResult<void> {
-  return (dispatch, getState) => {
-    dispatch(beginAjaxCall());
-    dispatch({ type: types.TOGGLE_MODAL_APPROVE_PRODUCT });
-    return axios
-      .post(API.POST.inventory.approveproduct, product)
-      .then(data => {
-        if (!data.data) {
-          throw undefined;
-        } else {
-          dispatch({
-            type: types.PRODUCT_APPROVE_SUCCESS,
-            product: data.data
-          });
-        }
-      })
-      .catch((error: any) => {
-        dispatch({ type: types.PRODUCT_APPROVE_FAILED });
-        constants.handleError(error, 'approve product');
-        throw error;
-      });
-  };
+export function approveProduct(productQueueID: string, dispatch: any) {
+  return axios
+    .post(API.POST.inventory.approveproduct, { id: productQueueID })
+    .then(data => {
+      if (!data.data) {
+        throw undefined;
+      } else {
+        dispatch({
+          type: types.PRODUCT_APPROVE_SUCCESS,
+          productQueueID
+        });
+      }
+    })
+    .catch((error: any) => {
+      dispatch({ type: types.PRODUCT_APPROVE_FAILED });
+      constants.handleError(error, 'approve product');
+      throw error;
+    });
 }
 
 export const toggleApproveProductModal = () => ({

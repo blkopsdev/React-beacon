@@ -14,29 +14,27 @@ import { FormUtil } from '../common/FormUtil';
 import {
   Icustomer,
   IinitialState,
-  IinstallBase,
   ImanageProductQueueReducer,
-  // Iproduct,
   IproductQueueObject,
   IproductInfo,
   ItableFiltersReducer,
   Itile,
   Iuser
 } from '../../models';
-// import { InstallationsExpander } from "./InstallsExpander";
 import { TableUtil } from '../common/TableUtil';
 import { addToCart } from '../../actions/shoppingCartActions';
 import { closeAllModals } from '../../actions/commonActions';
 import { emptyTile } from '../../reducers/initialState';
-import { getProductInfo } from '../../actions/manageInventoryActions';
+import {
+  getProductInfo,
+  toggleEditProductModal
+} from '../../actions/manageInventoryActions';
 import {
   getProductQueue,
-  setTableFilter,
-  toggleApproveProductModal
-  // approveProduct
+  setTableFilter
 } from '../../actions/manageProductQueueActions';
 import Banner from '../common/Banner';
-import EditProductModal from './EditProductModal';
+import EditProductModal from '../manageInventory/EditProductModal';
 import SearchTableForm from '../common/SearchTableForm';
 import constants from '../../constants/constants';
 
@@ -51,7 +49,7 @@ interface Iprops extends RouteComponentProps<any> {
 
 interface IdispatchProps {
   // Add your dispatcher properties here
-  toggleApproveProductModal: typeof toggleApproveProductModal;
+  toggleEditProductModal: typeof toggleEditProductModal;
   getProductInfo: typeof getProductInfo;
   toggleSecurityFunctionsModal: () => void;
   getProductQueue: typeof getProductQueue;
@@ -70,8 +68,8 @@ interface Istate {
   selectedRow: any;
   currentTile: Itile;
   columns: any;
-  selectedProduct: any;
-  selectedInstall: any;
+  selectedQueueObject: any;
+  // selectedInstall: any;
 }
 
 class ManageProductQueue extends React.Component<
@@ -89,8 +87,7 @@ class ManageProductQueue extends React.Component<
       selectedRow: {},
       currentTile: emptyTile,
       columns: [],
-      selectedProduct: {},
-      selectedInstall: {}
+      selectedQueueObject: {}
     };
     this.searchFieldConfig = this.buildSearchControls();
   }
@@ -119,7 +116,7 @@ class ManageProductQueue extends React.Component<
         this.props.showApproveProductModal &&
       !this.props.showApproveProductModal
     ) {
-      this.setState({ selectedProduct: {} });
+      this.setState({ selectedQueueObject: {} });
     }
 
     // we only need to check the productGroup options because both manufacturers and productGroup options are received in the same API response
@@ -220,12 +217,6 @@ class ManageProductQueue extends React.Component<
     } as FieldConfig;
     return searchFieldConfig;
   };
-  contactAboutInstall = (install: IinstallBase) => {
-    this.buttonInAction = true;
-    this.setState({ selectedInstall: install }, () => {
-      this.buttonInAction = false;
-    });
-  };
 
   /*
   * Handle user clicking on a product row
@@ -238,9 +229,9 @@ class ManageProductQueue extends React.Component<
         onClick: (e: React.MouseEvent<HTMLFormElement>) => {
           if (!this.buttonInAction) {
             this.setState({
-              selectedProduct: rowInfo.original
+              selectedQueueObject: rowInfo.original
             });
-            this.props.toggleApproveProductModal();
+            this.props.toggleEditProductModal();
           }
         },
         style: {
@@ -266,20 +257,11 @@ class ManageProductQueue extends React.Component<
   */
   onSearchValueChanges = (value: any, key: string) => {
     switch (key) {
-      case 'facility':
-        this.props.setTableFilter({ facility: value, page: 1 });
-        break;
       case 'search':
         clearTimeout(this.setTableFilterTimeout);
         this.setTableFilterTimeout = setTimeout(() => {
           this.props.setTableFilter({ search: value, page: 1 }); // this causes performance issues so we use a rudamentary debounce
         }, constants.tableSearchDebounceTime);
-        break;
-      case 'productGroup':
-        this.props.setTableFilter({ productGroup: value, page: 1 });
-        break;
-      case 'manufacturer':
-        this.props.setTableFilter({ manufacturer: value, page: 1 });
         break;
       default:
         break;
@@ -343,7 +325,8 @@ class ManageProductQueue extends React.Component<
           expanded={this.state.selectedRow}
         />
         <EditProductModal
-          selectedItem={this.state.selectedProduct}
+          selectedItem={this.state.selectedQueueObject.product}
+          selectedQueueObject={this.state.selectedQueueObject}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
@@ -375,7 +358,7 @@ export default translate('manageProductQueue')(
     mapStateToProps,
     {
       getProductQueue,
-      toggleApproveProductModal,
+      toggleEditProductModal,
       closeAllModals,
       getProductInfo,
       addToCart,

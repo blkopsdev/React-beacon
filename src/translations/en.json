@@ -145,11 +145,12 @@
     "remarks": "Remarks",
     "serialNumber": "Serial Number",
     "installDeleteConfirm": "Are you sure?",
-    "installDeleteOk": "Delete Install"
+    "installDeleteOk": "Delete Install",
+    "saveApprove": "Save & Approve"
   },
   "manageProductQueue": {
     "bannerTitle": "New Product Queue",
-    "editModalTitle": "Edit Product",
+    "editModalTitle": "Approve Product",
     "searchPlaceholder": "SKU, Product Name...",
     "message": "Comments / Questions",
     "nickname": "Nickname",

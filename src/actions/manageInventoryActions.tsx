@@ -9,6 +9,7 @@ import {
   ItableFiltersParams
 } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
+import { approveProduct } from './manageProductQueueActions';
 import API from '../constants/apiEndpoints';
 import constants from '../constants/constants';
 import * as types from './actionTypes';
@@ -82,7 +83,11 @@ export function getInventory(): ThunkResult<void> {
   };
 }
 
-export function updateProduct(product: Iproduct): ThunkResult<void> {
+export function updateProduct(
+  product: Iproduct,
+  shouldApprove?: boolean,
+  queueID?: string
+): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     dispatch({ type: types.TOGGLE_MODAL_EDIT_PRODUCT });
@@ -97,6 +102,10 @@ export function updateProduct(product: Iproduct): ThunkResult<void> {
             product: data.data
           });
           // toastr.success('Success', 'Saved product', constants.toastrSuccess);
+          if (shouldApprove && queueID) {
+            dispatch(beginAjaxCall());
+            approveProduct(queueID, dispatch); // don't return this because if we do, we will see two errors
+          }
         }
       })
       .catch((error: any) => {

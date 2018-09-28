@@ -317,11 +317,13 @@ class UserQueueForm extends React.Component<Iprops, {}> {
             {this.props.selectedQueueObject &&
               this.props.selectedQueueObject.user.managerID && (
                 <Col xs={12}>
-                  <h5>
-                    User Created By:{' '}
-                    {this.props.selectedQueueObject.user.manager.first}{' '}
-                    {this.props.selectedQueueObject.user.manager.last}
-                  </h5>
+                  <div className="form-group form-group-sm">
+                    <label className="control-label">Manager:</label>
+                    <h5 className="queue-form-label">
+                      {this.props.selectedQueueObject.user.manager.first}&nbsp;
+                      {this.props.selectedQueueObject.user.manager.last}
+                    </h5>
+                  </div>
                 </Col>
               )}
             <FormGenerator

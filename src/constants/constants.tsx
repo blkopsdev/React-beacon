@@ -63,6 +63,11 @@ const securityFunctions = {
     id: '655401EA-4AA1-4543-91E0-9F5A3AB754C3',
     name: 'securityF:Payment',
     description: 'TBD'
+  },
+  ManageProductQueue: {
+    id: '64818AA5-A685-4E5D-AD22-E2BB357CF58B',
+    name: 'securityF:ManageProductQueue',
+    description: 'Allows the user to manage and approve products.'
   }
 };
 
@@ -187,6 +192,18 @@ const tiles = [
     height: 400,
     url: '/inventory',
     securityFunction: securityFunctions.ViewInventory.id,
+    description: ''
+  },
+  {
+    icon: ['far', 'list-alt'],
+    title: 'productqueue',
+    src: require('src/images/beaconManageInventory.jpg'),
+    srcBanner: require('src/images/beaconManageInventoryHeader.jpg'),
+    color: 'purple',
+    width: 360,
+    height: 400,
+    url: '/productqueue',
+    securityFunction: securityFunctions.ManageProductQueue.id,
     description: ''
   },
   {

@@ -22,7 +22,8 @@ import {
   Iproduct,
   IproductInfo,
   Isubcategory,
-  ItableFiltersReducer
+  ItableFiltersReducer,
+  IproductQueueObject
 } from '../../models';
 import {
   saveProduct,
@@ -197,6 +198,7 @@ const buildFieldConfig = (
 interface Iprops {
   toggleEditProductModal: typeof toggleEditProductModal;
   selectedItem?: Iproduct;
+  selectedQueueObject?: IproductQueueObject;
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;
@@ -283,7 +285,10 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
     }
   };
 
-  handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
+  handleSubmit = (
+    e: React.MouseEvent<HTMLFormElement>,
+    shouldApprove: boolean = false
+  ) => {
     e.preventDefault();
     if (this.userForm.status === 'INVALID') {
       this.userForm.markAsSubmitted();
@@ -322,7 +327,15 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
       }
 
       if (this.props.selectedItem && this.props.selectedItem.id) {
-        this.props.updateProduct(newItem);
+        if (this.props.selectedQueueObject) {
+          this.props.updateProduct(
+            newItem,
+            shouldApprove,
+            this.props.selectedQueueObject.id
+          );
+        } else {
+          this.props.updateProduct(newItem);
+        }
       } else {
         this.props.saveProduct(newItem);
       }
@@ -364,6 +377,17 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
               >
                 {t('common:cancel')}
               </Button>
+              {this.props.selectedQueueObject && (
+                <Button
+                  bsStyle={this.props.colorButton}
+                  type="button"
+                  disabled={this.props.loading}
+                  onClick={(e: any) => this.handleSubmit(e, true)}
+                  style={{ marginRight: '20px' }}
+                >
+                  {t('manageInventory:saveApprove')}
+                </Button>
+              )}
               <Button
                 bsStyle={this.props.colorButton}
                 type="submit"

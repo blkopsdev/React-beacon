@@ -49,9 +49,10 @@ import Banner from '../common/Banner';
 import EditInstallModal from './EditInstallModal';
 import EditProductModal from './EditProductModal';
 import EditQuoteModal from '../shoppingCart/EditQuoteModal';
+import ImportInstallModal from './ImportInstallModal';
+import InstallContactModal from './InstallContactModal';
 import SearchTableForm from '../common/SearchTableForm';
 import constants from '../../constants/constants';
-import InstallContactModal from './InstallContactModal';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -551,6 +552,12 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         <InstallContactModal
           selectedProduct={this.state.selectedProduct}
           selectedInstall={this.state.selectedInstall}
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+          t={this.props.t}
+        />
+        <ImportInstallModal
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }

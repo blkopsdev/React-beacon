@@ -18,6 +18,7 @@ import {
   updateInstall,
   saveInstall,
   toggleEditInstallModal,
+  toggleImportInstallModal,
   deleteInstall
 } from '../../actions/manageInventoryActions';
 import CommonModal from '../common/CommonModal';
@@ -40,6 +41,7 @@ interface IdispatchProps {
   productInfo: IproductInfo;
   deleteInstall: typeof deleteInstall;
   tableFilters: ItableFiltersReducer;
+  toggleImportInstallModal: typeof toggleImportInstallModal;
 }
 
 class ManageInstallModal extends React.Component<Iprops & IdispatchProps, {}> {
@@ -84,6 +86,7 @@ export default connect(
     updateInstall,
     saveInstall,
     toggleEditInstallModal,
-    deleteInstall
+    deleteInstall,
+    toggleImportInstallModal
   }
 )(ManageInstallModal);

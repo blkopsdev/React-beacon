@@ -11,7 +11,8 @@ const API = {
       update: `${root}user/update`,
       updateprofile: `${root}user/updateprofile`,
       updateteam: `${root}user/updateteammember`,
-      saveteam: `${root}user/saveteammember`
+      saveteam: `${root}user/saveteammember`,
+      deleteTeamMember: `${root}user/deleteteammember`
     },
     customer: {
       add: `${root}customer/add`

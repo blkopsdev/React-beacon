@@ -46,6 +46,8 @@ function teamManageData(state: Iuser[] = [], action: any): Iuser[] {
 
       // TODO not adding them for now until after they are approved
       return state;
+    case types.TEAM_DELETE_SUCCESS:
+      return filter(state, member => member.id !== action.memberID);
 
     case types.USER_LOGOUT_SUCCESS:
       return [];

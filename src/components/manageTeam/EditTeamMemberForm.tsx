@@ -18,12 +18,13 @@ import * as React from 'react';
 
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
 import { Ioption, Iuser } from '../../models';
-import { getFacilitiesByCustomer } from '../../actions/commonActions';
 import {
+  deleteTeamUser,
   saveTeamUser,
   toggleEditTeamUserModal,
   updateTeamUser
 } from '../../actions/manageTeamActions';
+import { getFacilitiesByCustomer } from '../../actions/commonActions';
 import constants from '../../constants/constants';
 
 const buildFieldConfig = (facilityOptions: any[]) => {
@@ -75,6 +76,7 @@ interface Iprops {
   getFacilitiesByCustomer: typeof getFacilitiesByCustomer;
   facilityOptions: any[];
   user: Iuser;
+  deleteTeamUser: typeof deleteTeamUser;
 }
 
 class EditTeamMemberForm extends React.Component<Iprops, {}> {
@@ -193,6 +195,18 @@ class EditTeamMemberForm extends React.Component<Iprops, {}> {
       });
     }
   };
+  handleDelete = () => {
+    if (this.props.selectedUser) {
+      this.props.deleteTeamUser(this.props.selectedUser.id);
+    } else {
+      console.error('unable to delete, missing user');
+      toastr.error(
+        'Error',
+        'Unable to delete, missing user',
+        constants.toastrError
+      );
+    }
+  };
   setForm = (form: AbstractControl) => {
     this.userForm = form;
     this.userForm.meta = {
@@ -222,6 +236,19 @@ class EditTeamMemberForm extends React.Component<Iprops, {}> {
               >
                 {t('cancel')}
               </Button>
+              {!!this.props.selectedUser && (
+                <Button
+                  bsStyle="warning"
+                  style={{ marginRight: '15px' }}
+                  type="button"
+                  className=""
+                  disabled={this.props.loading}
+                  onClick={this.handleDelete}
+                >
+                  {t('common:delete')}
+                </Button>
+              )}
+
               <Button
                 bsStyle={this.props.colorButton}
                 type="submit"

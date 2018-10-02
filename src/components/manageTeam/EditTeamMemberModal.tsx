@@ -8,12 +8,13 @@ import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
 import { IinitialState, Iuser } from '../../models';
-import { getFacilitiesByCustomer } from '../../actions/commonActions';
 import {
-  updateTeamUser,
+  deleteTeamUser,
   saveTeamUser,
-  toggleEditTeamUserModal
+  toggleEditTeamUserModal,
+  updateTeamUser
 } from '../../actions/manageTeamActions';
+import { getFacilitiesByCustomer } from '../../actions/commonActions';
 import CommonModal from '../common/CommonModal';
 import UserManageForm from './EditTeamMemberForm';
 
@@ -33,6 +34,7 @@ interface IdispatchProps {
   toggleEditTeamUserModal: typeof toggleEditTeamUserModal;
   getFacilitiesByCustomer: typeof getFacilitiesByCustomer;
   user: Iuser;
+  deleteTeamUser: typeof deleteTeamUser;
 }
 
 class EditTeamMemberModal extends React.Component<Iprops & IdispatchProps, {}> {
@@ -77,6 +79,7 @@ export default connect(
     updateTeamUser,
     saveTeamUser,
     toggleEditTeamUserModal,
-    getFacilitiesByCustomer
+    getFacilitiesByCustomer,
+    deleteTeamUser
   }
 )(EditTeamMemberModal);

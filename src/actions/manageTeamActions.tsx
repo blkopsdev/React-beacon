@@ -94,6 +94,35 @@ export function saveTeamUser(user: Iuser): ThunkResult<void> {
   };
 }
 
+/*
+* delete a team member
+*/
+export function deleteTeamUser(memberID: string): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    dispatch({ type: types.TOGGLE_MODAL_EDIT_TEAM });
+    return axios
+      .post(API.POST.user.deleteTeamMember, { ID: memberID })
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.TEAM_DELETE_SUCCESS,
+            user: data.data
+          });
+
+          // toastr.success('Success', 'Deleted user', constants.toastrSuccess);
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.TEAM_DELETE_FAILED });
+        constants.handleError(error, 'delete user');
+        throw error;
+      });
+  };
+}
+
 export const toggleEditTeamUserModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_TEAM
 });

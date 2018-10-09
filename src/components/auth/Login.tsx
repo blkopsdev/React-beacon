@@ -12,7 +12,6 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import { IinitialState, Iuser, Iredirect } from '../../models';
-import { adalLogin, userLogin, userLogout } from '../../actions/userActions';
 import {
   setLoginRedirect,
   removeLoginRedirect,
@@ -22,7 +21,10 @@ import { Button, Col, Grid, Row } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
 import {
   isAuthenticated,
-  isFullyAuthenticated
+  isFullyAuthenticated,
+  adalLogin,
+  userLogin,
+  userLogout
 } from '../../actions/userActions';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 

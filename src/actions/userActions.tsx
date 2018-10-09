@@ -21,6 +21,7 @@ export const authContext = new AuthenticationContext({
 
 export function isAuthenticated() {
   let isAuth = false;
+  // const resource = "https://beacondev.onmicrosoft.com/beacon-dev-api";
   const resource = constants.adalAuth.clientId;
   authContext.acquireToken(
     resource,
@@ -29,13 +30,13 @@ export function isAuthenticated() {
         isAuth = true;
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
       } else {
-        // console.error(`message: ${message}  msg: ${msg}`);
-        // if (msg === 'login required') {
-        //   const tokenT = authContext.getCachedToken(
-        //     authContext.config.clientId
-        //   );
-        //   console.log(`should we try to automatically login here? ${tokenT}`);
-        // }
+        console.error(`message: ${message}  msg: ${msg}`);
+        if (msg === 'login required') {
+          const tokenT = authContext.getCachedToken(
+            authContext.config.clientId
+          );
+          console.log(`should we try to automatically login here? ${tokenT}`);
+        }
         isAuth = false;
       }
     }

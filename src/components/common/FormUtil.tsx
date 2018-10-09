@@ -13,7 +13,7 @@ import {
   AbstractControl,
   ValidationErrors
 } from 'react-reactive-form';
-import { mapValues, find, map } from 'lodash';
+import { mapValues, map } from 'lodash';
 import { TranslationFunction } from 'react-i18next';
 import Select, { components } from 'react-select';
 import Toggle from 'react-toggle';
@@ -158,8 +158,6 @@ export const FormUtil = {
     setErrors,
     value
   }: AbstractControl) => {
-    const defaultValue = find(meta.options, { value: meta.value });
-    // console.log('rendering select', meta.options, value, defaultValue)
     const selectClassName = meta.isMulti ? 'is-multi' : '';
     const selectValidationClass = value && !pristine ? 'has-success' : '';
     return (
@@ -176,7 +174,6 @@ export const FormUtil = {
           <Select
             options={meta.options}
             className={`${selectClassName} ${selectValidationClass}`}
-            defaultValue={defaultValue}
             components={{ Control: ControlComponent }}
             placeholder={meta.placeholder}
             isMulti={meta.isMulti}
@@ -199,7 +196,6 @@ export const FormUtil = {
     setErrors,
     value
   }: AbstractControl) => {
-    const defaultValue = find(meta.options, { value: meta.value });
     // console.log('rendering select', meta.options, value, defaultValue)
     const selectClassName = meta.isMulti ? `is-multi` : ``;
     return (
@@ -209,7 +205,6 @@ export const FormUtil = {
           <Select
             options={meta.options}
             className={selectClassName}
-            defaultValue={defaultValue}
             components={{ Control: ControlComponent }}
             placeholder={meta.placeholder}
             isMulti={meta.isMulti}
@@ -234,7 +229,6 @@ export const FormUtil = {
     value
   }: AbstractControl) => {
     // TODO get rid of this because default values do not work for some unknwon reason.  we patch the values instead
-    const defaultValue = find(meta.options, { value: meta.value });
     // console.log('rendering select', meta.options, value, defaultValue)
     const selectClassName = meta.isMulti ? `is-multi` : ``;
     return (
@@ -247,7 +241,6 @@ export const FormUtil = {
             <Select
               options={meta.options}
               className={selectClassName}
-              defaultValue={defaultValue}
               components={{ Control: ControlComponent }}
               placeholder={meta.placeholder}
               isMulti={meta.isMulti}
@@ -272,7 +265,6 @@ export const FormUtil = {
     setErrors,
     value
   }: AbstractControl) => {
-    const defaultValue = find(meta.options, { value: meta.value });
     // console.log('rendering select', meta.options, value, defaultValue)
     const selectClassName = meta.isMulti ? 'is-multi' : '';
     const selectValidationClass = value && !pristine ? 'has-success' : '';
@@ -297,7 +289,6 @@ export const FormUtil = {
           <Select
             options={meta.options}
             className={`${selectClassName} ${selectValidationClass}`}
-            defaultValue={defaultValue}
             components={{ Control: ControlComponent }}
             placeholder={meta.placeholder}
             isMulti={meta.isMulti}

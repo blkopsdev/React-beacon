@@ -42,11 +42,10 @@ const TwoPaneLayout = (props: any) => {
 
           <Col className="col-fluid">
             <div style={{ padding: '20px' }}>
-              {' '}
               <h4>
-                No access too {tile.title}. Please contact support and request
+                No access to {tile.title}. Please contact support and request
                 access.
-              </h4>{' '}
+              </h4>
             </div>
           </Col>
         </Row>

@@ -15,7 +15,6 @@ export function getJobs(): ThunkResult<void> {
     dispatch(beginAjaxCall());
     const {
       page,
-      search,
       company,
       type,
       startDate,
@@ -25,9 +24,8 @@ export function getJobs(): ThunkResult<void> {
       .get(API.GET.job.getall, {
         params: {
           page,
-          search,
-          company,
-          type,
+          company: company && company.value,
+          type: type && type.value,
           startDate,
           endDate
         }

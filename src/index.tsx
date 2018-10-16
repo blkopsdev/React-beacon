@@ -79,6 +79,7 @@ import * as types from './actions/actionTypes';
 import 'react-toggle/style.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
+import 'react-datetime/css/react-datetime.css';
 import './index.css';
 
 const persistedState = loadState('state-core-care');

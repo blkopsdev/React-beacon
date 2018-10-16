@@ -103,7 +103,14 @@
   },
   "jobManage": {
     "bannerTitle": "Manage Jobs",
-    "editJobModalTitle": "Edit Job"
+    "editJobModalTitle": "Edit Job",
+    "company": "Company",
+    "companyPlaceholder": "Select",
+    "type": "Type",
+    "typePlaceholder": "Select",
+    "dateRange": "Date Range",
+    "startDate": "Start Date",
+    "endDate": "End Date"
   },
   "teamManage": {
     "newTeamMember": "New Team Member",

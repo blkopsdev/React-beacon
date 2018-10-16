@@ -52,7 +52,7 @@ export default function jobManage(
   return {
     data: jobManageData(state.data, action),
     totalPages: jobManageTotalPages(state.totalPages, action),
-    showEditUserModal: modalToggleWithName(
+    showEditJobModal: modalToggleWithName(
       state.showEditJobModal,
       action,
       'EDIT_JOB'

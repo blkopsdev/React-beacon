@@ -18,6 +18,7 @@ import { TranslationFunction } from 'react-i18next';
 import Select, { components } from 'react-select';
 import Toggle from 'react-toggle';
 import { Ioption } from '../../models';
+import * as Datetime from 'react-datetime';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // add the bootstrap form-control class to the react-select select component
@@ -65,6 +66,26 @@ export const FormUtil = {
     }
   },
 
+  Datetime: ({
+    handler,
+    touched,
+    hasError,
+    meta,
+    pristine,
+    errors,
+    submitted
+  }: AbstractControl) => (
+    <FormGroup
+      validationState={FormUtil.getValidationState(pristine, errors, submitted)}
+      bsSize="sm"
+    >
+      <Col xs={meta.colWidth}>
+        <ControlLabel>{meta.label}</ControlLabel>
+        <Datetime defaultValue={meta.defaultValue} {...handler()} />
+        <FormControl.Feedback />
+      </Col>
+    </FormGroup>
+  ),
   TextInput: ({
     handler,
     touched,

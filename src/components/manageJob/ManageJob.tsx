@@ -28,7 +28,7 @@ import {
   updateJob
 } from '../../actions/manageJobActions';
 import Banner from '../common/Banner';
-// import EditJobModal from "./EditJobModal";
+import EditJobModal from './EditJobModal';
 import SearchTableForm from '../common/SearchTableForm';
 import constants from '../../constants/constants';
 import { FieldConfig } from 'react-reactive-form';
@@ -63,7 +63,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
   public columns: any[];
   public searchFieldConfig: FieldConfig;
   public buttonInAction = false;
-  private setTableFilterTimeout: any;
+  // private setTableFilterTimeout: any;
   constructor(props: Iprops & IdispatchProps) {
     super(props);
     this.getTrProps = this.getTrProps.bind(this);
@@ -120,25 +120,41 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
     );
     this.searchFieldConfig = {
       controls: {
-        search: {
-          render: FormUtil.TextInputWithoutValidation,
-          meta: {
-            label: 'common:search',
-            colWidth: 4,
-            type: 'text',
-            placeholder: 'searchPlaceholder',
-            defaultValue: this.props.tableFilters.search
-          }
-        },
-        customer: {
+        company: {
           render: FormUtil.SelectWithoutValidation,
           meta: {
-            label: 'common:customer',
+            label: 'jobManage:company',
             options: FormUtil.convertToOptions(this.props.customers),
-            colWidth: 4,
+            colWidth: 2,
             type: 'select',
-            placeholder: 'customerPlaceholder',
+            placeholder: 'companyPlaceholder',
             defaultValue: this.props.tableFilters.customer
+          }
+        },
+        type: {
+          render: FormUtil.SelectWithoutValidation,
+          meta: {
+            label: 'jobManage:type',
+            options: FormUtil.convertToOptions(this.props.customers),
+            colWidth: 2,
+            type: 'select',
+            placeholder: 'typePlaceholder',
+            defaultValue: this.props.tableFilters.type
+          }
+        },
+        startDate: {
+          render: FormUtil.Datetime,
+          meta: {
+            label: 'jobManage:dateRange',
+            colWidth: 2,
+            defaultValue: this.props.tableFilters.startDate
+          }
+        },
+        endDate: {
+          render: FormUtil.Datetime,
+          meta: {
+            colWidth: 2,
+            defaultValue: this.props.tableFilters.endDate
           }
         }
       }
@@ -213,14 +229,17 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
   */
   onSearchValueChanges = (value: any, key: string) => {
     switch (key) {
-      case 'customer':
-        this.props.setTableFilter({ customer: value, page: 1 });
+      case 'company':
+        this.props.setTableFilter({ company: value, page: 1 });
         break;
-      case 'search':
-        clearTimeout(this.setTableFilterTimeout);
-        this.setTableFilterTimeout = setTimeout(() => {
-          this.props.setTableFilter({ search: value, page: 1 }); // this causes performance issues so we use a rudamentary debounce
-        }, constants.tableSearchDebounceTime);
+      case 'type':
+        this.props.setTableFilter({ type: value, page: 1 });
+        break;
+      case 'startDate':
+        this.props.setTableFilter({ startDate: value, page: 1 });
+        break;
+      case 'endDate':
+        this.props.setTableFilter({ endDate: value, page: 1 });
         break;
       default:
         break;
@@ -277,13 +296,13 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
           noDataText={t('common:noDataText')}
           resizable={false}
         />
-        {/* <EditJobModal
-          selectedUser={this.props.tableData[this.state.selectedRow]}
+        <EditJobModal
+          selectedJob={this.props.tableData[this.state.selectedRow]}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
           t={this.props.t}
-        /> */}
+        />
       </div>
     );
   }

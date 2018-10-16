@@ -9,40 +9,29 @@ import { connect } from 'react-redux';
 import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
-import { IinitialState, Iuser } from '../../models';
-import {
-  getFacilitiesByCustomer,
-  toggleEditCustomerModal,
-  toggleEditFacilityModal
-} from '../../actions/commonActions';
-import {
-  updateUser,
-  toggleEditUserModal,
-  toggleSecurityFunctionsModal
-} from '../../actions/manageUserActions';
+import { IinitialState, Ijob } from '../../models';
+import { getFacilitiesByCustomer } from '../../actions/commonActions';
+import { updateJob, toggleEditJobModal } from '../../actions/manageJobActions';
 import CommonModal from '../common/CommonModal';
-import EditUserForm from './EditUserForm';
+import EditJobForm from './EditJobForm';
 
 interface Iprops {
-  selectedUser: Iuser;
+  selectedJob: Ijob;
   colorButton: any;
   t: TranslationFunction;
 }
 
 interface IdispatchProps {
-  showEditUserModal: boolean;
+  showEditJobModal: boolean;
   loading: boolean;
   customerOptions: any[];
   facilityOptions: any[];
-  updateUser: typeof updateUser;
-  toggleEditUserModal: typeof toggleEditUserModal;
+  updateJob: typeof updateJob;
+  toggleEditJobModal: typeof toggleEditJobModal;
   getFacilitiesByCustomer: (value: string) => Promise<void>;
-  toggleEditCustomerModal: typeof toggleEditCustomerModal;
-  toggleEditFacilityModal: typeof toggleEditFacilityModal;
-  toggleSecurityFunctionsModal: typeof toggleSecurityFunctionsModal;
 }
 
-class EditManageUserModal extends React.Component<Iprops & IdispatchProps, {}> {
+class EditManageJobModal extends React.Component<Iprops & IdispatchProps, {}> {
   constructor(props: Iprops & IdispatchProps) {
     super(props);
   }
@@ -50,11 +39,11 @@ class EditManageUserModal extends React.Component<Iprops & IdispatchProps, {}> {
   render() {
     return (
       <CommonModal
-        modalVisible={this.props.showEditUserModal}
-        className="user-edit"
-        onHide={this.props.toggleEditUserModal}
-        body={<EditUserForm {...this.props} />}
-        title={this.props.t('editUserModalTitle')}
+        modalVisible={this.props.showEditJobModal}
+        className="job-edit"
+        onHide={this.props.toggleEditJobModal}
+        body={<EditJobForm {...this.props} />}
+        title={this.props.t('editJobModalTitle')}
         container={document.getElementById('two-pane-layout')}
       />
     );
@@ -64,24 +53,19 @@ class EditManageUserModal extends React.Component<Iprops & IdispatchProps, {}> {
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
-    userManage: state.manageUser,
+    jobManage: state.manageJob,
     loading: state.ajaxCallsInProgress > 0,
     customerOptions: FormUtil.convertToOptions(state.customers),
     facilityOptions: FormUtil.convertToOptions(state.facilities),
-    showEditUserModal: state.manageUser.showEditUserModal,
-    showEditCustomerModal: state.showEditCustomerModal,
-    showEditFacilityModal: state.showEditFacilityModal
+    showEditJobModal: state.manageJob.showEditJobModal
   };
 };
 
 export default connect(
   mapStateToProps,
   {
-    updateUser,
-    toggleEditUserModal,
-    getFacilitiesByCustomer,
-    toggleEditCustomerModal,
-    toggleEditFacilityModal,
-    toggleSecurityFunctionsModal
+    updateJob,
+    toggleEditJobModal,
+    getFacilitiesByCustomer
   }
-)(EditManageUserModal);
+)(EditManageJobModal);

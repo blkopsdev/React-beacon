@@ -1,5 +1,5 @@
 /* 
-* EditUserForm 
+* EditJobForm 
 * Edit existing users
 */
 
@@ -8,62 +8,46 @@ import {
   Validators,
   FormGenerator,
   AbstractControl,
-  FieldConfig,
-  Observable
+  FieldConfig
+  // Observable
 } from 'react-reactive-form';
-import { forEach, find, map, differenceBy, filter, includes } from 'lodash';
+import {
+  forEach
+  // find, differenceBy, filter
+} from 'lodash';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 
-import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
-import { Ioption, Iuser } from '../../models';
-import {
-  toggleEditCustomerModal,
-  toggleEditFacilityModal
-} from '../../actions/commonActions';
-import {
-  toggleEditUserModal,
-  updateUser,
-  toggleSecurityFunctionsModal
-} from '../../actions/manageUserActions';
-import EditFacilityModal from '../common/EditFacilityModal';
+import { FormUtil } from '../common/FormUtil';
+import { Ioption, Ijob } from '../../models';
+import { toggleEditJobModal, updateJob } from '../../actions/manageJobActions';
 import constants from '../../constants/constants';
 
-// passing in an object, but we need an array back
-const securityOptions = [
-  ...FormUtil.convertToOptions(constants.securityFunctions)
-];
+// interface IstateChanges extends Observable<any> {
+//   next: () => void;
+// }
 
-interface IstateChanges extends Observable<any> {
-  next: () => void;
-}
-
-interface AbstractControlEdited extends AbstractControl {
-  stateChanges: IstateChanges;
-}
+// interface AbstractControlEdited extends AbstractControl {
+//   stateChanges: IstateChanges;
+// }
 
 const buildFieldConfig = (
   customerOptions: any[],
   facilityOptions: any[],
-  getFacilitiesByCustomer: (value: string) => Promise<void>,
-  toggleEditCustomerModalCB: typeof toggleEditCustomerModal,
-  toggleEditFacilityModalCB: typeof toggleEditFacilityModal,
-  toggleSecurityFunctionsModalCB: typeof toggleSecurityFunctionsModal
+  getFacilitiesByCustomer: (value: string) => Promise<void>
 ) => {
   // Field config to configure form
   const fieldConfigControls = {
     customerID: {
-      render: FormUtil.SelectWithButton,
+      render: FormUtil.Select,
       meta: {
         options: customerOptions,
         getFacilitiesByCustomer,
         label: 'common:customer',
 
         colWidth: 12,
-        placeholder: 'userManage:customerSearchPlaceholder',
-        buttonName: 'userManage:addCustomerButton',
-        buttonAction: toggleEditCustomerModalCB
+        placeholder: 'userManage:customerSearchPlaceholder'
       },
       options: {
         validators: [
@@ -76,49 +60,61 @@ const buildFieldConfig = (
         ]
       }
     },
-    facilities: {
-      render: FormUtil.SelectWithButton,
+    facilityID: {
+      render: FormUtil.Select,
       meta: {
         options: facilityOptions,
         label: 'common:facility',
         colWidth: 12,
-        placeholder: 'userQueue:facilitySearchPlaceholder',
-        buttonName: 'userQueue:facilityButton',
-        buttonAction: toggleEditFacilityModalCB,
-        isMulti: true
+        placeholder: 'userQueue:facilitySearchPlaceholder'
       },
       options: {
         validators: Validators.required
       }
     },
-    securityFunctions: {
-      render: FormUtil.SelectWithButton,
+    type: {
+      render: FormUtil.Select,
       meta: {
-        options: securityOptions,
-        label: 'userManage:securityLabel',
+        options: facilityOptions,
+        label: 'common:type',
         colWidth: 12,
-        placeholder: 'userManage:securitySearchPlaceholder',
-        buttonName: 'userManage:securityButton',
-        buttonAction: toggleSecurityFunctionsModalCB,
-        isMulti: true
+        placeholder: 'userQueue:typeSearchPlaceholder'
       },
       options: {
         validators: Validators.required
       }
     },
-    isActive: {
-      render: FormUtil.Toggle,
-      meta: { label: 'user:active', colWidth: 12 }
+    startDate: {
+      render: FormUtil.Datetime,
+      meta: {
+        label: 'jobManage:startDate',
+        colWidth: 6
+        // placeholder: "userQueue:typeSearchPlaceholder"
+      },
+      options: {
+        validators: Validators.required
+      }
+    },
+    endDate: {
+      render: FormUtil.Datetime,
+      meta: {
+        label: 'jobManage:endDate',
+        colWidth: 6
+        // placeholder: "userQueue:typeSearchPlaceholder"
+      },
+      options: {
+        validators: Validators.required
+      }
     }
   };
   const fieldConfig = {
-    controls: { ...userBaseConfigControls, ...fieldConfigControls }
+    controls: { ...fieldConfigControls }
   };
   return fieldConfig as FieldConfig;
 };
 
-interface Iprops extends React.Props<EditUserForm> {
-  selectedUser: Iuser;
+interface Iprops extends React.Props<EditJobForm> {
+  selectedJob: Ijob;
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;
@@ -126,15 +122,12 @@ interface Iprops extends React.Props<EditUserForm> {
   customerOptions: Ioption[];
   getFacilitiesByCustomer: (value: string) => Promise<void>;
   facilityOptions: Ioption[];
-  updateUser: typeof updateUser;
-  toggleEditUserModal: typeof toggleEditUserModal;
-  toggleEditCustomerModal: typeof toggleEditCustomerModal;
-  toggleEditFacilityModal: typeof toggleEditFacilityModal;
-  toggleSecurityFunctionsModal: typeof toggleSecurityFunctionsModal;
+  updateJob: typeof updateJob;
+  toggleEditJobModal: typeof toggleEditJobModal;
 }
 
-class EditUserForm extends React.Component<Iprops, {}> {
-  public userForm: AbstractControl;
+class EditJobForm extends React.Component<Iprops, {}> {
+  public jobForm: AbstractControl;
   public fieldConfig: FieldConfig;
   constructor(props: Iprops) {
     super(props);
@@ -142,10 +135,7 @@ class EditUserForm extends React.Component<Iprops, {}> {
       buildFieldConfig(
         this.props.customerOptions,
         this.props.facilityOptions,
-        this.props.getFacilitiesByCustomer,
-        this.props.toggleEditCustomerModal,
-        this.props.toggleEditFacilityModal,
-        this.props.toggleSecurityFunctionsModal
+        this.props.getFacilitiesByCustomer
       ),
       this.props.t
     );
@@ -153,161 +143,120 @@ class EditUserForm extends React.Component<Iprops, {}> {
     this.setForm = this.setForm.bind(this);
   }
   componentDidUpdate(prevProps: Iprops) {
-    if (!this.props.selectedUser) {
+    if (!this.props.selectedJob) {
       return;
     }
-    if (
-      differenceBy(
-        prevProps.facilityOptions,
-        this.props.facilityOptions,
-        'value'
-      ).length ||
-      prevProps.facilityOptions.length !== this.props.facilityOptions.length
-    ) {
-      const facilitySelectControl = this.userForm.get(
-        'facilities'
-      ) as AbstractControlEdited;
-      facilitySelectControl.meta.options = this.props.facilityOptions;
-      facilitySelectControl.stateChanges.next();
-      const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
-        return find(this.props.selectedUser.facilities, { id: fac.value })
-          ? true
-          : false;
-      });
-      this.userForm.patchValue({ facilities: facilitiesArray });
-    }
-    if (
-      differenceBy(
-        prevProps.customerOptions,
-        this.props.customerOptions,
-        'value'
-      ).length ||
-      prevProps.customerOptions.length !== this.props.customerOptions.length
-    ) {
-      const customerSelectControl = this.userForm.get(
-        'customerID'
-      ) as AbstractControlEdited;
-      customerSelectControl.meta.options = this.props.customerOptions;
-      customerSelectControl.stateChanges.next();
-      // now select the customer the user just added
-      // might be a better way to do this, but we are comparing the two arrays and finding the new customer
-      const newCustomer = filter(this.props.customerOptions, (cust: any) => {
-        return find(prevProps.customerOptions, { value: cust.value })
-          ? false
-          : true;
-      });
-      this.userForm.patchValue({ customerID: newCustomer[0] });
-    }
+    // if (
+    //   differenceBy(
+    //     prevProps.facilityOptions,
+    //     this.props.facilityOptions,
+    //     "value"
+    //   ).length ||
+    //   prevProps.facilityOptions.length !== this.props.facilityOptions.length
+    // ) {
+    //   const facilitySelectControl = this.jobForm.get(
+    //     "facilities"
+    //   ) as AbstractControlEdited;
+    //   facilitySelectControl.meta.options = this.props.facilityOptions;
+    //   facilitySelectControl.stateChanges.next();
+    //   const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
+    //     return find(this.props.selectedJob.facilities, { id: fac.value })
+    //       ? true
+    //       : false;
+    //   });
+    //   this.jobForm.patchValue({ facilities: facilitiesArray });
+    // }
+    // if (
+    //   differenceBy(
+    //     prevProps.customerOptions,
+    //     this.props.customerOptions,
+    //     "value"
+    //   ).length ||
+    //   prevProps.customerOptions.length !== this.props.customerOptions.length
+    // ) {
+    //   const customerSelectControl = this.jobForm.get(
+    //     "customerID"
+    //   ) as AbstractControlEdited;
+    //   customerSelectControl.meta.options = this.props.customerOptions;
+    //   customerSelectControl.stateChanges.next();
+    //   // now select the customer the user just added
+    //   // might be a better way to do this, but we are comparing the two arrays and finding the new customer
+    //   const newCustomer = filter(this.props.customerOptions, (cust: any) => {
+    //     return find(prevProps.customerOptions, { value: cust.value })
+    //       ? false
+    //       : true;
+    //   });
+    //   this.jobForm.patchValue({ customerID: newCustomer[0] });
+    // }
   }
 
   componentDidMount() {
-    if (!this.props.selectedUser) {
-      console.error('missing user');
+    if (!this.props.selectedJob) {
+      console.error('missing job');
       return;
     }
     // set values
-    forEach(this.props.selectedUser, (value, key) => {
-      this.userForm.patchValue({ [key]: value });
+    forEach(this.props.selectedJob, (value, key) => {
+      this.jobForm.patchValue({ [key]: value });
     });
 
-    const {
-      customerID,
-      facilities,
-      securityFunctions
-    } = this.props.selectedUser;
-    this.userForm.patchValue({
-      customerID: find(
-        this.props.customerOptions,
-        (cust: Ioption) => cust.value === customerID
-      )
-    });
+    // const {
+    //   customerID,
+    //   facilities,
+    //   securityFunctions
+    // } = this.props.selectedJob;
+    // this.jobForm.patchValue({
+    //   customerID: find(
+    //     this.props.customerOptions,
+    //     (cust: Ioption) => cust.value === customerID
+    //   )
+    // });
     // if there is a customerID then get facilities
-    if (customerID.length) {
-      this.props.getFacilitiesByCustomer(customerID);
-    }
-    const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
-      return find(facilities, { id: fac.value }) ? true : false;
-    });
-    this.userForm.patchValue({ facilities: facilitiesArray });
-    document.addEventListener('newFacility', this.handleNewFacility, false);
-
-    const securityFunctionsArray = filter(securityOptions, (sec: any) => {
-      return includes(securityFunctions, sec.value);
-    });
-    const securityfunctionsArrayTranslated = map(
-      securityFunctionsArray,
-      option => ({ value: option.value, label: this.props.t(option.label) })
-    );
-    this.userForm.patchValue({
-      securityFunctions: securityfunctionsArrayTranslated
-    });
-
-    const emailControl = this.userForm.get('email') as AbstractControlEdited;
-    emailControl.disable();
+    // if (customerID.length) {
+    //   this.props.getFacilitiesByCustomer(customerID);
+    // }
+    // const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
+    //   return find(facilities, { id: fac.value }) ? true : false;
+    // });
+    // this.jobForm.patchValue({ facilities: facilitiesArray });
   }
-  componentWillUnmount() {
-    document.removeEventListener('newFacility', this.handleNewFacility, false);
-  }
-  handleNewFacility = (event: any) => {
-    const facilityID = event.detail;
-    // now select the facility the user just added
-    // might be a better way to do this, but we are comparing the two arrays and finding the new facility
-    const newFacility = find(this.props.facilityOptions, { value: facilityID });
-    const newFacilitiesArray = [...this.userForm.value.facilities, newFacility];
-    this.userForm.patchValue({ facilities: newFacilitiesArray });
-  };
 
   handleSubmit = (
     e: React.MouseEvent<HTMLFormElement>,
     shouldApprove?: boolean
   ) => {
     e.preventDefault();
-    if (this.userForm.status === 'INVALID') {
-      this.userForm.markAsSubmitted();
+    if (this.jobForm.status === 'INVALID') {
+      this.jobForm.markAsSubmitted();
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-    console.log(this.userForm.value);
-    const facilitiesArray = map(
-      this.userForm.value.facilities,
-      (option: { value: string; label: string }) => {
-        return { id: option.value };
-      }
-    );
-    const securityFunctionsArray = map(
-      this.userForm.value.securityFunctions,
-      (option: { value: string; label: string }) => {
-        return option.value;
-      }
-    );
-    this.props.updateUser({
-      id: this.props.selectedUser.id,
-      ...this.userForm.value,
-      customerID: this.userForm.value.customerID.value,
-      facilities: facilitiesArray,
-      securityFunctions: securityFunctionsArray,
-      email: this.props.selectedUser.email // have to add back the email because disabling the input removes it
-    });
+    console.log(this.jobForm.value);
+    // this.props.updateUser({
+    //   id: this.props.selectedJob.id,
+    //   ...this.jobForm.value,
+    //   customerID: this.jobForm.value.customerID.value,
+    //   facilities: facilitiesArray,
+    //   securityFunctions: securityFunctionsArray,
+    //   email: this.props.selectedJob.email // have to add back the email because disabling the input removes it
+    // });
   };
   setForm = (form: AbstractControl) => {
-    this.userForm = form;
-    this.userForm.meta = {
+    this.jobForm = form;
+    this.jobForm.meta = {
       loading: this.props.loading
     };
   };
 
   render() {
     const { t } = this.props;
-    const selectedCustomer = this.userForm
-      ? this.userForm.value.customerID
-      : undefined;
 
-    const formClassName = `user-form manage-form ${this.props.colorButton}`;
+    const formClassName = `job-form manage-form ${this.props.colorButton}`;
 
     return (
       <div>
         <div className={formClassName}>
-          <form onSubmit={this.handleSubmit} className="user-form">
+          <form onSubmit={this.handleSubmit} className="job-form">
             <FormGenerator
               onMount={this.setForm}
               fieldConfig={this.fieldConfig}
@@ -317,7 +266,7 @@ class EditUserForm extends React.Component<Iprops, {}> {
                 bsStyle="link"
                 type="button"
                 className="pull-left left-side"
-                onClick={this.props.toggleEditUserModal}
+                onClick={this.props.toggleEditJobModal}
               >
                 {t('cancel')}
               </Button>
@@ -331,13 +280,8 @@ class EditUserForm extends React.Component<Iprops, {}> {
             </Col>
           </form>
         </div>
-        <EditFacilityModal
-          t={this.props.t}
-          colorButton={this.props.colorButton}
-          selectedCustomer={selectedCustomer}
-        />
       </div>
     );
   }
 }
-export default translate('user')(EditUserForm);
+export default translate('jobManage')(EditJobForm);

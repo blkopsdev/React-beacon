@@ -8,13 +8,10 @@ import {
   Validators,
   FormGenerator,
   AbstractControl,
-  FieldConfig
-  // Observable
+  FieldConfig,
+  Observable
 } from 'react-reactive-form';
-import {
-  forEach
-  // find, differenceBy, filter
-} from 'lodash';
+import { forEach, differenceBy } from 'lodash'; // find, filter
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
@@ -23,14 +20,51 @@ import { FormUtil } from '../common/FormUtil';
 import { Ioption, Ijob } from '../../models';
 import { toggleEditJobModal, updateJob } from '../../actions/manageJobActions';
 import constants from '../../constants/constants';
+import ReactTable from 'react-table';
 
-// interface IstateChanges extends Observable<any> {
-//   next: () => void;
-// }
+interface IstateChanges extends Observable<any> {
+  next: () => void;
+}
 
-// interface AbstractControlEdited extends AbstractControl {
-//   stateChanges: IstateChanges;
-// }
+interface AbstractControlEdited extends AbstractControl {
+  stateChanges: IstateChanges;
+}
+
+const typeOptions = [
+  { value: 'Audit', label: 'Audit' },
+  { value: 'Inspection', label: 'Inspection' },
+  { value: 'Validation', label: 'Validation' },
+  { value: 'Repair', label: 'Repair' }
+];
+
+const FormTable = ({
+  handler,
+  touched,
+  hasError,
+  meta,
+  pristine,
+  errors,
+  submitted
+}: AbstractControl) => (
+  <Col xs={meta.colWidth}>
+    <ReactTable
+      data={meta.data}
+      showPagination={false}
+      minRows={0}
+      style={{ marginTop: 30 }}
+      columns={[
+        {
+          Header: 'FSE',
+          accessor: 'name'
+        },
+        {
+          Header: 'Is Lead?',
+          accessor: 'isLead'
+        }
+      ]}
+    />
+  </Col>
+);
 
 const buildFieldConfig = (
   customerOptions: any[],
@@ -75,10 +109,10 @@ const buildFieldConfig = (
     type: {
       render: FormUtil.Select,
       meta: {
-        options: facilityOptions,
+        options: typeOptions,
         label: 'common:type',
         colWidth: 12,
-        placeholder: 'userQueue:typeSearchPlaceholder'
+        placeholder: 'jobManage:typeSearchPlaceholder'
       },
       options: {
         validators: Validators.required
@@ -89,7 +123,6 @@ const buildFieldConfig = (
       meta: {
         label: 'jobManage:startDate',
         colWidth: 6
-        // placeholder: "userQueue:typeSearchPlaceholder"
       },
       options: {
         validators: Validators.required
@@ -100,10 +133,19 @@ const buildFieldConfig = (
       meta: {
         label: 'jobManage:endDate',
         colWidth: 6
-        // placeholder: "userQueue:typeSearchPlaceholder"
       },
       options: {
         validators: Validators.required
+      }
+    },
+    fseList: {
+      render: FormTable,
+      meta: {
+        colWidth: 12,
+        data: [
+          { id: 1, name: 'Martin Shueltz', isLead: true },
+          { id: 2, name: 'Denise Richards', isLead: false }
+        ]
       }
     }
   };
@@ -146,26 +188,26 @@ class EditJobForm extends React.Component<Iprops, {}> {
     if (!this.props.selectedJob) {
       return;
     }
-    // if (
-    //   differenceBy(
-    //     prevProps.facilityOptions,
-    //     this.props.facilityOptions,
-    //     "value"
-    //   ).length ||
-    //   prevProps.facilityOptions.length !== this.props.facilityOptions.length
-    // ) {
-    //   const facilitySelectControl = this.jobForm.get(
-    //     "facilities"
-    //   ) as AbstractControlEdited;
-    //   facilitySelectControl.meta.options = this.props.facilityOptions;
-    //   facilitySelectControl.stateChanges.next();
-    //   const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
-    //     return find(this.props.selectedJob.facilities, { id: fac.value })
-    //       ? true
-    //       : false;
-    //   });
-    //   this.jobForm.patchValue({ facilities: facilitiesArray });
-    // }
+    if (
+      differenceBy(
+        prevProps.facilityOptions,
+        this.props.facilityOptions,
+        'value'
+      ).length ||
+      prevProps.facilityOptions.length !== this.props.facilityOptions.length
+    ) {
+      const facilitySelectControl = this.jobForm.get(
+        'facilityID'
+      ) as AbstractControlEdited;
+      facilitySelectControl.meta.options = this.props.facilityOptions;
+      facilitySelectControl.stateChanges.next();
+      // const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
+      //   return find(this.props.selectedJob.facilities, { id: fac.value })
+      //     ? true
+      //     : false;
+      // });
+      this.jobForm.patchValue({ facilities: this.props.facilityOptions });
+    }
     // if (
     //   differenceBy(
     //     prevProps.customerOptions,

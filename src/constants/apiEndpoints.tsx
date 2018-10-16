@@ -42,6 +42,7 @@ const API = {
   GET: {
     user: {
       getuserqueue: `${root}user/getuserqueue`,
+      getfseusers: `${root}user/getfseusers`,
       getusersearch: `${root}user/search`,
       getteamsearch: `${root}user/searchteam`
     },

@@ -136,15 +136,16 @@ const tiles = [
     description: ''
   },
   {
-    icon: 'icon-maintenance',
+    icon: ['far', 'clock'],
     title: 'maintenance',
-    src: 'https://placekitten.com/360/408',
-    srcBanner: '',
-    color: 'blue',
+    src: require('src/images/beaconManageUsers.jpg'),
+    srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
+    color: 'orange',
     width: 360,
     height: 408,
     url: '/maintenance',
-    securityFunction: ''
+    securityFunction: securityFunctions.ManageUsers.id,
+    description: ''
   },
   {
     icon: 'icon-reports',

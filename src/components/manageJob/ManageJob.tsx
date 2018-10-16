@@ -1,0 +1,319 @@
+/*
+* The New User Manage
+*/
+import { RouteComponentProps } from 'react-router-dom';
+import { connect } from 'react-redux';
+// import { find } from "lodash";
+import { translate, TranslationFunction, I18n } from 'react-i18next';
+import * as React from 'react';
+import ReactTable, { SortingRule, FinalState, RowInfo } from 'react-table';
+// import * as moment from "moment";
+
+import { FormUtil } from '../common/FormUtil';
+import {
+  Icustomer,
+  IinitialState,
+  ImanageJobReducer,
+  ItableFiltersReducer,
+  Itile,
+  Ijob
+} from '../../models';
+import { TableUtil } from '../common/TableUtil';
+import { closeAllModals, getCustomers } from '../../actions/commonActions';
+import { emptyTile } from '../../reducers/initialState';
+import {
+  getJobs,
+  setTableFilter,
+  toggleEditJobModal,
+  updateJob
+} from '../../actions/manageJobActions';
+import Banner from '../common/Banner';
+// import EditJobModal from "./EditJobModal";
+import SearchTableForm from '../common/SearchTableForm';
+import constants from '../../constants/constants';
+import { FieldConfig } from 'react-reactive-form';
+
+interface Iprops extends RouteComponentProps<any> {
+  // Add your regular properties here
+  t: TranslationFunction;
+  i18n: I18n;
+  loading: boolean;
+}
+
+interface IdispatchProps {
+  // Add your dispatcher properties here
+  toggleEditJobModal: typeof toggleEditJobModal;
+  getJobs: typeof getJobs;
+  customers: Icustomer[];
+  closeAllModals: typeof closeAllModals;
+  getCustomers: typeof getCustomers;
+  jobManage: ImanageJobReducer;
+  showEditJobModal: boolean;
+  setTableFilter: typeof setTableFilter;
+  tableFilters: ItableFiltersReducer;
+  tableData: Ijob[];
+}
+
+interface Istate {
+  selectedRow: any;
+  currentTile: Itile;
+}
+
+class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
+  public columns: any[];
+  public searchFieldConfig: FieldConfig;
+  public buttonInAction = false;
+  private setTableFilterTimeout: any;
+  constructor(props: Iprops & IdispatchProps) {
+    super(props);
+    this.getTrProps = this.getTrProps.bind(this);
+    this.state = {
+      selectedRow: null,
+      currentTile: emptyTile
+    };
+    this.columns = TableUtil.translateHeaders(
+      [
+        {
+          id: 'status',
+          Header: 'status',
+          accessor: 'status'
+        },
+        {
+          Header: 'type',
+          accessor: 'type'
+        },
+        {
+          id: 'company',
+          Header: 'company',
+          accessor: 'customerID'
+          // accessor: ({ customerID }: Ijob) => {
+          //   // !TODO move this to a reducer?
+          //   let cust;
+          //   if (customerID) {
+          //     cust = find(
+          //       this.props.customers,
+          //       c =>
+          //         c.id.trim().toLowerCase() === customerID.trim().toLowerCase()
+          //     );
+          //   }
+          //   return cust ? cust.name : "";
+          // }
+        },
+        {
+          Header: 'facility',
+          accessor: 'facilityID'
+        },
+        {
+          Header: 'FSE Lead',
+          accessor: 'assignedUserID'
+        },
+        {
+          Header: 'start date',
+          accessor: 'startDate'
+        },
+        {
+          Header: 'end date',
+          accessor: 'endDate'
+        }
+      ],
+      this.props.t
+    );
+    this.searchFieldConfig = {
+      controls: {
+        search: {
+          render: FormUtil.TextInputWithoutValidation,
+          meta: {
+            label: 'common:search',
+            colWidth: 4,
+            type: 'text',
+            placeholder: 'searchPlaceholder',
+            defaultValue: this.props.tableFilters.search
+          }
+        },
+        customer: {
+          render: FormUtil.SelectWithoutValidation,
+          meta: {
+            label: 'common:customer',
+            options: FormUtil.convertToOptions(this.props.customers),
+            colWidth: 4,
+            type: 'select',
+            placeholder: 'customerPlaceholder',
+            defaultValue: this.props.tableFilters.customer
+          }
+        }
+      }
+    };
+  }
+  componentWillMount() {
+    this.setState({
+      currentTile: constants.getTileByURL(this.props.location.pathname)
+    });
+  }
+  componentDidMount() {
+    // refresh the jobManage every time the component mounts
+    this.props.getJobs();
+    // refresh the list of customers every time the component mounts
+    this.props.getCustomers();
+  }
+  componentDidUpdate(prevProps: Iprops & IdispatchProps) {
+    if (
+      prevProps.showEditJobModal !== this.props.showEditJobModal &&
+      !this.props.showEditJobModal
+    ) {
+      this.setState({ selectedRow: null });
+    }
+    // automatically get inventory every time a fitler changes
+    if (prevProps.tableFilters !== this.props.tableFilters) {
+      this.props.getJobs();
+    }
+  }
+  componentWillUnmount() {
+    this.props.closeAllModals();
+  }
+
+  /*
+  * (reusable)
+  * Handle user clicking on a product row
+  * set the selected product to state and open the modal
+  */
+  getTrProps = (state: FinalState, rowInfo: RowInfo) => {
+    // console.log("ROWINFO", rowInfo);
+    if (rowInfo) {
+      return {
+        onClick: (e: React.MouseEvent<HTMLFormElement>) => {
+          if (!this.buttonInAction) {
+            this.setState({
+              selectedRow: rowInfo.index
+            });
+            this.props.toggleEditJobModal();
+          }
+        },
+        style: {
+          background:
+            rowInfo.index === this.state.selectedRow
+              ? constants.colors[`${this.state.currentTile.color}Tr`]
+              : ''
+        }
+      };
+    } else {
+      return {};
+    }
+  };
+  /*
+  * (reusable)
+  * get the next or previous page of data.  the table is 0 indexed but the API is not
+  */
+  onPageChange = (page: number) => {
+    const newPage = page + 1;
+    this.props.setTableFilter({ page: newPage });
+  };
+  /*
+  * (reusable)
+  * set the table filters to redux on each value change
+  */
+  onSearchValueChanges = (value: any, key: string) => {
+    switch (key) {
+      case 'customer':
+        this.props.setTableFilter({ customer: value, page: 1 });
+        break;
+      case 'search':
+        clearTimeout(this.setTableFilterTimeout);
+        this.setTableFilterTimeout = setTimeout(() => {
+          this.props.setTableFilter({ search: value, page: 1 }); // this causes performance issues so we use a rudamentary debounce
+        }, constants.tableSearchDebounceTime);
+        break;
+      default:
+        break;
+    }
+  };
+  /*
+  * (reusable)
+  * set the sorted changes to redux
+  */
+  onSortedChanged = (
+    newSorted: SortingRule[],
+    column: any,
+    shiftKey: boolean
+  ) => {
+    this.props.setTableFilter({ sorted: newSorted });
+    this.setState({ selectedRow: {} });
+  };
+
+  render() {
+    const { t } = this.props;
+    return (
+      <div className="manage-job">
+        <Banner
+          title={t('bannerTitle')}
+          img={this.state.currentTile.srcBanner}
+          color={constants.colors[`${this.state.currentTile.color}`]}
+        />
+        <SearchTableForm
+          fieldConfig={this.searchFieldConfig}
+          handleSubmit={this.props.getJobs}
+          loading={this.props.loading}
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+          t={this.props.t}
+          subscribeValueChanges={true}
+          onValueChanges={this.onSearchValueChanges}
+        />
+        <ReactTable
+          data={this.props.tableData}
+          onSortedChange={this.onSortedChanged}
+          columns={this.columns}
+          getTrProps={this.getTrProps}
+          pageSize={this.props.tableData.length}
+          page={this.props.tableFilters.page - 1}
+          manual // Forces table not to paginate or sort automatically, so we can handle it server-side
+          pages={this.props.jobManage.totalPages}
+          showPageSizeOptions={false}
+          className={`beacon-table -highlight ${this.state.currentTile.color}`}
+          previousText={t('common:previous')}
+          nextText={t('common:next')}
+          onPageChange={this.onPageChange}
+          sortable={false}
+          noDataText={t('common:noDataText')}
+          resizable={false}
+        />
+        {/* <EditJobModal
+          selectedUser={this.props.tableData[this.state.selectedRow]}
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+          t={this.props.t}
+        /> */}
+      </div>
+    );
+  }
+}
+
+/*
+* AddCustomerModal will connect to redux, impliment CommonModal, as well as AddCustomerForm
+*/
+
+const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
+  return {
+    user: state.user,
+    jobManage: state.manageJob,
+    customers: state.customers,
+    loading: state.ajaxCallsInProgress > 0,
+    showEditJobModal: state.manageJob.showEditJobModal,
+    tableData: state.manageJob.data,
+    tableFilters: state.manageJob.tableFilters
+  };
+};
+export default translate('jobManage')(
+  connect(
+    mapStateToProps,
+    {
+      getJobs,
+      updateJob,
+      toggleEditJobModal,
+      closeAllModals,
+      getCustomers,
+      setTableFilter
+    }
+  )(ManageJob)
+);

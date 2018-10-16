@@ -41,6 +41,12 @@ export default {
     showEditUserModal: false,
     tableFilters: initialTableFilters
   },
+  manageJob: {
+    totalPages: 1,
+    data: [],
+    showEditJobModal: false,
+    tableFilters: initialTableFilters
+  },
   manageTeam: {
     totalPages: 1,
     data: [],

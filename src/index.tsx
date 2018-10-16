@@ -41,7 +41,8 @@ import {
   faMinus,
   faHospital,
   faSignOut,
-  faListAlt
+  faListAlt,
+  faClock
 } from '@fortawesome/pro-regular-svg-icons';
 library.add(
   faCog,
@@ -60,7 +61,8 @@ library.add(
   faEnvelope,
   faListAlt,
   faPlus,
-  faMinus
+  faMinus,
+  faClock
 );
 
 import { authContext, isFullyAuthenticated } from './actions/userActions';
@@ -186,6 +188,7 @@ runWithAdal(
                 <PrivateRoute path="/team" component={TwoPaneLayout} />
                 <PrivateRoute path="/inventory" component={TwoPaneLayout} />
                 <PrivateRoute path="/productqueue" component={TwoPaneLayout} />
+                <PrivateRoute path="/maintenance" component={TwoPaneLayout} />
 
                 <Route component={NoMatch} />
               </Switch>

@@ -4,6 +4,10 @@ import { SortingRule } from 'react-table';
 export interface ItableFiltersReducer {
   search: string;
   page: number;
+  company?: Ioption;
+  type?: Ioption;
+  startDate?: string;
+  endDate?: string;
   facility?: Ioption;
   customer?: Ioption;
   productGroup?: Ioption;
@@ -13,6 +17,10 @@ export interface ItableFiltersReducer {
 export interface ItableFiltersParams {
   search?: string;
   page?: number;
+  company?: Ioption;
+  type?: Ioption;
+  startDate?: string;
+  endDate?: string;
   facility?: Ioption;
   customer?: Ioption;
   productGroup?: Ioption;
@@ -159,6 +167,24 @@ export interface ImanageUserReducer {
   showEditUserModal: boolean;
   tableFilters: ItableFiltersReducer;
 }
+
+export interface Ijob {
+  id: string;
+  name: string;
+  customerID: string;
+  facilityID: string;
+  assignedUserID: string;
+  type: string;
+  startDate: string;
+  endDate: string;
+  status: string;
+}
+export interface ImanageJobReducer {
+  data: Ijob[];
+  totalPages: number;
+  showEditJobModal: boolean;
+  tableFilters: ItableFiltersReducer;
+}
 export interface ImanageTeamReducer {
   data: Iuser[];
   totalPages: number;
@@ -227,6 +253,7 @@ export interface IinitialState {
   redirect: Iredirect;
   manageUserQueue: ImanageUserQueueReducer;
   manageUser: ImanageUserReducer;
+  manageJob: ImanageJobReducer;
   manageTeam: ImanageTeamReducer;
   manageInventory: ImanageInventoryReducer;
   manageProductQueue: ImanageProductQueueReducer;

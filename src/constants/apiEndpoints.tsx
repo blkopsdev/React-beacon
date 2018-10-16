@@ -14,6 +14,9 @@ const API = {
       saveteam: `${root}user/saveteammember`,
       deleteTeamMember: `${root}user/deleteteammember`
     },
+    job: {
+      create: `${root}job`
+    },
     customer: {
       add: `${root}customer/add`
     },
@@ -31,6 +34,11 @@ const API = {
       approveproduct: `${root}inventory/approve`
     }
   },
+  PUT: {
+    job: {
+      update: `${root}job`
+    }
+  },
   GET: {
     user: {
       getuserqueue: `${root}user/getuserqueue`,
@@ -39,6 +47,10 @@ const API = {
     },
     customer: {
       getall: `${root}customer/getall`
+    },
+    job: {
+      getall: `${root}job/getall`,
+      getassigned: `${root}job/getassigned`
     },
     facility: {
       getbycustomer: `${root}facility/getbycustomer`

@@ -101,6 +101,10 @@
     "securityFunctionsModalTitle": "Security Descriptions",
     "securityLabel": "Security"
   },
+  "jobManage": {
+    "bannerTitle": "Manage Jobs",
+    "editJobModalTitle": "Edit Job"
+  },
   "teamManage": {
     "newTeamMember": "New Team Member",
     "editTeamModalTitle": "Edit Team Member",

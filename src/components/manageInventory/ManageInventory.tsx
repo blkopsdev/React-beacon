@@ -87,7 +87,7 @@ interface IdispatchProps {
 interface Istate {
   selectedRow: any;
   currentTile: Itile;
-  columns: any;
+  columns: any[];
   selectedProduct: any;
   selectedInstall: any;
 }

@@ -16,7 +16,8 @@ import {
   ImanageJobReducer,
   ItableFiltersReducer,
   Itile,
-  Ijob
+  Ijob,
+  Iuser
 } from '../../models';
 import { TableUtil } from '../common/TableUtil';
 import { closeAllModals, getCustomers } from '../../actions/commonActions';
@@ -24,6 +25,7 @@ import { emptyTile } from '../../reducers/initialState';
 import {
   getJobs,
   getJobTypes,
+  getFSEUsers,
   setTableFilter,
   toggleEditJobModal,
   updateJob
@@ -47,6 +49,7 @@ interface IdispatchProps {
   toggleEditJobModal: typeof toggleEditJobModal;
   getJobs: typeof getJobs;
   getJobTypes: typeof getJobTypes;
+  getFSEUsers: typeof getFSEUsers;
   customers: Icustomer[];
   closeAllModals: typeof closeAllModals;
   getCustomers: typeof getCustomers;
@@ -56,6 +59,7 @@ interface IdispatchProps {
   tableFilters: ItableFiltersReducer;
   tableData: Ijob[];
   jobTypes: any[];
+  fseUsers: Iuser[];
 }
 
 interface Istate {
@@ -84,7 +88,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
         },
         {
           Header: 'type',
-          accessor: 'jobType'
+          accessor: 'jobType.name'
         },
         {
           id: 'company',
@@ -140,7 +144,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
           render: FormUtil.SelectWithoutValidation,
           meta: {
             label: 'jobManage:type',
-            options: this.props.jobTypes,
+            options: constants.typeOptions,
             colWidth: 2,
             type: 'select',
             placeholder: 'typePlaceholder',
@@ -173,6 +177,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
   componentDidMount() {
     // refresh job types
     this.props.getJobTypes();
+    this.props.getFSEUsers();
     // refresh the jobManage every time the component mounts
     this.props.getJobs();
     // refresh the list of customers every time the component mounts
@@ -334,7 +339,8 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     loading: state.ajaxCallsInProgress > 0,
     showEditJobModal: state.manageJob.showEditJobModal,
     tableData: state.manageJob.data,
-    jobTypes: FormUtil.convertToOptions(state.manageJob.jobTypes),
+    // jobTypes: FormUtil.convertToOptions(state.manageJob.jobTypes),
+    fseUsers: state.manageJob.fseUsers,
     tableFilters: state.manageJob.tableFilters
   };
 };
@@ -344,6 +350,7 @@ export default translate('jobManage')(
     {
       getJobs,
       getJobTypes,
+      getFSEUsers,
       updateJob,
       toggleEditJobModal,
       closeAllModals,

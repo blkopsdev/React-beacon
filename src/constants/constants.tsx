@@ -4,10 +4,10 @@ import { emptyTile } from '../reducers/initialState';
 import { toastr } from 'react-redux-toastr';
 
 const typeOptions = [
-  { value: 'Audit', label: 'Audit' },
-  { value: 'Inspection', label: 'Inspection' },
-  { value: 'Validation', label: 'Validation' },
-  { value: 'Repair', label: 'Repair' }
+  { value: '80eedbac-ec22-45ef-9ac7-f2eb4be2db4c', label: 'Audit' },
+  { value: '524235fd-4633-4b7a-9c13-c37fc39efe69', label: 'Inspection' },
+  { value: '9c7fde18-0b94-4af8-b4aa-913c40e5aed0', label: 'Validation' },
+  { value: 'ae78eaa3-89c2-490a-90c6-44e5cfa10b01', label: 'Repair' }
 ];
 
 const securityFunctions = {
@@ -21,6 +21,11 @@ const securityFunctions = {
     id: '097AAE49-75FD-4D2B-91EF-967BE665D565',
     name: 'securityF:ManageJobs',
     description: 'Create and edit maintenance jobs.'
+  },
+  FSE: {
+    id: '9685F92C-F78E-4C70-9961-5E3068030242',
+    name: 'securityF:FSE',
+    description: 'Can be added as an FSE to jobs.'
   },
   ManageTrainingPayment: {
     id: '3A0D4616-4179-4BA1-98F0-6A929A3A5E0D',

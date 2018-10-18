@@ -168,20 +168,27 @@ export interface ImanageUserReducer {
   tableFilters: ItableFiltersReducer;
 }
 
-export interface Ijob {
+export interface IuserJob {
   id: string;
-  name: string;
+  userID: string;
+  jobID: string;
+  user: Iuser;
+}
+export interface Ijob {
+  id?: string;
   customerID: string;
   facilityID: string;
   assignedUserID: string;
   type: string;
+  userJobs?: IuserJob[];
   startDate: string;
   endDate: string;
-  status: string;
+  status?: string;
 }
 export interface ImanageJobReducer {
   data: Ijob[];
   jobTypes: any[];
+  fseUsers: Iuser[];
   totalPages: number;
   showEditJobModal: boolean;
   tableFilters: ItableFiltersReducer;

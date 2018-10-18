@@ -1,6 +1,6 @@
 import { pickBy, map } from 'lodash';
 
-import { Ijob, ImanageJobReducer } from '../models';
+import { Ijob, ImanageJobReducer, Iuser } from '../models';
 import {
   createTableFiltersWithName,
   modalToggleWithName
@@ -56,6 +56,17 @@ function jobTypes(state: any[] = [], action: any): any[] {
   }
 }
 
+function fseUsers(state: Iuser[] = [], action: any): Iuser[] {
+  switch (action.type) {
+    case types.GET_FSE_SUCCESS:
+      return action.users;
+    case types.USER_LOGOUT_SUCCESS:
+      return [];
+    default:
+      return state;
+  }
+}
+
 export default function jobManage(
   state: ImanageJobReducer = initialState.manageJob,
   action: any
@@ -63,6 +74,7 @@ export default function jobManage(
   return {
     data: jobManageData(state.data, action),
     jobTypes: jobTypes(state.jobTypes, action),
+    fseUsers: fseUsers(state.fseUsers, action),
     totalPages: jobManageTotalPages(state.totalPages, action),
     showEditJobModal: modalToggleWithName(
       state.showEditJobModal,

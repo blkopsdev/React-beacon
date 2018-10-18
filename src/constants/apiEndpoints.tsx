@@ -15,7 +15,7 @@ const API = {
       deleteTeamMember: `${root}user/deleteteammember`
     },
     job: {
-      create: `${root}job`
+      create: `${root}job/create`
     },
     customer: {
       add: `${root}customer/add`

@@ -46,7 +46,11 @@ const ControlComponent = (props: any) => (
 export const FormUtil = {
   convertToOptions: (items: any): Ioption[] => {
     return map(items, (item: any) => {
-      return { value: item.id, label: item.name || item.code };
+      return {
+        value: item.id,
+        // TODO: verify this will not explode
+        label: item.name || item.code || item.first + ' ' + item.last
+      };
     });
   },
 
@@ -81,7 +85,11 @@ export const FormUtil = {
     >
       <Col xs={meta.colWidth}>
         <ControlLabel>{meta.label}</ControlLabel>
-        <Datetime defaultValue={meta.defaultValue} {...handler()} />
+        <Datetime
+          defaultValue={meta.defaultValue}
+          timeFormat={meta.showTime}
+          {...handler()}
+        />
         <FormControl.Feedback />
       </Col>
     </FormGroup>

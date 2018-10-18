@@ -11,7 +11,11 @@ import * as React from 'react';
 import { FormUtil } from '../common/FormUtil';
 import { IinitialState, Ijob } from '../../models';
 import { getFacilitiesByCustomer } from '../../actions/commonActions';
-import { updateJob, toggleEditJobModal } from '../../actions/manageJobActions';
+import {
+  updateJob,
+  createJob,
+  toggleEditJobModal
+} from '../../actions/manageJobActions';
 import CommonModal from '../common/CommonModal';
 import EditJobForm from './EditJobForm';
 
@@ -26,7 +30,9 @@ interface IdispatchProps {
   loading: boolean;
   customerOptions: any[];
   facilityOptions: any[];
+  fseOptions: any[];
   updateJob: typeof updateJob;
+  createJob: typeof createJob;
   toggleEditJobModal: typeof toggleEditJobModal;
   getFacilitiesByCustomer: (value: string) => Promise<void>;
 }
@@ -63,6 +69,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     loading: state.ajaxCallsInProgress > 0,
     customerOptions: FormUtil.convertToOptions(state.customers),
     facilityOptions: FormUtil.convertToOptions(state.facilities),
+    fseOptions: FormUtil.convertToOptions(state.manageJob.fseUsers),
     showEditJobModal: state.manageJob.showEditJobModal
   };
 };
@@ -71,6 +78,7 @@ export default connect(
   mapStateToProps,
   {
     updateJob,
+    createJob,
     toggleEditJobModal,
     getFacilitiesByCustomer
   }

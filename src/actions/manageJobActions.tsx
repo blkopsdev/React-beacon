@@ -34,6 +34,7 @@ export function getJobs(): ThunkResult<void> {
         if (!data.data) {
           throw undefined;
         } else {
+          console.log(data.data);
           dispatch({ type: types.JOB_MANAGE_SUCCESS, jobs: data.data.result });
           dispatch({
             type: types.JOB_MANAGE_TOTAL_PAGES,
@@ -76,6 +77,32 @@ export function getJobTypes(): ThunkResult<void> {
   };
 }
 
+export function getFSEUsers(): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    return axios
+      .get(API.GET.user.getfseusers, {
+        params: {}
+      })
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.GET_FSE_SUCCESS,
+            users: data.data
+          });
+          return data;
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.GET_FSE_FAILED });
+        constants.handleError(error, 'get fse users');
+        throw error;
+      });
+  };
+}
+
 export function updateJob(job: Ijob): ThunkResult<void> {
   return dispatch => {
     dispatch(beginAjaxCall());
@@ -106,11 +133,11 @@ export function updateJob(job: Ijob): ThunkResult<void> {
 /*
 * save (add) a new product
 */
-export function createJob(job: Ijob): ThunkResult<void> {
+export function createJob(job: Ijob, users: string[]): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     return axios
-      .post(API.POST.job.create, job)
+      .post(API.POST.job.create, { job, users })
       .then(data => {
         if (!data.data) {
           throw undefined;

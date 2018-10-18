@@ -45,6 +45,7 @@ export default {
     totalPages: 1,
     data: [],
     jobTypes: [],
+    fseUsers: [],
     showEditJobModal: false,
     tableFilters: initialTableFilters
   },

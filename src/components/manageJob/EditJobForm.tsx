@@ -11,14 +11,18 @@ import {
   FieldConfig,
   Observable
 } from 'react-reactive-form';
-import { forEach, differenceBy } from 'lodash'; // find, filter
+import { forEach, differenceBy, find, filter } from 'lodash';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
 import { Ioption, Ijob } from '../../models';
-import { toggleEditJobModal, updateJob } from '../../actions/manageJobActions';
+import {
+  toggleEditJobModal,
+  updateJob,
+  createJob
+} from '../../actions/manageJobActions';
 import constants from '../../constants/constants';
 
 interface IstateChanges extends Observable<any> {
@@ -32,6 +36,7 @@ interface AbstractControlEdited extends AbstractControl {
 const buildFieldConfig = (
   customerOptions: any[],
   facilityOptions: any[],
+  fseOptions: any[],
   getFacilitiesByCustomer: (value: string) => Promise<void>
 ) => {
   // Field config to configure form
@@ -85,7 +90,8 @@ const buildFieldConfig = (
       render: FormUtil.Datetime,
       meta: {
         label: 'jobManage:startDate',
-        colWidth: 6
+        colWidth: 6,
+        showTime: false
       },
       options: {
         validators: Validators.required
@@ -95,7 +101,8 @@ const buildFieldConfig = (
       render: FormUtil.Datetime,
       meta: {
         label: 'jobManage:endDate',
-        colWidth: 6
+        colWidth: 6,
+        showTime: false
       },
       options: {
         validators: Validators.required
@@ -104,7 +111,7 @@ const buildFieldConfig = (
     assignedUserID: {
       render: FormUtil.Select,
       meta: {
-        options: constants.typeOptions,
+        options: fseOptions,
         label: 'jobManage:fseLead',
         colWidth: 12,
         placeholder: 'jobManage:typeSearchPlaceholder'
@@ -116,7 +123,7 @@ const buildFieldConfig = (
     users: {
       render: FormUtil.Select,
       meta: {
-        options: constants.typeOptions,
+        options: fseOptions,
         label: 'jobManage:fseMembers',
         colWidth: 12,
         placeholder: 'jobManage:typeSearchPlaceholder',
@@ -142,7 +149,9 @@ interface Iprops extends React.Props<EditJobForm> {
   customerOptions: Ioption[];
   getFacilitiesByCustomer: (value: string) => Promise<void>;
   facilityOptions: Ioption[];
+  fseOptions: Ioption[];
   updateJob: typeof updateJob;
+  createJob: typeof createJob;
   toggleEditJobModal: typeof toggleEditJobModal;
 }
 
@@ -155,6 +164,7 @@ class EditJobForm extends React.Component<Iprops, {}> {
       buildFieldConfig(
         this.props.customerOptions,
         this.props.facilityOptions,
+        this.props.fseOptions,
         this.props.getFacilitiesByCustomer
       ),
       this.props.t
@@ -179,35 +189,33 @@ class EditJobForm extends React.Component<Iprops, {}> {
       ) as AbstractControlEdited;
       facilitySelectControl.meta.options = this.props.facilityOptions;
       facilitySelectControl.stateChanges.next();
-      // const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
-      //   return find(this.props.selectedJob.facilities, { id: fac.value })
-      //     ? true
-      //     : false;
-      // });
-      this.jobForm.patchValue({ facilities: this.props.facilityOptions });
+      const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
+        return (this.props.selectedJob.facilityID = fac.value);
+      });
+      this.jobForm.patchValue({ facilityID: facilitiesArray[0] });
     }
-    // if (
-    //   differenceBy(
-    //     prevProps.customerOptions,
-    //     this.props.customerOptions,
-    //     "value"
-    //   ).length ||
-    //   prevProps.customerOptions.length !== this.props.customerOptions.length
-    // ) {
-    //   const customerSelectControl = this.jobForm.get(
-    //     "customerID"
-    //   ) as AbstractControlEdited;
-    //   customerSelectControl.meta.options = this.props.customerOptions;
-    //   customerSelectControl.stateChanges.next();
-    //   // now select the customer the user just added
-    //   // might be a better way to do this, but we are comparing the two arrays and finding the new customer
-    //   const newCustomer = filter(this.props.customerOptions, (cust: any) => {
-    //     return find(prevProps.customerOptions, { value: cust.value })
-    //       ? false
-    //       : true;
-    //   });
-    //   this.jobForm.patchValue({ customerID: newCustomer[0] });
-    // }
+    if (
+      differenceBy(
+        prevProps.customerOptions,
+        this.props.customerOptions,
+        'value'
+      ).length ||
+      prevProps.customerOptions.length !== this.props.customerOptions.length
+    ) {
+      const customerSelectControl = this.jobForm.get(
+        'customerID'
+      ) as AbstractControlEdited;
+      customerSelectControl.meta.options = this.props.customerOptions;
+      customerSelectControl.stateChanges.next();
+      // now select the customer the user just added
+      // might be a better way to do this, but we are comparing the two arrays and finding the new customer
+      const newCustomer = filter(this.props.customerOptions, (cust: any) => {
+        return find(prevProps.customerOptions, { value: cust.value })
+          ? false
+          : true;
+      });
+      this.jobForm.patchValue({ customerID: newCustomer[0] });
+    }
   }
 
   componentDidMount() {
@@ -220,25 +228,39 @@ class EditJobForm extends React.Component<Iprops, {}> {
       this.jobForm.patchValue({ [key]: value });
     });
 
-    // const {
-    //   customerID,
-    //   facilities,
-    //   securityFunctions
-    // } = this.props.selectedJob;
-    // this.jobForm.patchValue({
-    //   customerID: find(
-    //     this.props.customerOptions,
-    //     (cust: Ioption) => cust.value === customerID
-    //   )
-    // });
+    const {
+      customerID,
+      facilityID,
+      assignedUserID,
+      userJobs
+    } = this.props.selectedJob;
+    this.jobForm.patchValue({
+      customerID: find(
+        this.props.customerOptions,
+        (cust: Ioption) => cust.value === customerID
+      )
+    });
     // if there is a customerID then get facilities
-    // if (customerID.length) {
-    //   this.props.getFacilitiesByCustomer(customerID);
-    // }
-    // const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
-    //   return find(facilities, { id: fac.value }) ? true : false;
-    // });
-    // this.jobForm.patchValue({ facilities: facilitiesArray });
+    if (customerID.length) {
+      this.props.getFacilitiesByCustomer(customerID);
+    }
+    const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
+      return facilityID === fac.value;
+    });
+    this.jobForm.patchValue({ facilityID: facilitiesArray[0] });
+
+    // if assigned user
+    this.jobForm.patchValue({
+      assignedUserID: find(
+        this.props.fseOptions,
+        (item: Ioption) => item.value === assignedUserID
+      )
+    });
+
+    const fseArray = filter(this.props.fseOptions, (fac: any) => {
+      return find(userJobs, { userID: fac.value }) ? true : false;
+    });
+    this.jobForm.patchValue({ users: fseArray });
   }
 
   handleSubmit = (
@@ -252,6 +274,22 @@ class EditJobForm extends React.Component<Iprops, {}> {
       return;
     }
     console.log(this.jobForm.value);
+    if (this.props.selectedJob && this.props.selectedJob.id) {
+      //
+    } else {
+      this.props.createJob(
+        // console.log(
+        {
+          customerID: this.jobForm.value.customerID.value,
+          facilityID: this.jobForm.value.facilityID.value,
+          assignedUserID: this.jobForm.value.assignedUserID.value,
+          type: this.jobForm.value.type.value,
+          startDate: this.jobForm.value.startDate.format(),
+          endDate: this.jobForm.value.endDate.format()
+        },
+        this.jobForm.value.users.map((u: any) => u.value)
+      );
+    }
     // this.props.updateUser({
     //   id: this.props.selectedJob.id,
     //   ...this.jobForm.value,

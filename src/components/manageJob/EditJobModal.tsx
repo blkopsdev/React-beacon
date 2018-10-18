@@ -37,13 +37,19 @@ class EditManageJobModal extends React.Component<Iprops & IdispatchProps, {}> {
   }
 
   render() {
+    let modalTitle;
+    if (this.props.selectedJob && this.props.selectedJob.id) {
+      modalTitle = this.props.t('jobManage:editModalTitle');
+    } else {
+      modalTitle = this.props.t('jobManage:saveModalTitle');
+    }
     return (
       <CommonModal
         modalVisible={this.props.showEditJobModal}
         className="job-edit"
         onHide={this.props.toggleEditJobModal}
         body={<EditJobForm {...this.props} />}
-        title={this.props.t('editJobModalTitle')}
+        title={modalTitle}
         container={document.getElementById('two-pane-layout')}
       />
     );

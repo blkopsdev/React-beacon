@@ -3,12 +3,24 @@ import { find } from 'lodash';
 import { emptyTile } from '../reducers/initialState';
 import { toastr } from 'react-redux-toastr';
 
+const typeOptions = [
+  { value: 'Audit', label: 'Audit' },
+  { value: 'Inspection', label: 'Inspection' },
+  { value: 'Validation', label: 'Validation' },
+  { value: 'Repair', label: 'Repair' }
+];
+
 const securityFunctions = {
   ManageUsers: {
     id: 'AA6F93B7-D278-4117-9B14-26DFA795742E',
     name: 'securityF:ManageUsers',
     description:
       'Approve and reject users as well as add and update customer and facility records.'
+  },
+  ManageJobs: {
+    id: '097AAE49-75FD-4D2B-91EF-967BE665D565',
+    name: 'securityF:ManageJobs',
+    description: 'Create and edit maintenance jobs.'
   },
   ManageTrainingPayment: {
     id: '3A0D4616-4179-4BA1-98F0-6A929A3A5E0D',
@@ -144,7 +156,7 @@ const tiles = [
     width: 360,
     height: 408,
     url: '/maintenance',
-    securityFunction: securityFunctions.ManageUsers.id,
+    securityFunction: securityFunctions.ManageJobs.id,
     description: ''
   },
   {
@@ -283,6 +295,7 @@ const constants = {
   colors,
   securityFunctions,
   tiles,
+  typeOptions,
   hasSecurityFunction: (user: Iuser, securityFunction: string): boolean => {
     if (user.securityFunctions.indexOf(securityFunction) >= 0) {
       return true;

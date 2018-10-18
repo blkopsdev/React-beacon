@@ -7,7 +7,7 @@ import { connect } from 'react-redux';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 import ReactTable, { SortingRule, FinalState, RowInfo } from 'react-table';
-// import * as moment from "moment";
+import * as moment from 'moment';
 
 import { FormUtil } from '../common/FormUtil';
 import {
@@ -32,6 +32,7 @@ import EditJobModal from './EditJobModal';
 import SearchTableForm from '../common/SearchTableForm';
 import constants from '../../constants/constants';
 import { FieldConfig } from 'react-reactive-form';
+import { Button } from 'react-bootstrap';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -80,40 +81,41 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
         },
         {
           Header: 'type',
-          accessor: 'type'
+          accessor: 'jobType'
         },
         {
           id: 'company',
           Header: 'company',
-          accessor: 'customerID'
-          // accessor: ({ customerID }: Ijob) => {
-          //   // !TODO move this to a reducer?
-          //   let cust;
-          //   if (customerID) {
-          //     cust = find(
-          //       this.props.customers,
-          //       c =>
-          //         c.id.trim().toLowerCase() === customerID.trim().toLowerCase()
-          //     );
-          //   }
-          //   return cust ? cust.name : "";
-          // }
+          accessor: 'customer.name'
         },
         {
           Header: 'facility',
-          accessor: 'facilityID'
+          accessor: 'facility.name'
         },
         {
           Header: 'FSE Lead',
-          accessor: 'assignedUserID'
+          // accessor: 'assignedUserID'
+          Cell: (row: any) => (
+            <span>
+              {row.original.assignedUser.first} {row.original.assignedUser.last}
+            </span>
+          )
         },
         {
           Header: 'start date',
-          accessor: 'startDate'
+          accessor: ({ startDate }: Ijob) => {
+            return startDate
+              ? moment.utc(startDate).format('MM/DD/YYYY')
+              : 'n/a';
+          },
+          id: 'startDate'
         },
         {
           Header: 'end date',
-          accessor: 'endDate'
+          accessor: ({ endDate }: Ijob) => {
+            return endDate ? moment.utc(endDate).format('MM/DD/YYYY') : 'n/a';
+          },
+          id: 'endDate'
         }
       ],
       this.props.t
@@ -135,7 +137,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
           render: FormUtil.SelectWithoutValidation,
           meta: {
             label: 'jobManage:type',
-            options: FormUtil.convertToOptions(this.props.customers),
+            options: constants.typeOptions,
             colWidth: 2,
             type: 'select',
             placeholder: 'typePlaceholder',
@@ -278,6 +280,13 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
           subscribeValueChanges={true}
           onValueChanges={this.onSearchValueChanges}
         />
+        <Button
+          className="table-add-button"
+          bsStyle="link"
+          onClick={this.props.toggleEditJobModal}
+        >
+          {t('jobManage:newJob')}
+        </Button>
         <ReactTable
           data={this.props.tableData}
           onSortedChange={this.onSortedChanged}

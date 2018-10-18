@@ -20,7 +20,6 @@ import { FormUtil } from '../common/FormUtil';
 import { Ioption, Ijob } from '../../models';
 import { toggleEditJobModal, updateJob } from '../../actions/manageJobActions';
 import constants from '../../constants/constants';
-import ReactTable from 'react-table';
 
 interface IstateChanges extends Observable<any> {
   next: () => void;
@@ -30,13 +29,6 @@ interface AbstractControlEdited extends AbstractControl {
   stateChanges: IstateChanges;
 }
 
-const typeOptions = [
-  { value: 'Audit', label: 'Audit' },
-  { value: 'Inspection', label: 'Inspection' },
-  { value: 'Validation', label: 'Validation' },
-  { value: 'Repair', label: 'Repair' }
-];
-
 const FormTable = ({
   handler,
   touched,
@@ -45,26 +37,7 @@ const FormTable = ({
   pristine,
   errors,
   submitted
-}: AbstractControl) => (
-  <Col xs={meta.colWidth}>
-    <ReactTable
-      data={meta.data}
-      showPagination={false}
-      minRows={0}
-      style={{ marginTop: 30 }}
-      columns={[
-        {
-          Header: 'FSE',
-          accessor: 'name'
-        },
-        {
-          Header: 'Is Lead?',
-          accessor: 'isLead'
-        }
-      ]}
-    />
-  </Col>
-);
+}: AbstractControl) => <Col xs={meta.colWidth}>{meta.label}</Col>;
 
 const buildFieldConfig = (
   customerOptions: any[],
@@ -109,7 +82,7 @@ const buildFieldConfig = (
     type: {
       render: FormUtil.Select,
       meta: {
-        options: typeOptions,
+        options: constants.typeOptions,
         label: 'common:type',
         colWidth: 12,
         placeholder: 'jobManage:typeSearchPlaceholder'

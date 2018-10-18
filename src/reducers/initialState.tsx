@@ -43,19 +43,7 @@ export default {
   },
   manageJob: {
     totalPages: 1,
-    data: [
-      {
-        id: 'testid',
-        name: 'test',
-        customerID: 'test',
-        facilityID: 'test',
-        assignedUserID: 'test',
-        type: 'test',
-        startDate: 'test',
-        endDate: 'test',
-        status: 'test'
-      }
-    ],
+    data: [],
     showEditJobModal: false,
     tableFilters: initialTableFilters
   },

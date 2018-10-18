@@ -34,10 +34,10 @@ export function getJobs(): ThunkResult<void> {
         if (!data.data) {
           throw undefined;
         } else {
-          dispatch({ type: types.JOB_MANAGE_SUCCESS, jobs: data.data[1] });
+          dispatch({ type: types.JOB_MANAGE_SUCCESS, jobs: data.data.result });
           dispatch({
             type: types.JOB_MANAGE_TOTAL_PAGES,
-            pages: data.data[0]
+            pages: data.data.pages
           });
           return data;
         }
@@ -62,7 +62,7 @@ export function updateJob(job: Ijob): ThunkResult<void> {
         } else {
           dispatch({
             type: types.JOB_UPDATE_SUCCESS,
-            job: data.data
+            job: data.data.result
           });
 
           // toastr.success('Success', 'Saved job', constants.toastrSuccess);

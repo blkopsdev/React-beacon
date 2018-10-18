@@ -29,16 +29,6 @@ interface AbstractControlEdited extends AbstractControl {
   stateChanges: IstateChanges;
 }
 
-const FormTable = ({
-  handler,
-  touched,
-  hasError,
-  meta,
-  pristine,
-  errors,
-  submitted
-}: AbstractControl) => <Col xs={meta.colWidth}>{meta.label}</Col>;
-
 const buildFieldConfig = (
   customerOptions: any[],
   facilityOptions: any[],
@@ -111,14 +101,29 @@ const buildFieldConfig = (
         validators: Validators.required
       }
     },
-    fseList: {
-      render: FormTable,
+    assignedUserID: {
+      render: FormUtil.Select,
       meta: {
+        options: constants.typeOptions,
+        label: 'jobManage:fseLead',
         colWidth: 12,
-        data: [
-          { id: 1, name: 'Martin Shueltz', isLead: true },
-          { id: 2, name: 'Denise Richards', isLead: false }
-        ]
+        placeholder: 'jobManage:typeSearchPlaceholder'
+      },
+      options: {
+        validators: Validators.required
+      }
+    },
+    users: {
+      render: FormUtil.Select,
+      meta: {
+        options: constants.typeOptions,
+        label: 'jobManage:fseMembers',
+        colWidth: 12,
+        placeholder: 'jobManage:typeSearchPlaceholder',
+        isMulti: true
+      },
+      options: {
+        validators: Validators.required
       }
     }
   };

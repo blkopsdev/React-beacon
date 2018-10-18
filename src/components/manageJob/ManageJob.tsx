@@ -23,6 +23,7 @@ import { closeAllModals, getCustomers } from '../../actions/commonActions';
 import { emptyTile } from '../../reducers/initialState';
 import {
   getJobs,
+  getJobTypes,
   setTableFilter,
   toggleEditJobModal,
   updateJob
@@ -45,6 +46,7 @@ interface IdispatchProps {
   // Add your dispatcher properties here
   toggleEditJobModal: typeof toggleEditJobModal;
   getJobs: typeof getJobs;
+  getJobTypes: typeof getJobTypes;
   customers: Icustomer[];
   closeAllModals: typeof closeAllModals;
   getCustomers: typeof getCustomers;
@@ -53,6 +55,7 @@ interface IdispatchProps {
   setTableFilter: typeof setTableFilter;
   tableFilters: ItableFiltersReducer;
   tableData: Ijob[];
+  jobTypes: any[];
 }
 
 interface Istate {
@@ -137,7 +140,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
           render: FormUtil.SelectWithoutValidation,
           meta: {
             label: 'jobManage:type',
-            options: constants.typeOptions,
+            options: this.props.jobTypes,
             colWidth: 2,
             type: 'select',
             placeholder: 'typePlaceholder',
@@ -168,6 +171,8 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
     });
   }
   componentDidMount() {
+    // refresh job types
+    this.props.getJobTypes();
     // refresh the jobManage every time the component mounts
     this.props.getJobs();
     // refresh the list of customers every time the component mounts
@@ -329,6 +334,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     loading: state.ajaxCallsInProgress > 0,
     showEditJobModal: state.manageJob.showEditJobModal,
     tableData: state.manageJob.data,
+    jobTypes: FormUtil.convertToOptions(state.manageJob.jobTypes),
     tableFilters: state.manageJob.tableFilters
   };
 };
@@ -337,6 +343,7 @@ export default translate('jobManage')(
     mapStateToProps,
     {
       getJobs,
+      getJobTypes,
       updateJob,
       toggleEditJobModal,
       closeAllModals,

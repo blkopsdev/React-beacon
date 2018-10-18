@@ -50,6 +50,32 @@ export function getJobs(): ThunkResult<void> {
   };
 }
 
+export function getJobTypes(): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    return axios
+      .get(API.GET.jobtype.getall, {
+        params: {}
+      })
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.GET_JOBTYPES_SUCCESS,
+            jobTypes: data.data.result
+          });
+          return data;
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.GET_JOBTYPES_FAILED });
+        constants.handleError(error, 'get jobtypes');
+        throw error;
+      });
+  };
+}
+
 export function updateJob(job: Ijob): ThunkResult<void> {
   return dispatch => {
     dispatch(beginAjaxCall());

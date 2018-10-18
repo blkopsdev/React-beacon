@@ -181,6 +181,7 @@ export interface Ijob {
 }
 export interface ImanageJobReducer {
   data: Ijob[];
+  jobTypes: any[];
   totalPages: number;
   showEditJobModal: boolean;
   tableFilters: ItableFiltersReducer;

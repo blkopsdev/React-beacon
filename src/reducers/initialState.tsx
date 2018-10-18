@@ -44,6 +44,7 @@ export default {
   manageJob: {
     totalPages: 1,
     data: [],
+    jobTypes: [],
     showEditJobModal: false,
     tableFilters: initialTableFilters
   },

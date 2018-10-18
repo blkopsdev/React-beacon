@@ -113,7 +113,9 @@
     "dateRange": "Date Range",
     "startDate": "Start Date",
     "endDate": "End Date",
-    "newJob": "Add Job"
+    "newJob": "Add Job",
+    "fseLead": "FSE Lead",
+    "fseMembers": "Other FSE"
   },
   "teamManage": {
     "newTeamMember": "New Team Member",

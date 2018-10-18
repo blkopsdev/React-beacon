@@ -45,12 +45,24 @@ function jobManageTotalPages(state: number = 1, action: any): number {
   }
 }
 
+function jobTypes(state: any[] = [], action: any): any[] {
+  switch (action.type) {
+    case types.GET_JOBTYPES_SUCCESS:
+      return action.jobTypes;
+    case types.USER_LOGOUT_SUCCESS:
+      return [];
+    default:
+      return state;
+  }
+}
+
 export default function jobManage(
   state: ImanageJobReducer = initialState.manageJob,
   action: any
 ) {
   return {
     data: jobManageData(state.data, action),
+    jobTypes: jobTypes(state.jobTypes, action),
     totalPages: jobManageTotalPages(state.totalPages, action),
     showEditJobModal: modalToggleWithName(
       state.showEditJobModal,

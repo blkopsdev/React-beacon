@@ -19,49 +19,28 @@ export const authContext = new AuthenticationContext({
   redirectUri: `${process.env.REACT_APP_HOST_DOMAIN}`
 });
 
-export function isAuthenticated() {
-  let isAuth = false;
-  // const resource = "https://beacondev.onmicrosoft.com/beacon-dev-api";
-  const resource = constants.adalAuth.clientId;
-  authContext.acquireToken(
-    resource,
-    (message: string, token: string, msg: string) => {
-      if (!msg) {
-        isAuth = true;
-        axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-      } else {
-        console.error(`message: ${message}  msg: ${msg}`);
-        if (msg === 'login required') {
-          const tokenT = authContext.getCachedToken(
-            authContext.config.clientId
-          );
-          console.log(`should we try to automatically login here? ${tokenT}`);
-        }
-        isAuth = false;
-      }
-    }
-  );
-  return isAuth;
+export function checkCachedToken() {
+  return !!authContext.getCachedToken(authContext.config.clientId);
 }
 
-export function isFullyAuthenticated(user: Iuser) {
-  if (isAuthenticated() && user.id) {
-    return true;
+export function setCachedToken() {
+  const cachedToken = authContext.getCachedToken(authContext.config.clientId);
+
+  if (!cachedToken) {
+    authContext.login();
   } else {
-    return false;
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + cachedToken;
   }
 }
 
-// export function hasSecurityFunction (securityFunction: string) {
-//   return (dispatch: any, getState: any) => {
-//     if (getState().user.securityFunctions.indexOf(securityFunction) >= 0) {
-//       return true;
-//     } else {
-//       return false;
-//     }
-//   }
-
-//   }
+const handleAdalLoginSuccess = (token: string, dispatch: any) => {
+  console.log('user is logged in and token is valid');
+  axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+  dispatch({
+    type: types.AAD_LOGIN,
+    isAuthenticated: true
+  });
+};
 
 export function userLogin(): ThunkResult<void> {
   return (dispatch, getState) => {
@@ -91,19 +70,26 @@ export function adalLogin(): ThunkResult<void> {
   return (dispatch, getState) => {
     // dispatch(beginAjaxCall()); removing loading here beacuse when we come back from adal login,
     // is when the success is called and it closses loading while userLogin is still waiting.
-    authContext.login();
+    const resource = constants.adalAuth.clientId;
+    authContext.acquireToken(
+      resource,
+      (message: string, token: string, msg: string) => {
+        if (!msg) {
+          handleAdalLoginSuccess(token, dispatch);
+        } else {
+          console.error(`message: ${message}  msg: ${msg}`);
+          if (msg === 'login required') {
+            const tokenT = authContext.getCachedToken(
+              authContext.config.clientId
+            );
+            console.log(`should we try to automatically login here? ${tokenT}`);
+          }
+          authContext.login();
+        }
+      }
+    );
   };
 }
-
-export const getToken = (): ThunkResult<void> => {
-  return (dispatch, getState) => {
-    // dispatch(beginAjaxCall()); see comment above in adalLogin
-    const token = authContext.getCachedToken(authContext.config.clientId);
-    axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
-    dispatch({ type: types.AAD_LOGIN, token });
-    // return token;
-  };
-};
 
 export function userLogout(): ThunkResult<void> {
   return (dispatch, getState) => {

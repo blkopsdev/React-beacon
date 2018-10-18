@@ -3,34 +3,13 @@
 * Initial routes are here and secondary routes are in TwoPanelLayout
 */
 
-import { throttle } from 'lodash';
-import * as React from 'react';
-import * as ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import ReduxToastr from 'react-redux-toastr';
 import {
   BrowserRouter as Router,
   Redirect,
   Route,
   Switch
 } from 'react-router-dom';
-import Login from './components/auth/Login';
-import initialState from './reducers/initialState';
-import registerServiceWorker from './registerServiceWorker';
-import configureStore from './store/configureStore';
-import { loadState, saveState } from './store/localStorage';
-import { runWithAdal } from 'react-adal';
-import axios from 'axios';
-import { library } from '@fortawesome/fontawesome-svg-core';
-import {
-  faUsers,
-  faSearch,
-  faUser,
-  faShoppingCart,
-  faChevronDown,
-  faChevronRight,
-  faEnvelope
-} from '@fortawesome/free-solid-svg-icons';
 import {
   faCog,
   faCalendarCheck,
@@ -44,6 +23,30 @@ import {
   faListAlt,
   faClock
 } from '@fortawesome/pro-regular-svg-icons';
+import {
+  faUsers,
+  faSearch,
+  faUser,
+  faShoppingCart,
+  faChevronDown,
+  faChevronRight,
+  faEnvelope
+} from '@fortawesome/free-solid-svg-icons';
+import { library } from '@fortawesome/fontawesome-svg-core';
+import { runWithAdal } from 'react-adal';
+import { throttle } from 'lodash';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import ReduxToastr from 'react-redux-toastr';
+import axios from 'axios';
+
+import { loadState, saveState } from './store/localStorage';
+import { setCachedToken } from './actions/userActions';
+import Login from './components/auth/Login';
+import configureStore from './store/configureStore';
+import initialState from './reducers/initialState';
+import registerServiceWorker from './registerServiceWorker';
+
 library.add(
   faCog,
   faUsers,
@@ -65,7 +68,7 @@ library.add(
   faClock
 );
 
-import { authContext, isFullyAuthenticated } from './actions/userActions';
+import { authContext } from './actions/userActions';
 import Dashboard from './components/dashboard/Dashboard';
 import Header from './components/header/Header';
 import SignUpDirect from './components/auth/SignUpDirect';
@@ -148,8 +151,11 @@ const checkAppVersion = (user: Iuser) => {
 
 const PrivateRoute = ({ component: Component, ...rest }: any) => {
   const user = store.getState().user;
-  const authenticated = isFullyAuthenticated(user);
+  let authenticated = false;
+  authenticated = user.isAuthenticated && user.id.length > 0;
   if (authenticated) {
+    // if authenticated, set the Azure token to the HTTP headers
+    setCachedToken();
     checkAppVersion(user);
   }
   return (

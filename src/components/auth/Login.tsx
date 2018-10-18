@@ -7,26 +7,28 @@
 * 2) provide a plane for the user to begin logging in
 */
 
-import * as React from 'react';
-import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Button, Col, Grid, Row } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+import { Redirect, RouteComponentProps } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { translate, TranslationFunction, I18n } from 'react-i18next';
+import * as React from 'react';
+
 import { IinitialState, Iuser, Iredirect } from '../../models';
+import {
+  adalLogin,
+  checkCachedToken,
+  setCachedToken,
+  userLogin,
+  userLogout
+} from '../../actions/userActions';
 import {
   setLoginRedirect,
   removeLoginRedirect,
   setRedirectPathname
 } from '../../actions/redirectToReferrerAction';
-import { Button, Col, Grid, Row } from 'react-bootstrap';
-import { RouteComponentProps } from 'react-router-dom';
-import {
-  isAuthenticated,
-  isFullyAuthenticated,
-  adalLogin,
-  userLogin,
-  userLogout
-} from '../../actions/userActions';
-import { translate, TranslationFunction, I18n } from 'react-i18next';
+
+const Loading = () => <h3>Loading...</h3>;
 
 interface Iprops extends RouteComponentProps<{}> {
   userLogin?: any;
@@ -56,17 +58,28 @@ class Login extends React.Component<Iprops, Istate> {
     };
   }
   componentWillMount() {
-    const { from } = this.props.location.state || { from: { pathname: '/' } };
-    if (
-      !isFullyAuthenticated(this.props.user) &&
-      isAuthenticated() &&
-      from.pathname !== '/signup' &&
-      !this.state.userLoginFailed
-    ) {
-      this.props.userLogin().catch((err: any) => {
-        console.error('error logging in', err);
-        this.setState({ userLoginFailed: true });
-      }); // TODO how do we handle this if it fails?
+    const { from } = this.props.location.state || {
+      from: { pathname: '/dashboard' }
+    };
+    /*
+    * If we have a Azure AD token, then set it.  If we have a token, but the user is not authenticated, then use the token to login to the API
+    */
+    if (checkCachedToken()) {
+      setCachedToken();
+      if (!this.props.user.isAuthenticated) {
+        this.props
+          .userLogin()
+          .then(() => {
+            this.props.history.push(from.pathname);
+          })
+          .catch(() => {
+            console.error('login failed in login.tsx');
+            this.setState({ userLoginFailed: true });
+          });
+      } else {
+        // user is authenticated, so take them back to where they came from or to the default route
+        this.props.history.push(from.pathname);
+      }
     }
   }
   componentDidMount() {
@@ -97,13 +110,13 @@ class Login extends React.Component<Iprops, Istate> {
     const { redirectToReferrer } = this.props.redirect;
 
     // if the user is authenticated but not fully, show loading
-    if (isAuthenticated() && !isFullyAuthenticated(this.props.user)) {
-      return null;
+    if (checkCachedToken()) {
+      return <Loading />;
     }
 
     // if user is authenticated and exists in the backend
     // redirect to the redirect.pathname or the dashboard
-    if (isFullyAuthenticated(this.props.user)) {
+    if (this.props.user.isAuthenticated) {
       const loggedInPath: string = redirectToReferrer
         ? from.pathname
         : '/dashboard';

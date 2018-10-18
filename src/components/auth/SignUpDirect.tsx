@@ -20,7 +20,6 @@ import { Col, Grid, Row, Button } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 
-import { isFullyAuthenticated } from '../../actions/userActions';
 import UserForm from './UserForm';
 
 interface Iprops extends RouteComponentProps<{}> {
@@ -84,7 +83,7 @@ class SignUpDirect extends React.Component<Iprops, Istate> {
   }
   render() {
     const { t } = this.props;
-    if (isFullyAuthenticated(this.props.user)) {
+    if (this.props.user.isAuthenticated) {
       this.props.removeLoginRedirect();
       return <Redirect to={'/dashboard'} />;
     }

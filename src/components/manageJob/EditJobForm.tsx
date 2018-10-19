@@ -24,6 +24,7 @@ import {
   createJob
 } from '../../actions/manageJobActions';
 import constants from '../../constants/constants';
+import * as moment from 'moment';
 
 interface IstateChanges extends Observable<any> {
   next: () => void;
@@ -74,11 +75,11 @@ const buildFieldConfig = (
         validators: Validators.required
       }
     },
-    type: {
+    jobTypeID: {
       render: FormUtil.Select,
       meta: {
         options: constants.typeOptions,
-        label: 'common:type',
+        label: 'jobManage:type',
         colWidth: 12,
         placeholder: 'jobManage:typeSearchPlaceholder'
       },
@@ -232,7 +233,10 @@ class EditJobForm extends React.Component<Iprops, {}> {
       customerID,
       facilityID,
       assignedUserID,
-      userJobs
+      userJobs,
+      jobTypeID,
+      startDate,
+      endDate
     } = this.props.selectedJob;
     this.jobForm.patchValue({
       customerID: find(
@@ -248,6 +252,18 @@ class EditJobForm extends React.Component<Iprops, {}> {
       return facilityID === fac.value;
     });
     this.jobForm.patchValue({ facilityID: facilitiesArray[0] });
+
+    this.jobForm.patchValue({
+      startDate: moment.utc(startDate),
+      endDate: moment.utc(endDate)
+    });
+
+    this.jobForm.patchValue({
+      jobTypeID: find(
+        constants.typeOptions,
+        (item: Ioption) => item.value === jobTypeID
+      )
+    });
 
     // if assigned user
     this.jobForm.patchValue({
@@ -275,29 +291,33 @@ class EditJobForm extends React.Component<Iprops, {}> {
     }
     console.log(this.jobForm.value);
     if (this.props.selectedJob && this.props.selectedJob.id) {
-      //
-    } else {
-      this.props.createJob(
-        // console.log(
+      this.props.updateJob(
         {
+          id: this.props.selectedJob.id,
           customerID: this.jobForm.value.customerID.value,
           facilityID: this.jobForm.value.facilityID.value,
           assignedUserID: this.jobForm.value.assignedUserID.value,
-          type: this.jobForm.value.type.value,
+          jobTypeID: this.jobForm.value.jobTypeID.value,
           startDate: this.jobForm.value.startDate.format(),
           endDate: this.jobForm.value.endDate.format()
         },
         this.jobForm.value.users.map((u: any) => u.value)
       );
+    } else {
+      this.props.createJob(
+        {
+          customerID: this.jobForm.value.customerID.value,
+          facilityID: this.jobForm.value.facilityID.value,
+          assignedUserID: this.jobForm.value.assignedUserID.value,
+          jobTypeID: this.jobForm.value.jobTypeID.value,
+          startDate: this.jobForm.value.startDate.format(),
+          endDate: this.jobForm.value.endDate.format(),
+          status: 'New',
+          name: 'temp'
+        },
+        this.jobForm.value.users.map((u: any) => u.value)
+      );
     }
-    // this.props.updateUser({
-    //   id: this.props.selectedJob.id,
-    //   ...this.jobForm.value,
-    //   customerID: this.jobForm.value.customerID.value,
-    //   facilities: facilitiesArray,
-    //   securityFunctions: securityFunctionsArray,
-    //   email: this.props.selectedJob.email // have to add back the email because disabling the input removes it
-    // });
   };
   setForm = (form: AbstractControl) => {
     this.jobForm = form;

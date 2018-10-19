@@ -115,7 +115,11 @@
     "endDate": "End Date",
     "newJob": "Add Job",
     "fseLead": "FSE Lead",
-    "fseMembers": "Other FSE"
+    "fseMembers": "Other FSE",
+    "save": "Save",
+    "cancel": "Cancel",
+    "status": "Status",
+    "facility": "Facility"
   },
   "teamManage": {
     "newTeamMember": "New Team Member",

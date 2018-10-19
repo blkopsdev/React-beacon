@@ -176,10 +176,11 @@ export interface IuserJob {
 }
 export interface Ijob {
   id?: string;
+  name?: string;
   customerID: string;
   facilityID: string;
   assignedUserID: string;
-  type: string;
+  jobTypeID?: string;
   userJobs?: IuserJob[];
   startDate: string;
   endDate: string;

@@ -103,12 +103,12 @@ export function getFSEUsers(): ThunkResult<void> {
   };
 }
 
-export function updateJob(job: Ijob): ThunkResult<void> {
+export function updateJob(job: Ijob, users: string[]): ThunkResult<void> {
   return dispatch => {
     dispatch(beginAjaxCall());
     dispatch({ type: types.TOGGLE_MODAL_EDIT_JOB });
     return axios
-      .put(`${API.PUT.job.update}/${job.id}`, job)
+      .put(`${API.PUT.job.update}/${job.id}`, { job, users })
       .then(data => {
         if (!data.data) {
           throw undefined;

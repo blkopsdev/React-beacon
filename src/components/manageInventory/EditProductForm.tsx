@@ -18,7 +18,6 @@ import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
 import {
-  Ioption,
   Iproduct,
   IproductInfo,
   Isubcategory,
@@ -69,7 +68,7 @@ const buildFieldConfig = (
       render: FormUtil.Select,
       meta: {
         options: productInfo.productGroupOptions,
-        label: 'productGroup',
+        label: 'common:productGroup',
         colWidth: 12,
         placeholder: 'common:searchPlaceholder',
         isMulti: false
@@ -204,7 +203,6 @@ interface Iprops {
   t: TranslationFunction;
   i18n: I18n;
   productInfo: IproductInfo;
-  facilityOptions: Ioption[];
   tableFilters: ItableFiltersReducer;
   saveProduct: typeof saveProduct;
   updateProduct: typeof updateProduct;

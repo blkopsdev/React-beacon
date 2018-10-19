@@ -1,5 +1,39 @@
 export const initialOption = { value: '', label: '' };
 export const initialTableFilters = { search: '', page: 1 };
+export const initialProduct = {
+  id: '',
+  name: '',
+  sku: '',
+  description: '',
+  imagePath: '',
+  subcategoryID: '',
+  standardID: '',
+  brandID: '',
+  manufacturerID: '',
+  gasTypeID: '',
+  powerID: '',
+  systemSizeID: '',
+  productGroupID: '',
+  subcategory: {
+    mainCategoryID: '',
+    id: '',
+    name: '',
+    createDate: '',
+    updateDate: '',
+    creatorID: '',
+    updaterID: '',
+    mainCategory: {
+      id: '',
+      name: '',
+      createDate: '',
+      updateDate: '',
+      creatorID: '',
+      updaterID: ''
+    }
+  },
+  installs: [],
+  quantity: 1
+};
 
 export default {
   ajaxCallsInProgress: 0,
@@ -60,6 +94,7 @@ export default {
     showEditInstallModal: false,
     showEditQuoteModal: false,
     showInstallContactModal: false,
+    showSearchNewProductsModal: false,
     totalPages: 1,
     data: [],
     cart: {
@@ -86,7 +121,9 @@ export default {
       subcategoryOptions: [],
       systemSizeOptions: []
     },
-    tableFilters: initialTableFilters
+    tableFilters: initialTableFilters,
+    selectedProduct: initialProduct,
+    newProducts: {}
   },
   manageProductQueue: {
     showApproveProductModal: false,

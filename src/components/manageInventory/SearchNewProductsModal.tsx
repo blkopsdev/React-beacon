@@ -1,5 +1,5 @@
 /*
-* Manage Inventory Modal
+* Search New Products Modal
 */
 
 import { TranslationFunction } from 'react-i18next';
@@ -16,10 +16,13 @@ import {
 import {
   updateProduct,
   saveProduct,
-  toggleEditProductModal
+  toggleEditProductModal,
+  toggleSearchNewProductsModal,
+  getProducts,
+  resetNewProducts
 } from '../../actions/manageInventoryActions';
 import CommonModal from '../common/CommonModal';
-import EditProductForm from './EditProductForm';
+import SearchNewProductsForm from './SearchNewProductsForm';
 
 interface Iprops {
   selectedItem: Iproduct;
@@ -31,14 +34,16 @@ interface Iprops {
 interface IdispatchProps {
   showModal: boolean;
   loading: boolean;
-  updateProduct: typeof updateProduct;
-  saveProduct: typeof saveProduct;
   toggleEditProductModal: typeof toggleEditProductModal;
+  toggleSearchNewProductsModal: typeof toggleSearchNewProductsModal;
   productInfo: IproductInfo;
   tableFilters: ItableFiltersReducer;
+  getProducts: typeof getProducts;
+  newProducts: { [key: string]: Iproduct };
+  resetNewProducts: typeof resetNewProducts;
 }
 
-class ManageInventoryModal extends React.Component<
+class SearchNewProductsModal extends React.Component<
   Iprops & IdispatchProps,
   {}
 > {
@@ -47,21 +52,13 @@ class ManageInventoryModal extends React.Component<
   }
 
   render() {
-    let modalTitle;
-    if (this.props.selectedQueueObject && this.props.selectedQueueObject.id) {
-      modalTitle = this.props.t('manageProductQueue:editModalTitle');
-    } else if (this.props.selectedItem && this.props.selectedItem.id) {
-      modalTitle = this.props.t('manageInventory:editModalTitle');
-    } else {
-      modalTitle = this.props.t('manageInventory:saveModalTitle');
-    }
     return (
       <CommonModal
         modalVisible={this.props.showModal}
         className="user-edit"
-        onHide={this.props.toggleEditProductModal}
-        body={<EditProductForm {...this.props} />}
-        title={modalTitle}
+        onHide={this.props.toggleSearchNewProductsModal}
+        body={<SearchNewProductsForm {...this.props} />}
+        title={this.props.t('searchNewProductModalTitle')}
         container={document.getElementById('two-pane-layout')}
       />
     );
@@ -72,9 +69,10 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
-    showModal: state.manageInventory.showEditProductModal,
+    showModal: state.manageInventory.showSearchNewProductsModal,
     productInfo: state.manageInventory.productInfo,
-    tableFilters: state.manageInventory.tableFilters
+    tableFilters: state.manageInventory.tableFilters,
+    newProducts: state.manageInventory.newProducts
   };
 };
 
@@ -83,6 +81,9 @@ export default connect(
   {
     updateProduct,
     saveProduct,
-    toggleEditProductModal
+    toggleEditProductModal,
+    getProducts,
+    toggleSearchNewProductsModal,
+    resetNewProducts
   }
-)(ManageInventoryModal);
+)(SearchNewProductsModal);

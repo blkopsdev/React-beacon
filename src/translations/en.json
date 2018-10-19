@@ -7,7 +7,7 @@
     "search": "search",
     "customer": "customer",
     "facility": "facility",
-    "productGroup": "Product Group",
+    "productGroup": "Equipment Type",
     "manufacturer": "Manufacturer",
     "newCustomerModalTitle": "New Customer",
     "customerNameLabel": "New Customer Name",
@@ -147,7 +147,6 @@
     "nickname": "Nickname",
     "sku": "SKU",
     "name": "Name",
-    "productGroup": "Product Group",
     "manufacturer": "Manufacturer",
     "quantity": "Quantity",
     "addToQuote": "Add To Quote",
@@ -166,7 +165,10 @@
     "serialNumber": "Serial Number",
     "installDeleteConfirm": "Are you sure?",
     "installDeleteOk": "Delete Install",
-    "saveApprove": "Save & Approve"
+    "saveApprove": "Save & Approve",
+    "addNewProductButton": "Can't find what you are looking for?",
+    "searchNewProductModalTitle": "Add Product",
+    "searchByName": "Search By Name"
   },
   "manageProductQueue": {
     "bannerTitle": "New Product Queue",
@@ -176,7 +178,6 @@
     "nickname": "Nickname",
     "sku": "SKU",
     "name": "Name",
-    "productGroup": "Product Group",
     "manufacturer": "Manufacturer",
     "quantity": "Quantity",
     "addToQuote": "Add To Quote",

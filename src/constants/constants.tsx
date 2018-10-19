@@ -98,6 +98,11 @@ const securityFunctions = {
     id: '64818AA5-A685-4E5D-AD22-E2BB357CF58B',
     name: 'securityF:ManageProductQueue',
     description: 'Allows the user to manage and approve products.'
+  },
+  ManageLocations: {
+    id: '0FE683B3-FEA5-4130-9243-2C272CABA674',
+    name: 'securityF:ManageLocations',
+    description: 'Allows the user to manage and create locations.'
   }
 };
 

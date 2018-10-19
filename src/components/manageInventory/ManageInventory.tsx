@@ -43,6 +43,7 @@ import {
   toggleEditInstallModal,
   toggleEditProductModal,
   toggleEditQuoteModal,
+  toggleSearchNewProductsModal,
   setSelectedProduct
 } from '../../actions/manageInventoryActions';
 import { getTotal } from '../../reducers/manageInventoryReducer';
@@ -53,6 +54,7 @@ import EditQuoteModal from '../shoppingCart/EditQuoteModal';
 import SearchTableForm from '../common/SearchTableForm';
 import constants from '../../constants/constants';
 import InstallContactModal from './InstallContactModal';
+import SearchNewProductsModal from './SearchNewProductsModal';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -69,6 +71,7 @@ interface IdispatchProps {
   toggleEditProductModal: typeof toggleEditProductModal;
   toggleEditInstallModal: typeof toggleEditInstallModal;
   toggleEditQuoteModal: typeof toggleEditQuoteModal;
+  toggleSearchNewProductsModal: typeof toggleSearchNewProductsModal;
   getProductInfo: typeof getProductInfo;
   toggleSecurityFunctionsModal: () => void;
   getInventory: typeof getInventory;
@@ -487,7 +490,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         <Button
           className="table-add-button"
           bsStyle="link"
-          onClick={this.props.toggleEditProductModal}
+          onClick={this.props.toggleSearchNewProductsModal}
         >
           {t('manageInventory:newProduct')}
         </Button>
@@ -555,6 +558,14 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           }
           t={this.props.t}
         />
+
+        <SearchNewProductsModal
+          selectedItem={this.props.selectedProduct}
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+          t={this.props.t}
+        />
       </div>
     );
   }
@@ -589,6 +600,7 @@ export default translate('manageInventory')(
       toggleEditProductModal,
       toggleEditInstallModal,
       toggleEditQuoteModal,
+      toggleSearchNewProductsModal,
       closeAllModals,
       getProductInfo,
       addToCart,

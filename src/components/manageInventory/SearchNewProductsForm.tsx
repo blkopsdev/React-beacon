@@ -3,45 +3,29 @@
 * Edit inventory items
 */
 
-import { Col, Button } from 'react-bootstrap';
+import { Col, Button, ListGroup, Row, Well } from 'react-bootstrap';
 import {
   Validators,
   FormGenerator,
   AbstractControl,
-  FieldConfig,
-  Observable
+  FieldConfig
 } from 'react-reactive-form';
-import { forEach, find, filter } from 'lodash';
+import { forEach, map, isEmpty } from 'lodash';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
+import { Iproduct, IproductInfo, ItableFiltersReducer } from '../../models';
 import {
-  Ioption,
-  Iproduct,
-  IproductInfo,
-  Isubcategory,
-  ItableFiltersReducer
-} from '../../models';
-import {
-  saveProduct,
-  updateProduct,
-  toggleSearchNewProductsModal
+  toggleSearchNewProductsModal,
+  getProducts,
+  toggleEditProductModal,
+  resetNewProducts
 } from '../../actions/manageInventoryActions';
 import constants from '../../constants/constants';
 
-interface IstateChanges extends Observable<any> {
-  next: () => void;
-}
-interface AbstractControlEdited extends AbstractControl {
-  stateChanges: IstateChanges;
-}
-
-const buildFieldConfig = (
-  productInfo: IproductInfo,
-  filterSubcategories: (id: string) => void
-) => {
+const buildFieldConfig = (productInfo: IproductInfo) => {
   const fieldConfigControls = {
     productGroupID: {
       render: FormUtil.Select,
@@ -57,11 +41,16 @@ const buildFieldConfig = (
       }
     },
     search: {
-      options: {
-        validators: Validators.required
-      },
+      // options: {
+      //   validators: Validators.required
+      // },
       render: FormUtil.TextInput,
-      meta: { label: 'search', colWidth: 12, type: 'input' }
+      meta: {
+        label: 'search',
+        colWidth: 12,
+        type: 'input',
+        placeholder: 'searchByName'
+      }
     }
   };
   return {
@@ -71,25 +60,29 @@ const buildFieldConfig = (
 
 interface Iprops {
   toggleSearchNewProductsModal: typeof toggleSearchNewProductsModal;
+  toggleEditProductModal: typeof toggleEditProductModal;
   selectedItem?: Iproduct;
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;
   i18n: I18n;
   productInfo: IproductInfo;
-  facilityOptions: Ioption[];
   tableFilters: ItableFiltersReducer;
-  saveProduct: typeof saveProduct;
-  updateProduct: typeof updateProduct;
+  getProducts: typeof getProducts;
+  newProducts: { [key: string]: Iproduct };
+  resetNewProducts: typeof resetNewProducts;
 }
 
 class SearchNewProductsForm extends React.Component<Iprops, {}> {
   public userForm: AbstractControl;
   public fieldConfig: FieldConfig;
+  private subscription: any;
+  private filterNewProductsTimeout: any;
+
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(
-      buildFieldConfig(this.props.productInfo, this.filterSubcategories),
+      buildFieldConfig(this.props.productInfo),
       this.props.t
     );
     this.setForm = this.setForm.bind(this);
@@ -98,71 +91,47 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
   // }
 
   componentDidMount() {
-    if (!this.props.selectedItem) {
-      console.log('adding a new user');
-    } else {
-      // set values
-      forEach(this.props.selectedItem, (value, key) => {
-        if (typeof value === 'string' && key.split('ID').length === 1) {
-          // it is a string and did Not find 'ID'
-          this.userForm.patchValue({ [key]: value });
-        } else if (value !== null) {
-          this.userForm.patchValue({
-            [key]: find(
-              this.props.productInfo[`${key.split('ID')[0]}Options`],
-              { value }
-            )
-          });
-          // special set for mainCategory
-          if (key === 'subcategory') {
-            const { mainCategoryID } = value || ('' as any);
-            this.userForm.patchValue({
-              mainCategoryID: find(
-                this.props.productInfo[`mainCategoryOptions`],
-                { value: mainCategoryID }
-              )
-            });
-          }
-        }
-      });
-    }
-  }
-  filterSubcategories = (mainCategoryID: string) => {
-    if (mainCategoryID) {
-      const filteredSubcategories = filter(
-        this.props.productInfo.subcategories,
-        (sub: Isubcategory) => {
-          return sub.mainCategoryID === mainCategoryID;
-        }
-      );
-      const subcategoryControl = this.userForm.get(
-        'subcategoryID'
-      ) as AbstractControlEdited;
-      subcategoryControl.meta.options = FormUtil.convertToOptions(
-        filteredSubcategories
-      );
-      subcategoryControl.stateChanges.next();
-      // try to set the value to the one selected by the user
-      if (this.props.selectedItem) {
-        const newSubcategory =
-          find(subcategoryControl.meta.options, {
-            value: this.props.selectedItem.subcategoryID
-          }) || {};
-        this.userForm.patchValue({ subcategoryID: newSubcategory });
-      } else {
-        // subcategoryControl.reset();
-        // subcategoryControl.markAsPristine();
-        // subcategoryControl.stateChanges.next();
-        this.userForm.patchValue({ subcategoryID: null });
-      }
-    }
-  };
+    // if (!this.props.selectedItem) {
+    //   console.log('adding a new user');
+    // } else {
+    // set values
+    // forEach(this.props.selectedItem, (value, key) => {
+    //   if (typeof value === 'string' && key.split('ID').length === 1) {
+    //     // it is a string and did Not find 'ID'
+    //     this.userForm.patchValue({ [key]: value });
+    //   } else if (value !== null) {
+    //     this.userForm.patchValue({
+    //       [key]: find(
+    //         this.props.productInfo[`${key.split('ID')[0]}Options`],
+    //         { value }
+    //       )
+    //     });
+    //   }
+    // });
+    // }
 
-  handleSubmit = (
-    e: React.MouseEvent<HTMLFormElement>,
-    shouldApprove: boolean = false
-  ) => {
-    e.preventDefault();
+    forEach(this.fieldConfig.controls, (input: any, key) => {
+      if (input.meta && input.meta.defaultValue) {
+        this.userForm.patchValue({ [key]: input.meta.defaultValue });
+      }
+      this.subscription = this.userForm
+        .get(key)
+        .valueChanges.subscribe((value: any) => {
+          clearTimeout(this.filterNewProductsTimeout);
+          this.filterNewProductsTimeout = setTimeout(() => {
+            this.handleSubmit();
+          }, constants.tableSearchDebounceTime);
+        });
+    });
+  }
+  componentWillUnmount() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+    this.props.resetNewProducts();
+  }
+
+  handleSubmit = () => {
     if (this.userForm.status === 'INVALID') {
       this.userForm.markAsSubmitted();
       toastr.error('Please check invalid inputs', '', constants.toastrError);
@@ -170,48 +139,9 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
     }
     console.log(this.userForm.value);
 
-    if (this.props.tableFilters.facility) {
-      const {
-        productGroupID,
-        brandID,
-        manufacturerID,
-        subcategoryID,
-        gasTypeID,
-        powerID,
-        systemSizeID,
-        standardID
-      } = this.userForm.value;
+    const { productGroupID, search } = this.userForm.value;
 
-      let newItem = {
-        ...this.userForm.value,
-        productGroupID: productGroupID.value,
-        brandID: brandID.value,
-        manufacturerID: manufacturerID.value,
-        subcategoryID: subcategoryID.value,
-        gasTypeID: gasTypeID.value,
-        powerID: powerID.value,
-        systemSizeID: systemSizeID.value,
-        standardID: standardID.value,
-        facilityID: this.props.tableFilters.facility.value
-      };
-
-      if (this.props.selectedItem) {
-        newItem = { ...newItem, id: this.props.selectedItem.id };
-      }
-
-      if (this.props.selectedItem && this.props.selectedItem.id) {
-        this.props.updateProduct(newItem);
-      } else {
-        this.props.saveProduct(newItem);
-      }
-    } else {
-      console.error('missing facility, unable to save install');
-      toastr.error(
-        'Error',
-        'Missing facility, please try again or contact support',
-        constants.toastrError
-      );
-    }
+    this.props.getProducts(1, search, productGroupID.value);
   };
   setForm = (form: AbstractControl) => {
     this.userForm = form;
@@ -225,14 +155,77 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
 
     const formClassName = `user-form manage-form ${this.props.colorButton}`;
 
+    let searchActive = false;
+    if (
+      this.userForm &&
+      this.userForm.value &&
+      (this.userForm.value.search || this.userForm.value.productGroupID)
+    ) {
+      searchActive = true;
+    }
+
+    const ProductListItem = ({
+      product,
+      productInfo
+    }: {
+      product: Iproduct;
+      productInfo: IproductInfo;
+    }) => (
+      <li className="list-group-item new-product-item" key={product.id}>
+        <h4> {product.name} </h4>
+        <Row>
+          <Col xs={6}>{product.sku}</Col>
+          <Col xs={6}>
+            {productInfo.manufacturers[product.manufacturerID].name}
+          </Col>
+          <Col xs={6}>
+            {productInfo.productGroups[product.productGroupID].name}
+          </Col>
+          <Col xs={6}>{productInfo.brands[product.brandID].name}</Col>
+        </Row>
+      </li>
+    );
+
     return (
       <div>
         <div className={formClassName}>
-          <form onSubmit={this.handleSubmit} className="user-form">
-            <FormGenerator
-              onMount={this.setForm}
-              fieldConfig={this.fieldConfig}
-            />
+          <form
+            onSubmit={(e: React.MouseEvent<HTMLFormElement>) => {
+              e.preventDefault();
+              this.handleSubmit();
+            }}
+            className="user-form"
+          >
+            <Row>
+              <Col xs={12}>
+                <FormGenerator
+                  onMount={this.setForm}
+                  fieldConfig={this.fieldConfig}
+                />
+              </Col>
+            </Row>
+            <Row>
+              <Col xs={12}>
+                <ListGroup>
+                  {map(this.props.newProducts, product => (
+                    <ProductListItem
+                      product={product}
+                      productInfo={this.props.productInfo}
+                    />
+                  ))}
+                </ListGroup>
+                {isEmpty(this.props.newProducts) &&
+                  searchActive && (
+                    <Well
+                      className="text-center"
+                      style={{ marginLeft: '20px' }}
+                    >
+                      {' '}
+                      {t('no products found')}{' '}
+                    </Well>
+                  )}
+              </Col>
+            </Row>
             <Col xs={12} className="form-buttons text-right">
               <Button
                 bsStyle="link"
@@ -243,12 +236,13 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
                 {t('common:cancel')}
               </Button>
               <Button
-                bsStyle={this.props.colorButton}
-                type="submit"
+                bsStyle="link"
+                type="button"
                 disabled={this.props.loading}
               >
-                {t('common:save')}
+                {t('addNewProductButton')}
               </Button>
+              <button type="submit" style={{ display: 'none' }} />
             </Col>
           </form>
         </div>

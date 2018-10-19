@@ -62,7 +62,8 @@ const API = {
     inventory: {
       getinventory: `${root}inventory/search`, // unused
       getproductinfo: `${root}inventory/getproductinfo`,
-      getproductqueue: `${root}inventory/getproductqueue`
+      getproductqueue: `${root}inventory/getproductqueue`,
+      products: `${root}inventory/products`
     }
   }
 };

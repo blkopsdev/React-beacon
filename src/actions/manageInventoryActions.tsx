@@ -41,6 +41,37 @@ export function getProductInfo(): ThunkResult<void> {
   };
 }
 
+export function getProducts(
+  page: number,
+  search: string,
+  productGroupID: string
+): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+
+    const pagingMode = 'paged';
+    return axios
+      .get(API.GET.inventory.products, {
+        params: { page, search, productGroupID, pagingMode }
+      })
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.GET_PRODUCTS_SUCCESS,
+            products: data.data.result
+          });
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.GET_PRODUCTS_FAILED });
+        constants.handleError(error, 'get products');
+        throw error;
+      });
+  };
+}
+
 export function getInventory(): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
@@ -299,4 +330,7 @@ export const setTableFilter = (filters: ItableFiltersParams) => ({
 export const setSelectedProduct = (product?: Iproduct) => ({
   type: types.SET_SELECTED_PRODUCT,
   product
+});
+export const resetNewProducts = () => ({
+  type: types.NEW_PRODUCTS_RESET
 });

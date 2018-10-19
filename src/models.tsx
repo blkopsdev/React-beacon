@@ -216,6 +216,7 @@ export interface ImanageInventoryReducer {
   showSearchNewProductsModal: boolean;
   tableFilters: ItableFiltersReducer;
   selectedProduct: Iproduct;
+  newProducts: { [key: string]: Iproduct };
 }
 
 export interface IproductQueueObject {

@@ -122,7 +122,8 @@ export default {
       systemSizeOptions: []
     },
     tableFilters: initialTableFilters,
-    selectedProduct: initialProduct
+    selectedProduct: initialProduct,
+    newProducts: {}
   },
   manageProductQueue: {
     showApproveProductModal: false,

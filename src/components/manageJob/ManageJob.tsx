@@ -156,14 +156,16 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
           meta: {
             label: 'jobManage:dateRange',
             colWidth: 2,
-            defaultValue: this.props.tableFilters.startDate
+            defaultValue: this.props.tableFilters.startDate,
+            showTime: false
           }
         },
         endDate: {
           render: FormUtil.Datetime,
           meta: {
             colWidth: 2,
-            defaultValue: this.props.tableFilters.endDate
+            defaultValue: this.props.tableFilters.endDate,
+            showTime: false
           }
         }
       }

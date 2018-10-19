@@ -299,7 +299,8 @@ class EditJobForm extends React.Component<Iprops, {}> {
           assignedUserID: this.jobForm.value.assignedUserID.value,
           jobTypeID: this.jobForm.value.jobTypeID.value,
           startDate: this.jobForm.value.startDate.format(),
-          endDate: this.jobForm.value.endDate.format()
+          endDate: this.jobForm.value.endDate.format(),
+          status: this.props.selectedJob.status
         },
         this.jobForm.value.users.map((u: any) => u.value)
       );

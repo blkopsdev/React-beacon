@@ -168,6 +168,18 @@ export interface ImanageUserReducer {
   tableFilters: ItableFiltersReducer;
 }
 
+export interface Ilocation {
+  id?: string;
+  name: string;
+}
+
+export interface ImanageLocationReducer {
+  data: Ilocation[];
+  totalPages: number;
+  showEditLocationModal: boolean;
+  tableFilters: ItableFiltersReducer;
+}
+
 export interface IuserJob {
   id: string;
   userID: string;

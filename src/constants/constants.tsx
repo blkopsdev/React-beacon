@@ -20,7 +20,8 @@ const icons = {
   productQueue: require('../images/icons/BM_NewProductQueue.png'),
   userQueue: require('../images/icons/BM_NewUserQueue.png'),
   payments: require('../images/icons/BM_Payments.png'),
-  training: require('../images/icons/BM_Training.png')
+  training: require('../images/icons/BM_Training.png'),
+  locations: require('../images/icons/BM_ManageLocations.png')
 };
 
 const securityFunctions = {
@@ -182,9 +183,22 @@ const tiles = [
     srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
     color: 'orange',
     width: 360,
-    height: 408,
+    height: 400,
     url: '/maintenance',
     securityFunction: securityFunctions.ManageJobs.id,
+    description: ''
+  },
+  {
+    icon: icons.locations,
+    iconType: 'img',
+    title: 'locations',
+    src: require('src/images/beaconManageUsers.jpg'),
+    srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
+    color: 'blue',
+    width: 360,
+    height: 400,
+    url: '/locations',
+    securityFunction: securityFunctions.ManageLocations.id,
     description: ''
   },
   {

@@ -83,6 +83,12 @@ export default {
     showEditJobModal: false,
     tableFilters: initialTableFilters
   },
+  manageLocation: {
+    totalPages: 1,
+    data: [],
+    showEditLocationModal: false,
+    tableFilters: initialTableFilters
+  },
   manageTeam: {
     totalPages: 1,
     data: [],

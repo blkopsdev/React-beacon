@@ -7,6 +7,7 @@ import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
 import constants from '../constants/constants';
 import * as types from './actionTypes';
+import * as moment from 'moment';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
@@ -24,10 +25,10 @@ export function getJobs(): ThunkResult<void> {
       .get(API.GET.job.getall, {
         params: {
           page,
-          company: company && company.value,
-          type: type && type.value,
-          startDate,
-          endDate
+          customerID: company && company.value,
+          jobTypeID: type && type.value,
+          startDate: startDate ? moment.utc(startDate).toISOString() : '',
+          endDate: endDate ? moment.utc(endDate).toISOString() : ''
         }
       })
       .then(data => {
@@ -108,14 +109,14 @@ export function updateJob(job: Ijob, users: string[]): ThunkResult<void> {
     dispatch(beginAjaxCall());
     dispatch({ type: types.TOGGLE_MODAL_EDIT_JOB });
     return axios
-      .put(`${API.PUT.job.update}/${job.id}`, { job, users })
+      .post(`${API.POST.job.update}`, { job, users })
       .then(data => {
         if (!data.data) {
           throw undefined;
         } else {
           dispatch({
             type: types.JOB_UPDATE_SUCCESS,
-            job: data.data.result
+            job: data.data
           });
 
           // toastr.success('Success', 'Saved job', constants.toastrSuccess);
@@ -144,7 +145,7 @@ export function createJob(job: Ijob, users: string[]): ThunkResult<void> {
         } else {
           dispatch({
             type: types.JOB_ADD_SUCCESS,
-            product: data.data
+            job: data.data
           });
           dispatch({ type: types.TOGGLE_MODAL_EDIT_JOB });
           toastr.success(

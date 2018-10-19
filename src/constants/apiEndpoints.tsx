@@ -9,7 +9,8 @@ const API = {
     },
 
     job: {
-      create: `${root}job/create`
+      create: `${root}job/create`,
+      update: `${root}job/update`
     },
 
     facility: {
@@ -38,11 +39,6 @@ const API = {
       updateteam: `${root}user/updateteammember`,
       saveteam: `${root}user/saveteammember`,
       deleteTeamMember: `${root}user/deleteteammember`
-    }
-  },
-  PUT: {
-    job: {
-      update: `${root}job`
     }
   },
   GET: {

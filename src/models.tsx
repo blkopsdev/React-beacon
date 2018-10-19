@@ -176,7 +176,6 @@ export interface IuserJob {
 }
 export interface Ijob {
   id?: string;
-  name?: string;
   customerID: string;
   facilityID: string;
   assignedUserID: string;

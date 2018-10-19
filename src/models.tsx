@@ -213,7 +213,9 @@ export interface ImanageInventoryReducer {
   showEditInstallModal: boolean;
   showEditQuoteModal: boolean;
   showInstallContactModal: boolean;
+  showSearchNewProductsModal: boolean;
   tableFilters: ItableFiltersReducer;
+  selectedProduct: Iproduct;
 }
 
 export interface IproductQueueObject {

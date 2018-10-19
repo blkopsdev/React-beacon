@@ -287,8 +287,16 @@ export const toggleEditQuoteModal = () => ({
 export const toggleInstallContactModal = () => ({
   type: types.TOGGLE_MODAL_INSTALL_CONTACT
 });
+export const toggleSearchNewProductsModal = () => ({
+  type: types.TOGGLE_MODAL_SEARCH_NEW_PRODUCTS
+});
 
 export const setTableFilter = (filters: ItableFiltersParams) => ({
   type: types.SET_TABLE_FILTER_MANAGE_INVENTORY,
   filters
+});
+
+export const setSelectedProduct = (product?: Iproduct) => ({
+  type: types.SET_SELECTED_PRODUCT,
+  product
 });

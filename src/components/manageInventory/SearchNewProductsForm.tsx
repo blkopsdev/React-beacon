@@ -18,16 +18,16 @@ import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
 import {
+  Ioption,
   Iproduct,
   IproductInfo,
   Isubcategory,
-  ItableFiltersReducer,
-  IproductQueueObject
+  ItableFiltersReducer
 } from '../../models';
 import {
   saveProduct,
-  toggleEditProductModal,
-  updateProduct
+  updateProduct,
+  toggleSearchNewProductsModal
 } from '../../actions/manageInventoryActions';
 import constants from '../../constants/constants';
 
@@ -43,27 +43,6 @@ const buildFieldConfig = (
   filterSubcategories: (id: string) => void
 ) => {
   const fieldConfigControls = {
-    name: {
-      options: {
-        validators: Validators.required
-      },
-      render: FormUtil.TextInput,
-      meta: { label: 'name', colWidth: 12, type: 'input' }
-    },
-    sku: {
-      options: {
-        validators: Validators.required
-      },
-      render: FormUtil.TextInput,
-      meta: { label: 'sku', colWidth: 12, type: 'input' }
-    },
-    description: {
-      options: {
-        validators: Validators.required
-      },
-      render: FormUtil.TextInput,
-      meta: { label: 'description', colWidth: 12, componentClass: 'textarea' }
-    },
     productGroupID: {
       render: FormUtil.Select,
       meta: {
@@ -77,116 +56,12 @@ const buildFieldConfig = (
         validators: Validators.required
       }
     },
-    brandID: {
-      render: FormUtil.Select,
-      meta: {
-        options: productInfo.brandOptions,
-        label: 'brand',
-        colWidth: 12,
-        placeholder: 'common:searchPlaceholder',
-        isMulti: false
-      },
+    search: {
       options: {
         validators: Validators.required
-      }
-    },
-    manufacturerID: {
-      render: FormUtil.Select,
-      meta: {
-        options: productInfo.manufacturerOptions,
-        label: 'manufacturer',
-        colWidth: 12,
-        placeholder: 'common:searchPlaceholder',
-        isMulti: false
       },
-      options: {
-        validators: Validators.required
-      }
-    },
-    mainCategoryID: {
-      render: FormUtil.Select,
-      meta: {
-        options: productInfo.mainCategoryOptions,
-        label: 'mainCategory',
-        colWidth: 6,
-        placeholder: 'common:searchPlaceholder',
-        isMulti: false
-      },
-      options: {
-        validators: [
-          Validators.required,
-          (c: any) => {
-            if (c.value && c.value.value) {
-              filterSubcategories(c.value.value);
-            }
-          }
-        ]
-      }
-    },
-    subcategoryID: {
-      render: FormUtil.Select,
-      meta: {
-        // options: productInfo.subcategoryOptions,
-        label: 'subcategory',
-        colWidth: 6,
-        placeholder: 'common:searchPlaceholder',
-        isMulti: false
-      },
-      options: {
-        validators: Validators.required
-      }
-    },
-    gasTypeID: {
-      render: FormUtil.Select,
-      meta: {
-        options: productInfo.gasTypeOptions,
-        label: 'gasType',
-        colWidth: 12,
-        placeholder: 'common:searchPlaceholder',
-        isMulti: false
-      },
-      options: {
-        validators: Validators.required
-      }
-    },
-    powerID: {
-      render: FormUtil.Select,
-      meta: {
-        options: productInfo.powerOptions,
-        label: 'power',
-        colWidth: 12,
-        placeholder: 'common:searchPlaceholder',
-        isMulti: false
-      },
-      options: {
-        validators: Validators.required
-      }
-    },
-    systemSizeID: {
-      render: FormUtil.Select,
-      meta: {
-        options: productInfo.systemSizeOptions,
-        label: 'systemSize',
-        colWidth: 6,
-        placeholder: 'common:searchPlaceholder',
-        isMulti: false
-      },
-      options: {
-        validators: Validators.required
-      }
-    },
-    standardID: {
-      render: FormUtil.Select,
-      meta: {
-        options: productInfo.standardOptions,
-        label: 'standard',
-        colWidth: 6,
-        placeholder: 'common:searchPlaceholder',
-        isMulti: false
-      },
-      options: {
-        validators: Validators.required
-      }
+      render: FormUtil.TextInput,
+      meta: { label: 'search', colWidth: 12, type: 'input' }
     }
   };
   return {
@@ -195,20 +70,20 @@ const buildFieldConfig = (
 };
 
 interface Iprops {
-  toggleEditProductModal: typeof toggleEditProductModal;
+  toggleSearchNewProductsModal: typeof toggleSearchNewProductsModal;
   selectedItem?: Iproduct;
-  selectedQueueObject?: IproductQueueObject;
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;
   i18n: I18n;
   productInfo: IproductInfo;
+  facilityOptions: Ioption[];
   tableFilters: ItableFiltersReducer;
   saveProduct: typeof saveProduct;
   updateProduct: typeof updateProduct;
 }
 
-class ManageInventoryForm extends React.Component<Iprops, {}> {
+class SearchNewProductsForm extends React.Component<Iprops, {}> {
   public userForm: AbstractControl;
   public fieldConfig: FieldConfig;
   constructor(props: Iprops) {
@@ -325,15 +200,7 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
       }
 
       if (this.props.selectedItem && this.props.selectedItem.id) {
-        if (this.props.selectedQueueObject) {
-          this.props.updateProduct(
-            newItem,
-            shouldApprove,
-            this.props.selectedQueueObject.id
-          );
-        } else {
-          this.props.updateProduct(newItem);
-        }
+        this.props.updateProduct(newItem);
       } else {
         this.props.saveProduct(newItem);
       }
@@ -371,21 +238,10 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
                 bsStyle="link"
                 type="button"
                 className="pull-left left-side"
-                onClick={this.props.toggleEditProductModal}
+                onClick={this.props.toggleSearchNewProductsModal}
               >
                 {t('common:cancel')}
               </Button>
-              {this.props.selectedQueueObject && (
-                <Button
-                  bsStyle={this.props.colorButton}
-                  type="button"
-                  disabled={this.props.loading}
-                  onClick={(e: any) => this.handleSubmit(e, true)}
-                  style={{ marginRight: '20px' }}
-                >
-                  {t('manageInventory:saveApprove')}
-                </Button>
-              )}
               <Button
                 bsStyle={this.props.colorButton}
                 type="submit"
@@ -400,4 +256,4 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
     );
   }
 }
-export default translate('manageInventory')(ManageInventoryForm);
+export default translate('manageInventory')(SearchNewProductsForm);

@@ -6,7 +6,6 @@ import { TranslationFunction } from 'react-i18next';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import { FormUtil } from '../common/FormUtil';
 import {
   IinitialState,
   Iproduct,
@@ -32,7 +31,6 @@ interface Iprops {
 interface IdispatchProps {
   showModal: boolean;
   loading: boolean;
-  facilityOptions: any[];
   updateProduct: typeof updateProduct;
   saveProduct: typeof saveProduct;
   toggleEditProductModal: typeof toggleEditProductModal;
@@ -74,7 +72,6 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
-    facilityOptions: FormUtil.convertToOptions(state.user.facilities),
     showModal: state.manageInventory.showEditProductModal,
     productInfo: state.manageInventory.productInfo,
     tableFilters: state.manageInventory.tableFilters

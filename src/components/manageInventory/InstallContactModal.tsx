@@ -41,7 +41,6 @@ class InstallContactModal extends React.Component<Iprops & IdispatchProps, {}> {
   }
 
   render() {
-    console.log(this.props.selectedProduct.name);
     return (
       <CommonModal
         modalVisible={this.props.showModal}

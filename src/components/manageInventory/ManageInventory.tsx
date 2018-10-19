@@ -42,7 +42,8 @@ import {
   toggleInstallContactModal,
   toggleEditInstallModal,
   toggleEditProductModal,
-  toggleEditQuoteModal
+  toggleEditQuoteModal,
+  setSelectedProduct
 } from '../../actions/manageInventoryActions';
 import { getTotal } from '../../reducers/manageInventoryReducer';
 import Banner from '../common/Banner';
@@ -82,13 +83,14 @@ interface IdispatchProps {
   setTableFilter: typeof setTableFilter;
   tableFilters: ItableFiltersReducer;
   toggleInstallContactModal: typeof toggleInstallContactModal;
+  selectedProduct: Iproduct;
+  setSelectedProduct: typeof setSelectedProduct;
 }
 
 interface Istate {
   selectedRow: any;
   currentTile: Itile;
   columns: any[];
-  selectedProduct: any;
   selectedInstall: any;
 }
 
@@ -104,7 +106,6 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       selectedRow: {},
       currentTile: emptyTile,
       columns: [],
-      selectedProduct: {},
       selectedInstall: {}
     };
     this.searchFieldConfig = this.buildSearchControls();
@@ -133,14 +134,15 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       prevProps.showEditProductModal !== this.props.showEditProductModal &&
       !this.props.showEditProductModal
     ) {
-      this.setState({ selectedProduct: {} });
+      this.props.setSelectedProduct();
     }
 
     if (
       prevProps.showEditInstallModal !== this.props.showEditInstallModal &&
       !this.props.showEditInstallModal
     ) {
-      this.setState({ selectedProduct: {}, selectedInstall: {} });
+      this.props.setSelectedProduct();
+      this.setState({ selectedInstall: {} });
     }
 
     // we only need to check the productGroup options because both manufacturers and productGroup options are received in the same API response
@@ -345,8 +347,9 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     const selectedProduct = find(this.props.tableData, {
       id: install.productID
     });
-
-    this.setState({ selectedInstall: install, selectedProduct }, () => {
+    this.props.setSelectedProduct(selectedProduct);
+    // TODO test to make sure the contact modal has the selected product defined
+    this.setState({ selectedInstall: install }, () => {
       this.buttonInAction = false;
       this.props.toggleInstallContactModal();
     });
@@ -362,9 +365,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       return {
         onClick: (e: React.MouseEvent<HTMLFormElement>) => {
           if (!this.buttonInAction) {
-            this.setState({
-              selectedProduct: rowInfo.original
-            });
+            this.props.setSelectedProduct(rowInfo.original);
             this.props.toggleEditProductModal();
           }
         },
@@ -392,9 +393,9 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
             // grab the product by using the productID from installbase
             const selectedProduct = find(this.props.tableData, {
               id: rowInfo.original.productID
-            });
+            }) as Iproduct;
+            this.props.setSelectedProduct(selectedProduct);
             this.setState({
-              selectedProduct,
               selectedInstall: rowInfo.original
             });
             this.props.toggleEditInstallModal();
@@ -513,12 +514,10 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
               contactAboutInstall={this.contactAboutInstall}
               addToQuote={this.props.addToCart}
               addInstallation={() => {
-                this.setState(
-                  { selectedProduct: rowInfo.original, selectedInstall: {} },
-                  () => {
-                    this.props.toggleEditInstallModal();
-                  }
-                );
+                this.props.setSelectedProduct(rowInfo.original);
+                this.setState({ selectedInstall: {} }, () => {
+                  this.props.toggleEditInstallModal();
+                });
               }}
               t={this.props.t}
               getExpanderTrProps={this.getExpanderTrProps}
@@ -528,7 +527,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           expanded={this.state.selectedRow}
         />
         <EditProductModal
-          selectedItem={this.state.selectedProduct}
+          selectedItem={this.props.selectedProduct}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
@@ -541,7 +540,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           t={this.props.t}
         />
         <EditInstallModal
-          selectedProduct={this.state.selectedProduct}
+          selectedProduct={this.props.selectedProduct}
           selectedItem={this.state.selectedInstall}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
@@ -549,7 +548,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           t={this.props.t}
         />
         <InstallContactModal
-          selectedProduct={this.state.selectedProduct}
+          selectedProduct={this.props.selectedProduct}
           selectedInstall={this.state.selectedInstall}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
@@ -578,7 +577,8 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     productInfo: state.manageInventory.productInfo,
     cartTotal: getTotal(state.manageInventory),
     tableData: state.manageInventory.data,
-    tableFilters: state.manageInventory.tableFilters
+    tableFilters: state.manageInventory.tableFilters,
+    selectedProduct: state.manageInventory.selectedProduct
   };
 };
 export default translate('manageInventory')(
@@ -593,7 +593,8 @@ export default translate('manageInventory')(
       getProductInfo,
       addToCart,
       setTableFilter,
-      toggleInstallContactModal
+      toggleInstallContactModal,
+      setSelectedProduct
     }
   )(ManageInventory)
 );

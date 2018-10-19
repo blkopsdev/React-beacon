@@ -128,7 +128,7 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
         productID: this.props.selectedProduct.id
       };
 
-      if (this.props.selectedItem) {
+      if (this.props.selectedItem && this.props.selectedItem.id) {
         newItem = { ...newItem, id: this.props.selectedItem.id };
         this.props.updateInstall(newItem, this.props.selectedProduct.id);
       } else {

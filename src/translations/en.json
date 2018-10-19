@@ -135,7 +135,7 @@
     "editModalTitle": "Edit Product",
     "saveModalTitle": "Add New Product",
     "editInstallModalTitle": "Manage Installation",
-    "saveInstallModalTitle": "Manage Installation",
+    "saveInstallModalTitle": "Add New Installation",
     "facilityPlaceholder": "Search...",
     "searchPlaceholder": "Search...",
     "productGroupPlaceholder": "Search...",
@@ -168,7 +168,9 @@
     "saveApprove": "Save & Approve",
     "addNewProductButton": "Can't find what you are looking for?",
     "searchNewProductModalTitle": "Add Product",
-    "searchByName": "Search By Name"
+    "searchByName": "Search By Name",
+    "searchNewProductInstructions":
+      "Please search for the product you would like toa dd to your facility."
   },
   "manageProductQueue": {
     "bannerTitle": "New Product Queue",

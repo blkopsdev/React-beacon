@@ -19,7 +19,9 @@ import {
   toggleEditProductModal,
   toggleSearchNewProductsModal,
   getProducts,
-  resetNewProducts
+  resetNewProducts,
+  setSelectedProduct,
+  toggleEditInstallModal
 } from '../../actions/manageInventoryActions';
 import CommonModal from '../common/CommonModal';
 import SearchNewProductsForm from './SearchNewProductsForm';
@@ -41,6 +43,8 @@ interface IdispatchProps {
   getProducts: typeof getProducts;
   newProducts: { [key: string]: Iproduct };
   resetNewProducts: typeof resetNewProducts;
+  setSelectedProduct: typeof setSelectedProduct;
+  toggleEditInstallModal: typeof toggleEditInstallModal;
 }
 
 class SearchNewProductsModal extends React.Component<
@@ -84,6 +88,8 @@ export default connect(
     toggleEditProductModal,
     getProducts,
     toggleSearchNewProductsModal,
-    resetNewProducts
+    toggleEditInstallModal,
+    resetNewProducts,
+    setSelectedProduct
   }
 )(SearchNewProductsModal);

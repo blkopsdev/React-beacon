@@ -5,7 +5,6 @@
 
 import { Col, Button, ListGroup, Row, Well } from 'react-bootstrap';
 import {
-  Validators,
   FormGenerator,
   AbstractControl,
   FieldConfig
@@ -21,30 +20,26 @@ import {
   toggleSearchNewProductsModal,
   getProducts,
   toggleEditProductModal,
-  resetNewProducts
+  resetNewProducts,
+  setSelectedProduct,
+  toggleEditInstallModal
 } from '../../actions/manageInventoryActions';
 import constants from '../../constants/constants';
 
 const buildFieldConfig = (productInfo: IproductInfo) => {
   const fieldConfigControls = {
     productGroupID: {
-      render: FormUtil.Select,
+      render: FormUtil.SelectWithoutValidation,
       meta: {
         options: productInfo.productGroupOptions,
         label: 'common:productGroup',
         colWidth: 12,
         placeholder: 'common:searchPlaceholder',
         isMulti: false
-      },
-      options: {
-        validators: Validators.required
       }
     },
     search: {
-      // options: {
-      //   validators: Validators.required
-      // },
-      render: FormUtil.TextInput,
+      render: FormUtil.TextInputWithoutValidation,
       meta: {
         label: 'search',
         colWidth: 12,
@@ -71,6 +66,8 @@ interface Iprops {
   getProducts: typeof getProducts;
   newProducts: { [key: string]: Iproduct };
   resetNewProducts: typeof resetNewProducts;
+  setSelectedProduct: typeof setSelectedProduct;
+  toggleEditInstallModal: typeof toggleEditInstallModal;
 }
 
 class SearchNewProductsForm extends React.Component<Iprops, {}> {
@@ -89,7 +86,9 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
   }
   // componentDidUpdate(prevProps: Iprops) {
   // }
-
+  componentWillMount() {
+    this.props.resetNewProducts();
+  }
   componentDidMount() {
     // if (!this.props.selectedItem) {
     //   console.log('adding a new user');
@@ -128,7 +127,6 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
-    this.props.resetNewProducts();
   }
 
   handleSubmit = () => {
@@ -157,6 +155,7 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
 
     let searchActive = false;
     if (
+      !this.props.loading &&
       this.userForm &&
       this.userForm.value &&
       (this.userForm.value.search || this.userForm.value.productGroupID)
@@ -171,30 +170,51 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
       product: Iproduct;
       productInfo: IproductInfo;
     }) => (
-      <li className="list-group-item new-product-item" key={product.id}>
+      <li
+        className="list-group-item new-product-item"
+        onClick={() => {
+          const newProduct = {
+            ...product,
+            subcategory: productInfo.subcategories[product.subcategoryID]
+          };
+          this.props.toggleEditInstallModal();
+          this.props.setSelectedProduct(newProduct);
+        }}
+      >
         <h4> {product.name} </h4>
         <Row>
-          <Col xs={6}>{product.sku}</Col>
-          <Col xs={6}>
+          <Col xs={5}>{product.sku}</Col>
+          <Col xs={7}>
             {productInfo.manufacturers[product.manufacturerID].name}
           </Col>
-          <Col xs={6}>
+          <Col xs={5}>
             {productInfo.productGroups[product.productGroupID].name}
           </Col>
-          <Col xs={6}>{productInfo.brands[product.brandID].name}</Col>
+          <Col xs={7}>{productInfo.brands[product.brandID].name}</Col>
         </Row>
       </li>
     );
 
     return (
       <div>
-        <div className={formClassName}>
+        <div className={formClassName} style={{ display: 'block' }}>
+          <p
+            style={{
+              marginLeft: '15px',
+              marginRight: '15px',
+              lineHeight: '1.5rem'
+            }}
+          >
+            {t('searchNewProductInstructions')}{' '}
+          </p>
+
           <form
             onSubmit={(e: React.MouseEvent<HTMLFormElement>) => {
               e.preventDefault();
               this.handleSubmit();
             }}
             className="user-form"
+            style={{ display: 'block' }}
           >
             <Row>
               <Col xs={12}>
@@ -211,6 +231,7 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
                     <ProductListItem
                       product={product}
                       productInfo={this.props.productInfo}
+                      key={product.id}
                     />
                   ))}
                 </ListGroup>
@@ -239,6 +260,8 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
                 bsStyle="link"
                 type="button"
                 disabled={this.props.loading}
+                className="right-side"
+                onClick={this.props.toggleEditProductModal}
               >
                 {t('addNewProductButton')}
               </Button>

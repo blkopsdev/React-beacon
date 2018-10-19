@@ -36,6 +36,7 @@ interface IdispatchProps {
   toggleEditProductModal: typeof toggleEditProductModal;
   productInfo: IproductInfo;
   tableFilters: ItableFiltersReducer;
+  secondModal: boolean;
 }
 
 class ManageInventoryModal extends React.Component<
@@ -55,10 +56,13 @@ class ManageInventoryModal extends React.Component<
     } else {
       modalTitle = this.props.t('manageInventory:saveModalTitle');
     }
+    const className = this.props.secondModal
+      ? 'user-edit second-modal'
+      : 'user-edit';
     return (
       <CommonModal
         modalVisible={this.props.showModal}
-        className="user-edit"
+        className={className}
         onHide={this.props.toggleEditProductModal}
         body={<EditProductForm {...this.props} />}
         title={modalTitle}
@@ -74,7 +78,8 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     loading: state.ajaxCallsInProgress > 0,
     showModal: state.manageInventory.showEditProductModal,
     productInfo: state.manageInventory.productInfo,
-    tableFilters: state.manageInventory.tableFilters
+    tableFilters: state.manageInventory.tableFilters,
+    secondModal: state.manageInventory.showSearchNewProductsModal
   };
 };
 

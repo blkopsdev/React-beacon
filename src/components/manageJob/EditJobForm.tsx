@@ -91,7 +91,7 @@ const buildFieldConfig = (
       render: FormUtil.Datetime,
       meta: {
         label: 'jobManage:startDate',
-        colWidth: 6,
+        colWidth: 12,
         showTime: false
       },
       options: {
@@ -102,7 +102,7 @@ const buildFieldConfig = (
       render: FormUtil.Datetime,
       meta: {
         label: 'jobManage:endDate',
-        colWidth: 6,
+        colWidth: 12,
         showTime: false
       },
       options: {
@@ -329,7 +329,9 @@ class EditJobForm extends React.Component<Iprops, {}> {
   render() {
     const { t } = this.props;
 
-    const formClassName = `job-form manage-form ${this.props.colorButton}`;
+    const formClassName = `job-form user-form manage-form ${
+      this.props.colorButton
+    }`;
 
     return (
       <div>

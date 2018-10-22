@@ -82,6 +82,7 @@ export const FormUtil = {
     <FormGroup
       validationState={FormUtil.getValidationState(pristine, errors, submitted)}
       bsSize="sm"
+      className="datetime-select"
     >
       <Col xs={meta.colWidth}>
         <ControlLabel>{meta.label}</ControlLabel>

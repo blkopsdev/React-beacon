@@ -10,10 +10,7 @@ export default function configureStore(intialState: IinitialState) {
       rootReducer,
       intialState,
       require('redux-devtools-extension').composeWithDevTools(
-        applyMiddleware(
-          thunk as ThunkMiddleware<IinitialState, any>,
-          require('redux-immutable-state-invariant').default()
-        )
+        applyMiddleware(thunk as ThunkMiddleware<IinitialState, any>)
       )
     );
   } else {

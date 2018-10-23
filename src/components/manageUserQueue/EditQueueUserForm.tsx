@@ -8,7 +8,7 @@
 * 
 */
 
-import { Col, Button, FormGroup, ControlLabel } from 'react-bootstrap';
+import { Col, Button } from 'react-bootstrap';
 import {
   Validators,
   FormGenerator,
@@ -42,16 +42,6 @@ interface AbstractControlEdited extends AbstractControl {
   stateChanges: IstateChanges;
 }
 
-const TextLabel = ({ handler, meta }: any) => {
-  return (
-    <Col xs={meta.colWidth}>
-      <FormGroup bsSize="sm">
-        <ControlLabel>{meta.label}</ControlLabel>
-        <h5 className="queue-form-label">{handler().value}</h5>
-      </FormGroup>
-    </Col>
-  );
-};
 const buildFieldConfig = (
   customerOptions: any[],
   facilityOptions: any[],
@@ -62,7 +52,7 @@ const buildFieldConfig = (
   // Field config to configure form
   const fieldConfigControls = {
     tempCompany: {
-      render: TextLabel,
+      render: FormUtil.TextLabel,
       meta: { label: 'userQueue:userCustomer', colWidth: 12 }
     },
     customerID: {
@@ -105,7 +95,7 @@ const buildFieldConfig = (
     },
 
     providedAddress: {
-      render: TextLabel,
+      render: FormUtil.TextLabel,
       meta: { label: 'userQueue:providedAddress', colWidth: 12 }
     }
   };
@@ -333,12 +323,12 @@ class UserQueueForm extends React.Component<Iprops, {}> {
 
             <Col xs={12} className="form-buttons text-right">
               <Button
-                bsStyle="link"
+                bsStyle="default"
                 type="button"
-                className="pull-left left-side"
+                className="pull-left"
                 onClick={this.props.toggleEditQueueUserModal}
               >
-                {t('cancel')}
+                {t('common:cancel')}
               </Button>
               <Button
                 bsStyle={this.props.colorButton}

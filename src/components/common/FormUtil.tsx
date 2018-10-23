@@ -18,6 +18,7 @@ import { TranslationFunction } from 'react-i18next';
 import Select, { components } from 'react-select';
 import Toggle from 'react-toggle';
 import { Ioption } from '../../models';
+import * as Datetime from 'react-datetime';
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // add the bootstrap form-control class to the react-select select component
@@ -45,7 +46,11 @@ const ControlComponent = (props: any) => (
 export const FormUtil = {
   convertToOptions: (items: any): Ioption[] => {
     return map(items, (item: any) => {
-      return { value: item.id, label: item.name || item.code };
+      return {
+        value: item.id,
+        // TODO: verify this will not explode
+        label: item.name || item.code || item.first + ' ' + item.last
+      };
     });
   },
 
@@ -65,6 +70,33 @@ export const FormUtil = {
     }
   },
 
+  Datetime: ({
+    handler,
+    touched,
+    hasError,
+    meta,
+    pristine,
+    errors,
+    submitted
+  }: AbstractControl) => (
+    <FormGroup
+      validationState={FormUtil.getValidationState(pristine, errors, submitted)}
+      bsSize="sm"
+      className="datetime-select"
+    >
+      <Col xs={meta.colWidth}>
+        <ControlLabel>{meta.label}</ControlLabel>
+        <Datetime
+          defaultValue={meta.defaultValue}
+          timeFormat={meta.showTime}
+          isValidDate={meta.isValidDate}
+          {...handler()}
+        />
+        <FormControl.Feedback />
+      </Col>
+    </FormGroup>
+  ),
+
   TextInput: ({
     handler,
     touched,
@@ -82,6 +114,7 @@ export const FormUtil = {
           submitted
         )}
         bsSize="sm"
+        style={meta.style}
       >
         <ControlLabel>{meta.label}</ControlLabel>
         <FormControl
@@ -301,7 +334,7 @@ export const FormUtil = {
   },
   translateForm: (config: FieldConfig, t: TranslationFunction) => {
     const newControls = mapValues(config.controls, field => {
-      if (field.meta.label) {
+      if (field.meta && field.meta.label) {
         let newMeta = {
           ...field.meta,
           label: t(field.meta.label)
@@ -331,6 +364,16 @@ export const FormUtil = {
       return field;
     });
     return { controls: newControls };
+  },
+  TextLabel: ({ handler, meta }: any) => {
+    return (
+      <Col xs={meta.colWidth}>
+        <FormGroup bsSize="sm">
+          <ControlLabel>{meta.label}</ControlLabel>
+          <h5 className="queue-form-label">{handler().value}</h5>
+        </FormGroup>
+      </Col>
+    );
   }
 };
 // reusable user form elements

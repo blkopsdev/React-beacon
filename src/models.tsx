@@ -4,6 +4,10 @@ import { SortingRule } from 'react-table';
 export interface ItableFiltersReducer {
   search: string;
   page: number;
+  company?: Ioption;
+  type?: Ioption;
+  startDate?: string;
+  endDate?: string;
   facility?: Ioption;
   customer?: Ioption;
   productGroup?: Ioption;
@@ -13,6 +17,10 @@ export interface ItableFiltersReducer {
 export interface ItableFiltersParams {
   search?: string;
   page?: number;
+  company?: Ioption;
+  type?: Ioption;
+  startDate?: string;
+  endDate?: string;
   facility?: Ioption;
   customer?: Ioption;
   productGroup?: Ioption;
@@ -159,6 +167,44 @@ export interface ImanageUserReducer {
   showEditUserModal: boolean;
   tableFilters: ItableFiltersReducer;
 }
+
+export interface Ilocation {
+  id?: string;
+  name: string;
+}
+
+export interface ImanageLocationReducer {
+  data: Ilocation[];
+  totalPages: number;
+  showEditLocationModal: boolean;
+  tableFilters: ItableFiltersReducer;
+}
+
+export interface IuserJob {
+  id: string;
+  userID: string;
+  jobID: string;
+  user: Iuser;
+}
+export interface Ijob {
+  id?: string;
+  customerID: string;
+  facilityID: string;
+  assignedUserID: string;
+  jobTypeID?: string;
+  userJobs?: IuserJob[];
+  startDate: string;
+  endDate: string;
+  status?: string;
+}
+export interface ImanageJobReducer {
+  data: Ijob[];
+  jobTypes: any[];
+  fseUsers: Iuser[];
+  totalPages: number;
+  showEditJobModal: boolean;
+  tableFilters: ItableFiltersReducer;
+}
 export interface ImanageTeamReducer {
   data: Iuser[];
   totalPages: number;
@@ -179,8 +225,11 @@ export interface ImanageInventoryReducer {
   showEditInstallModal: boolean;
   showEditQuoteModal: boolean;
   showInstallContactModal: boolean;
+  showSearchNewProductsModal: boolean;
   showImportInstall: boolean;
   tableFilters: ItableFiltersReducer;
+  selectedProduct: Iproduct;
+  newProducts: { [key: string]: Iproduct };
 }
 
 export interface IproductQueueObject {
@@ -228,6 +277,7 @@ export interface IinitialState {
   redirect: Iredirect;
   manageUserQueue: ImanageUserQueueReducer;
   manageUser: ImanageUserReducer;
+  manageJob: ImanageJobReducer;
   manageTeam: ImanageTeamReducer;
   manageInventory: ImanageInventoryReducer;
   manageProductQueue: ImanageProductQueueReducer;

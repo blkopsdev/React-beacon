@@ -42,7 +42,10 @@ import {
   toggleInstallContactModal,
   toggleEditInstallModal,
   toggleEditProductModal,
-  toggleEditQuoteModal
+  toggleEditQuoteModal,
+  toggleSearchNewProductsModal,
+  toggleImportInstallModal,
+  setSelectedProduct
 } from '../../actions/manageInventoryActions';
 import { getTotal } from '../../reducers/manageInventoryReducer';
 import Banner from '../common/Banner';
@@ -53,6 +56,7 @@ import ImportInstallModal from './ImportInstallModal';
 import InstallContactModal from './InstallContactModal';
 import SearchTableForm from '../common/SearchTableForm';
 import constants from '../../constants/constants';
+import SearchNewProductsModal from './SearchNewProductsModal';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -69,6 +73,8 @@ interface IdispatchProps {
   toggleEditProductModal: typeof toggleEditProductModal;
   toggleEditInstallModal: typeof toggleEditInstallModal;
   toggleEditQuoteModal: typeof toggleEditQuoteModal;
+  toggleSearchNewProductsModal: typeof toggleSearchNewProductsModal;
+  toggleImportInstallModal: typeof toggleImportInstallModal;
   getProductInfo: typeof getProductInfo;
   toggleSecurityFunctionsModal: () => void;
   getInventory: typeof getInventory;
@@ -83,13 +89,14 @@ interface IdispatchProps {
   setTableFilter: typeof setTableFilter;
   tableFilters: ItableFiltersReducer;
   toggleInstallContactModal: typeof toggleInstallContactModal;
+  selectedProduct: Iproduct;
+  setSelectedProduct: typeof setSelectedProduct;
 }
 
 interface Istate {
   selectedRow: any;
   currentTile: Itile;
   columns: any[];
-  selectedProduct: any;
   selectedInstall: any;
 }
 
@@ -105,7 +112,6 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       selectedRow: {},
       currentTile: emptyTile,
       columns: [],
-      selectedProduct: {},
       selectedInstall: {}
     };
     this.searchFieldConfig = this.buildSearchControls();
@@ -134,14 +140,15 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       prevProps.showEditProductModal !== this.props.showEditProductModal &&
       !this.props.showEditProductModal
     ) {
-      this.setState({ selectedProduct: {} });
+      this.props.setSelectedProduct();
     }
 
     if (
       prevProps.showEditInstallModal !== this.props.showEditInstallModal &&
       !this.props.showEditInstallModal
     ) {
-      this.setState({ selectedProduct: {}, selectedInstall: {} });
+      this.props.setSelectedProduct();
+      this.setState({ selectedInstall: {} });
     }
 
     // we only need to check the productGroup options because both manufacturers and productGroup options are received in the same API response
@@ -233,7 +240,8 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       [
         {
           Header: 'sku',
-          accessor: 'sku'
+          accessor: 'sku',
+          width: 150
         },
         {
           Header: 'name',
@@ -256,15 +264,15 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         {
           Header: 'quantity',
           id: 'quantity',
+          width: 90,
           accessor: ({ installs }: { installs: IinstallBase[] }) => {
             return installs.length; // using this rather than data.quantity because when we add new installs, we don't want to update the quantity on the product
-          },
-          minWidth: 50
+          }
         },
         {
           id: 'expander-toggle',
-          Cell: this.expanderToggle,
-          minWidth: 20,
+          expander: true,
+          Expander: this.expanderToggle,
           style: {
             cursor: 'pointer',
             textAlign: 'center',
@@ -346,8 +354,9 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     const selectedProduct = find(this.props.tableData, {
       id: install.productID
     });
-
-    this.setState({ selectedInstall: install, selectedProduct }, () => {
+    this.props.setSelectedProduct(selectedProduct);
+    // TODO test to make sure the contact modal has the selected product defined
+    this.setState({ selectedInstall: install }, () => {
       this.buttonInAction = false;
       this.props.toggleInstallContactModal();
     });
@@ -363,9 +372,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       return {
         onClick: (e: React.MouseEvent<HTMLFormElement>) => {
           if (!this.buttonInAction) {
-            this.setState({
-              selectedProduct: rowInfo.original
-            });
+            this.props.setSelectedProduct(rowInfo.original);
             this.props.toggleEditProductModal();
           }
         },
@@ -393,9 +400,9 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
             // grab the product by using the productID from installbase
             const selectedProduct = find(this.props.tableData, {
               id: rowInfo.original.productID
-            });
+            }) as Iproduct;
+            this.props.setSelectedProduct(selectedProduct);
             this.setState({
-              selectedProduct,
               selectedInstall: rowInfo.original
             });
             this.props.toggleEditInstallModal();
@@ -483,11 +490,18 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           <FontAwesomeIcon icon="shopping-cart" />
           <Badge>{this.props.cartTotal} </Badge>
         </Button>
+        <Button
+          className="table-import-button"
+          bsStyle="link"
+          onClick={this.props.toggleImportInstallModal}
+        >
+          {t('import')}
+        </Button>
 
         <Button
           className="table-add-button"
           bsStyle="link"
-          onClick={this.props.toggleEditProductModal}
+          onClick={this.props.toggleSearchNewProductsModal}
         >
           {t('manageInventory:newProduct')}
         </Button>
@@ -514,12 +528,10 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
               contactAboutInstall={this.contactAboutInstall}
               addToQuote={this.props.addToCart}
               addInstallation={() => {
-                this.setState(
-                  { selectedProduct: rowInfo.original, selectedInstall: {} },
-                  () => {
-                    this.props.toggleEditInstallModal();
-                  }
-                );
+                this.props.setSelectedProduct(rowInfo.original);
+                this.setState({ selectedInstall: {} }, () => {
+                  this.props.toggleEditInstallModal();
+                });
               }}
               t={this.props.t}
               getExpanderTrProps={this.getExpanderTrProps}
@@ -529,7 +541,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           expanded={this.state.selectedRow}
         />
         <EditProductModal
-          selectedItem={this.state.selectedProduct}
+          selectedItem={this.props.selectedProduct}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
@@ -542,7 +554,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           t={this.props.t}
         />
         <EditInstallModal
-          selectedProduct={this.state.selectedProduct}
+          selectedProduct={this.props.selectedProduct}
           selectedItem={this.state.selectedInstall}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
@@ -550,8 +562,16 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           t={this.props.t}
         />
         <InstallContactModal
-          selectedProduct={this.state.selectedProduct}
+          selectedProduct={this.props.selectedProduct}
           selectedInstall={this.state.selectedInstall}
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+          t={this.props.t}
+        />
+
+        <SearchNewProductsModal
+          selectedItem={this.props.selectedProduct}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
@@ -585,7 +605,8 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     productInfo: state.manageInventory.productInfo,
     cartTotal: getTotal(state.manageInventory),
     tableData: state.manageInventory.data,
-    tableFilters: state.manageInventory.tableFilters
+    tableFilters: state.manageInventory.tableFilters,
+    selectedProduct: state.manageInventory.selectedProduct
   };
 };
 export default translate('manageInventory')(
@@ -596,11 +617,14 @@ export default translate('manageInventory')(
       toggleEditProductModal,
       toggleEditInstallModal,
       toggleEditQuoteModal,
+      toggleSearchNewProductsModal,
       closeAllModals,
       getProductInfo,
       addToCart,
       setTableFilter,
-      toggleInstallContactModal
+      toggleInstallContactModal,
+      setSelectedProduct,
+      toggleImportInstallModal
     }
   )(ManageInventory)
 );

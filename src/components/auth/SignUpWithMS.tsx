@@ -14,10 +14,6 @@ import {
 } from '../../actions/redirectToReferrerAction';
 import { Button, Col, Grid, Row } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
-import {
-  isAuthenticated,
-  isFullyAuthenticated
-} from '../../actions/userActions';
 import UserForm from './UserForm';
 
 interface Iprops extends RouteComponentProps<{}> {
@@ -58,11 +54,21 @@ class SignUpWithMS extends React.Component<Iprops, any> {
   }
   render() {
     let showSignUpForm: boolean = false;
-    if (isFullyAuthenticated(this.props.user)) {
+
+    // TODO not sure how to update these...
+    // if (isFullyAuthenticated(this.props.user)) {
+    //   this.props.removeLoginRedirect();
+    //   return <Redirect to={'/dashboard'} />;
+    // }
+    // if (!isFullyAuthenticated(this.props.user) && isAuthenticated()) {
+    //   this.props.removeLoginRedirect();
+    //   showSignUpForm = true;
+    // }
+    if (this.props.user.isAuthenticated) {
       this.props.removeLoginRedirect();
       return <Redirect to={'/dashboard'} />;
     }
-    if (!isFullyAuthenticated(this.props.user) && isAuthenticated()) {
+    if (!this.props.user.isAuthenticated) {
       this.props.removeLoginRedirect();
       showSignUpForm = true;
     }

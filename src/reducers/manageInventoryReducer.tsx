@@ -18,7 +18,7 @@ import {
   modalToggleWithName
 } from './commonReducers';
 import cartReducer, { getAddedIDs, getQuantity } from './cartReducer';
-import initialState from './initialState';
+import initialState, { initialProduct } from './initialState';
 import * as types from '../actions/actionTypes';
 
 function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
@@ -138,6 +138,39 @@ function totalPagesReducer(state: number = 1, action: any): number {
   }
 }
 
+function selectedProductReducer(
+  state: Iproduct = initialProduct,
+  action: any
+): Iproduct {
+  switch (action.type) {
+    case types.SET_SELECTED_PRODUCT:
+      return action.product ? action.product : initialProduct;
+    case types.USER_LOGOUT_SUCCESS:
+      return initialProduct;
+    default:
+      return state;
+  }
+}
+
+function newProductsReducer(
+  state: { [key: string]: Iproduct } = {},
+  action: any
+): { [key: string]: Iproduct } {
+  switch (action.type) {
+    case types.GET_PRODUCTS_SUCCESS:
+      return action.products ? action.products : {};
+    // return map(action.products, d => {
+    //   return {
+    //     ...(pickBy(d, (property, key) => property !== null) as Iproduct)
+    //   };
+    // });
+    case types.NEW_PRODUCTS_RESET:
+      return {};
+    default:
+      return state;
+  }
+}
+
 export default function ManageInventory(
   state: ImanageInventoryReducer = initialState.manageInventory,
   action: any
@@ -147,6 +180,8 @@ export default function ManageInventory(
     totalPages: totalPagesReducer(state.totalPages, action),
     cart: cartReducer(state.cart, action),
     productInfo: productInfo(state.productInfo, action),
+    selectedProduct: selectedProductReducer(state.selectedProduct, action),
+    newProducts: newProductsReducer(state.newProducts, action),
     showEditQuoteModal: modalToggleWithName(
       state.showEditQuoteModal,
       action,
@@ -156,6 +191,11 @@ export default function ManageInventory(
       state.showEditProductModal,
       action,
       'EDIT_PRODUCT'
+    ),
+    showSearchNewProductsModal: modalToggleWithName(
+      state.showSearchNewProductsModal,
+      action,
+      'SEARCH_NEW_PRODUCTS'
     ),
     showEditInstallModal: modalToggleWithName(
       state.showEditInstallModal,

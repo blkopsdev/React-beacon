@@ -18,7 +18,6 @@ import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
 import {
-  Ioption,
   Iproduct,
   IproductInfo,
   Isubcategory,
@@ -69,7 +68,7 @@ const buildFieldConfig = (
       render: FormUtil.Select,
       meta: {
         options: productInfo.productGroupOptions,
-        label: 'productGroup',
+        label: 'common:productGroup',
         colWidth: 12,
         placeholder: 'common:searchPlaceholder',
         isMulti: false
@@ -109,7 +108,7 @@ const buildFieldConfig = (
       meta: {
         options: productInfo.mainCategoryOptions,
         label: 'mainCategory',
-        colWidth: 6,
+        colWidth: 12,
         placeholder: 'common:searchPlaceholder',
         isMulti: false
       },
@@ -129,7 +128,7 @@ const buildFieldConfig = (
       meta: {
         // options: productInfo.subcategoryOptions,
         label: 'subcategory',
-        colWidth: 6,
+        colWidth: 12,
         placeholder: 'common:searchPlaceholder',
         isMulti: false
       },
@@ -142,7 +141,7 @@ const buildFieldConfig = (
       meta: {
         options: productInfo.gasTypeOptions,
         label: 'gasType',
-        colWidth: 12,
+        colWidth: 6,
         placeholder: 'common:searchPlaceholder',
         isMulti: false
       },
@@ -155,7 +154,7 @@ const buildFieldConfig = (
       meta: {
         options: productInfo.powerOptions,
         label: 'power',
-        colWidth: 12,
+        colWidth: 6,
         placeholder: 'common:searchPlaceholder',
         isMulti: false
       },
@@ -204,7 +203,6 @@ interface Iprops {
   t: TranslationFunction;
   i18n: I18n;
   productInfo: IproductInfo;
-  facilityOptions: Ioption[];
   tableFilters: ItableFiltersReducer;
   saveProduct: typeof saveProduct;
   updateProduct: typeof updateProduct;
@@ -363,6 +361,14 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
     return (
       <div>
         <div className={formClassName}>
+          {!(this.props.selectedItem && this.props.selectedItem.id) && (
+            <Col xs={12}>
+              <p style={{ lineHeight: '1.4rem' }}>
+                {t('newProductInstructions')}
+              </p>
+            </Col>
+          )}
+
           <form onSubmit={this.handleSubmit} className="user-form">
             <FormGenerator
               onMount={this.setForm}
@@ -370,9 +376,9 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
             />
             <Col xs={12} className="form-buttons text-right">
               <Button
-                bsStyle="link"
+                bsStyle="default"
                 type="button"
-                className="pull-left left-side"
+                className="pull-left"
                 onClick={this.props.toggleEditProductModal}
               >
                 {t('common:cancel')}

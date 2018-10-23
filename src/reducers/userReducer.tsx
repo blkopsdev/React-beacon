@@ -26,10 +26,15 @@ export default function user(state: Iuser = initialState.user, action: any) {
         ...state,
         ...cleanUser,
         securityFunctions,
-        appVersion: process.env.REACT_APP_VERSION
+        appVersion: process.env.REACT_APP_VERSION,
+        isAuthenticated: true
       } as Iuser;
     case types.AAD_LOGIN:
-      return Object.assign({}, state, { token: action.token });
+      return {
+        ...state,
+        isAuthenticated: action.isAuthenticated,
+        appVersion: process.env.REACT_APP_VERSION
+      } as Iuser;
 
     case types.USER_UPDATE_PROFILE_SUCCESS:
       const pickedUser = pickBy(

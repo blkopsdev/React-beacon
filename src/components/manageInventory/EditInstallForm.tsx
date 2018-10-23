@@ -25,13 +25,16 @@ import {
 import {
   saveInstall,
   toggleEditInstallModal,
-  toggleImportInstallModal,
   updateInstall
 } from '../../actions/manageInventoryActions';
 import constants from '../../constants/constants';
 
 const buildFieldConfig = () => {
   const fieldConfigControls = {
+    productInfo: {
+      render: FormUtil.TextLabel,
+      meta: { label: 'productInfo', colWidth: 12 }
+    },
     nickname: {
       render: FormUtil.TextInput,
       meta: { label: 'nickname', colWidth: 12, type: 'input' }
@@ -66,7 +69,6 @@ interface Iprops {
   updateInstall: typeof updateInstall;
   saveInstall: typeof saveInstall;
   toggleEditInstallModal: typeof toggleEditInstallModal;
-  toggleImportInstallModal: typeof toggleImportInstallModal;
   selectedItem: IinstallBase;
   loading: boolean;
   colorButton: string;
@@ -99,6 +101,7 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
       );
       this.props.toggleEditInstallModal();
     }
+    this.userForm.patchValue({ productInfo: this.props.selectedProduct.name });
     if (
       !this.props.selectedItem ||
       (this.props.selectedItem && !this.props.selectedItem.id)
@@ -111,7 +114,10 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
         this.userForm.patchValue({ [key]: value });
       });
       const quantityControl = this.userForm.get('quantity');
-      quantityControl.disable();
+      quantityControl.meta = {
+        ...quantityControl.meta,
+        style: { display: 'none' }
+      };
     }
   }
 
@@ -130,7 +136,7 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
         productID: this.props.selectedProduct.id
       };
 
-      if (this.props.selectedItem) {
+      if (this.props.selectedItem && this.props.selectedItem.id) {
         newItem = { ...newItem, id: this.props.selectedItem.id };
         this.props.updateInstall(newItem, this.props.selectedProduct.id);
       } else {
@@ -170,38 +176,33 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
     const { t } = this.props;
 
     const formClassName = `user-form manage-form ${this.props.colorButton}`;
-
+    const deleteButtonStyle =
+      this.props.selectedItem.id === undefined
+        ? { marginRight: '15px', display: 'none' }
+        : { marginRight: '15px' };
     return (
       <div>
         <div className={formClassName}>
           <form onSubmit={this.handleSubmit} className="user-form">
-            <Button
-              bsStyle="link"
-              type="button"
-              className="pull-right"
-              onClick={this.props.toggleImportInstallModal}
-            >
-              {t('import')}
-            </Button>
             <FormGenerator
               onMount={this.setForm}
               fieldConfig={this.fieldConfig}
             />
             <Col xs={12} className="form-buttons text-right">
               <Button
-                bsStyle="link"
+                bsStyle="default"
                 type="button"
-                className="pull-left left-side"
+                className="pull-left"
                 onClick={this.props.toggleEditInstallModal}
               >
                 {t('common:cancel')}
               </Button>
               <Button
                 bsStyle="warning"
-                style={{ marginRight: '15px' }}
+                style={deleteButtonStyle}
                 type="button"
                 className=""
-                disabled={this.props.selectedItem.id === undefined}
+                disabled={this.props.loading}
                 onClick={this.handleDelete}
               >
                 {t('common:delete')}

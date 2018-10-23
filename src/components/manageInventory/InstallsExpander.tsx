@@ -146,6 +146,7 @@ export const InstallationsExpander = (props: ExpanderProps) => {
         noDataText="No installations found."
         resizable={false}
         getTrProps={props.getExpanderTrProps}
+        showPagination={props.original.installs.length >= 10}
       />
     </div>
   );

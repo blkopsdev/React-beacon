@@ -18,7 +18,6 @@ import {
   updateInstall,
   saveInstall,
   toggleEditInstallModal,
-  toggleImportInstallModal,
   deleteInstall
 } from '../../actions/manageInventoryActions';
 import CommonModal from '../common/CommonModal';
@@ -41,7 +40,7 @@ interface IdispatchProps {
   productInfo: IproductInfo;
   deleteInstall: typeof deleteInstall;
   tableFilters: ItableFiltersReducer;
-  toggleImportInstallModal: typeof toggleImportInstallModal;
+  secondModal: boolean;
 }
 
 class ManageInstallModal extends React.Component<Iprops & IdispatchProps, {}> {
@@ -56,10 +55,14 @@ class ManageInstallModal extends React.Component<Iprops & IdispatchProps, {}> {
     } else {
       modalTitle = this.props.t('manageInventory:saveInstallModalTitle');
     }
+    const className = this.props.secondModal
+      ? 'install-edit second-modal'
+      : 'install-edit';
+
     return (
       <CommonModal
         modalVisible={this.props.showModal}
-        className="install-edit"
+        className={className}
         onHide={this.props.toggleEditInstallModal}
         body={<EditInstallForm {...this.props} />}
         title={modalTitle}
@@ -76,7 +79,8 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     facilityOptions: FormUtil.convertToOptions(state.user.facilities),
     showModal: state.manageInventory.showEditInstallModal,
     productInfo: state.manageInventory.productInfo,
-    tableFilters: state.manageInventory.tableFilters
+    tableFilters: state.manageInventory.tableFilters,
+    secondModal: state.manageInventory.showSearchNewProductsModal
   };
 };
 
@@ -86,7 +90,6 @@ export default connect(
     updateInstall,
     saveInstall,
     toggleEditInstallModal,
-    deleteInstall,
-    toggleImportInstallModal
+    deleteInstall
   }
 )(ManageInstallModal);

@@ -2,6 +2,27 @@ import { transitionInType, transitionOutType, Iuser, Itile } from '../models';
 import { find } from 'lodash';
 import { emptyTile } from '../reducers/initialState';
 import { toastr } from 'react-redux-toastr';
+// import { icon } from "@fortawesome/fontawesome-svg-core";
+
+const typeOptions = [
+  { value: '80eedbac-ec22-45ef-9ac7-f2eb4be2db4c', label: 'Audit' },
+  { value: '524235fd-4633-4b7a-9c13-c37fc39efe69', label: 'Inspection' },
+  { value: '9c7fde18-0b94-4af8-b4aa-913c40e5aed0', label: 'Validation' },
+  { value: 'ae78eaa3-89c2-490a-90c6-44e5cfa10b01', label: 'Repair' }
+];
+
+const icons = {
+  dashboard: require('../images/icons/BM_Dashboard.png'),
+  inventory: require('../images/icons/BM_Inventory.png'),
+  manageJobs: require('../images/icons/BM_ManageJobs.png'),
+  manageTeam: require('../images/icons/BM_ManageTeam.png'),
+  manageUsers: require('../images/icons/BM_ManageUsers.png'),
+  productQueue: require('../images/icons/BM_NewProductQueue.png'),
+  userQueue: require('../images/icons/BM_NewUserQueue.png'),
+  payments: require('../images/icons/BM_Payments.png'),
+  training: require('../images/icons/BM_Training.png'),
+  locations: require('../images/icons/BM_ManageLocations.png')
+};
 
 const securityFunctions = {
   ManageUsers: {
@@ -9,6 +30,16 @@ const securityFunctions = {
     name: 'securityF:ManageUsers',
     description:
       'Approve and reject users as well as add and update customer and facility records.'
+  },
+  ManageJobs: {
+    id: '097AAE49-75FD-4D2B-91EF-967BE665D565',
+    name: 'securityF:ManageJobs',
+    description: 'Create and edit maintenance jobs.'
+  },
+  FSE: {
+    id: '9685F92C-F78E-4C70-9961-5E3068030242',
+    name: 'securityF:FSE',
+    description: 'Can be added as an FSE to jobs.'
   },
   ManageTrainingPayment: {
     id: '3A0D4616-4179-4BA1-98F0-6A929A3A5E0D',
@@ -68,6 +99,11 @@ const securityFunctions = {
     id: '64818AA5-A685-4E5D-AD22-E2BB357CF58B',
     name: 'securityF:ManageProductQueue',
     description: 'Allows the user to manage and approve products.'
+  },
+  ManageLocations: {
+    id: '0FE683B3-FEA5-4130-9243-2C272CABA674',
+    name: 'securityF:ManageLocations',
+    description: 'Allows the user to manage and create locations.'
   }
 };
 
@@ -89,6 +125,7 @@ const colors = {
 const tiles = [
   {
     icon: 'icon-alerts',
+    iconType: 'fa',
     title: 'alerts',
     src: 'https://placekitten.com/360/136',
     srcBanner: '',
@@ -100,7 +137,8 @@ const tiles = [
     description: ''
   },
   {
-    icon: ['far', 'calendar-check'],
+    icon: icons.training,
+    iconType: 'img',
     title: 'training',
     src: 'https://placekitten.com/360/408',
     srcBanner: '',
@@ -112,7 +150,8 @@ const tiles = [
     description: ''
   },
   {
-    icon: 'users',
+    icon: icons.userQueue,
+    iconType: 'img',
     title: 'userQueue',
     src: require('src/images/beaconQueue.jpg'),
     srcBanner: require('src/images/beaconQueueHeader.jpg'),
@@ -124,7 +163,8 @@ const tiles = [
     description: ''
   },
   {
-    icon: ['far', 'hospital'],
+    icon: icons.manageUsers,
+    iconType: 'img',
     title: 'userManage',
     src: require('src/images/beaconManageUsers.jpg'),
     srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
@@ -136,18 +176,34 @@ const tiles = [
     description: ''
   },
   {
-    icon: 'icon-maintenance',
-    title: 'maintenance',
-    src: 'https://placekitten.com/360/408',
-    srcBanner: '',
+    icon: icons.manageJobs,
+    iconType: 'img',
+    title: 'manageJobs',
+    src: require('src/images/beaconManageUsers.jpg'),
+    srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
+    color: 'orange',
+    width: 360,
+    height: 400,
+    url: '/managejobs',
+    securityFunction: securityFunctions.ManageJobs.id,
+    description: ''
+  },
+  {
+    icon: icons.locations,
+    iconType: 'img',
+    title: 'locations',
+    src: require('src/images/beaconManageUsers.jpg'),
+    srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
     color: 'blue',
     width: 360,
-    height: 408,
-    url: '/maintenance',
-    securityFunction: ''
+    height: 400,
+    url: '/locations',
+    securityFunction: securityFunctions.ManageLocations.id,
+    description: ''
   },
   {
     icon: 'icon-reports',
+    iconType: 'fa',
     title: 'reports',
     src: 'https://placekitten.com/360/272',
     srcBanner: '',
@@ -159,7 +215,8 @@ const tiles = [
     description: ''
   },
   {
-    icon: 'users',
+    icon: icons.manageTeam,
+    iconType: 'img',
     title: 'manageTeam',
     src: require('src/images/beaconManageTeam.jpg'),
     srcBanner: require('src/images/beaconManageTeamHeader.jpg'),
@@ -172,6 +229,7 @@ const tiles = [
   },
   {
     icon: 'icon-docs',
+    iconType: 'fa',
     title: 'documents',
     src: 'https://placekitten.com/360/272',
     srcBanner: '',
@@ -183,7 +241,8 @@ const tiles = [
     description: ''
   },
   {
-    icon: ['far', 'list-alt'],
+    icon: icons.inventory,
+    iconType: 'img',
     title: 'inventory',
     src: require('src/images/beaconManageInventory.jpg'),
     srcBanner: require('src/images/beaconManageInventoryHeader.jpg'),
@@ -195,7 +254,8 @@ const tiles = [
     description: ''
   },
   {
-    icon: ['far', 'list-alt'],
+    icon: icons.productQueue,
+    iconType: 'img',
     title: 'productqueue',
     src: require('src/images/beaconManageInventory.jpg'),
     srcBanner: require('src/images/beaconManageInventoryHeader.jpg'),
@@ -208,6 +268,7 @@ const tiles = [
   },
   {
     icon: 'icon-admin',
+    iconType: 'fa',
     title: 'administration',
     src: 'https://placekitten.com/360/272',
     srcBanner: '',
@@ -220,6 +281,7 @@ const tiles = [
   },
   {
     icon: 'icon-billing',
+    iconType: 'fa',
     title: 'billing',
     src: 'https://placekitten.com/360/408',
     srcBanner: '',
@@ -232,6 +294,7 @@ const tiles = [
   },
   {
     icon: 'icon-groups',
+    iconType: 'fa',
     title: 'groups',
     src: 'https://placekitten.com/360/272',
     srcBanner: '',
@@ -244,6 +307,7 @@ const tiles = [
   },
   {
     icon: 'icon-support',
+    iconType: 'fa',
     title: 'support',
     src: 'https://placekitten.com/360/136',
     srcBanner: '',
@@ -282,6 +346,8 @@ const constants = {
   colors,
   securityFunctions,
   tiles,
+  typeOptions,
+  icons,
   hasSecurityFunction: (user: Iuser, securityFunction: string): boolean => {
     if (user.securityFunctions.indexOf(securityFunction) >= 0) {
       return true;

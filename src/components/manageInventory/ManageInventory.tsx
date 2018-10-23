@@ -487,6 +487,13 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           <FontAwesomeIcon icon="shopping-cart" />
           <Badge>{this.props.cartTotal} </Badge>
         </Button>
+        <Button
+          className="table-import-button"
+          bsStyle="link"
+          onClick={this.props.toggleSearchNewProductsModal}
+        >
+          {t('import')}
+        </Button>
 
         <Button
           className="table-add-button"

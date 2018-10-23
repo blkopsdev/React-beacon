@@ -1,3 +1,5 @@
+import * as React from 'react';
+
 import { ThunkAction } from 'redux-thunk';
 import { toastr } from 'react-redux-toastr';
 import axios from 'axios';
@@ -43,45 +45,48 @@ export function getProductInfo(): ThunkResult<void> {
 
 export function getInventory(): ThunkResult<void> {
   return (dispatch, getState) => {
-    dispatch(beginAjaxCall());
-    const {
-      page,
-      search,
-      facility,
-      manufacturer,
-      productGroup
-    } = getState().manageInventory.tableFilters;
-    const facilityID = facility
-      ? facility.value
-      : getState().user.facilities[0].id;
-    const manufacturerID = manufacturer ? manufacturer.value : '';
-    const productGroupID = productGroup ? productGroup.value : '';
-    return axios
-      .get(API.GET.inventory.getinventory, {
-        params: { page, search, facilityID, manufacturerID, productGroupID }
-      })
-      .then(data => {
-        if (!data.data) {
-          throw undefined;
-        } else {
-          dispatch({
-            type: types.GET_INVENTORY_SUCCESS,
-            inventory: data.data[1]
-          });
-          dispatch({
-            type: types.INVENTORY_TOTAL_PAGES,
-            pages: data.data[0]
-          });
-          return data;
-        }
-      })
-      .catch((error: any) => {
-        dispatch({ type: types.GET_INVENTORY_FAILED });
-        constants.handleError(error, 'get inventory');
-        throw error;
-      });
+    getInventoryHelper(dispatch, getState);
   };
 }
+const getInventoryHelper = (dispatch: any, getState: any) => {
+  dispatch(beginAjaxCall());
+  const {
+    page,
+    search,
+    facility,
+    manufacturer,
+    productGroup
+  } = getState().manageInventory.tableFilters;
+  const facilityID = facility
+    ? facility.value
+    : getState().user.facilities[0].id;
+  const manufacturerID = manufacturer ? manufacturer.value : '';
+  const productGroupID = productGroup ? productGroup.value : '';
+  return axios
+    .get(API.GET.inventory.getinventory, {
+      params: { page, search, facilityID, manufacturerID, productGroupID }
+    })
+    .then(data => {
+      if (!data.data) {
+        throw undefined;
+      } else {
+        dispatch({
+          type: types.GET_INVENTORY_SUCCESS,
+          inventory: data.data[1]
+        });
+        dispatch({
+          type: types.INVENTORY_TOTAL_PAGES,
+          pages: data.data[0]
+        });
+        return data;
+      }
+    })
+    .catch((error: any) => {
+      dispatch({ type: types.GET_INVENTORY_FAILED });
+      constants.handleError(error, 'get inventory');
+      throw error;
+    });
+};
 
 export function updateProduct(
   product: Iproduct,
@@ -273,6 +278,59 @@ export function installContact(
   };
 }
 
+export function importInstall(file: any): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    const facility = getState().manageInventory.tableFilters.facility;
+    const facilityID = facility
+      ? facility.value
+      : getState().user.facilities[0].id;
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('facilityID', facilityID);
+    const config = {
+      headers: {
+        'content-type': 'multipart/form-data'
+      }
+    };
+    return axios
+      .post(API.POST.inventory.importInstall, formData, config)
+      .then(data => {
+        dispatch({
+          type: types.IMPORT_INSTALL_SUCCESS
+        });
+        dispatch({ type: types.TOGGLE_MODAL_IMPORT_INSTALL });
+        getInventoryHelper(dispatch, getState);
+        const customMessage = (
+          <div dangerouslySetInnerHTML={{ __html: data.data }} />
+        );
+        if (data.status === 200) {
+          toastr.success('Imported', '', {
+            ...constants.toastrSuccess,
+            component: customMessage
+          });
+        } else {
+          // status === 206
+          toastr.warning('Import Errors', '', {
+            ...constants.toastrSuccess,
+            component: customMessage,
+            timeOut: 0
+          });
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.IMPORT_INSTALL_FAILED });
+        // constants.handleError(error, 'importing');
+        toastr.error(
+          'Error',
+          'Please check your email for details on the failed import.',
+          constants.toastrError
+        );
+        throw error;
+      });
+  };
+}
+
 export const toggleEditProductModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_PRODUCT
 });
@@ -286,6 +344,9 @@ export const toggleEditQuoteModal = () => ({
 });
 export const toggleInstallContactModal = () => ({
   type: types.TOGGLE_MODAL_INSTALL_CONTACT
+});
+export const toggleImportInstallModal = () => ({
+  type: types.TOGGLE_MODAL_IMPORT_INSTALL
 });
 
 export const setTableFilter = (filters: ItableFiltersParams) => ({

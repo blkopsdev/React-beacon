@@ -28,7 +28,8 @@ const API = {
       addinstall: `${root}inventory/add`,
       deleteInstall: `${root}inventory/delete`,
       installContact: `${root}inventory/contact`,
-      approveproduct: `${root}inventory/approve`
+      approveproduct: `${root}inventory/approve`,
+      importInstall: `${root}inventory/import`
     }
   },
   GET: {

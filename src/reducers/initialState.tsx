@@ -52,6 +52,7 @@ export default {
     showEditInstallModal: false,
     showEditQuoteModal: false,
     showInstallContactModal: false,
+    showImportInstall: false,
     totalPages: 1,
     data: [],
     cart: {

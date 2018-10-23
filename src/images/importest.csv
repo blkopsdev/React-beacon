@@ -1,0 +1,10 @@
+Product SKU,Serial Number,Nickname,Install Date,Prod Date,RFID
+4107217668,111,import test,9/1/2018,9/1/2018,aaa
+4107217668,222,,9/1/2018,9/1/2018,bbb
+4107217668,333,import test,9/1/2018,,ccc
+4107217668,444,import test,,9/1/2018,ddd
+4107217668,555,import test,9/1/2018,9/1/2018,
+4107217668,,import test,9/1/2018,9/1/2018,eee
+badproduct,,,,,
+4107217668,999,bad install date,invalid date,9/1/2018,fff
+4107217668,999,bad prod date,9/1/2018,invalid date,fff

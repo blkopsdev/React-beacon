@@ -1,5 +1,5 @@
 /*
-* Manage Inventory Modal
+* Manage Product Modal
 */
 
 import { TranslationFunction } from 'react-i18next';

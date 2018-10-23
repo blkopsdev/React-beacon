@@ -25,6 +25,7 @@ import {
 import {
   saveInstall,
   toggleEditInstallModal,
+  toggleImportInstallModal,
   updateInstall
 } from '../../actions/manageInventoryActions';
 import constants from '../../constants/constants';
@@ -65,6 +66,7 @@ interface Iprops {
   updateInstall: typeof updateInstall;
   saveInstall: typeof saveInstall;
   toggleEditInstallModal: typeof toggleEditInstallModal;
+  toggleImportInstallModal: typeof toggleImportInstallModal;
   selectedItem: IinstallBase;
   loading: boolean;
   colorButton: string;
@@ -173,6 +175,14 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
       <div>
         <div className={formClassName}>
           <form onSubmit={this.handleSubmit} className="user-form">
+            <Button
+              bsStyle="link"
+              type="button"
+              className="pull-right"
+              onClick={this.props.toggleImportInstallModal}
+            >
+              {t('import')}
+            </Button>
             <FormGenerator
               onMount={this.setForm}
               fieldConfig={this.fieldConfig}

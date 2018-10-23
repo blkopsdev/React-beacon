@@ -146,7 +146,13 @@
     "serialNumber": "Serial Number",
     "installDeleteConfirm": "Are you sure?",
     "installDeleteOk": "Delete Install",
-    "saveApprove": "Save & Approve"
+    "saveApprove": "Save & Approve",
+    "importInstallModalTitle": "Import Installations",
+    "import": "import",
+    "exampleButton": "View Example",
+    "importInstallLabel": "choose file",
+    "uploadInstructions":
+      "Please upload the file that contains the installations that you would like to import.  Please use the template below to make sure the data is in the correct format."
   },
   "manageProductQueue": {
     "bannerTitle": "New Product Queue",

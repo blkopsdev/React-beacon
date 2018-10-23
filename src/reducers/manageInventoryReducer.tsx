@@ -167,6 +167,11 @@ export default function ManageInventory(
       action,
       'INSTALL_CONTACT'
     ),
+    showImportInstall: modalToggleWithName(
+      state.showImportInstall,
+      action,
+      'IMPORT_INSTALL'
+    ),
     tableFilters: createTableFiltersWithName(
       state.tableFilters,
       action,

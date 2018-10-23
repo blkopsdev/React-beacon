@@ -168,7 +168,10 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
     const { t } = this.props;
 
     const formClassName = `user-form manage-form ${this.props.colorButton}`;
-
+    const deleteButtonStyle =
+      this.props.selectedItem.id === undefined
+        ? { marginRight: '15px', display: 'none' }
+        : { marginRight: '15px' };
     return (
       <div>
         <div className={formClassName}>
@@ -188,10 +191,10 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
               </Button>
               <Button
                 bsStyle="warning"
-                style={{ marginRight: '15px' }}
+                style={deleteButtonStyle}
                 type="button"
                 className=""
-                disabled={this.props.selectedItem.id === undefined}
+                disabled={this.props.loading}
                 onClick={this.handleDelete}
               >
                 {t('common:delete')}

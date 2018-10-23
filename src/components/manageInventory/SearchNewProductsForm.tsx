@@ -165,35 +165,45 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
 
     const ProductListItem = ({
       product,
-      productInfo
+      productInfo,
+      selectedItem,
+      index
     }: {
       product: Iproduct;
       productInfo: IproductInfo;
-    }) => (
-      <li
-        className="list-group-item new-product-item"
-        onClick={() => {
-          const newProduct = {
-            ...product,
-            subcategory: productInfo.subcategories[product.subcategoryID]
-          };
-          this.props.toggleEditInstallModal();
-          this.props.setSelectedProduct(newProduct);
-        }}
-      >
-        <h4> {product.name} </h4>
-        <Row>
-          <Col xs={5}>{product.sku}</Col>
-          <Col xs={7}>
-            {productInfo.manufacturers[product.manufacturerID].name}
-          </Col>
-          <Col xs={5}>
-            {productInfo.productGroups[product.productGroupID].name}
-          </Col>
-          <Col xs={7}>{productInfo.brands[product.brandID].name}</Col>
-        </Row>
-      </li>
-    );
+      selectedItem?: Iproduct;
+      index: string;
+    }) => {
+      const className =
+        selectedItem && selectedItem.id === index
+          ? 'list-group-item new-product-item selected'
+          : 'list-group-item new-product-item';
+      return (
+        <li
+          className={className}
+          onClick={() => {
+            const newProduct = {
+              ...product,
+              subcategory: productInfo.subcategories[product.subcategoryID]
+            };
+            this.props.toggleEditInstallModal();
+            this.props.setSelectedProduct(newProduct);
+          }}
+        >
+          <h4> {product.name} </h4>
+          <Row>
+            <Col xs={5}>{product.sku}</Col>
+            <Col xs={7}>
+              {productInfo.manufacturers[product.manufacturerID].name}
+            </Col>
+            <Col xs={5}>
+              {productInfo.productGroups[product.productGroupID].name}
+            </Col>
+            <Col xs={7}>{productInfo.brands[product.brandID].name}</Col>
+          </Row>
+        </li>
+      );
+    };
 
     return (
       <div>
@@ -226,12 +236,14 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
             </Row>
             <Row>
               <Col xs={12}>
-                <ListGroup>
-                  {map(this.props.newProducts, product => (
+                <ListGroup className="beacon-list-group">
+                  {map(this.props.newProducts, (product, index) => (
                     <ProductListItem
                       product={product}
                       productInfo={this.props.productInfo}
                       key={product.id}
+                      selectedItem={this.props.selectedItem}
+                      index={index}
                     />
                   ))}
                 </ListGroup>

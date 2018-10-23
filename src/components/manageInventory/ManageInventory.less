@@ -73,17 +73,25 @@
     }
   }
 }
-.new-product-item{
-  h4{
-    font-size: 1.3rem;
-    margin-top: 0;
-    margin-bottom: 5px;
+.beacon-list-group{
+  background-color: #fff;
+
+  .new-product-item:nth-child(odd){
+    background-color: fade(@green, 5%)
   }
-  div {
-    line-height: 18px;
+  .new-product-item{
+    h4{
+      font-size: 1.3rem;
+      margin-top: 0;
+      margin-bottom: 5px;
+    }
+    div {
+      line-height: 18px;
+    }
+    &:hover, &.selected{
+      background-color: fade(@green, 20%)
+    }
   }
 }
-.new-product-item:nth-child(odd){
-  background-color: fade(@green, 5%)
-}
+
 

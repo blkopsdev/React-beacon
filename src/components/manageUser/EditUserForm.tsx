@@ -314,9 +314,9 @@ class EditUserForm extends React.Component<Iprops, {}> {
             />
             <Col xs={12} className="form-buttons text-right">
               <Button
-                bsStyle="link"
+                bsStyle="default"
                 type="button"
-                className="pull-left left-side"
+                className="pull-left"
                 onClick={this.props.toggleEditUserModal}
               >
                 {t('cancel')}

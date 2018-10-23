@@ -237,7 +237,8 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       [
         {
           Header: 'sku',
-          accessor: 'sku'
+          accessor: 'sku',
+          width: 150
         },
         {
           Header: 'name',
@@ -260,15 +261,15 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         {
           Header: 'quantity',
           id: 'quantity',
+          width: 90,
           accessor: ({ installs }: { installs: IinstallBase[] }) => {
             return installs.length; // using this rather than data.quantity because when we add new installs, we don't want to update the quantity on the product
-          },
-          minWidth: 50
+          }
         },
         {
           id: 'expander-toggle',
-          Cell: this.expanderToggle,
-          minWidth: 20,
+          expander: true,
+          Expander: this.expanderToggle,
           style: {
             cursor: 'pointer',
             textAlign: 'center',

@@ -114,6 +114,7 @@ export const FormUtil = {
           submitted
         )}
         bsSize="sm"
+        style={meta.style}
       >
         <ControlLabel>{meta.label}</ControlLabel>
         <FormControl
@@ -363,6 +364,16 @@ export const FormUtil = {
       return field;
     });
     return { controls: newControls };
+  },
+  TextLabel: ({ handler, meta }: any) => {
+    return (
+      <Col xs={meta.colWidth}>
+        <FormGroup bsSize="sm">
+          <ControlLabel>{meta.label}</ControlLabel>
+          <h5 className="queue-form-label">{handler().value}</h5>
+        </FormGroup>
+      </Col>
+    );
   }
 };
 // reusable user form elements

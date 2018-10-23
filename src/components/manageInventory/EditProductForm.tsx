@@ -108,7 +108,7 @@ const buildFieldConfig = (
       meta: {
         options: productInfo.mainCategoryOptions,
         label: 'mainCategory',
-        colWidth: 6,
+        colWidth: 12,
         placeholder: 'common:searchPlaceholder',
         isMulti: false
       },
@@ -128,7 +128,7 @@ const buildFieldConfig = (
       meta: {
         // options: productInfo.subcategoryOptions,
         label: 'subcategory',
-        colWidth: 6,
+        colWidth: 12,
         placeholder: 'common:searchPlaceholder',
         isMulti: false
       },
@@ -141,7 +141,7 @@ const buildFieldConfig = (
       meta: {
         options: productInfo.gasTypeOptions,
         label: 'gasType',
-        colWidth: 12,
+        colWidth: 6,
         placeholder: 'common:searchPlaceholder',
         isMulti: false
       },
@@ -154,7 +154,7 @@ const buildFieldConfig = (
       meta: {
         options: productInfo.powerOptions,
         label: 'power',
-        colWidth: 12,
+        colWidth: 6,
         placeholder: 'common:searchPlaceholder',
         isMulti: false
       },
@@ -361,6 +361,14 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
     return (
       <div>
         <div className={formClassName}>
+          {!(this.props.selectedItem && this.props.selectedItem.id) && (
+            <Col xs={12}>
+              <p style={{ lineHeight: '1.4rem' }}>
+                {t('newProductInstructions')}
+              </p>
+            </Col>
+          )}
+
           <form onSubmit={this.handleSubmit} className="user-form">
             <FormGenerator
               onMount={this.setForm}
@@ -368,9 +376,9 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
             />
             <Col xs={12} className="form-buttons text-right">
               <Button
-                bsStyle="link"
+                bsStyle="default"
                 type="button"
-                className="pull-left left-side"
+                className="pull-left"
                 onClick={this.props.toggleEditProductModal}
               >
                 {t('common:cancel')}

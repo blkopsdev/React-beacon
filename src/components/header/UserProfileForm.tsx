@@ -185,12 +185,12 @@ class UserProfileForm extends React.Component<Iprops, {}> {
             />
             <Col xs={12} className="form-buttons text-right">
               <Button
-                bsStyle="link"
+                bsStyle="default"
                 type="button"
-                className="pull-left left-side"
+                className="pull-left"
                 onClick={this.props.handleCancel}
               >
-                {t('cancel')}
+                {t('common:cancel')}
               </Button>
               <Button
                 bsStyle={this.props.colorButton}

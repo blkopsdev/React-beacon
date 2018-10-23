@@ -171,7 +171,10 @@
     "searchNewProductModalTitle": "Add Product",
     "searchByName": "Search By Name",
     "searchNewProductInstructions":
-      "Please search for the product you would like toa dd to your facility."
+      "Please search for the product you would like to add to your facility.",
+    "productInfo": "Product Information",
+    "newProductInstructions":
+      "Need to add a new product? No problem.  Just enter as much information about it as you can and we will get it added to the system."
   },
   "manageProductQueue": {
     "bannerTitle": "New Product Queue",

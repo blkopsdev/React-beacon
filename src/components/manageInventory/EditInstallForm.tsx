@@ -31,6 +31,10 @@ import constants from '../../constants/constants';
 
 const buildFieldConfig = () => {
   const fieldConfigControls = {
+    productInfo: {
+      render: FormUtil.TextLabel,
+      meta: { label: 'productInfo', colWidth: 12 }
+    },
     nickname: {
       render: FormUtil.TextInput,
       meta: { label: 'nickname', colWidth: 12, type: 'input' }
@@ -97,6 +101,7 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
       );
       this.props.toggleEditInstallModal();
     }
+    this.userForm.patchValue({ productInfo: this.props.selectedProduct.name });
     if (
       !this.props.selectedItem ||
       (this.props.selectedItem && !this.props.selectedItem.id)
@@ -109,7 +114,10 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
         this.userForm.patchValue({ [key]: value });
       });
       const quantityControl = this.userForm.get('quantity');
-      quantityControl.disable();
+      quantityControl.meta = {
+        ...quantityControl.meta,
+        style: { display: 'none' }
+      };
     }
   }
 
@@ -182,9 +190,9 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
             />
             <Col xs={12} className="form-buttons text-right">
               <Button
-                bsStyle="link"
+                bsStyle="default"
                 type="button"
-                className="pull-left left-side"
+                className="pull-left"
                 onClick={this.props.toggleEditInstallModal}
               >
                 {t('common:cancel')}

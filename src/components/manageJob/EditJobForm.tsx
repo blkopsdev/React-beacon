@@ -34,6 +34,10 @@ interface AbstractControlEdited extends AbstractControl {
   stateChanges: IstateChanges;
 }
 
+// const checkIfStartDateBeforeEndDate = (startDate, endDate) => {
+
+// }
+
 const buildFieldConfig = (
   customerOptions: any[],
   facilityOptions: any[],
@@ -92,7 +96,10 @@ const buildFieldConfig = (
       meta: {
         label: 'jobManage:startDate',
         colWidth: 12,
-        showTime: false
+        showTime: false,
+        isValidDate: (current: any) => {
+          return current.isAfter(moment().subtract(1, 'day'));
+        }
       },
       options: {
         validators: Validators.required
@@ -103,7 +110,10 @@ const buildFieldConfig = (
       meta: {
         label: 'jobManage:endDate',
         colWidth: 12,
-        showTime: false
+        showTime: false,
+        isValidDate: (current: any) => {
+          return current.isAfter(moment());
+        }
       },
       options: {
         validators: Validators.required
@@ -129,9 +139,6 @@ const buildFieldConfig = (
         colWidth: 12,
         placeholder: 'jobManage:typeSearchPlaceholder',
         isMulti: true
-      },
-      options: {
-        validators: Validators.required
       }
     }
   };
@@ -159,6 +166,7 @@ interface Iprops extends React.Props<EditJobForm> {
 class EditJobForm extends React.Component<Iprops, {}> {
   public jobForm: AbstractControl;
   public fieldConfig: FieldConfig;
+  private subscription: any;
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(
@@ -277,7 +285,57 @@ class EditJobForm extends React.Component<Iprops, {}> {
       return find(userJobs, { userID: fac.value }) ? true : false;
     });
     this.jobForm.patchValue({ users: fseArray });
+
+    this.subscribeDateChanges();
   }
+  componentWillUnmount() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+  subscribeDateChanges = () => {
+    this.subscription = this.jobForm
+      .get('startDate')
+      .valueChanges.subscribe((value: any) => {
+        this.checkIfStartDateBeforeEndDate({ startDate: value });
+      });
+    this.subscription = this.jobForm
+      .get('endDate')
+      .valueChanges.subscribe((value: any) => {
+        this.checkIfStartDateBeforeEndDate({ endDate: value });
+      });
+  };
+  checkIfStartDateBeforeEndDate = ({ startDate, endDate }: any) => {
+    if (startDate) {
+      if (startDate.isAfter(this.jobForm.value.endDate)) {
+        toastr.warning(
+          this.props.t('startDateWarning'),
+          '',
+          constants.toastrError
+        );
+        const startDateControl = this.jobForm.get('startDate');
+        startDateControl.setErrors({ beforeStart: true });
+      } else {
+        const startDateControl = this.jobForm.get('startDate');
+        startDateControl.setErrors(null);
+      }
+    } else if (endDate) {
+      if (this.jobForm.value.startDate.isAfter(endDate)) {
+        toastr.warning(
+          this.props.t('startDateWarning'),
+          '',
+          constants.toastrError
+        );
+        const endDateControl = this.jobForm.get('endDate');
+        endDateControl.setErrors({ beforeStart: true });
+      } else {
+        const endDateControl = this.jobForm.get('endDate');
+        endDateControl.setErrors(null);
+      }
+    } else {
+      console.error('missing start and end date');
+    }
+  };
 
   handleSubmit = (
     e: React.MouseEvent<HTMLFormElement>,

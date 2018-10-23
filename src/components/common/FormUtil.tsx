@@ -89,6 +89,7 @@ export const FormUtil = {
         <Datetime
           defaultValue={meta.defaultValue}
           timeFormat={meta.showTime}
+          isValidDate={meta.isValidDate}
           {...handler()}
         />
         <FormControl.Feedback />
@@ -332,7 +333,7 @@ export const FormUtil = {
   },
   translateForm: (config: FieldConfig, t: TranslationFunction) => {
     const newControls = mapValues(config.controls, field => {
-      if (field.meta.label) {
+      if (field.meta && field.meta.label) {
         let newMeta = {
           ...field.meta,
           label: t(field.meta.label)

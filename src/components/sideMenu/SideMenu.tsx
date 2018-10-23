@@ -18,7 +18,7 @@ const Item = (props: any) => {
         {iconType === 'img' && (
           <img src={icon} width={25} height={25} style={{ marginRight: 15 }} />
         )}
-        {props.t(title)}
+        <span>{props.t(title)}</span>
       </ListGroupItem>
     </LinkContainer>
   );

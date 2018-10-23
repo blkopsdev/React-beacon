@@ -178,13 +178,13 @@ const tiles = [
   {
     icon: icons.manageJobs,
     iconType: 'img',
-    title: 'maintenance',
+    title: 'manageJobs',
     src: require('src/images/beaconManageUsers.jpg'),
     srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
     color: 'orange',
     width: 360,
     height: 400,
-    url: '/maintenance',
+    url: '/managejobs',
     securityFunction: securityFunctions.ManageJobs.id,
     description: ''
   },

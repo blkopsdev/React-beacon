@@ -115,11 +115,12 @@
     "endDate": "End Date",
     "newJob": "Add Job",
     "fseLead": "FSE Lead",
-    "fseMembers": "Other FSE",
+    "fseMembers": "Additional FSEs",
     "save": "Save",
     "cancel": "Cancel",
     "status": "Status",
-    "facility": "Facility"
+    "facility": "Facility",
+    "startDateWarning": "You have selected a start date after the end date."
   },
   "teamManage": {
     "newTeamMember": "New Team Member",
@@ -205,7 +206,7 @@
     "training": "Training",
     "userQueue": "New User Queue",
     "userManage": "Manage Users",
-    "maintenance": "Maintenance",
+    "manageJobs": "Manage Jobs",
     "reports": "Reports",
     "manageTeam": "Manage Team",
     "documents": "Documents & Legal",

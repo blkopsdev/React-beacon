@@ -30,8 +30,6 @@ export function getFacilitiesByCustomer(customerID: string) {
             type: types.GET_FACILITIES_SUCCESS,
             facilities: data.data
           });
-          // dispatch({ type: types.USER_QUEUE_TOTAL_PAGES, pages: data.data[0] });
-          // return data;
         }
       })
       .catch((error: any) => {

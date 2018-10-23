@@ -71,7 +71,7 @@ const TwoPaneLayout = (props: any) => {
             <Route exact path="/team" component={ManageTeam} />
             <Route exact path="/inventory" component={ManageInventory} />
             <Route exact path="/productqueue" component={ManageProductQueue} />
-            <Route exact path="/maintenance" component={ManageJob} />
+            <Route exact path="/managejobs" component={ManageJob} />
             <Route exact path="/locations" component={ManageJob} />
           </Switch>
         </Col>

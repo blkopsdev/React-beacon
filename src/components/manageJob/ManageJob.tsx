@@ -84,20 +84,24 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
         {
           id: 'status',
           Header: 'status',
-          accessor: 'status'
+          accessor: 'status',
+          width: 70
         },
         {
           Header: 'type',
-          accessor: 'jobType.name'
+          accessor: 'jobType.name',
+          width: 100
         },
         {
           id: 'company',
           Header: 'company',
-          accessor: 'customer.name'
+          accessor: 'customer.name',
+          minWidth: 150
         },
         {
           Header: 'facility',
-          accessor: 'facility.name'
+          accessor: 'facility.name',
+          minWidth: 150
         },
         {
           Header: 'FSE Lead',
@@ -115,14 +119,16 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
               ? moment.utc(startDate).format('MM/DD/YYYY')
               : 'n/a';
           },
-          id: 'startDate'
+          id: 'startDate',
+          width: 110
         },
         {
           Header: 'end date',
           accessor: ({ endDate }: Ijob) => {
             return endDate ? moment.utc(endDate).format('MM/DD/YYYY') : 'n/a';
           },
-          id: 'endDate'
+          id: 'endDate',
+          width: 110
         }
       ],
       this.props.t

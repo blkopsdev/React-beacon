@@ -182,9 +182,6 @@ class EditJobForm extends React.Component<Iprops, {}> {
     this.setForm = this.setForm.bind(this);
   }
   componentDidUpdate(prevProps: Iprops) {
-    if (!this.props.selectedJob) {
-      return;
-    }
     if (
       differenceBy(
         prevProps.facilityOptions,
@@ -198,10 +195,15 @@ class EditJobForm extends React.Component<Iprops, {}> {
       ) as AbstractControlEdited;
       facilitySelectControl.meta.options = this.props.facilityOptions;
       facilitySelectControl.stateChanges.next();
-      const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
-        return (this.props.selectedJob.facilityID = fac.value);
-      });
-      this.jobForm.patchValue({ facilityID: facilitiesArray[0] });
+      if (this.props.selectedJob) {
+        const facilitiesArray = filter(
+          this.props.facilityOptions,
+          (fac: any) => {
+            return (this.props.selectedJob.facilityID = fac.value);
+          }
+        );
+        this.jobForm.patchValue({ facilityID: facilitiesArray[0] });
+      }
     }
     if (
       differenceBy(

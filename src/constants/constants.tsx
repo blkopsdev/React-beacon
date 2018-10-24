@@ -180,8 +180,8 @@ const tiles = [
     icon: icons.manageJobs,
     iconType: 'img',
     title: 'manageJobs',
-    src: require('src/images/beaconManageUsers.jpg'),
-    srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
+    src: require('src/images/beaconManageJobs.jpg'),
+    srcBanner: require('src/images/beaconManageJobsHeader.jpg'),
     color: 'orange',
     width: 360,
     height: 400,
@@ -199,7 +199,7 @@ const tiles = [
     width: 360,
     height: 400,
     url: '/locations',
-    securityFunction: securityFunctions.ManageLocations.id,
+    securityFunction: '', // temporarily hidden:  securityFunctions.ManageLocations.id
     description: ''
   },
   {

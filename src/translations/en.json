@@ -241,6 +241,8 @@
     "ManageEmployeeTraining": "Manage Employee Training",
     "ManageProductQueue": "Manage Product Queue",
     "Payment": "Payment",
-    "ViewJobs": "View Jobs"
+    "ViewJobs": "View Jobs",
+    "ManageLocations": "Manage Locations",
+    "ManageJobs": "Manage Jobs"
   }
 }

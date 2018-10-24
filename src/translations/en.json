@@ -181,7 +181,11 @@
     "exampleButton": "View Example",
     "importInstallLabel": "choose file",
     "uploadInstructions":
-      "Please upload the file that contains the installations that you would like to import.  Please use the template below to make sure the data is in the correct format."
+      "Please upload the file that contains the installations that you would like to import.  Please use the template below to make sure the data is in the correct format.",
+    "contactMessageLabel": "comments / questions",
+    "contactButton": "contact beacon",
+    "installContactTitle": "Contact Beacon",
+    "productInfoLabel": "Product Information"
   },
   "manageProductQueue": {
     "bannerTitle": "New Product Queue",
@@ -205,11 +209,7 @@
     "mainCategory": "Main Category",
     "rfid": "RFID",
     "remarks": "Remarks",
-    "serialNumber": "Serial Number",
-    "installContactTitle": "Contact Beacon",
-    "productInfoLabel": "Product Information",
-    "contactMessageLabel": "comments / questions",
-    "contactButton": "contact beacon"
+    "serialNumber": "Serial Number"
   },
   "tiles": {
     "alerts": "Alerts",

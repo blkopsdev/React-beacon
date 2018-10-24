@@ -2,6 +2,7 @@ import { transitionInType, transitionOutType, Iuser, Itile } from '../models';
 import { find } from 'lodash';
 import { emptyTile } from '../reducers/initialState';
 import { toastr } from 'react-redux-toastr';
+import { authContext } from '../actions/userActions';
 // import { icon } from "@fortawesome/fontawesome-svg-core";
 
 const typeOptions = [
@@ -385,6 +386,10 @@ const constants = {
     }
     if (!navigator.onLine) {
       msg = 'Please connect to the internet.';
+    }
+    if (error && error.response && error.response.status === 401) {
+      console.error('catching unauthorized, should we re-authenticate here?');
+      authContext.login();
     }
     toastr.error('Error', msg, constants.toastrError);
   },

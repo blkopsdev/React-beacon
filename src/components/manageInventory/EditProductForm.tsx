@@ -301,6 +301,7 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
         brandID,
         manufacturerID,
         subcategoryID,
+        mainCategoryID,
         gasTypeID,
         powerID,
         systemSizeID,
@@ -313,6 +314,7 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
         brandID: brandID.value,
         manufacturerID: manufacturerID.value,
         subcategoryID: subcategoryID.value,
+        mainCategoryID: mainCategoryID.value,
         gasTypeID: gasTypeID.value,
         powerID: powerID.value,
         systemSizeID: systemSizeID.value,
@@ -320,7 +322,11 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
         facilityID: this.props.tableFilters.facility.value
       };
 
-      if (this.props.selectedItem) {
+      if (
+        this.props.selectedItem &&
+        this.props.selectedItem.id &&
+        this.props.selectedItem.id.length
+      ) {
         newItem = { ...newItem, id: this.props.selectedItem.id };
       }
 

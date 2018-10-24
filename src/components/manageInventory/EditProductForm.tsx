@@ -144,9 +144,6 @@ const buildFieldConfig = (
         colWidth: 6,
         placeholder: 'common:searchPlaceholder',
         isMulti: false
-      },
-      options: {
-        validators: Validators.required
       }
     },
     powerID: {
@@ -157,9 +154,6 @@ const buildFieldConfig = (
         colWidth: 6,
         placeholder: 'common:searchPlaceholder',
         isMulti: false
-      },
-      options: {
-        validators: Validators.required
       }
     },
     systemSizeID: {
@@ -170,9 +164,6 @@ const buildFieldConfig = (
         colWidth: 6,
         placeholder: 'common:searchPlaceholder',
         isMulti: false
-      },
-      options: {
-        validators: Validators.required
       }
     },
     standardID: {
@@ -183,9 +174,6 @@ const buildFieldConfig = (
         colWidth: 6,
         placeholder: 'common:searchPlaceholder',
         isMulti: false
-      },
-      options: {
-        validators: Validators.required
       }
     }
   };

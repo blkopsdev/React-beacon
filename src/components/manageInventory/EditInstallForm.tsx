@@ -113,6 +113,8 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
       forEach(this.props.selectedItem, (value, key) => {
         this.userForm.patchValue({ [key]: value });
       });
+      // we don't use quantity on existing products, but we need to pass validation
+      this.userForm.patchValue({ quantity: 1 });
       const quantityControl = this.userForm.get('quantity');
       quantityControl.meta = {
         ...quantityControl.meta,

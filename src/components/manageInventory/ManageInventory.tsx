@@ -248,7 +248,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           accessor: 'name'
         },
         {
-          Header: 'productGroup',
+          Header: 'common:productGroup',
           accessor: ({ productGroupID }: Iproduct) => {
             return this.props.productInfo.productGroups[productGroupID].name;
           },

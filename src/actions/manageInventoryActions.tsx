@@ -220,6 +220,7 @@ export function updateInstall(
 
 /*
 * save (add) an install (an install might have a quantity greater than 1 so we might be adding multiple installs)
+* If this is a new product, then also add the product
 */
 export function saveInstall(
   install: IinstallBase,
@@ -239,7 +240,9 @@ export function saveInstall(
             installs: data.data,
             productID
           });
-          // toastr.success('Success', 'Saved install', constants.toastrSuccess);
+          toastr.success('Success', 'Saved install', constants.toastrSuccess);
+          // get updated inventory
+          getInventoryHelper(dispatch, getState);
         }
       })
       .catch((error: any) => {

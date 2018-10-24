@@ -16,8 +16,8 @@ Swagger: https://app.swaggerhub.com/apis/Big-Pixel/Core-Care
 REACT_APP_SERVER_DOMAIN=https://virtserver.swaggerhub.com/Big-Pixel/Core-Care/1.0.21/
 
 ## Design Spec
-https://xd.adobe.com/view/98de6938-9789-4098-6f9a-955b46301e31-eeef/
-https://xd.adobe.com/spec/ec9f6390-2e34-4630-61ee-c0aabe3c71bb-9aae/#screen/e6e7393c-93d5-4ae4-b71b-d22b520ec322/Dashboard
+https://xd.adobe.com/spec/47fd156c-3ae2-477f-5fea-e7826b206201-31cc/
+https://xd.adobe.com/view/ab0b5766-bfd5-4610-6fa1-694ebec38af6-dd3a/
 
 ## up to date Security Functions
 https://github.com/thebigpixel/Beacon-CoreCare-API/blob/David-Dev/Data/Constants.cs

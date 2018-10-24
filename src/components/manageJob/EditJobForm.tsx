@@ -350,6 +350,9 @@ class EditJobForm extends React.Component<Iprops, {}> {
       return;
     }
     console.log(this.jobForm.value);
+    const users = this.jobForm.value.users
+      ? this.jobForm.value.users.map((u: any) => u.value)
+      : [];
     if (this.props.selectedJob && this.props.selectedJob.id) {
       this.props.updateJob(
         {
@@ -362,7 +365,7 @@ class EditJobForm extends React.Component<Iprops, {}> {
           endDate: this.jobForm.value.endDate.format(),
           status: this.props.selectedJob.status
         },
-        this.jobForm.value.users.map((u: any) => u.value)
+        users
       );
     } else {
       this.props.createJob(
@@ -375,7 +378,7 @@ class EditJobForm extends React.Component<Iprops, {}> {
           endDate: this.jobForm.value.endDate.format(),
           status: 'New'
         },
-        this.jobForm.value.users.map((u: any) => u.value)
+        users
       );
     }
   };

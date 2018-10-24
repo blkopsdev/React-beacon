@@ -42,6 +42,11 @@ const securityFunctions = {
     name: 'securityF:FSE',
     description: 'Can be added as an FSE to jobs.'
   },
+  ViewJobs: {
+    id: '362838EB-A081-4D87-A231-1B427A481916',
+    name: 'securityF:ViewJobs',
+    description: 'Can view assigned jobs.'
+  },
   ManageTrainingPayment: {
     id: '3A0D4616-4179-4BA1-98F0-6A929A3A5E0D',
     name: 'securityF:ManageTrainingPayment',
@@ -320,14 +325,6 @@ const tiles = [
     description: ''
   }
 ];
-
-// const colors = {
-//   green: 'green',
-//   blue: 'blue',
-//   orange: 'orange',
-//   purple: 'purple',
-//   dark: 'dark'
-// }
 
 const constants = {
   adalAuth: {

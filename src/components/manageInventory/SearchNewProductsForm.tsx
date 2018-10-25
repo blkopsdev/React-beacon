@@ -138,8 +138,9 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
     console.log(this.userForm.value);
 
     const { productGroupID, search } = this.userForm.value;
+    const productGroupUUID = productGroupID ? productGroupID.value : '';
 
-    this.props.getProducts(1, search, productGroupID.value);
+    this.props.getProducts(1, search, productGroupUUID);
   };
   setForm = (form: AbstractControl) => {
     this.userForm = form;

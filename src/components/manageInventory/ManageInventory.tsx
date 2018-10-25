@@ -241,30 +241,33 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         {
           Header: 'sku',
           accessor: 'sku',
-          width: 150
+          minWidth: 150
         },
         {
           Header: 'name',
-          accessor: 'name'
+          accessor: 'name',
+          minWidth: 300
         },
         {
           Header: 'common:productGroup',
           accessor: ({ productGroupID }: Iproduct) => {
             return this.props.productInfo.productGroups[productGroupID].name;
           },
-          id: 'productGroup'
+          id: 'productGroup',
+          minWidth: 170
         },
         {
           Header: 'manufacturer',
           accessor: ({ manufacturerID }: Iproduct) => {
             return this.props.productInfo.manufacturers[manufacturerID].name;
           },
-          id: 'manufacturer'
+          id: 'manufacturer',
+          minWidth: 170
         },
         {
-          Header: 'quantity',
+          Header: 'qty',
           id: 'quantity',
-          width: 90,
+          minWidth: 50,
           accessor: ({ installs }: { installs: IinstallBase[] }) => {
             return installs.length; // using this rather than data.quantity because when we add new installs, we don't want to update the quantity on the product
           }

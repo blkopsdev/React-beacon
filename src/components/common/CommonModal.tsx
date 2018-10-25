@@ -11,7 +11,7 @@ interface Props extends React.Props<CommonModal> {
   className: string;
   body: JSX.Element;
   footer?: JSX.Element;
-  title: string;
+  title: string | JSX.Element;
   container: any;
 }
 

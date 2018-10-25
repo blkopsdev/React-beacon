@@ -96,7 +96,27 @@ export const FormUtil = {
       </Col>
     </FormGroup>
   ),
-
+  DatetimeWithoutValidation: ({
+    handler,
+    touched,
+    hasError,
+    meta,
+    pristine,
+    errors,
+    submitted
+  }: AbstractControl) => (
+    <FormGroup bsSize="sm" className="datetime-select">
+      <Col xs={meta.colWidth}>
+        <ControlLabel>{meta.label}</ControlLabel>
+        <Datetime
+          defaultValue={meta.defaultValue}
+          timeFormat={meta.showTime}
+          isValidDate={meta.isValidDate}
+          {...handler()}
+        />
+      </Col>
+    </FormGroup>
+  ),
   TextInput: ({
     handler,
     touched,

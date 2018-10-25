@@ -1,9 +1,10 @@
 /*
 * The New User Manage
 */
+import { Button, Col } from 'react-bootstrap';
+import { FieldConfig } from 'react-reactive-form';
 import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
-// import { find } from "lodash";
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 import ReactTable, { SortingRule, FinalState, RowInfo } from 'react-table';
@@ -34,8 +35,6 @@ import Banner from '../common/Banner';
 import EditJobModal from './EditJobModal';
 import SearchTableForm from '../common/SearchTableForm';
 import constants from '../../constants/constants';
-import { FieldConfig } from 'react-reactive-form';
-import { Button } from 'react-bootstrap';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -69,7 +68,6 @@ interface Istate {
 
 class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
   public columns: any[];
-  public searchFieldConfig: FieldConfig;
   public buttonInAction = false;
   // private setTableFilterTimeout: any;
   constructor(props: Iprops & IdispatchProps) {
@@ -133,49 +131,6 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
       ],
       this.props.t
     );
-    this.searchFieldConfig = {
-      controls: {
-        company: {
-          render: FormUtil.SelectWithoutValidation,
-          meta: {
-            label: 'jobManage:company',
-            options: FormUtil.convertToOptions(this.props.customers),
-            colWidth: 2,
-            type: 'select',
-            placeholder: 'companyPlaceholder',
-            defaultValue: this.props.tableFilters.customer
-          }
-        },
-        type: {
-          render: FormUtil.SelectWithoutValidation,
-          meta: {
-            label: 'jobManage:type',
-            options: constants.typeOptions,
-            colWidth: 2,
-            type: 'select',
-            placeholder: 'typePlaceholder',
-            defaultValue: this.props.tableFilters.type
-          }
-        },
-        startDate: {
-          render: FormUtil.Datetime,
-          meta: {
-            label: 'jobManage:dateRange',
-            colWidth: 2,
-            defaultValue: this.props.tableFilters.startDate,
-            showTime: false
-          }
-        },
-        endDate: {
-          render: FormUtil.Datetime,
-          meta: {
-            colWidth: 2,
-            defaultValue: this.props.tableFilters.endDate,
-            showTime: false
-          }
-        }
-      }
-    };
   }
   componentWillMount() {
     this.setState({
@@ -206,6 +161,55 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
   componentWillUnmount() {
     this.props.closeAllModals();
   }
+
+  /*
+  * build the config here so that we have time to get customers before rendering the search controls.
+  */
+  buildSearchFieldConfig = (): FieldConfig => {
+    return {
+      controls: {
+        company: {
+          render: FormUtil.SelectWithoutValidation,
+          meta: {
+            label: 'jobManage:company',
+            options: FormUtil.convertToOptions(this.props.customers),
+            colWidth: 2,
+            type: 'select',
+            placeholder: 'companyPlaceholder',
+            defaultValue: this.props.tableFilters.customer
+          }
+        },
+        type: {
+          render: FormUtil.SelectWithoutValidation,
+          meta: {
+            label: 'jobManage:type',
+            options: constants.typeOptions,
+            colWidth: 2,
+            type: 'select',
+            placeholder: 'typePlaceholder',
+            defaultValue: this.props.tableFilters.type
+          }
+        },
+        startDate: {
+          render: FormUtil.DatetimeWithoutValidation,
+          meta: {
+            label: 'jobManage:dateRange',
+            colWidth: 2,
+            defaultValue: this.props.tableFilters.startDate,
+            showTime: false
+          }
+        },
+        endDate: {
+          render: FormUtil.DatetimeWithoutValidation,
+          meta: {
+            colWidth: 2,
+            defaultValue: this.props.tableFilters.endDate,
+            showTime: false
+          }
+        }
+      }
+    };
+  };
 
   /*
   * (reusable)
@@ -279,6 +283,13 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
   };
 
   render() {
+    if (this.props.customers.length === 0) {
+      return (
+        <Col xs={12}>
+          <h4> loading... </h4>
+        </Col>
+      );
+    }
     const { t } = this.props;
     return (
       <div className="manage-job">
@@ -288,7 +299,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
           color={constants.colors[`${this.state.currentTile.color}`]}
         />
         <SearchTableForm
-          fieldConfig={this.searchFieldConfig}
+          fieldConfig={this.buildSearchFieldConfig()}
           handleSubmit={this.props.getJobs}
           loading={this.props.loading}
           colorButton={

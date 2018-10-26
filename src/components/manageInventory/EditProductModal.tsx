@@ -18,6 +18,7 @@ import {
   saveProduct,
   toggleEditProductModal
 } from '../../actions/manageInventoryActions';
+import { updateQueueProduct } from '../../actions/manageProductQueueActions';
 import CommonModal from '../common/CommonModal';
 import EditProductForm from './EditProductForm';
 
@@ -37,6 +38,7 @@ interface IdispatchProps {
   productInfo: IproductInfo;
   tableFilters: ItableFiltersReducer;
   secondModal: boolean;
+  updateQueueProduct: typeof updateQueueProduct;
 }
 
 class ManageInventoryModal extends React.Component<
@@ -88,6 +90,7 @@ export default connect(
   {
     updateProduct,
     saveProduct,
-    toggleEditProductModal
+    toggleEditProductModal,
+    updateQueueProduct
   }
 )(ManageInventoryModal);

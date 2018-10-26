@@ -29,6 +29,7 @@ import {
   toggleEditProductModal,
   updateProduct
 } from '../../actions/manageInventoryActions';
+import { updateQueueProduct } from '../../actions/manageProductQueueActions';
 import constants from '../../constants/constants';
 
 interface IstateChanges extends Observable<any> {
@@ -194,6 +195,7 @@ interface Iprops {
   tableFilters: ItableFiltersReducer;
   saveProduct: typeof saveProduct;
   updateProduct: typeof updateProduct;
+  updateQueueProduct: typeof updateQueueProduct;
 }
 
 class ManageInventoryForm extends React.Component<Iprops, {}> {
@@ -283,61 +285,63 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
     }
     console.log(this.userForm.value);
 
-    if (this.props.tableFilters.facility) {
-      const {
-        productGroupID,
-        brandID,
-        manufacturerID,
-        subcategoryID,
-        mainCategoryID,
-        gasTypeID,
-        powerID,
-        systemSizeID,
-        standardID
-      } = this.userForm.value;
+    const {
+      productGroupID,
+      brandID,
+      manufacturerID,
+      subcategoryID,
+      mainCategoryID,
+      gasTypeID,
+      powerID,
+      systemSizeID,
+      standardID
+    } = this.userForm.value;
 
-      let newItem = {
-        ...this.userForm.value,
-        productGroupID: productGroupID.value,
-        brandID: brandID.value,
-        manufacturerID: manufacturerID.value,
-        subcategoryID: subcategoryID.value,
-        mainCategoryID: mainCategoryID.value,
-        gasTypeID: gasTypeID.value,
-        powerID: powerID.value,
-        systemSizeID: systemSizeID.value,
-        standardID: standardID.value,
-        facilityID: this.props.tableFilters.facility.value
-      };
+    let newItem = {
+      ...this.userForm.value,
+      productGroupID: productGroupID.value,
+      brandID: brandID.value,
+      manufacturerID: manufacturerID.value,
+      subcategoryID: subcategoryID.value,
+      mainCategoryID: mainCategoryID.value,
+      gasTypeID: gasTypeID.value,
+      powerID: powerID.value,
+      systemSizeID: systemSizeID.value,
+      standardID: standardID.value
+    };
 
-      if (
-        this.props.selectedItem &&
-        this.props.selectedItem.id &&
-        this.props.selectedItem.id.length
-      ) {
-        newItem = { ...newItem, id: this.props.selectedItem.id };
-      }
-
-      if (this.props.selectedItem && this.props.selectedItem.id) {
-        if (this.props.selectedQueueObject) {
-          this.props.updateProduct(
-            newItem,
-            shouldApprove,
-            this.props.selectedQueueObject.id
-          );
-        } else {
+    if (
+      this.props.selectedItem &&
+      this.props.selectedItem.id &&
+      this.props.selectedItem.id.length
+    ) {
+      newItem = { ...newItem, id: this.props.selectedItem.id };
+      if (this.props.selectedQueueObject) {
+        // updating a queue object, no need for a facilityID
+        this.props.updateQueueProduct(
+          newItem,
+          shouldApprove,
+          this.props.selectedQueueObject.id
+        );
+      } else {
+        // updating a product object
+        if (this.props.tableFilters.facility) {
+          newItem = {
+            ...newItem,
+            facilityID: this.props.tableFilters.facility.value
+          };
           this.props.updateProduct(newItem);
         }
-      } else {
-        this.props.saveProduct(newItem);
       }
     } else {
-      console.error('missing facility, unable to save install');
-      toastr.error(
-        'Error',
-        'Missing facility, please try again or contact support',
-        constants.toastrError
-      );
+      // creating a new product
+      if (this.props.tableFilters.facility) {
+        newItem = {
+          ...newItem,
+          facilityID: this.props.tableFilters.facility.value
+        };
+        this.props.saveProduct(newItem);
+      }
     }
   };
   setForm = (form: AbstractControl) => {

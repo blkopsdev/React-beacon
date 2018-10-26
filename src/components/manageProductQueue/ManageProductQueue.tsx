@@ -171,7 +171,7 @@ class ManageProductQueue extends React.Component<
           accessor: 'product.name'
         },
         {
-          Header: 'productGroup',
+          Header: 'common:productGroup',
           accessor: ({ product }: IproductQueueObject) => {
             return this.props.productInfo.productGroups[product.productGroupID]
               .name;

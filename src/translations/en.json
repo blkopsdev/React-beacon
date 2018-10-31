@@ -178,7 +178,7 @@
     "import": "import",
     "importInstallModalTitle": "Import Installations",
     "import": "import",
-    "exampleButton": "View Example",
+    "exampleButton": "View Template",
     "importInstallLabel": "choose file",
     "uploadInstructions":
       "Please upload the file that contains the installations that you would like to import.  Please use the template below to make sure the data is in the correct format.",

@@ -43,7 +43,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
     this.props.importInstall(this.state.file);
   };
   addFile = (fileInput: HTMLInputElement) => {
-    console.log('updated file', fileInput.files);
+    // console.log('updated file', fileInput.files);
     if (fileInput.files) {
       // this.file = fileInput.files[0];
       this.setState({ file: fileInput.files[0] });

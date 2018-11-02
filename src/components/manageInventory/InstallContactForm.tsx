@@ -69,7 +69,10 @@ class InstallContactform extends React.Component<Iprops, {}> {
       message: {
         render: FormUtil.TextInput,
         options: {
-          validators: Validators.required
+          validators: [
+            Validators.required,
+            FormUtil.validators.requiredWithTrim
+          ]
         },
         meta: {
           label: 'contactMessageLabel',

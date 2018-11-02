@@ -98,11 +98,14 @@ const buildFieldConfig = (
         colWidth: 12,
         showTime: false,
         isValidDate: (current: any) => {
-          return current.isAfter(moment().subtract(1, 'day'));
+          return (
+            moment.isMoment(current) &&
+            current.isAfter(moment().subtract(1, 'day'))
+          );
         }
       },
       options: {
-        validators: Validators.required
+        validators: [Validators.required, FormUtil.validators.isValidMoment]
       }
     },
     endDate: {
@@ -112,11 +115,11 @@ const buildFieldConfig = (
         colWidth: 12,
         showTime: false,
         isValidDate: (current: any) => {
-          return current.isAfter(moment());
+          return moment.isMoment(current) && current.isAfter(moment());
         }
       },
       options: {
-        validators: Validators.required
+        validators: [Validators.required, FormUtil.validators.isValidMoment]
       }
     },
     assignedUserID: {
@@ -308,7 +311,7 @@ class EditJobForm extends React.Component<Iprops, {}> {
       });
   };
   checkIfStartDateBeforeEndDate = ({ startDate, endDate }: any) => {
-    if (startDate) {
+    if (startDate && moment.isMoment(startDate)) {
       if (startDate.isAfter(this.jobForm.value.endDate)) {
         toastr.warning(
           this.props.t('startDateWarning'),
@@ -321,7 +324,7 @@ class EditJobForm extends React.Component<Iprops, {}> {
         const startDateControl = this.jobForm.get('startDate');
         startDateControl.setErrors(null);
       }
-    } else if (endDate) {
+    } else if (endDate && moment.isMoment(endDate)) {
       if (this.jobForm.value.startDate.isAfter(endDate)) {
         toastr.warning(
           this.props.t('startDateWarning'),

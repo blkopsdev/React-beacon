@@ -26,7 +26,7 @@ const fieldConfig = {
   controls: {
     name: {
       options: {
-        validators: Validators.required
+        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
       meta: { label: 'customerNameLabel', colWidth: 12 }

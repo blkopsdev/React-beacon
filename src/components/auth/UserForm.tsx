@@ -21,14 +21,14 @@ import { translate, TranslationFunction, I18n } from 'react-i18next';
 const fieldConfigControls = {
   tempCompany: {
     options: {
-      validators: Validators.required
+      validators: [Validators.required, FormUtil.validators.requiredWithTrim]
     },
     render: FormUtil.TextInput,
     meta: { label: 'company', colWidth: 12, type: 'text' }
   },
   tempAddress: {
     options: {
-      validators: Validators.required
+      validators: [Validators.required, FormUtil.validators.requiredWithTrim]
     },
     render: FormUtil.TextInput,
     meta: { label: 'address', colWidth: 8, type: 'text' }
@@ -39,14 +39,14 @@ const fieldConfigControls = {
   },
   tempCity: {
     options: {
-      validators: Validators.required
+      validators: [Validators.required, FormUtil.validators.requiredWithTrim]
     },
     render: FormUtil.TextInput,
     meta: { label: 'city', colWidth: 5, type: 'text' }
   },
   tempState: {
     options: {
-      validators: Validators.required
+      validators: [Validators.required, FormUtil.validators.requiredWithTrim]
     },
     render: FormUtil.TextInput,
     meta: { label: 'state', colWidth: 3, type: 'text' }

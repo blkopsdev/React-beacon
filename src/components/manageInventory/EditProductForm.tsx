@@ -46,21 +46,21 @@ const buildFieldConfig = (
   const fieldConfigControls = {
     name: {
       options: {
-        validators: Validators.required
+        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
       meta: { label: 'name', colWidth: 12, type: 'input' }
     },
     sku: {
       options: {
-        validators: Validators.required
+        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
       meta: { label: 'sku', colWidth: 12, type: 'input' }
     },
     description: {
       options: {
-        validators: Validators.required
+        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
       meta: { label: 'description', colWidth: 12, componentClass: 'textarea' }

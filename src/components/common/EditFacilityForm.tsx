@@ -26,14 +26,14 @@ const fieldConfig = {
   controls: {
     name: {
       options: {
-        validators: Validators.required
+        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
       meta: { label: 'facilityNameLabel', colWidth: 12 }
     },
     address: {
       options: {
-        validators: Validators.required
+        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
       meta: { label: 'user:address', colWidth: 8, type: 'text' }
@@ -44,14 +44,14 @@ const fieldConfig = {
     },
     city: {
       options: {
-        validators: Validators.required
+        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
       meta: { label: 'user:city', colWidth: 5, type: 'text' }
     },
     state: {
       options: {
-        validators: Validators.required
+        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
       meta: { label: 'user:state', colWidth: 3, type: 'text' }

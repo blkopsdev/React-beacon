@@ -19,6 +19,8 @@ import Select, { components } from 'react-select';
 import Toggle from 'react-toggle';
 import { Ioption } from '../../models';
 import * as Datetime from 'react-datetime';
+import * as moment from 'moment';
+
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 // add the bootstrap form-control class to the react-select select component
@@ -44,6 +46,22 @@ const ControlComponent = (props: any) => (
 
 // TODO add a type that accepts an array or an object:  Array<{ id: string; name: string }>
 export const FormUtil = {
+  validators: {
+    requiredWithTrim: (m: any) => {
+      if (m && m.value && m.value.trim().length > 0) {
+        return null;
+      } else {
+        return { empty: { message: 'not long enough' } };
+      }
+    },
+    isValidMoment: (m: any) => {
+      if (m && m.value && moment.isMoment(m.value)) {
+        return null;
+      } else {
+        return { isValidMoment: { message: 'not a valid date' } };
+      }
+    }
+  },
   convertToOptions: (items: any): Ioption[] => {
     return map(items, (item: any) => {
       return {
@@ -400,14 +418,14 @@ export const FormUtil = {
 export const userBaseConfigControls = {
   first: {
     options: {
-      validators: Validators.required
+      validators: [Validators.required, FormUtil.validators.requiredWithTrim]
     },
     render: FormUtil.TextInput,
     meta: { label: 'user:first', colWidth: 6, type: 'text' }
   },
   last: {
     options: {
-      validators: Validators.required
+      validators: [Validators.required, FormUtil.validators.requiredWithTrim]
     },
     render: FormUtil.TextInput,
     meta: { label: 'user:last', colWidth: 6, type: 'text' }
@@ -444,7 +462,7 @@ export const userBaseConfigControls = {
   },
   position: {
     options: {
-      validators: Validators.required
+      validators: [Validators.required, FormUtil.validators.requiredWithTrim]
     },
     render: FormUtil.TextInput,
     meta: { label: 'user:position', colWidth: 6, type: 'text' }

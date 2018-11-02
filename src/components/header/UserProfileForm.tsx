@@ -33,7 +33,7 @@ const buildFieldConfig = (facilityOptions: any[]) => {
   const fieldConfigControls = {
     customer: {
       options: {
-        validators: Validators.required
+        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
       meta: { label: 'company', colWidth: 12, type: 'text' }

@@ -78,7 +78,11 @@ const buildFieldConfig = (
     return {
       render: NumberInputWithButton,
       options: {
-        validators: [Validators.min(1), Validators.max(1000)]
+        validators: [
+          Validators.min(1),
+          Validators.max(1000),
+          Validators.required
+        ]
       },
       meta: {
         label: prod.name,
@@ -92,7 +96,7 @@ const buildFieldConfig = (
     message: {
       render: FormUtil.TextInput,
       options: {
-        validators: Validators.required
+        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       meta: {
         label: 'message',

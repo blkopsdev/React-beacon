@@ -52,7 +52,7 @@ class CommonModal extends React.Component<Props, State> {
         <Modal.Header>
           <Modal.Title>{this.props.title}</Modal.Title>
         </Modal.Header>
-        <Modal.Body>{this.props.body}</Modal.Body>
+        <Modal.Body className="clearfix">{this.props.body}</Modal.Body>
 
         <Modal.Footer>{this.props.footer}</Modal.Footer>
       </Modal>

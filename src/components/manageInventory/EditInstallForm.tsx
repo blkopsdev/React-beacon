@@ -29,7 +29,15 @@ import {
 } from '../../actions/manageInventoryActions';
 import constants from '../../constants/constants';
 
-const buildFieldConfig = () => {
+const buildFieldConfig = (shouldRequireQuantity: boolean) => {
+  let quantityValidators = [Validators.min(1), Validators.max(1000)];
+  if (shouldRequireQuantity) {
+    quantityValidators = [
+      Validators.min(1),
+      Validators.max(1000),
+      Validators.required
+    ];
+  }
   const fieldConfigControls = {
     productInfo: {
       render: FormUtil.TextLabel,
@@ -53,7 +61,7 @@ const buildFieldConfig = () => {
     },
     quantity: {
       options: {
-        validators: [Validators.min(1), Validators.max(1000)]
+        validators: quantityValidators
       },
       render: FormUtil.TextInput,
       inputType: 'number',
@@ -85,7 +93,12 @@ class ManageInstallForm extends React.Component<Iprops, {}> {
   public fieldConfig: FieldConfig;
   constructor(props: Iprops) {
     super(props);
-    this.fieldConfig = FormUtil.translateForm(buildFieldConfig(), this.props.t);
+    this.fieldConfig = FormUtil.translateForm(
+      buildFieldConfig(
+        !!(this.props.selectedItem && this.props.selectedItem.id)
+      ),
+      this.props.t
+    );
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setForm = this.setForm.bind(this);
   }

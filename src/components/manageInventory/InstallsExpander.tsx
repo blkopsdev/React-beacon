@@ -134,11 +134,7 @@ export const InstallationsExpander = (props: ExpanderProps) => {
         data={props.original.installs}
         sortable={false}
         columns={expanderColumns}
-        defaultPageSize={
-          props.original.installs.length < 10
-            ? props.original.installs.length
-            : 10
-        }
+        minRows={0}
         showPageSizeOptions={false}
         rowsText="installs"
         key={props.original.installs.length}

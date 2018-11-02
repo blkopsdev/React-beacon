@@ -72,6 +72,11 @@ export function userLogin(): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.USER_LOGIN_FAILED });
         constants.handleError(error, 'login');
+        // to avoid getting stuck, go ahead and log the user out after a longer pause
+        localStorage.removeItem('state-core-care');
+        setTimeout(() => {
+          authContext.logOut();
+        }, 3000); // give it time to persist this to local storage
         throw error;
       });
   };

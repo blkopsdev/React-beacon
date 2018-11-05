@@ -168,7 +168,7 @@ body {
     padding: 2px;
   }
   .react-select__control{
-    
+
     height: 33px;
     min-height: 33px;
     //  overrides for react-select 
@@ -197,10 +197,17 @@ body {
 // }
 //fade(#F5F5F5, 90%)
 .slide-modal{
-    .modal-footer {
+  .modal-footer {
     display: none;
   }
 }
+
+// enable if we want the second modal backdrop to be above the first modal, 
+//also need to update the containers for the modals to "second-modal" and "first-modal"
+// #modal-two .modal-backdrop{
+//   z-index: 1050;
+// }
+
 .two-pane-layout .slide-modal {
   overflow: hidden;
   .modal-body {

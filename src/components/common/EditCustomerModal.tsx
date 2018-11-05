@@ -53,7 +53,7 @@ class EditCustomerModal extends React.Component<Iprops & IdispatchProps, {}> {
           />
         }
         title={this.props.t('common:newCustomerModalTitle')}
-        container={document.getElementById('two-pane-layout')}
+        container={document.getElementById('modal-two')}
       />
     );
   }

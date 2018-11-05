@@ -59,6 +59,8 @@ const TwoPaneLayout = (props: any) => {
       id="two-pane-layout"
       fluid={true}
     >
+      <div id="modal-one" />
+      <div id="modal-two" />
       <Row>
         <Col className="col-fixed">
           <SideMenu {...props} />

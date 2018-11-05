@@ -259,11 +259,16 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
       subcategoryControl.stateChanges.next();
       // try to set the value to the one selected by the user
       if (this.props.selectedItem) {
-        const newSubcategory =
-          find(subcategoryControl.meta.options, {
-            value: this.props.selectedItem.subcategoryID
-          }) || {};
+        const newSubcategory = find(subcategoryControl.meta.options, {
+          value: this.props.selectedItem.subcategoryID
+        }) || { value: '' };
         this.userForm.patchValue({ subcategoryID: newSubcategory });
+        if (!newSubcategory.value.length) {
+          subcategoryControl.markAsDirty();
+          subcategoryControl.setErrors({
+            required: { required: { message: 'this is required' } }
+          });
+        }
       } else {
         // subcategoryControl.reset();
         // subcategoryControl.markAsPristine();

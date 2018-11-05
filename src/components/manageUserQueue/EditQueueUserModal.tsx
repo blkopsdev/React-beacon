@@ -73,7 +73,7 @@ class EditQueueUserModal extends React.Component<Iprops & IdispatchProps, {}> {
         onHide={this.props.toggleEditQueueUserModal}
         body={<EditQueueUserForm {...this.props} />}
         title={this.props.t('newUserModalTitle')}
-        container={document.getElementById('two-pane-layout')}
+        container={document.getElementById('modal-one')}
       />
     );
   }

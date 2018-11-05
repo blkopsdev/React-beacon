@@ -48,6 +48,7 @@ class CommonModal extends React.Component<Props, State> {
           }, 200);
         }}
         container={this.props.container}
+        backdrop="static"
       >
         <Modal.Header>
           <Modal.Title>{this.props.title}</Modal.Title>

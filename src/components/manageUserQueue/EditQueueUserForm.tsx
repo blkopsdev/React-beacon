@@ -279,7 +279,8 @@ class UserQueueForm extends React.Component<Iprops, {}> {
         ...this.userForm.value,
         customerID: this.userForm.value.customerID.value,
         facilities: facilitiesArray,
-        email: this.props.selectedQueueObject.user.email // have to add back the email because disabling the input removes it
+        email: this.props.selectedQueueObject.user.email, // have to add back the email because disabling the input removes it
+        isActive: true // hardcode this because if the user is not active, they will be approved, but not active and will not be able to login
       },
       shouldApprove,
       this.props.selectedQueueObject.id

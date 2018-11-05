@@ -57,6 +57,7 @@ export interface Iuser {
   hasTeamMembers: boolean;
   appVersion: string;
   manager?: any;
+  isActive?: boolean;
 }
 // export interface ImanageUserQueueReducer {
 //   [key: string]: Iuser;

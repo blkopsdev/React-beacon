@@ -72,7 +72,10 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
               </Button>
             </form>
           </Col>
-          <form onSubmit={this.handleSubmit} className="user-form">
+          <form
+            onSubmit={this.handleSubmit}
+            className="clearfix beacon-form user-form"
+          >
             <Col xs={12}>
               <FormGroup>
                 <ControlLabel

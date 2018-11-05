@@ -85,7 +85,10 @@ class EditCustomerForm extends React.Component<Iprops, {}> {
 
     return (
       <div className="user-form customer-form">
-        <form onSubmit={this.handleSubmit} className="user-form">
+        <form
+          onSubmit={this.handleSubmit}
+          className="clearfix beacon-form user-form"
+        >
           <FormGenerator
             onMount={this.setForm}
             fieldConfig={this.fieldConfig}

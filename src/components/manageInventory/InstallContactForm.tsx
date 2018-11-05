@@ -116,7 +116,10 @@ class InstallContactform extends React.Component<Iprops, {}> {
     return (
       <div>
         <div className={formClassName}>
-          <form onSubmit={this.handleSubmit} className="user-form">
+          <form
+            onSubmit={this.handleSubmit}
+            className="clearfix beacon-form user-form"
+          >
             <FormGenerator
               onMount={this.setForm}
               fieldConfig={this.fieldConfig}

@@ -304,7 +304,10 @@ class UserQueueForm extends React.Component<Iprops, {}> {
     return (
       <div>
         <div className={formClassName}>
-          <form onSubmit={this.handleSubmit} className="user-form">
+          <form
+            onSubmit={this.handleSubmit}
+            className="clearfix beacon-form user-form"
+          >
             {this.props.selectedQueueObject &&
               this.props.selectedQueueObject.user.managerID && (
                 <Col xs={12}>

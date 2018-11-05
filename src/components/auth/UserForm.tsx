@@ -128,7 +128,10 @@ class UserForm extends React.Component<Iprops, {}> {
     const { t } = this.props;
     return (
       <div className="loginForm">
-        <form onSubmit={this.handleSubmit} className="user-form">
+        <form
+          onSubmit={this.handleSubmit}
+          className="clearfix beacon-form user-form"
+        >
           <FormGenerator
             onMount={this.setForm}
             fieldConfig={this.fieldConfig}

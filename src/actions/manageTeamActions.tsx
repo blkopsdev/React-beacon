@@ -104,16 +104,12 @@ export function deleteTeamUser(memberID: string): ThunkResult<void> {
     return axios
       .post(API.POST.user.deleteTeamMember, { ID: memberID })
       .then(data => {
-        if (!data.data) {
-          throw undefined;
-        } else {
-          dispatch({
-            type: types.TEAM_DELETE_SUCCESS,
-            user: data.data
-          });
+        dispatch({
+          type: types.TEAM_DELETE_SUCCESS,
+          memberID
+        });
 
-          // toastr.success('Success', 'Deleted user', constants.toastrSuccess);
-        }
+        // toastr.success('Success', 'Deleted user', constants.toastrSuccess);
       })
       .catch((error: any) => {
         dispatch({ type: types.TEAM_DELETE_FAILED });

@@ -224,7 +224,7 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
               e.preventDefault();
               this.handleSubmit();
             }}
-            className="user-form"
+            className="clearfix beacon-form user-form"
             style={{ display: 'block' }}
           >
             <Row>

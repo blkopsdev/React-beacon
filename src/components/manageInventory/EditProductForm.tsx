@@ -359,7 +359,9 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
   render() {
     const { t } = this.props;
 
-    const formClassName = `user-form manage-form ${this.props.colorButton}`;
+    const formClassName = `clearfix user-form manage-form ${
+      this.props.colorButton
+    }`;
 
     return (
       <div>
@@ -372,7 +374,10 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
             </Col>
           )}
 
-          <form onSubmit={this.handleSubmit} className="user-form">
+          <form
+            onSubmit={this.handleSubmit}
+            className="clearfix beacon-form user-form"
+          >
             <FormGenerator
               onMount={this.setForm}
               fieldConfig={this.fieldConfig}

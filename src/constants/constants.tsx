@@ -148,7 +148,7 @@ const tiles = [
     title: 'training',
     src: require('src/images/beaconTraining.jpg'),
     srcBanner: require('src/images/beaconTrainingHeader.jpg'),
-    color: 'green',
+    color: 'blue',
     width: 360,
     height: 400,
     url: '/training',

@@ -31,7 +31,7 @@ interface AbstractControlEdited extends AbstractControl {
 const buildFieldConfig = (facilityOptions: any[]) => {
   // Field config to configure form
   const fieldConfigControls = {
-    customer: {
+    customerName: {
       options: {
         validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
@@ -95,25 +95,21 @@ class UserProfileForm extends React.Component<Iprops, {}> {
     forEach(this.props.user, (value, key) => {
       this.userForm.patchValue({ [key]: value });
     });
+    const { facilities, customer } = this.props.user;
+
     const emailControl = this.userForm.get('email') as AbstractControlEdited;
     emailControl.disable();
 
-    // get the customer name
-    const customer = (find(
-      this.props.customers,
-      (cust: Icustomer) => cust.id === this.props.user.customerID
-    ) as Icustomer) || { name: '' };
-
     if (customer && customer.name.length) {
-      this.userForm.patchValue({ customer: customer.name });
+      this.userForm.patchValue({ customerName: customer.name });
     }
     const customerControl = this.userForm.get(
-      'customer'
+      'customerName'
     ) as AbstractControlEdited;
     customerControl.disable();
 
     const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
-      return find(this.props.user.facilities, { id: fac.value }) ? true : false;
+      return find(facilities, { id: fac.value }) ? true : false;
     });
     this.userForm.patchValue({ facilities: facilitiesArray });
   }

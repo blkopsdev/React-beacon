@@ -151,7 +151,7 @@ const tiles = [
     color: 'blue',
     width: 360,
     height: 400,
-    url: '/training',
+    url: '/dashboard',
     securityFunction: securityFunctions.ManageIndividualTraining.id,
     description: ''
   },

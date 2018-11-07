@@ -53,7 +53,15 @@ class CommonModal extends React.Component<Props, State> {
         backdrop={backdrop}
       >
         <Modal.Header>
-          <Modal.Title>{this.props.title}</Modal.Title>
+          <Modal.Title
+            style={{
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
+            }}
+          >
+            {this.props.title}
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body className="clearfix">{this.props.body}</Modal.Body>
 

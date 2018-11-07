@@ -217,7 +217,21 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
     const formClassName = `user-form manage-form ${this.props.colorButton}`;
     if (this.props.cart.addedIDs.length === 0) {
       return (
-        <h4 style={{ padding: '15px' }}>{this.props.t('emptyQuoteMessage')}</h4>
+        <div>
+          <h4 style={{ padding: '15px' }}>
+            {this.props.t('emptyQuoteMessage')}
+          </h4>
+          <Col xs={12} className="form-buttons text-right">
+            <Button
+              bsStyle="default"
+              type="button"
+              className="pull-left"
+              onClick={this.props.toggleEditQuoteModal}
+            >
+              {t('common:cancel')}
+            </Button>
+          </Col>
+        </div>
       );
     }
     return (

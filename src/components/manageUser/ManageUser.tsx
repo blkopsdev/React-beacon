@@ -320,6 +320,7 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
           body={<SecurityFunctionsList t={this.props.t} />}
           title={t('securityFunctionsModalTitle')}
           container={document.getElementById('two-pane-layout')}
+          backdrop={true}
         />
       </div>
     );

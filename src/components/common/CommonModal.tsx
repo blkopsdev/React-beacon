@@ -13,6 +13,7 @@ interface Props extends React.Props<CommonModal> {
   footer?: JSX.Element;
   title: string | JSX.Element;
   container: any;
+  backdrop?: string | boolean;
 }
 
 interface State {
@@ -31,6 +32,7 @@ class CommonModal extends React.Component<Props, State> {
     const className = `${this.props.className} ${
       this.state.classNameAnimation
     } slide-modal from-left`;
+    const backdrop = this.props.backdrop ? this.props.backdrop : 'static';
     return (
       <Modal
         show={this.props.modalVisible}
@@ -48,7 +50,7 @@ class CommonModal extends React.Component<Props, State> {
           }, 200);
         }}
         container={this.props.container}
-        backdrop="static"
+        backdrop={backdrop}
       >
         <Modal.Header>
           <Modal.Title>{this.props.title}</Modal.Title>

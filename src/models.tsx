@@ -168,13 +168,33 @@ export interface ImanageUserReducer {
   tableFilters: ItableFiltersReducer;
 }
 
+export interface Ibuilding {
+  id?: string;
+  name: string;
+  floors?: Ifloor[];
+  facilityID?: string;
+}
+export interface Ifloor {
+  id?: string;
+  name: string;
+  locations?: Ilocation[];
+  buildingID?: string;
+}
 export interface Ilocation {
   id?: string;
   name: string;
+  rooms?: Iroom[];
+  floorID?: string;
+}
+export interface Iroom {
+  id?: string;
+  name: string;
+  locationID?: string;
 }
 
 export interface ImanageLocationReducer {
-  data: Ilocation[];
+  data: any[];
+  facility?: Ifacility;
   totalPages: number;
   showEditLocationModal: boolean;
   tableFilters: ItableFiltersReducer;
@@ -281,6 +301,7 @@ export interface IinitialState {
   manageTeam: ImanageTeamReducer;
   manageInventory: ImanageInventoryReducer;
   manageProductQueue: ImanageProductQueueReducer;
+  manageLocation: ImanageLocationReducer;
   customers: Icustomer[];
   facilities: Ifacility[];
   showEditCustomerModal: boolean;
@@ -315,6 +336,7 @@ export interface Ifacility {
   city: string;
   state: string;
   postalCode: string;
+  buildings?: Ibuilding[];
 }
 
 export interface Ioption {

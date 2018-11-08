@@ -204,7 +204,7 @@ const tiles = [
     width: 360,
     height: 400,
     url: '/locations',
-    securityFunction: '', // temporarily hidden:  securityFunctions.ManageLocations.id
+    securityFunction: securityFunctions.ManageLocations.id,
     description: ''
   },
   {

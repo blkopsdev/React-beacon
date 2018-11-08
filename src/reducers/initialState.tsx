@@ -85,6 +85,7 @@ export default {
   },
   manageLocation: {
     totalPages: 1,
+    facility: undefined,
     data: [],
     showEditLocationModal: false,
     tableFilters: initialTableFilters

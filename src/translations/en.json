@@ -211,6 +211,16 @@
     "remarks": "Remarks",
     "serialNumber": "Serial Number"
   },
+  "manageLocation": {
+    "bannerTitle": "Manage Locations",
+    "newLocation": "New Location",
+    "editModalTitle": "Edit Location",
+    "saveModalTitle": "Add New Location",
+    "facilityPlaceholder": "Search...",
+    "searchPlaceholder": "Search...",
+    "saveApprove": "Save & Approve",
+    "searchByName": "Search By Name"
+  },
   "tiles": {
     "alerts": "Alerts",
     "training": "Training",

@@ -213,7 +213,10 @@
   },
   "manageLocation": {
     "bannerTitle": "Manage Locations",
+    "newBuilding": "New Building",
+    "newFloor": "New Floor",
     "newLocation": "New Location",
+    "newRoom": "New Room",
     "editModalTitle": "Edit Location",
     "saveModalTitle": "Add New Location",
     "facilityPlaceholder": "Search...",

@@ -8,6 +8,7 @@ import { connect } from 'react-redux';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 import ReactTable, { RowInfo, FinalState, SortingRule } from 'react-table';
+import { Breadcrumb, BreadcrumbItem, Button } from 'react-bootstrap';
 
 import { FormUtil } from '../common/FormUtil';
 import {
@@ -17,7 +18,11 @@ import {
   Iuser,
   Ifacility,
   Itile,
-  ImanageLocationReducer
+  ImanageLocationReducer,
+  Ibuilding,
+  Ifloor,
+  Ilocation,
+  Iroom
 } from '../../models';
 import { TableUtil } from '../common/TableUtil';
 import { addToCart } from '../../actions/shoppingCartActions';
@@ -62,7 +67,10 @@ interface Istate {
   selectedRow: any;
   currentTile: Itile;
   columns: any[];
-  selectedInstall: any;
+  selectedBuilding?: Ibuilding;
+  selectedFloor?: Ifloor;
+  selectedLocation?: Ilocation;
+  selectedRoom?: Iroom;
 }
 
 class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
@@ -77,7 +85,10 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
       selectedRow: {},
       currentTile: emptyTile,
       columns: [],
-      selectedInstall: {}
+      selectedBuilding: undefined,
+      selectedFloor: undefined,
+      selectedLocation: undefined,
+      selectedRoom: undefined
     };
     this.searchFieldConfig = this.buildSearchControls();
   }
@@ -100,12 +111,12 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
     }
   }
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
-    if (
-      prevProps.showEditLocationModal !== this.props.showEditLocationModal &&
-      !this.props.showEditLocationModal
-    ) {
-      this.props.setSelectedProduct();
-    }
+    // if (
+    //   prevProps.showEditLocationModal !== this.props.showEditLocationModal &&
+    //   !this.props.showEditLocationModal
+    // ) {
+    //   this.props.setSelectedProduct();
+    // }
 
     // update the table when we get new data
     if (prevProps.tableData !== this.props.tableData) {
@@ -163,16 +174,16 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
 
   buildSearchControls = (): FieldConfig => {
     const mainSearchControls = {
-      search: {
-        render: FormUtil.TextInputWithoutValidation,
-        meta: {
-          label: 'common:searchProduct',
-          colWidth: 3,
-          type: 'text',
-          placeholder: 'searchPlaceholder',
-          defaultValue: this.props.tableFilters.search
-        }
-      }
+      // search: {
+      //   render: FormUtil.TextInputWithoutValidation,
+      //   meta: {
+      //     label: 'common:searchProduct',
+      //     colWidth: 3,
+      //     type: 'text',
+      //     placeholder: 'searchPlaceholder',
+      //     defaultValue: this.props.tableFilters.search
+      //   }
+      // }
     };
     // only add the facility control if there is more than 1
     const facility = {
@@ -227,6 +238,28 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
     }
   };
 
+  // get breadcrumb path
+  getLocationType = () => {
+    if (this.state.selectedLocation) {
+      return 'Room';
+    } else if (this.state.selectedFloor) {
+      return 'Location';
+    } else if (this.state.selectedBuilding) {
+      return 'Floor';
+    } else {
+      return 'Building';
+    }
+  };
+
+  // get breadcrumb path
+  getBreadcrumbs = () => {
+    return (
+      <Breadcrumb>
+        <BreadcrumbItem active>Buildings</BreadcrumbItem>
+      </Breadcrumb>
+    );
+  };
+
   // get the next or previous page of data.  the table is 0 indexed but the API is not
   onPageChange = (page: number) => {
     const newPage = page + 1;
@@ -260,6 +293,7 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
     this.props.setTableFilter({ sorted: newSorted });
     this.setState({ selectedRow: {} });
   };
+
   render() {
     console.log('rendering locations table');
     const { t } = this.props;
@@ -280,9 +314,13 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
           }
           subscribeValueChanges={true}
           onValueChanges={this.onSearchValueChanges}
+          showSearchButton={false}
           t={this.props.t}
         />
-
+        {this.getBreadcrumbs()}
+        <Button className="table-add-button" bsStyle="link">
+          {t(`manageLocation:new${this.getLocationType()}`)}
+        </Button>
         <ReactTable
           data={this.props.tableData}
           columns={this.state.columns}

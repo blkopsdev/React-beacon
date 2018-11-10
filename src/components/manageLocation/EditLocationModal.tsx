@@ -6,25 +6,17 @@ import { TranslationFunction } from 'react-i18next';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
+import { IinitialState, Ibuilding, ItableFiltersReducer } from '../../models';
 import {
-  IinitialState,
-  Iproduct,
-  IproductInfo,
-  ItableFiltersReducer,
-  IproductQueueObject
-} from '../../models';
-import {
-  updateProduct,
-  saveProduct,
-  toggleEditProductModal
-} from '../../actions/manageInventoryActions';
+  saveBuilding,
+  toggleEditLocationModal
+} from '../../actions/manageLocationActions';
 import { updateQueueProduct } from '../../actions/manageProductQueueActions';
 import CommonModal from '../common/CommonModal';
-import EditProductForm from './EditLocationForm';
+import EditLocationForm from './EditLocationForm';
 
 interface Iprops {
-  selectedItem: Iproduct;
-  selectedQueueObject?: IproductQueueObject;
+  selectedItem: Ibuilding;
   colorButton: any;
   t: TranslationFunction;
 }
@@ -32,13 +24,9 @@ interface Iprops {
 interface IdispatchProps {
   showModal: boolean;
   loading: boolean;
-  updateProduct: typeof updateProduct;
-  saveProduct: typeof saveProduct;
-  toggleEditProductModal: typeof toggleEditProductModal;
-  productInfo: IproductInfo;
+  saveBuilding: typeof saveBuilding;
+  toggleEditLocationModal: typeof toggleEditLocationModal;
   tableFilters: ItableFiltersReducer;
-  secondModal: boolean;
-  updateQueueProduct: typeof updateQueueProduct;
 }
 
 class ManageInventoryModal extends React.Component<
@@ -51,22 +39,18 @@ class ManageInventoryModal extends React.Component<
 
   render() {
     let modalTitle;
-    if (this.props.selectedQueueObject && this.props.selectedQueueObject.id) {
-      modalTitle = this.props.t('manageProductQueue:editModalTitle');
-    } else if (this.props.selectedItem && this.props.selectedItem.id) {
-      modalTitle = this.props.t('manageInventory:editModalTitle');
+    if (this.props.selectedItem && this.props.selectedItem.id) {
+      modalTitle = this.props.t('manageLocation:editModalTitle');
     } else {
-      modalTitle = this.props.t('manageInventory:saveModalTitle');
+      modalTitle = this.props.t('manageLocation:saveModalTitle');
     }
-    const className = this.props.secondModal
-      ? 'user-edit second-modal'
-      : 'user-edit';
+    const className = 'user-edit';
     return (
       <CommonModal
         modalVisible={this.props.showModal}
         className={className}
-        onHide={this.props.toggleEditProductModal}
-        body={<EditProductForm {...this.props} />}
+        onHide={this.props.toggleEditLocationModal}
+        body={<EditLocationForm {...this.props} />}
         title={modalTitle}
         container={document.getElementById('two-pane-layout')}
       />
@@ -78,19 +62,16 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
-    showModal: state.manageInventory.showEditProductModal,
-    productInfo: state.manageInventory.productInfo,
-    tableFilters: state.manageInventory.tableFilters,
-    secondModal: state.manageInventory.showSearchNewProductsModal
+    showModal: state.manageLocation.showEditLocationModal,
+    tableFilters: state.manageLocation.tableFilters
   };
 };
 
 export default connect(
   mapStateToProps,
   {
-    updateProduct,
-    saveProduct,
-    toggleEditProductModal,
+    saveBuilding,
+    toggleEditLocationModal,
     updateQueueProduct
   }
 )(ManageInventoryModal);

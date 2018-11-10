@@ -1,10 +1,17 @@
 // import * as React from 'react';
 
 import { ThunkAction } from 'redux-thunk';
-// import { toastr } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import axios from 'axios';
 
-import { IinitialState, ItableFiltersParams } from '../models';
+import {
+  IinitialState,
+  ItableFiltersParams,
+  Ibuilding,
+  Ifloor,
+  Ilocation,
+  Iroom
+} from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
 import constants from '../constants/constants';
@@ -69,34 +76,52 @@ export function getLocationsFacility(facilityID: string): ThunkResult<void> {
 /*
 * save (add) a new product
 */
-// export function saveProduct(product: Iproduct): ThunkResult<void> {
-//   return (dispatch, getState) => {
-//     dispatch(beginAjaxCall());
-//     return axios
-//       .post(API.POST.inventory.addproduct, product)
-//       .then(data => {
-//         if (!data.data) {
-//           throw undefined;
-//         } else {
-//           dispatch({
-//             type: types.PRODUCT_ADD_SUCCESS,
-//             product: data.data
-//           });
-//           dispatch({ type: types.TOGGLE_MODAL_EDIT_PRODUCT });
-//           toastr.success(
-//             'Success',
-//             'Submitted new product for approval.',
-//             constants.toastrSuccess
-//           );
-//         }
-//       })
-//       .catch((error: any) => {
-//         dispatch({ type: types.PRODUCT_ADD_FAILED });
-//         constants.handleError(error, 'save product');
-//         throw error;
-//       });
-//   };
-// }
+export function saveBuilding(building: Ibuilding): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    return axios
+      .post(API.POST.building, building)
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.LOCATION_ADD_SUCCESS,
+            locType: 'building',
+            building: data.data
+          });
+          dispatch({ type: types.TOGGLE_MODAL_EDIT_LOCATION });
+          toastr.success(
+            'Success',
+            'Created new building.',
+            constants.toastrSuccess
+          );
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.LOCATION_ADD_FAILED });
+        constants.handleError(error, 'save building');
+        throw error;
+      });
+  };
+}
+
+export const setSelectedBuilding = (building?: Ibuilding) => ({
+  type: types.SET_SELECTED_BUILDING,
+  building
+});
+export const setSelectedFloor = (floor?: Ifloor) => ({
+  type: types.SET_SELECTED_FLOOR,
+  floor
+});
+export const setSelectedLocation = (location?: Ilocation) => ({
+  type: types.SET_SELECTED_LOCATION,
+  location
+});
+export const setSelectedRoom = (room?: Iroom) => ({
+  type: types.SET_SELECTED_ROOM,
+  room
+});
 
 export const toggleEditLocationModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_LOCATION

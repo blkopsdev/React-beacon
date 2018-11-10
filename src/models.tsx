@@ -198,6 +198,10 @@ export interface ImanageLocationReducer {
   totalPages: number;
   showEditLocationModal: boolean;
   tableFilters: ItableFiltersReducer;
+  selectedBuilding: Ibuilding;
+  selectedFloor: Ifloor;
+  selectedLocation: Ilocation;
+  selectedRoom: Iroom;
 }
 
 export interface IuserJob {

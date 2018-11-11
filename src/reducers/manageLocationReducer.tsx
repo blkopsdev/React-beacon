@@ -1,4 +1,4 @@
-// import { pickBy, map } from 'lodash';
+import { find } from 'lodash';
 
 import {
   ImanageLocationReducer,
@@ -33,18 +33,65 @@ function locationManageFacility(
   switch (action.type) {
     case types.LOCATION_MANAGE_SUCCESS:
       return action.facility;
-    // case types.LOCATION_ADD_SUCCESS:
-    //   return [...state, action.location];
-    // case types.LOCATION_UPDATE_SUCCESS:
-    //   return map(state, (location: Ilocation) => {
-    //     if (location.id === action.location.id) {
-    //       return {
-    //         ...pickBy(action.location, (property, key) => property !== null)
-    //       } as Ilocation;
-    //     } else {
-    //       return location;
-    //     }
-    //   });
+    case types.LOCATION_ADD_SUCCESS:
+      if (action.lType === 'Building' && state.buildings) {
+        return { ...state, buildings: [...state.buildings, action.item] };
+      } else if (action.lType === 'Floor' && state.buildings) {
+        let b = find(state.buildings, val => val.id === action.item.buildingID);
+        if (!b) {
+          b = initialLoc;
+        }
+        b.floors = b.floors ? [...b.floors, action.item] : [];
+        return {
+          ...state,
+          buildings: [
+            ...state.buildings.filter(val => val.id !== action.item.buildingID),
+            b
+          ]
+        };
+      }
+      // else if (action.lType === "Location" && state.buildings) {
+      //   let b = find(state.buildings, val => val.id === action.item.buildingID);
+      //   if (!b) {
+      //     b = initialLoc;
+      //   }
+      //   b.floors = b.floors ? [...b.floors, action.item] : [];
+      //   return {...state, buildings: [...state.buildings.filter((val) => val.id !== action.item.buildingID), b]};
+      // }
+      return state;
+    case types.LOCATION_UPDATE_SUCCESS:
+      if (action.lType === 'Building' && state.buildings) {
+        return {
+          ...state,
+          buildings: [
+            ...state.buildings.filter(val => {
+              return val.id !== action.item.id;
+            }),
+            action.item
+          ]
+        };
+      } else if (action.lType === 'Floor' && state.buildings) {
+        let b = find(state.buildings, val => val.id === action.item.buildingID);
+        if (!b) {
+          b = initialLoc;
+        }
+        b.floors = b.floors
+          ? [
+              ...b.floors.filter(val => {
+                return val.id !== action.item.id;
+              }),
+              action.item
+            ]
+          : [];
+        return {
+          ...state,
+          buildings: [
+            ...state.buildings.filter(val => val.id !== action.item.buildingID),
+            b
+          ]
+        };
+      }
+      return state;
     case types.USER_LOGOUT_SUCCESS:
       return blankFacility;
     default:
@@ -55,7 +102,7 @@ function locationManageFacility(
 function selectedBuildingReducer(state: Ibuilding, action: any): Ibuilding {
   switch (action.type) {
     case types.SET_SELECTED_BUILDING:
-      return action.building ? action.building : initialLoc;
+      return action.item ? action.item : initialLoc;
     case types.USER_LOGOUT_SUCCESS:
       return initialLoc;
     default:
@@ -64,9 +111,12 @@ function selectedBuildingReducer(state: Ibuilding, action: any): Ibuilding {
 }
 
 function selectedFloorReducer(state: Ifloor, action: any): Ifloor {
+  console.log('GOT HERE', action.type);
   switch (action.type) {
     case types.SET_SELECTED_FLOOR:
-      return action.floor ? action.floor : initialLoc;
+      return action.item ? action.item : initialLoc;
+    case types.SET_SELECTED_BUILDING:
+      return initialLoc;
     case types.USER_LOGOUT_SUCCESS:
       return initialLoc;
     default:
@@ -77,7 +127,11 @@ function selectedFloorReducer(state: Ifloor, action: any): Ifloor {
 function selectedLocationReducer(state: Ilocation, action: any): Ilocation {
   switch (action.type) {
     case types.SET_SELECTED_LOCATION:
-      return action.location ? action.location : initialLoc;
+      return action.item ? action.item : initialLoc;
+    case types.SET_SELECTED_BUILDING:
+      return initialLoc;
+    case types.SET_SELECTED_FLOOR:
+      return initialLoc;
     case types.USER_LOGOUT_SUCCESS:
       return initialLoc;
     default:
@@ -88,7 +142,13 @@ function selectedLocationReducer(state: Ilocation, action: any): Ilocation {
 function selectedRoomReducer(state: Iroom, action: any): Iroom {
   switch (action.type) {
     case types.SET_SELECTED_ROOM:
-      return action.room ? action.room : initialLoc;
+      return action.item ? action.item : initialLoc;
+    case types.SET_SELECTED_BUILDING:
+      return initialLoc;
+    case types.SET_SELECTED_FLOOR:
+      return initialLoc;
+    case types.SET_SELECTED_LOCATION:
+      return initialLoc;
     case types.USER_LOGOUT_SUCCESS:
       return initialLoc;
     default:
@@ -100,12 +160,24 @@ function locationManageData(state: ImanageLocationReducer, action: any): any[] {
   switch (action.type) {
     case types.LOCATION_MANAGE_SUCCESS:
       return action.facility.buildings || [];
+    case types.LOCATION_ADD_SUCCESS:
+      return [...state.data, action.item];
+    case types.LOCATION_UPDATE_SUCCESS:
+      return [
+        ...state.data.filter(val => {
+          return val.id !== action.item.id;
+        }),
+        action.item
+      ];
     case types.SET_SELECTED_BUILDING:
-      return action.building.floors || [];
+      if (!action.item.id) {
+        return (state.facility && state.facility.buildings) || [];
+      }
+      return action.item.floors || [];
     case types.SET_SELECTED_FLOOR:
-      return action.floor.locations || [];
+      return action.item.locations || [];
     case types.SET_SELECTED_LOCATION:
-      return action.location.rooms || [];
+      return action.item.rooms || [];
     case types.USER_LOGOUT_SUCCESS:
       return [];
     default:

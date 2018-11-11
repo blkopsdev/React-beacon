@@ -217,12 +217,13 @@
     "newFloor": "Add Floor",
     "newLocation": "Add Location",
     "newRoom": "Add Room",
-    "editModalTitle": "Edit Location",
-    "saveModalTitle": "Add New Location",
+    "editBuilding": "Edit Building",
+    "editFloor": "Edit Floor",
+    "editLocation": "Edit Location",
+    "editRoom": "Edit Room",
     "facilityPlaceholder": "Search...",
     "searchPlaceholder": "Search...",
-    "saveApprove": "Save & Approve",
-    "searchByName": "Search By Name"
+    "saveApprove": "Save & Approve"
   },
   "tiles": {
     "alerts": "Alerts",

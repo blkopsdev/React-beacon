@@ -21,7 +21,8 @@ import {
   faHospital,
   faSignOut,
   faListAlt,
-  faClock
+  faClock,
+  faEdit
 } from '@fortawesome/pro-regular-svg-icons';
 import {
   faUsers,
@@ -65,7 +66,8 @@ library.add(
   faListAlt,
   faPlus,
   faMinus,
-  faClock
+  faClock,
+  faEdit
 );
 
 import { authContext } from './actions/userActions';

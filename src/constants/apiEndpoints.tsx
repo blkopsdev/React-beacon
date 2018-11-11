@@ -42,6 +42,12 @@ const API = {
       deleteTeamMember: `${root}user/deleteteammember`
     }
   },
+  PUT: {
+    building: `${root}building`,
+    floor: `${root}floor`,
+    location: `${root}location`,
+    room: `${root}room`
+  },
   GET: {
     building: {
       getall: `${root}building/getall`

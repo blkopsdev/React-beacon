@@ -6,9 +6,18 @@ import { TranslationFunction } from 'react-i18next';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import { IinitialState, Ibuilding, ItableFiltersReducer } from '../../models';
 import {
-  saveBuilding,
+  IinitialState,
+  Ibuilding,
+  Ifloor,
+  Ilocation,
+  Iroom,
+  ItableFiltersReducer,
+  Ifacility
+} from '../../models';
+import {
+  saveAnyLocation,
+  updateAnyLocation,
   toggleEditLocationModal
 } from '../../actions/manageLocationActions';
 import { updateQueueProduct } from '../../actions/manageProductQueueActions';
@@ -16,7 +25,8 @@ import CommonModal from '../common/CommonModal';
 import EditLocationForm from './EditLocationForm';
 
 interface Iprops {
-  selectedItem: Ibuilding;
+  selectedItem: any;
+  selectedType: string;
   colorButton: any;
   t: TranslationFunction;
 }
@@ -24,9 +34,15 @@ interface Iprops {
 interface IdispatchProps {
   showModal: boolean;
   loading: boolean;
-  saveBuilding: typeof saveBuilding;
+  saveAnyLocation: typeof saveAnyLocation;
+  updateAnyLocation: typeof updateAnyLocation;
   toggleEditLocationModal: typeof toggleEditLocationModal;
   tableFilters: ItableFiltersReducer;
+  facility: Ifacility;
+  selectedBuilding: Ibuilding;
+  selectedFloor: Ifloor;
+  selectedLocation: Ilocation;
+  selectedRoom: Iroom;
 }
 
 class ManageInventoryModal extends React.Component<
@@ -40,9 +56,11 @@ class ManageInventoryModal extends React.Component<
   render() {
     let modalTitle;
     if (this.props.selectedItem && this.props.selectedItem.id) {
-      modalTitle = this.props.t('manageLocation:editModalTitle');
+      modalTitle = this.props.t(
+        `manageLocation:edit${this.props.selectedType}`
+      );
     } else {
-      modalTitle = this.props.t('manageLocation:saveModalTitle');
+      modalTitle = this.props.t(`manageLocation:new${this.props.selectedType}`);
     }
     const className = 'user-edit';
     return (
@@ -63,14 +81,20 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
     showModal: state.manageLocation.showEditLocationModal,
-    tableFilters: state.manageLocation.tableFilters
+    tableFilters: state.manageLocation.tableFilters,
+    facility: state.manageLocation.facility,
+    selectedBuilding: state.manageLocation.selectedBuilding,
+    selectedFloor: state.manageLocation.selectedFloor,
+    selectedLocation: state.manageLocation.selectedLocation,
+    selectedRoom: state.manageLocation.selectedRoom
   };
 };
 
 export default connect(
   mapStateToProps,
   {
-    saveBuilding,
+    saveAnyLocation,
+    updateAnyLocation,
     toggleEditLocationModal,
     updateQueueProduct
   }

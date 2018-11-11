@@ -44,83 +44,108 @@ export function getLocationsFacility(facilityID: string): ThunkResult<void> {
   };
 }
 
-// export function updateProduct(
-//   product: Iproduct,
-//   queueID?: string
-// ): ThunkResult<void> {
-//   return (dispatch, getState) => {
-//     dispatch(beginAjaxCall());
-//     dispatch({ type: types.TOGGLE_MODAL_EDIT_PRODUCT });
-//     return axios
-//       .post(API.POST.inventory.updateproduct, product)
-//       .then(data => {
-//         if (!data.data) {
-//           throw undefined;
-//         } else {
-//           dispatch({
-//             type: types.PRODUCT_UPDATE_SUCCESS,
-//             product: data.data,
-//             queueID
-//           });
-//           // toastr.success('Success', 'Saved product', constants.toastrSuccess);
-//         }
-//       })
-//       .catch((error: any) => {
-//         dispatch({ type: types.PRODUCT_UPDATE_FAILED });
-//         constants.handleError(error, 'update product');
-//         throw error;
-//       });
-//   };
-// }
-
 /*
-* save (add) a new product
+* save (add) a new building/floor/location/room
 */
-export function saveBuilding(building: Ibuilding): ThunkResult<void> {
+export function saveAnyLocation(item: any, lType: string): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
+    let url: string;
+    if (lType === 'Building') {
+      url = API.POST.building;
+    } else if (lType === 'Floor') {
+      url = API.POST.floor;
+    } else if (lType === 'Location') {
+      url = API.POST.location;
+    } else {
+      url = API.POST.room;
+    }
     return axios
-      .post(API.POST.building, building)
+      .post(url, item)
       .then(data => {
         if (!data.data) {
           throw undefined;
         } else {
           dispatch({
             type: types.LOCATION_ADD_SUCCESS,
-            locType: 'building',
-            building: data.data
+            lType,
+            item: { ...item, id: data.data }
           });
           dispatch({ type: types.TOGGLE_MODAL_EDIT_LOCATION });
           toastr.success(
             'Success',
-            'Created new building.',
+            `Created new ${lType}.`,
             constants.toastrSuccess
           );
         }
       })
       .catch((error: any) => {
         dispatch({ type: types.LOCATION_ADD_FAILED });
-        constants.handleError(error, 'save building');
+        constants.handleError(error, `save ${lType}`);
         throw error;
       });
   };
 }
 
-export const setSelectedBuilding = (building?: Ibuilding) => ({
+/*
+* update (edit) a building/floor/location/room
+*/
+export function updateAnyLocation(item: any, lType: string): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    let url: string;
+    if (lType === 'Building') {
+      url = `${API.PUT.building}/${item.id}`;
+    } else if (lType === 'Floor') {
+      url = `${API.PUT.floor}/${item.id}`;
+    } else if (lType === 'Location') {
+      url = `${API.PUT.location}/${item.id}`;
+    } else {
+      url = `${API.PUT.room}/${item.id}`;
+    }
+    return axios
+      .put(url, item)
+      .then(data => {
+        console.info('GOT HERE', data);
+        if (data.status !== 200) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.LOCATION_UPDATE_SUCCESS,
+            lType,
+            item
+          });
+          dispatch({ type: types.TOGGLE_MODAL_EDIT_LOCATION });
+          toastr.success(
+            'Success',
+            `Updated ${lType}.`,
+            constants.toastrSuccess
+          );
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.LOCATION_UPDATE_FAILED });
+        constants.handleError(error, `update ${lType}`);
+        throw error;
+      });
+  };
+}
+
+export const setSelectedBuilding = (item?: Ibuilding) => ({
   type: types.SET_SELECTED_BUILDING,
-  building
+  item
 });
-export const setSelectedFloor = (floor?: Ifloor) => ({
+export const setSelectedFloor = (item?: Ifloor) => ({
   type: types.SET_SELECTED_FLOOR,
-  floor
+  item
 });
-export const setSelectedLocation = (location?: Ilocation) => ({
+export const setSelectedLocation = (item?: Ilocation) => ({
   type: types.SET_SELECTED_LOCATION,
-  location
+  item
 });
-export const setSelectedRoom = (room?: Iroom) => ({
+export const setSelectedRoom = (item?: Iroom) => ({
   type: types.SET_SELECTED_ROOM,
-  room
+  item
 });
 
 export const toggleEditLocationModal = () => ({

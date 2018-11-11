@@ -16,9 +16,17 @@ import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
-import { Ibuilding, ItableFiltersReducer } from '../../models';
 import {
-  saveBuilding,
+  Ibuilding,
+  ItableFiltersReducer,
+  Ifloor,
+  Ilocation,
+  Iroom,
+  Ifacility
+} from '../../models';
+import {
+  saveAnyLocation,
+  updateAnyLocation,
   toggleEditLocationModal
 } from '../../actions/manageLocationActions';
 import constants from '../../constants/constants';
@@ -47,14 +55,20 @@ const buildFieldConfig = () => {
 
 interface Iprops {
   toggleEditLocationModal: typeof toggleEditLocationModal;
-  selectedItem?: Ibuilding;
+  selectedItem?: any;
+  selectedType: string;
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;
   i18n: I18n;
   tableFilters: ItableFiltersReducer;
-  saveBuilding: typeof saveBuilding;
-  // updateProduct: typeof updateProduct;
+  saveAnyLocation: typeof saveAnyLocation;
+  updateAnyLocation: typeof updateAnyLocation;
+  facility: Ifacility;
+  selectedBuilding: Ibuilding;
+  selectedFloor: Ifloor;
+  selectedLocation: Ilocation;
+  selectedRoom: Iroom;
 }
 
 class ManageLocationForm extends React.Component<Iprops, {}> {
@@ -68,7 +82,7 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
 
   componentDidMount() {
     if (!this.props.selectedItem) {
-      console.log('adding a new location');
+      console.log(`adding a new ${this.props.selectedType}`);
     } else {
       // set values
       forEach(this.props.selectedItem, (value, key) => {
@@ -92,34 +106,47 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
     }
     console.log(this.form.value);
 
-    // let newItem = {
-    //   ...this.form.value
-    // };
+    let newItem = {
+      ...this.form.value
+    };
 
-    // if (
-    //   this.props.selectedItem &&
-    //   this.props.selectedItem.id &&
-    //   this.props.selectedItem.id.length
-    // ) {
-    //   newItem = { ...newItem, id: this.props.selectedItem.id };
-    //     // updating a product object
-    //     if (this.props.tableFilters.facility) {
-    //       newItem = {
-    //         ...newItem,
-    //         facilityID: this.props.tableFilters.facility.value
-    //       };
-    //       this.props.updateProduct(newItem);
-    //     }
-    // } else {
-    //   // creating a new product
-    //   if (this.props.tableFilters.facility) {
-    //     newItem = {
-    //       ...newItem,
-    //       facilityID: this.props.tableFilters.facility.value
-    //     };
-    //     this.props.saveProduct(newItem);
-    //   }
-    // }
+    if (
+      this.props.selectedItem &&
+      this.props.selectedItem.id &&
+      this.props.selectedItem.id.length
+    ) {
+      newItem = { ...this.props.selectedItem, ...newItem };
+      // updating a location object
+      this.props.updateAnyLocation(newItem, this.props.selectedType);
+    } else {
+      // creating a new location
+      if (this.props.selectedType === 'Building') {
+        newItem = {
+          ...newItem,
+          facilityID: this.props.facility.id,
+          floors: []
+        };
+      } else if (this.props.selectedType === 'Floor') {
+        newItem = {
+          ...newItem,
+          buildingID: this.props.selectedBuilding.id,
+          locations: []
+        };
+      } else if (this.props.selectedType === 'Location') {
+        newItem = {
+          ...newItem,
+          floorID: this.props.selectedFloor.id,
+          rooms: []
+        };
+      } else {
+        newItem = {
+          ...newItem,
+          locationID: this.props.selectedLocation.id
+        };
+      }
+      this.props.saveAnyLocation(newItem, this.props.selectedType);
+      // console.error(newItem, this.props.selectedType);
+    }
   };
   setForm = (form: AbstractControl) => {
     this.form = form;
@@ -136,13 +163,13 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
     return (
       <div>
         <div className={formClassName}>
-          {!(this.props.selectedItem && this.props.selectedItem.id) && (
+          {/* {!(this.props.selectedItem && this.props.selectedItem.id) && (
             <Col xs={12}>
               <p style={{ lineHeight: '1.4rem' }}>
                 {t('newProductInstructions')}
               </p>
             </Col>
-          )}
+          )} */}
 
           <form onSubmit={this.handleSubmit} className="user-form">
             <FormGenerator

@@ -9,6 +9,7 @@ import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 import ReactTable, { RowInfo, FinalState, SortingRule } from 'react-table';
 import { Breadcrumb, BreadcrumbItem, Button } from 'react-bootstrap';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 import { FormUtil } from '../common/FormUtil';
 import {
@@ -27,10 +28,11 @@ import {
 import { TableUtil } from '../common/TableUtil';
 import { addToCart } from '../../actions/shoppingCartActions';
 import { closeAllModals } from '../../actions/commonActions';
-import { emptyTile } from '../../reducers/initialState';
+import { emptyTile, initialLoc } from '../../reducers/initialState';
 import {
   getLocationsFacility,
-  saveBuilding,
+  saveAnyLocation,
+  updateAnyLocation,
   setTableFilter,
   toggleEditLocationModal,
   setSelectedBuilding,
@@ -39,7 +41,7 @@ import {
   setSelectedRoom
 } from '../../actions/manageLocationActions';
 import Banner from '../common/Banner';
-import EditProductModal from './EditLocationModal';
+import EditLocationModal from './EditLocationModal';
 import SearchTableForm from '../common/SearchTableForm';
 import constants from '../../constants/constants';
 
@@ -56,7 +58,8 @@ interface IdispatchProps {
   // Add your dispatcher properties here
   toggleEditLocationModal: typeof toggleEditLocationModal;
   getLocationsFacility: typeof getLocationsFacility;
-  saveBuilding: typeof saveBuilding;
+  saveAnyLocation: typeof saveAnyLocation;
+  updateAnyLocation: typeof updateAnyLocation;
   closeAllModals: typeof closeAllModals;
   facilityOptions: Ioption[];
   user: Iuser;
@@ -79,6 +82,7 @@ interface Istate {
   currentTile: Itile;
   columns: any[];
   data: any[];
+  selectedItem: any;
 }
 
 class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
@@ -93,7 +97,8 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
       selectedRow: {},
       currentTile: emptyTile,
       columns: [],
-      data: []
+      data: [],
+      selectedItem: {}
     };
     this.searchFieldConfig = this.buildSearchControls();
   }
@@ -107,7 +112,7 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
   }
   componentDidMount() {
     // this.props.getLocationsFacility(this.props.facilityOptions[0].value);
-    // this.props.saveBuilding({
+    // this.props.saveAnyLocation({
     //   name: 'Building A',
     //   facilityID: this.props.facilityOptions[0].value
     // });
@@ -152,8 +157,9 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
     this.props.closeAllModals();
   }
 
-  handleEdit(item: any) {
-    console.log('EDIT:', item);
+  handleEdit(selectedItem: any) {
+    this.setState({ selectedItem });
+    // console.log("EDIT:", item);
   }
 
   /*
@@ -188,11 +194,15 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
         {
           Header: '',
           Cell: row => (
-            <div>
-              <button onClick={() => this.handleEdit(row.original)}>
-                Edit
-              </button>
-            </div>
+            <Button
+              bsStyle="link"
+              onClick={() => {
+                this.buttonInAction = true;
+                this.handleEdit(row.original);
+              }}
+            >
+              <FontAwesomeIcon icon={['far', 'edit']}> Edit </FontAwesomeIcon>
+            </Button>
           )
         }
       ],
@@ -251,20 +261,20 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
     if (rowInfo) {
       return {
         onClick: (e: React.MouseEvent<HTMLFormElement>) => {
-          if (this.getLocationType() === 'Building') {
-            this.props.setSelectedBuilding(rowInfo.original);
-          } else if (this.getLocationType() === 'Floor') {
-            this.props.setSelectedFloor(rowInfo.original);
-          } else if (this.getLocationType() === 'Location') {
-            this.props.setSelectedLocation(rowInfo.original);
-          } else {
-            this.props.setSelectedRoom(rowInfo.original);
-          }
-          if (!this.buttonInAction) {
-            // this.props.setSelectedProduct(rowInfo.original);
-          } else {
+          if (this.buttonInAction) {
             this.props.toggleEditLocationModal();
+          } else {
+            if (this.getLocationType() === 'Building') {
+              this.props.setSelectedBuilding(rowInfo.original);
+            } else if (this.getLocationType() === 'Floor') {
+              this.props.setSelectedFloor(rowInfo.original);
+            } else if (this.getLocationType() === 'Location') {
+              this.props.setSelectedLocation(rowInfo.original);
+            } else {
+              this.props.setSelectedRoom(rowInfo.original);
+            }
           }
+          this.buttonInAction = false;
         },
         style: {
           background: this.state.selectedRow[rowInfo.viewIndex]
@@ -290,27 +300,66 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
     }
   };
 
+  handleBCClick = (item: any, lType: string) => {
+    if (lType === 'Building') {
+      this.props.setSelectedBuilding(item);
+    } else if (lType === 'Floor') {
+      this.props.setSelectedFloor(item);
+    } else if (lType === 'Location') {
+      this.props.setSelectedLocation(item);
+    }
+  };
+
   // get breadcrumb path
   getBreadcrumbs = () => {
     return (
       <Breadcrumb>
+        <BreadcrumbItem active>
+          <a
+            href="#"
+            onClick={() => this.handleBCClick(initialLoc, 'Building')}
+          >
+            Buildings
+          </a>
+        </BreadcrumbItem>
         {this.props.selectedBuilding.id ? (
           <BreadcrumbItem active>
-            {this.props.selectedBuilding.name}
+            <a
+              href="#"
+              onClick={() =>
+                this.handleBCClick(this.props.selectedBuilding, 'Building')
+              }
+            >
+              {this.props.selectedBuilding.name}
+            </a>
           </BreadcrumbItem>
         ) : (
-          <BreadcrumbItem active>Buildings</BreadcrumbItem>
+          ''
         )}
         {this.props.selectedFloor.id ? (
           <BreadcrumbItem active>
-            {this.props.selectedFloor.name}
+            <a
+              href="#"
+              onClick={() =>
+                this.handleBCClick(this.props.selectedFloor, 'Floor')
+              }
+            >
+              {this.props.selectedFloor.name}
+            </a>
           </BreadcrumbItem>
         ) : (
           ''
         )}
         {this.props.selectedLocation.id ? (
           <BreadcrumbItem active>
-            {this.props.selectedLocation.name}
+            <a
+              href="#"
+              onClick={() =>
+                this.handleBCClick(this.props.selectedLocation, 'Location')
+              }
+            >
+              {this.props.selectedLocation.name}
+            </a>
           </BreadcrumbItem>
         ) : (
           ''
@@ -377,7 +426,15 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
           t={this.props.t}
         />
         {this.getBreadcrumbs()}
-        <Button className="table-add-button" bsStyle="link">
+        <Button
+          className="table-add-button"
+          bsStyle="link"
+          onClick={() => {
+            this.setState({ selectedItem: {} }, () => {
+              this.props.toggleEditLocationModal();
+            });
+          }}
+        >
           {t(`manageLocation:new${this.getLocationType()}`)}
         </Button>
         <ReactTable
@@ -400,8 +457,9 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
           resizable={false}
           expanded={this.state.selectedRow}
         />
-        <EditProductModal
-          selectedItem={this.props.selectedBuilding}
+        <EditLocationModal
+          selectedItem={this.state.selectedItem}
+          selectedType={this.getLocationType()}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
@@ -433,7 +491,8 @@ export default translate('manageLocation')(
     mapStateToProps,
     {
       getLocationsFacility,
-      saveBuilding,
+      saveAnyLocation,
+      updateAnyLocation,
       toggleEditLocationModal,
       closeAllModals,
       addToCart,

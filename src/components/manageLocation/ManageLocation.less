@@ -1,101 +1,106 @@
 @import '../../less/variables.less';
-
-.ReactTable.beacon-table .attempts-expander {
-  .rt-thead .rt-tr {
-    margin-top: 50px;
-  }
-  .rt-tfoot{
-    position: absolute;
-    width: 100%;
-    top: 0;
-    left: 0;
-    box-shadow: none;
-    .rt-tr{
-      background-color: #F5F5F5;
-    }
-
-    .rt-td{
-      border: none;
-      min-height: 50px;
-    }
-    .btn{
-      margin-top: 5px;
+.manage-location {
+  .breadcrumb {
+    background-color: #eee;
+    font-size: 1.2em;
+    margin-bottom: 0px;
+    padding: 15px 15px;
+    a {
+      color: @primaryBlue;
     }
   }
 }
 
-// .ReactTable.beacon-table .rt-expandable{
-//   display: none;
+// .ReactTable.beacon-table .attempts-expander {
+//   .rt-thead .rt-tr {
+//     margin-top: 50px;
+//   }
+//   .rt-tfoot{
+//     position: absolute;
+//     width: 100%;
+//     top: 0;
+//     left: 0;
+//     box-shadow: none;
+//     .rt-tr{
+//       background-color: #F5F5F5;
+//     }
+//     .rt-td{
+//       border: none;
+//       min-height: 50px;
+//     }
+//     .btn{
+//       margin-top: 5px;
+//     }
+//   }
 // }
-.request-for-quote-cart-button .badge{
-  position: absolute;
-  top: 12px;
-  right: 3px;
-  background-color: @orange;
-  color: #fff;
-  border: solid 1px #fff;
-  font-size: .8em;
-  padding: 2px 5px;
-}
-.quote-item-buttons{
-  padding: 0;
-  .btn-sm{
-    padding: 5px 9px;
-  }
-  .badge{
-    font-size: 1.1em;
-  }
-}
-.quote-item-name{
-  padding-right: 10px;
-  // h5{
-  //   white-space: nowrap;
-  //   overflow: hidden;
-  //   text-overflow: ellipsis;
-  // }
-  
-}
-// .install-edit .form-control[disabled]{
-//   display: none;
+// // .ReactTable.beacon-table .rt-expandable{
+// //   display: none;
+// // }
+// .request-for-quote-cart-button .badge{
+//   position: absolute;
+//   top: 12px;
+//   right: 3px;
+//   background-color: @orange;
+//   color: #fff;
+//   border: solid 1px #fff;
+//   font-size: .8em;
+//   padding: 2px 5px;
 // }
-
-.ReactTable.beacon-table .attempts-expander{
-  .rt-tr.-odd {
-    background-color: fade(@darkGrey, 5%);
-    &:hover {
-      background-color: fade(@darkGrey, 20%);
-    }
-  }
-  .rt-tr.-even {
-    background-color: fade(@grey, 5%);
-    &:hover {
-      background-color: fade(@darkGrey, 20%);
-    }
-  }
-}
-.beacon-list-group{
-  background-color: #fff;
-
-  .new-product-item:nth-child(odd){
-    background-color: fade(@green, 5%)
-  }
-  .new-product-item{
-    h4{
-      font-size: 1.3rem;
-      margin-top: 0;
-      margin-bottom: 5px;
-    }
-    div {
-      line-height: 18px;
-    }
-    &:hover, &.selected{
-      background-color: fade(@green, 20%)
-    }
-  }
-}
-.table-import-button{
-  position: absolute;
-  top: 93px;
-  right: 150px;
-}
-
+// .quote-item-buttons{
+//   padding: 0;
+//   .btn-sm{
+//     padding: 5px 9px;
+//   }
+//   .badge{
+//     font-size: 1.1em;
+//   }
+// }
+// .quote-item-name{
+//   padding-right: 10px;
+//   // h5{
+//   //   white-space: nowrap;
+//   //   overflow: hidden;
+//   //   text-overflow: ellipsis;
+//   // }
+// }
+// // .install-edit .form-control[disabled]{
+// //   display: none;
+// // }
+// .ReactTable.beacon-table .attempts-expander{
+//   .rt-tr.-odd {
+//     background-color: fade(@darkGrey, 5%);
+//     &:hover {
+//       background-color: fade(@darkGrey, 20%);
+//     }
+//   }
+//   .rt-tr.-even {
+//     background-color: fade(@grey, 5%);
+//     &:hover {
+//       background-color: fade(@darkGrey, 20%);
+//     }
+//   }
+// }
+// .beacon-list-group{
+//   background-color: #fff;
+//   .new-product-item:nth-child(odd){
+//     background-color: fade(@green, 5%)
+//   }
+//   .new-product-item{
+//     h4{
+//       font-size: 1.3rem;
+//       margin-top: 0;
+//       margin-bottom: 5px;
+//     }
+//     div {
+//       line-height: 18px;
+//     }
+//     &:hover, &.selected{
+//       background-color: fade(@green, 20%)
+//     }
+//   }
+// }
+// .table-import-button{
+//   position: absolute;
+//   top: 93px;
+//   right: 150px;
+// }

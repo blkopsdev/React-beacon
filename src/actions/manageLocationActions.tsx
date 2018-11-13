@@ -69,7 +69,7 @@ export function saveAnyLocation(item: any, lType: string): ThunkResult<void> {
           dispatch({
             type: types.LOCATION_ADD_SUCCESS,
             lType,
-            item: { ...item, id: data.data }
+            item
           });
           dispatch({ type: types.TOGGLE_MODAL_EDIT_LOCATION });
           toastr.success(

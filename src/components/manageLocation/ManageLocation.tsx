@@ -407,7 +407,7 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
     const { t } = this.props;
 
     return (
-      <div className="manage-inventory">
+      <div className="manage-location">
         <Banner
           title={t('bannerTitle')}
           img={this.state.currentTile.srcBanner}

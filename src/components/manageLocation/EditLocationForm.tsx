@@ -31,12 +31,7 @@ import {
 } from '../../actions/manageLocationActions';
 import constants from '../../constants/constants';
 
-// interface IstateChanges extends Observable<any> {
-//   next: () => void;
-// }
-// interface AbstractControlEdited extends AbstractControl {
-//   stateChanges: IstateChanges;
-// }
+const uuidv4 = require('uuid/v4');
 
 const buildFieldConfig = () => {
   const fieldConfigControls = {
@@ -120,6 +115,11 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
       this.props.updateAnyLocation(newItem, this.props.selectedType);
     } else {
       // creating a new location
+      // lets give it a uuid!
+      newItem = {
+        ...newItem,
+        id: uuidv4()
+      };
       if (this.props.selectedType === 'Building') {
         newItem = {
           ...newItem,

@@ -442,16 +442,16 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
           columns={this.state.columns}
           getTrProps={this.getTrProps}
           pageSize={this.props.tableData.length}
-          manual // Forces table not to paginate or sort automatically, so we can handle it server-side
-          pages={this.props.userManage.totalPages}
-          page={this.props.tableFilters.page - 1}
-          showPageSizeOptions={false}
+          // manual
+          // pages={this.props.userManage.totalPages}
+          // page={this.props.tableFilters.page - 1}
+          // showPageSizeOptions={false}
           className={`beacon-table -highlight ${this.state.currentTile.color}`}
           previousText={t('common:previous')}
           nextText={t('common:next')}
-          onPageChange={this.onPageChange}
-          onSortedChange={this.onSortedChanged}
-          sortable={false}
+          // onPageChange={this.onPageChange}
+          // onSortedChange={this.onSortedChanged}
+          sortable={true}
           multiSort={false}
           noDataText={t('common:noDataText')}
           resizable={false}

@@ -49,15 +49,69 @@ function locationManageFacility(
             b
           ]
         };
+      } else if (action.lType === 'Location' && state.buildings) {
+        let b = find(state.buildings, val => val.id === action.item.buildingID);
+        if (!b) {
+          b = initialLoc;
+        }
+        let f = find(b.floors, val => val.id === action.item.floorID);
+        if (!f) {
+          f = initialLoc;
+        }
+        f.locations = f.locations ? [...f.locations, action.item] : [];
+        b.floors = b.floors
+          ? [
+              ...b.floors.filter(val => {
+                return f && val.id !== f.id;
+              }),
+              f
+            ]
+          : [];
+        return {
+          ...state,
+          buildings: [
+            ...state.buildings.filter(val => val.id !== action.item.buildingID),
+            b
+          ]
+        };
+      } else if (action.lType === 'Room' && state.buildings) {
+        let b = find(state.buildings, val => val.id === action.item.buildingID);
+        if (!b) {
+          b = initialLoc;
+        }
+        let f = find(b.floors, val => val.id === action.item.floorID);
+        if (!f) {
+          f = initialLoc;
+        }
+        let l = find(f.locations, val => val.id === action.item.locationID);
+        if (!l) {
+          l = initialLoc;
+        }
+        l.rooms = l.rooms ? [...l.rooms, action.item] : [];
+        f.locations = f.locations
+          ? [
+              ...f.locations.filter(val => {
+                return l && val.id !== l.id;
+              }),
+              l
+            ]
+          : [];
+        b.floors = b.floors
+          ? [
+              ...b.floors.filter(val => {
+                return f && val.id !== f.id;
+              }),
+              f
+            ]
+          : [];
+        return {
+          ...state,
+          buildings: [
+            ...state.buildings.filter(val => val.id !== action.item.buildingID),
+            b
+          ]
+        };
       }
-      // else if (action.lType === "Location" && state.buildings) {
-      //   let b = find(state.buildings, val => val.id === action.item.buildingID);
-      //   if (!b) {
-      //     b = initialLoc;
-      //   }
-      //   b.floors = b.floors ? [...b.floors, action.item] : [];
-      //   return {...state, buildings: [...state.buildings.filter((val) => val.id !== action.item.buildingID), b]};
-      // }
       return state;
     case types.LOCATION_UPDATE_SUCCESS:
       if (action.lType === 'Building' && state.buildings) {
@@ -81,6 +135,82 @@ function locationManageFacility(
                 return val.id !== action.item.id;
               }),
               action.item
+            ]
+          : [];
+        return {
+          ...state,
+          buildings: [
+            ...state.buildings.filter(val => val.id !== action.item.buildingID),
+            b
+          ]
+        };
+      } else if (action.lType === 'Location' && state.buildings) {
+        let b = find(state.buildings, val => val.id === action.item.buildingID);
+        if (!b) {
+          b = initialLoc;
+        }
+        let f = find(b.floors, val => val.id === action.item.floorID);
+        if (!f) {
+          f = initialLoc;
+        }
+        f.locations = f.locations
+          ? [
+              ...f.locations.filter(val => {
+                return val.id !== action.item.id;
+              }),
+              action.item
+            ]
+          : [];
+        b.floors = b.floors
+          ? [
+              ...b.floors.filter(val => {
+                return f && val.id !== f.id;
+              }),
+              f
+            ]
+          : [];
+        return {
+          ...state,
+          buildings: [
+            ...state.buildings.filter(val => val.id !== action.item.buildingID),
+            b
+          ]
+        };
+      } else if (action.lType === 'Room' && state.buildings) {
+        let b = find(state.buildings, val => val.id === action.item.buildingID);
+        if (!b) {
+          b = initialLoc;
+        }
+        let f = find(b.floors, val => val.id === action.item.floorID);
+        if (!f) {
+          f = initialLoc;
+        }
+        let l = find(f.locations, val => val.id === action.item.locationID);
+        if (!l) {
+          l = initialLoc;
+        }
+        l.rooms = l.rooms
+          ? [
+              ...l.rooms.filter(val => {
+                return val.id !== action.item.id;
+              }),
+              action.item
+            ]
+          : [];
+        f.locations = f.locations
+          ? [
+              ...f.locations.filter(val => {
+                return l && val.id !== l.id;
+              }),
+              l
+            ]
+          : [];
+        b.floors = b.floors
+          ? [
+              ...b.floors.filter(val => {
+                return f && val.id !== f.id;
+              }),
+              f
             ]
           : [];
         return {

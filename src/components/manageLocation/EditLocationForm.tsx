@@ -3,7 +3,7 @@
 * Edit inventory items
 */
 
-import { Col, Button } from 'react-bootstrap';
+import { Col, Button, Breadcrumb, BreadcrumbItem } from 'react-bootstrap';
 import {
   Validators,
   FormGenerator,
@@ -110,7 +110,13 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
       this.props.selectedItem.id &&
       this.props.selectedItem.id.length
     ) {
-      newItem = { ...this.props.selectedItem, ...newItem };
+      newItem = {
+        ...this.props.selectedItem,
+        ...newItem,
+        buildingID: this.props.selectedBuilding.id,
+        floorID: this.props.selectedFloor.id,
+        locationID: this.props.selectedLocation.id
+      };
       // updating a location object
       this.props.updateAnyLocation(newItem, this.props.selectedType);
     } else {
@@ -135,17 +141,19 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
       } else if (this.props.selectedType === 'Location') {
         newItem = {
           ...newItem,
+          buildingID: this.props.selectedBuilding.id,
           floorID: this.props.selectedFloor.id,
           rooms: []
         };
       } else {
         newItem = {
           ...newItem,
+          buildingID: this.props.selectedBuilding.id,
+          floorID: this.props.selectedFloor.id,
           locationID: this.props.selectedLocation.id
         };
       }
       this.props.saveAnyLocation(newItem, this.props.selectedType);
-      // console.error(newItem, this.props.selectedType);
     }
   };
   setForm = (form: AbstractControl) => {
@@ -153,6 +161,35 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
     this.form.meta = {
       loading: this.props.loading
     };
+  };
+
+  // get breadcrumb path
+  getBreadcrumbs = () => {
+    return (
+      <Breadcrumb>
+        {this.props.selectedBuilding.id ? (
+          <BreadcrumbItem active>
+            {this.props.selectedBuilding.name}
+          </BreadcrumbItem>
+        ) : (
+          ''
+        )}
+        {this.props.selectedFloor.id ? (
+          <BreadcrumbItem active>
+            {this.props.selectedFloor.name}
+          </BreadcrumbItem>
+        ) : (
+          ''
+        )}
+        {this.props.selectedLocation.id ? (
+          <BreadcrumbItem active>
+            {this.props.selectedLocation.name}
+          </BreadcrumbItem>
+        ) : (
+          ''
+        )}
+      </Breadcrumb>
+    );
   };
 
   render() {
@@ -163,13 +200,7 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
     return (
       <div>
         <div className={formClassName}>
-          {/* {!(this.props.selectedItem && this.props.selectedItem.id) && (
-            <Col xs={12}>
-              <p style={{ lineHeight: '1.4rem' }}>
-                {t('newProductInstructions')}
-              </p>
-            </Col>
-          )} */}
+          {this.getBreadcrumbs()}
 
           <form onSubmit={this.handleSubmit} className="user-form">
             <FormGenerator

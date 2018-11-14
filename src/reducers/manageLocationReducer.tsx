@@ -34,6 +34,33 @@ function locationManageFacility(
     case types.LOCATION_MANAGE_SUCCESS:
       return action.facility;
     case types.LOCATION_ADD_SUCCESS:
+      /* 
+        This looks scary, but its fairly straightforward.
+        We are dealing with a tree data structure something like this:
+        buildings: [
+          building1: {
+            floors: [
+              floor1: {
+                locations: [
+                  location1: {
+                    rooms: [
+                      room1: {},
+                      ...
+                    ]
+                  },
+                  ...
+                ]
+              },
+              ...
+            ]
+          },
+          ...
+        ]
+
+        The main reason to update this piece of state is for when the user switches the type 
+        of location that is visible. This structure is the source of truth that sets the inital
+        content of the visible array. Further comments are found under the if (action.lType === "Room"..)
+      */
       if (action.lType === 'Building' && state.buildings) {
         return { ...state, buildings: [...state.buildings, action.item] };
       } else if (action.lType === 'Floor' && state.buildings) {
@@ -75,19 +102,32 @@ function locationManageFacility(
           ]
         };
       } else if (action.lType === 'Room' && state.buildings) {
+      /* 
+        The if blocks above are just simpler versions of this one. 
+      */
+        // We are passing in the entire path of parent ids on the created/updated item
+        // First, we use buildingID to locate the correct building
         let b = find(state.buildings, val => val.id === action.item.buildingID);
+        // This never happens, but it makes typescript happy since its *possible* the building could be undefined
         if (!b) {
           b = initialLoc;
         }
+        // Now we go a step deeper into the tree, locating the correct floor within the building
         let f = find(b.floors, val => val.id === action.item.floorID);
         if (!f) {
           f = initialLoc;
         }
+        // Yet deeper, locating the correct location within the floor
         let l = find(f.locations, val => val.id === action.item.locationID);
         if (!l) {
           l = initialLoc;
         }
+        // Now we add the room to the array of rooms in this location
+        // (In the LOCATION_UPDATE variation, we find the existing room and replace it)
         l.rooms = l.rooms ? [...l.rooms, action.item] : [];
+        // now that we've found and modified our data, we recontruct our tree in reverse
+        // starting with setting the new location with it's updated array of rooms
+        // back to the given floor.
         f.locations = f.locations
           ? [
               ...f.locations.filter(val => {
@@ -96,6 +136,7 @@ function locationManageFacility(
               l
             ]
           : [];
+        // then we put the floor back into the correct building
         b.floors = b.floors
           ? [
               ...b.floors.filter(val => {
@@ -104,6 +145,8 @@ function locationManageFacility(
               f
             ]
           : [];
+        // finally we set the replace the correct building in the array of buildings
+        // and return
         return {
           ...state,
           buildings: [
@@ -113,6 +156,7 @@ function locationManageFacility(
         };
       }
       return state;
+    // see LOCATION_ADD_SUCCESS for comments on how this works
     case types.LOCATION_UPDATE_SUCCESS:
       if (action.lType === 'Building' && state.buildings) {
         return {
@@ -222,6 +266,112 @@ function locationManageFacility(
         };
       }
       return state;
+    // see LOCATION_ADD_SUCCESS for comments on how this works
+    case types.LOCATION_DELETE_SUCCESS:
+      if (action.lType === 'Building' && state.buildings) {
+        return {
+          ...state,
+          buildings: [
+            ...state.buildings.filter(val => {
+              return val.id !== action.item.id;
+            })
+          ]
+        };
+      } else if (action.lType === 'Floor' && state.buildings) {
+        let b = find(state.buildings, val => val.id === action.item.buildingID);
+        if (!b) {
+          b = initialLoc;
+        }
+        b.floors = b.floors
+          ? [
+              ...b.floors.filter(val => {
+                return val.id !== action.item.id;
+              })
+            ]
+          : [];
+        return {
+          ...state,
+          buildings: [
+            ...state.buildings.filter(val => val.id !== action.item.buildingID),
+            b
+          ]
+        };
+      } else if (action.lType === 'Location' && state.buildings) {
+        let b = find(state.buildings, val => val.id === action.item.buildingID);
+        if (!b) {
+          b = initialLoc;
+        }
+        let f = find(b.floors, val => val.id === action.item.floorID);
+        if (!f) {
+          f = initialLoc;
+        }
+        f.locations = f.locations
+          ? [
+              ...f.locations.filter(val => {
+                return val.id !== action.item.id;
+              })
+            ]
+          : [];
+        b.floors = b.floors
+          ? [
+              ...b.floors.filter(val => {
+                return f && val.id !== f.id;
+              }),
+              f
+            ]
+          : [];
+        return {
+          ...state,
+          buildings: [
+            ...state.buildings.filter(val => val.id !== action.item.buildingID),
+            b
+          ]
+        };
+      } else if (action.lType === 'Room' && state.buildings) {
+        let b = find(state.buildings, val => val.id === action.item.buildingID);
+        if (!b) {
+          b = initialLoc;
+        }
+        let f = find(b.floors, val => val.id === action.item.floorID);
+        if (!f) {
+          f = initialLoc;
+        }
+        let l = find(f.locations, val => val.id === action.item.locationID);
+        if (!l) {
+          l = initialLoc;
+        }
+        l.rooms = l.rooms
+          ? [
+              ...l.rooms.filter(val => {
+                return val.id !== action.item.id;
+              })
+            ]
+          : [];
+        f.locations = f.locations
+          ? [
+              ...f.locations.filter(val => {
+                return l && val.id !== l.id;
+              }),
+              l
+            ]
+          : [];
+        b.floors = b.floors
+          ? [
+              ...b.floors.filter(val => {
+                return f && val.id !== f.id;
+              }),
+              f
+            ]
+          : [];
+        return {
+          ...state,
+          buildings: [
+            ...state.buildings.filter(val => val.id !== action.item.buildingID),
+            b
+          ]
+        };
+      }
+      return state;
     case types.USER_LOGOUT_SUCCESS:
       return blankFacility;
     default:
@@ -241,7 +391,6 @@ function selectedBuildingReducer(state: Ibuilding, action: any): Ibuilding {
 }
 
 function selectedFloorReducer(state: Ifloor, action: any): Ifloor {
-  console.log('GOT HERE', action.type);
   switch (action.type) {
     case types.SET_SELECTED_FLOOR:
       return action.item ? action.item : initialLoc;
@@ -286,6 +435,7 @@ function selectedRoomReducer(state: Iroom, action: any): Iroom {
   }
 }
 
+// This reducer manages the array of currently visible locations in the table
 function locationManageData(state: ImanageLocationReducer, action: any): any[] {
   switch (action.type) {
     case types.LOCATION_MANAGE_SUCCESS:
@@ -298,6 +448,12 @@ function locationManageData(state: ImanageLocationReducer, action: any): any[] {
           return val.id !== action.item.id;
         }),
         action.item
+      ];
+    case types.LOCATION_DELETE_SUCCESS:
+      return [
+        ...state.data.filter(val => {
+          return val.id !== action.item.id;
+        })
       ];
     case types.SET_SELECTED_BUILDING:
       if (!action.item.id) {

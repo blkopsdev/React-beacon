@@ -106,7 +106,6 @@ export function updateAnyLocation(item: any, lType: string): ThunkResult<void> {
     return axios
       .put(url, item)
       .then(data => {
-        console.info('GOT HERE', data);
         if (data.status !== 200) {
           throw undefined;
         } else {
@@ -126,6 +125,48 @@ export function updateAnyLocation(item: any, lType: string): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.LOCATION_UPDATE_FAILED });
         constants.handleError(error, `update ${lType}`);
+        throw error;
+      });
+  };
+}
+
+/*
+* update (edit) a building/floor/location/room
+*/
+export function deleteAnyLocation(item: any, lType: string): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    let url: string;
+    if (lType === 'Building') {
+      url = `${API.DELETE.building}/${item.id}`;
+    } else if (lType === 'Floor') {
+      url = `${API.DELETE.floor}/${item.id}`;
+    } else if (lType === 'Location') {
+      url = `${API.DELETE.location}/${item.id}`;
+    } else {
+      url = `${API.DELETE.room}/${item.id}`;
+    }
+    return axios
+      .delete(url)
+      .then(data => {
+        if (data.status !== 200) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.LOCATION_DELETE_SUCCESS,
+            lType,
+            item
+          });
+          toastr.success(
+            'Success',
+            `Deleted ${lType}.`,
+            constants.toastrSuccess
+          );
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.LOCATION_DELETE_FAILED });
+        constants.handleError(error, `delete ${lType}`);
         throw error;
       });
   };

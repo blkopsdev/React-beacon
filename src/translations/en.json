@@ -223,7 +223,9 @@
     "editRoom": "Edit Room",
     "facilityPlaceholder": "Search...",
     "searchPlaceholder": "Search...",
-    "saveApprove": "Save & Approve"
+    "saveApprove": "Save & Approve",
+    "deleteOk": "Delete Location",
+    "deleteConfirm": "Are you sure?"
   },
   "tiles": {
     "alerts": "Alerts",

@@ -1,6 +1,6 @@
 /* 
-* Manage Inventory Form 
-* Edit inventory items
+* Manage Location Form 
+* Edit location items
 */
 
 import { Col, Button, Breadcrumb, BreadcrumbItem } from 'react-bootstrap';
@@ -40,7 +40,7 @@ const buildFieldConfig = () => {
         validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
-      meta: { label: 'name', colWidth: 12, type: 'input' }
+      meta: { label: 'name', colWidth: 12, type: 'input', autoFocus: true }
     }
   };
   return {
@@ -158,6 +158,7 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
   };
   setForm = (form: AbstractControl) => {
     this.form = form;
+    // this.form.
     this.form.meta = {
       loading: this.props.loading
     };

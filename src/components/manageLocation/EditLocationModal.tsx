@@ -1,5 +1,5 @@
 /*
-* Manage Product Modal
+* Manage Location Modal
 */
 
 import { TranslationFunction } from 'react-i18next';

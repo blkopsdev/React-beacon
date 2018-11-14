@@ -48,6 +48,12 @@ const API = {
     location: `${root}location`,
     room: `${root}room`
   },
+  DELETE: {
+    building: `${root}building`,
+    floor: `${root}floor`,
+    location: `${root}location`,
+    room: `${root}room`
+  },
   GET: {
     building: {
       getall: `${root}building/getall`

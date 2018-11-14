@@ -10,6 +10,7 @@ import * as React from 'react';
 import ReactTable, { RowInfo, FinalState, SortingRule } from 'react-table';
 import { Breadcrumb, BreadcrumbItem, Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { toastr } from 'react-redux-toastr';
 
 import { FormUtil } from '../common/FormUtil';
 import {
@@ -33,6 +34,7 @@ import {
   getLocationsFacility,
   saveAnyLocation,
   updateAnyLocation,
+  deleteAnyLocation,
   setTableFilter,
   toggleEditLocationModal,
   setSelectedBuilding,
@@ -60,6 +62,7 @@ interface IdispatchProps {
   getLocationsFacility: typeof getLocationsFacility;
   saveAnyLocation: typeof saveAnyLocation;
   updateAnyLocation: typeof updateAnyLocation;
+  deleteAnyLocation: typeof deleteAnyLocation;
   closeAllModals: typeof closeAllModals;
   facilityOptions: Ioption[];
   user: Iuser;
@@ -83,12 +86,14 @@ interface Istate {
   columns: any[];
   data: any[];
   selectedItem: any;
+  deletedItem: any;
 }
 
 class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
   // public searchFieldConfig: any;
   public searchFieldConfigBanner: any;
   public buttonInAction = false;
+  public deleteAction = false;
   private setTableFilterTimeout: any;
   private searchFieldConfig: FieldConfig;
   constructor(props: Iprops & IdispatchProps) {
@@ -98,7 +103,8 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
       currentTile: emptyTile,
       columns: [],
       data: [],
-      selectedItem: {}
+      selectedItem: {},
+      deletedItem: {}
     };
     this.searchFieldConfig = this.buildSearchControls();
   }
@@ -111,11 +117,6 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
     this.setColumns();
   }
   componentDidMount() {
-    // this.props.getLocationsFacility(this.props.facilityOptions[0].value);
-    // this.props.saveAnyLocation({
-    //   name: 'Building A',
-    //   facilityID: this.props.facilityOptions[0].value
-    // });
     // make sure there is a facility set to the table search filters so that it can be used in the EditProductForm
     if (!this.props.tableFilters.facility) {
       const facility = this.props.tableFilters.facility
@@ -127,13 +128,6 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
     }
   }
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
-    // if (
-    //   prevProps.showEditLocationModal !== this.props.showEditLocationModal &&
-    //   !this.props.showEditLocationModal
-    // ) {
-    //   this.props.setSelectedProduct();
-    // }
-
     // update the table when we get new data
     if (prevProps.tableData !== this.props.tableData) {
       console.log('DATA CHANGED');
@@ -148,11 +142,8 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
         fac || this.props.facilityOptions[0].value
       );
     }
-
-    // if (prevProps.facility !== this.props.facility) {
-    //   this.getLocationType();
-    // }
   }
+
   componentWillUnmount() {
     this.props.closeAllModals();
   }
@@ -160,6 +151,25 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
   handleEdit(selectedItem: any) {
     this.setState({ selectedItem });
     // console.log("EDIT:", item);
+  }
+
+  handleDelete(deletedItem: any) {
+    const toastrConfirmOptions = {
+      onOk: () => {
+        deletedItem = {
+          ...deletedItem,
+          buildingID: this.props.selectedBuilding.id,
+          floorID: this.props.selectedFloor.id,
+          locationID: this.props.selectedLocation.id
+        };
+        this.props.deleteAnyLocation(deletedItem, this.getLocationType());
+        console.log('deleted', deletedItem);
+      },
+      onCancel: () => console.log('CANCEL: clicked'),
+      okText: this.props.t('deleteOk'),
+      cancelText: this.props.t('common:cancel')
+    };
+    toastr.confirm(this.props.t('deleteConfirm'), toastrConfirmOptions);
   }
 
   /*
@@ -194,15 +204,32 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
         {
           Header: '',
           Cell: row => (
-            <Button
-              bsStyle="link"
-              onClick={() => {
-                this.buttonInAction = true;
-                this.handleEdit(row.original);
-              }}
-            >
-              <FontAwesomeIcon icon={['far', 'edit']}> Edit </FontAwesomeIcon>
-            </Button>
+            <div>
+              <Button
+                bsStyle="link"
+                style={{ float: 'right', marginRight: 11 }}
+                onClick={() => {
+                  this.buttonInAction = true;
+                  this.handleEdit(row.original);
+                }}
+              >
+                <FontAwesomeIcon icon={['far', 'edit']}> Edit </FontAwesomeIcon>
+              </Button>
+              <Button
+                bsStyle="link"
+                style={{ float: 'right', color: 'red' }}
+                onClick={() => {
+                  this.buttonInAction = true;
+                  this.deleteAction = true;
+                  this.handleDelete(row.original);
+                }}
+              >
+                <FontAwesomeIcon icon={['far', 'times']}>
+                  {' '}
+                  Delete{' '}
+                </FontAwesomeIcon>
+              </Button>
+            </div>
           )
         }
       ],
@@ -257,13 +284,12 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
   * set the selected location to state and open the modal
   */
   getTrProps = (state: FinalState, rowInfo: RowInfo) => {
-    // console.log("ROWINFO", rowInfo, state);
     if (rowInfo) {
       return {
         onClick: (e: React.MouseEvent<HTMLFormElement>) => {
-          if (this.buttonInAction) {
+          if (this.buttonInAction && this.deleteAction === false) {
             this.props.toggleEditLocationModal();
-          } else {
+          } else if (this.deleteAction === false) {
             if (this.getLocationType() === 'Building') {
               this.props.setSelectedBuilding(rowInfo.original);
             } else if (this.getLocationType() === 'Floor') {
@@ -275,6 +301,7 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
             }
           }
           this.buttonInAction = false;
+          this.deleteAction = false;
         },
         style: {
           background: this.state.selectedRow[rowInfo.viewIndex]
@@ -310,60 +337,60 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
     }
   };
 
+  makeSandwhich = (label: string, handler?: any) => {
+    if (typeof handler !== 'undefined') {
+      return (
+        <BreadcrumbItem active>
+          <a href="#" onClick={handler}>
+            {label}
+          </a>
+        </BreadcrumbItem>
+      );
+    } else {
+      return <BreadcrumbItem active>{label}</BreadcrumbItem>;
+    }
+  };
+
   // get breadcrumb path
   getBreadcrumbs = () => {
     return (
       <Breadcrumb>
-        <BreadcrumbItem active>
-          <a
-            href="#"
-            onClick={() => this.handleBCClick(initialLoc, 'Building')}
-          >
-            Buildings
-          </a>
-        </BreadcrumbItem>
         {this.props.selectedBuilding.id ? (
           <BreadcrumbItem active>
             <a
               href="#"
-              onClick={() =>
+              onClick={() => this.handleBCClick(initialLoc, 'Building')}
+            >
+              Buildings
+            </a>
+          </BreadcrumbItem>
+        ) : (
+          ''
+        )}
+        {/* building crumbs */}
+        {this.getLocationType() === 'Floor' && this.props.selectedBuilding.id
+          ? this.makeSandwhich(this.props.selectedBuilding.name)
+          : this.props.selectedBuilding.id
+            ? this.makeSandwhich(this.props.selectedBuilding.name, () =>
                 this.handleBCClick(this.props.selectedBuilding, 'Building')
-              }
-            >
-              {this.props.selectedBuilding.name}
-            </a>
-          </BreadcrumbItem>
-        ) : (
-          ''
-        )}
-        {this.props.selectedFloor.id ? (
-          <BreadcrumbItem active>
-            <a
-              href="#"
-              onClick={() =>
+              )
+            : ''}
+        {/* Floor crumbs */}
+        {this.getLocationType() === 'Location' && this.props.selectedFloor.id
+          ? this.makeSandwhich(this.props.selectedFloor.name)
+          : this.props.selectedFloor.id
+            ? this.makeSandwhich(this.props.selectedFloor.name, () =>
                 this.handleBCClick(this.props.selectedFloor, 'Floor')
-              }
-            >
-              {this.props.selectedFloor.name}
-            </a>
-          </BreadcrumbItem>
-        ) : (
-          ''
-        )}
-        {this.props.selectedLocation.id ? (
-          <BreadcrumbItem active>
-            <a
-              href="#"
-              onClick={() =>
+              )
+            : ''}
+        {/* Location crumbs */}
+        {this.getLocationType() === 'Room' && this.props.selectedLocation.id
+          ? this.makeSandwhich(this.props.selectedLocation.name)
+          : this.props.selectedLocation.id
+            ? this.makeSandwhich(this.props.selectedLocation.name, () =>
                 this.handleBCClick(this.props.selectedLocation, 'Location')
-              }
-            >
-              {this.props.selectedLocation.name}
-            </a>
-          </BreadcrumbItem>
-        ) : (
-          ''
-        )}
+              )
+            : ''}
       </Breadcrumb>
     );
   };
@@ -493,6 +520,7 @@ export default translate('manageLocation')(
       getLocationsFacility,
       saveAnyLocation,
       updateAnyLocation,
+      deleteAnyLocation,
       toggleEditLocationModal,
       closeAllModals,
       addToCart,

@@ -47,6 +47,8 @@ import {
   toggleImportInstallModal,
   setSelectedProduct
 } from '../../actions/manageInventoryActions';
+
+import { getLocationsFacility } from '../../actions/manageLocationActions';
 import { getTotal } from '../../reducers/manageInventoryReducer';
 import Banner from '../common/Banner';
 import EditInstallModal from './EditInstallModal';
@@ -76,6 +78,7 @@ interface IdispatchProps {
   toggleSearchNewProductsModal: typeof toggleSearchNewProductsModal;
   toggleImportInstallModal: typeof toggleImportInstallModal;
   getProductInfo: typeof getProductInfo;
+  getLocationsFacility: typeof getLocationsFacility;
   toggleSecurityFunctionsModal: () => void;
   getInventory: typeof getInventory;
   customers: Icustomer[];
@@ -133,6 +136,9 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         ? this.props.tableFilters.facility
         : this.props.facilityOptions[0];
       this.props.setTableFilter({ facility });
+      this.props.getLocationsFacility(facility.value);
+    } else {
+      this.props.getLocationsFacility(this.props.tableFilters.facility.value);
     }
   }
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
@@ -171,6 +177,9 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     // automatically get inventory every time a fitler changes
     if (prevProps.tableFilters !== this.props.tableFilters) {
       this.props.getInventory();
+      if (this.props.tableFilters.facility) {
+        this.props.getLocationsFacility(this.props.tableFilters.facility.value);
+      }
     }
   }
   componentWillUnmount() {
@@ -405,6 +414,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
               id: rowInfo.original.productID
             }) as Iproduct;
             this.props.setSelectedProduct(selectedProduct);
+            console.error('INSTALL:', rowInfo.original);
             this.setState({
               selectedInstall: rowInfo.original
             });
@@ -623,6 +633,7 @@ export default translate('manageInventory')(
       toggleSearchNewProductsModal,
       closeAllModals,
       getProductInfo,
+      getLocationsFacility,
       addToCart,
       setTableFilter,
       toggleInstallContactModal,

@@ -123,6 +123,10 @@ export interface IinstallBase extends IbaseDataObject {
   rfid: string;
   installDate: string;
   prodDate: string;
+  buildingID: string;
+  floorID: string;
+  locationID: string;
+  roomID: string;
 }
 
 export interface Iproduct {

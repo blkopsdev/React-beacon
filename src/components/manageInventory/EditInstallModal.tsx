@@ -12,7 +12,8 @@ import {
   IinstallBase,
   Iproduct,
   IproductInfo,
-  ItableFiltersReducer
+  ItableFiltersReducer,
+  Ifacility
 } from '../../models';
 import {
   updateInstall,
@@ -20,6 +21,7 @@ import {
   toggleEditInstallModal,
   deleteInstall
 } from '../../actions/manageInventoryActions';
+import { saveAnyLocation } from '../../actions/manageLocationActions';
 import CommonModal from '../common/CommonModal';
 import EditInstallForm from './EditInstallForm';
 
@@ -34,6 +36,7 @@ interface IdispatchProps {
   showModal: boolean;
   loading: boolean;
   facilityOptions: any[];
+  facility: Ifacility;
   updateInstall: typeof updateInstall;
   saveInstall: typeof saveInstall;
   toggleEditInstallModal: typeof toggleEditInstallModal;
@@ -41,6 +44,7 @@ interface IdispatchProps {
   deleteInstall: typeof deleteInstall;
   tableFilters: ItableFiltersReducer;
   secondModal: boolean;
+  saveAnyLocation: typeof saveAnyLocation;
 }
 
 class ManageInstallModal extends React.Component<Iprops & IdispatchProps, {}> {
@@ -77,6 +81,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
     facilityOptions: FormUtil.convertToOptions(state.user.facilities),
+    facility: state.manageLocation.facility,
     showModal: state.manageInventory.showEditInstallModal,
     productInfo: state.manageInventory.productInfo,
     tableFilters: state.manageInventory.tableFilters,
@@ -90,6 +95,7 @@ export default connect(
     updateInstall,
     saveInstall,
     toggleEditInstallModal,
-    deleteInstall
+    deleteInstall,
+    saveAnyLocation
   }
 )(ManageInstallModal);

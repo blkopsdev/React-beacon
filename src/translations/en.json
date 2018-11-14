@@ -177,7 +177,6 @@
       "Need to add a new product? No problem.  Just enter as much information about it as you can and we will get it added to the system.",
     "import": "import",
     "importInstallModalTitle": "Import Installations",
-    "import": "import",
     "exampleButton": "View Template",
     "importInstallLabel": "choose file",
     "uploadInstructions":
@@ -185,7 +184,13 @@
     "contactMessageLabel": "comments / questions",
     "contactButton": "contact beacon",
     "installContactTitle": "Contact Beacon",
-    "productInfoLabel": "Product Information"
+    "productInfoLabel": "Product Information",
+    "locationLabel": "Where is this installation located?",
+    "building": "Building",
+    "floor": "Floor",
+    "location": "Location",
+    "room": "Room",
+    "position": "Position"
   },
   "manageProductQueue": {
     "bannerTitle": "New Product Queue",

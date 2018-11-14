@@ -16,6 +16,7 @@ import {
 import { mapValues, map } from 'lodash';
 import { TranslationFunction } from 'react-i18next';
 import Select, { components } from 'react-select';
+import CreatableSelect from 'react-select/lib/Creatable';
 import Toggle from 'react-toggle';
 import { Ioption } from '../../models';
 import * as Datetime from 'react-datetime';
@@ -250,6 +251,45 @@ export const FormUtil = {
             placeholder={meta.placeholder}
             isMulti={meta.isMulti}
             classNamePrefix="react-select"
+            {...handler()}
+          />
+        </FormGroup>
+      </Col>
+    );
+  },
+  CreatableSelect: ({
+    handler,
+    touched,
+    hasError,
+    meta,
+    pristine,
+    errors,
+    submitted,
+    patchValue,
+    setErrors,
+    value
+  }: AbstractControl) => {
+    const selectClassName = meta.isMulti ? 'is-multi' : '';
+    const selectValidationClass = value && !pristine ? 'has-success' : '';
+    return (
+      <Col xs={meta.colWidth}>
+        <FormGroup
+          validationState={FormUtil.getValidationState(
+            pristine,
+            errors,
+            submitted
+          )}
+          bsSize="sm"
+        >
+          <ControlLabel>{meta.label}</ControlLabel>
+          <CreatableSelect
+            options={meta.options}
+            className={`${selectClassName} ${selectValidationClass}`}
+            components={{ Control: ControlComponent }}
+            placeholder={meta.placeholder}
+            isMulti={meta.isMulti}
+            classNamePrefix="react-select"
+            onCreateOption={meta.handleCreate}
             {...handler()}
           />
         </FormGroup>

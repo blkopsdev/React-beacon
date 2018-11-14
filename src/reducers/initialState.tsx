@@ -35,6 +35,10 @@ export const initialProduct = {
   quantity: 1
 };
 
+export const initialLoc = {
+  name: ''
+};
+
 export default {
   ajaxCallsInProgress: 0,
   user: {
@@ -85,9 +89,14 @@ export default {
   },
   manageLocation: {
     totalPages: 1,
+    facility: undefined,
     data: [],
     showEditLocationModal: false,
-    tableFilters: initialTableFilters
+    tableFilters: initialTableFilters,
+    selectedBuilding: initialLoc,
+    selectedFloor: initialLoc,
+    selectedLocation: initialLoc,
+    selectedRoom: initialLoc
   },
   manageTeam: {
     totalPages: 1,

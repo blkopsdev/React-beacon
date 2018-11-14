@@ -19,6 +19,7 @@ interface Iprops extends React.Props<SearchTableForm> {
   fieldConfig: FieldConfig;
   handleSubmit: any;
   loading: boolean;
+  showSearchButton?: boolean;
   colorButton: string;
   t: TranslationFunction;
   onValueChanges?: any;
@@ -28,10 +29,15 @@ export default class SearchTableForm extends React.Component<Iprops, {}> {
   public searchForm: AbstractControl;
   public fieldConfig: FieldConfig;
   private subscription: any;
+  private showBtn: boolean;
   constructor(props: Iprops) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
     this.fieldConfig = FormUtil.translateForm(this.props.fieldConfig, props.t);
+    this.showBtn =
+      typeof this.props.showSearchButton === 'undefined'
+        ? true
+        : this.props.showSearchButton;
   }
   componentDidMount() {
     forEach(this.props.fieldConfig.controls, (input: any, key) => {
@@ -70,16 +76,18 @@ export default class SearchTableForm extends React.Component<Iprops, {}> {
             onMount={this.setForm}
             fieldConfig={this.fieldConfig}
           />
-          <Col xs={1} className="search-form-button">
-            <Button
-              bsStyle={this.props.colorButton}
-              bsSize="sm"
-              type="submit"
-              disabled={this.props.loading}
-            >
-              <FontAwesomeIcon icon="search" />
-            </Button>
-          </Col>
+          {this.showBtn && (
+            <Col xs={1} className="search-form-button">
+              <Button
+                bsStyle={this.props.colorButton}
+                bsSize="sm"
+                type="submit"
+                disabled={this.props.loading}
+              >
+                <FontAwesomeIcon icon="search" />
+              </Button>
+            </Col>
+          )}
         </form>
       </Row>
     );

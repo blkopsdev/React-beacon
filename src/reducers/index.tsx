@@ -13,6 +13,7 @@ import manageUser from './manageUserReducer';
 import manageUserQueue from './manageUserQueueReducer';
 import manageProductQueue from './manageProductQueueReducer';
 import manageJob from './manageJobReducer';
+import manageLocation from './manageLocationReducer';
 
 const rootReducer = combineReducers({
   ajaxCallsInProgress,
@@ -23,6 +24,7 @@ const rootReducer = combineReducers({
   manageUser,
   manageJob,
   manageTeam,
+  manageLocation,
   customers,
   facilities,
   manageInventory,

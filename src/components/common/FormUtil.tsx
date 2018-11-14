@@ -160,6 +160,7 @@ export const FormUtil = {
           componentClass={meta.componentClass}
           type={meta.type || 'text'}
           rows={meta.rows}
+          autoFocus={meta.autoFocus}
           {...handler()}
         />
         <FormControl.Feedback />

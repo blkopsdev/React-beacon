@@ -200,11 +200,11 @@ const tiles = [
     title: 'locations',
     src: require('src/images/beaconManageUsers.jpg'),
     srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
-    color: 'blue',
+    color: 'green',
     width: 360,
     height: 400,
     url: '/locations',
-    securityFunction: '', // temporarily hidden:  securityFunctions.ManageLocations.id
+    securityFunction: securityFunctions.ManageLocations.id,
     description: ''
   },
   {

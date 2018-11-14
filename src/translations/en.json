@@ -211,6 +211,22 @@
     "remarks": "Remarks",
     "serialNumber": "Serial Number"
   },
+  "manageLocation": {
+    "bannerTitle": "Manage Locations",
+    "newBuilding": "Add Building",
+    "newFloor": "Add Floor",
+    "newLocation": "Add Location",
+    "newRoom": "Add Room",
+    "editBuilding": "Edit Building",
+    "editFloor": "Edit Floor",
+    "editLocation": "Edit Location",
+    "editRoom": "Edit Room",
+    "facilityPlaceholder": "Search...",
+    "searchPlaceholder": "Search...",
+    "saveApprove": "Save & Approve",
+    "deleteOk": "Delete Location",
+    "deleteConfirm": "Are you sure?"
+  },
   "tiles": {
     "alerts": "Alerts",
     "training": "Training",

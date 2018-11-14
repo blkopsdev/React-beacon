@@ -257,6 +257,24 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
         ...quantityControl.meta,
         style: { display: 'none' }
       };
+
+      if (this.props.selectedItem.buildingID) {
+        const bControl = this.userForm.get(
+          'buildingID'
+        ) as AbstractControlEdited;
+        const selectedBuilding = find(bControl.meta.options, {
+          value: this.props.selectedItem.buildingID
+        });
+        this.userForm.patchValue({ buildingID: selectedBuilding });
+        //
+        this.filterFloors(this.props.selectedItem.buildingID);
+      }
+      if (this.props.selectedItem.floorID) {
+        this.filterLocations(this.props.selectedItem.floorID);
+      }
+      if (this.props.selectedItem.locationID) {
+        this.filterRooms(this.props.selectedItem.locationID);
+      }
     }
   }
 

@@ -304,11 +304,12 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
     // creating a new location
     // determine type
     let lType = 'Building';
-    if (this.userForm.value.locationID) {
+    const { locationID, floorID, buildingID } = this.userForm.value;
+    if (locationID) {
       lType = 'Room';
-    } else if (this.userForm.value.floorID) {
+    } else if (floorID) {
       lType = 'Location';
-    } else if (this.userForm.value.buildingID) {
+    } else if (buildingID) {
       lType = 'Floor';
     }
     console.info('Creating new location: ', lType, name);
@@ -326,22 +327,22 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
     } else if (lType === 'Floor') {
       newItem = {
         ...newItem,
-        buildingID: this.userForm.value.buildingID.value,
+        buildingID: buildingID.value,
         locations: []
       };
     } else if (lType === 'Location') {
       newItem = {
         ...newItem,
-        buildingID: this.userForm.value.buildingID.value,
-        floorID: this.userForm.value.floorID.value,
+        buildingID: buildingID.value,
+        floorID: floorID.value,
         rooms: []
       };
     } else {
       newItem = {
         ...newItem,
-        buildingID: this.userForm.value.buildingID.value,
-        floorID: this.userForm.value.floorID.value,
-        locationID: this.userForm.value.locationID.value
+        buildingID: buildingID.value,
+        floorID: floorID.value,
+        locationID: locationID.value
       };
     }
     this.setState({ newItem, newType: lType });
@@ -389,11 +390,12 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
     }
   };
   filterLocations = (floorID: string) => {
-    const buildingID = this.userForm.value.buildingID.value;
+    const { buildingID } = this.userForm.value;
+    // const buildingID = this.userForm.value.buildingID.value;
     if (buildingID && floorID) {
       console.info('Filtering by building & floor:', buildingID, floorID);
       let building = find(this.props.facility.buildings, (b: Ibuilding) => {
-        return b.id === buildingID;
+        return b.id === buildingID.value;
       });
       if (!building) {
         building = initialLoc;
@@ -432,8 +434,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
     }
   };
   filterRooms = (locationID: string) => {
-    const buildingID = this.userForm.value.buildingID.value;
-    const floorID = this.userForm.value.floorID.value;
+    const { buildingID, floorID } = this.userForm.value;
     if (buildingID && floorID && locationID) {
       console.info(
         'Filtering by building & floor & location:',
@@ -442,13 +443,13 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
         locationID
       );
       let building = find(this.props.facility.buildings, (b: Ibuilding) => {
-        return b.id === buildingID;
+        return b.id === buildingID.value;
       });
       if (!building) {
         building = initialLoc;
       }
       let floor = find(building.floors, (f: Ifloor) => {
-        return f.id === floorID;
+        return f.id === floorID.value;
       });
       if (!floor) {
         floor = initialLoc;
@@ -490,14 +491,15 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
     }
     console.log(this.userForm.value);
     if (this.props.tableFilters.facility) {
+      const { buildingID, floorID, locationID, roomID } = this.userForm.value;
       let newItem = {
         ...this.userForm.value,
         facilityID: this.props.tableFilters.facility.value,
         productID: this.props.selectedProduct.id,
-        buildingID: this.userForm.value.buildingID.value,
-        floorID: this.userForm.value.floorID.value,
-        locationID: this.userForm.value.locationID.value,
-        roomID: this.userForm.value.roomID.value
+        buildingID: buildingID.value,
+        floorID: floorID.value,
+        locationID: locationID.value,
+        roomID: roomID.value
       };
 
       if (this.props.selectedItem && this.props.selectedItem.id) {

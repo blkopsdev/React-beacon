@@ -34,6 +34,16 @@ export const initialProduct = {
   installs: [],
   quantity: 1
 };
+export const initialFacility = {
+  id: '',
+  name: '',
+  customerID: '',
+  address: '',
+  address2: '',
+  city: '',
+  state: '',
+  postalCode: ''
+};
 
 export const initialLoc = {
   name: ''

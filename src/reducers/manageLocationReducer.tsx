@@ -12,22 +12,11 @@ import {
   createTableFiltersWithName,
   modalToggleWithName
 } from './commonReducers';
-import initialState, { initialLoc } from './initialState';
+import initialState, { initialLoc, initialFacility } from './initialState';
 import * as types from '../actions/actionTypes';
 
-const blankFacility = {
-  id: '',
-  name: '',
-  customerID: '',
-  address1: '',
-  address2: '',
-  city: '',
-  state: '',
-  postalCode: ''
-};
-
 function locationManageFacility(
-  state: Ifacility = blankFacility,
+  state: Ifacility = initialFacility,
   action: any
 ): Ifacility {
   switch (action.type) {
@@ -102,7 +91,7 @@ function locationManageFacility(
           ]
         };
       } else if (action.lType === 'Room' && state.buildings) {
-      /* 
+        /* 
         The if blocks above are just simpler versions of this one. 
       */
         // We are passing in the entire path of parent ids on the created/updated item
@@ -373,7 +362,7 @@ function locationManageFacility(
       }
       return state;
     case types.USER_LOGOUT_SUCCESS:
-      return blankFacility;
+      return initialFacility;
     default:
       return state;
   }

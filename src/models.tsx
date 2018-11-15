@@ -341,7 +341,7 @@ export interface Ifacility {
   id: string;
   name: string;
   customerID: string;
-  address1: string;
+  address: string;
   address2: string;
   city: string;
   state: string;

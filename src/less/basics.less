@@ -306,11 +306,13 @@ body {
   font-weight: 400;
   border-top: none;
   max-height: calc(100vh - @maxTableHeightDifference);
+  min-height: 130px;
   overflow: auto;
 
   // margin-bottom: 90px; // space for the "no rows found" message
   .rt-noData{
-    transform: translate(-50%, 80%);
+    transform: translate(-50%, -90%);
+    padding: 5px 10px;
   }
   &.dark .rt-tr.-odd {
     background-color: fade(@dark, 5%);

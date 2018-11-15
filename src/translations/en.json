@@ -15,7 +15,7 @@
     "newFacilityModalTitle": "New Facility",
     "facilityNameLabel": "New Facility Name",
     "selectCustomerWarning": "You must select a customer first.",
-    "noDataText": "Sorry! We could not find and rows that matched that search.",
+    "noDataText": "Sorry! We could not find any rows that matched that search.",
     "searchPlaceholder": "Search...",
     "searchProduct": "Product/Installation",
     "profile": "Profile",

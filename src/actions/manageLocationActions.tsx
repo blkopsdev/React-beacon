@@ -47,7 +47,11 @@ export function getLocationsFacility(facilityID: string): ThunkResult<void> {
 /*
 * save (add) a new building/floor/location/room
 */
-export function saveAnyLocation(item: any, lType: string): ThunkResult<void> {
+export function saveAnyLocation(
+  item: any,
+  lType: 'Building' | 'Floor' | 'Location' | 'Room',
+  facilityID: string
+): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     let url: string;

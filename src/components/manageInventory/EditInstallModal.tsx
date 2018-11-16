@@ -6,7 +6,6 @@ import { TranslationFunction } from 'react-i18next';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import { FormUtil } from '../common/FormUtil';
 import {
   IinitialState,
   IinstallBase,
@@ -35,7 +34,6 @@ interface Iprops {
 interface IdispatchProps {
   showModal: boolean;
   loading: boolean;
-  facilityOptions: any[];
   facility: Ifacility;
   updateInstall: typeof updateInstall;
   saveInstall: typeof saveInstall;
@@ -80,7 +78,6 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
-    facilityOptions: FormUtil.convertToOptions(state.user.facilities),
     facility: state.manageLocation.facility,
     showModal: state.manageInventory.showEditInstallModal,
     productInfo: state.manageInventory.productInfo,

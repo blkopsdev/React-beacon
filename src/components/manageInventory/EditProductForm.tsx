@@ -268,6 +268,7 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
           subcategoryControl.setErrors({
             required: { required: { message: 'this is required' } }
           });
+          this.userForm.patchValue({ subcategoryID: null });
         }
       } else {
         // subcategoryControl.reset();

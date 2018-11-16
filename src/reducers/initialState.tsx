@@ -42,10 +42,24 @@ export const initialFacility = {
   address2: '',
   city: '',
   state: '',
-  postalCode: ''
+  postalCode: '',
+  buildings: []
 };
 
 export const initialLoc = {
+  name: '',
+  rooms: []
+};
+export const initialBuilding = {
+  name: '',
+  floors: []
+};
+export const initialFloor = {
+  name: '',
+  locations: []
+};
+
+export const initialRoom = {
   name: ''
 };
 
@@ -103,10 +117,10 @@ export default {
     data: [],
     showEditLocationModal: false,
     tableFilters: initialTableFilters,
-    selectedBuilding: initialLoc,
-    selectedFloor: initialLoc,
+    selectedBuilding: initialBuilding,
+    selectedFloor: initialFloor,
     selectedLocation: initialLoc,
-    selectedRoom: initialLoc
+    selectedRoom: initialRoom
   },
   manageTeam: {
     totalPages: 1,

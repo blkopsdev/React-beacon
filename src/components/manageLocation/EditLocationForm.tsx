@@ -132,12 +132,14 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
           facilityID: this.props.facility.id,
           floors: []
         };
+        this.props.saveAnyLocation(newItem, 'Building', this.props.facility.id);
       } else if (this.props.selectedType === 'Floor') {
         newItem = {
           ...newItem,
           buildingID: this.props.selectedBuilding.id,
           locations: []
         };
+        this.props.saveAnyLocation(newItem, 'Floor', this.props.facility.id);
       } else if (this.props.selectedType === 'Location') {
         newItem = {
           ...newItem,
@@ -152,8 +154,8 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
           floorID: this.props.selectedFloor.id,
           locationID: this.props.selectedLocation.id
         };
+        this.props.saveAnyLocation(newItem, 'Location', this.props.facility.id);
       }
-      this.props.saveAnyLocation(newItem, this.props.selectedType);
     }
   };
   setForm = (form: AbstractControl) => {

@@ -177,19 +177,19 @@ export interface ImanageUserReducer {
 export interface Ibuilding {
   id?: string;
   name: string;
-  floors?: Ifloor[];
+  floors: Ifloor[];
   facilityID?: string;
 }
 export interface Ifloor {
   id?: string;
   name: string;
-  locations?: Ilocation[];
+  locations: Ilocation[];
   buildingID?: string;
 }
 export interface Ilocation {
   id?: string;
   name: string;
-  rooms?: Iroom[];
+  rooms: Iroom[];
   floorID?: string;
 }
 export interface Iroom {
@@ -200,7 +200,7 @@ export interface Iroom {
 
 export interface ImanageLocationReducer {
   data: any[];
-  facility?: Ifacility;
+  facility?: IfacilityComplete;
   totalPages: number;
   showEditLocationModal: boolean;
   tableFilters: ItableFiltersReducer;
@@ -347,6 +347,9 @@ export interface Ifacility {
   state: string;
   postalCode: string;
   buildings?: Ibuilding[];
+}
+export interface IfacilityComplete extends Ifacility {
+  buildings: Ibuilding[];
 }
 
 export interface Ioption {

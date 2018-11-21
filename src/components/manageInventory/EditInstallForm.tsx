@@ -272,9 +272,6 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           placeholder: 'common:searchPlaceholder',
           isMulti: false,
           handleCreate: this.handleCreateRoom
-        },
-        options: {
-          validators: Validators.required
         }
       },
       position: {

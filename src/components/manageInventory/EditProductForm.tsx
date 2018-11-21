@@ -308,12 +308,12 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
       productGroupID: productGroupID.value,
       brandID: brandID.value,
       manufacturerID: manufacturerID.value,
-      subcategoryID: subcategoryID.value,
+      subcategoryID: subcategoryID ? subcategoryID.value : '',
       mainCategoryID: mainCategoryID.value,
-      gasTypeID: gasTypeID.value,
-      powerID: powerID.value,
-      systemSizeID: systemSizeID.value,
-      standardID: standardID.value
+      gasTypeID: gasTypeID ? gasTypeID.value : '',
+      powerID: powerID ? powerID.value : '',
+      systemSizeID: systemSizeID ? systemSizeID.value : '',
+      standardID: standardID ? standardID.value : ''
     };
 
     if (

@@ -147,6 +147,7 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
           floorID: this.props.selectedFloor.id,
           rooms: []
         };
+        this.props.saveAnyLocation(newItem, 'Location', this.props.facility.id);
       } else {
         newItem = {
           ...newItem,
@@ -154,7 +155,7 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
           floorID: this.props.selectedFloor.id,
           locationID: this.props.selectedLocation.id
         };
-        this.props.saveAnyLocation(newItem, 'Location', this.props.facility.id);
+        this.props.saveAnyLocation(newItem, 'Room', this.props.facility.id);
       }
     }
   };

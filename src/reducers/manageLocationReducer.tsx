@@ -90,6 +90,7 @@ function locationManageFacility(
         return { ...state, buildings: updatedBuildings };
       }
       return state;
+
     case types.LOCATION_UPDATE_SUCCESS:
       if (action.lType === 'Building' && state.buildings) {
         return {

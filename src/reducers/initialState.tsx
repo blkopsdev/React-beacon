@@ -48,7 +48,8 @@ export const initialFacility = {
 
 export const initialLoc = {
   name: '',
-  rooms: []
+  rooms: [],
+  floorID: ''
 };
 export const initialBuilding = {
   name: '',
@@ -113,7 +114,7 @@ export default {
   },
   manageLocation: {
     totalPages: 1,
-    facility: undefined,
+    facility: initialFacility,
     data: [],
     showEditLocationModal: false,
     tableFilters: initialTableFilters,

@@ -190,7 +190,7 @@ export interface Ilocation {
   id?: string;
   name: string;
   rooms: Iroom[];
-  floorID?: string;
+  floorID: string;
 }
 export interface Iroom {
   id?: string;
@@ -200,7 +200,7 @@ export interface Iroom {
 
 export interface ImanageLocationReducer {
   data: any[];
-  facility?: IfacilityComplete;
+  facility: IfacilityComplete;
   totalPages: number;
   showEditLocationModal: boolean;
   tableFilters: ItableFiltersReducer;

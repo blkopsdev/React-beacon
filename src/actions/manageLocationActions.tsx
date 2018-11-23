@@ -16,6 +16,7 @@ import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
 import constants from '../constants/constants';
 import * as types from './actionTypes';
+import { find } from 'lodash';
 
 // import {AxiosResponse} from 'axios';
 
@@ -176,18 +177,77 @@ export function deleteAnyLocation(item: any, lType: string): ThunkResult<void> {
   };
 }
 
-export const setSelectedBuilding = (item?: Ibuilding) => ({
-  type: types.SET_SELECTED_BUILDING,
-  item
-});
-export const setSelectedFloor = (item?: Ifloor) => ({
-  type: types.SET_SELECTED_FLOOR,
-  item
-});
-export const setSelectedLocation = (item?: Ilocation) => ({
-  type: types.SET_SELECTED_LOCATION,
-  item
-});
+export const setSelectedBuilding = (building: Ibuilding): ThunkResult<void> => {
+  return (dispatch, getState) => {
+    let item = building;
+    const buildingID = building.id;
+
+    const { buildings } = getState().manageLocation.facility;
+    const buildingB = find(buildings, build => build.id === buildingID);
+    if (buildingB) {
+      item = buildingB;
+    }
+
+    dispatch({
+      type: types.SET_SELECTED_BUILDING,
+      item
+    });
+  };
+};
+
+export const setSelectedFloor = (
+  floor: Ifloor,
+  facilityID: string
+): ThunkResult<void> => {
+  return (dispatch, getState) => {
+    let item = floor;
+    const buildingID = getState().manageLocation.selectedBuilding.id;
+    const { buildings } = getState().manageLocation.facility;
+
+    const building = find(buildings, build => build.id === buildingID);
+    if (building && building.floors.length) {
+      const newFloor = find(building.floors, fl => fl.id === floor.id);
+      if (newFloor) {
+        item = newFloor;
+      }
+    }
+
+    dispatch({
+      type: types.SET_SELECTED_FLOOR,
+      item
+    });
+  };
+};
+
+export const setSelectedLocation = (
+  location: Ilocation,
+  facilityID: string
+): ThunkResult<void> => {
+  return (dispatch, getState) => {
+    let item = location;
+    const buildingID = getState().manageLocation.selectedBuilding.id;
+    const { buildings } = getState().manageLocation.facility;
+
+    const building = find(buildings, build => build.id === buildingID);
+    if (building && building.floors.length) {
+      const floor = find(building.floors, fl => fl.id === location.floorID);
+      if (floor && floor.locations.length) {
+        const newLocation = find(
+          floor.locations,
+          loc => loc.id === location.id
+        );
+        if (newLocation) {
+          item = newLocation;
+        }
+      }
+    }
+
+    dispatch({
+      type: types.SET_SELECTED_LOCATION,
+      item
+    });
+  };
+};
 export const setSelectedRoom = (item?: Iroom) => ({
   type: types.SET_SELECTED_ROOM,
   item

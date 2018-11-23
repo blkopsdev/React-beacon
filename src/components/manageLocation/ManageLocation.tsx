@@ -29,7 +29,7 @@ import {
 import { TableUtil } from '../common/TableUtil';
 import { addToCart } from '../../actions/shoppingCartActions';
 import { closeAllModals } from '../../actions/commonActions';
-import { emptyTile, initialLoc } from '../../reducers/initialState';
+import { emptyTile, initialBuilding } from '../../reducers/initialState';
 import {
   getLocationsFacility,
   saveAnyLocation,
@@ -293,9 +293,15 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
             if (this.getLocationType() === 'Building') {
               this.props.setSelectedBuilding(rowInfo.original);
             } else if (this.getLocationType() === 'Floor') {
-              this.props.setSelectedFloor(rowInfo.original);
+              this.props.setSelectedFloor(
+                rowInfo.original,
+                this.props.facility.id
+              );
             } else if (this.getLocationType() === 'Location') {
-              this.props.setSelectedLocation(rowInfo.original);
+              this.props.setSelectedLocation(
+                rowInfo.original,
+                this.props.facility.id
+              );
             } else {
               this.props.setSelectedRoom(rowInfo.original);
             }
@@ -327,13 +333,18 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
     }
   };
 
-  handleBCClick = (item: any, lType: string) => {
+  handleBCClick = (
+    item: any,
+    lType: string,
+    e: React.MouseEvent<HTMLAnchorElement>
+  ) => {
+    e.preventDefault();
     if (lType === 'Building') {
       this.props.setSelectedBuilding(item);
     } else if (lType === 'Floor') {
-      this.props.setSelectedFloor(item);
+      this.props.setSelectedFloor(item, this.props.facility.id);
     } else if (lType === 'Location') {
-      this.props.setSelectedLocation(item);
+      this.props.setSelectedLocation(item, this.props.facility.id);
     }
   };
 
@@ -359,7 +370,9 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
           <BreadcrumbItem active>
             <a
               href="#"
-              onClick={() => this.handleBCClick(initialLoc, 'Building')}
+              onClick={(e: React.MouseEvent<HTMLAnchorElement>) =>
+                this.handleBCClick(initialBuilding, 'Building', e)
+              }
             >
               Buildings
             </a>
@@ -371,24 +384,30 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
         {this.getLocationType() === 'Floor' && this.props.selectedBuilding.id
           ? this.makeSandwhich(this.props.selectedBuilding.name)
           : this.props.selectedBuilding.id
-            ? this.makeSandwhich(this.props.selectedBuilding.name, () =>
-                this.handleBCClick(this.props.selectedBuilding, 'Building')
+            ? this.makeSandwhich(
+                this.props.selectedBuilding.name,
+                (e: React.MouseEvent<HTMLAnchorElement>) =>
+                  this.handleBCClick(this.props.selectedBuilding, 'Building', e)
               )
             : ''}
         {/* Floor crumbs */}
         {this.getLocationType() === 'Location' && this.props.selectedFloor.id
           ? this.makeSandwhich(this.props.selectedFloor.name)
           : this.props.selectedFloor.id
-            ? this.makeSandwhich(this.props.selectedFloor.name, () =>
-                this.handleBCClick(this.props.selectedFloor, 'Floor')
+            ? this.makeSandwhich(
+                this.props.selectedFloor.name,
+                (e: React.MouseEvent<HTMLAnchorElement>) =>
+                  this.handleBCClick(this.props.selectedFloor, 'Floor', e)
               )
             : ''}
         {/* Location crumbs */}
         {this.getLocationType() === 'Room' && this.props.selectedLocation.id
           ? this.makeSandwhich(this.props.selectedLocation.name)
           : this.props.selectedLocation.id
-            ? this.makeSandwhich(this.props.selectedLocation.name, () =>
-                this.handleBCClick(this.props.selectedLocation, 'Location')
+            ? this.makeSandwhich(
+                this.props.selectedLocation.name,
+                (e: React.MouseEvent<HTMLAnchorElement>) =>
+                  this.handleBCClick(this.props.selectedLocation, 'Location', e)
               )
             : ''}
       </Breadcrumb>

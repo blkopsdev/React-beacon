@@ -214,7 +214,41 @@ export default {
     tableFilters: initialTableFilters
   },
   training: {
-    courses: [],
+    courses: [
+      {
+        id: 'f8b631da-5a22-4e7f-9079-1b0a30e2435a',
+        name: 'Level 1 GrammarFlip Foundations',
+        description:
+          'Perfect for elementary level learners or for middle school students interested in reviewing basic grammar concepts. Establish the foundation on which other grammar topics depend.',
+        isPublished: true,
+        createDate: '2018-03-29T19:54:43.8481828',
+        updateDate: '2018-07-03T13:28:52.8677053',
+        creatorID: 'cb217e0e-634e-4159-9ccf-0f3e51ef38ca',
+        updaterID: 'cb217e0e-634e-4159-9ccf-0f3e51ef38ca'
+      },
+      {
+        id: '45f989fc-5cff-4e54-a110-f9856d02e44b',
+        name: 'Level 2 GrammarFlip Building Blocks',
+        description:
+          'Suggested for the middle school level or for students interested in reviewing intermediate level topics.  The following grammar lessons build upon the foundational topics from Level I.',
+        isPublished: true,
+        createDate: '2018-03-29T20:46:01.6985064',
+        updateDate: '2018-07-03T13:30:11.0721513',
+        creatorID: 'cb217e0e-634e-4159-9ccf-0f3e51ef38ca',
+        updaterID: 'cb217e0e-634e-4159-9ccf-0f3e51ef38ca'
+      },
+      {
+        id: '289ac98b-cafd-4a08-afaa-5cfa5d1bcb24',
+        name: 'Level 3 GrammarFlip Advanced Topics',
+        description:
+          'Recommended for high school level students or for middle school students interested in challenging themselves beyond the intermediate level.',
+        isPublished: true,
+        createDate: '2018-03-29T20:50:09.4787239',
+        updateDate: '2018-07-03T13:30:22.2955199',
+        creatorID: 'cb217e0e-634e-4159-9ccf-0f3e51ef38ca',
+        updaterID: 'cb217e0e-634e-4159-9ccf-0f3e51ef38ca'
+      }
+    ],
     lessons: {},
     lesson: initialLesson,
     quizzes: {},

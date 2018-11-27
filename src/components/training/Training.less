@@ -1,3 +1,5 @@
+@import '../../less/variables.less';
+
 .gf-breadcrumb {
   ol.breadcrumb {
     padding-left: 0px;
@@ -46,21 +48,11 @@
     font-size: 16px;
     font-weight: 400;
   }
-  .kahoot-path{
-      background-image: url('./images/kahoot-grey-logo.png');
-      background-repeat: no-repeat;
-      background-size: 58px 20px;
-      height: 28px;
-      line-height: 52px;
-      top: 18px;
-    &:hover {
-      background-image: url('./images/kahoot-blue-logo.png');
-      cursor: pointer;
-    }
-  }
+
   .courses-list {
     padding-top: 15px;
     padding-left: 15px;
+    padding-right: 30px;
     cursor: pointer;
     .list-group {
       padding-left: 15px;
@@ -84,13 +76,13 @@
       .course-footer {
         position: absolute;
         bottom: 0;
-        background-color: @yellow;
-        border-bottom: 4px solid @yellowShadow;
+        background-color: @orange;
+        border-bottom: 4px solid @darkOrange;
         border-radius: 0 0 4px 4px;
         min-height: 30px;
         width: 100%;
         .btn {
-          background-color: @yellow;
+          background-color: @orange;
           border: 0px;
           color: #fff;
         }
@@ -98,7 +90,7 @@
           background-color: #d4bb33;
         }
         .btn:active {
-          background-color: @yellowShadow;
+          background-color: @darkOrange;
         }
       }
     }

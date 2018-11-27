@@ -22,15 +22,17 @@ import {
   Panel,
   Grid,
   Row,
-  Col,
-  Button
+  Col
 } from 'react-bootstrap';
-import { LinkContainer } from 'react-router-bootstrap';
 
 import { RouteComponentProps } from 'react-router';
 // const mixpanel = require('mixpanel-browser')
 
-interface Props extends RouteComponentProps<{}> {
+interface RouterParams {
+  courseID: string;
+}
+
+interface Props extends RouteComponentProps<RouterParams> {
   user: Iuser;
   courses: GFCourse[];
   lessons: GFLessons;
@@ -38,10 +40,7 @@ interface Props extends RouteComponentProps<{}> {
   loadCourses: any;
   getLessonsByCourseID: any;
   setLesson: any;
-  getBadges: any;
   loading: boolean;
-  params: any;
-  location: any;
 }
 
 interface State {
@@ -54,7 +53,7 @@ class Courses extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
-      display: '',
+      display: 'courses',
       selectedCourse: { name: '', description: '' },
       filteredLessons: []
     };
@@ -73,26 +72,26 @@ class Courses extends React.Component<Props, State> {
       this.getAllCourses();
     }
     // if we have a courseID then display the lessons in that course
-    // if (!!this.props.params.courseID) {
-    //   this.loadCourseLessons(this.props.params.courseID)
-    // } else {
-    //   this.setState({ display: 'courses' })
-    // }
+    if (!!this.props.match.params.courseID) {
+      this.loadCourseLessons(this.props.match.params.courseID);
+    } else {
+      this.setState({ display: 'courses' });
+    }
   }
 
-  // componentWillReceiveProps(nextProps: any) {
-  //   if (!nextProps.params.courseID) {
-  //     this.setState({ display: 'courses' })
-  //   }
-  // }
-  // componentDidUpdate(prevProps: Props) {
-  //   if (
-  //     prevProps.lessons !== this.props.lessons &&
-  //     !!this.props.params.courseID
-  //   ) {
-  //     this.loadCourseLessons(this.props.params.courseID)
-  //   }
-  // }
+  componentWillReceiveProps(nextProps: any) {
+    if (!nextProps.match.params.courseID) {
+      this.setState({ display: 'courses' });
+    }
+  }
+  componentDidUpdate(prevProps: Props) {
+    if (
+      prevProps.lessons !== this.props.lessons &&
+      !!this.props.match.params.courseID
+    ) {
+      this.loadCourseLessons(this.props.match.params.courseID);
+    }
+  }
 
   getAllCourses() {
     this.props.loadCourses(this.props.user);
@@ -111,7 +110,7 @@ class Courses extends React.Component<Props, State> {
     });
 
     // replace current path so we know which course is selected
-    const path = `/courses/${gfCourseId}`;
+    const path = `/training/${gfCourseId}`;
     this.props.history.replace(path);
     const sc = this.props.courses.filter(
       (course: any) => course.id === gfCourseId
@@ -157,7 +156,7 @@ class Courses extends React.Component<Props, State> {
       // this.props.lessons.filter((lesson: any) => lesson.id === gfLesson.id)[0]
     );
     window.scrollTo(0, 0);
-    // this.props.history.push(`/lesson/${this.props.params.courseID}/${gfLesson.id}`)
+    // this.props.history.push(`/lesson/${this.props.match.params.courseID}/${gfLesson.id}`)
   }
 
   handleChange(e: any) {
@@ -177,38 +176,18 @@ class Courses extends React.Component<Props, State> {
   }
 
   printStudentCourses() {
-    let courseMessage;
-    if (this.props.user.isActive === true) {
-      courseMessage = 'Dashboard';
-    } else {
-      courseMessage = (
-        <span>
-          Welcome back to your GrammarFlip account! You are not currently
-          enrolled in a class, so you will need to ask your teacher for a class
-          code. Once you have a class code, you can add yourself to a class by
-          <LinkContainer to={`/profile`}>
-            <Button bsStyle="link" bsSize="sm" className="update-profile-link">
-              clicking here.
-            </Button>
-          </LinkContainer>
-        </span>
-      );
-    }
     return (
       <div
         key="courses"
         className="main-content content-without-sidebar courses animated fadeIn"
       >
         <Row className="sub-header">
-          <Col md={8} xs={8}>
-            <h1 className="text-center">{courseMessage}</h1>
-          </Col>
-          <Col md={4} xs={4}>
-            <h1 className="text-center">Your Badges</h1>
+          <Col md={12} xs={12}>
+            <h1 className="text-center">Training</h1>
           </Col>
         </Row>
         <Row className="">
-          <Col xs={8} sm={8} md={8}>
+          <Col xs={12} sm={12}>
             <div className="courses-list text-center">
               {this.props.user.isActive &&
                 this.props.courses.map(gfCourse => {

@@ -353,8 +353,9 @@ const constants = {
       return false;
     }
   },
-  getTileByURL: (url: string): Itile => {
-    const foundTile = find(tiles, { url });
+  getTileByURL: (URL: string): Itile => {
+    const firstParam = '/' + URL.split('/')[1];
+    const foundTile = find(tiles, { url: firstParam });
     if (foundTile && foundTile.url.length) {
       return foundTile as Itile;
     } else {

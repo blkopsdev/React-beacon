@@ -32,6 +32,16 @@ export function setCachedToken() {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + cachedToken;
   }
 }
+
+export function getCachedToken() {
+  const cachedToken = authContext.getCachedToken(authContext.config.clientId);
+
+  if (!cachedToken) {
+    return '';
+  } else {
+    return cachedToken;
+  }
+}
 // export function setCachedToken() {
 //   console.log('setting cached token')
 //   authContext.acquireToken(authContext.config.clientId, (errorDesc, token, error) => {

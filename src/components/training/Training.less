@@ -1,0 +1,139 @@
+.gf-breadcrumb {
+  ol.breadcrumb {
+    padding-left: 0px;
+    background-color: #eceff4;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    li.active span {
+      text-decoration: none;
+    }
+    a span,
+    span {
+      font-size: 17px;
+      font-family: @headerFont;
+      color: @blue;
+      font-weight: 500;
+      text-decoration: underline;
+    }
+    a span:hover {
+      color: #7e9db4;
+    }
+  }
+  .breadcrumb > li + li::before {
+    color: @blue;
+  }
+  li::before {
+    font-size: 20px;
+    color: @blue;
+  }
+}
+
+.courses {
+  .course.animated.fadeInUp {
+    text-align: center;
+    min-width: 330px;
+    padding: 0px 30px 0px 0px;
+    display: inline-block;
+  }
+  .panel-body h2{
+    font-family: @headerFont;
+    min-height: 60px;
+    max-height: 60px;
+  }
+  .lesson-name {
+    padding-left: 15px;
+    font-family: @headerFont;
+    font-size: 16px;
+    font-weight: 400;
+  }
+  .kahoot-path{
+      background-image: url('./images/kahoot-grey-logo.png');
+      background-repeat: no-repeat;
+      background-size: 58px 20px;
+      height: 28px;
+      line-height: 52px;
+      top: 18px;
+    &:hover {
+      background-image: url('./images/kahoot-blue-logo.png');
+      cursor: pointer;
+    }
+  }
+  .courses-list {
+    padding-top: 15px;
+    padding-left: 15px;
+    cursor: pointer;
+    .list-group {
+      padding-left: 15px;
+    }
+    .course {
+      cursor: pointer;
+      .btn .fa{
+        text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.49);
+      }
+      .panel {
+        background-color: #fff;
+        border-radius: 4px;
+        position: relative;
+        min-height: 225px;
+        min-width: 220px;
+        .panel-body {
+          padding-bottom: 0px;
+          padding-top: 0px;
+        }
+      }
+      .course-footer {
+        position: absolute;
+        bottom: 0;
+        background-color: @yellow;
+        border-bottom: 4px solid @yellowShadow;
+        border-radius: 0 0 4px 4px;
+        min-height: 30px;
+        width: 100%;
+        .btn {
+          background-color: @yellow;
+          border: 0px;
+          color: #fff;
+        }
+        .btn:hover {
+          background-color: #d4bb33;
+        }
+        .btn:active {
+          background-color: @yellowShadow;
+        }
+      }
+    }
+  }
+  .modal-container {
+    position: relative;
+  }
+  .modal-container .modal, .modal-container .modal-backdrop {
+    position: absolute;
+  }
+}
+.modal-body input[type="text"]:focus, input[type="number"]:focus {
+  box-shadow: inset 0 1px 1px rgba(0,0,0,.075);
+  border-color: #ccc;
+}
+.gf-breadcrumb.course {
+  padding-left: 0px;
+}
+// .update-profile-link:hover {
+//   color: #7E9DB4;
+//   text-decoration: underline;
+//   cursor: pointer;
+// }
+.update-profile-link.btn.btn-link{
+    font-weight: 500;
+    font-family: 'museo', sans-serif;
+    font-size: 24px;
+    line-height: 34px;
+}
+.students-badge {
+  margin: 0px 20px 10px 0px;
+  img {
+    max-width: 64px;
+    max-height: 64px;
+    min-width: 64px;
+    min-height: 64px;
+  }
+}

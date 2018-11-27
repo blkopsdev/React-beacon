@@ -14,6 +14,7 @@ import manageUserQueue from './manageUserQueueReducer';
 import manageProductQueue from './manageProductQueueReducer';
 import manageJob from './manageJobReducer';
 import manageLocation from './manageLocationReducer';
+import training from './trainingReducer';
 
 const rootReducer = combineReducers({
   ajaxCallsInProgress,
@@ -30,6 +31,7 @@ const rootReducer = combineReducers({
   manageInventory,
   manageProductQueue,
   productInfo,
+  training,
   showEditCustomerModal: createShowModalWithNamedType('EDIT_CUSTOMER'),
   showEditFacilityModal: createShowModalWithNamedType('EDIT_FACILITY'),
   showEditProfileModal: createShowModalWithNamedType('EDIT_PROFILE'),

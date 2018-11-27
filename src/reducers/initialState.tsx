@@ -63,7 +63,48 @@ export const initialFloor = {
 export const initialRoom = {
   name: ''
 };
+/*
+*  TRAINING initial state
+*/
 
+export const initialQuiz = {
+  id: '',
+  name: '',
+  imagePath: '',
+  isComplete: false,
+  videoPath: '',
+  instructions: '',
+  lessonID: '',
+  questions: [
+    {
+      id: '',
+      text: '',
+      type: '',
+      options: [],
+      correctAnswer: '',
+      correctText: '',
+      wrongText: '',
+      order: 0
+    }
+  ]
+};
+export const initialLesson = {
+  id: '',
+  name: '',
+  description: '',
+  courseID: '',
+  imagePath: '',
+  order: 0,
+  primaryVideoPath: '',
+  secondaryVideoPath: '',
+  slideshowPath: '',
+  courseLessons: [],
+  kahootPath: ''
+};
+
+/* 
+* initialState
+*/
 export default {
   ajaxCallsInProgress: 0,
   user: {
@@ -172,6 +213,13 @@ export default {
     data: [],
     tableFilters: initialTableFilters
   },
+  training: {
+    courses: [],
+    lessons: {},
+    lesson: initialLesson,
+    quizzes: {},
+    quiz: initialQuiz
+  },
   customers: [],
   facilities: [],
 
@@ -194,3 +242,5 @@ export const emptyTile = {
   securityFunction: '',
   description: ''
 };
+
+export const initialQuizAnswers = { show: false, quizAnswers: {} };

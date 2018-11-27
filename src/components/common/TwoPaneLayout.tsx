@@ -14,6 +14,7 @@ import ManageInventory from '../manageInventory/ManageInventory';
 import ManageProductQueue from '../manageProductQueue/ManageProductQueue';
 import ManageJob from '../manageJob/ManageJob';
 import ManageLocation from '../manageLocation/ManageLocation';
+import Training from '../training/Training';
 import constants from '../../constants/constants';
 import { IinitialState } from '../../models';
 
@@ -76,6 +77,7 @@ const TwoPaneLayout = (props: any) => {
             <Route exact path="/productqueue" component={ManageProductQueue} />
             <Route exact path="/managejobs" component={ManageJob} />
             <Route exact path="/locations" component={ManageLocation} />
+            <Route exact path="/training" component={Training} />
           </Switch>
         </Col>
       </Row>

@@ -318,6 +318,7 @@ export interface IinitialState {
   showEditFacilityModal: boolean;
   showEditProfileModal: boolean;
   showSecurityFunctionsModal: boolean;
+  training: ItrainingReducer;
 }
 export interface Itile {
   icon: string | string[];
@@ -362,3 +363,103 @@ export type transitionInType = 'bounceIn' | 'bounceInDown' | 'fadeIn';
 export type transitionOutType = 'bounceOut' | 'bounceOutUp' | 'fadeOut';
 
 export type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
+
+/* 
+* TRAINING MODELS
+*/
+export interface GFClass {
+  id: string;
+  name: string;
+  code: string;
+  classSize: number;
+  createDate: string;
+}
+
+export interface GFCourse {
+  id?: string;
+  name: string;
+  description: string;
+}
+
+export interface GFLesson {
+  id: string;
+  name: string;
+  description: string;
+  courseID: string;
+  imagePath: string;
+  order: number;
+  primaryVideoPath: string;
+  slideshowPath: string;
+  courseLessons: any;
+}
+
+export interface GFLessons {
+  [key: string]: GFLesson;
+}
+export interface GFClassProgressRaw {
+  [key: string]: GFStudentQuizResult[];
+}
+
+export interface GFLessonsWithProgress {
+  quiz01Results: GFStudentQuizResult[];
+  quiz02Results: GFStudentQuizResult[];
+  quiz03Results: GFStudentQuizResult[];
+  quiz04Results: GFStudentQuizResult[];
+  quiz05Results: GFStudentQuizResult[];
+  lessonHasProgress: boolean;
+}
+
+export interface GFStudentWithProgress {
+  quiz01Results: GFStudentQuizResult[];
+  quiz02Results: GFStudentQuizResult[];
+  quiz03Results: GFStudentQuizResult[];
+  quiz04Results: GFStudentQuizResult[];
+  quiz05Results: GFStudentQuizResult[];
+}
+
+export interface GFQuizQuestion {
+  id: string;
+  text: string;
+  type: string;
+  options: any[];
+  correctAnswer: string;
+  correctText: string;
+  wrongText: string;
+  order: number;
+  userAnswer?: any;
+  userCorrect?: boolean;
+}
+
+export interface GFQuizItem {
+  id: string;
+  name: string;
+  imagePath: string;
+  isComplete: boolean;
+  videoPath: string;
+  instructions: string;
+  lessonID: string;
+  questions: GFQuizQuestion[];
+  createDate?: any;
+  updateDate?: any;
+  studentCanAccess?: any;
+}
+
+export interface GFStudentQuizResult {
+  id?: string;
+  studentID: string;
+  lessonID: string;
+  quizID: string;
+  quiz: GFQuizItem;
+  answers: any[];
+  score: number;
+  createDate: string;
+  className: string;
+}
+
+export interface ItrainingReducer {
+  courses: GFCourse[];
+  lessons: GFLessons | any;
+  lesson: GFLesson;
+  quizzes: { [key: string]: GFQuizItem };
+  quiz: GFQuizItem;
+}

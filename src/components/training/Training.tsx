@@ -13,7 +13,8 @@ import {
   loadCourses,
   getLessonsByCourseID,
   setLesson,
-  getAllLessons
+  getAllLessons,
+  getAllQuizzes
 } from '../../actions/trainingActions';
 
 import {
@@ -43,6 +44,7 @@ interface Props extends RouteComponentProps<RouterParams> {
   setLesson: any;
   loading: boolean;
   getAllLessons: typeof getAllLessons;
+  getAllQuizzes: typeof getAllQuizzes;
 }
 
 interface State {
@@ -74,6 +76,7 @@ class Courses extends React.Component<Props, State> {
     // if (!this.props.courses.length) {
     this.props.loadCourses(this.props.user);
     this.props.getAllLessons(this.props.user);
+    this.props.getAllQuizzes(this.props.user);
     // }
     // if we have a courseID then display the lessons in that course
     // if (!!this.props.match.params.courseID) {
@@ -313,6 +316,7 @@ export default connect(
     loadCourses,
     getLessonsByCourseID,
     setLesson,
-    getAllLessons
+    getAllLessons,
+    getAllQuizzes
   }
 )(Courses);

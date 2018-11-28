@@ -67,3 +67,24 @@ export function getAllLessons(user: Iuser) {
       });
   };
 }
+
+/*
+* Complete list of quizzes without the questions
+*/
+export function getAllQuizzes(user: Iuser) {
+  return (dispatch: any) => {
+    dispatch(beginAjaxCall());
+    return courseAPI
+      .getAllQuizzes(user)
+      .then(quizzes => {
+        dispatch({ type: types.LOAD_QUIZZES_SUCCESS, quizzes });
+        return quizzes;
+      })
+      .catch(error => {
+        console.error('Error when trying to get all quizzes', error);
+        dispatch({ type: types.LOAD_QUIZZES_FAILED, error });
+        constants.handleError(error, 'loading all quizzes');
+        throw error;
+      });
+  };
+}

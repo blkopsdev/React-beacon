@@ -12,7 +12,8 @@ import {
 import {
   loadCourses,
   getLessonsByCourseID,
-  setLesson
+  setLesson,
+  getAllLessons
 } from '../../actions/trainingActions';
 
 import {
@@ -41,6 +42,7 @@ interface Props extends RouteComponentProps<RouterParams> {
   getLessonsByCourseID: any;
   setLesson: any;
   loading: boolean;
+  getAllLessons: typeof getAllLessons;
 }
 
 interface State {
@@ -70,14 +72,15 @@ class Courses extends React.Component<Props, State> {
   componentDidMount() {
     // TODO get updated courses based on time like we are doing in App.tsx in GrammarFlip.  for now we will get them every time.
     // if (!this.props.courses.length) {
-    this.getAllCourses();
+    this.props.loadCourses(this.props.user);
+    this.props.getAllLessons(this.props.user);
     // }
     // if we have a courseID then display the lessons in that course
-    if (!!this.props.match.params.courseID) {
-      this.loadCourseLessons(this.props.match.params.courseID);
-    } else {
-      this.setState({ display: 'courses' });
-    }
+    // if (!!this.props.match.params.courseID) {
+    //   this.loadCourseLessons(this.props.match.params.courseID);
+    // } else {
+    //   this.setState({ display: 'courses' });
+    // }
   }
 
   componentWillReceiveProps(nextProps: any) {
@@ -92,10 +95,6 @@ class Courses extends React.Component<Props, State> {
     ) {
       this.loadCourseLessons(this.props.match.params.courseID);
     }
-  }
-
-  getAllCourses() {
-    this.props.loadCourses(this.props.user);
   }
 
   /*
@@ -313,6 +312,7 @@ export default connect(
   {
     loadCourses,
     getLessonsByCourseID,
-    setLesson
+    setLesson,
+    getAllLessons
   }
 )(Courses);

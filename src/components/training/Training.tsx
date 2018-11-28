@@ -27,8 +27,8 @@ import {
   Col
 } from 'react-bootstrap';
 
-import { RouteComponentProps } from 'react-router';
-// const mixpanel = require('mixpanel-browser')
+import { RouteComponentProps, Switch, Route } from 'react-router';
+import Lesson from './Lesson';
 
 interface RouterParams {
   courseID: string;
@@ -159,7 +159,7 @@ class Courses extends React.Component<Props, State> {
       // this.props.lessons.filter((lesson: any) => lesson.id === gfLesson.id)[0]
     );
     window.scrollTo(0, 0);
-    // this.props.history.push(`/lesson/${this.props.match.params.courseID}/${gfLesson.id}`)
+    this.props.history.push(`${this.props.match.url}/${gfLesson.id}`);
   }
 
   handleChange(e: any) {
@@ -293,9 +293,36 @@ class Courses extends React.Component<Props, State> {
 
   render() {
     return (
-      <Grid className="content modal-container">
-        {this.displayCourseHtml()}
-      </Grid>
+      <Switch>
+        {/* <Route exact path={`/training/:courseID/:lessonID/:quizID`} component={Lesson} /> */}
+        <Route
+          exact
+          path={`/training/:courseID/:lessonID`}
+          component={Lesson}
+        />
+        <Route
+          exact
+          path={`/training/:courseID`}
+          render={() => {
+            return (
+              <Grid className="content modal-container">
+                {this.printLessonsList()}
+              </Grid>
+            );
+          }}
+        />
+        <Route
+          exact
+          path={`/training`}
+          render={() => {
+            return (
+              <Grid className="content modal-container">
+                {this.printStudentCourses()}
+              </Grid>
+            );
+          }}
+        />
+      </Switch>
     );
   }
 }

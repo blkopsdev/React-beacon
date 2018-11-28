@@ -68,9 +68,10 @@ class Courses extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    if (!this.props.courses.length) {
-      this.getAllCourses();
-    }
+    // TODO get updated courses based on time like we are doing in App.tsx in GrammarFlip.  for now we will get them every time.
+    // if (!this.props.courses.length) {
+    this.getAllCourses();
+    // }
     // if we have a courseID then display the lessons in that course
     if (!!this.props.match.params.courseID) {
       this.loadCourseLessons(this.props.match.params.courseID);

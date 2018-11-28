@@ -128,25 +128,6 @@ class CourseAPI {
   }
 
   /*
-    Get all writing assignments for lesson
-  */
-  static getAllWAByLessonID(lessonID: string, user: Iuser) {
-    const  URL = `${root}/writingassignment/getall?lessonID=${lessonID}`;
-    const  request = new Request(URL,
-      { method: 'GET', headers: this.getHeaders(user) });
-
-    return fetch(request)
-      .then((response) => {
-        if (response.status !== 200) {
-          throw response;
-        }
-        return response.json();
-      }).then((data: any) => {
-        return data;
-      });
-  }
-
-  /*
     Convenience method to construct headers using a user object to obtain
     their apiKey
   */

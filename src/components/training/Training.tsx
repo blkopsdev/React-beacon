@@ -7,7 +7,8 @@ import {
   GFLesson,
   GFQuizItem,
   GFLessons,
-  IinitialState
+  IinitialState,
+  Itile
 } from '../../models';
 import {
   loadCourses,
@@ -22,13 +23,16 @@ import {
   ListGroupItem,
   Media,
   Panel,
-  Grid,
   Row,
-  Col
+  Col,
+  Button
 } from 'react-bootstrap';
 
 import { RouteComponentProps, Switch, Route } from 'react-router';
 import Lesson from './Lesson';
+import Banner from '../common/Banner';
+import constants from '../../constants/constants';
+import { emptyTile } from '../../reducers/initialState';
 
 interface RouterParams {
   courseID: string;
@@ -48,6 +52,7 @@ interface Props extends RouteComponentProps<RouterParams> {
 }
 
 interface State {
+  currentTile: Itile;
   display: string;
   selectedCourse: any;
   filteredLessons: GFLesson[];
@@ -57,6 +62,7 @@ class Courses extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = {
+      currentTile: emptyTile,
       display: 'courses',
       selectedCourse: { name: '', description: '' },
       filteredLessons: []
@@ -69,6 +75,11 @@ class Courses extends React.Component<Props, State> {
     this.loadLessonAndQuizzes = this.loadLessonAndQuizzes.bind(this);
     this.goBack = this.goBack.bind(this);
     this.goToProgress = this.goToProgress.bind(this);
+  }
+  componentWillMount() {
+    this.setState({
+      currentTile: constants.getTileByURL(this.props.location.pathname)
+    });
   }
 
   componentDidMount() {
@@ -114,7 +125,7 @@ class Courses extends React.Component<Props, State> {
 
     // replace current path so we know which course is selected
     const path = `/training/${gfCourseId}`;
-    this.props.history.replace(path);
+    this.props.history.push(path);
     const sc = this.props.courses.filter(
       (course: any) => course.id === gfCourseId
     )[0];
@@ -184,22 +195,14 @@ class Courses extends React.Component<Props, State> {
         key="courses"
         className="main-content content-without-sidebar courses animated fadeIn"
       >
-        <Row className="sub-header">
-          <Col md={12} xs={12}>
-            <h1 className="text-center">Training</h1>
-          </Col>
-        </Row>
         <Row className="">
           <Col xs={12} sm={12}>
-            <div className="courses-list text-center">
+            <div className="courses-tiles text-center">
               {this.props.user.isActive &&
                 this.props.courses.map(gfCourse => {
                   return (
                     <Col
                       key={gfCourse.id}
-                      onClick={() => {
-                        this.loadCourseLessons(gfCourse.id || '');
-                      }}
                       xs={12}
                       sm={4}
                       md={4}
@@ -207,8 +210,22 @@ class Courses extends React.Component<Props, State> {
                     >
                       <Panel className="text-center">
                         <h2>{this.shortenTitle(gfCourse.name)}</h2>
-                        <h4>{this.shortenDescription(gfCourse.description)}</h4>
-                        <div className="course-footer" />
+                        <Button bsStyle="warning" type="button">
+                          Purchase Entire Course
+                        </Button>
+                        <h4>{'$845'}</h4>
+                        <span className="purchase-text">
+                          Save 25% by purchasing the entire course rather than
+                          all the lessons individually
+                        </span>
+                        <div
+                          className="course-footer"
+                          onClick={() => {
+                            this.loadCourseLessons(gfCourse.id || '');
+                          }}
+                        >
+                          {'View Lessons'}
+                        </div>
                       </Panel>
                     </Col>
                   );
@@ -240,14 +257,6 @@ class Courses extends React.Component<Props, State> {
   printLessonsList() {
     return (
       <div className="courses main-content content-without-sidebar student animated fadeIn">
-        <div className="row sub-header">
-          <Col md={12}>
-            <h1 className="text-center">{this.state.selectedCourse.name}</h1>
-            <h3 className="text-center">
-              {this.state.selectedCourse.description}
-            </h3>
-          </Col>
-        </div>
         <div className="row courses-list">
           <ListGroup className="col-md-12">
             {this.state.filteredLessons.map((gfLesson, index) => {
@@ -259,13 +268,18 @@ class Courses extends React.Component<Props, State> {
                 <ListGroupItem className="lesson list-item" key={gfLesson.id}>
                   <Media>
                     <Col
-                      md={11}
+                      md={9}
                       onClick={() => {
                         this.loadLessonAndQuizzes(gfLesson || '');
                       }}
                     >
                       <img width={64} height={64} src={imagePath} alt="Image" />
                       <span className="lesson-name">{gfLesson.name}</span>
+                    </Col>
+                    <Col md={3}>
+                      <span className="lesson-name lesson-progress">
+                        {'x% Complete'}
+                      </span>
                     </Col>
                   </Media>
                 </ListGroupItem>
@@ -291,38 +305,40 @@ class Courses extends React.Component<Props, State> {
     return displayHtml;
   }
 
+  getBannerTitle() {
+    if (!!this.state.selectedCourse.name) {
+      return this.state.selectedCourse.name;
+    }
+    return 'Training';
+  }
+
   render() {
     return (
-      <Switch>
-        {/* <Route exact path={`/training/:courseID/:lessonID/:quizID`} component={Lesson} /> */}
-        <Route
-          exact
-          path={`/training/:courseID/:lessonID`}
-          component={Lesson}
+      <div className="manage-training">
+        <Banner
+          title={this.getBannerTitle()}
+          img={this.state.currentTile.srcBanner}
+          color={constants.colors[`${this.state.currentTile.color}`]}
         />
-        <Route
-          exact
-          path={`/training/:courseID`}
-          render={() => {
-            return (
-              <Grid className="content modal-container">
-                {this.printLessonsList()}
-              </Grid>
-            );
-          }}
-        />
-        <Route
-          exact
-          path={`/training`}
-          render={() => {
-            return (
-              <Grid className="content modal-container">
-                {this.printStudentCourses()}
-              </Grid>
-            );
-          }}
-        />
-      </Switch>
+        <Switch>
+          {/* <Route exact path={`/training/:courseID/:lessonID/:quizID`} component={Lesson} /> */}
+          <Route
+            exact
+            path={`/training/:courseID/:lessonID`}
+            component={Lesson}
+          />
+          <Route
+            exact
+            path={`/training/:courseID`}
+            render={() => this.printLessonsList()}
+          />
+          <Route
+            exact
+            path={`/training`}
+            render={() => this.printStudentCourses()}
+          />
+        </Switch>
+      </div>
     );
   }
 }

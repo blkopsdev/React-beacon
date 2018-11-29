@@ -12,7 +12,6 @@ import {
   ListGroup,
   ListGroupItem,
   Media,
-  Grid,
   Row,
   Col,
   Breadcrumb
@@ -268,11 +267,7 @@ class Lesson extends React.Component<Props, State> {
     );
   }
   render() {
-    return (
-      <Grid className="content modal-container">
-        {this.displayLessonsHTML()}
-      </Grid>
-    );
+    return this.displayLessonsHTML();
   }
 }
 

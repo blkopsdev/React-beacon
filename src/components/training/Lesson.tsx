@@ -13,17 +13,18 @@ import {
   ListGroupItem,
   Media,
   Row,
-  Col,
-  Breadcrumb
+  Col
+  // Breadcrumb
 } from 'react-bootstrap';
 // const FontAwesome = require("react-fontawesome");
 // const mixpanel = require("mixpanel-browser");
 
 import { RouteComponentProps } from 'react-router';
-
+import Player from '@vimeo/player';
 interface RouterParams {
   courseID: string;
   lessonID: string;
+  quizID: string;
 }
 
 interface Props extends RouteComponentProps<RouterParams> {
@@ -41,20 +42,18 @@ interface Props extends RouteComponentProps<RouterParams> {
 
 interface State {
   primaryVideo: string;
-  srcSlideShare: string;
   lessonQuizzes: GFQuizItem[]; // the quizzes for this lesson
   waitingCount: number;
 }
 
 class Lesson extends React.Component<Props, State> {
+  private player: any;
+  private pElem: any;
   constructor(props: Props) {
     super(props);
     this.state = {
-      primaryVideo: `https://fast.wistia.net/embed/iframe/${
+      primaryVideo: `https://player.vimeo.com/video/${
         this.props.lesson.primaryVideoPath
-      }?videoFoam=true`,
-      srcSlideShare: `https://www.slideshare.net/slideshow/embed_code/key/${
-        this.props.lesson.slideshowPath
       }`,
       lessonQuizzes: [],
       waitingCount: 0
@@ -96,7 +95,7 @@ class Lesson extends React.Component<Props, State> {
       isEmpty(this.props.lessons) ||
       isEmpty(this.props.quizzes)
     ) {
-      this.props.history.replace(`/training`);
+      this.props.history.push(`/training`);
       return;
     }
 
@@ -106,6 +105,8 @@ class Lesson extends React.Component<Props, State> {
     if (this.props.lesson.id !== this.props.match.params.lessonID) {
       this.setLesson(this.props.match.params.lessonID);
     }
+
+    this.setUpPlayer();
   }
   componentDidUpdate(prevProps: Props) {
     if (prevProps.quizzes !== this.props.quizzes) {
@@ -114,6 +115,41 @@ class Lesson extends React.Component<Props, State> {
     if (prevProps.lessons !== this.props.lessons) {
       this.setLesson(this.props.match.params.lessonID);
     }
+  }
+
+  componentWillUnmount() {
+    if (typeof this.player !== 'undefined') {
+      this.player.off('play');
+      this.player.off('pause');
+      this.player.off('timeupdate');
+      this.player.off('seeked');
+    }
+  }
+
+  setUpPlayer() {
+    const options = {
+      id: this.props.lesson.primaryVideoPath,
+      width: this.pElem.offsetWidth < 723 ? this.pElem.offsetWidth : 723,
+      loop: true
+    };
+
+    this.player = new Player('lessonPlayer', options);
+    // this.player = new Player("lessonPlayer");
+    this.player.ready().then(() => {
+      // set up event listeners
+      this.player.on('play', (data: any) => {
+        console.log('PLAY:', data);
+      });
+      this.player.on('pause', (data: any) => {
+        console.log('PAUSE:', data);
+      });
+      this.player.on('timeupdate', (data: any) => {
+        console.log('TIMEUPDATE:', data);
+      });
+      this.player.on('seeked', (data: any) => {
+        console.log('SEEKED:', data);
+      });
+    });
   }
 
   setLesson(lessonID: string) {
@@ -169,13 +205,13 @@ class Lesson extends React.Component<Props, State> {
   }
 
   displayLessonsHTML() {
-    let courseName;
-    if (this.props.user.id && this.props.lesson.id) {
-      courseName = this.props.lesson.courseLessons[0].course.name;
-    }
+    // let courseName;
+    // if (this.props.user.id && this.props.lesson.id) {
+    //   courseName = this.props.lesson.courseLessons[0].course.name;
+    // }
     return (
       <div className="main-content content-without-sidebar lesson animated fadeIn">
-        <Row className="sub-header">
+        {/* <Row className="sub-header">
           <Col md={10} xs={10} className="gf-breadcrumb lesson">
             <Breadcrumb>
               <Breadcrumb.Item>
@@ -186,7 +222,7 @@ class Lesson extends React.Component<Props, State> {
               </Breadcrumb.Item>
             </Breadcrumb>
           </Col>
-        </Row>
+        </Row> */}
         <Row className="lesson-description">
           <Col
             md={12}
@@ -196,37 +232,13 @@ class Lesson extends React.Component<Props, State> {
           />
         </Row>
         <Row className="lesson-list">
-          <Col md={6} sm={6} xs={12} className="firstVideo text-center">
-            <iframe
+          <Col md={12} sm={12} xs={12} className="firstVideo text-center">
+            <div
+              id="lessonPlayer"
               style={{
-                border: '1px solid #CCC',
-                borderWidth: 1,
-                marginBottom: 5,
                 maxWidth: '100%'
               }}
-              width="500"
-              height="360"
-              src={this.state.primaryVideo}
-              frameBorder="0"
-              allowFullScreen={true}
-            />
-          </Col>
-          <Col md={6} sm={6} xs={12}>
-            <iframe
-              style={{
-                border: '1px solid #CCC',
-                borderWidth: 1,
-                marginBottom: 5,
-                maxWidth: '100%'
-              }}
-              src={this.state.srcSlideShare}
-              width="500"
-              height="360"
-              frameBorder="0"
-              marginWidth={0}
-              marginHeight={0}
-              scrolling="no"
-              allowFullScreen={true}
+              ref={ref => (this.pElem = ref)}
             />
           </Col>
         </Row>

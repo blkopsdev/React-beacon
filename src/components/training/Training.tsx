@@ -37,6 +37,8 @@ import { emptyTile } from '../../reducers/initialState';
 
 interface RouterParams {
   courseID: string;
+  lessonID: string;
+  quizID: string;
 }
 
 interface Props extends RouteComponentProps<RouterParams> {
@@ -308,8 +310,52 @@ class Courses extends React.Component<Props, State> {
     return displayHtml;
   }
 
-  getBannerTitle() {
-    if (!!this.props.lesson.name) {
+  getBreadcrumbs() {
+    if (!!this.props.match.params.quizID) {
+      return (
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <span
+              onClick={() => {
+                this.setState({ selectedCourse: {} });
+                this.props.history.push('/training');
+              }}
+            >
+              Training
+            </span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <span
+              onClick={() => {
+                this.props.history.replace(
+                  `/training/${this.props.match.params.courseID}`
+                );
+              }}
+            >
+              {this.state.selectedCourse.name}
+            </span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <span
+              onClick={() => {
+                this.props.history.replace(
+                  `/training/${this.props.match.params.courseID}/${
+                    this.props.match.params.lessonID
+                  }`
+                );
+              }}
+            >
+              {this.props.lesson.name}
+            </span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item active={true}>
+            {this.props.lesson.name}
+          </Breadcrumb.Item>
+        </Breadcrumb>
+      );
+    }
+
+    if (!!this.props.match.params.lessonID) {
       return (
         <Breadcrumb>
           <Breadcrumb.Item>
@@ -337,7 +383,8 @@ class Courses extends React.Component<Props, State> {
         </Breadcrumb>
       );
     }
-    if (!!this.state.selectedCourse.name) {
+
+    if (!!this.props.match.params.courseID) {
       return (
         <Breadcrumb>
           <Breadcrumb.Item>
@@ -356,11 +403,21 @@ class Courses extends React.Component<Props, State> {
         </Breadcrumb>
       );
     }
-    return (
-      <Breadcrumb>
-        <Breadcrumb.Item active={true}>Training</Breadcrumb.Item>
-      </Breadcrumb>
-    );
+
+    return '';
+  }
+
+  getBannerTitle() {
+    if (!!this.props.match.params.quizID) {
+      return this.props.quiz.name;
+    }
+    if (!!this.props.match.params.lessonID) {
+      return this.props.lesson.name;
+    }
+    if (!!this.props.match.params.courseID) {
+      return this.state.selectedCourse.name;
+    }
+    return 'Training';
   }
 
   render() {
@@ -371,6 +428,7 @@ class Courses extends React.Component<Props, State> {
           img={this.state.currentTile.srcBanner}
           color={constants.colors[`${this.state.currentTile.color}`]}
         />
+        {this.getBreadcrumbs()}
         <Switch>
           {/* <Route exact path={`/training/:courseID/:lessonID/:quizID`} component={Lesson} /> */}
           <Route

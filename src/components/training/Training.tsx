@@ -25,7 +25,8 @@ import {
   Panel,
   Row,
   Col,
-  Button
+  Button,
+  Breadcrumb
 } from 'react-bootstrap';
 
 import { RouteComponentProps, Switch, Route } from 'react-router';
@@ -43,6 +44,8 @@ interface Props extends RouteComponentProps<RouterParams> {
   courses: GFCourse[];
   lessons: GFLessons;
   quizzes: { [key: string]: GFQuizItem };
+  quiz: GFQuizItem;
+  lesson: GFLesson;
   loadCourses: any;
   getLessonsByCourseID: any;
   setLesson: any;
@@ -181,7 +184,7 @@ class Courses extends React.Component<Props, State> {
     let path = ``;
     if (this.state.display === 'lessons') {
       this.setState({ display: 'courses' });
-      path = `/courses`;
+      path = `/training`;
     }
     this.props.history.push(path);
   }
@@ -306,10 +309,58 @@ class Courses extends React.Component<Props, State> {
   }
 
   getBannerTitle() {
-    if (!!this.state.selectedCourse.name) {
-      return this.state.selectedCourse.name;
+    if (!!this.props.lesson.name) {
+      return (
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <span
+              onClick={() => {
+                this.setState({ selectedCourse: {} });
+                this.props.history.push('/training');
+              }}
+            >
+              Training
+            </span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item>
+            <span
+              onClick={() => {
+                this.props.history.goBack();
+              }}
+            >
+              {this.state.selectedCourse.name}
+            </span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item active={true}>
+            {this.props.lesson.name}
+          </Breadcrumb.Item>
+        </Breadcrumb>
+      );
     }
-    return 'Training';
+    if (!!this.state.selectedCourse.name) {
+      return (
+        <Breadcrumb>
+          <Breadcrumb.Item>
+            <span
+              onClick={() => {
+                this.setState({ selectedCourse: {} });
+                this.props.history.goBack();
+              }}
+            >
+              Training
+            </span>
+          </Breadcrumb.Item>
+          <Breadcrumb.Item active={true}>
+            {this.state.selectedCourse.name}
+          </Breadcrumb.Item>
+        </Breadcrumb>
+      );
+    }
+    return (
+      <Breadcrumb>
+        <Breadcrumb.Item active={true}>Training</Breadcrumb.Item>
+      </Breadcrumb>
+    );
   }
 
   render() {
@@ -349,6 +400,8 @@ const mapStateToProps = (state: IinitialState, ownProps: any) => {
     courses: state.training.courses,
     lessons: state.training.lessons,
     quizzes: state.training.quizzes,
+    quiz: state.training.quiz,
+    lesson: state.training.lesson,
     loading: state.ajaxCallsInProgress > 0
   };
 };

@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
-import { filter } from 'lodash'; // isEmpty
+import { filter, isEmpty } from 'lodash';
 import { GFQuizItem, GFLesson, GFCourse } from '../../models';
 
 import {
@@ -86,19 +86,19 @@ class Lesson extends React.Component<Props, State> {
       !this.props.match.params.courseID
     ) {
       // no lesson id and no coursID is not allowed
-      this.props.history.replace(`/courses`);
+      this.props.history.replace(`/training`);
       return;
     }
 
     // Check to make sure we have already loaded courses, lessons and quizzes in redux
-    // if (
-    //   isEmpty(this.props.courses) ||
-    //   isEmpty(this.props.lessons) ||
-    //   isEmpty(this.props.quizzes)
-    // ) {
-    //   this.props.history.replace(`/courses`);
-    //   return;
-    // }
+    if (
+      isEmpty(this.props.courses) ||
+      isEmpty(this.props.lessons) ||
+      isEmpty(this.props.quizzes)
+    ) {
+      this.props.history.replace(`/training`);
+      return;
+    }
 
     // Check to see if there is any lesson in redux
     // If there is a lesson we make sure it matches the lesson we are loading in the params otherwise
@@ -139,7 +139,7 @@ class Lesson extends React.Component<Props, State> {
   }
 
   goBack() {
-    this.props.history.replace(`/courses/${this.props.match.params.courseID}`);
+    this.props.history.replace(`/training/${this.props.match.params.courseID}`);
   }
   /*
   * start a quiz
@@ -161,11 +161,11 @@ class Lesson extends React.Component<Props, State> {
   }
 
   backToCourses() {
-    this.props.history.replace(`/courses/${this.props.match.params.courseID}`);
+    this.props.history.replace(`/training/${this.props.match.params.courseID}`);
   }
 
   backToAllCourses() {
-    this.props.history.push(`/courses`);
+    this.props.history.push(`/training`);
   }
 
   displayLessonsHTML() {

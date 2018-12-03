@@ -129,7 +129,7 @@ class Lesson extends React.Component<Props, State> {
   setUpPlayer() {
     const options = {
       id: this.props.lesson.primaryVideoPath,
-      width: this.pElem.offsetWidth < 723 ? this.pElem.offsetWidth : 723,
+      width: this.pElem.offsetWidth, // > 723 ? this.pElem.offsetWidth : 723,
       loop: true
     };
 
@@ -242,9 +242,6 @@ class Lesson extends React.Component<Props, State> {
             />
           </Col>
         </Row>
-        {this.state.lessonQuizzes.length !== 0 && (
-          <h1>Diagnostic, Practice Exercises, and Post-Evaluation</h1>
-        )}
         <ListGroup className="lesson-list">
           {this.state.lessonQuizzes.map((gfQuiz, index) => {
             let gfImage = gfQuiz.imagePath;
@@ -255,12 +252,12 @@ class Lesson extends React.Component<Props, State> {
               <ListGroupItem
                 key={gfQuiz.id}
                 onClick={() => {
-                  this.startQuiz(gfQuiz, index);
+                  // this.startQuiz(gfQuiz, index);
                 }}
               >
                 <Media>
                   <Media.Left>
-                    <img width={64} height={64} src={gfImage} alt="Image" />
+                    <img width={32} height={32} src={gfImage} alt="Image" />
                   </Media.Left>
                   <Media.Body>
                     <Media.Heading>{gfQuiz.name}</Media.Heading>

@@ -219,10 +219,10 @@ class Courses extends React.Component<Props, State> {
                           Purchase Entire Course
                         </Button>
                         <h4>{'$845'}</h4>
-                        <span className="purchase-text">
+                        <p className="purchase-text">
                           Save 25% by purchasing the entire course rather than
                           all the lessons individually
-                        </span>
+                        </p>
                         <div
                           className="course-footer"
                           onClick={() => {
@@ -278,7 +278,7 @@ class Courses extends React.Component<Props, State> {
                         this.loadLessonAndQuizzes(gfLesson || '');
                       }}
                     >
-                      <img width={64} height={64} src={imagePath} alt="Image" />
+                      <img width={32} height={32} src={imagePath} alt="Image" />
                       <span className="lesson-name">{gfLesson.name}</span>
                     </Col>
                     <Col md={3}>

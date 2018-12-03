@@ -4,7 +4,8 @@
   background-color: #eee;
   font-size: 1.2em;
   margin-bottom: 0px;
-  // padding: 15px 25px;
+  padding-top: 30px;
+  font-weight: 600;
   a {
     color: @primaryBlue;
   }
@@ -52,7 +53,7 @@
     max-height: 60px;
   }
   .lesson-name {
-    padding-left: 15px;
+    padding-left: 25px;
     font-family: @headerFont;
     font-size: 16px;
     font-weight: 400;
@@ -63,18 +64,18 @@
       li:nth-child(odd) {
         background-color: fade(@blue, 5%);
         &:hover {
-          background-color: fade(@blue, 20%);
+          background-color: fade(@blue, 10%);
         }
       }
       li:nth-child(even) {
         &:hover {
-          background-color: fade(#fff, 20%);
+          background-color: fade(#fff, 10%);
         }
       }
     }
   }
   .courses-tiles {
-    padding-top: 15px;
+    padding-top: 30px;
     padding-left: 15px;
     padding-right: 30px;
     .list-group {
@@ -95,12 +96,16 @@
           padding-top: 0px;
         }
         .purchase-text {
-          // line-height: 5px;
+          line-height: 20px;
+          padding-left: 20px;
+          padding-right: 20px;
         }
       }
       .course-footer {
         cursor: pointer;
-        position: absolute;
+        padding: 10px;
+        font-weight: 600;
+        // position: absolute;
         bottom: 0;
         background-color: @blue;
         border-bottom: 4px solid @darkerBlue;

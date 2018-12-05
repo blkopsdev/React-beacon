@@ -51,7 +51,6 @@ import {
 } from '../../actions/manageInventoryActions';
 
 import { getLocationsFacility } from '../../actions/manageLocationActions';
-import { getTotal } from '../../reducers/manageInventoryReducer';
 import Banner from '../common/Banner';
 import EditInstallModal from './EditInstallModal';
 import EditProductModal from './EditProductModal';
@@ -61,6 +60,7 @@ import InstallContactModal from './InstallContactModal';
 import SearchTableForm from '../common/SearchTableForm';
 import constants from '../../constants/constants';
 import SearchNewProductsModal from './SearchNewProductsModal';
+import { getTotal } from 'src/reducers/cartReducer';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -618,7 +618,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     showInstallContactModal: state.manageInventory.showInstallContactModal,
     facilityOptions: FormUtil.convertToOptions(state.user.facilities),
     productInfo: state.manageInventory.productInfo,
-    cartTotal: getTotal(state.manageInventory),
+    cartTotal: getTotal(state.manageInventory.cart),
     tableData: state.manageInventory.data,
     tableFilters: state.manageInventory.tableFilters,
     selectedProduct: state.manageInventory.selectedProduct

@@ -87,4 +87,7 @@ const cart = (
   }
 };
 
+export const getTotal = (state: IshoppingCart) =>
+  state.addedIDs.reduce((total, id) => total + getQuantity(state, id), 0);
+
 export default cart;

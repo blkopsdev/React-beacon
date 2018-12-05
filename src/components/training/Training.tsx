@@ -26,7 +26,8 @@ import {
   Row,
   Col,
   Button,
-  Breadcrumb
+  Breadcrumb,
+  Badge
 } from 'react-bootstrap';
 
 import { RouteComponentProps, Switch, Route } from 'react-router';
@@ -34,6 +35,15 @@ import Lesson from './Lesson';
 import Banner from '../common/Banner';
 import constants from '../../constants/constants';
 import { emptyTile } from '../../reducers/initialState';
+import ShoppingCartModal from '../shoppingCart/ShoppingCartModal';
+import {
+  addToCart,
+  toggleShoppingCartModal
+} from '../../actions/shoppingCartActions';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { TranslationFunction } from 'i18next';
+import { I18n, translate } from 'react-i18next';
+import { getTotal } from 'src/reducers/cartReducer';
 
 interface RouterParams {
   courseID: string;
@@ -54,6 +64,11 @@ interface Props extends RouteComponentProps<RouterParams> {
   loading: boolean;
   getAllLessons: typeof getAllLessons;
   getAllQuizzes: typeof getAllQuizzes;
+  toggleShoppingCartModal: typeof toggleShoppingCartModal;
+  addToCart: typeof addToCart;
+  cartTotal: number;
+  t: TranslationFunction;
+  i18n: I18n;
 }
 
 interface State {
@@ -428,6 +443,14 @@ class Courses extends React.Component<Props, State> {
           img={this.state.currentTile.srcBanner}
           color={constants.colors[`${this.state.currentTile.color}`]}
         />
+        <Button
+          className="request-for-quote-cart-button"
+          bsStyle="primary"
+          onClick={this.props.toggleShoppingCartModal}
+        >
+          <FontAwesomeIcon icon="shopping-cart" />
+          <Badge>{this.props.cartTotal} </Badge>
+        </Button>
         {this.getBreadcrumbs()}
         <Switch>
           {/* <Route exact path={`/training/:courseID/:lessonID/:quizID`} component={Lesson} /> */}
@@ -447,12 +470,18 @@ class Courses extends React.Component<Props, State> {
             render={() => this.printStudentCourses()}
           />
         </Switch>
+        <ShoppingCartModal
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+          t={this.props.t}
+        />
       </div>
     );
   }
 }
 
-const mapStateToProps = (state: IinitialState, ownProps: any) => {
+const mapStateToProps = (state: IinitialState, ownProps: Props) => {
   return {
     user: state.user,
     courses: state.training.courses,
@@ -460,17 +489,21 @@ const mapStateToProps = (state: IinitialState, ownProps: any) => {
     quizzes: state.training.quizzes,
     quiz: state.training.quiz,
     lesson: state.training.lesson,
-    loading: state.ajaxCallsInProgress > 0
+    loading: state.ajaxCallsInProgress > 0,
+    cartTotal: getTotal(state.training.cart)
   };
 };
 
-export default connect(
-  mapStateToProps,
-  {
-    loadCourses,
-    getLessonsByCourseID,
-    setLesson,
-    getAllLessons,
-    getAllQuizzes
-  }
-)(Courses);
+export default translate('training')(
+  connect(
+    mapStateToProps,
+    {
+      loadCourses,
+      getLessonsByCourseID,
+      setLesson,
+      getAllLessons,
+      getAllQuizzes,
+      toggleShoppingCartModal
+    }
+  )(Courses)
+);

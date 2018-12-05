@@ -17,7 +17,7 @@ import {
   createTableFiltersWithName,
   modalToggleWithName
 } from './commonReducers';
-import cartReducer, { getAddedIDs, getQuantity } from './cartReducer';
+import cartReducer from './cartReducer';
 import initialState, { initialProduct } from './initialState';
 import * as types from '../actions/actionTypes';
 
@@ -277,21 +277,3 @@ export function productInfo(
       return state;
   }
 }
-
-// getters for shopping cart
-// const getAddedIds = (cart: IshoppingCart) => getAddedIDs(cart)
-// const getQuantity = (cart: IshoppingCart, id: string) => getQuantity(cart, id)
-const getProduct = (productInfoState: IproductInfo, id: string) =>
-  productInfoState.productGroups[id];
-
-export const getTotal = (state: ImanageInventoryReducer) =>
-  state.cart.addedIDs.reduce(
-    (total, id) => total + getQuantity(state.cart, id),
-    0
-  );
-
-export const getCartProducts = (state: ImanageInventoryReducer) =>
-  getAddedIDs(state.cart).map(id => ({
-    ...getProduct(state.productInfo, id),
-    quantity: getQuantity(state.cart, id)
-  }));

@@ -8,6 +8,8 @@ import {
   GFQuizItem,
   GFCourse
 } from 'src/models';
+import cartReducer, { getQuantity } from './cartReducer';
+import { modalToggleWithName } from './commonReducers';
 
 function courseReducer(state: GFCourse[] = [], action: any): GFCourse[] {
   switch (action.type) {
@@ -96,6 +98,20 @@ export default function trainingReducer(
     lessons: lessonsReducer(state.lessons, action),
     lesson: lessonReducer(state.lesson, action),
     quizzes: quizzesReducer(state.quizzes, action),
-    quiz: quizReducer(state.quiz, action)
+    quiz: quizReducer(state.quiz, action),
+    cart: cartReducer(state.cart, action),
+    showShoppingCartModal: modalToggleWithName(
+      state.showShoppingCartModal,
+      action,
+      'SHOPPING_CART'
+    )
   };
 }
+
+// getters for shopping cart
+
+export const getTotal = (state: ItrainingReducer) =>
+  state.cart.addedIDs.reduce(
+    (total, id) => total + getQuantity(state.cart, id),
+    0
+  );

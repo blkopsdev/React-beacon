@@ -1,6 +1,6 @@
 import * as types from '../actions/actionTypes';
 import initialState from './initialState';
-import { IshoppingCart, Iproduct } from '../models';
+import { IshoppingCart, IshoppingCartProduct } from '../models';
 import { filter, omit } from 'lodash';
 
 const addedIds = (
@@ -24,8 +24,8 @@ const addedIds = (
 };
 
 const productsByID = (
-  state: { [key: string]: Iproduct } = initialState.manageInventory.cart
-    .productsByID,
+  state: { [key: string]: IshoppingCartProduct } = initialState.manageInventory
+    .cart.productsByID,
   action: any
 ) => {
   switch (action.type) {

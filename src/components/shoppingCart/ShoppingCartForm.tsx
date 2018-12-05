@@ -1,5 +1,5 @@
 /* 
-* Edit Quote Form
+* Edit Shopping Cart Form
 */
 
 import {
@@ -24,13 +24,15 @@ import * as React from 'react';
 import { FormUtil } from '../common/FormUtil';
 import {
   Ioption,
-  Iproduct,
+  IshoppingCartProduct,
   IproductInfo,
   IshoppingCart,
   ItableFiltersReducer
 } from '../../models';
-import { checkout } from '../../actions/shoppingCartActions';
-import { toggleEditQuoteModal } from '../../actions/manageInventoryActions';
+import {
+  checkout,
+  toggleShoppingCartModal
+} from '../../actions/shoppingCartActions';
 import constants from '../../constants/constants';
 
 const NumberInputWithButton = ({
@@ -71,7 +73,7 @@ const NumberInputWithButton = ({
 );
 
 const buildFieldConfig = (
-  products: { [key: string]: Iproduct },
+  products: { [key: string]: IshoppingCartProduct },
   deleteFromCart: any
 ) => {
   const productControls = mapValues(products, prod => {
@@ -113,7 +115,7 @@ const buildFieldConfig = (
 
 interface Iprops {
   checkout: typeof checkout;
-  toggleEditQuoteModal: typeof toggleEditQuoteModal;
+  toggleShoppingCartModal: typeof toggleShoppingCartModal;
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;
@@ -226,7 +228,7 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
               bsStyle="default"
               type="button"
               className="pull-left"
-              onClick={this.props.toggleEditQuoteModal}
+              onClick={this.props.toggleShoppingCartModal}
             >
               {t('common:cancel')}
             </Button>
@@ -251,7 +253,7 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
                 bsStyle="default"
                 type="button"
                 className="pull-left"
-                onClick={this.props.toggleEditQuoteModal}
+                onClick={this.props.toggleShoppingCartModal}
               >
                 {t('common:cancel')}
               </Button>

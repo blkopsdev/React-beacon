@@ -32,7 +32,10 @@ import {
 } from '../../models';
 import { InstallationsExpander } from './InstallsExpander';
 import { TableUtil } from '../common/TableUtil';
-import { addToCart } from '../../actions/shoppingCartActions';
+import {
+  addToCart,
+  toggleShoppingCartModal
+} from '../../actions/shoppingCartActions';
 import { closeAllModals } from '../../actions/commonActions';
 import { emptyTile } from '../../reducers/initialState';
 import {
@@ -42,7 +45,6 @@ import {
   toggleInstallContactModal,
   toggleEditInstallModal,
   toggleEditProductModal,
-  toggleEditQuoteModal,
   toggleSearchNewProductsModal,
   toggleImportInstallModal,
   setSelectedProduct
@@ -53,7 +55,7 @@ import { getTotal } from '../../reducers/manageInventoryReducer';
 import Banner from '../common/Banner';
 import EditInstallModal from './EditInstallModal';
 import EditProductModal from './EditProductModal';
-import EditQuoteModal from '../shoppingCart/EditQuoteModal';
+import ShoppingCartModal from '../shoppingCart/ShoppingCartModal';
 import ImportInstallModal from './ImportInstallModal';
 import InstallContactModal from './InstallContactModal';
 import SearchTableForm from '../common/SearchTableForm';
@@ -74,7 +76,7 @@ interface IdispatchProps {
   // Add your dispatcher properties here
   toggleEditProductModal: typeof toggleEditProductModal;
   toggleEditInstallModal: typeof toggleEditInstallModal;
-  toggleEditQuoteModal: typeof toggleEditQuoteModal;
+  toggleShoppingCartModal: typeof toggleShoppingCartModal;
   toggleSearchNewProductsModal: typeof toggleSearchNewProductsModal;
   toggleImportInstallModal: typeof toggleImportInstallModal;
   getProductInfo: typeof getProductInfo;
@@ -498,7 +500,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         <Button
           className="request-for-quote-cart-button"
           bsStyle="primary"
-          onClick={this.props.toggleEditQuoteModal}
+          onClick={this.props.toggleShoppingCartModal}
         >
           <FontAwesomeIcon icon="shopping-cart" />
           <Badge>{this.props.cartTotal} </Badge>
@@ -560,7 +562,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           }
           t={this.props.t}
         />
-        <EditQuoteModal
+        <ShoppingCartModal
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
@@ -629,7 +631,7 @@ export default translate('manageInventory')(
       getInventory,
       toggleEditProductModal,
       toggleEditInstallModal,
-      toggleEditQuoteModal,
+      toggleShoppingCartModal,
       toggleSearchNewProductsModal,
       closeAllModals,
       getProductInfo,

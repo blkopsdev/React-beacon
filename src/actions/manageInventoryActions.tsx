@@ -367,9 +367,6 @@ export const toggleEditInstallModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_INSTALL
 });
 
-export const toggleEditQuoteModal = () => ({
-  type: types.TOGGLE_MODAL_EDIT_QUOTE
-});
 export const toggleInstallContactModal = () => ({
   type: types.TOGGLE_MODAL_INSTALL_CONTACT
 });

@@ -155,6 +155,12 @@ export interface Iproduct {
   quantity: number;
 }
 
+export interface IshoppingCartProduct {
+  name: string;
+  quantity: number;
+  id: number;
+}
+
 export interface IquoteItem {
   productID: string;
   quantity: number;
@@ -244,7 +250,7 @@ export interface ImanageTeamReducer {
 
 export interface IshoppingCart {
   addedIDs: string[];
-  productsByID: { [key: string]: Iproduct };
+  productsByID: { [key: string]: IshoppingCartProduct };
 }
 export interface ImanageInventoryReducer {
   data: Iproduct[];
@@ -253,7 +259,7 @@ export interface ImanageInventoryReducer {
   productInfo: IproductInfo;
   showEditProductModal: boolean;
   showEditInstallModal: boolean;
-  showEditQuoteModal: boolean;
+  showShoppingCartModal: boolean;
   showInstallContactModal: boolean;
   showSearchNewProductsModal: boolean;
   showImportInstall: boolean;
@@ -462,4 +468,6 @@ export interface ItrainingReducer {
   lesson: GFLesson;
   quizzes: { [key: string]: GFQuizItem };
   quiz: GFQuizItem;
+  cart: IshoppingCart;
+  showShoppingCartModal: boolean;
 }

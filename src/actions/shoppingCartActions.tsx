@@ -42,7 +42,7 @@ export const checkout = ({
       }
     );
     dispatch(beginAjaxCall());
-    dispatch({ type: types.TOGGLE_MODAL_EDIT_QUOTE });
+    dispatch({ type: types.TOGGLE_MODAL_SHOPPING_CART });
     return axios
       .post(API.POST.inventory.quote, { QuoteItems, facilityID, message })
       .then(data => {
@@ -58,3 +58,6 @@ export const checkout = ({
       });
   };
 };
+export const toggleShoppingCartModal = () => ({
+  type: types.TOGGLE_MODAL_SHOPPING_CART
+});

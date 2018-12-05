@@ -173,7 +173,7 @@ export default {
   manageInventory: {
     showEditProductModal: false,
     showEditInstallModal: false,
-    showEditQuoteModal: false,
+    showShoppingCartModal: false,
     showInstallContactModal: false,
     showSearchNewProductsModal: false,
     showImportInstall: false,
@@ -214,6 +214,11 @@ export default {
     tableFilters: initialTableFilters
   },
   training: {
+    cart: {
+      addedIDs: [],
+      productsByID: {}
+    },
+    showShoppingCartModal: false,
     courses: [
       {
         id: 'f8b631da-5a22-4e7f-9079-1b0a30e2435a',

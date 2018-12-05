@@ -182,10 +182,10 @@ export default function ManageInventory(
     productInfo: productInfo(state.productInfo, action),
     selectedProduct: selectedProductReducer(state.selectedProduct, action),
     newProducts: newProductsReducer(state.newProducts, action),
-    showEditQuoteModal: modalToggleWithName(
-      state.showEditQuoteModal,
+    showShoppingCartModal: modalToggleWithName(
+      state.showShoppingCartModal,
       action,
-      'EDIT_QUOTE'
+      'SHOPPING_CART'
     ),
     showEditProductModal: modalToggleWithName(
       state.showEditProductModal,

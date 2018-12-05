@@ -456,10 +456,21 @@ export interface GFStudentQuizResult {
   className: string;
 }
 
+export interface LessonProgress {
+  id?: string;
+  lessonID: string;
+  userID: string;
+  currentTime: number;
+  percentageComplete: number;
+  totalTime: number;
+  timeSpent: number;
+}
+
 export interface ItrainingReducer {
   courses: GFCourse[];
   lessons: GFLessons | any;
   lesson: GFLesson;
   quizzes: { [key: string]: GFQuizItem };
   quiz: GFQuizItem;
+  lessonProgress: { [key: string]: LessonProgress };
 }

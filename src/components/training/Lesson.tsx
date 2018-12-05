@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { filter, isEmpty } from 'lodash';
-import { GFQuizItem, GFLesson, GFCourse } from '../../models';
+import { GFQuizItem, GFLesson, GFCourse, LessonProgress } from '../../models';
 
 import {
-  setLesson
+  setLesson,
+  saveLessonProgress
   // setQuiz
 } from '../../actions/trainingActions';
 
@@ -21,6 +22,8 @@ import {
 
 import { RouteComponentProps } from 'react-router';
 import Player from '@vimeo/player';
+import * as moment from 'moment';
+
 interface RouterParams {
   courseID: string;
   lessonID: string;
@@ -35,9 +38,11 @@ interface Props extends RouteComponentProps<RouterParams> {
   quiz: GFQuizItem;
   quizzes: GFQuizItem[];
   setLesson: typeof setLesson;
+  saveLessonProgress: typeof saveLessonProgress;
   setQuiz: any;
   loading: boolean;
   params: any;
+  progress: LessonProgress;
 }
 
 interface State {
@@ -49,6 +54,8 @@ interface State {
 class Lesson extends React.Component<Props, State> {
   private player: any;
   private pElem: any;
+  private timeSpent: any;
+  private lastUpdate: any;
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -71,6 +78,8 @@ class Lesson extends React.Component<Props, State> {
     this.backToCourses = this.backToCourses.bind(this);
     this.backToAllCourses = this.backToAllCourses.bind(this);
     this.displayLessonsHTML = this.displayLessonsHTML.bind(this);
+
+    this.timeSpent = 0;
   }
 
   componentWillMount() {
@@ -142,9 +151,29 @@ class Lesson extends React.Component<Props, State> {
       });
       this.player.on('pause', (data: any) => {
         console.log('PAUSE:', data);
+        this.lastUpdate = null;
       });
       this.player.on('timeupdate', (data: any) => {
-        console.log('TIMEUPDATE:', data);
+        const now = moment().unix();
+        if (!this.lastUpdate) {
+          this.lastUpdate = now;
+        } else {
+          this.timeSpent += now - this.lastUpdate;
+          this.lastUpdate = now;
+        }
+        const progress: LessonProgress = {
+          lessonID: this.props.lesson.id,
+          currentTime: data.seconds,
+          percentageComplete: data.percent * 100,
+          totalTime: data.duration,
+          timeSpent: this.timeSpent,
+          userID: this.props.user.id
+        };
+        console.log('TIMEUPDATE:', progress);
+
+        this.props.saveLessonProgress(progress);
+        // increment our TimeSpent variable on each timeupdate event.
+        // this will track total time spent playing the video, regardless of seeks, etc
       });
       this.player.on('seeked', (data: any) => {
         console.log('SEEKED:', data);
@@ -205,24 +234,8 @@ class Lesson extends React.Component<Props, State> {
   }
 
   displayLessonsHTML() {
-    // let courseName;
-    // if (this.props.user.id && this.props.lesson.id) {
-    //   courseName = this.props.lesson.courseLessons[0].course.name;
-    // }
     return (
       <div className="main-content content-without-sidebar lesson animated fadeIn">
-        {/* <Row className="sub-header">
-          <Col md={10} xs={10} className="gf-breadcrumb lesson">
-            <Breadcrumb>
-              <Breadcrumb.Item>
-                <span onClick={this.backToCourses}>{courseName}</span>
-              </Breadcrumb.Item>
-              <Breadcrumb.Item active={true}>
-                {this.props.lesson.name}
-              </Breadcrumb.Item>
-            </Breadcrumb>
-          </Col>
-        </Row> */}
         <Row className="lesson-description">
           <Col
             md={12}
@@ -288,6 +301,7 @@ const mapStateToProps = (state: any, ownProps: any) => {
     quiz: state.training.quiz,
     lesson: state.training.lesson,
     quizzes: state.training.quizzes,
+    progress: state.training.lessonProgress[state.training.lesson.id],
     loading: state.ajaxCallsInProgress > 0
   };
 };
@@ -295,7 +309,8 @@ const mapStateToProps = (state: any, ownProps: any) => {
 export default connect(
   mapStateToProps,
   {
-    setLesson
+    setLesson,
+    saveLessonProgress
     // setQuiz,
   }
 )(Lesson);

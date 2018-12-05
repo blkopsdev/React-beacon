@@ -40,6 +40,9 @@ const API = {
       updateteam: `${root}user/updateteammember`,
       saveteam: `${root}user/saveteammember`,
       deleteTeamMember: `${root}user/deleteteammember`
+    },
+    training: {
+      savelessonprogress: `${root}training/savelessonprogress`
     }
   },
   PUT: {
@@ -93,6 +96,10 @@ const API = {
       getfseusers: `${root}user/getfseusers`,
       getusersearch: `${root}user/search`,
       getteamsearch: `${root}user/searchteam`
+    },
+    training: {
+      getprogressbylesson: `${root}training/getprogressbylesson`,
+      getalllessonprogress: `${root}training/getalllessonprogress`
     }
   }
 };

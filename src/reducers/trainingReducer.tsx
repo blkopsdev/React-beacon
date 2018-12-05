@@ -6,7 +6,8 @@ import {
   GFLessons,
   ItrainingReducer,
   GFQuizItem,
-  GFCourse
+  GFCourse,
+  LessonProgress
 } from 'src/models';
 
 function courseReducer(state: GFCourse[] = [], action: any): GFCourse[] {
@@ -87,6 +88,26 @@ function quizReducer(state: GFQuizItem = initialQuiz, action: any): GFQuizItem {
   }
 }
 
+function lessonProgressReducer(
+  state: { [key: string]: LessonProgress } = {},
+  action: any
+): { [key: string]: LessonProgress } {
+  switch (action.type) {
+    case types.GET_ALL_LESSON_PROGRESS_SUCCESS:
+      return Object.assign(
+        {},
+        state,
+        keyBy(action.progress, (prog: any) => prog.lessonID)
+      );
+    case types.SAVE_LESSON_PROGRESS_SUCCESS:
+      return state;
+    case types.USER_LOGOUT_SUCCESS:
+      return {};
+    default:
+      return state;
+  }
+}
+
 export default function trainingReducer(
   state: ItrainingReducer = initialState.training,
   action: any
@@ -96,6 +117,7 @@ export default function trainingReducer(
     lessons: lessonsReducer(state.lessons, action),
     lesson: lessonReducer(state.lesson, action),
     quizzes: quizzesReducer(state.quizzes, action),
-    quiz: quizReducer(state.quiz, action)
+    quiz: quizReducer(state.quiz, action),
+    lessonProgress: lessonProgressReducer(state.lessonProgress, action)
   };
 }

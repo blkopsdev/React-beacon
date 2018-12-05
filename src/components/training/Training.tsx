@@ -8,14 +8,16 @@ import {
   GFQuizItem,
   GFLessons,
   IinitialState,
-  Itile
+  Itile,
+  LessonProgress
 } from '../../models';
 import {
   loadCourses,
   getLessonsByCourseID,
   setLesson,
   getAllLessons,
-  getAllQuizzes
+  getAllQuizzes,
+  getAllLessonProgress
 } from '../../actions/trainingActions';
 
 import {
@@ -48,12 +50,14 @@ interface Props extends RouteComponentProps<RouterParams> {
   quizzes: { [key: string]: GFQuizItem };
   quiz: GFQuizItem;
   lesson: GFLesson;
+  lessonProgress: { [key: string]: LessonProgress };
   loadCourses: any;
   getLessonsByCourseID: any;
   setLesson: any;
   loading: boolean;
   getAllLessons: typeof getAllLessons;
   getAllQuizzes: typeof getAllQuizzes;
+  getAllLessonProgress: typeof getAllLessonProgress;
 }
 
 interface State {
@@ -93,6 +97,7 @@ class Courses extends React.Component<Props, State> {
     this.props.loadCourses(this.props.user);
     this.props.getAllLessons(this.props.user);
     this.props.getAllQuizzes(this.props.user);
+    this.props.getAllLessonProgress();
     // }
     // if we have a courseID then display the lessons in that course
     // if (!!this.props.match.params.courseID) {
@@ -269,6 +274,9 @@ class Courses extends React.Component<Props, State> {
               if (imagePath === null || imagePath === '') {
                 imagePath = require('../../images/Azure.png');
               }
+              const progress = this.props.lessonProgress[gfLesson.id]
+                ? this.props.lessonProgress[gfLesson.id].percentageComplete
+                : 0;
               return (
                 <ListGroupItem className="lesson list-item" key={gfLesson.id}>
                   <Media>
@@ -283,7 +291,7 @@ class Courses extends React.Component<Props, State> {
                     </Col>
                     <Col md={3}>
                       <span className="lesson-name lesson-progress">
-                        {'x% Complete'}
+                        {`${progress}% Complete`}
                       </span>
                     </Col>
                   </Media>
@@ -460,6 +468,7 @@ const mapStateToProps = (state: IinitialState, ownProps: any) => {
     quizzes: state.training.quizzes,
     quiz: state.training.quiz,
     lesson: state.training.lesson,
+    lessonProgress: state.training.lessonProgress,
     loading: state.ajaxCallsInProgress > 0
   };
 };
@@ -471,6 +480,7 @@ export default connect(
     getLessonsByCourseID,
     setLesson,
     getAllLessons,
-    getAllQuizzes
+    getAllQuizzes,
+    getAllLessonProgress
   }
 )(Courses);

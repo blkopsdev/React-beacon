@@ -1,8 +1,10 @@
 import * as types from './actionTypes';
 import courseAPI from '../trainingAPI/courseAPI';
+import API from '../constants/apiEndpoints';
 import { beginAjaxCall } from './ajaxStatusActions';
 import constants from '../constants/constants';
 import { Iuser, GFLesson, GFLessons } from 'src/models';
+import axios from 'axios';
 
 export function loadCourses(user: Iuser) {
   return (dispatch: any) => {
@@ -84,6 +86,68 @@ export function getAllQuizzes(user: Iuser) {
         console.error('Error when trying to get all quizzes', error);
         dispatch({ type: types.LOAD_QUIZZES_FAILED, error });
         constants.handleError(error, 'loading all quizzes');
+        throw error;
+      });
+  };
+}
+
+// Get all lesson progress
+export function getAllLessonProgress() {
+  return (dispatch: any) => {
+    dispatch(beginAjaxCall());
+    return axios
+      .get(`${API.GET.training.getalllessonprogress}`)
+      .then(data => {
+        console.log('PROGRESS', data.data);
+        dispatch({
+          type: types.GET_ALL_LESSON_PROGRESS_SUCCESS,
+          progress: data.data
+        });
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.GET_ALL_LESSON_PROGRESS_FAILED });
+        constants.handleError(error, 'get all lesson progress');
+        throw error;
+      });
+  };
+}
+
+// Get lesson progress
+export function getProgressByLesson(lessonId: string) {
+  return (dispatch: any) => {
+    dispatch(beginAjaxCall());
+    return axios
+      .get(`${API.GET.training.getprogressbylesson}/${lessonId}`)
+      .then(data => {
+        dispatch({
+          type: types.GET_LESSON_PROGRESS_SUCCESS,
+          progress: data
+        });
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.GET_LESSON_PROGRESS_FAILED });
+        constants.handleError(error, 'get lesson progress');
+        throw error;
+      });
+  };
+}
+
+// Save lesson progress
+export function saveLessonProgress(progress: any) {
+  return (dispatch: any) => {
+    dispatch(beginAjaxCall());
+    return axios
+      .post(`${API.POST.training.savelessonprogress}`, progress)
+      .then(data => {
+        console.log('SAVE PROGRESS', data.data);
+        dispatch({
+          type: types.SAVE_LESSON_PROGRESS_SUCCESS,
+          progress: data.data
+        });
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.SAVE_LESSON_PROGRESS_FAILED });
+        constants.handleError(error, 'save lesson progress');
         throw error;
       });
   };

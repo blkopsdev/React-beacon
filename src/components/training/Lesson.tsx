@@ -56,6 +56,7 @@ class Lesson extends React.Component<Props, State> {
   private pElem: any;
   private timeSpent: any;
   private lastUpdate: any;
+  private lastSave: any;
   constructor(props: Props) {
     super(props);
     this.state = {
@@ -154,6 +155,8 @@ class Lesson extends React.Component<Props, State> {
         this.lastUpdate = null;
       });
       this.player.on('timeupdate', (data: any) => {
+        // increment our TimeSpent variable on each timeupdate event.
+        // this will track total time spent playing the video, regardless of seeks, etc
         const now = moment().unix();
         if (!this.lastUpdate) {
           this.lastUpdate = now;
@@ -171,13 +174,24 @@ class Lesson extends React.Component<Props, State> {
         };
         console.log('TIMEUPDATE:', progress);
 
-        this.props.saveLessonProgress(progress);
-        // increment our TimeSpent variable on each timeupdate event.
-        // this will track total time spent playing the video, regardless of seeks, etc
+        if (!this.lastSave) {
+          this.lastSave = now;
+        }
+        if (now - this.lastSave >= 10) {
+          this.props.saveLessonProgress(progress);
+          this.lastSave = now;
+        }
       });
       this.player.on('seeked', (data: any) => {
         console.log('SEEKED:', data);
       });
+
+      if (this.props.progress) {
+        // set timeSpent
+        this.timeSpent = this.props.progress.timeSpent;
+        // seek to last played time
+        this.player.setCurrentTime(this.props.progress.currentTime);
+      }
     });
   }
 

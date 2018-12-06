@@ -158,7 +158,7 @@ export interface Iproduct {
 export interface IshoppingCartProduct {
   name: string;
   quantity: number;
-  id: number;
+  id: string;
 }
 
 export interface IquoteItem {
@@ -382,7 +382,7 @@ export interface GFClass {
 }
 
 export interface GFCourse {
-  id?: string;
+  id: string;
   name: string;
   description: string;
 }

@@ -30,10 +30,12 @@ import {
   ItableFiltersReducer
 } from '../../models';
 import {
-  checkout,
-  toggleShoppingCartModal
+  toggleShoppingCartModal,
+  updateQuantityCart,
+  deleteFromCart
 } from '../../actions/shoppingCartActions';
 import constants from '../../constants/constants';
+import { requestQuote } from 'src/actions/manageInventoryActions';
 
 const NumberInputWithButton = ({
   handler,
@@ -74,7 +76,8 @@ const NumberInputWithButton = ({
 
 const buildFieldConfig = (
   products: { [key: string]: IshoppingCartProduct },
-  deleteFromCart: any
+  deleteFromCartCB: typeof deleteFromCart,
+  cartName: string
 ) => {
   const productControls = mapValues(products, prod => {
     return {
@@ -89,7 +92,7 @@ const buildFieldConfig = (
       meta: {
         label: prod.name,
         defaultValue: prod.quantity,
-        buttonAction: deleteFromCart,
+        buttonAction: (id: string) => deleteFromCartCB(id, cartName),
         id: prod.id
       }
     };
@@ -114,7 +117,7 @@ const buildFieldConfig = (
 };
 
 interface Iprops {
-  checkout: typeof checkout;
+  checkout: typeof requestQuote;
   toggleShoppingCartModal: typeof toggleShoppingCartModal;
   loading: boolean;
   colorButton: string;
@@ -124,8 +127,9 @@ interface Iprops {
   facilityOptions: Ioption[];
   cart: IshoppingCart;
   tableFilters: ItableFiltersReducer;
-  updateQuantityCart: any;
-  deleteFromCart: any;
+  updateQuantityCart: typeof updateQuantityCart;
+  deleteFromCart: typeof deleteFromCart;
+  cartName: string;
 }
 interface Istate {
   fieldConfig: FieldConfig;
@@ -180,7 +184,8 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
         fieldConfig: FormUtil.translateForm(
           buildFieldConfig(
             this.props.cart.productsByID,
-            this.props.deleteFromCart
+            this.props.deleteFromCart,
+            this.props.cartName
           ),
           this.props.t
         )
@@ -198,7 +203,11 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
             this.subscription = this.userForm
               .get(key)
               .valueChanges.subscribe((value: any) => {
-                this.props.updateQuantityCart(parseInt(value, 10), key);
+                this.props.updateQuantityCart(
+                  parseInt(value, 10),
+                  key,
+                  this.props.cartName
+                );
               });
           }
         });
@@ -228,7 +237,9 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
               bsStyle="default"
               type="button"
               className="pull-left"
-              onClick={this.props.toggleShoppingCartModal}
+              onClick={() =>
+                this.props.toggleShoppingCartModal(this.props.cartName)
+              }
             >
               {t('common:cancel')}
             </Button>
@@ -253,7 +264,9 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
                 bsStyle="default"
                 type="button"
                 className="pull-left"
-                onClick={this.props.toggleShoppingCartModal}
+                onClick={() =>
+                  this.props.toggleShoppingCartModal(this.props.cartName)
+                }
               >
                 {t('common:cancel')}
               </Button>

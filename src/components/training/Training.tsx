@@ -9,7 +9,8 @@ import {
   GFLessons,
   IinitialState,
   Itile,
-  LessonProgress
+  LessonProgress,
+  IshoppingCart
 } from '../../models';
 import {
   loadCourses,
@@ -17,7 +18,8 @@ import {
   setLesson,
   getAllLessons,
   getAllQuizzes,
-  getAllLessonProgress
+  getAllLessonProgress,
+  trainingCheckout
 } from '../../actions/trainingActions';
 
 import {
@@ -73,6 +75,8 @@ interface Props extends RouteComponentProps<RouterParams> {
   cartTotal: number;
   t: TranslationFunction;
   i18n: I18n;
+  cart: IshoppingCart;
+  trainingCheckout: typeof trainingCheckout;
 }
 
 interface State {
@@ -225,6 +229,7 @@ class Courses extends React.Component<Props, State> {
             <div className="courses-tiles text-center">
               {this.props.user.isActive &&
                 this.props.courses.map(gfCourse => {
+                  const shoppingCartItem = { ...gfCourse, quantity: 1 };
                   return (
                     <Col
                       key={gfCourse.id}
@@ -235,7 +240,13 @@ class Courses extends React.Component<Props, State> {
                     >
                       <Panel className="text-center">
                         <h2>{this.shortenTitle(gfCourse.name)}</h2>
-                        <Button bsStyle="warning" type="button">
+                        <Button
+                          bsStyle="warning"
+                          type="button"
+                          onClick={() =>
+                            this.props.addToCart(shoppingCartItem, 'TRAINING')
+                          }
+                        >
                           Purchase Entire Course
                         </Button>
                         <h4>{'$845'}</h4>
@@ -454,7 +465,7 @@ class Courses extends React.Component<Props, State> {
         <Button
           className="request-for-quote-cart-button"
           bsStyle="primary"
-          onClick={this.props.toggleShoppingCartModal}
+          onClick={() => this.props.toggleShoppingCartModal('TRAINING')}
         >
           <FontAwesomeIcon icon="shopping-cart" />
           <Badge>{this.props.cartTotal} </Badge>
@@ -483,6 +494,10 @@ class Courses extends React.Component<Props, State> {
             constants.colors[`${this.state.currentTile.color}Button`]
           }
           t={this.props.t}
+          cart={this.props.cart}
+          title={this.props.t('training:shoppingCartTitle')}
+          checkout={this.props.trainingCheckout}
+          cartName="TRAINING"
         />
       </div>
     );
@@ -499,7 +514,8 @@ const mapStateToProps = (state: IinitialState, ownProps: Props) => {
     lesson: state.training.lesson,
     lessonProgress: state.training.lessonProgress,
     loading: state.ajaxCallsInProgress > 0,
-    cartTotal: getTotal(state.training.cart)
+    cartTotal: getTotal(state.training.cart),
+    cart: state.training.cart
   };
 };
 
@@ -513,7 +529,9 @@ export default translate('training')(
       getAllLessons,
       getAllQuizzes,
       getAllLessonProgress,
-      toggleShoppingCartModal
+      toggleShoppingCartModal,
+      addToCart,
+      trainingCheckout
     }
   )(Courses)
 );

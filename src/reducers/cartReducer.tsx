@@ -1,19 +1,19 @@
-import * as types from '../actions/actionTypes';
 import initialState from './initialState';
 import { IshoppingCart, IshoppingCartProduct } from '../models';
 import { filter, omit } from 'lodash';
 
 const addedIds = (
   state: string[] = initialState.manageInventory.cart.addedIDs,
-  action: any
+  action: any,
+  cartName: string
 ) => {
   switch (action.type) {
-    case types.ADD_TO_CART:
+    case `ADD_TO_CART_${cartName}`:
       if (state.indexOf(action.product.id) !== -1) {
         return state;
       }
       return [...state, action.product.id];
-    case types.DELETE_FROM_CART:
+    case `DELETE_FROM_CART_${cartName}`:
       if (state.indexOf(action.productID) === -1) {
         return state;
       }
@@ -26,10 +26,11 @@ const addedIds = (
 const productsByID = (
   state: { [key: string]: IshoppingCartProduct } = initialState.manageInventory
     .cart.productsByID,
-  action: any
+  action: any,
+  cartName: string
 ) => {
   switch (action.type) {
-    case types.ADD_TO_CART:
+    case `ADD_TO_CART_${cartName}`:
       const { product } = action;
       return {
         ...state,
@@ -38,7 +39,7 @@ const productsByID = (
           quantity: (state[product.id] ? state[product.id].quantity : 0) + 1
         }
       };
-    case types.DECREASE_FROM_CART:
+    case `DECREASE_FROM_CART_${cartName}`:
       return {
         ...state,
         [action.productID]: {
@@ -47,7 +48,7 @@ const productsByID = (
             (state[action.productID] ? state[action.productID].quantity : 1) - 1
         }
       };
-    case types.UPDATE_QUANTITY_CART:
+    case `UPDATE_QUANTITY_CART_${cartName}`:
       return {
         ...state,
         [action.productID]: {
@@ -55,7 +56,7 @@ const productsByID = (
           quantity: state[action.productID] ? action.quantity : 1
         }
       };
-    case types.DELETE_FROM_CART:
+    case `DELETE_FROM_CART_${cartName}`:
       // const {[action.productID]: v, ...theRest} = state;
       // return theRest;
       return omit(state, [action.productID]);
@@ -70,24 +71,26 @@ export const getQuantity = (state: IshoppingCart, productID: string): number =>
 
 export const getAddedIDs = (state: IshoppingCart) => state.addedIDs;
 
-const cart = (
+/*
+* main cart reducer
+*/
+export const cartReducerWithName = (
   state: IshoppingCart = initialState.manageInventory.cart,
-  action: any
+  action: any,
+  cartName: string
 ): IshoppingCart => {
   switch (action.type) {
-    case types.CHECKOUT_SUCCESS:
+    case `CHECKOUT_SUCCESS_${cartName}`:
       return initialState.manageInventory.cart;
-    case types.CHECKOUT_FAILED:
+    case `CHECKOUT_FAILED_${cartName}`:
       return state;
     default:
       return {
-        addedIDs: addedIds(state.addedIDs, action),
-        productsByID: productsByID(state.productsByID, action)
+        addedIDs: addedIds(state.addedIDs, action, cartName),
+        productsByID: productsByID(state.productsByID, action, cartName)
       };
   }
 };
 
 export const getTotal = (state: IshoppingCart) =>
   state.addedIDs.reduce((total, id) => total + getQuantity(state, id), 0);
-
-export default cart;

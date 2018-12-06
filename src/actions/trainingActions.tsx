@@ -3,8 +3,9 @@ import courseAPI from '../trainingAPI/courseAPI';
 import API from '../constants/apiEndpoints';
 import { beginAjaxCall } from './ajaxStatusActions';
 import constants from '../constants/constants';
-import { Iuser, GFLesson, GFLessons } from 'src/models';
+import { Iuser, GFLesson, GFLessons, ThunkResult } from 'src/models';
 import axios from 'axios';
+import { map } from 'lodash';
 
 export function loadCourses(user: Iuser) {
   return (dispatch: any) => {
@@ -152,3 +153,33 @@ export function saveLessonProgress(progress: any) {
       });
   };
 }
+
+export const trainingCheckout = ({
+  message
+}: {
+  message: string;
+}): ThunkResult<void> => {
+  return (dispatch, getState) => {
+    const QuoteItems = map(
+      getState().training.cart.productsByID,
+      (product, key) => {
+        return { productID: key, quantity: product.quantity };
+      }
+    );
+    dispatch(beginAjaxCall());
+    dispatch({ type: types.TOGGLE_MODAL_SHOPPING_CART });
+    return axios
+      .post(API.POST.inventory.quote, { QuoteItems, message })
+      .then(data => {
+        dispatch({
+          type: types.CHECKOUT_SUCCESS
+        });
+        // toastr.success("Success", "requested quote", constants.toastrSuccess);
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.CHECKOUT_FAILED });
+        constants.handleError(error, 'requesting quote');
+        throw error;
+      });
+  };
+};

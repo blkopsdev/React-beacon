@@ -28,7 +28,8 @@ import {
   IproductInfo,
   ItableFiltersReducer,
   Itile,
-  Iuser
+  Iuser,
+  IshoppingCart
 } from '../../models';
 import { InstallationsExpander } from './InstallsExpander';
 import { TableUtil } from '../common/TableUtil';
@@ -47,7 +48,8 @@ import {
   toggleEditProductModal,
   toggleSearchNewProductsModal,
   toggleImportInstallModal,
-  setSelectedProduct
+  setSelectedProduct,
+  requestQuote
 } from '../../actions/manageInventoryActions';
 
 import { getLocationsFacility } from '../../actions/manageLocationActions';
@@ -96,6 +98,8 @@ interface IdispatchProps {
   toggleInstallContactModal: typeof toggleInstallContactModal;
   selectedProduct: Iproduct;
   setSelectedProduct: typeof setSelectedProduct;
+  cart: IshoppingCart;
+  requestQuote: typeof requestQuote;
 }
 
 interface Istate {
@@ -500,7 +504,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         <Button
           className="request-for-quote-cart-button"
           bsStyle="primary"
-          onClick={this.props.toggleShoppingCartModal}
+          onClick={() => this.props.toggleShoppingCartModal('INVENTORY')}
         >
           <FontAwesomeIcon icon="shopping-cart" />
           <Badge>{this.props.cartTotal} </Badge>
@@ -541,7 +545,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
             <InstallationsExpander
               {...rowInfo}
               contactAboutInstall={this.contactAboutInstall}
-              addToQuote={this.props.addToCart}
+              addToCart={this.props.addToCart}
               addInstallation={() => {
                 this.props.setSelectedProduct(rowInfo.original);
                 this.setState({ selectedInstall: {} }, () => {
@@ -567,6 +571,10 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
             constants.colors[`${this.state.currentTile.color}Button`]
           }
           t={this.props.t}
+          cart={this.props.cart}
+          title={this.props.t('manageInventory:requestForQuote')}
+          checkout={this.props.requestQuote}
+          cartName="INVENTORY"
         />
         <EditInstallModal
           selectedProduct={this.props.selectedProduct}
@@ -621,7 +629,8 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     cartTotal: getTotal(state.manageInventory.cart),
     tableData: state.manageInventory.data,
     tableFilters: state.manageInventory.tableFilters,
-    selectedProduct: state.manageInventory.selectedProduct
+    selectedProduct: state.manageInventory.selectedProduct,
+    cart: state.manageInventory.cart
   };
 };
 export default translate('manageInventory')(
@@ -640,7 +649,8 @@ export default translate('manageInventory')(
       setTableFilter,
       toggleInstallContactModal,
       setSelectedProduct,
-      toggleImportInstallModal
+      toggleImportInstallModal,
+      requestQuote
     }
   )(ManageInventory)
 );

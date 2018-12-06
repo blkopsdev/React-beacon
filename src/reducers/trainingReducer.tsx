@@ -9,7 +9,7 @@ import {
   GFCourse,
   LessonProgress
 } from 'src/models';
-import cartReducer, { getQuantity } from './cartReducer';
+import { cartReducerWithName, getQuantity } from './cartReducer';
 import { modalToggleWithName } from './commonReducers';
 
 function courseReducer(state: GFCourse[] = [], action: any): GFCourse[] {
@@ -121,11 +121,11 @@ export default function trainingReducer(
     quizzes: quizzesReducer(state.quizzes, action),
     quiz: quizReducer(state.quiz, action),
     lessonProgress: lessonProgressReducer(state.lessonProgress, action),
-    cart: cartReducer(state.cart, action),
+    cart: cartReducerWithName(state.cart, action, 'TRAINING'),
     showShoppingCartModal: modalToggleWithName(
       state.showShoppingCartModal,
       action,
-      'SHOPPING_CART'
+      'SHOPPING_CART_TRAINING'
     )
   };
 }

@@ -142,7 +142,7 @@
     "productGroupPlaceholder": "Search...",
     "manufacturerPlaceholder": "Search...",
     "requestForQuote": "Request For Quote",
-    "emptyQuoteMessage": "Please add some items to request a quote.",
+    "emptyQuoteMessage": "Please add some items.",
     "request": "Request Quote",
     "message": "Comments / Questions",
     "nickname": "Nickname",
@@ -265,5 +265,8 @@
     "ViewJobs": "View Jobs",
     "ManageLocations": "Manage Locations",
     "ManageJobs": "Manage Jobs"
+  },
+  "training": {
+    "shoppingCartTitle": "Shopping Cart"
   }
 }

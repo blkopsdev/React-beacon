@@ -14,6 +14,7 @@ import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
 import constants from '../constants/constants';
 import * as types from './actionTypes';
+import { map } from 'lodash';
 
 // import {AxiosResponse} from 'axios';
 
@@ -358,6 +359,38 @@ export function importInstall(file: any): ThunkResult<void> {
       });
   };
 }
+
+export const requestQuote = ({
+  message,
+  facilityID
+}: {
+  message: string;
+  facilityID: string;
+}): ThunkResult<void> => {
+  return (dispatch, getState) => {
+    const QuoteItems = map(
+      getState().manageInventory.cart.productsByID,
+      (product, key) => {
+        return { productID: key, quantity: product.quantity };
+      }
+    );
+    dispatch(beginAjaxCall());
+    dispatch({ type: types.TOGGLE_MODAL_SHOPPING_CART });
+    return axios
+      .post(API.POST.inventory.quote, { QuoteItems, facilityID, message })
+      .then(data => {
+        dispatch({
+          type: types.CHECKOUT_SUCCESS
+        });
+        // toastr.success("Success", "requested quote", constants.toastrSuccess);
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.CHECKOUT_FAILED });
+        constants.handleError(error, 'requesting quote');
+        throw error;
+      });
+  };
+};
 
 export const toggleEditProductModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_PRODUCT

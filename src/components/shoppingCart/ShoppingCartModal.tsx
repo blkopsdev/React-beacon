@@ -18,11 +18,11 @@ import {
   decreaseFromCart,
   deleteFromCart,
   updateQuantityCart,
-  checkout,
   toggleShoppingCartModal
 } from '../../actions/shoppingCartActions';
 import CommonModal from '../common/CommonModal';
 import ShoppingCartForm from './ShoppingCartForm';
+import { requestQuote } from 'src/actions/manageInventoryActions';
 
 interface Iprops {
   colorButton: any;
@@ -38,10 +38,12 @@ interface IdispatchProps {
   updateQuantityCart: typeof updateQuantityCart;
   decreaseFromCart: typeof decreaseFromCart;
   deleteFromCart: typeof deleteFromCart;
-  checkout: typeof checkout;
+  checkout: typeof requestQuote;
   toggleShoppingCartModal: typeof toggleShoppingCartModal;
   cart: IshoppingCart;
   tableFilters: ItableFiltersReducer;
+  title: string;
+  cartName: string;
 }
 
 class EditQuoteModal extends React.Component<Iprops & IdispatchProps, {}> {
@@ -56,7 +58,7 @@ class EditQuoteModal extends React.Component<Iprops & IdispatchProps, {}> {
         className="user-edit"
         onHide={this.props.toggleShoppingCartModal}
         body={<ShoppingCartForm {...this.props} />}
-        title={this.props.t('manageInventory:requestForQuote')}
+        title={this.props.title}
         container={document.getElementById('two-pane-layout')}
       />
     );
@@ -68,9 +70,10 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
     facilityOptions: FormUtil.convertToOptions(state.user.facilities),
-    showModal: state.manageInventory.showShoppingCartModal,
+    showModal:
+      state.manageInventory.showShoppingCartModal ||
+      state.training.showShoppingCartModal,
     productInfo: state.manageInventory.productInfo,
-    cart: state.manageInventory.cart,
     tableFilters: state.manageInventory.tableFilters
   };
 };
@@ -82,7 +85,6 @@ export default connect(
     decreaseFromCart,
     deleteFromCart,
     toggleShoppingCartModal,
-    checkout,
     updateQuantityCart
   }
 )(EditQuoteModal);

@@ -11,9 +11,10 @@ import { Button } from 'react-bootstrap';
 // import { LinkContainer } from "react-router-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TranslationFunction } from 'react-i18next';
+import { addToCart } from '../../actions/shoppingCartActions';
 
 interface ExpanderProps extends RowInfo {
-  addToQuote: (product: any) => void;
+  addToCart: typeof addToCart;
   addInstallation: () => void;
   contactAboutInstall: (install: any) => void;
   t: TranslationFunction;
@@ -36,7 +37,10 @@ export const InstallationsExpander = (props: ExpanderProps) => {
         className="expander-button-bar text-right"
         style={{ position: 'absolute', top: 0, left: 0, width: '100%' }}
       >
-        <Button bsStyle="link" onClick={() => props.addToQuote(props.original)}>
+        <Button
+          bsStyle="link"
+          onClick={() => props.addToCart(props.original, 'INVENTORY')}
+        >
           {props.t('addToQuote')}
         </Button>
         <Button bsStyle="link" onClick={props.addInstallation}>

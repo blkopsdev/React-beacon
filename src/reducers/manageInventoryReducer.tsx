@@ -17,7 +17,7 @@ import {
   createTableFiltersWithName,
   modalToggleWithName
 } from './commonReducers';
-import cartReducer from './cartReducer';
+import { cartReducerWithName } from './cartReducer';
 import initialState, { initialProduct } from './initialState';
 import * as types from '../actions/actionTypes';
 
@@ -178,14 +178,14 @@ export default function ManageInventory(
   return {
     data: dataReducer(state.data, action),
     totalPages: totalPagesReducer(state.totalPages, action),
-    cart: cartReducer(state.cart, action),
+    cart: cartReducerWithName(state.cart, action, 'INVENTORY'),
     productInfo: productInfo(state.productInfo, action),
     selectedProduct: selectedProductReducer(state.selectedProduct, action),
     newProducts: newProductsReducer(state.newProducts, action),
     showShoppingCartModal: modalToggleWithName(
       state.showShoppingCartModal,
       action,
-      'SHOPPING_CART'
+      'SHOPPING_CART_INVENTORY'
     ),
     showEditProductModal: modalToggleWithName(
       state.showEditProductModal,

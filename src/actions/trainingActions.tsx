@@ -3,7 +3,13 @@ import courseAPI from '../trainingAPI/courseAPI';
 import API from '../constants/apiEndpoints';
 import { beginAjaxCall } from './ajaxStatusActions';
 import constants from '../constants/constants';
-import { Iuser, GFLesson, GFLessons, ThunkResult } from 'src/models';
+import {
+  Iuser,
+  GFLesson,
+  GFLessons,
+  LessonProgress,
+  ThunkResult
+} from 'src/models';
 import axios from 'axios';
 import { map } from 'lodash';
 
@@ -134,7 +140,7 @@ export function getProgressByLesson(lessonId: string) {
 }
 
 // Save lesson progress
-export function saveLessonProgress(progress: any) {
+export function saveLessonProgress(progress: LessonProgress) {
   return (dispatch: any) => {
     dispatch(beginAjaxCall());
     return axios
@@ -143,7 +149,7 @@ export function saveLessonProgress(progress: any) {
         console.log('SAVE PROGRESS', data.data);
         dispatch({
           type: types.SAVE_LESSON_PROGRESS_SUCCESS,
-          progress: data.data
+          progress: { id: data.data, ...progress }
         });
       })
       .catch((error: any) => {

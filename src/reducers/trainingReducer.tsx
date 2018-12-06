@@ -102,7 +102,11 @@ function lessonProgressReducer(
         keyBy(action.progress, (prog: any) => prog.lessonID)
       );
     case types.SAVE_LESSON_PROGRESS_SUCCESS:
-      return state;
+      return Object.assign(
+        {},
+        state,
+        keyBy([action.progress], (prog: any) => prog.lessonID)
+      );
     case types.USER_LOGOUT_SUCCESS:
       return {};
     default:

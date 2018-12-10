@@ -99,7 +99,7 @@ export const initialLesson = {
   secondaryVideoPath: '',
   slideshowPath: '',
   courseLessons: [],
-  kahootPath: ''
+  cost: 0
 };
 
 /* 

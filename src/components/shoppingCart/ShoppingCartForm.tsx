@@ -7,7 +7,8 @@ import {
   Button,
   FormGroup,
   ControlLabel,
-  FormControl
+  FormControl,
+  Badge
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -37,6 +38,9 @@ import {
 import constants from '../../constants/constants';
 import { requestQuote } from 'src/actions/manageInventoryActions';
 
+/*
+* Input row with a button to delete the cart item
+*/
 const NumberInputWithButton = ({
   handler,
   touched,
@@ -74,14 +78,50 @@ const NumberInputWithButton = ({
   </FormGroup>
 );
 
+/*
+* Card product with a button to delete it
+*/
+const CartProduct = ({
+  handler,
+  touched,
+  hasError,
+  meta,
+  pristine,
+  errors,
+  submitted
+}: AbstractControl) => (
+  <FormGroup
+    bsSize="sm"
+    validationState={FormUtil.getValidationState(pristine, errors, submitted)}
+  >
+    <Col xs={8}>
+      <ControlLabel>{meta.label}</ControlLabel>
+    </Col>
+    <Col
+      xs={4}
+      style={{ textAlign: 'center', paddingRight: '0', paddingLeft: '0' }}
+    >
+      <Badge>${`${meta.cost / 100}`}</Badge>
+      <Button
+        bsStyle="link"
+        style={{ fontSize: '1.6em' }}
+        onClick={() => meta.buttonAction(meta.id)}
+      >
+        <FontAwesomeIcon icon={['far', 'times']} />
+      </Button>
+    </Col>
+  </FormGroup>
+);
+
 const buildFieldConfig = (
   products: { [key: string]: IshoppingCartProduct },
   deleteFromCartCB: typeof deleteFromCart,
-  cartName: string
+  cartName: string,
+  showCost: boolean = false
 ) => {
   const productControls = mapValues(products, prod => {
     return {
-      render: NumberInputWithButton,
+      render: showCost ? CartProduct : NumberInputWithButton,
       options: {
         validators: [
           Validators.min(1),
@@ -93,7 +133,8 @@ const buildFieldConfig = (
         label: prod.name,
         defaultValue: prod.quantity,
         buttonAction: (id: string) => deleteFromCartCB(id, cartName),
-        id: prod.id
+        id: prod.id,
+        cost: prod.cost
       }
     };
   });
@@ -130,6 +171,7 @@ interface Iprops {
   updateQuantityCart: typeof updateQuantityCart;
   deleteFromCart: typeof deleteFromCart;
   cartName: string;
+  showCost?: boolean;
 }
 interface Istate {
   fieldConfig: FieldConfig;
@@ -185,7 +227,8 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
           buildFieldConfig(
             this.props.cart.productsByID,
             this.props.deleteFromCart,
-            this.props.cartName
+            this.props.cartName,
+            this.props.showCost
           ),
           this.props.t
         )
@@ -220,6 +263,14 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
     this.userForm.meta = {
       loading: this.props.loading
     };
+  };
+
+  calculateSubtotal = () => {
+    let subtotal = 0;
+    forEach(this.props.cart.productsByID, product => {
+      subtotal += product.cost;
+    });
+    return subtotal;
   };
 
   render() {
@@ -258,6 +309,9 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
               onMount={this.setForm}
               fieldConfig={this.state.fieldConfig}
             />
+            <Col xs={12} className="cart-totals">
+              Subtotal: ${this.calculateSubtotal() / 100}
+            </Col>
 
             <Col xs={12} className="form-buttons text-right">
               <Button
@@ -275,7 +329,7 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
                 type="submit"
                 disabled={this.props.loading}
               >
-                {t('request')}
+                {t('checkout')}
               </Button>
             </Col>
           </form>

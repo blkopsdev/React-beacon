@@ -159,6 +159,7 @@ export interface IshoppingCartProduct {
   name: string;
   quantity: number;
   id: string;
+  cost: number;
 }
 
 export interface IquoteItem {
@@ -385,6 +386,7 @@ export interface GFCourse {
   id: string;
   name: string;
   description: string;
+  cost: number;
 }
 
 export interface GFLesson {
@@ -397,6 +399,7 @@ export interface GFLesson {
   primaryVideoPath: string;
   slideshowPath: string;
   courseLessons: any;
+  cost: number;
 }
 
 export interface GFLessons {

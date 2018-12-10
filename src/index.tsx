@@ -106,7 +106,8 @@ store.subscribe(
         manageUser: store.getState().manageUser,
         manageTeam: store.getState().manageTeam,
         manageInventory: store.getState().manageInventory,
-        productInfo: store.getState().productInfo
+        productInfo: store.getState().productInfo,
+        training: store.getState().training
         // facilities: store.getState().facilities
       },
       'state-core-care'

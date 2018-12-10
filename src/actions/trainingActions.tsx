@@ -8,10 +8,12 @@ import {
   GFLesson,
   GFLessons,
   LessonProgress,
-  ThunkResult
+  ThunkResult,
+  IshoppingCartProduct
 } from 'src/models';
 import axios from 'axios';
-import { map } from 'lodash';
+import { map, find } from 'lodash';
+import { toastr } from 'react-redux-toastr';
 
 export function loadCourses(user: Iuser) {
   return (dispatch: any) => {
@@ -159,6 +161,73 @@ export function saveLessonProgress(progress: LessonProgress) {
       });
   };
 }
+
+/*
+* check to see if we already added this course
+* check to see if there are already any lessons in the cart
+*/
+export const addCourseToCart = (
+  product: IshoppingCartProduct,
+  cartName: string
+): ThunkResult<void> => {
+  return (dispatch, getState) => {
+    const { lessons, cart } = getState().training;
+    let foundLesson = false;
+    cart.addedIDs.forEach(value => {
+      foundLesson = !!find(lessons, { id: value });
+    });
+    const foundCourse = cart.productsByID[product.id];
+    if (foundLesson) {
+      toastr.warning(
+        'Warning',
+        'Please remove all lessons before adding a course.  You cannot purchase courses and lessons at the same time.'
+      );
+      return;
+    }
+    if (foundCourse) {
+      console.log('course already added');
+      return;
+    }
+    dispatch({
+      type: `ADD_TO_CART_TRAINING`,
+      product
+    });
+  };
+};
+
+/*
+* check to see if we already added this course
+* check to see if there are already any lessons in the cart
+*/
+export const addLessonToCart = (
+  product: IshoppingCartProduct,
+  cartName: string
+): ThunkResult<void> => {
+  return (dispatch, getState) => {
+    const { courses, cart } = getState().training;
+    let foundCourse = false;
+    cart.addedIDs.forEach(value => {
+      foundCourse = !!find(courses, { id: value });
+    });
+
+    const foundLesson = cart.productsByID[product.id];
+    if (foundCourse) {
+      toastr.warning(
+        'Warning',
+        'Please remove all courses before adding a lesson.  You cannot purchase courses and lessons at the same time.'
+      );
+      return;
+    }
+    if (foundLesson) {
+      console.log('lesson already added');
+      return;
+    }
+    dispatch({
+      type: `ADD_TO_CART_TRAINING`,
+      product
+    });
+  };
+};
 
 export const trainingCheckout = ({
   message

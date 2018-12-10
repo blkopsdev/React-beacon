@@ -44,6 +44,7 @@ interface IdispatchProps {
   tableFilters: ItableFiltersReducer;
   title: string;
   cartName: string;
+  showCost?: boolean;
 }
 
 class EditQuoteModal extends React.Component<Iprops & IdispatchProps, {}> {

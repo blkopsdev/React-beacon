@@ -19,7 +19,9 @@ import {
   getAllLessons,
   getAllQuizzes,
   getAllLessonProgress,
-  trainingCheckout
+  trainingCheckout,
+  addCourseToCart,
+  addLessonToCart
 } from '../../actions/trainingActions';
 
 import {
@@ -40,10 +42,7 @@ import Banner from '../common/Banner';
 import constants from '../../constants/constants';
 import { emptyTile } from '../../reducers/initialState';
 import ShoppingCartModal from '../shoppingCart/ShoppingCartModal';
-import {
-  addToCart,
-  toggleShoppingCartModal
-} from '../../actions/shoppingCartActions';
+import { toggleShoppingCartModal } from '../../actions/shoppingCartActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TranslationFunction } from 'i18next';
 import { I18n, translate } from 'react-i18next';
@@ -71,7 +70,8 @@ interface Props extends RouteComponentProps<RouterParams> {
   getAllQuizzes: typeof getAllQuizzes;
   getAllLessonProgress: typeof getAllLessonProgress;
   toggleShoppingCartModal: typeof toggleShoppingCartModal;
-  addToCart: typeof addToCart;
+  addCourseToCart: typeof addCourseToCart;
+  addLessonToCart: typeof addLessonToCart;
   cartTotal: number;
   t: TranslationFunction;
   i18n: I18n;
@@ -244,12 +244,15 @@ class Courses extends React.Component<Props, State> {
                           bsStyle="warning"
                           type="button"
                           onClick={() =>
-                            this.props.addToCart(shoppingCartItem, 'TRAINING')
+                            this.props.addCourseToCart(
+                              shoppingCartItem,
+                              'TRAINING'
+                            )
                           }
                         >
                           Purchase Entire Course
                         </Button>
-                        <h4>{'$845'}</h4>
+                        <h4>${`${shoppingCartItem.cost / 100}`}</h4>
                         <p className="purchase-text">
                           Save 25% by purchasing the entire course rather than
                           all the lessons individually
@@ -300,6 +303,7 @@ class Courses extends React.Component<Props, State> {
               if (imagePath === null || imagePath === '') {
                 imagePath = require('../../images/Azure.png');
               }
+              const shoppingCartItem = { ...gfLesson, quantity: 1 };
               const progress = this.props.lessonProgress[gfLesson.id]
                 ? this.props.lessonProgress[gfLesson.id].percentageComplete
                 : 0;
@@ -319,6 +323,19 @@ class Courses extends React.Component<Props, State> {
                       <span className="lesson-name lesson-progress">
                         {`${progress}% Complete`}
                       </span>
+                      <Button
+                        bsStyle="warning"
+                        type="button"
+                        onClick={() =>
+                          this.props.addLessonToCart(
+                            shoppingCartItem,
+                            'TRAINING'
+                          )
+                        }
+                      >
+                        Purchase
+                      </Button>
+                      <h4>${`${shoppingCartItem.cost / 100}`}</h4>
                     </Col>
                   </Media>
                 </ListGroupItem>
@@ -498,6 +515,7 @@ class Courses extends React.Component<Props, State> {
           title={this.props.t('training:shoppingCartTitle')}
           checkout={this.props.trainingCheckout}
           cartName="TRAINING"
+          showCost={true}
         />
       </div>
     );
@@ -530,7 +548,8 @@ export default translate('training')(
       getAllQuizzes,
       getAllLessonProgress,
       toggleShoppingCartModal,
-      addToCart,
+      addCourseToCart,
+      addLessonToCart,
       trainingCheckout
     }
   )(Courses)

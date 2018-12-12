@@ -51,6 +51,8 @@ interface State {
   waitingCount: number;
 }
 
+const saveTimeout = 15;
+
 class Lesson extends React.Component<Props, State> {
   private player: any;
   private pElem: any;
@@ -148,10 +150,10 @@ class Lesson extends React.Component<Props, State> {
     this.player.ready().then(() => {
       // set up event listeners
       this.player.on('play', (data: any) => {
-        console.log('PLAY:', data);
+        // console.log('PLAY:', data);
       });
       this.player.on('pause', (data: any) => {
-        console.log('PAUSE:', data);
+        // console.log('PAUSE:', data);
         this.lastUpdate = null;
       });
       this.player.on('timeupdate', (data: any) => {
@@ -169,21 +171,22 @@ class Lesson extends React.Component<Props, State> {
           currentTime: data.seconds,
           percentageComplete: data.percent * 100,
           totalTime: data.duration,
-          timeSpent: this.timeSpent,
+          timeSpent:
+            this.timeSpent < data.duration ? this.timeSpent : data.duration,
           userID: this.props.user.id
         };
-        console.log('TIMEUPDATE:', progress);
+        // console.log('TIMEUPDATE:', progress);
 
         if (!this.lastSave) {
           this.lastSave = now;
         }
-        if (now - this.lastSave >= 10) {
+        if (now - this.lastSave >= saveTimeout) {
           this.props.saveLessonProgress(progress);
           this.lastSave = now;
         }
       });
       this.player.on('seeked', (data: any) => {
-        console.log('SEEKED:', data);
+        // console.log('SEEKED:', data);
       });
 
       if (this.props.progress) {

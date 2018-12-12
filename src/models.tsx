@@ -473,6 +473,7 @@ export interface LessonProgress {
   percentageComplete: number;
   totalTime: number;
   timeSpent: number;
+  isComplete?: boolean;
 }
 
 export interface ItrainingReducer {

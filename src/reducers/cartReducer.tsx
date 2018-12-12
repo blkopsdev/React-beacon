@@ -80,9 +80,9 @@ export const cartReducerWithName = (
   cartName: string
 ): IshoppingCart => {
   switch (action.type) {
-    case `CHECKOUT_SUCCESS_${cartName}`:
+    case `CHECKOUT_${cartName}_SUCCESS`:
       return initialState.manageInventory.cart;
-    case `CHECKOUT_FAILED_${cartName}`:
+    case `CHECKOUT_${cartName}_FAILED`:
       return state;
     default:
       return {

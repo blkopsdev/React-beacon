@@ -93,6 +93,9 @@ const store = configureStore(persistedState || initialState);
 // set Axios default header for accepting JSON
 axios.defaults.headers.common['Accept'] = 'application/json';
 
+// set the window name for UTA transaction window
+window.name = 'MyMedGas';
+
 // throttle ensures that we never write to
 // localstorage more than once per second
 store.subscribe(

@@ -12,7 +12,7 @@ import {
   IshoppingCartProduct
 } from 'src/models';
 import axios from 'axios';
-import { map, find } from 'lodash';
+import { find } from 'lodash';
 import { toastr } from 'react-redux-toastr';
 
 export function loadCourses(user: Iuser) {
@@ -229,31 +229,48 @@ export const addLessonToCart = (
   };
 };
 
-export const trainingCheckout = ({
-  message
-}: {
-  message: string;
-}): ThunkResult<void> => {
+export const trainingCheckout = (
+  transactionNumber: string
+): ThunkResult<void> => {
   return (dispatch, getState) => {
-    const QuoteItems = map(
-      getState().training.cart.productsByID,
-      (product, key) => {
-        return { productID: key, quantity: product.quantity };
-      }
-    );
+    const products = getState().training.cart.addedIDs;
     dispatch(beginAjaxCall());
-    dispatch({ type: types.TOGGLE_MODAL_SHOPPING_CART });
+    dispatch({ type: types.TOGGLE_MODAL_SHOPPING_CART_TRAINING });
     return axios
-      .post(API.POST.inventory.quote, { QuoteItems, message })
+      .post(API.POST.training.trainingCheckout, {
+        Transaction: {
+          PurchasedTraining: products,
+          UTATransactionNumber: parseInt(transactionNumber, 10)
+        }
+      })
       .then(data => {
         dispatch({
-          type: types.CHECKOUT_SUCCESS
+          type: types.CHECKOUT_TRAINING_SUCCESS
         });
         // toastr.success("Success", "requested quote", constants.toastrSuccess);
       })
       .catch((error: any) => {
-        dispatch({ type: types.CHECKOUT_FAILED });
-        constants.handleError(error, 'requesting quote');
+        dispatch({ type: types.CHECKOUT_TRAINING_FAILED });
+        constants.handleError(error, 'purchasing training');
+        throw error;
+      });
+  };
+};
+
+export const getPurchasedTraining = (): ThunkResult<void> => {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    return axios
+      .get(API.GET.training.getPurchasedTraining)
+      .then(data => {
+        dispatch({
+          type: types.GET_PURCHASED_TRAINING_SUCCESS
+        });
+        // toastr.success("Success", "requested quote", constants.toastrSuccess);
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.GET_PURCHASED_TRAINING_FAILED });
+        constants.handleError(error, 'get purchased training');
         throw error;
       });
   };

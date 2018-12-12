@@ -1,5 +1,5 @@
 /* 
-* Edit Shopping Cart Form
+* Edit Training Checkout Form
 */
 
 import {
@@ -158,7 +158,7 @@ const buildFieldConfig = (
 };
 
 interface Iprops {
-  checkout?: typeof requestQuote;
+  checkout: typeof requestQuote;
   toggleShoppingCartModal: typeof toggleShoppingCartModal;
   loading: boolean;
   colorButton: string;
@@ -212,10 +212,6 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
       return;
     }
     console.log(this.userForm.value);
-    if (!this.props.checkout) {
-      console.error('missing checkout function');
-      return;
-    }
 
     this.props.checkout({
       message: this.userForm.value.message,
@@ -306,9 +302,56 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
       <div>
         <div className={formClassName}>
           <form
-            onSubmit={this.handleSubmit}
+            action="https://demo.unitedtranzactions.com/obp/onlineBillPay.asp"
+            method="post"
+            target="MyMedGas"
+            name="obpauto"
             className="clearfix beacon-form user-form"
           >
+            <input hidden={true} name="User" id="1" value="beacon" />
+
+            <input hidden={true} name="Owner" id="Owner" value="0400008000" />
+            <input
+              hidden={true}
+              name="CustomerNo"
+              id="CustomerNo"
+              value="0400008005"
+            />
+
+            <input
+              hidden={true}
+              name="merchantno"
+              id="merchantno"
+              value="0400008000"
+            />
+
+            <input
+              hidden={true}
+              name="password"
+              id="password"
+              value="P@ym3nts"
+            />
+
+            <input
+              hidden={true}
+              name="Amount"
+              id="Amount"
+              value={this.calculateSubtotal() / 100}
+            />
+
+            <input
+              hidden={true}
+              name="transactiondate"
+              id="transactiondate"
+              value="11-05-2018"
+            />
+            <input
+              hidden={true}
+              name="redirect"
+              id="redirect"
+              value="https://beacon-mmg-api-phase2-dev.azurewebsites.net/training/acceptutapayment"
+            />
+
             <FormGenerator
               onMount={this.setForm}
               fieldConfig={this.state.fieldConfig}
@@ -342,4 +385,4 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
     );
   }
 }
-export default translate('manageInventory')(EditQuoteForm);
+export default translate('training')(EditQuoteForm);

@@ -21,7 +21,6 @@ import {
   toggleShoppingCartModal
 } from '../../actions/shoppingCartActions';
 import CommonModal from '../common/CommonModal';
-import ShoppingCartForm from './ShoppingCartForm';
 import { requestQuote } from 'src/actions/manageInventoryActions';
 
 interface Iprops {
@@ -38,12 +37,13 @@ interface IdispatchProps {
   updateQuantityCart: typeof updateQuantityCart;
   decreaseFromCart: typeof decreaseFromCart;
   deleteFromCart: typeof deleteFromCart;
-  checkout: typeof requestQuote;
+  checkout?: typeof requestQuote;
   toggleShoppingCartModal: typeof toggleShoppingCartModal;
   cart: IshoppingCart;
   tableFilters: ItableFiltersReducer;
   title: string;
   cartName: string;
+  ShoppingCartForm: any;
   showCost?: boolean;
 }
 
@@ -58,7 +58,7 @@ class EditQuoteModal extends React.Component<Iprops & IdispatchProps, {}> {
         modalVisible={this.props.showModal}
         className="user-edit"
         onHide={this.props.toggleShoppingCartModal}
-        body={<ShoppingCartForm {...this.props} />}
+        body={<this.props.ShoppingCartForm {...this.props} />}
         title={this.props.title}
         container={document.getElementById('two-pane-layout')}
       />

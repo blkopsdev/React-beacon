@@ -114,6 +114,18 @@ function lessonProgressReducer(
   }
 }
 
+function purchasedTrainingReducer(state: any[] = [], action: any): any[] {
+  switch (action.type) {
+    case types.GET_PURCHASED_TRAINING_SUCCESS:
+      return action.products;
+    case types.USER_LOGOUT_SUCCESS:
+      return [];
+
+    default:
+      return state;
+  }
+}
+
 export default function trainingReducer(
   state: ItrainingReducer = initialState.training,
   action: any
@@ -126,6 +138,10 @@ export default function trainingReducer(
     quiz: quizReducer(state.quiz, action),
     lessonProgress: lessonProgressReducer(state.lessonProgress, action),
     cart: cartReducerWithName(state.cart, action, 'TRAINING'),
+    purchasedTraining: purchasedTrainingReducer(
+      state.purchasedTraining,
+      action
+    ),
     showShoppingCartModal: modalToggleWithName(
       state.showShoppingCartModal,
       action,

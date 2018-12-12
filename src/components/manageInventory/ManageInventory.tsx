@@ -51,6 +51,7 @@ import {
   setSelectedProduct,
   requestQuote
 } from '../../actions/manageInventoryActions';
+import ShoppingCartForm from '../shoppingCart/ShoppingCartForm';
 
 import { getLocationsFacility } from '../../actions/manageLocationActions';
 import Banner from '../common/Banner';
@@ -575,6 +576,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           title={this.props.t('manageInventory:requestForQuote')}
           checkout={this.props.requestQuote}
           cartName="INVENTORY"
+          ShoppingCartForm={ShoppingCartForm}
         />
         <EditInstallModal
           selectedProduct={this.props.selectedProduct}

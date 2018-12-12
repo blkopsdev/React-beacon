@@ -375,17 +375,17 @@ export const requestQuote = ({
       }
     );
     dispatch(beginAjaxCall());
-    dispatch({ type: types.TOGGLE_MODAL_SHOPPING_CART });
+    dispatch({ type: types.TOGGLE_MODAL_SHOPPING_CART_INVENTORY });
     return axios
       .post(API.POST.inventory.quote, { QuoteItems, facilityID, message })
       .then(data => {
         dispatch({
-          type: types.CHECKOUT_SUCCESS
+          type: types.CHECKOUT_INVENTORY_SUCCESS
         });
         // toastr.success("Success", "requested quote", constants.toastrSuccess);
       })
       .catch((error: any) => {
-        dispatch({ type: types.CHECKOUT_FAILED });
+        dispatch({ type: types.CHECKOUT_INVENTORY_FAILED });
         constants.handleError(error, 'requesting quote');
         throw error;
       });

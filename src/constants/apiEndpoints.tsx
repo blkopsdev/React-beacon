@@ -42,7 +42,8 @@ const API = {
       deleteTeamMember: `${root}user/deleteteammember`
     },
     training: {
-      savelessonprogress: `${root}training/savelessonprogress`
+      savelessonprogress: `${root}training/savelessonprogress`,
+      trainingCheckout: `${root}training/savetrainingtransaction`
     }
   },
   PUT: {
@@ -99,7 +100,8 @@ const API = {
     },
     training: {
       getprogressbylesson: `${root}training/getprogressbylesson`,
-      getalllessonprogress: `${root}training/getalllessonprogress`
+      getalllessonprogress: `${root}training/getalllessonprogress`,
+      getPurchasedTraining: `${root}training/getpurchasedtraining`
     }
   }
 };

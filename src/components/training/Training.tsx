@@ -21,7 +21,8 @@ import {
   getAllLessonProgress,
   trainingCheckout,
   addCourseToCart,
-  addLessonToCart
+  addLessonToCart,
+  getPurchasedTraining
 } from '../../actions/trainingActions';
 
 import {
@@ -35,6 +36,7 @@ import {
   Breadcrumb,
   Badge
 } from 'react-bootstrap';
+import queryString from 'query-string';
 
 import { RouteComponentProps, Switch, Route } from 'react-router';
 import Lesson from './Lesson';
@@ -47,6 +49,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TranslationFunction } from 'i18next';
 import { I18n, translate } from 'react-i18next';
 import { getTotal } from 'src/reducers/cartReducer';
+import TrainingCheckoutForm from './TrainingCheckoutForm';
 
 interface RouterParams {
   courseID: string;
@@ -77,6 +80,7 @@ interface Props extends RouteComponentProps<RouterParams> {
   i18n: I18n;
   cart: IshoppingCart;
   trainingCheckout: typeof trainingCheckout;
+  getPurchasedTraining: typeof getPurchasedTraining;
 }
 
 interface State {
@@ -117,6 +121,15 @@ class Courses extends React.Component<Props, State> {
     this.props.getAllLessons(this.props.user);
     this.props.getAllQuizzes(this.props.user);
     this.props.getAllLessonProgress();
+    this.props.getPurchasedTraining();
+    const query = queryString.parse(this.props.location.search);
+    console.log('query params', query, query.transactionNumber);
+
+    // if we receive a transation number, that means we were recently redirected from a UTA transaction.  Now we need to actually checkout.
+    if (query && query.transactionNumber && query.transactionNumber.length) {
+      this.props.trainingCheckout(query.transactionNumber);
+    }
+
     // }
     // if we have a courseID then display the lessons in that course
     // if (!!this.props.match.params.courseID) {
@@ -513,9 +526,9 @@ class Courses extends React.Component<Props, State> {
           t={this.props.t}
           cart={this.props.cart}
           title={this.props.t('training:shoppingCartTitle')}
-          checkout={this.props.trainingCheckout}
           cartName="TRAINING"
           showCost={true}
+          ShoppingCartForm={TrainingCheckoutForm}
         />
       </div>
     );
@@ -550,7 +563,8 @@ export default translate('training')(
       toggleShoppingCartModal,
       addCourseToCart,
       addLessonToCart,
-      trainingCheckout
+      trainingCheckout,
+      getPurchasedTraining
     }
   )(Courses)
 );

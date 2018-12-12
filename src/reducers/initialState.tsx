@@ -224,7 +224,8 @@ export default {
     lesson: initialLesson,
     quizzes: {},
     quiz: initialQuiz,
-    lessonProgress: {}
+    lessonProgress: {},
+    purchasedTraining: []
   },
   customers: [],
   facilities: [],

@@ -301,7 +301,9 @@ class Courses extends React.Component<Props, State> {
                 imagePath = require('../../images/Azure.png');
               }
               const progress = this.props.lessonProgress[gfLesson.id]
-                ? this.props.lessonProgress[gfLesson.id].percentageComplete
+                ? this.props.lessonProgress[gfLesson.id].isComplete
+                  ? 100
+                  : this.props.lessonProgress[gfLesson.id].percentageComplete
                 : 0;
               return (
                 <ListGroupItem className="lesson list-item" key={gfLesson.id}>
@@ -316,7 +318,12 @@ class Courses extends React.Component<Props, State> {
                       <span className="lesson-name">{gfLesson.name}</span>
                     </Col>
                     <Col md={3}>
-                      <span className="lesson-name lesson-progress">
+                      <span
+                        className="lesson-name lesson-progress"
+                        style={{
+                          color: progress === 100 ? 'green' : 'inherit'
+                        }}
+                      >
                         {`${progress}% Complete`}
                       </span>
                     </Col>

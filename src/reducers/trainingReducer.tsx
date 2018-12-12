@@ -114,7 +114,7 @@ function lessonProgressReducer(
   }
 }
 
-function purchasedTrainingReducer(state: any[] = [], action: any): any[] {
+function purchasedTrainingReducer(state: string[] = [], action: any): string[] {
   switch (action.type) {
     case types.GET_PURCHASED_TRAINING_SUCCESS:
       return action.products;

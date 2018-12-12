@@ -398,7 +398,7 @@ export interface GFLesson {
   order: number;
   primaryVideoPath: string;
   slideshowPath: string;
-  courseLessons: any;
+  courseLessons: Array<{ id: string; courseID: string }>;
   cost: number;
 }
 
@@ -485,5 +485,5 @@ export interface ItrainingReducer {
   lessonProgress: { [key: string]: LessonProgress };
   cart: IshoppingCart;
   showShoppingCartModal: boolean;
-  purchasedTraining: any[];
+  purchasedTraining: string[];
 }

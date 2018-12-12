@@ -238,16 +238,14 @@ export const trainingCheckout = (
     dispatch({ type: types.TOGGLE_MODAL_SHOPPING_CART_TRAINING });
     return axios
       .post(API.POST.training.trainingCheckout, {
-        Transaction: {
-          PurchasedTraining: products,
-          UTATransactionNumber: parseInt(transactionNumber, 10)
-        }
+        PurchasedTraining: products,
+        UTATransactionNumber: parseInt(transactionNumber, 10)
       })
       .then(data => {
         dispatch({
           type: types.CHECKOUT_TRAINING_SUCCESS
         });
-        // toastr.success("Success", "requested quote", constants.toastrSuccess);
+        getPurchasedTrainingHelper(dispatch, getState);
       })
       .catch((error: any) => {
         dispatch({ type: types.CHECKOUT_TRAINING_FAILED });
@@ -260,18 +258,23 @@ export const trainingCheckout = (
 export const getPurchasedTraining = (): ThunkResult<void> => {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
-    return axios
-      .get(API.GET.training.getPurchasedTraining)
-      .then(data => {
-        dispatch({
-          type: types.GET_PURCHASED_TRAINING_SUCCESS
-        });
-        // toastr.success("Success", "requested quote", constants.toastrSuccess);
-      })
-      .catch((error: any) => {
-        dispatch({ type: types.GET_PURCHASED_TRAINING_FAILED });
-        constants.handleError(error, 'get purchased training');
-        throw error;
-      });
+    getPurchasedTrainingHelper(dispatch, getState);
   };
+};
+
+const getPurchasedTrainingHelper = (dispatch: any, getState: any) => {
+  return axios
+    .get(API.GET.training.getPurchasedTraining)
+    .then(data => {
+      dispatch({
+        type: types.GET_PURCHASED_TRAINING_SUCCESS,
+        products: data.data
+      });
+      // toastr.success("Success", "requested quote", constants.toastrSuccess);
+    })
+    .catch((error: any) => {
+      dispatch({ type: types.GET_PURCHASED_TRAINING_FAILED });
+      constants.handleError(error, 'get purchased training');
+      throw error;
+    });
 };

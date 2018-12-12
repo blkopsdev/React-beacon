@@ -10,7 +10,8 @@ import {
   IinitialState,
   Itile,
   LessonProgress,
-  IshoppingCart
+  IshoppingCart,
+  IshoppingCartProduct
 } from '../../models';
 import {
   loadCourses,
@@ -50,6 +51,7 @@ import { TranslationFunction } from 'i18next';
 import { I18n, translate } from 'react-i18next';
 import { getTotal } from 'src/reducers/cartReducer';
 import TrainingCheckoutForm from './TrainingCheckoutForm';
+import { closeAllModals } from 'src/actions/commonActions';
 
 interface RouterParams {
   courseID: string;
@@ -81,6 +83,8 @@ interface Props extends RouteComponentProps<RouterParams> {
   cart: IshoppingCart;
   trainingCheckout: typeof trainingCheckout;
   getPurchasedTraining: typeof getPurchasedTraining;
+  closeAllModals: typeof closeAllModals;
+  purchasedTraining: string[];
 }
 
 interface State {
@@ -109,6 +113,7 @@ class Courses extends React.Component<Props, State> {
     this.goToProgress = this.goToProgress.bind(this);
   }
   componentWillMount() {
+    this.props.closeAllModals();
     this.setState({
       currentTile: constants.getTileByURL(this.props.location.pathname)
     });
@@ -151,6 +156,9 @@ class Courses extends React.Component<Props, State> {
     ) {
       this.loadCourseLessons(this.props.match.params.courseID);
     }
+  }
+  componentWillUnmount() {
+    this.props.closeAllModals();
   }
 
   /*
@@ -232,6 +240,9 @@ class Courses extends React.Component<Props, State> {
   }
 
   printStudentCourses() {
+    const showBuyButton = (id: string) =>
+      this.props.purchasedTraining.indexOf(id) === -1;
+
     return (
       <div
         key="courses"
@@ -253,19 +264,24 @@ class Courses extends React.Component<Props, State> {
                     >
                       <Panel className="text-center">
                         <h2>{this.shortenTitle(gfCourse.name)}</h2>
-                        <Button
-                          bsStyle="warning"
-                          type="button"
-                          onClick={() =>
-                            this.props.addCourseToCart(
-                              shoppingCartItem,
-                              'TRAINING'
-                            )
-                          }
-                        >
-                          Purchase Entire Course
-                        </Button>
-                        <h4>${`${shoppingCartItem.cost / 100}`}</h4>
+                        {showBuyButton(gfCourse.id) && (
+                          <span>
+                            <Button
+                              bsStyle="warning"
+                              type="button"
+                              onClick={() =>
+                                this.props.addCourseToCart(
+                                  shoppingCartItem,
+                                  'TRAINING'
+                                )
+                              }
+                            >
+                              Purchase Entire Course
+                            </Button>
+                            <h4>${`${shoppingCartItem.cost / 100}`}</h4>
+                          </span>
+                        )}
+
                         <p className="purchase-text">
                           Save 25% by purchasing the entire course rather than
                           all the lessons individually
@@ -307,6 +323,48 @@ class Courses extends React.Component<Props, State> {
   }
 
   printLessonsList() {
+    const ProgressColumn = ({ progress }: { progress: number }) => (
+      <Col md={3}>
+        <span
+          className="lesson-name lesson-progress"
+          style={{
+            color: progress === 100 ? 'green' : 'inherit'
+          }}
+        >
+          {`${progress}% Complete`}
+        </span>
+      </Col>
+    );
+    const BuyColumn = ({
+      shoppingCartItem
+    }: {
+      shoppingCartItem: IshoppingCartProduct;
+    }) => (
+      <Col md={3}>
+        <Button
+          bsStyle="warning"
+          type="button"
+          onClick={() =>
+            this.props.addLessonToCart(shoppingCartItem, 'TRAINING')
+          }
+        >
+          Buy Lesson <b>(${`${shoppingCartItem.cost / 100}`})</b>
+        </Button>
+      </Col>
+    );
+
+    const showProgressColumn = (lesson: GFLesson) => {
+      const lessonPurchased =
+        this.props.purchasedTraining.indexOf(lesson.id) !== -1;
+      let coursePurchased = false;
+      lesson.courseLessons.forEach(cl => {
+        if (this.props.purchasedTraining.indexOf(cl.courseID) !== -1) {
+          coursePurchased = true;
+        }
+      });
+
+      return lessonPurchased || coursePurchased;
+    };
     return (
       <div className="courses main-content content-without-sidebar student animated fadeIn">
         <div className="row courses-list">
@@ -334,29 +392,12 @@ class Courses extends React.Component<Props, State> {
                       <img width={32} height={32} src={imagePath} alt="Image" />
                       <span className="lesson-name">{gfLesson.name}</span>
                     </Col>
-                    <Col md={3}>
-                      <span
-                        className="lesson-name lesson-progress"
-                        style={{
-                          color: progress === 100 ? 'green' : 'inherit'
-                        }}
-                      >
-                        {`${progress}% Complete`}
-                      </span>
-                      <Button
-                        bsStyle="warning"
-                        type="button"
-                        onClick={() =>
-                          this.props.addLessonToCart(
-                            shoppingCartItem,
-                            'TRAINING'
-                          )
-                        }
-                      >
-                        Purchase
-                      </Button>
-                      <h4>${`${shoppingCartItem.cost / 100}`}</h4>
-                    </Col>
+                    {showProgressColumn(gfLesson) && (
+                      <ProgressColumn progress={progress} />
+                    )}
+                    {!showProgressColumn(gfLesson) && (
+                      <BuyColumn shoppingCartItem={shoppingCartItem} />
+                    )}
                   </Media>
                 </ListGroupItem>
               );
@@ -550,6 +591,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Props) => {
     quizzes: state.training.quizzes,
     quiz: state.training.quiz,
     lesson: state.training.lesson,
+    purchasedTraining: state.training.purchasedTraining,
     lessonProgress: state.training.lessonProgress,
     loading: state.ajaxCallsInProgress > 0,
     cartTotal: getTotal(state.training.cart),
@@ -571,7 +613,8 @@ export default translate('training')(
       addCourseToCart,
       addLessonToCart,
       trainingCheckout,
-      getPurchasedTraining
+      getPurchasedTraining,
+      closeAllModals
     }
   )(Courses)
 );

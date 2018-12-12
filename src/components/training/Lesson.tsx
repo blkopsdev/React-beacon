@@ -171,7 +171,8 @@ class Lesson extends React.Component<Props, State> {
           currentTime: data.seconds,
           percentageComplete: data.percent * 100,
           totalTime: data.duration,
-          timeSpent: this.timeSpent,
+          timeSpent:
+            this.timeSpent < data.duration ? this.timeSpent : data.duration,
           userID: this.props.user.id
         };
         // console.log('TIMEUPDATE:', progress);

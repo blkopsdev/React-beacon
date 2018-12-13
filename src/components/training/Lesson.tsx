@@ -142,7 +142,7 @@ class Lesson extends React.Component<Props, State> {
     const options = {
       id: this.props.lesson.primaryVideoPath,
       width: this.pElem.offsetWidth, // > 723 ? this.pElem.offsetWidth : 723,
-      loop: true
+      loop: false
     };
 
     this.player = new Player('lessonPlayer', options);
@@ -155,6 +155,21 @@ class Lesson extends React.Component<Props, State> {
       this.player.on('pause', (data: any) => {
         // console.log('PAUSE:', data);
         this.lastUpdate = null;
+      });
+      this.player.on('ended', (data: any) => {
+        const now = moment().unix();
+        this.lastSave = now;
+        this.lastUpdate = now;
+        const progress: LessonProgress = {
+          lessonID: this.props.lesson.id,
+          currentTime: data.seconds,
+          percentageComplete: data.percent * 100,
+          totalTime: data.duration,
+          timeSpent:
+            this.timeSpent < data.duration ? this.timeSpent : data.duration,
+          userID: this.props.user.id
+        };
+        this.props.saveLessonProgress(progress);
       });
       this.player.on('timeupdate', (data: any) => {
         // increment our TimeSpent variable on each timeupdate event.

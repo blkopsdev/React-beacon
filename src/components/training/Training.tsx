@@ -375,10 +375,11 @@ class Courses extends React.Component<Props, State> {
                 imagePath = require('../../images/Azure.png');
               }
               const shoppingCartItem = { ...gfLesson, quantity: 1 };
-              const progress = this.props.lessonProgress[gfLesson.id]
-                ? this.props.lessonProgress[gfLesson.id].isComplete
+              const lp = this.props.lessonProgress[gfLesson.id];
+              const progress = lp
+                ? lp.isComplete
                   ? 100
-                  : this.props.lessonProgress[gfLesson.id].percentageComplete
+                  : Math.round(lp.timeSpent / lp.totalTime) * 99
                 : 0;
               return (
                 <ListGroupItem className="lesson list-item" key={gfLesson.id}>

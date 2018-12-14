@@ -37,6 +37,14 @@ import {
 } from '../../actions/shoppingCartActions';
 import constants from '../../constants/constants';
 import { requestQuote } from 'src/actions/manageInventoryActions';
+import Select, { components } from 'react-select';
+
+// add the bootstrap form-control class to the react-select select component
+const ControlComponent = (props: any) => (
+  <div>
+    <components.Control {...props} className="form-control" />
+  </div>
+);
 
 /*
 * Input row with a button to delete the cart item
@@ -345,6 +353,7 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
               id="transactiondate"
               value="11-05-2018"
             />
+
             <input
               hidden={true}
               name="redirect"
@@ -356,6 +365,22 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
               onMount={this.setForm}
               fieldConfig={this.state.fieldConfig}
             />
+            <Col xs={12}>
+              <FormGroup bsSize="sm">
+                <ControlLabel>Payment Method</ControlLabel>
+                <Select
+                  options={[
+                    { label: 'Credit Card', value: 2 },
+                    { label: 'ACH', value: 1 }
+                  ]}
+                  classNamePrefix="react-select"
+                  defaultValue={{ label: 'Credit Card', value: 2 }}
+                  name="paymenttype"
+                  className="payment-select"
+                  components={{ Control: ControlComponent }}
+                />
+              </FormGroup>
+            </Col>
             <Col xs={12} className="cart-totals">
               Subtotal: ${this.calculateSubtotal() / 100}
             </Col>

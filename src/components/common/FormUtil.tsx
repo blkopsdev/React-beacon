@@ -162,6 +162,7 @@ export const FormUtil = {
           type={meta.type || 'text'}
           rows={meta.rows}
           autoFocus={meta.autoFocus}
+          name={meta.name || ''}
           {...handler()}
         />
         <FormControl.Feedback />
@@ -322,6 +323,7 @@ export const FormUtil = {
             isMulti={meta.isMulti}
             classNamePrefix="react-select"
             isClearable={true}
+            name={meta.name || ''}
             {...handler()}
           />
         </FormGroup>

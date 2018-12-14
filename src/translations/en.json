@@ -267,6 +267,7 @@
     "ManageJobs": "Manage Jobs"
   },
   "training": {
-    "shoppingCartTitle": "Shopping Cart"
+    "shoppingCartTitle": "Shopping Cart",
+    "emptyMessage": "Please add some lessons or courses."
   }
 }

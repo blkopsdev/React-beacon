@@ -147,16 +147,17 @@ const buildFieldConfig = (
     };
   });
   const fieldConfigControls = {
-    message: {
+    memo: {
       render: FormUtil.TextInput,
       options: {
         validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       meta: {
-        label: 'message',
+        label: 'memo',
         colWidth: 12,
         componentClass: 'textarea',
-        rows: 8
+        rows: 6,
+        name: 'memo'
       }
     }
   };
@@ -288,9 +289,7 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
     if (this.props.cart.addedIDs.length === 0) {
       return (
         <div>
-          <h4 style={{ padding: '15px' }}>
-            {this.props.t('emptyQuoteMessage')}
-          </h4>
+          <h4 style={{ padding: '15px' }}>{this.props.t('emptyMessage')}</h4>
           <Col xs={12} className="form-buttons text-right">
             <Button
               bsStyle="default"

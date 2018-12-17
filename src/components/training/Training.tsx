@@ -52,6 +52,7 @@ import { I18n, translate } from 'react-i18next';
 import { getTotal } from 'src/reducers/cartReducer';
 import TrainingCheckoutForm from './TrainingCheckoutForm';
 import { closeAllModals } from 'src/actions/commonActions';
+import Quiz from './Quiz';
 
 interface RouterParams {
   courseID: string;
@@ -462,7 +463,7 @@ class Courses extends React.Component<Props, State> {
             </span>
           </Breadcrumb.Item>
           <Breadcrumb.Item active={true}>
-            {this.props.lesson.name}
+            {this.props.quiz.name}
           </Breadcrumb.Item>
         </Breadcrumb>
       );
@@ -551,7 +552,11 @@ class Courses extends React.Component<Props, State> {
         </Button>
         {this.getBreadcrumbs()}
         <Switch>
-          {/* <Route exact path={`/training/:courseID/:lessonID/:quizID`} component={Lesson} /> */}
+          <Route
+            exact
+            path={`/training/:courseID/:lessonID/:quizID`}
+            component={Quiz}
+          />
           <Route
             exact
             path={`/training/:courseID/:lessonID`}

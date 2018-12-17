@@ -1,0 +1,238 @@
+@import '../../less/variables.less';
+.manage-training .main-content .quiz {
+  padding: 15px;
+}
+.owl-image {
+  position: fixed;
+  right: 30%;
+  bottom: 0;
+  min-width: 340px;
+  max-width: 340px;
+  background-size: cover;
+  padding-bottom: 215px;
+}
+p.wrong.bubble-text, p.right.bubble-text {
+  position: absolute;
+  font-weight: 500;
+  max-width: 135px;
+  min-width: 135px;
+  max-height: 50px;
+  min-height: 50px;
+  bottom: 95px;
+  left: 38%;
+  font-size: 18px;
+  //top: 100px;
+  text-align: center;
+}
+p.wrong.bubble-text {
+  color: @red;
+}
+p.right.bubble-text {
+  color: @green;
+}
+.quiz {
+  .button-row {
+    margin: 0 auto 125px 0px;
+    line-height: 2;
+    .quiz-buttons.col-md-5 {
+      padding-left: 0px;
+    }
+  }
+  .question {
+    padding-bottom: 20px;
+    font-size: 26px;
+    }
+    .text-question p {
+      font-size: 26px;
+      font-family: @headerFont;
+      font-weight: 500;
+      margin: 15px auto 15px auto;
+    }
+    .text-instructions p {
+      color: #999;
+      font-size: 22px;
+      font-weight: 100;
+      line-height: 32px;
+      padding-bottom: 2px;
+      font-family: @headerFont;
+    }
+    .options {
+      margin-bottom: 25px;
+    }
+    .quiz-score {
+      color: grey;
+      h1 {
+        font-size: 96px;
+        color: grey;
+        padding: 25px;
+      }
+      p {
+        color: grey;
+      }
+      .quiz-score-a {
+        color: @green;
+      }
+      .quiz-score-b {
+        color: @yellow;
+      }
+      .quiz-score-c {
+        color: @red;
+      }
+    }
+    .customRadio .check-box{
+      // font-size: 24px;
+    }
+    .radio {
+      padding: 3px;
+      margin: 0 auto;
+      .check-box {
+        margin-right: 25px;
+      }
+      .check-box-correct {
+        background-color: @green;
+        margin-right: 25px;
+      }
+      .check-box-wrong {
+        background-color: @red;
+        margin-right: 25px;
+      }
+    }
+    .right-answer {
+      color: @green;
+    }
+    .wrong-answer {
+      color: @red;
+    }
+    .text-input-wrong-answer {
+      color: @green;
+      padding-top: 15px;
+    }
+    .right-or-wrong {
+      padding-left: 15px;
+      &.check-mark {
+        color: @green;
+      }
+      &.check-mark.text-input {
+        padding: 8.5px 0 0 0;
+      }
+      &.times-mark {
+        color: @red;
+      }
+      &.times-mark.text-input {
+        padding: 8.5px 0 0 0;
+      }
+    }
+    label, input {
+      padding-left: 0px;
+      font-size: 22px;
+      color: #777;
+      font-weight: 300;
+    }
+    input[type="radio"] {
+      display: none;
+      padding-left: 0px;
+    }
+    input[type="radio"] + span {
+      font-family: Arial, sans-serif;
+      font-size: 14px;
+      display: inline-block;
+      width: 19px;
+      height: 19px;
+      margin: -1px 4px 0 0;
+      vertical-align: middle;
+      cursor: pointer;
+      -moz-border-radius: 50%;
+      border-radius: 50%;
+      background-color: @grayBlue;
+      i {
+        display: none;
+      }
+    }
+    input[type="radio"]:checked + span {
+      background-color: @darkBlue;
+      i {
+        color: white;
+        display: inline-block;
+      }
+    }
+    input[type="radio"] + span, input[type="radio"]:checked + span {
+      -webkit-transition: background-color 0.4s linear;
+      -o-transition: background-color 0.4s linear;
+      -moz-transition: background-color 0.4s linear;
+      transition: background-color 0.4s linear;
+    }
+    .quiz-text-field {
+      margin: 0 auto;
+      input.form-control {
+        height: 45px;
+        padding: 0px 12px;
+        font-size: 20px;
+      }
+    }
+  }
+  .practice-exercise-modal{
+    padding: 0px;
+    .quiz {
+      .question {
+        font-size: 20px;
+        font-weight: 500;
+        .teacher-viewing-text-question p {
+          font-size: 18px;
+          font-weight: 500;
+        }
+        .teacher-viewing-progress-report {
+          p {
+            font-size: 20px;
+            font-weight: 500;
+            padding-top: 10px;
+          }
+          .quiz-text-field {
+            input.form-control {
+              height: 35px;
+              padding: 10px 12px;
+              font-size: 20px;
+            }
+          }
+          .teacher-options{
+            font-size: 18px;
+            .radio {
+              padding: 1px;
+              margin: 0 auto;
+              .check-box {
+                height: 12px;
+                width: 12px;
+                margin-right: 15px;
+              }
+              .check-box-correct {
+                height: 12px;
+                width: 12px;
+                background-color: @green;
+                margin-right: 15px;
+              }
+              .check-box-wrong {
+                height: 12px;
+                width: 12px;
+                background-color: @red;
+                margin-right: 15px;
+              }
+            }
+          }
+        }
+      }
+      .text-input-wrong-answer {
+        color: @green;
+        padding-top: 5px;
+      }
+    }
+  }
+.page-number {
+  color: #999;
+  line-height: 3;
+  padding-right: 0px;
+}
+
+@media (max-width: 670px) {
+  .page-number {
+    visibility: hidden;
+  }
+}

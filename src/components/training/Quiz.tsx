@@ -1,0 +1,632 @@
+import * as React from 'react';
+// import UserAPI from "../../api/userAPI";
+// import StudentAPI from "../../api/studentAPI";
+// import constants from "../../constants";
+import initialState from '../../reducers/initialState';
+
+import { connect } from 'react-redux';
+import { GFQuizItem, GFLesson, GFCourse } from '../../models';
+import {
+  getLessonsByCourseID,
+  setLesson,
+  // getQuizzesByLessonID,
+  setQuiz
+} from '../../actions/trainingActions';
+// import Badge from '../course/Badge'
+import Question from './Question';
+
+import { Button, Row, Col } from 'react-bootstrap';
+// import { toastr } from "react-redux-toastr";
+import { forEach, isEmpty } from 'lodash';
+// const mixpanel = require("mixpanel-browser");
+
+const txtBubble = require('../../images/Azure.png');
+
+import { RouteComponentProps } from 'react-router';
+
+interface RouterParams {
+  courseID: string;
+  lessonID: string;
+  quizID: string;
+}
+
+interface Props extends RouteComponentProps<RouterParams> {
+  user: any;
+  quiz: GFQuizItem;
+  courses: GFCourse[];
+  lesson: GFLesson;
+  lessons: GFLesson[];
+  quizzes: GFQuizItem[];
+  getLessonsByCourseID: any;
+  // getQuizzesByLessonID: any;
+  setLesson: any;
+  setQuiz: any;
+  loading: boolean;
+  params: any;
+}
+
+interface State {
+  questionIndex: number;
+  selectedAnswer: any;
+  checkingAnswer: boolean;
+  quizComplete: boolean;
+  textAnswer: string;
+  currentQuiz: GFQuizItem;
+}
+
+class Quiz extends React.Component<Props, State> {
+  savingQuiz: boolean;
+  checkingAnswer: boolean;
+  goingToNextQuestion: boolean;
+
+  constructor(props: Props) {
+    super(props);
+    this.state = {
+      questionIndex: 0,
+      selectedAnswer: {},
+      checkingAnswer: false,
+      quizComplete: false,
+      textAnswer: '',
+      currentQuiz: initialState.training.quiz
+    };
+    this.handleChange = this.handleChange.bind(this);
+    this.backToLesson = this.backToLesson.bind(this);
+    this.backToCourses = this.backToCourses.bind(this);
+    this.retakeQuiz = this.retakeQuiz.bind(this);
+    this.nextQuestion = this.nextQuestion.bind(this);
+    this.printScore = this.printScore.bind(this);
+    this.checkAnswer = this.checkAnswer.bind(this);
+    this.finishQuiz = this.finishQuiz.bind(this);
+    // this.showBadge = this.showBadge.bind(this);
+    this.backToAllCourses = this.backToAllCourses.bind(this);
+    this.getQuizByID = this.getQuizByID.bind(this);
+
+    this.savingQuiz = false;
+    this.checkingAnswer = false;
+    this.goingToNextQuestion = false;
+  }
+
+  componentWillMount() {
+    if (!this.props.match.params.lessonID) {
+      // no lesson id is not allowed
+      this.props.history.replace(`/courses`);
+    }
+  }
+
+  /*
+  * When the component mounts we want to check for a quizID, if there is not one then we can not load a quiz, 
+  * so send them back to the courses page
+  * we need the lesson in order to show the breadcrumbs
+  * then get the quiz
+  */
+  componentDidMount() {
+    if (!this.props.match.params.quizID || !this.props.match.params.lessonID) {
+      console.error('GOT HERE 1');
+      this.props.history.replace(`/training`);
+      return;
+    }
+    // Check to make sure we have already loaded courses, lessons and quizzes in redux
+    if (
+      isEmpty(this.props.courses) ||
+      isEmpty(this.props.lessons) ||
+      isEmpty(this.props.quizzes)
+    ) {
+      console.error('GOT HERE 2');
+      // this.props.history.replace(`/training`);
+      // return;
+    }
+
+    // Check to see if there is any quiz in redux
+    // If there is a quiz we make sure it matches the quiz we are loading in the params otherwise
+    // direct links will load whatever quiz is left in redux
+    if (
+      this.props.quiz.id === this.props.match.params.quizID &&
+      this.props.quiz.questions.length
+    ) {
+      this.loadQuiz(); // set the quiz to state
+    } else {
+      this.getQuizByID();
+    }
+    // Check to see if there is any lesson in redux
+    // If there is a lesson we make sure it matches the lesson we are loading in the params otherwise
+    // direct links will load whatever lesson is left in redux
+    // if (this.props.lesson.id !== this.props.match.params.lessonID) {
+    //   this.setLesson(this.props.match.params.lessonID);
+    // }
+    if (
+      this.props.quiz &&
+      this.props.quiz.id.length &&
+      this.props.quiz.questions.length
+    ) {
+      this.reloadExistingQuiz();
+    }
+  }
+  componentDidUpdate(prevProps: Props) {
+    if (prevProps.quiz !== this.props.quiz) {
+      this.loadQuiz();
+    }
+    // if (prevProps.quizzes !== this.props.quizzes) {
+    //   this.getQuizByID();
+    // }
+    // if (prevProps.lessons !== this.props.lessons) {
+    //   this.setLesson(this.props.match.params.lessonID);
+    // }
+  }
+
+  componentWillUnmount() {
+    if (this.state.quizComplete) {
+      const questions = this.props.quiz.questions.map(q => {
+        return Object.assign({}, q, { userAnswer: {} });
+      });
+      const quiz = Object.assign({}, this.props.quiz, { questions });
+      this.props.setQuiz(quiz);
+    }
+  }
+
+  /*
+  * There is a quiz in progress, so lets reload it
+  */
+  reloadExistingQuiz() {
+    window.scrollTo(0, 0);
+    let i = 0;
+
+    // count how many questions have been answered
+    forEach(this.props.quiz.questions, (q, index) => {
+      if (!!q.userAnswer && !!q.userAnswer.option) {
+        i++;
+      }
+    });
+    if (i >= this.props.quiz.questions.length) {
+      // the user refreshed the page after completing the last question.  We don't know if they saved to the API or not
+      // so lets assume they did not and show the last question answered and not editable.  this way they can try to re-save
+      // @jfbloom22 why are we calling finishQuiz when the component mounts?  changed it to not do that on 09/28/2017
+      // this.finishQuiz();
+      const lastQuestion = this.props.quiz.questions[i - 1];
+      this.setState({
+        questionIndex: i - 1,
+        textAnswer: lastQuestion.userAnswer.option,
+        selectedAnswer: lastQuestion.userAnswer,
+        checkingAnswer: true,
+        currentQuiz: this.props.quiz
+      });
+    } else {
+      this.setState({
+        questionIndex: i,
+        currentQuiz: this.props.quiz
+      });
+    }
+  }
+  loadQuiz() {
+    this.setState({ currentQuiz: this.props.quiz });
+  }
+
+  /*
+  * First try to find the quiz in the quizzes redux store, then try to get it from the API.
+  * We do not have an endpoint to get the quiz by ID, so in order to get the quiz by ID 
+  * we have to use the endpoint that gets all the quizzes for the lesson.
+  * 
+  */
+  getQuizByID() {
+    const quiz = this.props.quizzes[this.props.match.params.quizID];
+    if (!!quiz && quiz.questions.length) {
+      this.props.setQuiz(quiz);
+    } else {
+      // Check to make sure we have already loaded courses, lessons and quizzes in redux
+      if (
+        isEmpty(this.props.courses) ||
+        isEmpty(this.props.lessons) ||
+        isEmpty(this.props.quizzes)
+      ) {
+        this.props.history.push(`/training`);
+        return;
+      }
+    }
+  }
+  setLesson(lessonID: string) {
+    const newLesson = this.props.lessons[lessonID];
+    if (newLesson) {
+      this.props.setLesson(
+        this.props.lessons[this.props.match.params.lessonID]
+      );
+    } else {
+      console.log('did not find lesson in Redux, loading lessons from API');
+      this.getLessonsByCourseID(this.props.match.params.courseID);
+    }
+  }
+  getLessonsByCourseID(courseId: string) {
+    this.props.getLessonsByCourseID(courseId, this.props.user);
+  }
+
+  // showBadge(badge: GFBadge) {
+  // const toastrOptions = {
+  //   ...constants.toastrSuccessBadge,
+  //   component: <Badge badge={badge} />,
+  //   className: 'toast-badge'
+  // }
+  // toastr.success('', '', toastrOptions)
+  // }
+
+  handleChange(option: any) {
+    // this.setState({ [e.target.name]: e.target.value });
+    // it was set to option.option.trim();
+    if (option.name === 'textAnswer') {
+      this.setState({ textAnswer: option.option, selectedAnswer: option });
+    } else {
+      this.setState({ selectedAnswer: option });
+    }
+  }
+
+  backToLesson() {
+    this.props.history.replace(
+      `/training/${this.props.match.params.courseID}/${
+        this.props.match.params.lessonID
+      }`
+    );
+  }
+
+  backToCourses() {
+    this.props.history.replace(`/training/${this.props.match.params.courseID}`);
+  }
+
+  retakeQuiz() {
+    const questions = this.props.quiz.questions.map(q => {
+      return Object.assign({}, q, { userAnswer: {} });
+    });
+    const quiz = Object.assign({}, this.props.quiz, { questions });
+    this.props.setQuiz(quiz);
+
+    // mixpanel.track("Retake Practice Exercise was clicked", {
+    //   quizID: this.props.quiz.id,
+    //   quizName: this.props.quiz.name
+    // });
+    this.setState({
+      questionIndex: 0,
+      selectedAnswer: {},
+      checkingAnswer: false,
+      quizComplete: false
+    });
+  }
+
+  nextQuestion() {
+    // TODO test for the last question and show results
+    if (this.goingToNextQuestion) {
+      return;
+    }
+    if (this.props.quiz.questions.length === this.state.questionIndex + 1) {
+      this.finishQuiz();
+      return;
+    }
+    this.goingToNextQuestion = true;
+    setTimeout(() => {
+      const newIndex = this.state.questionIndex + 1;
+      this.goingToNextQuestion = false;
+      this.setState({
+        questionIndex: newIndex,
+        selectedAnswer: {},
+        checkingAnswer: false,
+        textAnswer: ''
+      });
+    }, 200);
+
+    forEach(
+      document.getElementsByName('optionsRadios'),
+      (el: HTMLFormElement) => {
+        el.checked = false;
+      }
+    );
+  }
+  /*
+    I need to click check answer and it triggers a statement that lets me know if the answer is wrong.
+  */
+  checkAnswer(e: any) {
+    e.preventDefault();
+    if (this.checkingAnswer) {
+      return;
+    }
+    if (this.state.checkingAnswer) {
+      this.nextQuestion();
+      return;
+    }
+    this.checkingAnswer = true;
+
+    setTimeout(() => {
+      this.checkingAnswer = false;
+      this.setState({
+        checkingAnswer: true
+      });
+    }, 200);
+    // save user selection to redux quiz state
+    const curQ = this.props.quiz.questions[this.state.questionIndex];
+    const questions = [
+      ...this.props.quiz.questions.map(q => {
+        if (q.id === curQ.id) {
+          return Object.assign({}, curQ, {
+            userAnswer: this.state.selectedAnswer
+          });
+        } else {
+          return q;
+        }
+      })
+    ];
+    const quiz = Object.assign({}, this.props.quiz, { questions });
+    this.props.setQuiz(quiz);
+  }
+
+  finishQuiz() {
+    // if student, save the results to the api here, bypassing
+    // redux flow since we do not need to update the store.
+    // prevent doubl submission
+    if (this.savingQuiz) {
+      console.info('already saving quiz, returning');
+      return;
+    }
+    this.savingQuiz = true;
+    setTimeout(() => {
+      this.savingQuiz = false;
+    }, 1000);
+
+    // if (UserAPI.isStudent(this.props.user.roleID)) {
+    //   StudentAPI.saveQuizResults(this.props.quiz, this.props.user)
+    //     .then((res: any) => {
+    //       if (!!res.earnedBadge) {
+    //         this.showBadge(res.earnedBadge);
+    //       }
+    //       this.setState({
+    //         selectedAnswer: {},
+    //         checkingAnswer: false,
+    //         quizComplete: true,
+    //         textAnswer: "",
+    //         currentQuiz: this.props.quiz,
+    //         questionIndex: 0
+    //       });
+    //     })
+    //     .catch((error: any) => {
+    //       console.error(
+    //         "Error with saving Practice Exercise results",
+    //         error,
+    //         this.props.quiz.questions
+    //       );
+    //       const message = "saving practice exercise";
+    //       constants.handleError(error, message);
+    //     });
+    // } else {
+    //   // for teachers, pretend we saved the quiz
+    //   this.setState(
+    //     {
+    //       selectedAnswer: {},
+    //       checkingAnswer: false,
+    //       quizComplete: true,
+    //       textAnswer: "",
+    //       currentQuiz: this.props.quiz,
+    //       questionIndex: 0
+    //     },
+    //     () => {
+    //       // this is a teacher finishing the quiz, so we just show a toast
+    //       toastr.warning(
+    //         `Thank you`,
+    //         `Only students can save Practice Exercise results!`,
+    //         constants.toastrSuccess
+    //       );
+    //     }
+    //   );
+    // }
+    // mixpanel.track("Finished Practice Exercise", {
+    //   quizID: this.props.quiz.id,
+    //   quizName: this.props.quiz.name
+    // });
+  }
+
+  printScore() {
+    let numCorrect = 0;
+    const tot = this.state.currentQuiz.questions.length;
+    forEach(this.state.currentQuiz.questions, q => {
+      if (q.userAnswer && q.userAnswer.isAnswer) {
+        numCorrect++;
+      }
+    });
+    const score = (numCorrect / tot) * 100;
+    let grade;
+    let message;
+    if (score >= 80 && score <= 100) {
+      message =
+        'Nice job!  It looks like you have a solid understanding of the material.  Keep it up!';
+      grade = 'a';
+    } else if (score >= 60 && score <= 79) {
+      message =
+        'Hmmm.  You missed a few.  Review the lesson, and try the exercise again.';
+      grade = 'b';
+    } else if (score >= 0 && score <= 59) {
+      message =
+        "It looks like you're still learning the material - don't give up.  Review the lesson one more time, and then make sure to see your teacher for some help.";
+      grade = 'c';
+    }
+    return (
+      <div>
+        <Row>
+          <Col
+            md={10}
+            mdOffset={1}
+            sm={10}
+            smOffset={1}
+            xs={10}
+            xsOffset={1}
+            className="text-center"
+          >
+            <p>{message}</p>
+          </Col>
+        </Row>
+        <div className="quiz-score">
+          <h1 className={'quiz-score-' + grade}>{score.toFixed(0) + '%'}</h1>
+          <p>
+            {numCorrect} / {tot} correct.
+          </p>
+        </div>
+      </div>
+    );
+  }
+
+  backToAllCourses() {
+    this.props.history.replace(`/training`);
+  }
+
+  render() {
+    let questions;
+    let totQ = 0;
+    let qi = 0;
+    let curQ;
+    // let courseName
+    if (this.props.quiz && this.props.quiz.id) {
+      questions = this.props.quiz.questions;
+      totQ = this.props.quiz.questions.length;
+      qi = this.state.questionIndex;
+      curQ = questions[qi];
+    }
+    const bubble = {
+      backgroundImage: `url(${txtBubble})`
+    };
+    if (this.props.lesson && this.props.lesson.id) {
+      // courseName = this.props.lesson.courseLessons[0].course.name
+    }
+    return (
+      <div>
+        <div className="main-content content-without-sidebar quiz animated fadeIn">
+          {this.state.quizComplete && (
+            <div className="sub-header">
+              <Row className="question">
+                <Col md={12} sm={12} xs={12} className="text-center">
+                  {this.printScore()}
+                </Col>
+              </Row>
+              <Row className="question">
+                <Col md={12} sm={12} xs={12} className="text-center">
+                  <Button
+                    bsStyle="primary"
+                    onClick={this.retakeQuiz}
+                    className=""
+                  >
+                    Retake Exercise
+                  </Button>
+                  <Button
+                    bsStyle="primary"
+                    onClick={this.backToLesson}
+                    style={{ marginLeft: 10 }}
+                  >
+                    Return to Lesson
+                  </Button>
+                  <Button
+                    bsStyle="primary"
+                    onClick={this.backToAllCourses}
+                    style={{ marginLeft: 10 }}
+                  >
+                    Return to dashboard
+                  </Button>
+                </Col>
+              </Row>
+            </div>
+          )}
+          {!this.state.quizComplete &&
+            typeof curQ !== 'undefined' && (
+              <div className="sub-header">
+                <form id="quizForm" onSubmit={this.checkAnswer}>
+                  <Row className="question">
+                    <Col md={12} xs={12} className="quiz-text-container">
+                      <div className="text-instructions">
+                        <p
+                          dangerouslySetInnerHTML={{
+                            __html: this.props.quiz.instructions.replace(
+                              '**blank**',
+                              '__________'
+                            )
+                          }}
+                        />
+                      </div>
+                    </Col>
+                    <Question
+                      curQ={curQ}
+                      checkingAnswer={this.state.checkingAnswer}
+                      selectedAnswer={this.state.selectedAnswer}
+                      textAnswer={this.state.textAnswer}
+                      handleChange={this.handleChange}
+                    />
+                  </Row>
+                  <Row className="button-row">
+                    <Col md={5} sm={5} className="quiz-buttons">
+                      {!this.state.checkingAnswer && (
+                        <Button
+                          bsStyle="primary"
+                          type="submit"
+                          disabled={
+                            this.state.selectedAnswer.option === undefined
+                          }
+                        >
+                          Check
+                        </Button>
+                      )}
+                      {this.state.checkingAnswer &&
+                        qi + 1 < totQ && (
+                          <Button
+                            bsStyle="primary"
+                            className="next-button"
+                            type="submit"
+                            disabled={!this.state.checkingAnswer}
+                          >
+                            Next
+                          </Button>
+                        )}
+                      {this.state.checkingAnswer &&
+                        qi + 1 === totQ && (
+                          <Button
+                            bsStyle="primary"
+                            type="button"
+                            onClick={this.finishQuiz}
+                            disabled={this.props.loading}
+                          >
+                            Finish Exercise
+                          </Button>
+                        )}
+                    </Col>
+                    <Col md={7} sm={7}>
+                      <div className="pull-right page-number">
+                        {qi + 1} of {totQ}
+                      </div>
+                    </Col>
+                  </Row>
+                </form>
+              </div>
+            )}
+        </div>
+        {this.state.checkingAnswer && (
+          <div className="animated slideInUp owl-image" style={bubble}>
+            {this.state.selectedAnswer.isAnswer && (
+              <p className="right bubble-text">{curQ && curQ.correctText}</p>
+            )}
+            {!this.state.selectedAnswer.isAnswer && (
+              <p className="wrong bubble-text">{curQ && curQ.wrongText}</p>
+            )}
+          </div>
+        )}
+      </div>
+    );
+  }
+}
+
+const mapStateToProps = (state: any, ownProps: any) => {
+  return {
+    user: state.user,
+    courses: state.training.courses,
+    quiz: state.training.quiz,
+    lessons: state.training.lessons,
+    lesson: state.training.lesson,
+    quizzes: state.training.quizzes,
+    loading: state.ajaxCallsInProgress > 0
+  };
+};
+
+export default connect(
+  mapStateToProps,
+  {
+    getLessonsByCourseID,
+    setLesson,
+    setQuiz
+  }
+)(Quiz);

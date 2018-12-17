@@ -5,8 +5,9 @@ import { GFQuizItem, GFLesson, GFCourse, LessonProgress } from '../../models';
 
 import {
   setLesson,
-  saveLessonProgress
-  // setQuiz
+  saveLessonProgress,
+  setQuiz,
+  getQuizzesByLessonID
 } from '../../actions/trainingActions';
 
 import {
@@ -39,7 +40,8 @@ interface Props extends RouteComponentProps<RouterParams> {
   quizzes: GFQuizItem[];
   setLesson: typeof setLesson;
   saveLessonProgress: typeof saveLessonProgress;
-  setQuiz: any;
+  setQuiz: typeof setQuiz;
+  getQuizzesByLessonID: typeof getQuizzesByLessonID;
   loading: boolean;
   params: any;
   progress: LessonProgress;
@@ -122,7 +124,11 @@ class Lesson extends React.Component<Props, State> {
   }
   componentDidUpdate(prevProps: Props) {
     if (prevProps.quizzes !== this.props.quizzes) {
-      this.loadQuizzes();
+      // this.loadQuizzes();
+      const lessonQuizzes = filter(this.props.quizzes, {
+        lessonID: this.props.match.params.lessonID
+      });
+      this.setState({ lessonQuizzes } as State);
     }
     if (prevProps.lessons !== this.props.lessons) {
       this.setLesson(this.props.match.params.lessonID);
@@ -225,10 +231,10 @@ class Lesson extends React.Component<Props, State> {
   }
 
   loadQuizzes() {
-    const lessonQuizzes = filter(this.props.quizzes, {
-      lessonID: this.props.match.params.lessonID
-    });
-    this.setState({ lessonQuizzes } as State);
+    this.props.getQuizzesByLessonID(
+      this.props.match.params.lessonID,
+      this.props.user
+    );
   }
 
   handleChange(e: any) {
@@ -251,7 +257,7 @@ class Lesson extends React.Component<Props, State> {
     if (!this.props.quiz || gfQuiz.id !== this.props.quiz.id) {
       this.props.setQuiz(gfQuiz);
     }
-    const path = `/quiz/${this.props.match.params.courseID}/${
+    const path = `/training/${this.props.match.params.courseID}/${
       this.props.match.params.lessonID
     }/${gfQuiz.id}`;
     this.props.history.push(path);
@@ -297,7 +303,7 @@ class Lesson extends React.Component<Props, State> {
               <ListGroupItem
                 key={gfQuiz.id}
                 onClick={() => {
-                  // this.startQuiz(gfQuiz, index);
+                  this.startQuiz(gfQuiz, index);
                 }}
               >
                 <Media>
@@ -342,7 +348,8 @@ export default connect(
   mapStateToProps,
   {
     setLesson,
-    saveLessonProgress
-    // setQuiz,
+    saveLessonProgress,
+    setQuiz,
+    getQuizzesByLessonID
   }
 )(Lesson);

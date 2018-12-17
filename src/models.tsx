@@ -374,6 +374,14 @@ export type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 /* 
 * TRAINING MODELS
 */
+// export interface GFBadge {
+//   id: string;
+//   name: string;
+//   description: boolean;
+//   hook: string;
+//   count: number;
+//   imagePath: string;
+// }
 export interface GFClass {
   id: string;
   name: string;

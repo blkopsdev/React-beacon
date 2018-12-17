@@ -9,7 +9,8 @@ import {
   GFLessons,
   LessonProgress,
   ThunkResult,
-  IshoppingCartProduct
+  IshoppingCartProduct,
+  GFQuizItem
 } from 'src/models';
 import axios from 'axios';
 import { find } from 'lodash';
@@ -79,6 +80,16 @@ export function getAllLessons(user: Iuser) {
   };
 }
 
+export function getQuizSuccess(quiz: GFQuizItem) {
+  return { type: types.LOAD_QUIZ, quiz };
+}
+
+export function setQuiz(quiz: GFQuizItem) {
+  return (dispatch: any) => {
+    dispatch(getQuizSuccess(quiz));
+  };
+}
+
 /*
 * Complete list of quizzes without the questions
 */
@@ -87,6 +98,27 @@ export function getAllQuizzes(user: Iuser) {
     dispatch(beginAjaxCall());
     return courseAPI
       .getAllQuizzes(user)
+      .then(quizzes => {
+        dispatch({ type: types.LOAD_QUIZZES_SUCCESS, quizzes });
+        return quizzes;
+      })
+      .catch(error => {
+        console.error('Error when trying to get all quizzes', error);
+        dispatch({ type: types.LOAD_QUIZZES_FAILED, error });
+        constants.handleError(error, 'loading all quizzes');
+        throw error;
+      });
+  };
+}
+
+/*
+* Quizzes with the questions for a particular lesson
+*/
+export function getQuizzesByLessonID(lessonID: string, user: Iuser) {
+  return (dispatch: any) => {
+    dispatch(beginAjaxCall());
+    return courseAPI
+      .getQuizzesByLessonID(lessonID, user)
       .then(quizzes => {
         dispatch({ type: types.LOAD_QUIZZES_SUCCESS, quizzes });
         return quizzes;

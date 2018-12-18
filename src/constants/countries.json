@@ -1,0 +1,2522 @@
+[
+  {
+    "value": "6C0A6477-F317-42ED-9BCE-000FEF1FBB0E",
+    "RegionID": "89810B84-64F4-4FB1-80BB-544A70CC258E",
+    "label": "Georgia",
+    "Currency": "GEL",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "A529CE23-64F7-4E6B-AF94-015CAF27DB13",
+    "RegionID": "EC025AB5-2C64-4D3C-8979-3CC584397701",
+    "label": "Italy",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "A20D4E73-6E60-41AF-A94F-02E3C4AC10EF",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Guernsey",
+    "Currency": "GBP",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "C08B5A45-51E1-4BBB-B47D-044631567899",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "San Marino",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "388E0CFC-FD34-4BE6-B3FF-049239469414",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Kenya",
+    "Currency": "KES",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "9AD3C9B8-23AC-4BED-A52E-04A4FC5780CF",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Congo",
+    "Currency": "XAF",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "6605719B-E683-4C11-832A-066F46BF7CC9",
+    "RegionID": "EC025AB5-2C64-4D3C-8979-3CC584397701",
+    "label": "Iceland",
+    "Currency": "ISK",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "6D83DFAD-171C-43DC-8C6F-0697568AF08C",
+    "RegionID": "FCD22F3E-F9C6-4A21-9EA7-4CDA3DB9CCDD",
+    "label": "Greece",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "9480BB2C-FE13-44ED-BA5A-09EBCECCA109",
+    "RegionID": "FCD22F3E-F9C6-4A21-9EA7-4CDA3DB9CCDD",
+    "label": "Andorra",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "0BC5BE03-62FD-4B9B-B5E6-09FAD44973E5",
+    "RegionID": "EC025AB5-2C64-4D3C-8979-3CC584397701",
+    "label": "Ireland",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "3752D47C-E125-4C10-96CB-0B9056ACF55A",
+    "RegionID": "EC025AB5-2C64-4D3C-8979-3CC584397701",
+    "label": "Norway",
+    "Currency": "NOK",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "26D56FB8-35BE-45E0-84D8-0BC93B4E32BF",
+    "RegionID": "5C0A0BAA-205B-41DD-B1AE-6EC2F13524CD",
+    "label": "Philippines",
+    "Currency": "PHP",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "ABC5D95C-129F-4837-988C-0BF4AE1F3B67",
+    "RegionID": "FFF5D95C-129F-4837-988C-0BF4AE1F3B67",
+    "label": "United States of America",
+    "Currency": "USD",
+    "CreateDate": "2018-07-31 21:00:37.5847336",
+    "UpdateDate": null,
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "1452B93C-3396-417D-9258-0E6CB8D6DD39",
+    "RegionID": "C1F19CB5-3298-45D2-9DEB-ED4A82ABFD5F",
+    "label": "Saint Vincent and the Grenadines",
+    "Currency": "XCD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "E1AE5344-829D-42B6-B2C9-0EDC3750598B",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "French Guiana",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "595E2AB2-9D63-46DF-99EB-0EE727C8006A",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Netherlands Antilles",
+    "Currency": "ANG",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "71E729F9-405E-45C3-8B90-0F0816B39DD7",
+    "RegionID": "EB4BDD26-35B8-4377-BEEB-3FEE0CAC4116",
+    "label": "Belize",
+    "Currency": "BZD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "2AE1C517-1AC7-4DB0-9160-11641DA406E9",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Korea (Democratic People's Republic of)",
+    "Currency": "KPW",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "9E8E623F-9898-4FAD-AF3A-1274FEE7C0AF",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Djibouti",
+    "Currency": "DJF",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "D5FD3D83-FBE4-4F33-9448-18132EE69DD9",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Cabo Verde",
+    "Currency": "CVE",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "C13A9281-9E31-4C0F-BD02-1A178E3F67AD",
+    "RegionID": "EB4BDD26-35B8-4377-BEEB-3FEE0CAC4116",
+    "label": "Guatemala",
+    "Currency": "GTQ",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "1F5B1B66-2207-4EF4-89C9-1AF352B24FC1",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Sao Tome and Principe",
+    "Currency": "STD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "277FB406-B1CF-4C21-ADF0-1B422E01E28C",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "United States Minor Outlying Islands",
+    "Currency": "USD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "EE2E85D4-829E-466A-9BFD-1C9E6B35BD99",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Lao People's Democratic Republic",
+    "Currency": "LAK",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "4A4E4E84-13AD-4B80-947F-1CA2565998AB",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Nigeria",
+    "Currency": "NGN",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "A8617E5A-AA77-4D8A-BCA5-1D456A0CC075",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Bouvet Island",
+    "Currency": "NOK",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "69CBF6BF-494A-4551-B7E1-1D5893B4B8D9",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Kosovo",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "7391EB33-8F2E-4742-94EE-1DDA04ABE406",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "New Caledonia",
+    "Currency": "XPF",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "5ACE6370-62A0-49B1-8DFC-1E15F735FFC8",
+    "RegionID": "90E7D634-F30D-4783-8B48-33481EDAF26D",
+    "label": "India",
+    "Currency": "INR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "59C22C18-263C-445D-AA07-1EA44A18CAC6",
+    "RegionID": "EC025AB5-2C64-4D3C-8979-3CC584397701",
+    "label": "Sweden",
+    "Currency": "SEK",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "93CA6481-32A5-44FD-B541-1F8435F86663",
+    "RegionID": "7ACD510E-6E83-4A4C-9D0F-69F1FDF2E729",
+    "label": "Peru",
+    "Currency": "PEN",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "049060FF-8FC7-44B3-9C0E-20A987AAC7FF",
+    "RegionID": "EC025AB5-2C64-4D3C-8979-3CC584397701",
+    "label": "Germany",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "70AB9D97-9707-47AD-85D3-233D72CEE6B0",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Central African Republic",
+    "Currency": "XAF",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "A25FD808-FFC0-4AC4-A8B8-2389238B24E4",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Bonaire, Sint Eustatius and Saba",
+    "Currency": "USD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "7377BFBC-C656-4DF1-BC8E-23A53E042B20",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Jersey",
+    "Currency": "GBP",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "7F354FD1-5553-43EA-8871-23AFD91B1E85",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Dominica",
+    "Currency": "XCD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "1D790FE6-BB17-4B3F-8982-2442E79E1E28",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Madagascar",
+    "Currency": "MGA",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "DE34A490-4705-422E-A7A1-24E5DDFF4949",
+    "RegionID": "FCD22F3E-F9C6-4A21-9EA7-4CDA3DB9CCDD",
+    "label": "Belarus",
+    "Currency": "BYR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "1CC3A36D-D9FF-4D5B-94AA-259AAD9320A1",
+    "RegionID": "89810B84-64F4-4FB1-80BB-544A70CC258E",
+    "label": "Kuwait",
+    "Currency": "KWD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "660212F6-9457-4DE9-9BB4-25B7C2CB6F50",
+    "RegionID": "89810B84-64F4-4FB1-80BB-544A70CC258E",
+    "label": "Turkey",
+    "Currency": "TRY",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "EAC8021E-75BB-4681-A3A1-2A9869D09FE2",
+    "RegionID": "90E7D634-F30D-4783-8B48-33481EDAF26D",
+    "label": "Pakistan",
+    "Currency": "PKR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "B9494453-83E8-4E39-803A-2AD620C3AB30",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Uganda",
+    "Currency": "UGX",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "90D0B678-3669-4E2F-B23A-2B0E68029E62",
+    "RegionID": "AD5C1660-7F4C-4DBE-AFD9-DE1BBF157504",
+    "label": "Palau",
+    "Currency": "USD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "552F2EA3-491F-4DAC-AD50-2EE4D55DD050",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Burkina Faso",
+    "Currency": "XOF",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "7C3DBD90-D039-4057-80F5-2F05BD4A706C",
+    "RegionID": "7ACD510E-6E83-4A4C-9D0F-69F1FDF2E729",
+    "label": "Brazil",
+    "Currency": "BRL",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "87713284-D886-4504-BE25-2F140D932B30",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Anguilla",
+    "Currency": "XCD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "3EF1B885-AEB8-4CC4-B465-2FD2AEDCE7F0",
+    "RegionID": "EC025AB5-2C64-4D3C-8979-3CC584397701",
+    "label": "Finland",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "3C124D70-FA30-43B3-A727-30F3416CE08D",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Tanzania, United Republic of",
+    "Currency": "TZS",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "BC316313-00DA-46C9-BC43-32EA17E0F9FB",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "French Southern Territories",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "EB393DCD-1869-4415-B1BB-32EBE29CB6FF",
+    "RegionID": "75F7993D-1C70-4D9A-8097-5A595EB15E2B",
+    "label": "Uzbekistan",
+    "Currency": "UZS",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "BD474374-4FE1-4C2F-94BD-373BC29AFE26",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Gambia",
+    "Currency": "GMD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "BB9EB2BE-6FB0-431C-8DAA-3A088200C2E4",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Liberia",
+    "Currency": "LRD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "07A68557-75F1-413D-9250-3CD5656C7EBE",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Northern Mariana Islands",
+    "Currency": "USD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "2232324B-695D-4A04-9904-3D087056BA4E",
+    "RegionID": "EC025AB5-2C64-4D3C-8979-3CC584397701",
+    "label": "Austria",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "01635D9B-68C4-41E3-94DF-3D631DE8C42C",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Timor-Leste",
+    "Currency": "USD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "CED4B9C1-987E-4443-ADA1-3D6997E84719",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Equatorial Guinea",
+    "Currency": "XAF",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "8BB9ED9B-D986-44FF-A232-3E610995DE44",
+    "RegionID": "7ACD510E-6E83-4A4C-9D0F-69F1FDF2E729",
+    "label": "Paraguay",
+    "Currency": "PYG",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "D023B2AB-71C3-4B76-9BA1-3E7647B713FA",
+    "RegionID": "C1F19CB5-3298-45D2-9DEB-ED4A82ABFD5F",
+    "label": "Saint Lucia",
+    "Currency": "XCD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "512D4D95-1E7A-44C1-9A76-3F2E6E7A5384",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Bolivia",
+    "Currency": "BOB",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "45B81A37-2501-482F-933B-42C4065D9ED1",
+    "RegionID": "EC025AB5-2C64-4D3C-8979-3CC584397701",
+    "label": "Belgium",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "6070EE3E-5C50-46BC-BFD2-4362CE36DD60",
+    "RegionID": "75F7993D-1C70-4D9A-8097-5A595EB15E2B",
+    "label": "Kyrgyzstan",
+    "Currency": "KGS",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "3FA95CC3-71B8-4D64-9646-439D057CD9C2",
+    "RegionID": "5C0A0BAA-205B-41DD-B1AE-6EC2F13524CD",
+    "label": "Singapore",
+    "Currency": "SGD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "DA8D57F2-F7EB-47A2-A918-43EF1A3085EE",
+    "RegionID": "FCD22F3E-F9C6-4A21-9EA7-4CDA3DB9CCDD",
+    "label": "Czech Republic",
+    "Currency": "CZK",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "EE96EF2B-B5AC-4B06-99ED-44B6079D5F0F",
+    "RegionID": "E48BA5B5-DBF0-4EDA-ABA2-23E238007E96",
+    "label": "Japan",
+    "Currency": "JPY",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "E2F549C5-2AD3-4B7D-9E01-45323F50792B",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Niger",
+    "Currency": "XOF",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "81EC8229-BA60-410D-B0CC-46B0F5393A09",
+    "RegionID": "FCD22F3E-F9C6-4A21-9EA7-4CDA3DB9CCDD",
+    "label": "Montenegro",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "4BE8C268-7119-4870-A697-47B09089EEC2",
+    "RegionID": "FCD22F3E-F9C6-4A21-9EA7-4CDA3DB9CCDD",
+    "label": "Estonia",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "1AB636F1-2CA9-42C6-B2EA-47E1B91511C1",
+    "RegionID": "7ACD510E-6E83-4A4C-9D0F-69F1FDF2E729",
+    "label": "Uruguay",
+    "Currency": "UYU",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "9C5D9CF4-1793-4852-AB3A-4848293F6E33",
+    "RegionID": "89810B84-64F4-4FB1-80BB-544A70CC258E",
+    "label": "Iraq",
+    "Currency": "IQD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "FEC654E4-34E1-4A51-97A2-48A57140CDC9",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Botswana",
+    "Currency": "BWP",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "BD3BCB68-C45A-4DCC-89F2-48AA998F5BE5",
+    "RegionID": "C1F19CB5-3298-45D2-9DEB-ED4A82ABFD5F",
+    "label": "Dominican Republic",
+    "Currency": "DOP",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "BF5CE72E-2CEC-4413-8F4D-49D6B412C1B4",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Mauritania",
+    "Currency": "MRO",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "E8F8B265-19A6-4D7D-BB1A-4B1EFCB7E1C3",
+    "RegionID": "FCD22F3E-F9C6-4A21-9EA7-4CDA3DB9CCDD",
+    "label": "Serbia",
+    "Currency": "RSD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "10CB4C17-A28B-481C-B3AF-4B7EEAFAA733",
+    "RegionID": "5C0A0BAA-205B-41DD-B1AE-6EC2F13524CD",
+    "label": "Cambodia",
+    "Currency": "KHR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "581CE88F-BB4F-4E17-8003-4C52CC86F9AB",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Antarctica",
+    "Currency": "   ",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "08E7C635-5E66-4E09-8C4E-4EB596707097",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Mali",
+    "Currency": "XOF",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "12D48F20-63CC-4079-B0AE-4EF32CBCDA78",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Guam",
+    "Currency": "USD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "0E43567A-4F24-4F1E-8AE0-4F4F082A26B6",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Puerto Rico",
+    "Currency": "USD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "57EF656E-8C33-4721-A8D9-4FA40BBAF688",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Niue",
+    "Currency": "NZD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "F1D0E337-0D40-4C8D-A57C-503D9D697689",
+    "RegionID": "89810B84-64F4-4FB1-80BB-544A70CC258E",
+    "label": "Oman",
+    "Currency": "OMR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "C35D4E12-9EB7-45A7-B528-507DFD66BA25",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Wallis and Futuna",
+    "Currency": "XPF",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "0C39B4E5-777E-4F45-B93F-50991ADA160D",
+    "RegionID": "EC025AB5-2C64-4D3C-8979-3CC584397701",
+    "label": "Spain",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "3E7BDE04-2DC2-4A27-9CF1-515939273E31",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Pitcairn",
+    "Currency": "NZD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "9A2861B3-739A-45B9-93B9-52BE7FD4FFFD",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Isle of Man",
+    "Currency": "GBP",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "F7F5DF28-C2B5-4342-AA92-536354C378DC",
+    "RegionID": "EC025AB5-2C64-4D3C-8979-3CC584397701",
+    "label": "Portugal",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "D3561E2B-65BA-43D4-93CD-562C91090E56",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Nauru",
+    "Currency": "AUD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "5380B117-4F79-40A7-A960-5653B35F11F0",
+    "RegionID": "EC025AB5-2C64-4D3C-8979-3CC584397701",
+    "label": "Malta",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "A55A00CC-0F7E-4447-8E28-569A5EF028A7",
+    "RegionID": "FCD22F3E-F9C6-4A21-9EA7-4CDA3DB9CCDD",
+    "label": "Ukraine",
+    "Currency": "UAH",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "EEA5CA49-A032-4FB2-9831-56B459BD59AB",
+    "RegionID": "AD5C1660-7F4C-4DBE-AFD9-DE1BBF157504",
+    "label": "Solomon Islands",
+    "Currency": "SBD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "EB1385A4-798F-4C3B-BB00-570EDC9C0EEF",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Malawi",
+    "Currency": "MWK",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "CAF7B660-C5F5-4ED9-A50B-5780484670DF",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Mauritius",
+    "Currency": "MUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "C8B4A31C-5183-4511-ACF2-58BB4A251D18",
+    "RegionID": "FCD22F3E-F9C6-4A21-9EA7-4CDA3DB9CCDD",
+    "label": "Croatia",
+    "Currency": "HRK",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "6C494590-AB74-4561-89D6-58F2FB5FA75F",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Benin",
+    "Currency": "XOF",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "5805FA8B-9473-41C7-AEA3-59095E8B9831",
+    "RegionID": "C1F19CB5-3298-45D2-9DEB-ED4A82ABFD5F",
+    "label": "Jamaica",
+    "Currency": "JMD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "8794C70C-3C1B-4C48-AF28-59348F7F76BF",
+    "RegionID": "7ACD510E-6E83-4A4C-9D0F-69F1FDF2E729",
+    "label": "Ecuador",
+    "Currency": "USD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "09268241-6974-42D9-A5F7-5B9EC7C518D8",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Mozambique",
+    "Currency": "MZN",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "097BD9D0-E0AE-46F7-A802-5CC3370F539C",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Virgin Islands (British)",
+    "Currency": "USD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "9708D049-6F40-409A-B9CB-5CFBA6AA2869",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Heard Island and McDonald Islands",
+    "Currency": "AUD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "FE4D6975-85F9-4037-AC18-5D46E4F45088",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Cayman Islands",
+    "Currency": "KYD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "59A25C1C-E288-4927-91AE-5DDB8A443533",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Gabon",
+    "Currency": "XAF",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "ED0EEAAD-712D-4E41-BF47-5EBEA044E910",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "South Africa",
+    "Currency": "ZAR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "D1D17AFC-84E3-48E7-91A3-5FBBEBCE89F7",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Ghana",
+    "Currency": "GHS",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "708FE4CC-F172-4751-9C0D-601D06252F86",
+    "RegionID": "FCD22F3E-F9C6-4A21-9EA7-4CDA3DB9CCDD",
+    "label": "Lithuania",
+    "Currency": "LTL",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "54D577C1-5E09-4F46-904E-620CBA4BC82F",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Hong Kong",
+    "Currency": "HKD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "453E5146-2826-4E50-AE2B-6237446DED52",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Sudan",
+    "Currency": "SDG",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "B3351468-7C03-4ADE-BC35-638B91DBE895",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Moldova, Republic of",
+    "Currency": "MDL",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "A74ABCAC-E447-453B-ACB9-66280664BE29",
+    "RegionID": "89810B84-64F4-4FB1-80BB-544A70CC258E",
+    "label": "Israel",
+    "Currency": "ILS",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "915EB6D4-E622-4213-920E-675AD71BDD95",
+    "RegionID": "90E7D634-F30D-4783-8B48-33481EDAF26D",
+    "label": "Nepal",
+    "Currency": "NPR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "F1271BC1-CE12-4C0E-A71F-67CE8952CF08",
+    "RegionID": "5C0A0BAA-205B-41DD-B1AE-6EC2F13524CD",
+    "label": "Thailand",
+    "Currency": "THB",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "ECBAF58A-3C81-4FBD-81C9-682563ADB45B",
+    "RegionID": "FCD22F3E-F9C6-4A21-9EA7-4CDA3DB9CCDD",
+    "label": "Bulgaria",
+    "Currency": "BGN",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "F71FB0C6-9A3F-411B-A10D-6952288FE362",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Turks and Caicos Islands",
+    "Currency": "USD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "BF5D3582-9AE5-4210-A99E-6B0FD9EFCF8F",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Greenland",
+    "Currency": "DKK",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "E55C3F64-D34A-4482-AF1A-6C9374772A8C",
+    "RegionID": "FCD22F3E-F9C6-4A21-9EA7-4CDA3DB9CCDD",
+    "label": "Slovenia",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "77D29646-9501-4DE7-AFE4-6E0C3DF81ACA",
+    "RegionID": "7ACD510E-6E83-4A4C-9D0F-69F1FDF2E729",
+    "label": "Suriname",
+    "Currency": "SRD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "CAAB83EC-2651-4FCA-995F-6E9174FCD8A2",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Swaziland",
+    "Currency": "SZL",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "0D357022-671B-4972-B4CE-70655F4855B9",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Aruba",
+    "Currency": "AWG",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "97052121-AA99-42E0-AE35-70AB7306E858",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Brunei Darussalam",
+    "Currency": "BND",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "BDE96E53-5651-4B9E-B0F5-7148BB568E46",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Cameroon",
+    "Currency": "XAF",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "BAA6CEF8-17E8-4607-B5EF-71DD89BF6EBD",
+    "RegionID": "75F7993D-1C70-4D9A-8097-5A595EB15E2B",
+    "label": "Turkmenistan",
+    "Currency": "TMT",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "1567A20D-5B04-4C71-8EC6-74D5E9150419",
+    "RegionID": "C1F19CB5-3298-45D2-9DEB-ED4A82ABFD5F",
+    "label": "Cuba",
+    "Currency": "CUP",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "936DE0D9-989E-42D6-AD2F-78FEBA0C2F1D",
+    "RegionID": "E48BA5B5-DBF0-4EDA-ABA2-23E238007E96",
+    "label": "Mongolia",
+    "Currency": "MNT",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "1953AC91-0AE6-4499-9EAD-7951AD0E7144",
+    "RegionID": "89810B84-64F4-4FB1-80BB-544A70CC258E",
+    "label": "Jordan",
+    "Currency": "JOD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "4BB1EC08-4D6B-4FC4-9322-79EA9AAFDD7E",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Åland Islands",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "EAD28564-1849-455E-8C55-7A6F14CA232E",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Rwanda",
+    "Currency": "RWF",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "2FCBFDC4-9C25-4B58-874C-7C2625EAA750",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Canada",
+    "Currency": "CAD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "8D17465D-A157-4C5F-9CF2-7CA3FB423416",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Cocos (Keeling) Islands",
+    "Currency": "AUD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "2F8F9CF7-9985-460B-BF19-83AAC3638056",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Liechtenstein",
+    "Currency": "CHF",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "0A547A57-9E5B-45EE-BFD7-846E7E40E9E3",
+    "RegionID": "89810B84-64F4-4FB1-80BB-544A70CC258E",
+    "label": "Azerbaijan",
+    "Currency": "AZN",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "52EC3CB5-5295-4AD4-9AEA-84B038A9FFC1",
+    "RegionID": "89810B84-64F4-4FB1-80BB-544A70CC258E",
+    "label": "Armenia",
+    "Currency": "AMD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "3266115C-62C5-40DB-9642-86F19D97F458",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Barbados",
+    "Currency": "BBD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "7ED264B0-151E-4E2D-A1EA-8940C2FEAB3D",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Morocco",
+    "Currency": "MAD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "6077C261-555E-416D-A256-89D71B5E0062",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Holy See (the)",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "04FD495F-C99B-4583-9FD1-8A99A4C348B1",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "United States",
+    "Currency": "USD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "C1785A25-0CC3-4C74-851E-8BA95D9DB77A",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Taiwan, Province of China",
+    "Currency": "TWD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "C0E9A6D3-F7DE-4CDB-8C58-8BE16D344CA6",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Bermuda",
+    "Currency": "BMD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "DC57A176-CE68-468E-8B57-8BEC00DF7FC0",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Seychelles",
+    "Currency": "SCR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "5BAD68CC-335F-4C60-A513-8CF3C564B0E1",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Saint Helena, Ascension and Tristan da Cunha",
+    "Currency": "SHP",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "D2E5704D-83A0-44B8-990C-8D0AC5BDB6EA",
+    "RegionID": "90E7D634-F30D-4783-8B48-33481EDAF26D",
+    "label": "Sri Lanka",
+    "Currency": "LKR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "2F61AEFC-8B87-481F-8EFD-8DDADBD29D6E",
+    "RegionID": "7ACD510E-6E83-4A4C-9D0F-69F1FDF2E729",
+    "label": "Colombia",
+    "Currency": "COP",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "116D9D03-3F7C-4B61-8CF3-9023DD5F941A",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Faroe Islands",
+    "Currency": "DKK",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "66EBC79B-3A50-433F-9362-914E53E5E2FF",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Micronesia (Federated States of)",
+    "Currency": "USD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "64137492-AEBF-4171-B780-9230A5F62182",
+    "RegionID": "FCD22F3E-F9C6-4A21-9EA7-4CDA3DB9CCDD",
+    "label": "Bosnia and Herzegovina",
+    "Currency": "BAM",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "959ADF80-4D75-4041-B345-925756971B48",
+    "RegionID": "AD5C1660-7F4C-4DBE-AFD9-DE1BBF157504",
+    "label": "Australia",
+    "Currency": "AUD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "F6516D46-D71A-4E00-A9A3-93AE4B5806BD",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Chad",
+    "Currency": "XAF",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "FA1DC5DC-B553-4C1C-8961-947111509190",
+    "RegionID": "EC025AB5-2C64-4D3C-8979-3CC584397701",
+    "label": "Luxembourg",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "2BD91EDE-E91A-4432-AE76-94DEF704847C",
+    "RegionID": "EC025AB5-2C64-4D3C-8979-3CC584397701",
+    "label": "Switzerland",
+    "Currency": "CHF",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "D708FE7D-DE97-4561-BDBE-95E933A7D987",
+    "RegionID": "AD5C1660-7F4C-4DBE-AFD9-DE1BBF157504",
+    "label": "Kiribati",
+    "Currency": "AUD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "6754587B-7301-4625-8570-967295FB463A",
+    "RegionID": "FCD22F3E-F9C6-4A21-9EA7-4CDA3DB9CCDD",
+    "label": "Russian Federation",
+    "Currency": "RUB",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "B9B11418-FD61-428F-B6B1-96E5F71E1D18",
+    "RegionID": "FCD22F3E-F9C6-4A21-9EA7-4CDA3DB9CCDD",
+    "label": "Poland",
+    "Currency": "PLN",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "A16F6C38-601C-44C2-89EF-979980FC7BCC",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Mayotte",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "CB71384A-5D22-48D1-9A5F-990249171309",
+    "RegionID": "AD5C1660-7F4C-4DBE-AFD9-DE1BBF157504",
+    "label": "Fiji",
+    "Currency": "FJD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "DF767246-2199-47CE-A737-9A96E9558472",
+    "RegionID": "FCD22F3E-F9C6-4A21-9EA7-4CDA3DB9CCDD",
+    "label": "Monaco",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "9FA1DCF4-7E8F-494F-B4D8-9AD5D2EB972C",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Algeria",
+    "Currency": "DZD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "21BD76E7-441E-444A-97C6-9D99DFE2CAB9",
+    "RegionID": "7ACD510E-6E83-4A4C-9D0F-69F1FDF2E729",
+    "label": "Argentina",
+    "Currency": "ARS",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "2A559BD2-5A8F-41F6-8B7C-9EDF61E90A2E",
+    "RegionID": "AD5C1660-7F4C-4DBE-AFD9-DE1BBF157504",
+    "label": "Papua New Guinea",
+    "Currency": "PGK",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "DF9353CA-4BB9-4BE6-B544-A0D482D6861C",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Sierra Leone",
+    "Currency": "SLL",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "4F1C54FD-EFF5-476E-8066-A3BA7BE2F5E2",
+    "RegionID": "90E7D634-F30D-4783-8B48-33481EDAF26D",
+    "label": "Bhutan",
+    "Currency": "BTN",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "D1B72224-FB04-4CAD-8E1F-A3CC8CB3E7C5",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Sint Maarten (Dutch part)",
+    "Currency": "ANG",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "919A4029-DD05-4192-ABF9-A4946EEFD6A9",
+    "RegionID": "EB4BDD26-35B8-4377-BEEB-3FEE0CAC4116",
+    "label": "Mexico",
+    "Currency": "MXN",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "E6900A12-7C2E-4312-9861-A4AB950C7381",
+    "RegionID": "89810B84-64F4-4FB1-80BB-544A70CC258E",
+    "label": "Bahrain",
+    "Currency": "BHD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "915CB039-1B3B-4B4E-BFE2-A57715D96D25",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Venezuela",
+    "Currency": "VEF",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "5B831BFC-827E-45E1-B55D-A5F28C90D4B5",
+    "RegionID": "E48BA5B5-DBF0-4EDA-ABA2-23E238007E96",
+    "label": "China",
+    "Currency": "CNY",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "12E7CF33-931D-495D-A0FA-A6C817BAD554",
+    "RegionID": "FCD22F3E-F9C6-4A21-9EA7-4CDA3DB9CCDD",
+    "label": "Albania",
+    "Currency": "ALL",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "3590757D-6E8D-4734-864D-A719169A3EAE",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "South Georgia and the South Sandwich Islands",
+    "Currency": "   ",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "C1097EEF-AE00-40B0-B433-A8B11DFCB0FB",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Macao",
+    "Currency": "MOP",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "93FE213C-94AC-4317-94BB-A8D1F0EB8237",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Angola",
+    "Currency": "AOA",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "DA99AAC9-E283-4E58-B466-A8FC695B7E83",
+    "RegionID": "89810B84-64F4-4FB1-80BB-544A70CC258E",
+    "label": "Syrian Arab Republic",
+    "Currency": "SYP",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "30324170-B27C-40DF-9D87-A9FD95DB64D8",
+    "RegionID": "EB4BDD26-35B8-4377-BEEB-3FEE0CAC4116",
+    "label": "Nicaragua",
+    "Currency": "NIO",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "6B31C649-A8B2-4770-AA2D-AACA864D271B",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Norfolk Island",
+    "Currency": "AUD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "BB9D5FAB-B002-496C-A958-ABD6A50A21BC",
+    "RegionID": "EB4BDD26-35B8-4377-BEEB-3FEE0CAC4116",
+    "label": "Costa Rica",
+    "Currency": "CRC",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "D8B85CFC-837C-48F6-9F17-AD78E089D7C1",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Gibraltar",
+    "Currency": "GIP",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "292C619F-048E-45B3-BB95-AF6455D16727",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Côte d'Ivoire",
+    "Currency": "XOF",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "6B01C34B-781A-47AA-B180-AF8BCC23BD00",
+    "RegionID": "90E7D634-F30D-4783-8B48-33481EDAF26D",
+    "label": "Maldives",
+    "Currency": "MVR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "DD864FA6-E45F-45CF-844D-B04ADF29C5EE",
+    "RegionID": "AD5C1660-7F4C-4DBE-AFD9-DE1BBF157504",
+    "label": "Marshall Islands",
+    "Currency": "USD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "833F005F-9C6D-4C01-8B42-B10DE825D0FF",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Macedonia, The former Yugoslav Republic of",
+    "Currency": "MKD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "9D956995-A455-4D70-8DD3-B299E5B0B1E7",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Guinea-Bissau",
+    "Currency": "XOF",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "423F1C7C-F907-44C8-9872-B2E21DDD8F4B",
+    "RegionID": "90E7D634-F30D-4783-8B48-33481EDAF26D",
+    "label": "Bangladesh",
+    "Currency": "BDT",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "7D5A6109-A0C5-4BDD-8437-B3DBCBFC1263",
+    "RegionID": "AD5C1660-7F4C-4DBE-AFD9-DE1BBF157504",
+    "label": "Tuvalu",
+    "Currency": "AUD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "E4BF050E-D386-41F4-838E-B40CF09DB156",
+    "RegionID": "EB4BDD26-35B8-4377-BEEB-3FEE0CAC4116",
+    "label": "Honduras",
+    "Currency": "HNL",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "288EF457-D82D-4307-94DF-B4C76D5B0E73",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Tunisia",
+    "Currency": "TND",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "A5D36D59-CC19-4108-876C-B531BD0D087C",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Bahamas",
+    "Currency": "BSD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "9B73878C-4C24-40E8-9997-B5EC5914CC0E",
+    "RegionID": "AD5C1660-7F4C-4DBE-AFD9-DE1BBF157504",
+    "label": "Cook Islands",
+    "Currency": "NZD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "DD4410F0-78FA-40C7-BDA5-B67770A4E79E",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Congo, Democratic Republic of the",
+    "Currency": "CDF",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "9AF49C5A-3C55-4298-8164-B6B9679D0E98",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Egypt",
+    "Currency": "EGP",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "E704F85C-713F-4BF4-A97B-B7968CAB9CD9",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Zimbabwe",
+    "Currency": "ZWL",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "2D456133-5F93-4259-9DC9-BB062B9AA4A8",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "American Samoa",
+    "Currency": "USD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "C0421D4C-60FC-4561-BF25-BB537B7E8D86",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Curaçao",
+    "Currency": "ANG",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "8A72ECE4-3AB4-4C3F-9DD0-BC62EE1B3538",
+    "RegionID": "AD5C1660-7F4C-4DBE-AFD9-DE1BBF157504",
+    "label": "Vanuatu",
+    "Currency": "VUV",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "89D26F7A-516A-433F-B4AC-BD578E32FBB4",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Tokelau",
+    "Currency": "NZD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "9F1285CA-45FF-4D22-9D0D-BEE9DCFE054A",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Zambia",
+    "Currency": "ZMW",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "3035546A-F053-4EEA-8AC3-BF4B2659EA71",
+    "RegionID": "FCD22F3E-F9C6-4A21-9EA7-4CDA3DB9CCDD",
+    "label": "Latvia",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "79129517-7006-4687-AFC3-BF9E157F5970",
+    "RegionID": "FCD22F3E-F9C6-4A21-9EA7-4CDA3DB9CCDD",
+    "label": "Slovakia",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "86088D47-82FA-43FC-A87D-BFBFE229C2AD",
+    "RegionID": "5C0A0BAA-205B-41DD-B1AE-6EC2F13524CD",
+    "label": "Myanmar",
+    "Currency": "MMK",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "E7BF5B1F-A6D1-452E-BA73-BFCA37B8FCB0",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Namibia",
+    "Currency": "NAD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "5E1EE1A9-57FD-4B01-9175-C0B2174C77CE",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Antigua and Barbuda",
+    "Currency": "XCD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "95E75B09-21FC-4E07-B239-C28E2995ED2F",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Martinique",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "64F34C79-1ED2-46A7-9CD6-C362E90F7BCC",
+    "RegionID": "C1F19CB5-3298-45D2-9DEB-ED4A82ABFD5F",
+    "label": "Grenada",
+    "Currency": "XCD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "D58BF4C7-3A4B-42C3-9E9A-C37B1FF2C25A",
+    "RegionID": "FCD22F3E-F9C6-4A21-9EA7-4CDA3DB9CCDD",
+    "label": "Romania",
+    "Currency": "RON",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "0FC88714-D446-4EE2-817E-C52B5C88ECB9",
+    "RegionID": "EB4BDD26-35B8-4377-BEEB-3FEE0CAC4116",
+    "label": "El Salvador",
+    "Currency": "SVC",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "2CBA17E9-BE82-41AD-B43D-C7627A401E8F",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Guinea",
+    "Currency": "GNF",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "6F4502DD-2F55-4CCF-9BB8-C8AFA01298F3",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "French Polynesia",
+    "Currency": "XPF",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "23A37804-9AC7-42D6-B5A9-CB57C4CE87E0",
+    "RegionID": "AD5C1660-7F4C-4DBE-AFD9-DE1BBF157504",
+    "label": "Samoa",
+    "Currency": "WST",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "5E2B22EE-FFEC-4737-BFEB-CBA950C51232",
+    "RegionID": "C1F19CB5-3298-45D2-9DEB-ED4A82ABFD5F",
+    "label": "Trinidad and Tobago",
+    "Currency": "TTD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "F2E680FE-837F-471B-921E-CC44DA112806",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Falkland Islands (Malvinas)",
+    "Currency": "FKP",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "AA7CC955-8E11-4E2D-9547-CD3E180D7578",
+    "RegionID": "EB4BDD26-35B8-4377-BEEB-3FEE0CAC4116",
+    "label": "Panama",
+    "Currency": "PAB",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "72337C49-F468-4C93-B0A3-CE1EE691F65E",
+    "RegionID": "7ACD510E-6E83-4A4C-9D0F-69F1FDF2E729",
+    "label": "Chile",
+    "Currency": "CLP",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "419EC375-DCE2-41FB-8251-CE28CAA507F5",
+    "RegionID": "EC025AB5-2C64-4D3C-8979-3CC584397701",
+    "label": "United Kingdom",
+    "Currency": "GBP",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "0FBC78BB-E5DA-4567-92ED-CE840625A804",
+    "RegionID": "AD5C1660-7F4C-4DBE-AFD9-DE1BBF157504",
+    "label": "Tonga",
+    "Currency": "TOP",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "FC0D5690-077C-482B-B8E1-CF6FB9053677",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Ethiopia",
+    "Currency": "ETB",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "E1E0D75D-06A6-44EF-8E8D-CFCE52C206F5",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Lesotho",
+    "Currency": "LSL",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "F9908110-88C8-4079-BD29-D332B9E73857",
+    "RegionID": "75F7993D-1C70-4D9A-8097-5A595EB15E2B",
+    "label": "Kazakhstan",
+    "Currency": "KZT",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "71F93152-390F-44E9-8403-D4E33C5A3258",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Christmas Island",
+    "Currency": "AUD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "FD1EDEC2-95E1-4C96-85EA-D5BBEC622F56",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Guadeloupe",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "89B05658-443B-4D94-92C8-D6E603FB3AD8",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Korea, Republic of",
+    "Currency": "KRW",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "DC75822F-842A-45B9-B605-D9B81C6DA8CB",
+    "RegionID": "89810B84-64F4-4FB1-80BB-544A70CC258E",
+    "label": "Yemen",
+    "Currency": "YER",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "5FA000D9-6543-45C9-9036-D9FB0379BCF1",
+    "RegionID": "C1F19CB5-3298-45D2-9DEB-ED4A82ABFD5F",
+    "label": "Haiti",
+    "Currency": "HTG",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "F3589DE0-3BEB-4F37-B601-DA6AD3EA8F54",
+    "RegionID": "89810B84-64F4-4FB1-80BB-544A70CC258E",
+    "label": "United Arab Emirates",
+    "Currency": "AED",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "2ECE640B-EBE2-4B59-A597-DBEFA59CC795",
+    "RegionID": "5C0A0BAA-205B-41DD-B1AE-6EC2F13524CD",
+    "label": "Indonesia",
+    "Currency": "IDR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "17E3F048-93E9-45CE-A276-DD07E716B76C",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "British Indian Ocean Territory",
+    "Currency": "USD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "52CE05A9-D42A-477C-B44F-DDEEF48F3EEE",
+    "RegionID": "89810B84-64F4-4FB1-80BB-544A70CC258E",
+    "label": "Saudi Arabia",
+    "Currency": "SAR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "BA24C7BB-B738-415E-B1EC-E04A2C896406",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Libya",
+    "Currency": "LYD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "F1ABD996-1288-4D13-9054-E0AF652A80F0",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "South Sudan",
+    "Currency": "SSP",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "C408B8B6-40B7-4E18-9434-E0C97A9044DE",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Montserrat",
+    "Currency": "XCD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "C388D362-5F3A-4748-9C87-E118F2E01D90",
+    "RegionID": "7ACD510E-6E83-4A4C-9D0F-69F1FDF2E729",
+    "label": "Guyana",
+    "Currency": "GYD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "CA9AFF48-AD98-4B9F-BA9E-E131D223A054",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Somalia",
+    "Currency": "SOS",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "A686D010-C614-403D-87D2-E1CE448B9213",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Palestine, State of",
+    "Currency": "   ",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "E1BFE35C-0265-4F5E-B4BF-E2009A4AD514",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Saint Kitts and Nevis",
+    "Currency": "XCD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "A67D6468-9370-495A-BA15-E2B9F9ED91F6",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Saint Barthélemy",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "5EFA3555-6729-4255-94E8-E30494CA56AB",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Virgin Islands (U.S.)",
+    "Currency": "USD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "A48D29CF-4CCE-46F9-8CAC-E46121077BB7",
+    "RegionID": "89810B84-64F4-4FB1-80BB-544A70CC258E",
+    "label": "Qatar",
+    "Currency": "QAR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "7899AF8C-C894-4C66-907D-E4DB9F817D7C",
+    "RegionID": "89810B84-64F4-4FB1-80BB-544A70CC258E",
+    "label": "Cyprus",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "68FE124B-3D2B-4F0F-B4E9-E51BEBBE26B5",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Burundi",
+    "Currency": "BIF",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "CABD1F34-8E17-4221-8A8A-E5F071D9D06F",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Western Sahara",
+    "Currency": "MAD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "A9892C4C-90BE-421A-AC1A-E6BFA3FF214E",
+    "RegionID": "75F7993D-1C70-4D9A-8097-5A595EB15E2B",
+    "label": "Tajikistan",
+    "Currency": "TJS",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "F03EE890-74A6-4541-9425-E702F13176B5",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Svalbard and Jan Mayen",
+    "Currency": "NOK",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "1922D0B2-5999-44BD-B741-E7081574EF4F",
+    "RegionID": "89810B84-64F4-4FB1-80BB-544A70CC258E",
+    "label": "Lebanon",
+    "Currency": "LBP",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "DA122659-F2BD-4A68-9AAB-E74EAE365BB7",
+    "RegionID": "5C0A0BAA-205B-41DD-B1AE-6EC2F13524CD",
+    "label": "Viet Nam",
+    "Currency": "VND",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "A3CF2CAD-FB39-447B-A9E2-EC43886C56EE",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Comoros",
+    "Currency": "KMF",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "FD8D32FF-B5AB-4FF2-8661-ECCC20DBA0D3",
+    "RegionID": "EC025AB5-2C64-4D3C-8979-3CC584397701",
+    "label": "France",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "8E74C89C-BA2A-461F-9041-ED74088EBF84",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Eritrea",
+    "Currency": "ERN",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "1179CC16-8466-4C69-9801-EDA2B245B8FF",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Saint Pierre and Miquelon",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "858D2167-9DD5-49A6-8BC3-F00D6B403162",
+    "RegionID": "FCD22F3E-F9C6-4A21-9EA7-4CDA3DB9CCDD",
+    "label": "Hungary",
+    "Currency": "HUF",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "E816A8ED-A624-444D-90AB-F1E8111C943B",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Réunion",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "BF6D95AD-439E-4DD5-8212-F5B34740B402",
+    "RegionID": "90E7D634-F30D-4783-8B48-33481EDAF26D",
+    "label": "Afghanistan",
+    "Currency": "AFN",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "A78E9E43-F479-4CBD-A10D-F8374725013D",
+    "RegionID": "75F7993D-1C70-4D9A-8097-5A595EB15E2B",
+    "label": "Iran (Islamic Republic of)",
+    "Currency": "IRR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "3EDC5C09-3602-4D6F-AEC0-F8CFA6FACF90",
+    "RegionID": "EC12A3AD-2E4F-45CA-8F13-ADF036BF74AE",
+    "label": "Saint Martin (French part)",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "7891D372-BA2E-4AF2-A545-F94E7CEB173B",
+    "RegionID": "EC025AB5-2C64-4D3C-8979-3CC584397701",
+    "label": "Netherlands",
+    "Currency": "EUR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "3390ACE9-5D44-4E56-B641-FAAB8EC4A854",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Senegal",
+    "Currency": "XOF",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "0B61D1DD-F32E-442C-9FF4-FB5FC1E012E4",
+    "RegionID": "5C0A0BAA-205B-41DD-B1AE-6EC2F13524CD",
+    "label": "Malaysia",
+    "Currency": "MYR",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "83FE3A5F-9793-4FAD-B9D1-FEBC8FA0E008",
+    "RegionID": "AD5C1660-7F4C-4DBE-AFD9-DE1BBF157504",
+    "label": "New Zealand",
+    "Currency": "NZD",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "2D486C5D-F55F-42B8-A80F-FF965B8E4240",
+    "RegionID": "EC025AB5-2C64-4D3C-8979-3CC584397701",
+    "label": "Denmark",
+    "Currency": "DKK",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  },
+  {
+    "value": "426D9A7E-3D6B-46D3-BB18-FFE67DE2D52E",
+    "RegionID": "0F2E656C-246C-4BE2-BF26-AF6FD8EFDD67",
+    "label": "Togo",
+    "Currency": "XOF",
+    "CreateDate": "2018-09-20 14:36:57.6500000",
+    "UpdateDate": "2018-09-20 14:36:57.6500000",
+    "CreatorID": null,
+    "UpdaterID": null
+  }
+]

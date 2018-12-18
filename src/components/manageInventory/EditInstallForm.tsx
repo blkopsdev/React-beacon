@@ -153,9 +153,9 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
     }
   }
   buildFieldConfig = () => {
-    const shouldRequireQuantity = !!(
-      this.props.selectedItem && this.props.selectedItem.id
-    );
+    const shouldRequireQuantity =
+      this.props.selectedItem && this.props.selectedItem.id ? false : true;
+
     const buildings = FormUtil.convertToOptions(this.props.facility.buildings);
     let quantityValidators = [Validators.min(1), Validators.max(1000)];
     if (shouldRequireQuantity) {

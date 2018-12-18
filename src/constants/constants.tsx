@@ -382,13 +382,7 @@ const constants = {
   },
 
   // {value: '', label: ''}
-  countries: [
-    {
-      value: 'abc5d95c-129f-4837-988c-0bf4ae1f3b67',
-      label: 'United States of America'
-    },
-    { value: '1235d95c-129f-4837-988c-0bf4ae1f3b67', label: 'Cuba' }
-  ],
+  countries: require('src/constants/countries.json'),
   handleError(error: any, message: string) {
     let msg = '';
     if (error && error.response && error.response.data) {

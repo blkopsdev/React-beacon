@@ -110,7 +110,8 @@ store.subscribe(
         manageTeam: store.getState().manageTeam,
         manageInventory: store.getState().manageInventory,
         productInfo: store.getState().productInfo,
-        training: store.getState().training
+        training: store.getState().training,
+        manageTraining: store.getState().manageTraining
         // facilities: store.getState().facilities
       },
       'state-core-care'
@@ -204,6 +205,10 @@ runWithAdal(
                 <PrivateRoute path="/managejobs" component={TwoPaneLayout} />
                 <PrivateRoute path="/locations" component={TwoPaneLayout} />
                 <PrivateRoute path="/training" component={TwoPaneLayout} />
+                <PrivateRoute
+                  path="/manageTraining"
+                  component={TwoPaneLayout}
+                />
 
                 <Route component={NoMatch} />
               </Switch>

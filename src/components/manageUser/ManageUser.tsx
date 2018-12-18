@@ -317,7 +317,14 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
           modalVisible={this.props.showSecurityFunctionsModal}
           className="security-modal second-modal"
           onHide={this.props.toggleSecurityFunctionsModal}
-          body={<SecurityFunctionsList t={this.props.t} />}
+          body={
+            <SecurityFunctionsList
+              t={this.props.t}
+              toggleSecurityFunctionsModal={
+                this.props.toggleSecurityFunctionsModal
+              }
+            />
+          }
           title={t('securityFunctionsModalTitle')}
           container={document.getElementById('two-pane-layout')}
           backdrop={true}

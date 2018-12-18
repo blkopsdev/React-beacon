@@ -227,6 +227,18 @@ export default {
     lessonProgress: {},
     purchasedTraining: []
   },
+  manageTraining: {
+    data: [
+      {
+        userName: 'Joe Dill',
+        courseName: 'Beacon Training 101',
+        progress: '1/12',
+        results: '80%, 90%'
+      }
+    ],
+    tableFilters: initialTableFilters,
+    totalPages: 1
+  },
   customers: [],
   facilities: [],
 

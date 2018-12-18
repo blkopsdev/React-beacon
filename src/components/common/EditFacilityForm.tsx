@@ -135,9 +135,21 @@ class EditFacilityForm extends React.Component<Iprops, {}> {
     const { t } = this.props;
     if (!this.props.selectedCustomer) {
       return (
-        <Col xs={12}>
-          <h4>{t('selectCustomerWarning')}</h4>
-        </Col>
+        <div>
+          <Col xs={12}>
+            <h4>{t('selectCustomerWarning')}</h4>
+          </Col>
+          <Col xs={12} className="form-buttons text-right">
+            <Button
+              bsStyle="default"
+              type="button"
+              className="pull-left"
+              onClick={this.props.handleCancel}
+            >
+              {t('cancel')}
+            </Button>
+          </Col>
+        </div>
       );
     }
 

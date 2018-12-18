@@ -382,7 +382,7 @@ export const requestQuote = ({
         dispatch({
           type: types.CHECKOUT_INVENTORY_SUCCESS
         });
-        // toastr.success("Success", "requested quote", constants.toastrSuccess);
+        toastr.success('Success', 'requested quote', constants.toastrSuccess);
       })
       .catch((error: any) => {
         dispatch({ type: types.CHECKOUT_INVENTORY_FAILED });

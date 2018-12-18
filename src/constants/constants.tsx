@@ -110,6 +110,11 @@ const securityFunctions = {
     id: '0FE683B3-FEA5-4130-9243-2C272CABA674',
     name: 'securityF:ManageLocations',
     description: 'Allows the user to manage and create locations.'
+  },
+  ManageAllTraining: {
+    id: '25961E0B-AFB4-4864-BF4C-A341A22553C6',
+    name: 'securityF:ManageAllTraining',
+    description: "Allows the user to view all user's training progress"
   }
 };
 
@@ -153,6 +158,19 @@ const tiles = [
     height: 400,
     url: '/training',
     securityFunction: securityFunctions.ManageIndividualTraining.id,
+    description: ''
+  },
+  {
+    icon: icons.training,
+    iconType: 'img',
+    title: 'manageAllTraining',
+    src: require('src/images/beaconTraining.jpg'),
+    srcBanner: require('src/images/beaconTrainingHeader.jpg'),
+    color: 'orange',
+    width: 360,
+    height: 400,
+    url: '/manageTraining',
+    securityFunction: securityFunctions.ManageAllTraining.id,
     description: ''
   },
   {

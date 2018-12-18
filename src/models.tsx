@@ -283,6 +283,19 @@ export interface ImanageProductQueueReducer {
   tableFilters: ItableFiltersReducer;
 }
 
+export interface ImanageTrainingProgress {
+  userName: string;
+  courseName: string;
+  progress: string;
+  results: string;
+}
+
+export interface ImanageTrainingReducer {
+  data: ImanageTrainingProgress[];
+  totalPages: number;
+  tableFilters: ItableFiltersReducer;
+}
+
 export interface Iredirect {
   redirectToReferrer: boolean;
   pathname: string;
@@ -326,7 +339,9 @@ export interface IinitialState {
   showEditProfileModal: boolean;
   showSecurityFunctionsModal: boolean;
   training: ItrainingReducer;
+  manageTraining: ImanageTrainingReducer;
 }
+
 export interface Itile {
   icon: string | string[];
   title: string;

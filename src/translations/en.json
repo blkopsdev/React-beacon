@@ -232,6 +232,14 @@
     "deleteOk": "Delete Location",
     "deleteConfirm": "Are you sure?"
   },
+  "manageTraining": {
+    "bannerTitle": "Training Progress",
+    "searchPlaceholder": "Search by first, last, or email",
+    "userName": "Name",
+    "courseName": "Course Name",
+    "progress": "Lessons Complete",
+    "results": "Test Results"
+  },
   "tiles": {
     "alerts": "Alerts",
     "training": "Training",
@@ -246,11 +254,12 @@
     "administration": "Administration",
     "billing": "Billing",
     "groups": "My groups",
-    "support": "Support"
+    "support": "Support",
+    "manageAllTraining": "Training Progress"
   },
   "securityF": {
     "ManageUsers": "Manage Users",
-    "ManageTrainingPayment": "Training",
+    "ManageTrainingPayment": "Manage Training Payment",
     "ManageSecurity": "Manage Security",
     "ViewInventory": "View Inventory",
     "ManageInventory": "Manage Inventory",
@@ -260,6 +269,7 @@
     "ManageTeamMembers": "Manage Team Members",
     "ManageIndividualTraining": "Manage Individual Training",
     "ManageEmployeeTraining": "Manage Employee Training",
+    "ManageAllTraining": "Manage All Training",
     "ManageProductQueue": "Manage Product Queue",
     "Payment": "Payment",
     "ViewJobs": "View Jobs",

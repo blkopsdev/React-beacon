@@ -101,7 +101,8 @@ const API = {
     training: {
       getprogressbylesson: `${root}training/getprogressbylesson`,
       getalllessonprogress: `${root}training/getalllessonprogress`,
-      getPurchasedTraining: `${root}training/getpurchasedtraining`
+      getPurchasedTraining: `${root}training/getpurchasedtraining`,
+      getAdminProgress: `${root}training/getadminprogress`
     }
   }
 };

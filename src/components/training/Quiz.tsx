@@ -21,7 +21,7 @@ import { Button, Row, Col } from 'react-bootstrap';
 import { forEach, isEmpty } from 'lodash';
 // const mixpanel = require("mixpanel-browser");
 
-const txtBubble = require('../../images/Azure.png');
+// const txtBubble = require('../../images/Azure.png');
 
 import { RouteComponentProps } from 'react-router';
 
@@ -447,9 +447,9 @@ class Quiz extends React.Component<Props, State> {
       qi = this.state.questionIndex;
       curQ = questions[qi];
     }
-    const bubble = {
-      backgroundImage: `url(${txtBubble})`
-    };
+    // const bubble = {
+    //   backgroundImage: `url(${txtBubble})`
+    // };
     if (this.props.lesson && this.props.lesson.id) {
       // courseName = this.props.lesson.courseLessons[0].course.name
     }
@@ -562,7 +562,8 @@ class Quiz extends React.Component<Props, State> {
             )}
         </div>
         {this.state.checkingAnswer && (
-          <div className="animated slideInUp owl-image" style={bubble}>
+          <div className="animated slideInUp owl-image">
+            {/* style={bubble} */}
             {this.state.selectedAnswer.isAnswer && (
               <p className="right bubble-text">{curQ && curQ.correctText}</p>
             )}

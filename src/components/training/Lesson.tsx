@@ -99,6 +99,7 @@ class Lesson extends React.Component<Props, State> {
       !this.props.match.params.courseID
     ) {
       // no lesson id and no coursID is not allowed
+      console.log('no lesson id or no coursID allowed');
       this.props.history.replace(`/training`);
       return;
     }
@@ -109,6 +110,7 @@ class Lesson extends React.Component<Props, State> {
       isEmpty(this.props.lessons) ||
       isEmpty(this.props.quizzes)
     ) {
+      console.log('have not loaded courses, lessons, or quizzes');
       this.props.history.push(`/training`);
       return;
     }

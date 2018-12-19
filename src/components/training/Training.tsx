@@ -38,6 +38,7 @@ import {
   Badge
 } from 'react-bootstrap';
 import queryString from 'query-string';
+import { LinkContainer } from 'react-router-bootstrap';
 
 import { RouteComponentProps, Switch, Route } from 'react-router';
 import Lesson from './Lesson';
@@ -157,6 +158,9 @@ class Courses extends React.Component<Props, State> {
     ) {
       this.loadCourseLessons(this.props.match.params.courseID);
     }
+    if (prevProps.match.params.courseID !== this.props.match.params.courseID) {
+      this.loadCourseLessons(this.props.match.params.courseID);
+    }
   }
   componentWillUnmount() {
     this.props.closeAllModals();
@@ -174,9 +178,6 @@ class Courses extends React.Component<Props, State> {
       return courseLesson.length ? true : false;
     });
 
-    // replace current path so we know which course is selected
-    const path = `/training/${gfCourseId}`;
-    this.props.history.push(path);
     const sc = this.props.courses.filter(
       (course: any) => course.id === gfCourseId
     )[0];
@@ -245,64 +246,57 @@ class Courses extends React.Component<Props, State> {
       this.props.purchasedTraining.indexOf(id) === -1;
 
     return (
-      <div
+      <Row
         key="courses"
         className="main-content content-without-sidebar courses animated fadeIn"
       >
-        <Row className="">
-          <Col xs={12} sm={12}>
-            <div className="courses-tiles text-center">
-              {this.props.user.isActive &&
-                this.props.courses.map(gfCourse => {
-                  const shoppingCartItem = { ...gfCourse, quantity: 1 };
-                  return (
-                    <Col
-                      key={gfCourse.id}
-                      xs={12}
-                      sm={4}
-                      md={4}
-                      className="course animated fadeInUp"
-                    >
-                      <Panel className="text-center">
-                        <h2>{this.shortenTitle(gfCourse.name)}</h2>
-                        {showBuyButton(gfCourse.id) && (
-                          <span>
-                            <Button
-                              bsStyle="warning"
-                              type="button"
-                              onClick={() =>
-                                this.props.addCourseToCart(
-                                  shoppingCartItem,
-                                  'TRAINING'
-                                )
-                              }
-                            >
-                              Purchase Entire Course
-                            </Button>
-                            <h4>${`${shoppingCartItem.cost / 100}`}</h4>
-                          </span>
-                        )}
+        <Col xs={12} sm={12}>
+          <div className="courses-tiles text-center">
+            {this.props.user.isActive &&
+              this.props.courses.map(gfCourse => {
+                const shoppingCartItem = { ...gfCourse, quantity: 1 };
+                return (
+                  <Col
+                    key={gfCourse.id}
+                    xs={12}
+                    sm={4}
+                    md={4}
+                    className="course animated fadeInUp"
+                  >
+                    <Panel className="text-center">
+                      <h2>{this.shortenTitle(gfCourse.name)}</h2>
+                      {showBuyButton(gfCourse.id) && (
+                        <span>
+                          <Button
+                            bsStyle="warning"
+                            type="button"
+                            onClick={() =>
+                              this.props.addCourseToCart(
+                                shoppingCartItem,
+                                'TRAINING'
+                              )
+                            }
+                          >
+                            Purchase Entire Course
+                          </Button>
+                          <h4>${`${shoppingCartItem.cost / 100}`}</h4>
+                        </span>
+                      )}
 
-                        <p className="purchase-text">
-                          Save 25% by purchasing the entire course rather than
-                          all the lessons individually
-                        </p>
-                        <div
-                          className="course-footer"
-                          onClick={() => {
-                            this.loadCourseLessons(gfCourse.id || '');
-                          }}
-                        >
-                          {'View Lessons'}
-                        </div>
-                      </Panel>
-                    </Col>
-                  );
-                })}
-            </div>
-          </Col>
-        </Row>
-      </div>
+                      <p className="purchase-text">
+                        Save 25% by purchasing the entire course rather than all
+                        the lessons individually
+                      </p>
+                      <LinkContainer to={`training/${gfCourse.id}`}>
+                        <div className="course-footer">{'View Lessons'}</div>
+                      </LinkContainer>
+                    </Panel>
+                  </Col>
+                );
+              })}
+          </div>
+        </Col>
+      </Row>
     );
   }
   shortenDescription(text: string) {

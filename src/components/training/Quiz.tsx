@@ -565,10 +565,14 @@ class Quiz extends React.Component<Props, State> {
           <div className="animated slideInUp owl-image">
             {/* style={bubble} */}
             {this.state.selectedAnswer.isAnswer && (
-              <p className="right bubble-text">{curQ && curQ.correctText}</p>
+              <p className="right bubble-text">
+                {(curQ && curQ.correctText) || 'correct'}
+              </p>
             )}
             {!this.state.selectedAnswer.isAnswer && (
-              <p className="wrong bubble-text">{curQ && curQ.wrongText}</p>
+              <p className="wrong bubble-text">
+                {(curQ && curQ.wrongText) || 'wrong'}
+              </p>
             )}
           </div>
         )}

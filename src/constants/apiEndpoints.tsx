@@ -43,7 +43,8 @@ const API = {
     },
     training: {
       savelessonprogress: `${root}training/savelessonprogress`,
-      trainingCheckout: `${root}training/savetrainingtransaction`
+      trainingCheckout: `${root}training/savetrainingtransaction`,
+      savequiz: `${root}training/savequiz`
     }
   },
   PUT: {

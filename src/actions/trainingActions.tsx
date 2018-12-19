@@ -13,7 +13,7 @@ import {
   GFQuizItem
 } from 'src/models';
 import axios from 'axios';
-import { find } from 'lodash';
+import { find, forEach } from 'lodash';
 import { toastr } from 'react-redux-toastr';
 
 export function loadCourses(user: Iuser) {
@@ -127,6 +127,50 @@ export function getQuizzesByLessonID(lessonID: string, user: Iuser) {
         console.error('Error when trying to get all quizzes', error);
         dispatch({ type: types.LOAD_QUIZZES_FAILED, error });
         constants.handleError(error, 'loading all quizzes');
+        throw error;
+      });
+  };
+}
+
+/*
+    Save quiz results
+  */
+export function saveQuizResults(quiz: GFQuizItem, user: Iuser) {
+  return (dispatch: any) => {
+    dispatch(beginAjaxCall());
+
+    // grind quiz results into the sausage that David's api is expecting
+    const answers: any[] = [];
+    let numCorrect: number = 0;
+    forEach(quiz.questions, q => {
+      if (q && q.userAnswer && q.userAnswer.isAnswer) {
+        numCorrect++;
+      }
+      answers.push({
+        QuestionID: q.id,
+        Answer: q.userAnswer.option,
+        IsCorrect: q.userAnswer.isAnswer
+      });
+    });
+    const score = ((numCorrect / quiz.questions.length) * 100).toFixed(0);
+    const body = {
+      Answers: answers,
+      QuizID: quiz.id,
+      Score: score
+    };
+
+    return axios
+      .post(`${API.POST.training.savequiz}`, body)
+      .then(data => {
+        console.log('SAVE QUIZ', data);
+        dispatch({
+          type: types.SAVE_QUIZ_SUCCESS,
+          progress: data.data
+        });
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.SAVE_QUIZ_FAILED });
+        constants.handleError(error, 'save quiz');
         throw error;
       });
   };

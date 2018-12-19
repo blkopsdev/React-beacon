@@ -10,7 +10,8 @@ import {
   getLessonsByCourseID,
   setLesson,
   // getQuizzesByLessonID,
-  setQuiz
+  setQuiz,
+  saveQuizResults
 } from '../../actions/trainingActions';
 // import Badge from '../course/Badge'
 import Question from './Question';
@@ -20,7 +21,7 @@ import { Button, Row, Col } from 'react-bootstrap';
 import { forEach, isEmpty } from 'lodash';
 // const mixpanel = require("mixpanel-browser");
 
-const txtBubble = require('../../images/Azure.png');
+// const txtBubble = require('../../images/Azure.png');
 
 import { RouteComponentProps } from 'react-router';
 
@@ -41,6 +42,7 @@ interface Props extends RouteComponentProps<RouterParams> {
   // getQuizzesByLessonID: any;
   setLesson: any;
   setQuiz: any;
+  saveQuizResults: typeof saveQuizResults;
   loading: boolean;
   params: any;
 }
@@ -365,51 +367,15 @@ class Quiz extends React.Component<Props, State> {
       this.savingQuiz = false;
     }, 1000);
 
-    // if (UserAPI.isStudent(this.props.user.roleID)) {
-    //   StudentAPI.saveQuizResults(this.props.quiz, this.props.user)
-    //     .then((res: any) => {
-    //       if (!!res.earnedBadge) {
-    //         this.showBadge(res.earnedBadge);
-    //       }
-    //       this.setState({
-    //         selectedAnswer: {},
-    //         checkingAnswer: false,
-    //         quizComplete: true,
-    //         textAnswer: "",
-    //         currentQuiz: this.props.quiz,
-    //         questionIndex: 0
-    //       });
-    //     })
-    //     .catch((error: any) => {
-    //       console.error(
-    //         "Error with saving Practice Exercise results",
-    //         error,
-    //         this.props.quiz.questions
-    //       );
-    //       const message = "saving practice exercise";
-    //       constants.handleError(error, message);
-    //     });
-    // } else {
-    //   // for teachers, pretend we saved the quiz
-    //   this.setState(
-    //     {
-    //       selectedAnswer: {},
-    //       checkingAnswer: false,
-    //       quizComplete: true,
-    //       textAnswer: "",
-    //       currentQuiz: this.props.quiz,
-    //       questionIndex: 0
-    //     },
-    //     () => {
-    //       // this is a teacher finishing the quiz, so we just show a toast
-    //       toastr.warning(
-    //         `Thank you`,
-    //         `Only students can save Practice Exercise results!`,
-    //         constants.toastrSuccess
-    //       );
-    //     }
-    //   );
-    // }
+    this.props.saveQuizResults(this.props.quiz, this.props.user);
+    this.setState({
+      selectedAnswer: {},
+      checkingAnswer: false,
+      quizComplete: true,
+      textAnswer: '',
+      currentQuiz: this.props.quiz,
+      questionIndex: 0
+    });
     // mixpanel.track("Finished Practice Exercise", {
     //   quizID: this.props.quiz.id,
     //   quizName: this.props.quiz.name
@@ -481,9 +447,9 @@ class Quiz extends React.Component<Props, State> {
       qi = this.state.questionIndex;
       curQ = questions[qi];
     }
-    const bubble = {
-      backgroundImage: `url(${txtBubble})`
-    };
+    // const bubble = {
+    //   backgroundImage: `url(${txtBubble})`
+    // };
     if (this.props.lesson && this.props.lesson.id) {
       // courseName = this.props.lesson.courseLessons[0].course.name
     }
@@ -596,7 +562,8 @@ class Quiz extends React.Component<Props, State> {
             )}
         </div>
         {this.state.checkingAnswer && (
-          <div className="animated slideInUp owl-image" style={bubble}>
+          <div className="animated slideInUp owl-image">
+            {/* style={bubble} */}
             {this.state.selectedAnswer.isAnswer && (
               <p className="right bubble-text">{curQ && curQ.correctText}</p>
             )}
@@ -627,6 +594,7 @@ export default connect(
   {
     getLessonsByCourseID,
     setLesson,
-    setQuiz
+    setQuiz,
+    saveQuizResults
   }
 )(Quiz);

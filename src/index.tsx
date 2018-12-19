@@ -47,6 +47,8 @@ import Login from './components/auth/Login';
 import configureStore from './store/configureStore';
 import initialState from './reducers/initialState';
 import registerServiceWorker from './registerServiceWorker';
+import { LinkContainer } from 'react-router-bootstrap';
+import { Button } from 'react-bootstrap';
 
 library.add(
   faCog,
@@ -124,9 +126,14 @@ store.subscribe(
 const NoMatch = ({ location }: any) => {
   console.error(`no match for route: ${location.pathname}`);
   return (
-    <h3>
-      <code>{location.pathname}</code> does not exist
-    </h3>
+    <div>
+      <h3>
+        <code>{location.pathname}</code> does not exist
+      </h3>
+      <LinkContainer to="/">
+        <Button bsStyle="link">Back to home page.</Button>
+      </LinkContainer>
+    </div>
   );
 };
 /*

@@ -409,7 +409,7 @@ const constants = {
     toastr.error('Error', msg, constants.toastrError);
   },
   tableSearchDebounceTime: 300,
-  timedQuizHours: 2
+  timedQuizHours: 7
 };
 
 export default constants;

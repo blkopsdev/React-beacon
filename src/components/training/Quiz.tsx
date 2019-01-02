@@ -214,7 +214,7 @@ class Quiz extends React.Component<Props, State> {
   calculateTimeLeft = () => {
     const timeLeft = moment
       .utc(this.props.quiz.startTime)
-      .add(constants.timedQuizHours, 'h')
+      .add(constants.timedQuizHours, 'm') // TODO set to minutes temporarily to help us test
       .diff(moment(), 'minutes');
 
     this.setState({ timeLeft });

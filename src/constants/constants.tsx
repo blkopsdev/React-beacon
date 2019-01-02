@@ -354,6 +354,11 @@ const constants = {
     transitionOut: 'bounceOutUp' as transitionOutType,
     timeOut: 8000
   },
+  toastrWarning: {
+    transitionIn: 'bounceInDown' as transitionInType,
+    transitionOut: 'bounceOutUp' as transitionOutType,
+    timeOut: 8000
+  },
   toastrSuccess: {
     transitionIn: 'bounceInDown' as transitionInType,
     transitionOut: 'bounceOutUp' as transitionOutType,
@@ -403,7 +408,8 @@ const constants = {
     }
     toastr.error('Error', msg, constants.toastrError);
   },
-  tableSearchDebounceTime: 300
+  tableSearchDebounceTime: 300,
+  timedQuizHours: 2
 };
 
 export default constants;

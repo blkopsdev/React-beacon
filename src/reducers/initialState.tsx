@@ -75,6 +75,7 @@ export const initialQuiz = {
   videoPath: '',
   instructions: '',
   lessonID: '',
+  isTimed: false,
   questions: [
     {
       id: '',

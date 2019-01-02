@@ -354,3 +354,24 @@ const getPurchasedTrainingHelper = (dispatch: any, getState: any) => {
       throw error;
     });
 };
+
+// Save quiz start
+export function startQuiz(quizID: string): ThunkResult<void> {
+  return dispatch => {
+    dispatch(beginAjaxCall());
+    return axios
+      .post(API.POST.training.startQuiz, { quizID })
+      .then(data => {
+        console.log('starting quiz', data.data);
+        dispatch({
+          type: types.START_QUIZ_SUCCESS,
+          startTime: data.data.startTime
+        });
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.START_QUIZ_FAILED });
+        constants.handleError(error, 'start quiz');
+        throw error;
+      });
+  };
+}

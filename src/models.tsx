@@ -471,6 +471,8 @@ export interface GFQuizItem {
   instructions: string;
   lessonID: string;
   questions: GFQuizQuestion[];
+  isTimed: boolean;
+  startTime?: string;
   createDate?: any;
   updateDate?: any;
   studentCanAccess?: any;

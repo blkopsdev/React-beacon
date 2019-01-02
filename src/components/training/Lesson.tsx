@@ -24,6 +24,7 @@ import {
 import { RouteComponentProps } from 'react-router';
 import Player from '@vimeo/player';
 import * as moment from 'moment';
+import { toastr } from 'react-redux-toastr';
 
 interface RouterParams {
   courseID: string;
@@ -146,6 +147,21 @@ class Lesson extends React.Component<Props, State> {
     }
   }
 
+  showTimedQuizMessage = (quiz: GFQuizItem) => {
+    const toastrConfirmOptions = {
+      onOk: () => {
+        this.startQuiz(quiz, true);
+      },
+      onCancel: () => console.log('CANCEL: clicked'),
+      okText: 'start quiz',
+      cancelText: 'cancel'
+    };
+    toastr.confirm(
+      'This is a timed quiz. You will have 2 hours to complete all of the questions.',
+      toastrConfirmOptions
+    );
+  };
+
   setUpPlayer() {
     const options = {
       id: this.props.lesson.primaryVideoPath,
@@ -249,12 +265,17 @@ class Lesson extends React.Component<Props, State> {
   /*
   * start a quiz
   */
-  startQuiz(gfQuiz: GFQuizItem, index: any) {
+  startQuiz(gfQuiz: GFQuizItem, skipTimedCheck: boolean = false) {
     // set the current active quiz item
     // mixpanel.track("Practice Exercise started", {
     //   quiz: gfQuiz.id,
     //   name: gfQuiz.name
     // });
+
+    if (gfQuiz.isTimed && !skipTimedCheck) {
+      this.showTimedQuizMessage(gfQuiz);
+      return;
+    }
     // as long as this quiz is not already set as the quiz in redux, set it
     if (!this.props.quiz || gfQuiz.id !== this.props.quiz.id) {
       this.props.setQuiz(gfQuiz);
@@ -305,7 +326,7 @@ class Lesson extends React.Component<Props, State> {
               <ListGroupItem
                 key={gfQuiz.id}
                 onClick={() => {
-                  this.startQuiz(gfQuiz, index);
+                  this.startQuiz(gfQuiz);
                 }}
               >
                 <Media>

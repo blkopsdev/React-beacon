@@ -11,12 +11,13 @@ import {
   setLesson,
   // getQuizzesByLessonID,
   setQuiz,
-  saveQuizResults
+  saveQuizResults,
+  startQuiz
 } from '../../actions/trainingActions';
 // import Badge from '../course/Badge'
 import Question from './Question';
 
-import { Button, Row, Col } from 'react-bootstrap';
+import { Button, Row, Col, Alert } from 'react-bootstrap';
 // import { toastr } from "react-redux-toastr";
 import { forEach, isEmpty } from 'lodash';
 // const mixpanel = require("mixpanel-browser");
@@ -24,6 +25,23 @@ import { forEach, isEmpty } from 'lodash';
 // const txtBubble = require('../../images/Azure.png');
 
 import { RouteComponentProps } from 'react-router';
+import * as moment from 'moment';
+import { toastr } from 'react-redux-toastr';
+import constants from 'src/constants/constants';
+
+const TimeLeftBanner = ({ timeLeft }: { timeLeft?: number }) => {
+  if (!timeLeft) {
+    return null;
+  }
+
+  return (
+    <Col xs={3} className="pull-right" style={{ height: '0' }}>
+      <Alert bsStyle="warning">
+        <strong>{timeLeft}</strong> minutes remaining
+      </Alert>
+    </Col>
+  );
+};
 
 interface RouterParams {
   courseID: string;
@@ -45,6 +63,7 @@ interface Props extends RouteComponentProps<RouterParams> {
   saveQuizResults: typeof saveQuizResults;
   loading: boolean;
   params: any;
+  startQuiz: (id: string) => Promise<void>;
 }
 
 interface State {
@@ -54,12 +73,15 @@ interface State {
   quizComplete: boolean;
   textAnswer: string;
   currentQuiz: GFQuizItem;
+  timeLeft: number;
+  timeoutWarningShown: boolean;
 }
 
 class Quiz extends React.Component<Props, State> {
   savingQuiz: boolean;
   checkingAnswer: boolean;
   goingToNextQuestion: boolean;
+  quizTimer: any;
 
   constructor(props: Props) {
     super(props);
@@ -69,7 +91,9 @@ class Quiz extends React.Component<Props, State> {
       checkingAnswer: false,
       quizComplete: false,
       textAnswer: '',
-      currentQuiz: initialState.training.quiz
+      currentQuiz: initialState.training.quiz,
+      timeLeft: 0,
+      timeoutWarningShown: false
     };
     this.handleChange = this.handleChange.bind(this);
     this.backToLesson = this.backToLesson.bind(this);
@@ -142,6 +166,10 @@ class Quiz extends React.Component<Props, State> {
     ) {
       this.reloadExistingQuiz();
     }
+
+    if (this.props.quiz.isTimed) {
+      this.handleTimedQuiz();
+    }
   }
   componentDidUpdate(prevProps: Props) {
     if (prevProps.quiz !== this.props.quiz) {
@@ -163,7 +191,52 @@ class Quiz extends React.Component<Props, State> {
       const quiz = Object.assign({}, this.props.quiz, { questions });
       this.props.setQuiz(quiz);
     }
+    clearInterval(this.quizTimer);
   }
+
+  /*
+  * If timed, call the API to a) notify that the Quiz has started. b) can we start
+  */
+  handleTimedQuiz = () => {
+    this.props
+      .startQuiz(this.props.quiz.id)
+      .then()
+      .catch(() => {
+        this.props.history.push(
+          `/training/${this.props.match.params.courseID}/${
+            this.props.match.params.lessonID
+          }`
+        );
+      });
+    this.calculateTimeLeft(); // call it once in order to show the time left immediately
+    this.quizTimer = setInterval(this.calculateTimeLeft, 3000);
+  };
+  calculateTimeLeft = () => {
+    const timeLeft = moment
+      .utc(this.props.quiz.startTime)
+      .add(constants.timedQuizHours, 'h')
+      .diff(moment(), 'minutes');
+
+    this.setState({ timeLeft });
+
+    if (timeLeft <= 5 && !this.state.timeoutWarningShown) {
+      toastr.warning('5 Minutes Remaining', '', constants.toastrWarning);
+      this.setState({ timeoutWarningShown: true });
+    }
+
+    if (timeLeft <= 0) {
+      toastr.error(
+        'Out Of Time',
+        'You have run out of time and are no longer able to submit this quiz',
+        { ...constants.toastrError, timeOut: 0 }
+      );
+      this.props.history.push(
+        `/training/${this.props.match.params.courseID}/${
+          this.props.match.params.lessonID
+        }`
+      );
+    }
+  };
 
   /*
   * There is a quiz in progress, so lets reload it
@@ -494,8 +567,11 @@ class Quiz extends React.Component<Props, State> {
             typeof curQ !== 'undefined' && (
               <div className="sub-header">
                 <form id="quizForm" onSubmit={this.checkAnswer}>
-                  <Row className="question">
-                    <Col md={12} xs={12} className="quiz-text-container">
+                  <Row>
+                    <Col
+                      xs={this.state.timeLeft ? 9 : 12}
+                      className="quiz-text-container"
+                    >
                       <div className="text-instructions">
                         <p
                           dangerouslySetInnerHTML={{
@@ -507,6 +583,9 @@ class Quiz extends React.Component<Props, State> {
                         />
                       </div>
                     </Col>
+                    <TimeLeftBanner timeLeft={this.state.timeLeft} />
+                  </Row>
+                  <Row>
                     <Question
                       curQ={curQ}
                       checkingAnswer={this.state.checkingAnswer}
@@ -599,6 +678,7 @@ export default connect(
     getLessonsByCourseID,
     setLesson,
     setQuiz,
-    saveQuizResults
+    saveQuizResults,
+    startQuiz
   }
 )(Quiz);

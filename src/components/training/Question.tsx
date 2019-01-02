@@ -68,7 +68,7 @@ class Question extends React.Component<Props, {}> {
     textInputPlaceholder = 'Your answer...';
     const curQ = this.props.curQ;
     return (
-      <div>
+      <div className="question">
         {curQ.type === 'blank' && (
           <div className={quizClassName}>
             <Col md={12}>

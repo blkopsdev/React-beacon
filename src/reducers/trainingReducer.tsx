@@ -82,9 +82,10 @@ function quizReducer(state: GFQuizItem = initialQuiz, action: any): GFQuizItem {
   switch (action.type) {
     case types.LOAD_QUIZ:
       return action.quiz;
+    case types.START_QUIZ_SUCCESS:
+      return { ...state, startTime: action.startTime };
     case types.USER_LOGOUT_SUCCESS:
       return initialQuiz;
-
     default:
       return state;
   }

@@ -351,7 +351,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         className: 'banner-input',
         isClearable: false,
         defaultValue: this.props.tableFilters.facility
-          ? this.props.tableFilters.facility.value
+          ? this.props.tableFilters.facility
           : this.props.facilityOptions[0]
       }
     };

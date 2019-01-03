@@ -206,6 +206,8 @@ class EditJobForm extends React.Component<Iprops, {}> {
           }
         );
         this.jobForm.patchValue({ facilityID: facilitiesArray[0] });
+      } else {
+        this.jobForm.patchValue({ facilityID: null });
       }
     }
     if (
@@ -234,7 +236,6 @@ class EditJobForm extends React.Component<Iprops, {}> {
 
   componentDidMount() {
     if (!this.props.selectedJob) {
-      console.error('missing job');
       return;
     }
     // set values

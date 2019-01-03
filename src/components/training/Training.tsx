@@ -23,7 +23,8 @@ import {
   trainingCheckout,
   addCourseToCart,
   addLessonToCart,
-  getPurchasedTraining
+  getPurchasedTraining,
+  getQuizResults
 } from '../../actions/trainingActions';
 
 import {
@@ -87,6 +88,7 @@ interface Props extends RouteComponentProps<RouterParams> {
   getPurchasedTraining: typeof getPurchasedTraining;
   closeAllModals: typeof closeAllModals;
   purchasedTraining: string[];
+  getQuizResults: typeof getQuizResults;
 }
 
 interface State {
@@ -129,6 +131,7 @@ class Courses extends React.Component<Props, State> {
     this.props.getAllQuizzes(this.props.user);
     this.props.getAllLessonProgress();
     this.props.getPurchasedTraining();
+    this.props.getQuizResults();
     const query = queryString.parse(this.props.location.search);
     console.log('query params', query, query.transactionNumber);
 
@@ -330,7 +333,13 @@ class Courses extends React.Component<Props, State> {
         </span>
       </Col>
     );
-    const QuizResultColumn = ({ score }: { score: number }) => (
+    const QuizResultColumn = ({
+      score,
+      quizName
+    }: {
+      score: number;
+      quizName: string;
+    }) => (
       <Col md={3}>
         <span
           className="lesson-name lesson-progress"
@@ -338,7 +347,7 @@ class Courses extends React.Component<Props, State> {
             color: score === 100 ? 'green' : 'inherit'
           }}
         >
-          {`Quiz Score ${score}%`}
+          {`${quizName} ${score}%`}
         </span>
       </Col>
     );
@@ -400,9 +409,13 @@ class Courses extends React.Component<Props, State> {
                       <img width={32} height={32} src={imagePath} alt="Image" />
                       <span className="lesson-name">{gfLesson.name}</span>
                     </Col>
-                    {gfLesson.score && (
-                      <QuizResultColumn score={gfLesson.score} />
-                    )}
+                    {gfLesson.score &&
+                      gfLesson.quizName && (
+                        <QuizResultColumn
+                          score={gfLesson.score}
+                          quizName={gfLesson.quizName}
+                        />
+                      )}
                     {showProgressColumn(gfLesson) && (
                       <ProgressColumn progress={progress} />
                     )}
@@ -629,7 +642,8 @@ export default translate('training')(
       addLessonToCart,
       trainingCheckout,
       getPurchasedTraining,
-      closeAllModals
+      closeAllModals,
+      getQuizResults
     }
   )(Courses)
 );

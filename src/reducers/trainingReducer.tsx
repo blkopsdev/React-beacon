@@ -49,9 +49,13 @@ function lessonsReducer(
       );
     case types.GET_QUIZ_RESULTS_SUCCESS:
       return mapValues(state, (lesson: GFLesson) => {
-        const quizResult = find(action.results, { LessonID: lesson.id }) as any;
-        if (quizResult && quizResult.Score) {
-          return { ...lesson, score: quizResult.Score };
+        const quizResult = find(action.results, { lessonID: lesson.id }) as any;
+        if (quizResult && quizResult.score) {
+          return {
+            ...lesson,
+            score: quizResult.score,
+            quizName: quizResult.quizName
+          };
         }
         return lesson;
       });
@@ -83,9 +87,9 @@ function quizzesReducer(
     // TODO commented out because we are assuming a single quiz for a lesson and showing tht score on the Lesson
     // case types.GET_QUIZ_RESULTS_SUCCESS:
     //     return mapValues(state, (quiz: GFQuizItem) => {
-    //       const quizResult = find(action.results, {QuizID: quiz.id}) as any;
-    //       if (quizResult && quizResult.Score){
-    //         return {...quiz, score: quizResult.Score}
+    //       const quizResult = find(action.results, {quizID: quiz.id}) as any;
+    //       if (quizResult && quizResult.score){
+    //         return {...quiz, score: quizResult.score}
     //       }
     //       return quiz;
     //     })

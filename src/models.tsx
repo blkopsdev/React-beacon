@@ -424,6 +424,7 @@ export interface GFLesson {
   courseLessons: Array<{ id: string; courseID: string }>;
   cost: number;
   score?: number;
+  quizName?: string;
 }
 
 export interface GFLessons {

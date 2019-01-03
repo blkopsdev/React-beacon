@@ -216,7 +216,7 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
               lineHeight: '1.5rem'
             }}
           >
-            {t('searchNewProductInstructions')}{' '}
+            {t('searchNewProductInstructions')}
           </p>
 
           <form
@@ -250,13 +250,11 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
                 </ListGroup>
                 {isEmpty(this.props.newProducts) &&
                   searchActive && (
-                    <Well
-                      className="text-center"
-                      style={{ marginLeft: '20px' }}
-                    >
-                      {' '}
-                      {t('no products found')}{' '}
-                    </Well>
+                    <Col xs={12}>
+                      <Well className="text-center">
+                        {t('no products found')}
+                      </Well>
+                    </Col>
                   )}
               </Col>
             </Row>

@@ -173,7 +173,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
           meta: {
             label: 'jobManage:company',
             options: FormUtil.convertToOptions(this.props.customers),
-            colWidth: 2,
+            colWidth: 3,
             type: 'select',
             placeholder: 'companyPlaceholder',
             defaultValue: this.props.tableFilters.customer

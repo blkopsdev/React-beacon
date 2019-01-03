@@ -1,6 +1,6 @@
 import * as types from '../actions/actionTypes';
 import initialState, { initialLesson, initialQuiz } from './initialState';
-import { keyBy } from 'lodash';
+import { keyBy, mapValues, find } from 'lodash';
 import {
   GFLesson,
   GFLessons,
@@ -47,6 +47,14 @@ function lessonsReducer(
         state,
         keyBy(action.lessons, (lesson: GFLesson) => lesson.id)
       );
+    case types.GET_QUIZ_RESULTS_SUCCESS:
+      return mapValues(state, (lesson: GFLesson) => {
+        const quizResult = find(action.results, { LessonID: lesson.id }) as any;
+        if (quizResult && quizResult.Score) {
+          return { ...lesson, score: quizResult.Score };
+        }
+        return lesson;
+      });
     case types.USER_LOGOUT_SUCCESS:
       return {};
 
@@ -72,6 +80,15 @@ function quizzesReducer(
         state,
         keyBy(action.quizzes, (quiz: GFQuizItem) => quiz.id)
       );
+    // TODO commented out because we are assuming a single quiz for a lesson and showing tht score on the Lesson
+    // case types.GET_QUIZ_RESULTS_SUCCESS:
+    //     return mapValues(state, (quiz: GFQuizItem) => {
+    //       const quizResult = find(action.results, {QuizID: quiz.id}) as any;
+    //       if (quizResult && quizResult.Score){
+    //         return {...quiz, score: quizResult.Score}
+    //       }
+    //       return quiz;
+    //     })
     case types.USER_LOGOUT_SUCCESS:
       return {};
     default:

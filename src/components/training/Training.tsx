@@ -330,6 +330,18 @@ class Courses extends React.Component<Props, State> {
         </span>
       </Col>
     );
+    const QuizResultColumn = ({ score }: { score: number }) => (
+      <Col md={3}>
+        <span
+          className="lesson-name lesson-progress"
+          style={{
+            color: score === 100 ? 'green' : 'inherit'
+          }}
+        >
+          {`Quiz Score ${score}%`}
+        </span>
+      </Col>
+    );
     const BuyColumn = ({
       shoppingCartItem
     }: {
@@ -380,7 +392,7 @@ class Courses extends React.Component<Props, State> {
                 <ListGroupItem className="lesson list-item" key={gfLesson.id}>
                   <Media>
                     <Col
-                      md={9}
+                      md={gfLesson.score ? 6 : 9}
                       onClick={() => {
                         this.loadLessonAndQuizzes(gfLesson || '');
                       }}
@@ -388,6 +400,9 @@ class Courses extends React.Component<Props, State> {
                       <img width={32} height={32} src={imagePath} alt="Image" />
                       <span className="lesson-name">{gfLesson.name}</span>
                     </Col>
+                    {gfLesson.score && (
+                      <QuizResultColumn score={gfLesson.score} />
+                    )}
                     {showProgressColumn(gfLesson) && (
                       <ProgressColumn progress={progress} />
                     )}

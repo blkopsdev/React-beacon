@@ -16,8 +16,8 @@ import axios from 'axios';
 import { find, forEach } from 'lodash';
 import { toastr } from 'react-redux-toastr';
 
-export function loadCourses(user: Iuser) {
-  return (dispatch: any) => {
+export function loadCourses(user: Iuser): ThunkResult<void> {
+  return dispatch => {
     dispatch(beginAjaxCall());
     return courseAPI
       .getAll(user)
@@ -25,7 +25,7 @@ export function loadCourses(user: Iuser) {
         dispatch({ type: types.LOAD_COURSES_SUCCESS, courses });
         return courses;
       })
-      .catch((error: any) => {
+      .catch(error => {
         dispatch({ type: types.LOAD_COURSES_FAILED, error });
         const message = 'load courses';
         constants.handleError(error, message);
@@ -38,14 +38,17 @@ export function getLessonSuccess(lesson: GFLesson) {
   return { type: types.LOAD_LESSON, lesson };
 }
 
-export function setLesson(lesson: GFLesson) {
-  return (dispatch: any) => {
+export function setLesson(lesson: GFLesson): ThunkResult<void> {
+  return dispatch => {
     dispatch(getLessonSuccess(lesson));
   };
 }
 
-export function getLessonsByCourseID(courseID: string, user: Iuser) {
-  return (dispatch: any) => {
+export function getLessonsByCourseID(
+  courseID: string,
+  user: Iuser
+): ThunkResult<void> {
+  return dispatch => {
     dispatch(beginAjaxCall());
     return courseAPI
       .getLessonsByCourseID(courseID, user)
@@ -53,7 +56,7 @@ export function getLessonsByCourseID(courseID: string, user: Iuser) {
         dispatch({ type: types.LOAD_LESSONS_SUCCESS, lessons });
         return lessons;
       })
-      .catch((error: any) => {
+      .catch(error => {
         dispatch({ type: types.LOAD_LESSONS_FAILED, error });
         constants.handleError(error, 'load lessons');
         console.error(error);
@@ -62,8 +65,8 @@ export function getLessonsByCourseID(courseID: string, user: Iuser) {
   };
 }
 
-export function getAllLessons(user: Iuser) {
-  return (dispatch: any) => {
+export function getAllLessons(user: Iuser): ThunkResult<void> {
+  return dispatch => {
     dispatch(beginAjaxCall());
     return courseAPI
       .getAllLessons(user)
@@ -71,7 +74,7 @@ export function getAllLessons(user: Iuser) {
         dispatch({ type: types.LOAD_LESSONS_SUCCESS, lessons });
         return lessons;
       })
-      .catch((error: any) => {
+      .catch(error => {
         dispatch({ type: types.LOAD_LESSONS_FAILED, error });
         constants.handleError(error, 'load lessons');
         console.error(error);
@@ -84,8 +87,8 @@ export function getQuizSuccess(quiz: GFQuizItem) {
   return { type: types.LOAD_QUIZ, quiz };
 }
 
-export function setQuiz(quiz: GFQuizItem) {
-  return (dispatch: any) => {
+export function setQuiz(quiz: GFQuizItem): ThunkResult<void> {
+  return dispatch => {
     dispatch(getQuizSuccess(quiz));
   };
 }
@@ -93,8 +96,8 @@ export function setQuiz(quiz: GFQuizItem) {
 /*
 * Complete list of quizzes without the questions
 */
-export function getAllQuizzes(user: Iuser) {
-  return (dispatch: any) => {
+export function getAllQuizzes(user: Iuser): ThunkResult<void> {
+  return dispatch => {
     dispatch(beginAjaxCall());
     return courseAPI
       .getAllQuizzes(user)
@@ -114,8 +117,11 @@ export function getAllQuizzes(user: Iuser) {
 /*
 * Quizzes with the questions for a particular lesson
 */
-export function getQuizzesByLessonID(lessonID: string, user: Iuser) {
-  return (dispatch: any) => {
+export function getQuizzesByLessonID(
+  lessonID: string,
+  user: Iuser
+): ThunkResult<void> {
+  return dispatch => {
     dispatch(beginAjaxCall());
     return courseAPI
       .getQuizzesByLessonID(lessonID, user)
@@ -135,8 +141,11 @@ export function getQuizzesByLessonID(lessonID: string, user: Iuser) {
 /*
     Save quiz results
   */
-export function saveQuizResults(quiz: GFQuizItem, user: Iuser) {
-  return (dispatch: any) => {
+export function saveQuizResults(
+  quiz: GFQuizItem,
+  user: Iuser
+): ThunkResult<void> {
+  return dispatch => {
     dispatch(beginAjaxCall());
 
     // grind quiz results into the sausage that David's api is expecting
@@ -168,7 +177,7 @@ export function saveQuizResults(quiz: GFQuizItem, user: Iuser) {
           progress: data.data
         });
       })
-      .catch((error: any) => {
+      .catch(error => {
         dispatch({ type: types.SAVE_QUIZ_FAILED });
         constants.handleError(error, 'save quiz');
         throw error;
@@ -177,8 +186,8 @@ export function saveQuizResults(quiz: GFQuizItem, user: Iuser) {
 }
 
 // Get all lesson progress
-export function getAllLessonProgress() {
-  return (dispatch: any) => {
+export function getAllLessonProgress(): ThunkResult<void> {
+  return dispatch => {
     dispatch(beginAjaxCall());
     return axios
       .get(`${API.GET.training.getalllessonprogress}`)
@@ -189,7 +198,7 @@ export function getAllLessonProgress() {
           progress: data.data
         });
       })
-      .catch((error: any) => {
+      .catch(error => {
         dispatch({ type: types.GET_ALL_LESSON_PROGRESS_FAILED });
         constants.handleError(error, 'get all lesson progress');
         throw error;
@@ -198,8 +207,8 @@ export function getAllLessonProgress() {
 }
 
 // Get lesson progress
-export function getProgressByLesson(lessonId: string) {
-  return (dispatch: any) => {
+export function getProgressByLesson(lessonId: string): ThunkResult<void> {
+  return dispatch => {
     dispatch(beginAjaxCall());
     return axios
       .get(`${API.GET.training.getprogressbylesson}/${lessonId}`)
@@ -209,7 +218,7 @@ export function getProgressByLesson(lessonId: string) {
           progress: data
         });
       })
-      .catch((error: any) => {
+      .catch(error => {
         dispatch({ type: types.GET_LESSON_PROGRESS_FAILED });
         constants.handleError(error, 'get lesson progress');
         throw error;
@@ -218,8 +227,10 @@ export function getProgressByLesson(lessonId: string) {
 }
 
 // Save lesson progress
-export function saveLessonProgress(progress: LessonProgress) {
-  return (dispatch: any) => {
+export function saveLessonProgress(
+  progress: LessonProgress
+): ThunkResult<void> {
+  return dispatch => {
     dispatch(beginAjaxCall());
     return axios
       .post(`${API.POST.training.savelessonprogress}`, progress)
@@ -230,7 +241,7 @@ export function saveLessonProgress(progress: LessonProgress) {
           progress: { id: data.data, ...progress }
         });
       })
-      .catch((error: any) => {
+      .catch(error => {
         dispatch({ type: types.SAVE_LESSON_PROGRESS_FAILED });
         constants.handleError(error, 'save lesson progress');
         throw error;
@@ -323,7 +334,7 @@ export const trainingCheckout = (
         });
         getPurchasedTrainingHelper(dispatch, getState);
       })
-      .catch((error: any) => {
+      .catch(error => {
         dispatch({ type: types.CHECKOUT_TRAINING_FAILED });
         constants.handleError(error, 'purchasing training');
         throw error;
@@ -348,7 +359,7 @@ const getPurchasedTrainingHelper = (dispatch: any, getState: any) => {
       });
       // toastr.success("Success", "requested quote", constants.toastrSuccess);
     })
-    .catch((error: any) => {
+    .catch(error => {
       dispatch({ type: types.GET_PURCHASED_TRAINING_FAILED });
       constants.handleError(error, 'get purchased training');
       throw error;
@@ -362,15 +373,36 @@ export function startQuiz(quizID: string): ThunkResult<void> {
     return axios
       .post(API.POST.training.startQuiz, { quizID })
       .then(data => {
-        console.log('starting quiz', data.data);
         dispatch({
           type: types.START_QUIZ_SUCCESS,
           startTime: data.data.startTime
         });
       })
-      .catch((error: any) => {
+      .catch(error => {
         dispatch({ type: types.START_QUIZ_FAILED });
         constants.handleError(error, 'start quiz');
+        throw error;
+      });
+  };
+}
+
+/*
+* Get Quiz Results
+*/
+export function getQuizResults(): ThunkResult<void> {
+  return dispatch => {
+    dispatch(beginAjaxCall());
+    return axios
+      .get(API.GET.training.getQuizResults)
+      .then(data => {
+        dispatch({
+          type: types.GET_QUIZ_RESULTS_SUCCESS,
+          results: data.data
+        });
+      })
+      .catch(error => {
+        dispatch({ type: types.GET_QUIZ_RESULTS_FAILED });
+        constants.handleError(error, 'get quiz results');
         throw error;
       });
   };

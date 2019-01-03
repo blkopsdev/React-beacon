@@ -423,6 +423,7 @@ export interface GFLesson {
   slideshowPath: string;
   courseLessons: Array<{ id: string; courseID: string }>;
   cost: number;
+  score?: number;
 }
 
 export interface GFLessons {
@@ -476,6 +477,7 @@ export interface GFQuizItem {
   createDate?: any;
   updateDate?: any;
   studentCanAccess?: any;
+  score?: number;
 }
 
 export interface GFStudentQuizResult {

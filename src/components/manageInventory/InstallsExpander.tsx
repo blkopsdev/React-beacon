@@ -22,6 +22,8 @@ interface ExpanderProps extends RowInfo {
     state: FinalState,
     rowInfo: RowInfo
   ) => object | undefined;
+  showAddInstallation: boolean;
+  showRequestQuote: boolean;
 }
 
 /*
@@ -37,15 +39,20 @@ export const InstallationsExpander = (props: ExpanderProps) => {
         className="expander-button-bar text-right"
         style={{ position: 'absolute', top: 0, left: 0, width: '100%' }}
       >
-        <Button
-          bsStyle="link"
-          onClick={() => props.addToCart(props.original, 'INVENTORY')}
-        >
-          {props.t('addToQuote')}
-        </Button>
-        <Button bsStyle="link" onClick={props.addInstallation}>
-          {props.t('addInstallation')}
-        </Button>
+        {props.showRequestQuote && (
+          <Button
+            bsStyle="link"
+            onClick={() => props.addToCart(props.original, 'INVENTORY')}
+          >
+            {props.t('addToQuote')}
+          </Button>
+        )}
+
+        {props.showAddInstallation && (
+          <Button bsStyle="link" onClick={props.addInstallation}>
+            {props.t('addInstallation')}
+          </Button>
+        )}
       </span>
     );
   };

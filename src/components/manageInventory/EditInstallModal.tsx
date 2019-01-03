@@ -12,7 +12,8 @@ import {
   Iproduct,
   IproductInfo,
   ItableFiltersReducer,
-  Ifacility
+  Ifacility,
+  Iuser
 } from '../../models';
 import {
   updateInstall,
@@ -43,6 +44,7 @@ interface IdispatchProps {
   tableFilters: ItableFiltersReducer;
   secondModal: boolean;
   saveAnyLocation: typeof saveAnyLocation;
+  user: Iuser;
 }
 
 class ManageInstallModal extends React.Component<Iprops & IdispatchProps, {}> {

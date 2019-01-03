@@ -473,6 +473,20 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     this.props.setTableFilter({ sorted: newSorted });
     this.setState({ selectedRow: {} });
   };
+
+  canEditInstalls = () => {
+    return constants.hasSecurityFunction(
+      this.props.user,
+      constants.securityFunctions.ManageInventory.id
+    );
+  };
+  canRequestQuote = () => {
+    return constants.hasSecurityFunction(
+      this.props.user,
+      constants.securityFunctions.QuoteForInvoice.id
+    );
+  };
+
   render() {
     console.log('rendering inventory table');
     if (this.props.productInfo.productGroupOptions.length === 0) {
@@ -502,29 +516,37 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           onValueChanges={this.onSearchValueChanges}
           t={this.props.t}
         />
-        <Button
-          className="request-for-quote-cart-button"
-          bsStyle="primary"
-          onClick={() => this.props.toggleShoppingCartModal('INVENTORY')}
-        >
-          <FontAwesomeIcon icon="shopping-cart" />
-          <Badge>{this.props.cartTotal} </Badge>
-        </Button>
-        <Button
-          className="table-import-button"
-          bsStyle="link"
-          onClick={this.props.toggleImportInstallModal}
-        >
-          {t('import')}
-        </Button>
+        {this.canRequestQuote() && (
+          <Button
+            className="request-for-quote-cart-button"
+            bsStyle="primary"
+            onClick={() => this.props.toggleShoppingCartModal('INVENTORY')}
+          >
+            <FontAwesomeIcon icon="shopping-cart" />
+            <Badge>{this.props.cartTotal} </Badge>
+          </Button>
+        )}
 
-        <Button
-          className="table-add-button"
-          bsStyle="link"
-          onClick={this.props.toggleSearchNewProductsModal}
-        >
-          {t('manageInventory:newProduct')}
-        </Button>
+        {this.canEditInstalls() && (
+          <div>
+            <Button
+              className="table-import-button"
+              bsStyle="link"
+              onClick={this.props.toggleImportInstallModal}
+            >
+              {t('import')}
+            </Button>
+
+            <Button
+              className="table-add-button"
+              bsStyle="link"
+              onClick={this.props.toggleSearchNewProductsModal}
+            >
+              {t('manageInventory:newProduct')}
+            </Button>
+          </div>
+        )}
+
         <ReactTable
           data={this.props.tableData}
           columns={this.state.columns}
@@ -555,6 +577,8 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
               }}
               t={this.props.t}
               getExpanderTrProps={this.getExpanderTrProps}
+              showAddInstallation={this.canEditInstalls()}
+              showRequestQuote={this.canRequestQuote()}
             />
           )}
           resizable={false}

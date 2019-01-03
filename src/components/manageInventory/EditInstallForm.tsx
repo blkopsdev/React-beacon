@@ -24,7 +24,8 @@ import {
   Ifacility,
   Ibuilding,
   Ifloor,
-  Ilocation
+  Ilocation,
+  Iuser
 } from '../../models';
 import {
   saveInstall,
@@ -56,6 +57,7 @@ interface Iprops {
   facility: Ifacility;
   deleteInstall: (id: string, prodID: string) => void;
   saveAnyLocation: typeof saveAnyLocation;
+  user: Iuser;
 }
 
 interface Istate {
@@ -553,6 +555,12 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       loading: this.props.loading
     };
   };
+  canEditInstalls = () => {
+    return constants.hasSecurityFunction(
+      this.props.user,
+      constants.securityFunctions.ManageInventory.id
+    );
+  };
 
   render() {
     const { t } = this.props;
@@ -582,23 +590,27 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
               >
                 {t('common:cancel')}
               </Button>
-              <Button
-                bsStyle="warning"
-                style={deleteButtonStyle}
-                type="button"
-                className=""
-                disabled={this.props.loading}
-                onClick={this.handleDelete}
-              >
-                {t('common:delete')}
-              </Button>
-              <Button
-                bsStyle={this.props.colorButton}
-                type="submit"
-                disabled={this.props.loading}
-              >
-                {t('common:save')}
-              </Button>
+              {this.canEditInstalls() && (
+                <div>
+                  <Button
+                    bsStyle="warning"
+                    style={deleteButtonStyle}
+                    type="button"
+                    className=""
+                    disabled={this.props.loading}
+                    onClick={this.handleDelete}
+                  >
+                    {t('common:delete')}
+                  </Button>
+                  <Button
+                    bsStyle={this.props.colorButton}
+                    type="submit"
+                    disabled={this.props.loading}
+                  >
+                    {t('common:save')}
+                  </Button>
+                </div>
+              )}
             </Col>
           </form>
         </div>

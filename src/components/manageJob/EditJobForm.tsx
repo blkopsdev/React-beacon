@@ -311,11 +311,25 @@ class EditJobForm extends React.Component<Iprops, {}> {
         this.checkIfStartDateBeforeEndDate({ endDate: value });
       });
   };
+
+  /*
+  * Check if the date is in the past or if the start is before the end date
+  * TODO the react-datetime does not call the validation function.  Next step is to replace react-datetime with react-datepicker
+  */
   checkIfStartDateBeforeEndDate = ({ startDate, endDate }: any) => {
+    console.log('checking start end date', startDate);
     if (startDate && moment.isMoment(startDate)) {
       if (startDate.isAfter(this.jobForm.value.endDate)) {
         toastr.warning(
           this.props.t('startDateWarning'),
+          '',
+          constants.toastrError
+        );
+        const startDateControl = this.jobForm.get('startDate');
+        startDateControl.setErrors({ beforeStart: true });
+      } else if (startDate.isBefore(moment(), 'day')) {
+        toastr.warning(
+          this.props.t('pastDateWarning'),
           '',
           constants.toastrError
         );
@@ -329,6 +343,14 @@ class EditJobForm extends React.Component<Iprops, {}> {
       if (this.jobForm.value.startDate.isAfter(endDate)) {
         toastr.warning(
           this.props.t('startDateWarning'),
+          '',
+          constants.toastrError
+        );
+        const endDateControl = this.jobForm.get('endDate');
+        endDateControl.setErrors({ beforeStart: true });
+      } else if (endDate.isBefore(moment(), 'day')) {
+        toastr.warning(
+          this.props.t('pastDateWarning'),
           '',
           constants.toastrError
         );

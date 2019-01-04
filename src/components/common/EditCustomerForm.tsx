@@ -84,34 +84,26 @@ class EditCustomerForm extends React.Component<Iprops, {}> {
     const { t } = this.props;
 
     return (
-      <div className="user-form customer-form">
-        <form
-          onSubmit={this.handleSubmit}
-          className="clearfix beacon-form user-form"
-        >
-          <FormGenerator
-            onMount={this.setForm}
-            fieldConfig={this.fieldConfig}
-          />
-          <Col xs={12} className="form-buttons text-right">
-            <Button
-              bsStyle="default"
-              type="button"
-              className="pull-left"
-              onClick={this.props.handleCancel}
-            >
-              {t('common:cancel')}
-            </Button>
-            <Button
-              bsStyle={this.props.colorButton}
-              type="submit"
-              disabled={this.props.loading}
-            >
-              {t('save')}
-            </Button>
-          </Col>
-        </form>
-      </div>
+      <form onSubmit={this.handleSubmit} className="clearfix beacon-form">
+        <FormGenerator onMount={this.setForm} fieldConfig={this.fieldConfig} />
+        <Col xs={12} className="form-buttons text-right">
+          <Button
+            bsStyle="default"
+            type="button"
+            className="pull-left"
+            onClick={this.props.handleCancel}
+          >
+            {t('common:cancel')}
+          </Button>
+          <Button
+            bsStyle={this.props.colorButton}
+            type="submit"
+            disabled={this.props.loading}
+          >
+            {t('save')}
+          </Button>
+        </Col>
+      </form>
     );
   }
 }

@@ -280,7 +280,9 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
   render() {
     const { t } = this.props;
 
-    const formClassName = `user-form manage-form ${this.props.colorButton}`;
+    const formClassName = `clearfix beacon-form manage-form ${
+      this.props.colorButton
+    }`;
     if (this.props.cart.addedIDs.length === 0) {
       return (
         <div>
@@ -303,42 +305,35 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
       );
     }
     return (
-      <div>
-        <div className={formClassName}>
-          <form
-            onSubmit={this.handleSubmit}
-            className="clearfix beacon-form user-form"
-          >
-            <FormGenerator
-              onMount={this.setForm}
-              fieldConfig={this.state.fieldConfig}
-            />
-            <Col xs={12} className="cart-totals">
-              Subtotal: ${this.calculateSubtotal() / 100}
-            </Col>
+      <form onSubmit={this.handleSubmit} className={formClassName}>
+        <FormGenerator
+          onMount={this.setForm}
+          fieldConfig={this.state.fieldConfig}
+        />
+        <Col xs={12} className="cart-totals">
+          Subtotal: ${this.calculateSubtotal() / 100}
+        </Col>
 
-            <Col xs={12} className="form-buttons text-right">
-              <Button
-                bsStyle="default"
-                type="button"
-                className="pull-left"
-                onClick={() =>
-                  this.props.toggleShoppingCartModal(this.props.cartName)
-                }
-              >
-                {t('common:cancel')}
-              </Button>
-              <Button
-                bsStyle={this.props.colorButton}
-                type="submit"
-                disabled={this.props.loading}
-              >
-                {t('checkout')}
-              </Button>
-            </Col>
-          </form>
-        </div>
-      </div>
+        <Col xs={12} className="form-buttons text-right">
+          <Button
+            bsStyle="default"
+            type="button"
+            className="pull-left"
+            onClick={() =>
+              this.props.toggleShoppingCartModal(this.props.cartName)
+            }
+          >
+            {t('common:cancel')}
+          </Button>
+          <Button
+            bsStyle={this.props.colorButton}
+            type="submit"
+            disabled={this.props.loading}
+          >
+            {t('checkout')}
+          </Button>
+        </Col>
+      </form>
     );
   }
 }

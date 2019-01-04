@@ -44,7 +44,7 @@ interface Istate {
 const SignUpSuccess = (props: any) => {
   const { t } = props;
   return (
-    <div className="loginForm signup-success" style={{ color: 'white' }}>
+    <div className="login-form signup-success" style={{ color: 'white' }}>
       <h2>{t('successTitle')}</h2>
       <p>{t('successBody1')}</p>
       <p>

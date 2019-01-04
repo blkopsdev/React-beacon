@@ -154,34 +154,29 @@ class EditFacilityForm extends React.Component<Iprops, {}> {
     }
 
     return (
-      <div className="user-form facility-form">
-        <form
-          onSubmit={this.handleSubmit}
-          className="clearfix beacon-form user-form"
-        >
-          <FormGenerator
-            onMount={this.setForm}
-            fieldConfig={this.fieldConfig}
-          />
-          <Col xs={12} className="form-buttons text-right">
-            <Button
-              bsStyle="default"
-              type="button"
-              className="pull-left"
-              onClick={this.props.handleCancel}
-            >
-              {t('cancel')}
-            </Button>
-            <Button
-              bsStyle={this.props.colorButton}
-              type="submit"
-              disabled={this.props.loading}
-            >
-              {t('save')}
-            </Button>
-          </Col>
-        </form>
-      </div>
+      <form
+        onSubmit={this.handleSubmit}
+        className="clearfix beacon-form facility-form"
+      >
+        <FormGenerator onMount={this.setForm} fieldConfig={this.fieldConfig} />
+        <Col xs={12} className="form-buttons text-right">
+          <Button
+            bsStyle="default"
+            type="button"
+            className="pull-left"
+            onClick={this.props.handleCancel}
+          >
+            {t('cancel')}
+          </Button>
+          <Button
+            bsStyle={this.props.colorButton}
+            type="submit"
+            disabled={this.props.loading}
+          >
+            {t('save')}
+          </Button>
+        </Col>
+      </form>
     );
   }
 }

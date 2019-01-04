@@ -285,7 +285,9 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
   render() {
     const { t } = this.props;
 
-    const formClassName = `user-form manage-form ${this.props.colorButton}`;
+    const formClassName = `clearfix beacon-form checkout-form ${
+      this.props.colorButton
+    }`;
     if (this.props.cart.addedIDs.length === 0) {
       return (
         <div>
@@ -306,106 +308,97 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
       );
     }
     return (
-      <div>
-        <div className={formClassName}>
-          <form
-            action="https://demo.unitedtranzactions.com/obp/onlineBillPay.asp"
-            method="post"
-            target="MyMedGas"
-            name="obpauto"
-            className="clearfix beacon-form user-form"
+      <form
+        action="https://demo.unitedtranzactions.com/obp/onlineBillPay.asp"
+        method="post"
+        target="MyMedGas"
+        name="obpauto"
+        className={formClassName}
+      >
+        <input hidden={true} name="User" id="1" value="beacon" />
+
+        <input hidden={true} name="Owner" id="Owner" value="0400008000" />
+        <input
+          hidden={true}
+          name="CustomerNo"
+          id="CustomerNo"
+          value="0400008005"
+        />
+
+        <input
+          hidden={true}
+          name="merchantno"
+          id="merchantno"
+          value="0400008000"
+        />
+
+        <input hidden={true} name="password" id="password" value="P@ym3nts" />
+
+        <input
+          hidden={true}
+          name="Amount"
+          id="Amount"
+          value={this.calculateSubtotal() / 100}
+        />
+
+        <input
+          hidden={true}
+          name="transactiondate"
+          id="transactiondate"
+          value="11-05-2018"
+        />
+
+        <input
+          hidden={true}
+          name="redirect"
+          id="redirect"
+          value="https://beacon-mmg-api-phase2-dev.azurewebsites.net/training/acceptutapayment"
+        />
+
+        <FormGenerator
+          onMount={this.setForm}
+          fieldConfig={this.state.fieldConfig}
+        />
+        <Col xs={12}>
+          <FormGroup bsSize="sm">
+            <ControlLabel>Payment Method</ControlLabel>
+            <Select
+              options={[
+                { label: 'Credit Card', value: 2 },
+                { label: 'ACH', value: 1 }
+              ]}
+              classNamePrefix="react-select"
+              defaultValue={{ label: 'Credit Card', value: 2 }}
+              name="paymenttype"
+              className="payment-select"
+              components={{ Control: ControlComponent }}
+            />
+          </FormGroup>
+        </Col>
+        <Col xs={12} className="cart-totals">
+          Subtotal: ${this.calculateSubtotal() / 100}
+        </Col>
+
+        <Col xs={12} className="form-buttons text-right">
+          <Button
+            bsStyle="default"
+            type="button"
+            className="pull-left"
+            onClick={() =>
+              this.props.toggleShoppingCartModal(this.props.cartName)
+            }
           >
-            <input hidden={true} name="User" id="1" value="beacon" />
-
-            <input hidden={true} name="Owner" id="Owner" value="0400008000" />
-            <input
-              hidden={true}
-              name="CustomerNo"
-              id="CustomerNo"
-              value="0400008005"
-            />
-
-            <input
-              hidden={true}
-              name="merchantno"
-              id="merchantno"
-              value="0400008000"
-            />
-
-            <input
-              hidden={true}
-              name="password"
-              id="password"
-              value="P@ym3nts"
-            />
-
-            <input
-              hidden={true}
-              name="Amount"
-              id="Amount"
-              value={this.calculateSubtotal() / 100}
-            />
-
-            <input
-              hidden={true}
-              name="transactiondate"
-              id="transactiondate"
-              value="11-05-2018"
-            />
-
-            <input
-              hidden={true}
-              name="redirect"
-              id="redirect"
-              value="https://beacon-mmg-api-phase2-dev.azurewebsites.net/training/acceptutapayment"
-            />
-
-            <FormGenerator
-              onMount={this.setForm}
-              fieldConfig={this.state.fieldConfig}
-            />
-            <Col xs={12}>
-              <FormGroup bsSize="sm">
-                <ControlLabel>Payment Method</ControlLabel>
-                <Select
-                  options={[
-                    { label: 'Credit Card', value: 2 },
-                    { label: 'ACH', value: 1 }
-                  ]}
-                  classNamePrefix="react-select"
-                  defaultValue={{ label: 'Credit Card', value: 2 }}
-                  name="paymenttype"
-                  className="payment-select"
-                  components={{ Control: ControlComponent }}
-                />
-              </FormGroup>
-            </Col>
-            <Col xs={12} className="cart-totals">
-              Subtotal: ${this.calculateSubtotal() / 100}
-            </Col>
-
-            <Col xs={12} className="form-buttons text-right">
-              <Button
-                bsStyle="default"
-                type="button"
-                className="pull-left"
-                onClick={() =>
-                  this.props.toggleShoppingCartModal(this.props.cartName)
-                }
-              >
-                {t('common:cancel')}
-              </Button>
-              <Button
-                bsStyle={this.props.colorButton}
-                type="submit"
-                disabled={this.props.loading}
-              >
-                {t('checkout')}
-              </Button>
-            </Col>
-          </form>
-        </div>
-      </div>
+            {t('common:cancel')}
+          </Button>
+          <Button
+            bsStyle={this.props.colorButton}
+            type="submit"
+            disabled={this.props.loading}
+          >
+            {t('checkout')}
+          </Button>
+        </Col>
+      </form>
     );
   }
 }

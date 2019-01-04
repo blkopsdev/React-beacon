@@ -152,7 +152,9 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
   render() {
     const { t } = this.props;
 
-    const formClassName = `user-form manage-form ${this.props.colorButton}`;
+    const formClassName = `clearfix beacon-form search-products-form ${
+      this.props.colorButton
+    }`;
 
     let searchActive = false;
     if (
@@ -208,78 +210,76 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
 
     return (
       <div>
-        <div className={formClassName} style={{ display: 'block' }}>
-          <p
-            style={{
-              marginLeft: '15px',
-              marginRight: '15px',
-              lineHeight: '1.5rem'
-            }}
-          >
-            {t('searchNewProductInstructions')}
-          </p>
+        <p
+          style={{
+            marginLeft: '15px',
+            marginRight: '15px',
+            lineHeight: '1.5rem'
+          }}
+        >
+          {t('searchNewProductInstructions')}
+        </p>
 
-          <form
-            onSubmit={(e: React.MouseEvent<HTMLFormElement>) => {
-              e.preventDefault();
-              this.handleSubmit();
-            }}
-            className="clearfix beacon-form user-form"
-            style={{ display: 'block' }}
-          >
-            <Row>
-              <Col xs={12}>
-                <FormGenerator
-                  onMount={this.setForm}
-                  fieldConfig={this.fieldConfig}
-                />
-              </Col>
-            </Row>
-            <Row>
-              <Col xs={12}>
-                <ListGroup className="beacon-list-group">
-                  {map(this.props.newProducts, (product, index) => (
-                    <ProductListItem
-                      product={product}
-                      productInfo={this.props.productInfo}
-                      key={product.id}
-                      selectedItem={this.props.selectedItem}
-                      index={index}
-                    />
-                  ))}
-                </ListGroup>
-                {isEmpty(this.props.newProducts) &&
-                  searchActive && (
-                    <Col xs={12}>
-                      <Well className="text-center">
-                        {t('no products found')}
-                      </Well>
-                    </Col>
-                  )}
-              </Col>
-            </Row>
-            <Col xs={12} className="form-buttons text-right">
-              <Button
-                bsStyle="default"
-                type="button"
-                className="pull-left"
-                onClick={this.props.toggleSearchNewProductsModal}
-              >
-                {t('common:cancel')}
-              </Button>
-              <Button
-                bsStyle="link"
-                type="button"
-                disabled={this.props.loading}
-                className="right-side"
-                onClick={this.props.toggleEditProductModal}
-              >
-                {t('addNewProductButton')}
-              </Button>
-              <button type="submit" style={{ display: 'none' }} />
+        <form
+          onSubmit={(e: React.MouseEvent<HTMLFormElement>) => {
+            e.preventDefault();
+            this.handleSubmit();
+          }}
+          className={formClassName}
+          style={{ display: 'block' }}
+        >
+          <Row>
+            <Col xs={12}>
+              <FormGenerator
+                onMount={this.setForm}
+                fieldConfig={this.fieldConfig}
+              />
             </Col>
-          </form>
-        </div>
+          </Row>
+          <Row>
+            <Col xs={12}>
+              <ListGroup className="beacon-list-group">
+                {map(this.props.newProducts, (product, index) => (
+                  <ProductListItem
+                    product={product}
+                    productInfo={this.props.productInfo}
+                    key={product.id}
+                    selectedItem={this.props.selectedItem}
+                    index={index}
+                  />
+                ))}
+              </ListGroup>
+              {isEmpty(this.props.newProducts) &&
+                searchActive && (
+                  <Col xs={12}>
+                    <Well className="text-center">
+                      {t('no products found')}
+                    </Well>
+                  </Col>
+                )}
+            </Col>
+          </Row>
+          <Col xs={12} className="form-buttons text-right">
+            <Button
+              bsStyle="default"
+              type="button"
+              className="pull-left"
+              onClick={this.props.toggleSearchNewProductsModal}
+            >
+              {t('common:cancel')}
+            </Button>
+            <Button
+              bsStyle="link"
+              type="button"
+              disabled={this.props.loading}
+              className="right-side"
+              onClick={this.props.toggleEditProductModal}
+            >
+              {t('addNewProductButton')}
+            </Button>
+            <button type="submit" style={{ display: 'none' }} />
+          </Col>
+        </form>
       </div>
     );
   }

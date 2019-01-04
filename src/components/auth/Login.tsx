@@ -131,7 +131,7 @@ class Login extends React.Component<Iprops, Istate> {
         <Grid>
           <Row>
             <Col>
-              <div className="loginForm login">
+              <div className="login-form login">
                 <span className="loginTitle">{t('welcome')}</span>
                 <Button
                   bsStyle="default"

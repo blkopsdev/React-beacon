@@ -169,39 +169,29 @@ class UserProfileForm extends React.Component<Iprops, {}> {
   render() {
     const { t } = this.props;
 
-    const formClassName = `user-form profile-form ${this.props.colorButton}`;
+    const formClassName = `clearfix beacon-form ${this.props.colorButton}`;
 
     return (
-      <div>
-        <div className={formClassName}>
-          <form
-            onSubmit={this.handleSubmit}
-            className="clearfix beacon-form user-form"
+      <form onSubmit={this.handleSubmit} className={formClassName}>
+        <FormGenerator onMount={this.setForm} fieldConfig={this.fieldConfig} />
+        <Col xs={12} className="form-buttons text-right">
+          <Button
+            bsStyle="default"
+            type="button"
+            className="pull-left"
+            onClick={this.props.handleCancel}
           >
-            <FormGenerator
-              onMount={this.setForm}
-              fieldConfig={this.fieldConfig}
-            />
-            <Col xs={12} className="form-buttons text-right">
-              <Button
-                bsStyle="default"
-                type="button"
-                className="pull-left"
-                onClick={this.props.handleCancel}
-              >
-                {t('common:cancel')}
-              </Button>
-              <Button
-                bsStyle={this.props.colorButton}
-                type="submit"
-                disabled={this.props.loading}
-              >
-                {t('save')}
-              </Button>
-            </Col>
-          </form>
-        </div>
-      </div>
+            {t('common:cancel')}
+          </Button>
+          <Button
+            bsStyle={this.props.colorButton}
+            type="submit"
+            disabled={this.props.loading}
+          >
+            {t('save')}
+          </Button>
+        </Col>
+      </form>
     );
   }
 }

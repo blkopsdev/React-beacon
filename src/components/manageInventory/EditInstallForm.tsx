@@ -565,7 +565,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
   render() {
     const { t } = this.props;
 
-    const formClassName = `user-form manage-form ${this.props.colorButton}`;
+    const formClassName = `${this.props.colorButton}`;
     const deleteButtonStyle =
       this.props.selectedItem.id === undefined
         ? { marginRight: '15px', display: 'none' }
@@ -573,10 +573,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
     return (
       <div>
         <div className={formClassName}>
-          <form
-            onSubmit={this.handleSubmit}
-            className="clearfix beacon-form user-form"
-          >
+          <form onSubmit={this.handleSubmit} className="clearfix beacon-form">
             <FormGenerator
               onMount={this.setForm}
               fieldConfig={this.fieldConfig}

@@ -9,7 +9,6 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
   - One example:  https://stackoverflow.com/questions/49799736/simplifying-redux-thunk-actions-with-typescript
   - This example appears to be wrong or out of date:  https://gist.github.com/milankorsos/ffb9d32755db0304545f92b11f0e4beb
   - in the meantime if we use a .then() you need to change the type from "typeof" to something like `: (value: string) => Promise<void>;``
-3. rename css class "user-form" to beacon-form - use this to style our forms
 
 ## API documentation:
 Swagger: https://app.swaggerhub.com/apis/Big-Pixel/Core-Care

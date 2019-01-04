@@ -217,52 +217,44 @@ class EditTeamMemberForm extends React.Component<Iprops, {}> {
   render() {
     const { t } = this.props;
 
-    const formClassName = `user-form manage-form ${this.props.colorButton}`;
+    const formClassName = `clearfix beacon-form team-member-form ${
+      this.props.colorButton
+    }`;
 
     return (
-      <div>
-        <div className={formClassName}>
-          <form
-            onSubmit={this.handleSubmit}
-            className="clearfix beacon-form user-form"
+      <form onSubmit={this.handleSubmit} className={formClassName}>
+        <FormGenerator onMount={this.setForm} fieldConfig={this.fieldConfig} />
+        <Col xs={12} className="form-buttons text-right">
+          <Button
+            bsStyle="default"
+            type="button"
+            className="pull-left"
+            onClick={this.props.toggleEditTeamUserModal}
           >
-            <FormGenerator
-              onMount={this.setForm}
-              fieldConfig={this.fieldConfig}
-            />
-            <Col xs={12} className="form-buttons text-right">
-              <Button
-                bsStyle="default"
-                type="button"
-                className="pull-left"
-                onClick={this.props.toggleEditTeamUserModal}
-              >
-                {t('common:cancel')}
-              </Button>
-              {!!this.props.selectedUser && (
-                <Button
-                  bsStyle="warning"
-                  style={{ marginRight: '15px' }}
-                  type="button"
-                  className=""
-                  disabled={this.props.loading}
-                  onClick={this.handleDelete}
-                >
-                  {t('common:delete')}
-                </Button>
-              )}
+            {t('common:cancel')}
+          </Button>
+          {!!this.props.selectedUser && (
+            <Button
+              bsStyle="warning"
+              style={{ marginRight: '15px' }}
+              type="button"
+              className=""
+              disabled={this.props.loading}
+              onClick={this.handleDelete}
+            >
+              {t('common:delete')}
+            </Button>
+          )}
 
-              <Button
-                bsStyle={this.props.colorButton}
-                type="submit"
-                disabled={this.props.loading}
-              >
-                {t('save')}
-              </Button>
-            </Col>
-          </form>
-        </div>
-      </div>
+          <Button
+            bsStyle={this.props.colorButton}
+            type="submit"
+            disabled={this.props.loading}
+          >
+            {t('save')}
+          </Button>
+        </Col>
+      </form>
     );
   }
 }

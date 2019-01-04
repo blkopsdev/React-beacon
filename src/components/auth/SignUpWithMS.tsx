@@ -79,7 +79,7 @@ class SignUpWithMS extends React.Component<Iprops, any> {
         <Grid>
           <Row>
             <Col>
-              <div className="loginForm">
+              <div className="login-form">
                 {showSignUpForm && (
                   <UserForm
                     handleSubmit={this.login}

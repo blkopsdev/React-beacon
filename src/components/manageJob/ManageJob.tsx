@@ -183,7 +183,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
           render: FormUtil.SelectWithoutValidation,
           meta: {
             label: 'jobManage:type',
-            options: constants.typeOptions,
+            options: constants.jobTypeOptions,
             colWidth: 2,
             type: 'select',
             placeholder: 'typePlaceholder',

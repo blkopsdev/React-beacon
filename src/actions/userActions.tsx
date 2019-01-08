@@ -8,6 +8,7 @@ import * as AuthenticationContext from 'adal-angular';
 
 import { ItempUser, Iuser, IinitialState } from '../models';
 import { ThunkAction } from 'redux-thunk';
+import * as localForage from 'localforage';
 // import {AxiosResponse} from 'axios';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
@@ -83,10 +84,10 @@ export function userLogin(): ThunkResult<void> {
         dispatch({ type: types.USER_LOGIN_FAILED });
         constants.handleError(error, 'login');
         // to avoid getting stuck, go ahead and log the user out after a longer pause
-        localStorage.removeItem('state-core-care');
         setTimeout(() => {
           authContext.logOut();
         }, 3000); // give it time to persist this to local storage
+
         throw error;
       });
   };
@@ -119,10 +120,10 @@ export function adalLogin(): ThunkResult<void> {
 export function userLogout(): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch({ type: types.USER_LOGOUT_SUCCESS });
-    localStorage.removeItem('state-core-care');
-    setTimeout(() => {
+    dispatch({ type: 'RESET_STATE' }); // reset the redux-offline outbox
+    localForage.removeItem('state-core-care-web').then(() => {
       authContext.logOut();
-    }, 100); // give it time to persist this to local storage
+    });
   };
 }
 

@@ -5,12 +5,19 @@ import { toastr } from 'react-redux-toastr';
 import { authContext } from '../actions/userActions';
 // import { icon } from "@fortawesome/fontawesome-svg-core";
 
-const typeOptions = [
+const jobTypeOptions = [
   { value: '80eedbac-ec22-45ef-9ac7-f2eb4be2db4c', label: 'Audit' },
   { value: '524235fd-4633-4b7a-9c13-c37fc39efe69', label: 'Inspection' },
   { value: '9c7fde18-0b94-4af8-b4aa-913c40e5aed0', label: 'Validation' },
   { value: 'ae78eaa3-89c2-490a-90c6-44e5cfa10b01', label: 'Repair' }
 ];
+
+const jobTypesByID = {
+  '80eedbac-ec22-45ef-9ac7-f2eb4be2db4c': 'Audit',
+  '524235fd-4633-4b7a-9c13-c37fc39efe69': 'Inspection',
+  '9c7fde18-0b94-4af8-b4aa-913c40e5aed0': 'Validation',
+  'ae78eaa3-89c2-490a-90c6-44e5cfa10b01': 'Repair'
+};
 
 const icons = {
   dashboard: require('../images/icons/BM_Dashboard.png'),
@@ -367,7 +374,8 @@ const constants = {
   colors,
   securityFunctions,
   tiles,
-  typeOptions,
+  jobTypeOptions,
+  jobTypesByID,
   icons,
   hasSecurityFunction: (user: Iuser, securityFunction: string): boolean => {
     if (user.securityFunctions.indexOf(securityFunction) >= 0) {
@@ -403,7 +411,7 @@ const constants = {
       msg = 'Please connect to the internet.';
     }
     if (error && error.response && error.response.status === 401) {
-      console.error('catching unauthorized, should we re-authenticate here?');
+      console.warn('catching unauthorized, re-authenticating');
       authContext.login();
     }
     toastr.error('Error', msg, constants.toastrError);

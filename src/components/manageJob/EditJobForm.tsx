@@ -82,7 +82,7 @@ const buildFieldConfig = (
     jobTypeID: {
       render: FormUtil.Select,
       meta: {
-        options: constants.typeOptions,
+        options: constants.jobTypeOptions,
         label: 'jobManage:type',
         colWidth: 12,
         placeholder: 'jobManage:typeSearchPlaceholder'
@@ -274,7 +274,7 @@ class EditJobForm extends React.Component<Iprops, {}> {
 
     this.jobForm.patchValue({
       jobTypeID: find(
-        constants.typeOptions,
+        constants.jobTypeOptions,
         (item: Ioption) => item.value === jobTypeID
       )
     });

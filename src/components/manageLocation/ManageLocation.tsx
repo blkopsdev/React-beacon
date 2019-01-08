@@ -487,11 +487,12 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
           data={this.props.tableData}
           columns={this.state.columns}
           getTrProps={this.getTrProps}
-          pageSize={this.props.tableData.length}
+          // pageSize={this.props.tableData.length}
           // manual
           // pages={this.props.userManage.totalPages}
           // page={this.props.tableFilters.page - 1}
           // showPageSizeOptions={false}
+          defaultPageSize={10}
           className={`beacon-table -highlight ${this.state.currentTile.color}`}
           previousText={t('common:previous')}
           nextText={t('common:next')}

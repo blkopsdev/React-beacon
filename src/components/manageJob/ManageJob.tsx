@@ -176,7 +176,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
             colWidth: 3,
             type: 'select',
             placeholder: 'companyPlaceholder',
-            defaultValue: this.props.tableFilters.customer
+            defaultValue: this.props.tableFilters.company
           }
         },
         type: {

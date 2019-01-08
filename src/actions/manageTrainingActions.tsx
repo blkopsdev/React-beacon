@@ -14,7 +14,7 @@ type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 export function getManageTraining(): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
-    const { page, search } = getState().manageUser.tableFilters;
+    const { page, search } = getState().manageTraining.tableFilters;
     return axios
       .get(API.GET.training.getAdminProgress, { params: { page, search } })
       .then(data => {
@@ -23,11 +23,11 @@ export function getManageTraining(): ThunkResult<void> {
         } else {
           dispatch({
             type: types.MANAGE_TRAINING_SUCCESS,
-            trainingProgress: data.data[1]
+            trainingProgress: data.data.result
           });
           dispatch({
             type: types.MANAGE_TRAINING_TOTAL_PAGES,
-            pages: data.data[0]
+            pages: data.data.pages
           });
           return data;
         }

@@ -163,7 +163,7 @@ class ManageTraining extends React.Component<Iprops & IdispatchProps, Istate> {
   render() {
     const { t } = this.props;
     return (
-      <div className="user-manage">
+      <div className="training-manage">
         <Banner
           title={t('bannerTitle')}
           img={this.state.currentTile.srcBanner}

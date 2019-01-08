@@ -486,12 +486,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
         const selectedRoom = find(roomControl.meta.options, {
           value: this.props.selectedItem.roomID
         }) || { value: '' };
-        if (!selectedRoom.value.length) {
-          roomControl.markAsDirty();
-          roomControl.setErrors({
-            required: { required: { message: 'this is required' } }
-          });
-        } else {
+        if (selectedRoom.value.length) {
           this.userForm.patchValue({ roomID: selectedRoom });
         }
       } else {
@@ -565,52 +560,49 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
   render() {
     const { t } = this.props;
 
-    const formClassName = `${this.props.colorButton}`;
     const deleteButtonStyle =
       this.props.selectedItem.id === undefined
         ? { marginRight: '15px', display: 'none' }
         : { marginRight: '15px' };
     return (
-      <div>
-        <div className={formClassName}>
-          <form onSubmit={this.handleSubmit} className="clearfix beacon-form">
-            <FormGenerator
-              onMount={this.setForm}
-              fieldConfig={this.fieldConfig}
-            />
-            <Col xs={12} className="form-buttons text-right">
-              <Button
-                bsStyle="default"
-                type="button"
-                className="pull-left"
-                onClick={this.props.toggleEditInstallModal}
-              >
-                {t('common:cancel')}
-              </Button>
-              {this.canEditInstalls() && (
-                <div>
-                  <Button
-                    bsStyle="warning"
-                    style={deleteButtonStyle}
-                    type="button"
-                    className=""
-                    disabled={this.props.loading}
-                    onClick={this.handleDelete}
-                  >
-                    {t('common:delete')}
-                  </Button>
-                  <Button
-                    bsStyle={this.props.colorButton}
-                    type="submit"
-                    disabled={this.props.loading}
-                  >
-                    {t('common:save')}
-                  </Button>
-                </div>
-              )}
-            </Col>
-          </form>
-        </div>
+      <div className={this.props.colorButton}>
+        <form onSubmit={this.handleSubmit} className="clearfix beacon-form">
+          <FormGenerator
+            onMount={this.setForm}
+            fieldConfig={this.fieldConfig}
+          />
+          <Col xs={12} className="form-buttons text-right">
+            <Button
+              bsStyle="default"
+              type="button"
+              className="pull-left"
+              onClick={this.props.toggleEditInstallModal}
+            >
+              {t('common:cancel')}
+            </Button>
+            {this.canEditInstalls() && (
+              <div>
+                <Button
+                  bsStyle="warning"
+                  style={deleteButtonStyle}
+                  type="button"
+                  className=""
+                  disabled={this.props.loading}
+                  onClick={this.handleDelete}
+                >
+                  {t('common:delete')}
+                </Button>
+                <Button
+                  bsStyle={this.props.colorButton}
+                  type="submit"
+                  disabled={this.props.loading}
+                >
+                  {t('common:save')}
+                </Button>
+              </div>
+            )}
+          </Col>
+        </form>
       </div>
     );
   }

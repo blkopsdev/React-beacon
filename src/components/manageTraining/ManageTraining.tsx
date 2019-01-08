@@ -83,7 +83,7 @@ class ManageTraining extends React.Component<Iprops & IdispatchProps, Istate> {
   }
   componentDidMount() {
     // refresh the ManageTraining every time the component mounts
-    // this.props.getManageTraining();
+    this.props.getManageTraining();
   }
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
     // automatically get data every time a fitler changes

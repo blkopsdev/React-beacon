@@ -359,55 +359,50 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
 
   render() {
     const { t } = this.props;
-
-    const formClassName = `${this.props.colorButton}`;
-
     return (
-      <div>
-        <div className={formClassName}>
-          {!(this.props.selectedItem && this.props.selectedItem.id) && (
-            <Col xs={12}>
-              <p style={{ lineHeight: '1.4rem' }}>
-                {t('newProductInstructions')}
-              </p>
-            </Col>
-          )}
+      <div className={this.props.colorButton}>
+        {!(this.props.selectedItem && this.props.selectedItem.id) && (
+          <Col xs={12}>
+            <p style={{ lineHeight: '1.4rem' }}>
+              {t('newProductInstructions')}
+            </p>
+          </Col>
+        )}
 
-          <form onSubmit={this.handleSubmit} className="clearfix beacon-form">
-            <FormGenerator
-              onMount={this.setForm}
-              fieldConfig={this.fieldConfig}
-            />
-            <Col xs={12} className="form-buttons text-right">
-              <Button
-                bsStyle="default"
-                type="button"
-                className="pull-left"
-                onClick={this.props.toggleEditProductModal}
-              >
-                {t('common:cancel')}
-              </Button>
-              {this.props.selectedQueueObject && (
-                <Button
-                  bsStyle={this.props.colorButton}
-                  type="button"
-                  disabled={this.props.loading}
-                  onClick={(e: any) => this.handleSubmit(e, true)}
-                  style={{ marginRight: '20px' }}
-                >
-                  {t('manageInventory:saveApprove')}
-                </Button>
-              )}
+        <form onSubmit={this.handleSubmit} className="clearfix beacon-form">
+          <FormGenerator
+            onMount={this.setForm}
+            fieldConfig={this.fieldConfig}
+          />
+          <Col xs={12} className="form-buttons text-right">
+            <Button
+              bsStyle="default"
+              type="button"
+              className="pull-left"
+              onClick={this.props.toggleEditProductModal}
+            >
+              {t('common:cancel')}
+            </Button>
+            {this.props.selectedQueueObject && (
               <Button
                 bsStyle={this.props.colorButton}
-                type="submit"
+                type="button"
                 disabled={this.props.loading}
+                onClick={(e: any) => this.handleSubmit(e, true)}
+                style={{ marginRight: '20px' }}
               >
-                {t('common:save')}
+                {t('manageInventory:saveApprove')}
               </Button>
-            </Col>
-          </form>
-        </div>
+            )}
+            <Button
+              bsStyle={this.props.colorButton}
+              type="submit"
+              disabled={this.props.loading}
+            >
+              {t('common:save')}
+            </Button>
+          </Col>
+        </form>
       </div>
     );
   }

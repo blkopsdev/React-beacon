@@ -49,21 +49,26 @@ const buildFieldConfig = (
         validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
-      meta: { label: 'name', colWidth: 12, type: 'input' }
+      meta: { label: 'name', colWidth: 12, type: 'input', name: 'product-name' }
     },
     sku: {
       options: {
         validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
-      meta: { label: 'sku', colWidth: 12, type: 'input' }
+      meta: { label: 'sku', colWidth: 12, type: 'input', name: 'sku' }
     },
     description: {
       options: {
         validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
-      meta: { label: 'description', colWidth: 12, componentClass: 'textarea' }
+      meta: {
+        label: 'description',
+        colWidth: 12,
+        componentClass: 'textarea',
+        name: 'description'
+      }
     },
     productGroupID: {
       render: FormUtil.Select,
@@ -72,7 +77,8 @@ const buildFieldConfig = (
         label: 'common:productGroup',
         colWidth: 12,
         placeholder: 'common:searchPlaceholder',
-        isMulti: false
+        isMulti: false,
+        name: 'product-group'
       },
       options: {
         validators: Validators.required
@@ -85,7 +91,8 @@ const buildFieldConfig = (
         label: 'brand',
         colWidth: 12,
         placeholder: 'common:searchPlaceholder',
-        isMulti: false
+        isMulti: false,
+        name: 'brand'
       },
       options: {
         validators: Validators.required
@@ -98,7 +105,8 @@ const buildFieldConfig = (
         label: 'manufacturer',
         colWidth: 12,
         placeholder: 'common:searchPlaceholder',
-        isMulti: false
+        isMulti: false,
+        name: 'manufacturer'
       },
       options: {
         validators: Validators.required
@@ -111,7 +119,8 @@ const buildFieldConfig = (
         label: 'mainCategory',
         colWidth: 12,
         placeholder: 'common:searchPlaceholder',
-        isMulti: false
+        isMulti: false,
+        name: 'main-category'
       },
       options: {
         validators: [
@@ -131,7 +140,8 @@ const buildFieldConfig = (
         label: 'subcategory',
         colWidth: 12,
         placeholder: 'common:searchPlaceholder',
-        isMulti: false
+        isMulti: false,
+        name: 'subcategory'
       },
       options: {
         validators: Validators.required
@@ -144,7 +154,8 @@ const buildFieldConfig = (
         label: 'gasType',
         colWidth: 6,
         placeholder: 'common:searchPlaceholder',
-        isMulti: false
+        isMulti: false,
+        name: 'gas-type'
       }
     },
     powerID: {
@@ -154,7 +165,8 @@ const buildFieldConfig = (
         label: 'power',
         colWidth: 6,
         placeholder: 'common:searchPlaceholder',
-        isMulti: false
+        isMulti: false,
+        name: 'power'
       }
     },
     systemSizeID: {
@@ -164,7 +176,8 @@ const buildFieldConfig = (
         label: 'systemSize',
         colWidth: 6,
         placeholder: 'common:searchPlaceholder',
-        isMulti: false
+        isMulti: false,
+        name: 'system-size'
       }
     },
     standardID: {
@@ -174,7 +187,8 @@ const buildFieldConfig = (
         label: 'standard',
         colWidth: 6,
         placeholder: 'common:searchPlaceholder',
-        isMulti: false
+        isMulti: false,
+        name: 'standard'
       }
     }
   };

@@ -63,7 +63,8 @@ class InstallContactform extends React.Component<Iprops, {}> {
         meta: {
           label: 'productInfoLabel',
           colWidth: 12,
-          defaultValue: this.props.productName
+          defaultValue: this.props.productName,
+          name: 'install'
         }
       },
       message: {
@@ -78,7 +79,8 @@ class InstallContactform extends React.Component<Iprops, {}> {
           label: 'contactMessageLabel',
           colWidth: 12,
           componentClass: 'textarea',
-          rows: 8
+          rows: 8,
+          name: 'message'
         }
       }
     };

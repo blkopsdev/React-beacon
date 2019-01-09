@@ -24,32 +24,37 @@ const fieldConfigControls = {
       validators: [Validators.required, FormUtil.validators.requiredWithTrim]
     },
     render: FormUtil.TextInput,
-    meta: { label: 'company', colWidth: 12, type: 'text' }
+    meta: { label: 'company', colWidth: 12, type: 'text', name: 'company' }
   },
   tempAddress: {
     options: {
       validators: [Validators.required, FormUtil.validators.requiredWithTrim]
     },
     render: FormUtil.TextInput,
-    meta: { label: 'address', colWidth: 8, type: 'text' }
+    meta: { label: 'address', colWidth: 8, type: 'text', name: 'temp-address' }
   },
   tempAddress2: {
     render: FormUtil.TextInput,
-    meta: { label: 'address2', colWidth: 4, type: 'text' }
+    meta: {
+      label: 'address2',
+      colWidth: 4,
+      type: 'text',
+      name: 'temp-address2'
+    }
   },
   tempCity: {
     options: {
       validators: [Validators.required, FormUtil.validators.requiredWithTrim]
     },
     render: FormUtil.TextInput,
-    meta: { label: 'city', colWidth: 5, type: 'text' }
+    meta: { label: 'city', colWidth: 5, type: 'text', name: 'temp-city' }
   },
   tempState: {
     options: {
       validators: [Validators.required, FormUtil.validators.requiredWithTrim]
     },
     render: FormUtil.TextInput,
-    meta: { label: 'state', colWidth: 3, type: 'text' }
+    meta: { label: 'state', colWidth: 3, type: 'text', name: 'temp-state' }
   },
   tempZip: {
     options: {
@@ -61,7 +66,7 @@ const fieldConfigControls = {
       ]
     },
     render: FormUtil.TextInput,
-    meta: { label: 'zip', colWidth: 4, type: 'tel' }
+    meta: { label: 'zip', colWidth: 4, type: 'tel', name: 'temp-zip' }
   }
 };
 const fieldConfig = {

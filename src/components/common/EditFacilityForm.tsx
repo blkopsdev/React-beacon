@@ -29,32 +29,42 @@ const fieldConfig = {
         validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
-      meta: { label: 'facilityNameLabel', colWidth: 12 }
+      meta: { label: 'facilityNameLabel', colWidth: 12, name: 'fac-name' }
     },
     address: {
       options: {
         validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
-      meta: { label: 'user:address', colWidth: 8, type: 'text' }
+      meta: {
+        label: 'user:address',
+        colWidth: 8,
+        type: 'text',
+        name: 'address'
+      }
     },
     address2: {
       render: FormUtil.TextInput,
-      meta: { label: 'user:address2', colWidth: 4, type: 'text' }
+      meta: {
+        label: 'user:address2',
+        colWidth: 4,
+        type: 'text',
+        name: 'address2'
+      }
     },
     city: {
       options: {
         validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
-      meta: { label: 'user:city', colWidth: 5, type: 'text' }
+      meta: { label: 'user:city', colWidth: 5, type: 'text', name: 'city' }
     },
     state: {
       options: {
         validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
-      meta: { label: 'user:state', colWidth: 3, type: 'text' }
+      meta: { label: 'user:state', colWidth: 3, type: 'text', name: 'state' }
     },
     postalCode: {
       options: {
@@ -66,7 +76,7 @@ const fieldConfig = {
         ]
       },
       render: FormUtil.TextInput,
-      meta: { label: 'user:zip', colWidth: 4, type: 'tel' }
+      meta: { label: 'user:zip', colWidth: 4, type: 'tel', name: 'postal-code' }
     },
     countryID: {
       options: {
@@ -77,7 +87,8 @@ const fieldConfig = {
         options: constants.countries,
         label: 'user:country',
         colWidth: 12,
-        placeholder: 'userQueue:countrySearchPlaceholder'
+        placeholder: 'userQueue:countrySearchPlaceholder',
+        name: 'country'
       }
     }
   }

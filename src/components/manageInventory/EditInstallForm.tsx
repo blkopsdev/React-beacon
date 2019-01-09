@@ -170,23 +170,38 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
     const fieldConfigControls = {
       productInfo: {
         render: FormUtil.TextLabel,
-        meta: { label: 'productInfo', colWidth: 12 }
+        meta: { label: 'productInfo', colWidth: 12, name: 'product-info' }
       },
       nickname: {
         render: FormUtil.TextInput,
-        meta: { label: 'nickname', colWidth: 12, type: 'input' }
+        meta: {
+          label: 'nickname',
+          colWidth: 12,
+          type: 'input',
+          name: 'nickname'
+        }
       },
       serialNumber: {
         render: FormUtil.TextInput,
-        meta: { label: 'serialNumber', colWidth: 6, type: 'input' }
+        meta: {
+          label: 'serialNumber',
+          colWidth: 6,
+          type: 'input',
+          name: 'serial-number'
+        }
       },
       rfid: {
         render: FormUtil.TextInput,
-        meta: { label: 'rfid', colWidth: 6, type: 'input' }
+        meta: { label: 'rfid', colWidth: 6, type: 'input', name: 'rfid' }
       },
       remarks: {
         render: FormUtil.TextInput,
-        meta: { label: 'remarks', colWidth: 12, componentClass: 'textarea' }
+        meta: {
+          label: 'remarks',
+          colWidth: 12,
+          componentClass: 'textarea',
+          name: 'remarks'
+        }
       },
       quantity: {
         options: {
@@ -198,12 +213,13 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           label: 'quantity',
           colWidth: 6,
           type: 'number',
-          defaultValue: 1
+          defaultValue: 1,
+          name: 'quantity'
         }
       },
       locLabel: {
         render: FormUtil.TextLabel,
-        meta: { label: 'locationLabel', colWidth: 12 }
+        meta: { label: 'locationLabel', colWidth: 12, name: 'location-label' }
       },
       buildingID: {
         render: FormUtil.CreatableSelect,
@@ -213,7 +229,8 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           colWidth: 12,
           placeholder: 'common:searchPlaceholder',
           isMulti: false,
-          handleCreate: this.handleCreateBuilding
+          handleCreate: this.handleCreateBuilding,
+          name: 'building'
         },
         options: {
           validators: [
@@ -233,7 +250,8 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           colWidth: 12,
           placeholder: 'common:searchPlaceholder',
           isMulti: false,
-          handleCreate: this.handleCreateFloor
+          handleCreate: this.handleCreateFloor,
+          name: 'floor'
         },
         options: {
           validators: [
@@ -253,7 +271,8 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           colWidth: 12,
           placeholder: 'common:searchPlaceholder',
           isMulti: false,
-          handleCreate: this.handleCreateLocation
+          handleCreate: this.handleCreateLocation,
+          name: 'location'
         },
         options: {
           validators: [
@@ -273,14 +292,16 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           colWidth: 12,
           placeholder: 'common:searchPlaceholder',
           isMulti: false,
-          handleCreate: this.handleCreateRoom
+          handleCreate: this.handleCreateRoom,
+          name: 'room'
         }
       },
       position: {
         render: FormUtil.TextInput,
         meta: {
           label: 'position',
-          colWidth: 12
+          colWidth: 12,
+          name: 'position'
         }
       }
     };

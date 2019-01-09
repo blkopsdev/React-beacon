@@ -36,7 +36,7 @@ const buildFieldConfig = (facilityOptions: any[]) => {
         validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
-      meta: { label: 'company', colWidth: 12, type: 'text' }
+      meta: { label: 'company', colWidth: 12, type: 'text', name: 'customer' }
     },
     facilities: {
       render: FormUtil.Select,
@@ -45,7 +45,8 @@ const buildFieldConfig = (facilityOptions: any[]) => {
         label: 'common:facility',
         colWidth: 12,
         placeholder: 'userQueue:facilitySearchPlaceholder',
-        isMulti: true
+        isMulti: true,
+        name: 'facilities'
       },
       options: {
         validators: Validators.required

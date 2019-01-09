@@ -54,7 +54,8 @@ const buildFieldConfig = (
         label: 'common:customer',
 
         colWidth: 12,
-        placeholder: 'userManage:customerSearchPlaceholder'
+        placeholder: 'userManage:customerSearchPlaceholder',
+        name: 'customer'
       },
       options: {
         validators: [
@@ -73,7 +74,8 @@ const buildFieldConfig = (
         options: facilityOptions,
         label: 'common:facility',
         colWidth: 12,
-        placeholder: 'userQueue:facilitySearchPlaceholder'
+        placeholder: 'userQueue:facilitySearchPlaceholder',
+        name: 'facility'
       },
       options: {
         validators: Validators.required
@@ -85,7 +87,8 @@ const buildFieldConfig = (
         options: constants.jobTypeOptions,
         label: 'jobManage:type',
         colWidth: 12,
-        placeholder: 'jobManage:typeSearchPlaceholder'
+        placeholder: 'jobManage:typeSearchPlaceholder',
+        name: 'job-type'
       },
       options: {
         validators: Validators.required
@@ -97,6 +100,7 @@ const buildFieldConfig = (
         label: 'jobManage:startDate',
         colWidth: 12,
         showTime: false,
+        name: 'start-date',
         isValidDate: (current: any) => {
           return (
             moment.isMoment(current) &&
@@ -114,6 +118,7 @@ const buildFieldConfig = (
         label: 'jobManage:endDate',
         colWidth: 12,
         showTime: false,
+        name: 'end-date',
         isValidDate: (current: any) => {
           return moment.isMoment(current) && current.isAfter(moment());
         }
@@ -128,7 +133,8 @@ const buildFieldConfig = (
         options: fseOptions,
         label: 'jobManage:fseLead',
         colWidth: 12,
-        placeholder: 'jobManage:typeSearchPlaceholder'
+        placeholder: 'jobManage:typeSearchPlaceholder',
+        name: 'assigned-lead-user'
       },
       options: {
         validators: Validators.required
@@ -141,7 +147,8 @@ const buildFieldConfig = (
         label: 'jobManage:fseMembers',
         colWidth: 12,
         placeholder: 'jobManage:typeSearchPlaceholder',
-        isMulti: true
+        isMulti: true,
+        name: 'assigned-user'
       }
     }
   };

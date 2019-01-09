@@ -73,6 +73,7 @@ const NumberInputWithButton = ({
         style={{ width: '50%', display: 'inline' }}
         placeholder={meta.placeholder}
         type="number"
+        name={meta.id}
         {...handler()}
       />
       <Button
@@ -142,7 +143,8 @@ const buildFieldConfig = (
         defaultValue: prod.quantity,
         buttonAction: (id: string) => deleteFromCartCB(id, cartName),
         id: prod.id,
-        cost: prod.cost
+        cost: prod.cost,
+        name: prod.id
       }
     };
   });

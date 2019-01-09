@@ -84,6 +84,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
                   id="fileUpload"
                   type="file"
                   accept=".csv"
+                  name="upload"
                   onChange={e => {
                     const input = e.target as HTMLInputElement;
                     this.addFile(input);

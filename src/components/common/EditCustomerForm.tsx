@@ -29,11 +29,11 @@ const fieldConfig = {
         validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
-      meta: { label: 'customerNameLabel', colWidth: 12 }
+      meta: { label: 'customerNameLabel', colWidth: 12, name: 'customer-name' }
     },
     vat: {
       render: FormUtil.TextInput,
-      meta: { label: 'customerVatLabel', colWidth: 12 }
+      meta: { label: 'customerVatLabel', colWidth: 12, name: 'customer-vat' }
     }
   }
 };

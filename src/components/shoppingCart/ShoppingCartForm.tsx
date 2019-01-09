@@ -65,6 +65,7 @@ const NumberInputWithButton = ({
         style={{ width: '50%', display: 'inline' }}
         placeholder={meta.placeholder}
         type="number"
+        name="quantity"
         {...handler()}
       />
       <Button
@@ -134,7 +135,8 @@ const buildFieldConfig = (
         defaultValue: prod.quantity,
         buttonAction: (id: string) => deleteFromCartCB(id, cartName),
         id: prod.id,
-        cost: prod.cost
+        cost: prod.cost,
+        name: 'product'
       }
     };
   });
@@ -148,7 +150,8 @@ const buildFieldConfig = (
         label: 'message',
         colWidth: 12,
         componentClass: 'textarea',
-        rows: 8
+        rows: 8,
+        name: 'message'
       }
     }
   };

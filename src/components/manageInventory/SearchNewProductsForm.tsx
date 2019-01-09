@@ -35,7 +35,8 @@ const buildFieldConfig = (productInfo: IproductInfo) => {
         label: 'common:productGroup',
         colWidth: 12,
         placeholder: 'common:searchPlaceholder',
-        isMulti: false
+        isMulti: false,
+        name: 'product-group'
       }
     },
     search: {
@@ -44,7 +45,8 @@ const buildFieldConfig = (productInfo: IproductInfo) => {
         label: 'search',
         colWidth: 12,
         type: 'input',
-        placeholder: 'searchByName'
+        placeholder: 'searchByName',
+        name: 'product-search'
       }
     }
   };

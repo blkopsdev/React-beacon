@@ -40,7 +40,13 @@ const buildFieldConfig = () => {
         validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
-      meta: { label: 'name', colWidth: 12, type: 'input', autoFocus: true }
+      meta: {
+        label: 'name',
+        colWidth: 12,
+        type: 'input',
+        autoFocus: true,
+        name: 'location-name'
+      }
     }
   };
   return {

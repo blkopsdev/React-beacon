@@ -53,18 +53,22 @@ const buildFieldConfig = (
   const fieldConfigControls = {
     tempCompany: {
       render: FormUtil.TextLabel,
-      meta: { label: 'userQueue:userCustomer', colWidth: 12 }
+      meta: {
+        label: 'userQueue:userCustomer',
+        colWidth: 12,
+        name: 'temp-company'
+      }
     },
     customerID: {
       render: FormUtil.SelectWithButton,
       meta: {
         options: customerOptions,
         label: 'common:customer',
-
         colWidth: 12,
         placeholder: 'userQueue:customerSearchPlaceholder',
         buttonName: 'userQueue:addCustomerButton',
-        buttonAction: toggleEditCustomerModalCB
+        buttonAction: toggleEditCustomerModalCB,
+        name: 'customer'
       },
       options: {
         validators: [
@@ -87,7 +91,8 @@ const buildFieldConfig = (
         placeholder: 'userQueue:facilitySearchPlaceholder',
         buttonName: 'userQueue:facilityButton',
         buttonAction: toggleEditFacilityModalCB,
-        isMulti: true
+        isMulti: true,
+        name: 'facilities'
       },
       options: {
         validators: Validators.required

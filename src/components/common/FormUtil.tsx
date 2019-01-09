@@ -194,6 +194,7 @@ export const FormUtil = {
             checked={value}
             {...handler()}
             className="beacon-toggle"
+            name={meta.name || ''}
           />
           <span className="react-toggle-label">{meta.label}</span>
         </label>
@@ -215,6 +216,7 @@ export const FormUtil = {
         <FormControl
           placeholder={meta.placeholder}
           componentClass={meta.componentClass}
+          name={meta.name || ''}
           {...handler()}
         />
       </FormGroup>
@@ -252,6 +254,7 @@ export const FormUtil = {
             placeholder={meta.placeholder}
             isMulti={meta.isMulti}
             classNamePrefix="react-select"
+            name={meta.name || ''}
             {...handler()}
           />
         </FormGroup>
@@ -291,6 +294,7 @@ export const FormUtil = {
             isMulti={meta.isMulti}
             classNamePrefix="react-select"
             onCreateOption={meta.handleCreate}
+            name={meta.name || ''}
             {...handler()}
           />
         </FormGroup>
@@ -360,6 +364,7 @@ export const FormUtil = {
               isMulti={meta.isMulti}
               classNamePrefix="react-select"
               isClearable={meta.isClearable}
+              name={meta.name || ''}
               {...handler()}
             />
           </Col>
@@ -407,6 +412,7 @@ export const FormUtil = {
             placeholder={meta.placeholder}
             isMulti={meta.isMulti}
             classNamePrefix="react-select"
+            name={meta.name || ''}
             {...handler()}
           />
         </FormGroup>
@@ -464,14 +470,14 @@ export const userBaseConfigControls = {
       validators: [Validators.required, FormUtil.validators.requiredWithTrim]
     },
     render: FormUtil.TextInput,
-    meta: { label: 'user:first', colWidth: 6, type: 'text' }
+    meta: { label: 'user:first', colWidth: 6, type: 'text', name: 'first' }
   },
   last: {
     options: {
       validators: [Validators.required, FormUtil.validators.requiredWithTrim]
     },
     render: FormUtil.TextInput,
-    meta: { label: 'user:last', colWidth: 6, type: 'text' }
+    meta: { label: 'user:last', colWidth: 6, type: 'text', name: 'last' }
   },
   email: {
     options: {
@@ -483,7 +489,7 @@ export const userBaseConfigControls = {
       ]
     },
     render: FormUtil.TextInput,
-    meta: { label: 'user:email', colWidth: 12, type: 'text' }
+    meta: { label: 'user:email', colWidth: 12, type: 'text', name: 'email' }
   },
 
   phone: {
@@ -500,7 +506,8 @@ export const userBaseConfigControls = {
       label: 'user:phone',
       colWidth: 6,
       type: 'tel',
-      placeholder: '***-***-****'
+      placeholder: '***-***-****',
+      name: 'phone'
     }
   },
   position: {
@@ -508,6 +515,11 @@ export const userBaseConfigControls = {
       validators: [Validators.required, FormUtil.validators.requiredWithTrim]
     },
     render: FormUtil.TextInput,
-    meta: { label: 'user:position', colWidth: 6, type: 'text' }
+    meta: {
+      label: 'user:position',
+      colWidth: 6,
+      type: 'text',
+      name: 'position'
+    }
   }
 };

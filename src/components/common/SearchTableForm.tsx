@@ -25,21 +25,50 @@ interface Iprops extends React.Props<SearchTableForm> {
   onValueChanges?: any;
   subscribeValueChanges?: boolean;
 }
-export default class SearchTableForm extends React.Component<Iprops, {}> {
+
+interface Istate {
+  fieldConfig: FieldConfig;
+}
+export default class SearchTableForm extends React.Component<Iprops, Istate> {
   public searchForm: AbstractControl;
-  public fieldConfig: FieldConfig;
   private subscription: any;
   private showBtn: boolean;
   constructor(props: Iprops) {
     super(props);
     this.handleSubmit = this.handleSubmit.bind(this);
-    this.fieldConfig = FormUtil.translateForm(this.props.fieldConfig, props.t);
     this.showBtn =
       typeof this.props.showSearchButton === 'undefined'
         ? true
         : this.props.showSearchButton;
+    this.state = {
+      fieldConfig: FormUtil.translateForm(this.props.fieldConfig, this.props.t)
+    };
   }
   componentDidMount() {
+    this.handleUpdatedFieldConfig();
+  }
+  componentDidUpdate(prevProps: Iprops) {
+    if (prevProps.fieldConfig !== this.props.fieldConfig) {
+      console.log('search field config changed', this.props.fieldConfig);
+      this.setState(
+        {
+          fieldConfig: FormUtil.translateForm(
+            this.props.fieldConfig,
+            this.props.t
+          )
+        },
+        () => {
+          this.handleUpdatedFieldConfig();
+        }
+      );
+    }
+  }
+  componentWillUnmount() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+  handleUpdatedFieldConfig = () => {
     forEach(this.props.fieldConfig.controls, (input: any, key) => {
       if (input.meta && input.meta.defaultValue) {
         this.searchForm.patchValue({ [key]: input.meta.defaultValue });
@@ -52,12 +81,7 @@ export default class SearchTableForm extends React.Component<Iprops, {}> {
           });
       }
     });
-  }
-  componentWillUnmount() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-  }
+  };
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     this.props.handleSubmit(this.searchForm.value);
@@ -74,7 +98,7 @@ export default class SearchTableForm extends React.Component<Iprops, {}> {
         <form onSubmit={this.handleSubmit}>
           <FormGenerator
             onMount={this.setForm}
-            fieldConfig={this.fieldConfig}
+            fieldConfig={this.state.fieldConfig}
           />
           {this.showBtn && (
             <Col xs={1} className="search-form-button">

@@ -108,23 +108,22 @@ interface Istate {
   currentTile: Itile;
   columns: any[];
   selectedInstall: any;
+  searchFieldConfig: FieldConfig;
 }
 
 class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
-  // public searchFieldConfig: any;
   public searchFieldConfigBanner: any;
   public buttonInAction = false;
   private setTableFilterTimeout: any;
-  private searchFieldConfig: FieldConfig;
   constructor(props: Iprops & IdispatchProps) {
     super(props);
     this.state = {
       selectedRow: {},
       currentTile: emptyTile,
       columns: [],
-      selectedInstall: {}
+      selectedInstall: {},
+      searchFieldConfig: this.buildSearchControls()
     };
-    this.searchFieldConfig = this.buildSearchControls();
   }
   componentWillMount() {
     // since the install modal depends on a selected product in state, we need to make sure and start off with the modals closed
@@ -172,8 +171,12 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       prevProps.productInfo.manufacturerOptions.length !==
         this.props.productInfo.manufacturerOptions.length
     ) {
-      console.log('re setting columns');
+      console.log(
+        're setting columns and table filters',
+        this.props.productInfo.manufacturerOptions
+      );
       this.setColumns();
+      this.setState({ searchFieldConfig: this.buildSearchControls() });
     }
 
     // update the table when we get new products or new installs
@@ -506,7 +509,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           color={constants.colors[`${this.state.currentTile.color}`]}
         />
         <SearchTableForm
-          fieldConfig={this.searchFieldConfig}
+          fieldConfig={this.state.searchFieldConfig}
           handleSubmit={this.props.getInventory}
           loading={this.props.loading}
           colorButton={

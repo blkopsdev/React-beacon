@@ -240,6 +240,12 @@
     "progress": "Lessons Complete",
     "results": "Test Results"
   },
+  "manageMeasurements": {
+    "bannerTitle": "Measurement Points",
+    "type": "Type",
+    "equipmentType": "Equipment Type",
+    "standard": "Standard"
+  },
   "tiles": {
     "alerts": "Alerts",
     "training": "Training",
@@ -255,7 +261,8 @@
     "billing": "Billing",
     "groups": "My groups",
     "support": "Support",
-    "manageAllTraining": "Training Progress"
+    "manageAllTraining": "Training Progress",
+    "manageMeasurements": "Measurements"
   },
   "securityF": {
     "ManageUsers": "Manage Users",
@@ -274,7 +281,8 @@
     "Payment": "Payment",
     "ViewJobs": "View Jobs",
     "ManageLocations": "Manage Locations",
-    "ManageJobs": "Manage Jobs"
+    "ManageJobs": "Manage Jobs",
+    "ManageMeasurements": "Manage Measurements"
   },
   "training": {
     "shoppingCartTitle": "Shopping Cart",

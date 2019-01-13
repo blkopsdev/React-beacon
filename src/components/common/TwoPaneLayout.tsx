@@ -20,6 +20,7 @@ import constants from '../../constants/constants';
 import { IinitialState } from '../../models';
 
 import 'react-table/react-table.css';
+import ManageMeasurements from '../manageMeasurements/ManageMeasurements';
 
 // const testme = () => {
 //   return <h3>Your test is a success</h3>;
@@ -83,6 +84,7 @@ const TwoPaneLayout = (props: any) => {
               component={Training}
             />
             <Route exact path="/manageTraining" component={ManageTraining} />
+            <Route exact path="/measurements" component={ManageMeasurements} />
           </Switch>
         </Col>
       </Row>

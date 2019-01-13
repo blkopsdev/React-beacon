@@ -29,7 +29,8 @@ const icons = {
   userQueue: require('../images/icons/BM_NewUserQueue.png'),
   payments: require('../images/icons/BM_Payments.png'),
   training: require('../images/icons/BM_Training.png'),
-  locations: require('../images/icons/BM_ManageLocations.png')
+  locations: require('../images/icons/BM_ManageLocations.png'),
+  measurements: require('../images/icons/BM_ManageLocations.png')
 };
 
 const securityFunctions = {
@@ -122,6 +123,11 @@ const securityFunctions = {
     id: '25961E0B-AFB4-4864-BF4C-A341A22553C6',
     name: 'securityF:ManageAllTraining',
     description: "Allows the user to view all user's training progress"
+  },
+  ManageMeasurements: {
+    id: '25961E0B-AFB4-4864-BF4C-A341A22553C6',
+    name: 'securityF:ManageAllTraining',
+    description: 'Allows the user to manage measurement points'
   }
 };
 
@@ -347,6 +353,19 @@ const tiles = [
     height: 136,
     url: '/support',
     securityFunction: '',
+    description: ''
+  },
+  {
+    icon: icons.measurements,
+    iconType: 'img',
+    title: 'manageMeasurements',
+    src: require('src/images/beaconManageUsers.jpg'),
+    srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
+    color: 'purple',
+    width: 360,
+    height: 400,
+    url: '/measurements',
+    securityFunction: securityFunctions.ManageMeasurements.id,
     description: ''
   }
 ];

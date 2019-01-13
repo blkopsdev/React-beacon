@@ -106,6 +106,9 @@ const API = {
       getPurchasedTraining: `${root}training/getpurchasedtraining`,
       getAdminProgress: `${root}training/getadminprogress`,
       getQuizResults: `${root}/training/getquizresults`
+    },
+    measurements: {
+      get: `${root}/measurementpoint/GetAllMeasurementPointLists`
     }
   }
 };

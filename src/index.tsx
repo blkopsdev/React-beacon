@@ -170,6 +170,10 @@ runWithAdal(
                     path="/manageTraining"
                     component={TwoPaneLayout}
                   />
+                  <PrivateRoute
+                    path="/measurements"
+                    component={TwoPaneLayout}
+                  />
 
                   <Route component={NoMatch} />
                 </Switch>

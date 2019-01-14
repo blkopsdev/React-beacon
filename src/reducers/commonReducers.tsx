@@ -38,6 +38,8 @@ export function createTableFiltersWithName(
   switch (action.type) {
     case `SET_TABLE_FILTER_${tableName}`:
       return { ...state, ...action.filters } as ItableFiltersReducer;
+    case types.USER_LOGOUT_SUCCESS:
+      return initialTableFilters;
     default:
       return state;
   }

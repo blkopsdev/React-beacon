@@ -340,6 +340,7 @@ export interface IinitialState {
   showSecurityFunctionsModal: boolean;
   training: ItrainingReducer;
   manageTraining: ImanageTrainingReducer;
+  productInfo: IproductInfo;
 }
 
 export interface Itile {

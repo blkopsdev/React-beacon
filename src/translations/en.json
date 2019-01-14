@@ -243,8 +243,12 @@
   "manageMeasurements": {
     "bannerTitle": "Measurement Points",
     "type": "Type",
+    "typePlaceholder": "Select type...",
     "equipmentType": "Equipment Type",
-    "standard": "Standard"
+    "equipmentTypePlaceholder": "Select equipment type...",
+    "standard": "Standard",
+    "standardPlaceholder": "Select standard...",
+    "newMeasurement": "Add Measurements"
   },
   "tiles": {
     "alerts": "Alerts",

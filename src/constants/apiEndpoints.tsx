@@ -46,13 +46,21 @@ const API = {
       trainingCheckout: `${root}training/savetrainingtransaction`,
       savequiz: `${root}training/savequiz`,
       startQuiz: `${root}training/startquiz`
+    },
+    measurements: {
+      addglobalmpl: `${root}/MeasurementPoint/AddGlobalMeasurementPointList`,
+      addcustomermpl: `${root}/MeasurementPoint/AddCustomerMeasurementPointList`
     }
   },
   PUT: {
     building: `${root}building`,
     floor: `${root}floor`,
     location: `${root}location`,
-    room: `${root}room`
+    room: `${root}room`,
+    measurements: {
+      updateglobalmpl: `${root}/MeasurementPoint/UpdateGlobalMeasurementPointList`,
+      updatecustomermpl: `${root}/MeasurementPoint/UpdateCustomerMeasurementPointList`
+    }
   },
   DELETE: {
     building: `${root}building`,

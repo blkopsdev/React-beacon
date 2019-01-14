@@ -8,6 +8,7 @@ import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 import ReactTable, { SortingRule, FinalState, RowInfo } from 'react-table';
 import * as moment from 'moment';
+import { Button } from 'react-bootstrap';
 
 import { FormUtil } from '../common/FormUtil';
 import {
@@ -16,7 +17,8 @@ import {
   ImanageUserReducer,
   ItableFiltersReducer,
   Itile,
-  Iuser
+  Iuser,
+  Ioption
 } from '../../models';
 import { TableUtil } from '../common/TableUtil';
 import { closeAllModals, getCustomers } from '../../actions/commonActions';
@@ -28,6 +30,7 @@ import {
   toggleSecurityFunctionsModal,
   updateUser
 } from '../../actions/manageUserActions';
+import { getProductInfo } from '../../actions/manageInventoryActions';
 import Banner from '../common/Banner';
 import CommonModal from '../common/CommonModal';
 import EditCustomerModal from '../common/EditCustomerModal';
@@ -36,6 +39,11 @@ import SearchTableForm from '../common/SearchTableForm';
 import SecurityFunctionsList from './SecurityFunctionsList';
 import constants from '../../constants/constants';
 import { FieldConfig } from 'react-reactive-form';
+
+const mpListTypes = [
+  { label: 'Annual', value: 1 },
+  { label: 'Verification', value: 2 }
+];
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -49,6 +57,9 @@ interface IdispatchProps {
   toggleEditUserModal: typeof toggleEditUserModal;
   toggleSecurityFunctionsModal: typeof toggleSecurityFunctionsModal;
   getUserManage: typeof getUserManage;
+  getProductInfo: typeof getProductInfo;
+  productGroupOptions: Ioption[];
+  standardOptions: Ioption[];
   customers: Icustomer[];
   closeAllModals: typeof closeAllModals;
   getCustomers: typeof getCustomers;
@@ -88,12 +99,31 @@ class ManageMeasurements extends React.Component<
         type: {
           render: FormUtil.SelectWithoutValidation,
           meta: {
-            label: 'common:type',
-            options: FormUtil.convertToOptions(this.props.customers),
-            colWidth: 4,
+            label: 'manageMeasurements:type',
+            options: mpListTypes,
+            colWidth: 3,
             type: 'select',
-            placeholder: 'customerPlaceholder',
-            defaultValue: this.props.tableFilters.customer
+            placeholder: 'typePlaceholder'
+          }
+        },
+        equipmentType: {
+          render: FormUtil.SelectWithoutValidation,
+          meta: {
+            label: 'manageMeasurements:equipmentType',
+            options: this.props.productGroupOptions,
+            colWidth: 3,
+            type: 'select',
+            placeholder: 'equipmentTypePlaceholder'
+          }
+        },
+        standard: {
+          render: FormUtil.SelectWithoutValidation,
+          meta: {
+            label: 'manageMeasurements:standard',
+            options: this.props.standardOptions,
+            colWidth: 3,
+            type: 'select',
+            placeholder: 'standardPlaceholder'
           }
         }
       }
@@ -106,6 +136,7 @@ class ManageMeasurements extends React.Component<
     });
   }
   componentDidMount() {
+    this.props.getProductInfo();
     // refresh the userManage every time the component mounts
     this.props.getUserManage();
     // refresh the list of customers every time the component mounts
@@ -274,7 +305,15 @@ class ManageMeasurements extends React.Component<
           t={this.props.t}
           subscribeValueChanges={true}
           onValueChanges={this.onSearchValueChanges}
+          showSearchButton={false}
         />
+        <Button
+          className="table-add-button"
+          bsStyle="link"
+          // onClick={this.props.toggleEditJobModal}
+        >
+          {t('manageMeasurements:newMeasurement')}
+        </Button>
         <ReactTable
           data={this.props.tableData}
           onSortedChange={this.onSortedChanged}
@@ -342,7 +381,9 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     showEditFacilityModal: state.showEditFacilityModal,
     showSecurityFunctionsModal: state.showSecurityFunctionsModal,
     tableData: state.manageUser.data,
-    tableFilters: state.manageUser.tableFilters
+    tableFilters: state.manageUser.tableFilters,
+    standardOptions: state.productInfo.standardOptions,
+    productGroupOptions: state.productInfo.productGroupOptions
   };
 };
 export default translate('manageMeasurements')(
@@ -355,7 +396,8 @@ export default translate('manageMeasurements')(
       toggleSecurityFunctionsModal,
       closeAllModals,
       getCustomers,
-      setTableFilter
+      setTableFilter,
+      getProductInfo
     }
   )(ManageMeasurements)
 );

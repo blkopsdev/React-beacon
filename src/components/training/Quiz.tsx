@@ -221,7 +221,11 @@ class Quiz extends React.Component<Props, State> {
     this.setState({ timeLeft });
 
     if (timeLeft <= 5 && !this.state.timeoutWarningShown) {
-      toastr.warning('5 Minutes Remaining', '', constants.toastrWarning);
+      toastr.warning(
+        'Almost out of time, please submit test as soon as possible.',
+        '',
+        constants.toastrWarning
+      );
       this.setState({ timeoutWarningShown: true });
     }
 

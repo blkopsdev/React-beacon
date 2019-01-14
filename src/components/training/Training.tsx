@@ -394,11 +394,11 @@ class Courses extends React.Component<Props, State> {
               }
               const shoppingCartItem = { ...gfLesson, quantity: 1 };
               const lp = this.props.lessonProgress[gfLesson.id];
-              const progress = lp
-                ? lp.isComplete
-                  ? 100
-                  : Math.round(lp.timeSpent / lp.totalTime) * 99
-                : 0;
+              let progress = 0;
+              if (lp && lp.percentageComplete) {
+                progress = lp.percentageComplete;
+              }
+
               return (
                 <ListGroupItem className="lesson list-item" key={gfLesson.id}>
                   <Media>

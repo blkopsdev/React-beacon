@@ -395,8 +395,10 @@ class Courses extends React.Component<Props, State> {
               const shoppingCartItem = { ...gfLesson, quantity: 1 };
               const lp = this.props.lessonProgress[gfLesson.id];
               let progress = 0;
-              if (lp && lp.percentageComplete) {
-                progress = lp.percentageComplete;
+              if (lp) {
+                progress = lp.isComplete
+                  ? 100
+                  : Math.round((lp.timeSpent / lp.totalTime) * 99); // multiplying by 99 because we do not want to display 100% here.  only if .isComplete is true.
               }
 
               return (

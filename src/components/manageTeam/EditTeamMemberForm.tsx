@@ -17,7 +17,7 @@ import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
-import { Ioption, Iuser } from '../../models';
+import { Iuser } from '../../models';
 import {
   deleteTeamUser,
   saveTeamUser,
@@ -126,13 +126,10 @@ class EditTeamMemberForm extends React.Component<Iprops, {}> {
 
   componentDidMount() {
     // get the customer name
-    const { customerID } = this.props.user;
-    const customer = (find(
-      this.props.customerOptions,
-      (cust: Ioption) => cust.value === customerID
-    ) as Ioption) || { name: '' };
-    if (customer && customer.label && customer.label.length) {
-      this.userForm.patchValue({ customer: customer.label });
+    const { customer, customerID } = this.props.user;
+
+    if (customer) {
+      this.userForm.patchValue({ customer: customer.name });
     }
     const customerControl = this.userForm.get(
       'customer'

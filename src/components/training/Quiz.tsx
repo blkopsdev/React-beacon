@@ -200,7 +200,10 @@ class Quiz extends React.Component<Props, State> {
   handleTimedQuiz = () => {
     this.props
       .startQuiz(this.props.quiz.id)
-      .then()
+      .then(() => {
+        this.calculateTimeLeft(); // call it once in order to show the time left immediately
+        this.quizTimer = setInterval(this.calculateTimeLeft, 3000);
+      })
       .catch(() => {
         this.props.history.push(
           `/training/${this.props.match.params.courseID}/${
@@ -208,8 +211,6 @@ class Quiz extends React.Component<Props, State> {
           }`
         );
       });
-    this.calculateTimeLeft(); // call it once in order to show the time left immediately
-    this.quizTimer = setInterval(this.calculateTimeLeft, 3000);
   };
   calculateTimeLeft = () => {
     const timeLeft = moment

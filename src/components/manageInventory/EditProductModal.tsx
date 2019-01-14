@@ -11,7 +11,8 @@ import {
   Iproduct,
   IproductInfo,
   ItableFiltersReducer,
-  IproductQueueObject
+  IproductQueueObject,
+  Iuser
 } from '../../models';
 import {
   updateProduct,
@@ -39,6 +40,7 @@ interface IdispatchProps {
   tableFilters: ItableFiltersReducer;
   secondModal: boolean;
   updateQueueProduct: typeof updateQueueProduct;
+  user: Iuser;
 }
 
 class ManageInventoryModal extends React.Component<

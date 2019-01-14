@@ -110,6 +110,7 @@ export const FormUtil = {
           timeFormat={meta.showTime}
           isValidDate={meta.isValidDate}
           {...handler()}
+          // TODO figure out how to handle disabled
         />
         <FormControl.Feedback />
       </Col>
@@ -164,6 +165,7 @@ export const FormUtil = {
           autoFocus={meta.autoFocus}
           name={meta.name || ''}
           {...handler()}
+          disabled={meta.disabled} // must go after handler so that it does not get overridden on load
         />
         <FormControl.Feedback />
       </FormGroup>
@@ -256,6 +258,7 @@ export const FormUtil = {
             classNamePrefix="react-select"
             name={meta.name || ''}
             {...handler()}
+            isDisabled={meta.disabled}
           />
         </FormGroup>
       </Col>
@@ -296,6 +299,7 @@ export const FormUtil = {
             onCreateOption={meta.handleCreate}
             name={meta.name || ''}
             {...handler()}
+            isDisabled={meta.disabled}
           />
         </FormGroup>
       </Col>
@@ -329,6 +333,7 @@ export const FormUtil = {
             isClearable={true}
             name={meta.name || ''}
             {...handler()}
+            isDisabled={meta.disabled}
           />
         </FormGroup>
       </Col>
@@ -414,6 +419,7 @@ export const FormUtil = {
             classNamePrefix="react-select"
             name={meta.name || ''}
             {...handler()}
+            isDisabled={meta.disabled}
           />
         </FormGroup>
       </Col>

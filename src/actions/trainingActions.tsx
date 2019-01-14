@@ -322,7 +322,7 @@ export const trainingCheckout = (
   return (dispatch, getState) => {
     const products = getState().training.cart.addedIDs;
     dispatch(beginAjaxCall());
-    dispatch({ type: types.TOGGLE_MODAL_SHOPPING_CART_TRAINING });
+    dispatch({ type: types.CLOSE_ALL_MODALS });
     return axios
       .post(API.POST.training.trainingCheckout, {
         PurchasedTraining: products,

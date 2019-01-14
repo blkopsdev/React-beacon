@@ -155,8 +155,13 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
     }
   }
   buildFieldConfig = () => {
+    const disabled = this.canEditInstalls() === false;
     const shouldRequireQuantity =
-      this.props.selectedItem && this.props.selectedItem.id ? false : true;
+      disabled === false &&
+      this.props.selectedItem &&
+      this.props.selectedItem.id
+        ? false
+        : true;
 
     const buildings = FormUtil.convertToOptions(this.props.facility.buildings);
     let quantityValidators = [Validators.min(1), Validators.max(1000)];
@@ -167,6 +172,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
         Validators.required
       ];
     }
+
     const fieldConfigControls = {
       productInfo: {
         render: FormUtil.TextLabel,
@@ -178,7 +184,8 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           label: 'nickname',
           colWidth: 12,
           type: 'input',
-          name: 'nickname'
+          name: 'nickname',
+          disabled
         }
       },
       serialNumber: {
@@ -187,12 +194,19 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           label: 'serialNumber',
           colWidth: 6,
           type: 'input',
-          name: 'serial-number'
+          name: 'serial-number',
+          disabled
         }
       },
       rfid: {
         render: FormUtil.TextInput,
-        meta: { label: 'rfid', colWidth: 6, type: 'input', name: 'rfid' }
+        meta: {
+          label: 'rfid',
+          colWidth: 6,
+          type: 'input',
+          name: 'rfid',
+          disabled
+        }
       },
       remarks: {
         render: FormUtil.TextInput,
@@ -200,7 +214,8 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           label: 'remarks',
           colWidth: 12,
           componentClass: 'textarea',
-          name: 'remarks'
+          name: 'remarks',
+          disabled
         }
       },
       quantity: {
@@ -214,7 +229,8 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           colWidth: 6,
           type: 'number',
           defaultValue: 1,
-          name: 'quantity'
+          name: 'quantity',
+          disabled
         }
       },
       locLabel: {
@@ -230,7 +246,8 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           placeholder: 'common:searchPlaceholder',
           isMulti: false,
           handleCreate: this.handleCreateBuilding,
-          name: 'building'
+          name: 'building',
+          disabled
         },
         options: {
           validators: [
@@ -251,7 +268,8 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           placeholder: 'common:searchPlaceholder',
           isMulti: false,
           handleCreate: this.handleCreateFloor,
-          name: 'floor'
+          name: 'floor',
+          disabled
         },
         options: {
           validators: [
@@ -272,7 +290,8 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           placeholder: 'common:searchPlaceholder',
           isMulti: false,
           handleCreate: this.handleCreateLocation,
-          name: 'location'
+          name: 'location',
+          disabled
         },
         options: {
           validators: [
@@ -293,7 +312,8 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           placeholder: 'common:searchPlaceholder',
           isMulti: false,
           handleCreate: this.handleCreateRoom,
-          name: 'room'
+          name: 'room',
+          disabled
         }
       },
       position: {
@@ -301,7 +321,8 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
         meta: {
           label: 'position',
           colWidth: 12,
-          name: 'position'
+          name: 'position',
+          disabled
         }
       }
     };

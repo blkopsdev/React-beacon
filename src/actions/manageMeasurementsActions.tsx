@@ -33,7 +33,7 @@ export function getAllMeasurementPointLists(): ThunkResult<void> {
         if (!data.data) {
           throw undefined;
         } else {
-          console.log(data.data);
+          // console.log(data.data);
           dispatch({
             type: types.MANAGE_MEASUREMENTS_SUCCESS,
             measurements: data.data.result

@@ -27,6 +27,7 @@ export interface ItableFiltersParams {
   productGroup?: Ioption;
   manufacturer?: Ioption;
   sorted?: SortingRule[];
+  standard?: Ioption;
 }
 
 export interface Iuser {

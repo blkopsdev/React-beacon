@@ -14,34 +14,35 @@ import { FormUtil } from '../common/FormUtil';
 import {
   Icustomer,
   IinitialState,
-  ImanageUserReducer,
   ItableFiltersReducer,
   Itile,
   Iuser,
   Ioption,
-  IMeasurementListObject
+  IMeasurementListObject,
+  ImanageMeasurementsReducer
 } from '../../models';
 import { TableUtil } from '../common/TableUtil';
 import { closeAllModals, getCustomers } from '../../actions/commonActions';
 import { emptyTile } from '../../reducers/initialState';
-import {
-  getUserManage,
-  setTableFilter,
-  toggleEditUserModal,
-  toggleSecurityFunctionsModal,
-  updateUser
-} from '../../actions/manageUserActions';
+// import {
+// getUserManage,
+// setTableFilter,
+// toggleEditUserModal,
+// toggleSecurityFunctionsModal,
+// updateUser
+// } from '../../actions/manageUserActions';
 import {
   getAllMeasurementPointLists,
-  toggleEditMeasurementsModal
+  toggleEditMeasurementsModal,
+  setTableFilter
 } from '../../actions/manageMeasurementsActions';
 import { getProductInfo } from '../../actions/manageInventoryActions';
 import Banner from '../common/Banner';
-import CommonModal from '../common/CommonModal';
-import EditCustomerModal from '../common/EditCustomerModal';
-import EditUserModal from './EditUserModal';
+// import CommonModal from '../common/CommonModal';
+// import EditCustomerModal from '../common/EditCustomerModal';
+// import EditUserModal from './EditUserModal';
 import SearchTableForm from '../common/SearchTableForm';
-import SecurityFunctionsList from './SecurityFunctionsList';
+// import SecurityFunctionsList from './SecurityFunctionsList';
 import constants from '../../constants/constants';
 import { FieldConfig } from 'react-reactive-form';
 
@@ -59,9 +60,9 @@ interface Iprops extends RouteComponentProps<any> {
 
 interface IdispatchProps {
   // Add your dispatcher properties here
-  toggleEditUserModal: typeof toggleEditUserModal;
-  toggleSecurityFunctionsModal: typeof toggleSecurityFunctionsModal;
-  getUserManage: typeof getUserManage;
+  // toggleEditUserModal: typeof toggleEditUserModal;
+  // toggleSecurityFunctionsModal: typeof toggleSecurityFunctionsModal;
+  // getUserManage: typeof getUserManage;
   getAllMeasurementPointLists: typeof getAllMeasurementPointLists;
   toggleEditMeasurementsModal: typeof toggleEditMeasurementsModal;
   getProductInfo: typeof getProductInfo;
@@ -70,8 +71,8 @@ interface IdispatchProps {
   customers: Icustomer[];
   closeAllModals: typeof closeAllModals;
   getCustomers: typeof getCustomers;
-  userManage: ImanageUserReducer;
-  showEditUserModal: boolean;
+  manageMeasurements: ImanageMeasurementsReducer;
+  showEditMeasurementsModal: boolean;
   showEditCustomerModal: boolean;
   showEditFacilityModal: boolean;
   showSecurityFunctionsModal: boolean;
@@ -92,7 +93,7 @@ class ManageMeasurements extends React.Component<
 > {
   public searchFieldConfig: FieldConfig;
   public buttonInAction = false;
-  private setTableFilterTimeout: any;
+  // private setTableFilterTimeout: any;
   constructor(props: Iprops & IdispatchProps) {
     super(props);
     this.getTrProps = this.getTrProps.bind(this);
@@ -155,17 +156,15 @@ class ManageMeasurements extends React.Component<
   }
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
     if (
-      prevProps.showEditUserModal !== this.props.showEditUserModal &&
-      !this.props.showEditUserModal
+      prevProps.showEditMeasurementsModal !==
+        this.props.showEditMeasurementsModal &&
+      !this.props.showEditMeasurementsModal
     ) {
       this.setState({ selectedRow: null });
     }
-    // automatically get inventory every time a fitler changes
+    // automatically get inventory every time a filter changes
     if (prevProps.tableFilters !== this.props.tableFilters) {
-      this.props.getUserManage();
-    }
-    if (prevProps.customers !== this.props.customers) {
-      this.setState({ columns: this.setColumns() });
+      this.props.getAllMeasurementPointLists();
     }
   }
   componentWillUnmount() {
@@ -236,7 +235,7 @@ class ManageMeasurements extends React.Component<
             this.setState({
               selectedRow: rowInfo.index
             });
-            this.props.toggleEditUserModal();
+            this.props.toggleEditMeasurementsModal();
           }
         },
         style: {
@@ -264,14 +263,14 @@ class ManageMeasurements extends React.Component<
   */
   onSearchValueChanges = (value: any, key: string) => {
     switch (key) {
-      case 'customer':
-        this.props.setTableFilter({ customer: value, page: 1 });
+      case 'type':
+        this.props.setTableFilter({ type: value, page: 1 });
         break;
-      case 'search':
-        clearTimeout(this.setTableFilterTimeout);
-        this.setTableFilterTimeout = setTimeout(() => {
-          this.props.setTableFilter({ search: value, page: 1 }); // this causes performance issues so we use a rudamentary debounce
-        }, constants.tableSearchDebounceTime);
+      case 'equipmentType':
+        this.props.setTableFilter({ productGroup: value, page: 1 });
+        break;
+      case 'standard':
+        this.props.setTableFilter({ standard: value, page: 1 });
         break;
       default:
         break;
@@ -301,7 +300,7 @@ class ManageMeasurements extends React.Component<
         />
         <SearchTableForm
           fieldConfig={this.searchFieldConfig}
-          handleSubmit={this.props.getUserManage}
+          handleSubmit={this.props.getAllMeasurementPointLists}
           loading={this.props.loading}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
@@ -314,7 +313,7 @@ class ManageMeasurements extends React.Component<
         <Button
           className="table-add-button"
           bsStyle="link"
-          // onClick={this.props.toggleEditJobModal}
+          onClick={this.props.toggleEditMeasurementsModal}
         >
           {t('manageMeasurements:newMeasurement')}
         </Button>
@@ -326,7 +325,7 @@ class ManageMeasurements extends React.Component<
           pageSize={this.props.tableData.length}
           page={this.props.tableFilters.page - 1}
           manual // Forces table not to paginate or sort automatically, so we can handle it server-side
-          pages={this.props.userManage.totalPages}
+          pages={this.props.manageMeasurements.totalPages}
           showPageSizeOptions={false}
           className={`beacon-table -highlight ${this.state.currentTile.color}`}
           previousText={t('common:previous')}
@@ -336,20 +335,20 @@ class ManageMeasurements extends React.Component<
           noDataText={t('common:noDataText')}
           resizable={false}
         />
-        <EditUserModal
+        {/* <EditUserModal
           selectedUser={this.props.tableData[this.state.selectedRow]}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
           t={this.props.t}
-        />
-        <EditCustomerModal
+        /> */}
+        {/* <EditCustomerModal
           t={this.props.t}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
-        />
-        <CommonModal
+        /> */}
+        {/* <CommonModal
           modalVisible={this.props.showSecurityFunctionsModal}
           className="security-modal second-modal"
           onHide={this.props.toggleSecurityFunctionsModal}
@@ -364,7 +363,7 @@ class ManageMeasurements extends React.Component<
           title={t('securityFunctionsModalTitle')}
           container={document.getElementById('two-pane-layout')}
           backdrop={true}
-        />
+        /> */}
       </div>
     );
   }
@@ -377,10 +376,11 @@ class ManageMeasurements extends React.Component<
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
-    userManage: state.manageUser,
+    manageMeasurements: state.manageMeasurements,
     customers: state.customers,
     loading: state.ajaxCallsInProgress > 0,
-    showEditUserModal: state.manageUser.showEditUserModal,
+    showEditMeasurementsModal:
+      state.manageMeasurements.showEditMeasurementsModal,
     // showEditCustomerModal: state.showEditCustomerModal,
     // showEditFacilityModal: state.showEditFacilityModal,
     // showSecurityFunctionsModal: state.showSecurityFunctionsModal,
@@ -394,14 +394,14 @@ export default translate('manageMeasurements')(
   connect(
     mapStateToProps,
     {
-      getUserManage,
-      updateUser,
-      toggleEditUserModal,
-      toggleSecurityFunctionsModal,
+      // getUserManage,
+      // updateUser,
+      // toggleEditUserModal,
+      // toggleSecurityFunctionsModal,
       getAllMeasurementPointLists,
       toggleEditMeasurementsModal,
       closeAllModals,
-      getCustomers,
+      // getCustomers,
       setTableFilter,
       getProductInfo
     }

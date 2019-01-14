@@ -240,6 +240,12 @@ export default {
     tableFilters: initialTableFilters,
     totalPages: 1
   },
+  manageMeasurements: {
+    totalPages: 1,
+    data: [],
+    showEditMeasurementsModal: false,
+    tableFilters: initialTableFilters
+  },
   customers: [],
   facilities: [],
 

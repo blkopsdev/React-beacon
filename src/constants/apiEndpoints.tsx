@@ -116,7 +116,7 @@ const API = {
       getQuizResults: `${root}/training/getquizresults`
     },
     measurements: {
-      get: `${root}/measurementpoint/GetAllMeasurementPointLists`
+      getall: `${root}/measurementpoint/GetAllMeasurementPointLists`
     }
   }
 };

@@ -3,11 +3,11 @@
 */
 import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { find } from 'lodash';
+// import { find } from 'lodash';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 import ReactTable, { SortingRule, FinalState, RowInfo } from 'react-table';
-import * as moment from 'moment';
+// import * as moment from 'moment';
 import { Button } from 'react-bootstrap';
 
 import { FormUtil } from '../common/FormUtil';
@@ -18,7 +18,8 @@ import {
   ItableFiltersReducer,
   Itile,
   Iuser,
-  Ioption
+  Ioption,
+  IMeasurementListObject
 } from '../../models';
 import { TableUtil } from '../common/TableUtil';
 import { closeAllModals, getCustomers } from '../../actions/commonActions';
@@ -30,6 +31,10 @@ import {
   toggleSecurityFunctionsModal,
   updateUser
 } from '../../actions/manageUserActions';
+import {
+  getAllMeasurementPointLists,
+  toggleEditMeasurementsModal
+} from '../../actions/manageMeasurementsActions';
 import { getProductInfo } from '../../actions/manageInventoryActions';
 import Banner from '../common/Banner';
 import CommonModal from '../common/CommonModal';
@@ -40,7 +45,7 @@ import SecurityFunctionsList from './SecurityFunctionsList';
 import constants from '../../constants/constants';
 import { FieldConfig } from 'react-reactive-form';
 
-const mpListTypes = [
+const mpListTypeOptions = [
   { label: 'Annual', value: 1 },
   { label: 'Verification', value: 2 }
 ];
@@ -57,6 +62,8 @@ interface IdispatchProps {
   toggleEditUserModal: typeof toggleEditUserModal;
   toggleSecurityFunctionsModal: typeof toggleSecurityFunctionsModal;
   getUserManage: typeof getUserManage;
+  getAllMeasurementPointLists: typeof getAllMeasurementPointLists;
+  toggleEditMeasurementsModal: typeof toggleEditMeasurementsModal;
   getProductInfo: typeof getProductInfo;
   productGroupOptions: Ioption[];
   standardOptions: Ioption[];
@@ -100,7 +107,7 @@ class ManageMeasurements extends React.Component<
           render: FormUtil.SelectWithoutValidation,
           meta: {
             label: 'manageMeasurements:type',
-            options: mpListTypes,
+            options: mpListTypeOptions,
             colWidth: 3,
             type: 'select',
             placeholder: 'typePlaceholder'
@@ -136,11 +143,15 @@ class ManageMeasurements extends React.Component<
     });
   }
   componentDidMount() {
+    // Get measurement point lists
+    this.props.getAllMeasurementPointLists();
+    // Get product info when this component mounts
     this.props.getProductInfo();
-    // refresh the userManage every time the component mounts
-    this.props.getUserManage();
-    // refresh the list of customers every time the component mounts
-    this.props.getCustomers();
+
+    // // refresh the userManage every time the component mounts
+    // this.props.getUserManage();
+    // // refresh the list of customers every time the component mounts
+    // this.props.getCustomers();
   }
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
     if (
@@ -168,50 +179,43 @@ class ManageMeasurements extends React.Component<
     return TableUtil.translateHeaders(
       [
         {
-          id: 'name',
-          Header: 'name',
-          // accessor: "user",
-          Cell: (row: any) => (
-            <span>
-              {row.original.first} {row.original.last}
-            </span>
-          )
-        },
-        {
-          Header: 'email',
-          accessor: 'email'
-        },
-        {
-          id: 'company',
-          Header: 'company',
-          accessor: ({ customerID }: Iuser) => {
-            // !TODO move this to a reducer?
-            let cust;
-            if (customerID) {
-              cust = find(
-                this.props.customers,
-                c =>
-                  c.id.trim().toLowerCase() === customerID.trim().toLowerCase()
-              );
-            }
-            return cust ? cust.name : '';
+          id: 'type',
+          Header: 'Type',
+          Cell: (row: any) => {
+            const item = mpListTypeOptions.filter((opt: any) => {
+              return opt.value === row.original.type;
+            })[0];
+            return <span>{item.label}</span>;
           }
         },
         {
-          Header: 'manager',
-          accessor: ({ hasTeamMembers }: Iuser) => {
-            return hasTeamMembers ? 'Yes' : 'No';
-          },
-          id: 'manager'
+          id: 'equipmentType',
+          Header: 'equipment type',
+          accessor: ({ productGroupID }: IMeasurementListObject) => {
+            const item = this.props.productGroupOptions.filter(
+              (opt: Ioption) => {
+                return opt.value === productGroupID;
+              }
+            )[0];
+            return productGroupID ? item.label : '';
+          }
         },
         {
-          Header: 'login',
-          accessor: ({ lastLoginDate }: Iuser) => {
-            return lastLoginDate
-              ? moment.utc(lastLoginDate).format('MM/DD/YYYY hh:mm a')
-              : 'n/a';
-          },
-          id: 'login'
+          id: 'standard',
+          Header: 'standard',
+          accessor: ({ standardID }: IMeasurementListObject) => {
+            const item = this.props.standardOptions.filter((opt: Ioption) => {
+              return opt.value === standardID;
+            })[0];
+            return standardID ? item.label : '';
+          }
+        },
+        {
+          id: 'numQuestions',
+          Header: '# of Questions',
+          accessor: ({ measurementPoints }: IMeasurementListObject) => {
+            return measurementPoints ? measurementPoints.length : 0;
+          }
         }
       ],
       this.props.t
@@ -377,11 +381,11 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     customers: state.customers,
     loading: state.ajaxCallsInProgress > 0,
     showEditUserModal: state.manageUser.showEditUserModal,
-    showEditCustomerModal: state.showEditCustomerModal,
-    showEditFacilityModal: state.showEditFacilityModal,
-    showSecurityFunctionsModal: state.showSecurityFunctionsModal,
-    tableData: state.manageUser.data,
-    tableFilters: state.manageUser.tableFilters,
+    // showEditCustomerModal: state.showEditCustomerModal,
+    // showEditFacilityModal: state.showEditFacilityModal,
+    // showSecurityFunctionsModal: state.showSecurityFunctionsModal,
+    tableData: state.manageMeasurements.data,
+    tableFilters: state.manageMeasurements.tableFilters,
     standardOptions: state.productInfo.standardOptions,
     productGroupOptions: state.productInfo.productGroupOptions
   };
@@ -394,6 +398,8 @@ export default translate('manageMeasurements')(
       updateUser,
       toggleEditUserModal,
       toggleSecurityFunctionsModal,
+      getAllMeasurementPointLists,
+      toggleEditMeasurementsModal,
       closeAllModals,
       getCustomers,
       setTableFilter,

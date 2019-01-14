@@ -286,7 +286,8 @@
     "ViewJobs": "View Jobs",
     "ManageLocations": "Manage Locations",
     "ManageJobs": "Manage Jobs",
-    "ManageMeasurements": "Manage Measurements"
+    "ManageAllMeasurementPoints": "Manage Global Measurement Points",
+    "ManageCustomerMeasurementPoints": "Manage Customer Measurement Points"
   },
   "training": {
     "shoppingCartTitle": "Shopping Cart",

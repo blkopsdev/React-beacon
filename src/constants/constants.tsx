@@ -124,10 +124,15 @@ const securityFunctions = {
     name: 'securityF:ManageAllTraining',
     description: "Allows the user to view all user's training progress"
   },
-  ManageMeasurements: {
-    id: '25961E0B-AFB4-4864-BF4C-A341A22553C6',
-    name: 'securityF:ManageAllTraining',
-    description: 'Allows the user to manage measurement points'
+  ManageAllMeasurementPoints: {
+    id: 'BE9173D7-B8AA-4065-973F-7B39A2226221',
+    name: 'securityF:ManageAllMeasurementPoints',
+    description: 'Allows the user to manage global measurement points'
+  },
+  ManageCustomerMeasurementPoints: {
+    id: '4EA1668B-220A-4FFB-865B-EB271EF6FF0E',
+    name: 'securityF:ManageCustomerMeasurementPoints',
+    description: 'Allows the user to manage global measurement points'
   }
 };
 
@@ -365,7 +370,9 @@ const tiles = [
     width: 360,
     height: 400,
     url: '/measurements',
-    securityFunction: securityFunctions.ManageMeasurements.id,
+    securityFunction:
+      securityFunctions.ManageAllMeasurementPoints.id ||
+      securityFunctions.ManageCustomerMeasurementPoints.id,
     description: ''
   }
 ];

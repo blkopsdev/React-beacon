@@ -13,6 +13,7 @@ export interface ItableFiltersReducer {
   productGroup?: Ioption;
   manufacturer?: Ioption;
   sorted?: SortingRule[];
+  standard?: Ioption;
 }
 export interface ItableFiltersParams {
   search?: string;
@@ -321,6 +322,24 @@ export interface IproductInfo {
   systemSizeOptions: Ioption[];
 }
 
+export interface IMeasurementListObject {
+  id: string;
+  measurementPoints: any[];
+  productGroupID: string;
+  standardID: string;
+  // productID: string;
+  // createDate: string;
+  // creatorID: string;
+  // product: Iproduct;
+}
+
+export interface ImanageMeasurementsReducer {
+  data: IMeasurementListObject[];
+  totalPages: number;
+  showEditMeasurementsModal: boolean;
+  tableFilters: ItableFiltersReducer;
+}
+
 export interface IinitialState {
   user: Iuser;
   ajaxCallsInProgress: number;
@@ -341,6 +360,7 @@ export interface IinitialState {
   training: ItrainingReducer;
   manageTraining: ImanageTrainingReducer;
   productInfo: IproductInfo;
+  manageMeasurements: ImanageMeasurementsReducer;
 }
 
 export interface Itile {

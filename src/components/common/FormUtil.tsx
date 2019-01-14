@@ -419,6 +419,26 @@ export const FormUtil = {
       </Col>
     );
   },
+  Button: ({
+    handler,
+    touched,
+    hasError,
+    meta,
+    pristine,
+    errors,
+    submitted,
+    patchValue,
+    setErrors,
+    value
+  }: AbstractControl) => {
+    return (
+      <Col xs={meta.colWidth}>
+        <Button bsStyle="link" className="" onClick={meta.buttonAction}>
+          {meta.buttonName}
+        </Button>
+      </Col>
+    );
+  },
   translateForm: (config: FieldConfig, t: TranslationFunction) => {
     const newControls = mapValues(config.controls, field => {
       if (field.meta && field.meta.label) {

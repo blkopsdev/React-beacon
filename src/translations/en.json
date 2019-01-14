@@ -248,7 +248,8 @@
     "equipmentTypePlaceholder": "Select equipment type...",
     "standard": "Standard",
     "standardPlaceholder": "Select standard...",
-    "newMeasurement": "Add Measurements"
+    "newMeasurement": "Add Measurements",
+    "editMeasurementsModalTitle": "ADD MEASUREMENTS"
   },
   "tiles": {
     "alerts": "Alerts",

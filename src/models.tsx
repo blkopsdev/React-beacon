@@ -328,10 +328,8 @@ export interface IMeasurementListObject {
   measurementPoints: any[];
   productGroupID: string;
   standardID: string;
-  // productID: string;
-  // createDate: string;
-  // creatorID: string;
-  // product: Iproduct;
+  type: number;
+  customerID: string;
 }
 
 export interface ImanageMeasurementsReducer {

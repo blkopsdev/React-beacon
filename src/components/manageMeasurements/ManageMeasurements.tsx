@@ -16,7 +16,6 @@ import {
   IinitialState,
   ItableFiltersReducer,
   Itile,
-  Iuser,
   Ioption,
   IMeasurementListObject,
   ImanageMeasurementsReducer
@@ -40,16 +39,11 @@ import { getProductInfo } from '../../actions/manageInventoryActions';
 import Banner from '../common/Banner';
 // import CommonModal from '../common/CommonModal';
 // import EditCustomerModal from '../common/EditCustomerModal';
-// import EditUserModal from './EditUserModal';
+import EditMeasurementsModal from './EditMeasurementsModal';
 import SearchTableForm from '../common/SearchTableForm';
 // import SecurityFunctionsList from './SecurityFunctionsList';
 import constants from '../../constants/constants';
 import { FieldConfig } from 'react-reactive-form';
-
-const mpListTypeOptions = [
-  { label: 'Annual', value: 1 },
-  { label: 'Verification', value: 2 }
-];
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -78,7 +72,7 @@ interface IdispatchProps {
   showSecurityFunctionsModal: boolean;
   setTableFilter: typeof setTableFilter;
   tableFilters: ItableFiltersReducer;
-  tableData: Iuser[];
+  tableData: IMeasurementListObject[];
 }
 
 interface Istate {
@@ -108,7 +102,7 @@ class ManageMeasurements extends React.Component<
           render: FormUtil.SelectWithoutValidation,
           meta: {
             label: 'manageMeasurements:type',
-            options: mpListTypeOptions,
+            options: constants.measurementPointListTypeOptions,
             colWidth: 3,
             type: 'select',
             placeholder: 'typePlaceholder'
@@ -181,9 +175,11 @@ class ManageMeasurements extends React.Component<
           id: 'type',
           Header: 'Type',
           Cell: (row: any) => {
-            const item = mpListTypeOptions.filter((opt: any) => {
-              return opt.value === row.original.type;
-            })[0];
+            const item = constants.measurementPointListTypeOptions.filter(
+              (opt: any) => {
+                return opt.value === row.original.type;
+              }
+            )[0];
             return <span>{item.label}</span>;
           }
         },
@@ -335,13 +331,18 @@ class ManageMeasurements extends React.Component<
           noDataText={t('common:noDataText')}
           resizable={false}
         />
-        {/* <EditUserModal
-          selectedUser={this.props.tableData[this.state.selectedRow]}
+        <EditMeasurementsModal
+          selectedMeasurementPointList={
+            this.props.tableData[this.state.selectedRow]
+          }
+          measurementPointListTypeOptions={
+            constants.measurementPointListTypeOptions
+          }
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
           t={this.props.t}
-        /> */}
+        />
         {/* <EditCustomerModal
           t={this.props.t}
           colorButton={

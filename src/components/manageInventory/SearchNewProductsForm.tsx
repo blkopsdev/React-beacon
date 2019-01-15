@@ -11,49 +11,23 @@ import {
 } from 'react-reactive-form';
 import { forEach, map, isEmpty } from 'lodash';
 import { toastr } from 'react-redux-toastr';
-import { translate, TranslationFunction, I18n } from 'react-i18next';
+import { TranslationFunction } from 'react-i18next';
 import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
-import { Iproduct, IproductInfo, ItableFiltersReducer } from '../../models';
+import {
+  Iproduct,
+  IproductInfo,
+  ItableFiltersReducer,
+  IproductQueueObject
+} from '../../models';
 import {
   toggleSearchNewProductsModal,
   getProducts,
   toggleEditProductModal,
-  resetNewProducts,
-  setSelectedProduct,
-  toggleEditInstallModal
+  resetNewProducts
 } from '../../actions/manageInventoryActions';
 import constants from '../../constants/constants';
-
-const buildFieldConfig = (productInfo: IproductInfo) => {
-  const fieldConfigControls = {
-    productGroupID: {
-      render: FormUtil.SelectWithoutValidation,
-      meta: {
-        options: productInfo.productGroupOptions,
-        label: 'common:productGroup',
-        colWidth: 12,
-        placeholder: 'common:searchPlaceholder',
-        isMulti: false,
-        name: 'product-group'
-      }
-    },
-    search: {
-      render: FormUtil.TextInputWithoutValidation,
-      meta: {
-        label: 'search',
-        colWidth: 12,
-        type: 'input',
-        placeholder: 'searchByName',
-        name: 'product-search'
-      }
-    }
-  };
-  return {
-    controls: { ...fieldConfigControls }
-  };
-};
 
 interface Iprops {
   toggleSearchNewProductsModal: typeof toggleSearchNewProductsModal;
@@ -62,14 +36,13 @@ interface Iprops {
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;
-  i18n: I18n;
   productInfo: IproductInfo;
   tableFilters: ItableFiltersReducer;
   getProducts: typeof getProducts;
   newProducts: { [key: string]: Iproduct };
   resetNewProducts: typeof resetNewProducts;
-  setSelectedProduct: typeof setSelectedProduct;
-  toggleEditInstallModal: typeof toggleEditInstallModal;
+  handleProductSelect: (product: Iproduct) => void;
+  selectedQueueObject?: IproductQueueObject;
 }
 
 class SearchNewProductsForm extends React.Component<Iprops, {}> {
@@ -81,7 +54,7 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(
-      buildFieldConfig(this.props.productInfo),
+      this.buildFieldConfig(this.props.productInfo),
       this.props.t
     );
     this.setForm = this.setForm.bind(this);
@@ -130,7 +103,43 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
       this.subscription.unsubscribe();
     }
   }
-
+  buildFieldConfig = (productInfo: IproductInfo) => {
+    let defaultProductGroup = null;
+    if (this.props.selectedQueueObject) {
+      const pg = this.props.productInfo.productGroups[
+        this.props.selectedQueueObject.product.productGroupID
+      ];
+      defaultProductGroup = { label: pg.name, value: pg.id };
+    }
+    const fieldConfigControls = {
+      productGroupID: {
+        render: FormUtil.SelectWithoutValidation,
+        meta: {
+          options: productInfo.productGroupOptions,
+          label: 'common:productGroup',
+          colWidth: 12,
+          placeholder: 'common:searchPlaceholder',
+          isMulti: false,
+          name: 'product-group',
+          disabled: !!this.props.selectedQueueObject,
+          defaultValue: defaultProductGroup
+        }
+      },
+      search: {
+        render: FormUtil.TextInputWithoutValidation,
+        meta: {
+          label: 'search',
+          colWidth: 12,
+          type: 'input',
+          placeholder: 'searchByName',
+          name: 'product-search'
+        }
+      }
+    };
+    return {
+      controls: { ...fieldConfigControls }
+    };
+  };
   handleSubmit = () => {
     if (this.userForm.status === 'INVALID') {
       this.userForm.markAsSubmitted();
@@ -187,12 +196,7 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
         <li
           className={className}
           onClick={() => {
-            const newProduct = {
-              ...product,
-              subcategory: productInfo.subcategories[product.subcategoryID]
-            };
-            this.props.toggleEditInstallModal();
-            this.props.setSelectedProduct(newProduct);
+            this.props.handleProductSelect(product);
           }}
         >
           <h4> {product.name} </h4>
@@ -254,9 +258,7 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
               {isEmpty(this.props.newProducts) &&
                 searchActive && (
                   <Col xs={12}>
-                    <Well className="text-center">
-                      {t('no products found')}
-                    </Well>
+                    <Well className="text-center">{t('noProductsFound')}</Well>
                   </Col>
                 )}
             </Col>
@@ -270,15 +272,18 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
             >
               {t('common:cancel')}
             </Button>
-            <Button
-              bsStyle="link"
-              type="button"
-              disabled={this.props.loading}
-              className="right-side"
-              onClick={this.props.toggleEditProductModal}
-            >
-              {t('addNewProductButton')}
-            </Button>
+            {!!!this.props.selectedQueueObject && (
+              <Button
+                bsStyle="link"
+                type="button"
+                disabled={this.props.loading}
+                className="right-side"
+                onClick={this.props.toggleEditProductModal}
+              >
+                {t('addNewProductButton')}
+              </Button>
+            )}
+
             <button type="submit" style={{ display: 'none' }} />
           </Col>
         </form>
@@ -286,4 +291,4 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
     );
   }
 }
-export default translate('manageInventory')(SearchNewProductsForm);
+export default SearchNewProductsForm;

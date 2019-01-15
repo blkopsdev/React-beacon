@@ -28,7 +28,8 @@ import {
 import {
   saveProduct,
   toggleEditProductModal,
-  updateProduct
+  updateProduct,
+  toggleSearchNewProductsModal
 } from '../../actions/manageInventoryActions';
 import { updateQueueProduct } from '../../actions/manageProductQueueActions';
 import constants from '../../constants/constants';
@@ -229,6 +230,7 @@ interface Iprops {
   updateProduct: typeof updateProduct;
   updateQueueProduct: typeof updateQueueProduct;
   user: Iuser;
+  toggleSearchNewProductsModal: typeof toggleSearchNewProductsModal;
 }
 
 class ManageInventoryForm extends React.Component<Iprops, {}> {
@@ -418,6 +420,9 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
             onMount={this.setForm}
             fieldConfig={this.fieldConfig}
           />
+          {this.props.selectedQueueObject && (
+            <div style={{ height: '80px', float: 'left', marginTop: '40px' }} />
+          )}
           <Col xs={12} className="form-buttons text-right">
             <Button
               bsStyle="default"
@@ -427,24 +432,36 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
             >
               {t('common:cancel')}
             </Button>
+            {this.canEditInstalls() && (
+              <Button
+                bsStyle={this.props.colorButton}
+                type="submit"
+                disabled={this.props.loading}
+                style={{ marginRight: '20px' }}
+              >
+                {t('common:save')}
+              </Button>
+            )}
             {this.props.selectedQueueObject && (
               <Button
                 bsStyle={this.props.colorButton}
                 type="button"
                 disabled={this.props.loading}
                 onClick={(e: any) => this.handleSubmit(e, true)}
-                style={{ marginRight: '20px' }}
               >
                 {t('manageInventory:saveApprove')}
               </Button>
             )}
-            {this.canEditInstalls() && (
+            {this.props.selectedQueueObject && (
               <Button
                 bsStyle={this.props.colorButton}
-                type="submit"
+                type="button"
                 disabled={this.props.loading}
+                onClick={this.props.toggleSearchNewProductsModal}
+                style={{ marginTop: '10px' }}
+                className="pull-left"
               >
-                {t('common:save')}
+                {t('manageInventory:mergeProduct')}
               </Button>
             )}
           </Col>

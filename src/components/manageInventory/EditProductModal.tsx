@@ -17,7 +17,8 @@ import {
 import {
   updateProduct,
   saveProduct,
-  toggleEditProductModal
+  toggleEditProductModal,
+  toggleSearchNewProductsModal
 } from '../../actions/manageInventoryActions';
 import { updateQueueProduct } from '../../actions/manageProductQueueActions';
 import CommonModal from '../common/CommonModal';
@@ -41,6 +42,7 @@ interface IdispatchProps {
   secondModal: boolean;
   updateQueueProduct: typeof updateQueueProduct;
   user: Iuser;
+  toggleSearchNewProductsModal: typeof toggleSearchNewProductsModal;
 }
 
 class ManageInventoryModal extends React.Component<
@@ -82,8 +84,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     loading: state.ajaxCallsInProgress > 0,
     showModal: state.manageInventory.showEditProductModal,
     productInfo: state.manageInventory.productInfo,
-    tableFilters: state.manageInventory.tableFilters,
-    secondModal: state.manageInventory.showSearchNewProductsModal
+    tableFilters: state.manageInventory.tableFilters
   };
 };
 
@@ -93,6 +94,7 @@ export default connect(
     updateProduct,
     saveProduct,
     toggleEditProductModal,
-    updateQueueProduct
+    updateQueueProduct,
+    toggleSearchNewProductsModal
   }
 )(ManageInventoryModal);

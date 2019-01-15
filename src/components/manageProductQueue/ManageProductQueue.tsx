@@ -19,7 +19,8 @@ import {
   IproductInfo,
   ItableFiltersReducer,
   Itile,
-  Iuser
+  Iuser,
+  Iproduct
 } from '../../models';
 import { TableUtil } from '../common/TableUtil';
 import { addToCart } from '../../actions/shoppingCartActions';
@@ -27,7 +28,8 @@ import { closeAllModals } from '../../actions/commonActions';
 import { emptyTile } from '../../reducers/initialState';
 import {
   getProductInfo,
-  toggleEditProductModal
+  toggleEditProductModal,
+  mergeProduct
 } from '../../actions/manageInventoryActions';
 import {
   getProductQueue,
@@ -37,6 +39,8 @@ import Banner from '../common/Banner';
 import EditProductModal from '../manageInventory/EditProductModal';
 import SearchTableForm from '../common/SearchTableForm';
 import constants from '../../constants/constants';
+import SearchNewProductsModal from '../manageInventory/SearchNewProductsModal';
+import { toastr } from 'react-redux-toastr';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -62,6 +66,7 @@ interface IdispatchProps {
   tableData: IproductQueueObject[];
   setTableFilter: typeof setTableFilter;
   tableFilters: ItableFiltersReducer;
+  mergeProduct: typeof mergeProduct;
 }
 
 interface Istate {
@@ -275,6 +280,29 @@ class ManageProductQueue extends React.Component<
     this.props.setTableFilter({ sorted: newSorted });
     this.setState({ selectedRow: {} });
   };
+
+  /*
+  * Handle Product Select
+  */
+  handleProductSelect = (product: Iproduct) => {
+    // const newProduct = {
+    //   ...product,
+    //   subcategory: this.props.productInfo.subcategories[product.subcategoryID]
+    // };
+    toastr.confirm(
+      `${this.props.t('mergeConfirmPart_01')} \n ${
+        this.state.selectedQueueObject.product.name
+      } ${this.props.t('mergeConfirmPart_02')} ${product.name}?`,
+      {
+        onOk: () => {
+          this.props.mergeProduct(
+            this.state.selectedQueueObject.product.id,
+            product.id
+          );
+        }
+      }
+    );
+  };
   render() {
     console.log('rendering inventory table');
     if (this.props.productInfo.productGroupOptions.length === 0) {
@@ -331,6 +359,17 @@ class ManageProductQueue extends React.Component<
             constants.colors[`${this.state.currentTile.color}Button`]
           }
           t={this.props.t}
+          secondModal={false}
+        />
+        <SearchNewProductsModal
+          selectedItem={this.state.selectedQueueObject}
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+          t={this.props.t}
+          secondModal={true}
+          handleProductSelect={this.handleProductSelect}
+          selectedQueueObject={this.state.selectedQueueObject}
         />
       </div>
     );
@@ -362,7 +401,8 @@ export default translate('manageProductQueue')(
       closeAllModals,
       getProductInfo,
       addToCart,
-      setTableFilter
+      setTableFilter,
+      mergeProduct
     }
   )(ManageProductQueue)
 );

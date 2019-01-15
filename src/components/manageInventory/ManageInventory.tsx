@@ -490,6 +490,17 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     );
   };
 
+  /*
+  * Handle Product Select
+  */
+  handleProductSelect = (product: Iproduct) => {
+    const newProduct = {
+      ...product,
+      subcategory: this.props.productInfo.subcategories[product.subcategoryID]
+    };
+    this.props.toggleEditInstallModal();
+    this.props.setSelectedProduct(newProduct);
+  };
   render() {
     console.log('rendering inventory table');
     if (this.props.productInfo.productGroupOptions.length === 0) {
@@ -593,6 +604,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
             constants.colors[`${this.state.currentTile.color}Button`]
           }
           t={this.props.t}
+          secondModal={this.props.userManage.showSearchNewProductsModal}
         />
         <ShoppingCartModal
           colorButton={
@@ -628,6 +640,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
             constants.colors[`${this.state.currentTile.color}Button`]
           }
           t={this.props.t}
+          handleProductSelect={this.handleProductSelect}
         />
         <ImportInstallModal
           colorButton={

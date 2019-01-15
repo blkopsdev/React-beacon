@@ -398,7 +398,7 @@ class Courses extends React.Component<Props, State> {
               if (lp) {
                 progress = lp.isComplete
                   ? 100
-                  : Math.round((lp.timeSpent / lp.totalTime) * 99); // multiplying by 99 because we do not want to display 100% here.  only if .isComplete is true.
+                  : Math.round((lp.timeSpent / lp.totalTime) * 99); // multiplying by 99 because we do not want to display 100% here.  display 100% only if .isComplete is true.
               }
 
               return (

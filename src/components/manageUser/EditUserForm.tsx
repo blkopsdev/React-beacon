@@ -267,7 +267,6 @@ class EditUserForm extends React.Component<Iprops, {}> {
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-    console.log(this.userForm.value);
     const facilitiesArray = map(
       this.userForm.value.facilities,
       (option: { value: string; label: string }) => {

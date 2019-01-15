@@ -240,10 +240,10 @@ export default {
     tableFilters: initialTableFilters,
     totalPages: 1
   },
-  manageMeasurements: {
+  manageMeasurementPointLists: {
     totalPages: 1,
     data: [],
-    showEditMeasurementsModal: false,
+    showEditMeasurementPointListModal: false,
     showEditQuestionModal: false,
     showEditGroupModal: false,
     showEditProcedureModal: false,

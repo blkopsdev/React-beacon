@@ -1,5 +1,5 @@
 /*
-* Measurement Points
+* Measurement Point Lists
 */
 import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
@@ -8,7 +8,7 @@ import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 import ReactTable, { SortingRule, FinalState, RowInfo } from 'react-table';
 // import * as moment from 'moment';
-import { Button } from 'react-bootstrap';
+import { Button, Col } from 'react-bootstrap';
 
 import { FormUtil } from '../common/FormUtil';
 import {
@@ -17,34 +17,25 @@ import {
   ItableFiltersReducer,
   Itile,
   Ioption,
-  IMeasurementListObject,
-  ImanageMeasurementsReducer
+  ImeasurementPointList,
+  ImanageMeasurementPointListsReducer
 } from '../../models';
 import { TableUtil } from '../common/TableUtil';
 import { closeAllModals, getCustomers } from '../../actions/commonActions';
 import { emptyTile } from '../../reducers/initialState';
-// import {
-// getUserManage,
-// setTableFilter,
-// toggleEditUserModal,
-// toggleSecurityFunctionsModal,
-// updateUser
-// } from '../../actions/manageUserActions';
 import {
   getAllMeasurementPointLists,
-  toggleEditMeasurementsModal,
+  toggleEditMeasurementPointListModal,
   toggleEditQuestionModal,
   toggleEditProcedureModal,
   toggleEditGroupModal,
   setTableFilter
-} from '../../actions/manageMeasurementsActions';
+} from '../../actions/manageMeasurementPointListsActions';
 import { getProductInfo } from '../../actions/manageInventoryActions';
 import Banner from '../common/Banner';
 import CommonModal from '../common/CommonModal';
-// import EditCustomerModal from '../common/EditCustomerModal';
-import EditMeasurementsModal from './EditMeasurementsModal';
+import EditMeasurementPointListModal from './EditMeasurementPointListModal';
 import SearchTableForm from '../common/SearchTableForm';
-// import SecurityFunctionsList from './SecurityFunctionsList';
 import constants from '../../constants/constants';
 import { FieldConfig } from 'react-reactive-form';
 
@@ -61,7 +52,7 @@ interface IdispatchProps {
   // toggleSecurityFunctionsModal: typeof toggleSecurityFunctionsModal;
   // getUserManage: typeof getUserManage;
   getAllMeasurementPointLists: typeof getAllMeasurementPointLists;
-  toggleEditMeasurementsModal: typeof toggleEditMeasurementsModal;
+  toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
   toggleEditQuestionModal: typeof toggleEditQuestionModal;
   toggleEditProcedureModal: typeof toggleEditProcedureModal;
   toggleEditGroupModal: typeof toggleEditGroupModal;
@@ -71,14 +62,14 @@ interface IdispatchProps {
   customers: Icustomer[];
   closeAllModals: typeof closeAllModals;
   getCustomers: typeof getCustomers;
-  manageMeasurements: ImanageMeasurementsReducer;
-  showEditMeasurementsModal: boolean;
+  manageMeasurementPointList: ImanageMeasurementPointListsReducer;
+  showEditMeasurementPointListModal: boolean;
   showEditQuestionModal: boolean;
   showEditProcedureModal: boolean;
   showEditGroupModal: boolean;
   setTableFilter: typeof setTableFilter;
   tableFilters: ItableFiltersReducer;
-  tableData: IMeasurementListObject[];
+  tableData: ImeasurementPointList[];
 }
 
 interface Istate {
@@ -87,7 +78,7 @@ interface Istate {
   columns: any[];
 }
 
-class ManageMeasurements extends React.Component<
+class ManageMeasurementPointList extends React.Component<
   Iprops & IdispatchProps,
   Istate
 > {
@@ -107,31 +98,34 @@ class ManageMeasurements extends React.Component<
         type: {
           render: FormUtil.SelectWithoutValidation,
           meta: {
-            label: 'manageMeasurements:type',
+            label: 'manageMeasurementPointList:type',
             options: constants.measurementPointListTypeOptions,
             colWidth: 3,
             type: 'select',
-            placeholder: 'typePlaceholder'
+            placeholder: 'typePlaceholder',
+            defaultValue: this.props.tableFilters.type
           }
         },
         equipmentType: {
           render: FormUtil.SelectWithoutValidation,
           meta: {
-            label: 'manageMeasurements:equipmentType',
+            label: 'manageMeasurementPointList:equipmentType',
             options: this.props.productGroupOptions,
             colWidth: 3,
             type: 'select',
-            placeholder: 'equipmentTypePlaceholder'
+            placeholder: 'equipmentTypePlaceholder',
+            defaultValue: this.props.tableFilters.productGroup
           }
         },
         standard: {
           render: FormUtil.SelectWithoutValidation,
           meta: {
-            label: 'manageMeasurements:standard',
+            label: 'manageMeasurementPointList:standard',
             options: this.props.standardOptions,
             colWidth: 3,
             type: 'select',
-            placeholder: 'standardPlaceholder'
+            placeholder: 'standardPlaceholder',
+            defaultValue: this.props.tableFilters.standard
           }
         }
       }
@@ -149,16 +143,13 @@ class ManageMeasurements extends React.Component<
     // Get product info when this component mounts
     this.props.getProductInfo();
 
-    // // refresh the userManage every time the component mounts
-    // this.props.getUserManage();
-    // // refresh the list of customers every time the component mounts
-    // this.props.getCustomers();
+    // TODO: set initial filters from redux
   }
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
     if (
-      prevProps.showEditMeasurementsModal !==
-        this.props.showEditMeasurementsModal &&
-      !this.props.showEditMeasurementsModal
+      prevProps.showEditMeasurementPointListModal !==
+        this.props.showEditMeasurementPointListModal &&
+      !this.props.showEditMeasurementPointListModal
     ) {
       this.setState({ selectedRow: null });
     }
@@ -192,7 +183,7 @@ class ManageMeasurements extends React.Component<
         {
           id: 'equipmentType',
           Header: 'equipment type',
-          accessor: ({ productGroupID }: IMeasurementListObject) => {
+          accessor: ({ productGroupID }: ImeasurementPointList) => {
             const item = this.props.productGroupOptions.filter(
               (opt: Ioption) => {
                 return opt.value === productGroupID;
@@ -204,7 +195,7 @@ class ManageMeasurements extends React.Component<
         {
           id: 'standard',
           Header: 'standard',
-          accessor: ({ standardID }: IMeasurementListObject) => {
+          accessor: ({ standardID }: ImeasurementPointList) => {
             const item = this.props.standardOptions.filter((opt: Ioption) => {
               return opt.value === standardID;
             })[0];
@@ -214,7 +205,7 @@ class ManageMeasurements extends React.Component<
         {
           id: 'numQuestions',
           Header: '# of Questions',
-          accessor: ({ measurementPoints }: IMeasurementListObject) => {
+          accessor: ({ measurementPoints }: ImeasurementPointList) => {
             return measurementPoints ? measurementPoints.length : 0;
           }
         }
@@ -237,7 +228,7 @@ class ManageMeasurements extends React.Component<
             this.setState({
               selectedRow: rowInfo.index
             });
-            this.props.toggleEditMeasurementsModal();
+            this.props.toggleEditMeasurementPointListModal();
           }
         },
         style: {
@@ -292,6 +283,13 @@ class ManageMeasurements extends React.Component<
   };
 
   render() {
+    if (this.props.productGroupOptions.length === 0) {
+      return (
+        <Col xs={12}>
+          <h4> loading... </h4>
+        </Col>
+      );
+    }
     const { t } = this.props;
     return (
       <div className="user-manage">
@@ -315,9 +313,9 @@ class ManageMeasurements extends React.Component<
         <Button
           className="table-add-button"
           bsStyle="link"
-          onClick={this.props.toggleEditMeasurementsModal}
+          onClick={this.props.toggleEditMeasurementPointListModal}
         >
-          {t('manageMeasurements:newMeasurement')}
+          {t('manageMeasurementPointList:newMeasurement')}
         </Button>
         <ReactTable
           data={this.props.tableData}
@@ -327,7 +325,7 @@ class ManageMeasurements extends React.Component<
           pageSize={this.props.tableData.length}
           page={this.props.tableFilters.page - 1}
           manual // Forces table not to paginate or sort automatically, so we can handle it server-side
-          pages={this.props.manageMeasurements.totalPages}
+          pages={this.props.manageMeasurementPointList.totalPages}
           showPageSizeOptions={false}
           className={`beacon-table -highlight ${this.state.currentTile.color}`}
           previousText={t('common:previous')}
@@ -337,7 +335,7 @@ class ManageMeasurements extends React.Component<
           noDataText={t('common:noDataText')}
           resizable={false}
         />
-        <EditMeasurementsModal
+        <EditMeasurementPointListModal
           selectedMeasurementPointList={
             this.props.tableData[this.state.selectedRow]
           }
@@ -370,37 +368,34 @@ class ManageMeasurements extends React.Component<
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
-    manageMeasurements: state.manageMeasurements,
+    manageMeasurementPointList: state.manageMeasurementPointLists,
     customers: state.customers,
     loading: state.ajaxCallsInProgress > 0,
-    showEditMeasurementsModal:
-      state.manageMeasurements.showEditMeasurementsModal,
-    showEditQuestionModal: state.manageMeasurements.showEditQuestionModal,
-    showEditProcedureModal: state.manageMeasurements.showEditProcedureModal,
-    showEditGroupModal: state.manageMeasurements.showEditGroupModal,
-    tableData: state.manageMeasurements.data,
-    tableFilters: state.manageMeasurements.tableFilters,
+    showEditMeasurementPointListModal:
+      state.manageMeasurementPointLists.showEditMeasurementPointListModal,
+    showEditQuestionModal:
+      state.manageMeasurementPointLists.showEditQuestionModal,
+    showEditProcedureModal:
+      state.manageMeasurementPointLists.showEditProcedureModal,
+    showEditGroupModal: state.manageMeasurementPointLists.showEditGroupModal,
+    tableData: state.manageMeasurementPointLists.data,
+    tableFilters: state.manageMeasurementPointLists.tableFilters,
     standardOptions: state.productInfo.standardOptions,
     productGroupOptions: state.productInfo.productGroupOptions
   };
 };
-export default translate('manageMeasurements')(
+export default translate('manageMeasurementPointLists')(
   connect(
     mapStateToProps,
     {
-      // getUserManage,
-      // updateUser,
-      // toggleEditUserModal,
-      // toggleSecurityFunctionsModal,
       getAllMeasurementPointLists,
-      toggleEditMeasurementsModal,
+      toggleEditMeasurementPointListModal,
       toggleEditQuestionModal,
       toggleEditProcedureModal,
       toggleEditGroupModal,
       closeAllModals,
-      // getCustomers,
       setTableFilter,
       getProductInfo
     }
-  )(ManageMeasurements)
+  )(ManageMeasurementPointList)
 );

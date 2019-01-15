@@ -3,35 +3,35 @@ import { connect } from 'react-redux';
 import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
-import { IinitialState, IMeasurementListObject, Ioption } from '../../models';
+import { IinitialState, ImeasurementPointList, Ioption } from '../../models';
 import {
-  toggleEditMeasurementsModal,
+  toggleEditMeasurementPointListModal,
   toggleEditGroupModal,
   toggleEditProcedureModal,
   toggleEditQuestionModal
-} from '../../actions/manageMeasurementsActions';
+} from '../../actions/manageMeasurementPointListsActions';
 import CommonModal from '../common/CommonModal';
-import EditMeasurementsForm from './EditMeasurementsForm';
+import EditMeasurementPointListForm from './EditMeasurementPointListForm';
 
 interface Iprops {
   measurementPointListTypeOptions: any[];
-  selectedMeasurementPointList: IMeasurementListObject;
+  selectedMeasurementPointList: ImeasurementPointList;
   colorButton: any;
   t: TranslationFunction;
 }
 
 interface IdispatchProps {
-  showEditMeasurementsModal: boolean;
+  showEditMeasurementPointListModal: boolean;
   loading: boolean;
   productGroupOptions: Ioption[];
   standardOptions: Ioption[];
-  toggleEditMeasurementsModal: typeof toggleEditMeasurementsModal;
+  toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
   toggleEditQuestionModal: typeof toggleEditQuestionModal;
   toggleEditProcedureModal: typeof toggleEditProcedureModal;
   toggleEditGroupModal: typeof toggleEditGroupModal;
 }
 
-class EditMeasurementsModal extends React.Component<
+class EditMeasurementPointListModal extends React.Component<
   Iprops & IdispatchProps,
   {}
 > {
@@ -42,11 +42,11 @@ class EditMeasurementsModal extends React.Component<
   render() {
     return (
       <CommonModal
-        modalVisible={this.props.showEditMeasurementsModal}
+        modalVisible={this.props.showEditMeasurementPointListModal}
         className="measurements-edit"
-        onHide={this.props.toggleEditMeasurementsModal}
-        body={<EditMeasurementsForm {...this.props} />}
-        title={this.props.t('editMeasurementsModalTitle')}
+        onHide={this.props.toggleEditMeasurementPointListModal}
+        body={<EditMeasurementPointListForm {...this.props} />}
+        title={this.props.t('EditMeasurementPointListModalTitle')}
         container={document.getElementById('two-pane-layout')}
       />
     );
@@ -60,8 +60,8 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     loading: state.ajaxCallsInProgress > 0,
     customerOptions: FormUtil.convertToOptions(state.customers),
     facilityOptions: FormUtil.convertToOptions(state.facilities),
-    showEditMeasurementsModal:
-      state.manageMeasurements.showEditMeasurementsModal,
+    showEditMeasurementPointListModal:
+      state.manageMeasurementPointLists.showEditMeasurementPointListModal,
     showEditCustomerModal: state.showEditCustomerModal,
     showEditFacilityModal: state.showEditFacilityModal,
     standardOptions: state.productInfo.standardOptions,
@@ -72,9 +72,9 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
 export default connect(
   mapStateToProps,
   {
-    toggleEditMeasurementsModal,
+    toggleEditMeasurementPointListModal,
     toggleEditGroupModal,
     toggleEditProcedureModal,
     toggleEditQuestionModal
   }
-)(EditMeasurementsModal);
+)(EditMeasurementPointListModal);

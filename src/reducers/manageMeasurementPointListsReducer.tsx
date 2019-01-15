@@ -1,6 +1,9 @@
 // import { pickBy, map } from 'lodash';
 
-import { ImanageMeasurementsReducer, IMeasurementListObject } from '../models';
+import {
+  ImanageMeasurementPointListsReducer,
+  ImeasurementPointList
+} from '../models';
 import {
   createTableFiltersWithName,
   modalToggleWithName
@@ -8,10 +11,10 @@ import {
 import initialState from './initialState';
 import * as types from '../actions/actionTypes';
 
-function manageMeasurementsData(
-  state: IMeasurementListObject[] = [],
+function manageMeasurementPointListData(
+  state: ImeasurementPointList[] = [],
   action: any
-): IMeasurementListObject[] {
+): ImeasurementPointList[] {
   switch (action.type) {
     case types.MANAGE_MEASUREMENTS_SUCCESS:
       return action.measurements;
@@ -34,7 +37,10 @@ function manageMeasurementsData(
   }
 }
 
-function manageMeasurementsTotalPages(state: number = 1, action: any): number {
+function manageMeasurementPointListTotalPages(
+  state: number = 1,
+  action: any
+): number {
   switch (action.type) {
     case types.MANAGE_MEASUREMENTS_TOTAL_PAGES:
       if (action.pages && action.pages > 0) {
@@ -48,15 +54,15 @@ function manageMeasurementsTotalPages(state: number = 1, action: any): number {
   }
 }
 
-export default function jobManage(
-  state: ImanageMeasurementsReducer = initialState.manageMeasurements,
+export default function manageMeasurementPointLists(
+  state: ImanageMeasurementPointListsReducer = initialState.manageMeasurementPointLists,
   action: any
 ) {
   return {
-    data: manageMeasurementsData(state.data, action),
-    totalPages: manageMeasurementsTotalPages(state.totalPages, action),
-    showEditMeasurementsModal: modalToggleWithName(
-      state.showEditMeasurementsModal,
+    data: manageMeasurementPointListData(state.data, action),
+    totalPages: manageMeasurementPointListTotalPages(state.totalPages, action),
+    showEditMeasurementPointListModal: modalToggleWithName(
+      state.showEditMeasurementPointListModal,
       action,
       'EDIT_MEASUREMENTS'
     ),

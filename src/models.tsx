@@ -323,7 +323,11 @@ export interface IproductInfo {
   systemSizeOptions: Ioption[];
 }
 
-export interface IMeasurementListObject {
+// export interface ImeasurementPointQuestion {
+
+// }
+
+export interface ImeasurementPointList {
   id: string;
   measurementPoints: any[];
   productGroupID: string;
@@ -332,10 +336,10 @@ export interface IMeasurementListObject {
   customerID: string;
 }
 
-export interface ImanageMeasurementsReducer {
-  data: IMeasurementListObject[];
+export interface ImanageMeasurementPointListsReducer {
+  data: ImeasurementPointList[];
   totalPages: number;
-  showEditMeasurementsModal: boolean;
+  showEditMeasurementPointListModal: boolean;
   showEditQuestionModal: boolean;
   showEditGroupModal: boolean;
   showEditProcedureModal: boolean;
@@ -362,7 +366,7 @@ export interface IinitialState {
   training: ItrainingReducer;
   manageTraining: ImanageTrainingReducer;
   productInfo: IproductInfo;
-  manageMeasurements: ImanageMeasurementsReducer;
+  manageMeasurementPointLists: ImanageMeasurementPointListsReducer;
 }
 
 export interface Itile {

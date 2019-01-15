@@ -240,7 +240,7 @@
     "progress": "Lessons Complete",
     "results": "Test Results"
   },
-  "manageMeasurements": {
+  "manageMeasurementPointLists": {
     "bannerTitle": "Measurement Points",
     "type": "Type",
     "typePlaceholder": "Select type...",
@@ -249,7 +249,7 @@
     "standard": "Standard",
     "standardPlaceholder": "Select standard...",
     "newMeasurement": "Add Measurements",
-    "editMeasurementsModalTitle": "ADD MEASUREMENTS"
+    "EditMeasurementPointListModalTitle": "ADD MEASUREMENTS"
   },
   "tiles": {
     "alerts": "Alerts",
@@ -267,7 +267,7 @@
     "groups": "My groups",
     "support": "Support",
     "manageAllTraining": "Training Progress",
-    "manageMeasurements": "Measurements"
+    "manageMeasurementPointList": "Measurements"
   },
   "securityF": {
     "ManageUsers": "Manage Users",

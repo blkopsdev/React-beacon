@@ -19,7 +19,7 @@ export function getAllMeasurementPointLists(): ThunkResult<void> {
       type,
       productGroup,
       standard
-    } = getState().manageMeasurements.tableFilters;
+    } = getState().manageMeasurementPointLists.tableFilters;
     return axios
       .get(API.GET.measurements.getall, {
         params: {
@@ -47,7 +47,7 @@ export function getAllMeasurementPointLists(): ThunkResult<void> {
       })
       .catch((error: any) => {
         dispatch({ type: types.MANAGE_MEASUREMENTS_FAILED });
-        constants.handleError(error, 'get jobs');
+        constants.handleError(error, 'get measurements');
         throw error;
       });
   };
@@ -112,7 +112,7 @@ export function getAllMeasurementPointLists(): ThunkResult<void> {
 //   };
 // }
 
-export const toggleEditMeasurementsModal = () => ({
+export const toggleEditMeasurementPointListModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_MEASUREMENTS
 });
 export const toggleEditQuestionModal = () => ({

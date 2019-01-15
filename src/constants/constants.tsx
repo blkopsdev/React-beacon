@@ -368,7 +368,7 @@ const tiles = [
   {
     icon: icons.measurements,
     iconType: 'img',
-    title: 'manageMeasurements',
+    title: 'manageMeasurementPointList',
     src: require('src/images/beaconManageUsers.jpg'),
     srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
     color: 'purple',

@@ -1,5 +1,5 @@
 /* 
-* EditMeasurementsForm 
+* EditMeasurementPointListForm 
 * Edit measurement point lists
 */
 
@@ -17,13 +17,13 @@ import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
-import { Ioption, IMeasurementListObject } from '../../models';
+import { Ioption, ImeasurementPointList } from '../../models';
 import {
-  toggleEditMeasurementsModal,
+  toggleEditMeasurementPointListModal,
   toggleEditGroupModal,
   toggleEditProcedureModal,
   toggleEditQuestionModal
-} from '../../actions/manageMeasurementsActions';
+} from '../../actions/manageMeasurementPointListsActions';
 // import EditFacilityModal from '../common/EditFacilityModal';
 import constants from '../../constants/constants';
 
@@ -51,9 +51,9 @@ const buildFieldConfig = (
       render: FormUtil.SelectWithoutValidation,
       meta: {
         options: typeOptions,
-        label: 'manageMeasurements:type',
+        label: 'manageMeasurementPointList:type',
         colWidth: 12,
-        placeholder: 'manageMeasurements:typePlaceholder'
+        placeholder: 'manageMeasurementPointList:typePlaceholder'
       },
       options: {
         validators: [Validators.required]
@@ -63,9 +63,9 @@ const buildFieldConfig = (
       render: FormUtil.SelectWithoutValidation,
       meta: {
         options: productGroupOptions,
-        label: 'manageMeasurements:equipmentType',
+        label: 'manageMeasurementPointList:equipmentType',
         colWidth: 12,
-        placeholder: 'manageMeasurements:equipmentTypePlaceholder'
+        placeholder: 'manageMeasurementPointList:equipmentTypePlaceholder'
       },
       options: {
         validators: [Validators.required]
@@ -75,9 +75,9 @@ const buildFieldConfig = (
       render: FormUtil.SelectWithoutValidation,
       meta: {
         options: standardOptions,
-        label: 'manageMeasurements:standard',
+        label: 'manageMeasurementPointList:standard',
         colWidth: 12,
-        placeholder: 'manageMeasurements:standardPlaceholder'
+        placeholder: 'manageMeasurementPointList:standardPlaceholder'
       },
       options: {
         validators: [Validators.required]
@@ -90,8 +90,8 @@ const buildFieldConfig = (
   return fieldConfig as FieldConfig;
 };
 
-interface Iprops extends React.Props<EditMeasurementsForm> {
-  selectedMeasurementPointList: IMeasurementListObject;
+interface Iprops extends React.Props<EditMeasurementPointListForm> {
+  selectedMeasurementPointList: ImeasurementPointList;
   measurementPointListTypeOptions: any[];
   standardOptions: Ioption[];
   productGroupOptions: Ioption[];
@@ -99,13 +99,13 @@ interface Iprops extends React.Props<EditMeasurementsForm> {
   colorButton: string;
   t: TranslationFunction;
   i18n: I18n;
-  toggleEditMeasurementsModal: typeof toggleEditMeasurementsModal;
+  toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
   toggleEditQuestionModal: typeof toggleEditQuestionModal;
   toggleEditProcedureModal: typeof toggleEditProcedureModal;
   toggleEditGroupModal: typeof toggleEditGroupModal;
 }
 
-class EditMeasurementsForm extends React.Component<Iprops, {}> {
+class EditMeasurementPointListForm extends React.Component<Iprops, {}> {
   public measurementsForm: AbstractControl;
   public fieldConfig: FieldConfig;
   constructor(props: Iprops) {
@@ -225,7 +225,7 @@ class EditMeasurementsForm extends React.Component<Iprops, {}> {
               bsStyle="default"
               type="button"
               className="pull-left"
-              onClick={this.props.toggleEditMeasurementsModal}
+              onClick={this.props.toggleEditMeasurementPointListModal}
             >
               {t('cancel')}
             </Button>
@@ -247,4 +247,6 @@ class EditMeasurementsForm extends React.Component<Iprops, {}> {
     );
   }
 }
-export default translate('manageMeasurements')(EditMeasurementsForm);
+export default translate('manageMeasurementPointList')(
+  EditMeasurementPointListForm
+);

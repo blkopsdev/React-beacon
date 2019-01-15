@@ -554,7 +554,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
         buildingID: buildingID.value,
         floorID: floorID.value,
         locationID: locationID.value,
-        roomID: roomID.value
+        roomID: roomID ? roomID.value : '' // since this is not required, it might be null
       };
 
       if (this.props.selectedItem && this.props.selectedItem.id) {

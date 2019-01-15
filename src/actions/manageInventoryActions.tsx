@@ -224,7 +224,7 @@ export function saveInstall(
 ): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
-    dispatch({ type: types.TOGGLE_MODAL_EDIT_INSTALL });
+    dispatch({ type: types.CLOSE_ALL_MODALS });
     return axios
       .post(API.POST.inventory.addinstall, install)
       .then(data => {

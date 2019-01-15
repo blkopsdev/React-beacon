@@ -323,13 +323,14 @@ export interface IproductInfo {
   systemSizeOptions: Ioption[];
 }
 
-// export interface ImeasurementPointQuestion {
-
-// }
+export interface ImeasurementPointQuestion {
+  id: string;
+  type: number;
+}
 
 export interface ImeasurementPointList {
   id: string;
-  measurementPoints: any[];
+  measurementPoints: { [key: string]: ImeasurementPointQuestion };
   productGroupID: string;
   standardID: string;
   type: number;

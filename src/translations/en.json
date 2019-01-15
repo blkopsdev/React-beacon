@@ -249,7 +249,8 @@
     "standard": "Standard",
     "standardPlaceholder": "Select standard...",
     "newMeasurement": "Add Measurements",
-    "EditMeasurementPointListModalTitle": "ADD MEASUREMENTS"
+    "EditMeasurementPointListModalTitle": "ADD MEASUREMENTS",
+    "EditMeasurementPointQuestionModalTitle": "ADD QUESTION"
   },
   "tiles": {
     "alerts": "Alerts",

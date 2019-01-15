@@ -1,6 +1,6 @@
 /* 
-* EditMeasurementPointListForm 
-* Edit measurement point lists
+* EditMeasurementPointQuestionForm 
+* Edit measurement point questions
 */
 
 import { Col, Button } from 'react-bootstrap';
@@ -17,12 +17,11 @@ import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
-import { Ioption, ImeasurementPointList } from '../../models';
+import { ImeasurementPointList } from '../../models';
 import {
   toggleEditMeasurementPointListModal,
   toggleEditMeasurementPointQuestionModal
 } from '../../actions/manageMeasurementPointListsActions';
-// import EditFacilityModal from '../common/EditFacilityModal';
 import constants from '../../constants/constants';
 
 // passing in an object, but we need an array back
@@ -38,11 +37,7 @@ import constants from '../../constants/constants';
 //   stateChanges: IstateChanges;
 // }
 
-const buildFieldConfig = (
-  typeOptions: any[],
-  productGroupOptions: any[],
-  standardOptions: any[]
-) => {
+const buildFieldConfig = (typeOptions: any[]) => {
   // Field config to configure form
   const fieldConfigControls = {
     type: {
@@ -56,30 +51,6 @@ const buildFieldConfig = (
       options: {
         validators: [Validators.required]
       }
-    },
-    equipmentType: {
-      render: FormUtil.SelectWithoutValidation,
-      meta: {
-        options: productGroupOptions,
-        label: 'manageMeasurementPointLists:equipmentType',
-        colWidth: 12,
-        placeholder: 'manageMeasurementPointLists:equipmentTypePlaceholder'
-      },
-      options: {
-        validators: [Validators.required]
-      }
-    },
-    standard: {
-      render: FormUtil.SelectWithoutValidation,
-      meta: {
-        options: standardOptions,
-        label: 'manageMeasurementPointLists:standard',
-        colWidth: 12,
-        placeholder: 'manageMeasurementPointLists:standardPlaceholder'
-      },
-      options: {
-        validators: [Validators.required]
-      }
     }
   };
   const fieldConfig = {
@@ -88,11 +59,8 @@ const buildFieldConfig = (
   return fieldConfig as FieldConfig;
 };
 
-interface Iprops extends React.Props<EditMeasurementPointListForm> {
+interface Iprops extends React.Props<EditMeasurementPointQuestionForm> {
   selectedMeasurementPointList: ImeasurementPointList;
-  measurementPointListTypeOptions: any[];
-  standardOptions: Ioption[];
-  productGroupOptions: Ioption[];
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;
@@ -101,17 +69,13 @@ interface Iprops extends React.Props<EditMeasurementPointListForm> {
   toggleEditMeasurementPointQuestionModal: typeof toggleEditMeasurementPointQuestionModal;
 }
 
-class EditMeasurementPointListForm extends React.Component<Iprops, {}> {
+class EditMeasurementPointQuestionForm extends React.Component<Iprops, {}> {
   public measurementsForm: AbstractControl;
   public fieldConfig: FieldConfig;
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(
-      buildFieldConfig(
-        this.props.measurementPointListTypeOptions,
-        this.props.productGroupOptions,
-        this.props.standardOptions
-      ),
+      buildFieldConfig(constants.measurementPointQuestionTypeOptions),
       this.props.t
     );
     this.handleSubmit = this.handleSubmit.bind(this);
@@ -133,27 +97,11 @@ class EditMeasurementPointListForm extends React.Component<Iprops, {}> {
       this.measurementsForm.patchValue({ [key]: value });
     });
 
-    const {
-      type,
-      productGroupID,
-      standardID
-    } = this.props.selectedMeasurementPointList;
+    const { type } = this.props.selectedMeasurementPointList;
     this.measurementsForm.patchValue({
       type: find(
-        this.props.measurementPointListTypeOptions,
+        constants.measurementPointQuestionTypeOptions,
         (tOpt: any) => tOpt.value === type
-      )
-    });
-    this.measurementsForm.patchValue({
-      equipmentType: find(
-        this.props.productGroupOptions,
-        (tOpt: any) => tOpt.value === productGroupID
-      )
-    });
-    this.measurementsForm.patchValue({
-      standard: find(
-        this.props.standardOptions,
-        (tOpt: any) => tOpt.value === standardID
       )
     });
   }
@@ -170,14 +118,6 @@ class EditMeasurementPointListForm extends React.Component<Iprops, {}> {
       return;
     }
     console.log(this.measurementsForm.value);
-    // this.props.updateUser({
-    //   id: this.props.selectedMeasurementPointList.id,
-    //   ...this.measurementsForm.value,
-    //   customerID: this.measurementsForm.value.customerID.value,
-    //   facilities: facilitiesArray,
-    //   securityFunctions: securityFunctionsArray,
-    //   email: this.props.selectedMeasurementPointList.email // have to add back the email because disabling the input removes it
-    // });
   };
   setForm = (form: AbstractControl) => {
     this.measurementsForm = form;
@@ -201,27 +141,12 @@ class EditMeasurementPointListForm extends React.Component<Iprops, {}> {
             onMount={this.setForm}
             fieldConfig={this.fieldConfig}
           />
-          <Col xs={12} className="">
-            <Button bsStyle="link" className="" onClick={console.log}>
-              Add Group
-            </Button>
-            <Button bsStyle="link" className="" onClick={console.log}>
-              Add Procedure
-            </Button>
-            <Button
-              bsStyle="link"
-              className=""
-              onClick={this.props.toggleEditMeasurementPointQuestionModal}
-            >
-              Add Question
-            </Button>
-          </Col>
           <Col xs={12} className="form-buttons text-right">
             <Button
               bsStyle="default"
               type="button"
               className="pull-left"
-              onClick={this.props.toggleEditMeasurementPointListModal}
+              onClick={this.props.toggleEditMeasurementPointQuestionModal}
             >
               {t('cancel')}
             </Button>
@@ -239,5 +164,5 @@ class EditMeasurementPointListForm extends React.Component<Iprops, {}> {
   }
 }
 export default translate('manageMeasurementPointLists')(
-  EditMeasurementPointListForm
+  EditMeasurementPointQuestionForm
 );

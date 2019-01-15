@@ -24,6 +24,13 @@ const measurementPointListTypeOptions = [
   { label: 'Verification', value: 2 }
 ];
 
+const measurementPointQuestionTypeOptions = [
+  { label: 'PassFail', value: 1 },
+  { label: 'Text', value: 2 },
+  { label: 'Numeric', value: 3 },
+  { label: 'Select', value: 4 }
+];
+
 const icons = {
   dashboard: require('../images/icons/BM_Dashboard.png'),
   inventory: require('../images/icons/BM_Inventory.png'),
@@ -409,6 +416,7 @@ const constants = {
   jobTypesByID,
   icons,
   measurementPointListTypeOptions,
+  measurementPointQuestionTypeOptions,
   hasSecurityFunction: (user: Iuser, securityFunction: string): boolean => {
     if (user.securityFunctions.indexOf(securityFunction) >= 0) {
       return true;

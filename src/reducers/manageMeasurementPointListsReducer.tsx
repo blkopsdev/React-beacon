@@ -2,7 +2,8 @@
 
 import {
   ImanageMeasurementPointListsReducer,
-  ImeasurementPointList
+  ImeasurementPointList,
+  ImeasurementPointQuestion
 } from '../models';
 import {
   createTableFiltersWithName,
@@ -10,6 +11,7 @@ import {
 } from './commonReducers';
 import initialState from './initialState';
 import * as types from '../actions/actionTypes';
+import { keyBy } from 'lodash';
 
 function manageMeasurementPointListData(
   state: ImeasurementPointList[] = [],
@@ -17,7 +19,17 @@ function manageMeasurementPointListData(
 ): ImeasurementPointList[] {
   switch (action.type) {
     case types.MANAGE_MEASUREMENT_POINT_LISTS_SUCCESS:
-      return action.measurements;
+      return action.measurements.map((m: any) => {
+        if (m.measurementPoints) {
+          m.measurementPoints = keyBy(
+            m.measurementPoints,
+            (item: ImeasurementPointQuestion) => item.id
+          );
+        } else {
+          m.measurementPoints = {};
+        }
+        return m;
+      });
     // case types.MEASUREMENTS_ADD_SUCCESS:
     //   return [...state, action.measurement];
     // case types.MEASUREMENTS_UPDATE_SUCCESS:

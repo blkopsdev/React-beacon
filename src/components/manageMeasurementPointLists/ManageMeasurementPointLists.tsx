@@ -31,8 +31,9 @@ import {
 } from '../../actions/manageMeasurementPointListsActions';
 import { getProductInfo } from '../../actions/manageInventoryActions';
 import Banner from '../common/Banner';
-import CommonModal from '../common/CommonModal';
+// import CommonModal from '../common/CommonModal';
 import EditMeasurementPointListModal from './EditMeasurementPointListModal';
+import EditMeasurementPointQuestionModal from './EditMeasurementPointQuestionModal';
 import SearchTableForm from '../common/SearchTableForm';
 import constants from '../../constants/constants';
 import { FieldConfig } from 'react-reactive-form';
@@ -343,23 +344,19 @@ class ManageMeasurementPointList extends React.Component<
           }
           t={this.props.t}
         />
-        <CommonModal
-          modalVisible={this.props.showEditMeasurementPointQuestionModal}
-          className="security-modal second-modal"
-          onHide={this.props.toggleEditMeasurementPointQuestionModal}
-          body={<span>QUESTIONS</span>}
-          title={t('securityFunctionsModalTitle')}
-          container={document.getElementById('two-pane-layout')}
-          backdrop={true}
+        <EditMeasurementPointQuestionModal
+          selectedMeasurementPointList={
+            this.props.tableData[this.state.selectedRow]
+          }
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+          t={this.props.t}
         />
       </div>
     );
   }
 }
-
-/*
-* AddCustomerModal will connect to redux, impliment CommonModal, as well as AddCustomerForm
-*/
 
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {

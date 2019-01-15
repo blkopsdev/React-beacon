@@ -60,6 +60,21 @@ export default function jobManage(
       action,
       'EDIT_MEASUREMENTS'
     ),
+    showEditQuestionModal: modalToggleWithName(
+      state.showEditQuestionModal,
+      action,
+      'EDIT_MEASUREMENT_QUESTION'
+    ),
+    showEditProcedureModal: modalToggleWithName(
+      state.showEditProcedureModal,
+      action,
+      'EDIT_MEASUREMENT_PROCEDURE'
+    ),
+    showEditGroupModal: modalToggleWithName(
+      state.showEditGroupModal,
+      action,
+      'EDIT_MEASUREMENT_GROUP'
+    ),
     tableFilters: createTableFiltersWithName(
       state.tableFilters,
       action,

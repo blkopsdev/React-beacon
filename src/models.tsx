@@ -336,6 +336,9 @@ export interface ImanageMeasurementsReducer {
   data: IMeasurementListObject[];
   totalPages: number;
   showEditMeasurementsModal: boolean;
+  showEditQuestionModal: boolean;
+  showEditGroupModal: boolean;
+  showEditProcedureModal: boolean;
   tableFilters: ItableFiltersReducer;
 }
 

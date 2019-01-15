@@ -33,11 +33,14 @@ import { emptyTile } from '../../reducers/initialState';
 import {
   getAllMeasurementPointLists,
   toggleEditMeasurementsModal,
+  toggleEditQuestionModal,
+  toggleEditProcedureModal,
+  toggleEditGroupModal,
   setTableFilter
 } from '../../actions/manageMeasurementsActions';
 import { getProductInfo } from '../../actions/manageInventoryActions';
 import Banner from '../common/Banner';
-// import CommonModal from '../common/CommonModal';
+import CommonModal from '../common/CommonModal';
 // import EditCustomerModal from '../common/EditCustomerModal';
 import EditMeasurementsModal from './EditMeasurementsModal';
 import SearchTableForm from '../common/SearchTableForm';
@@ -59,6 +62,9 @@ interface IdispatchProps {
   // getUserManage: typeof getUserManage;
   getAllMeasurementPointLists: typeof getAllMeasurementPointLists;
   toggleEditMeasurementsModal: typeof toggleEditMeasurementsModal;
+  toggleEditQuestionModal: typeof toggleEditQuestionModal;
+  toggleEditProcedureModal: typeof toggleEditProcedureModal;
+  toggleEditGroupModal: typeof toggleEditGroupModal;
   getProductInfo: typeof getProductInfo;
   productGroupOptions: Ioption[];
   standardOptions: Ioption[];
@@ -67,9 +73,9 @@ interface IdispatchProps {
   getCustomers: typeof getCustomers;
   manageMeasurements: ImanageMeasurementsReducer;
   showEditMeasurementsModal: boolean;
-  showEditCustomerModal: boolean;
-  showEditFacilityModal: boolean;
-  showSecurityFunctionsModal: boolean;
+  showEditQuestionModal: boolean;
+  showEditProcedureModal: boolean;
+  showEditGroupModal: boolean;
   setTableFilter: typeof setTableFilter;
   tableFilters: ItableFiltersReducer;
   tableData: IMeasurementListObject[];
@@ -343,28 +349,15 @@ class ManageMeasurements extends React.Component<
           }
           t={this.props.t}
         />
-        {/* <EditCustomerModal
-          t={this.props.t}
-          colorButton={
-            constants.colors[`${this.state.currentTile.color}Button`]
-          }
-        /> */}
-        {/* <CommonModal
-          modalVisible={this.props.showSecurityFunctionsModal}
+        <CommonModal
+          modalVisible={this.props.showEditQuestionModal}
           className="security-modal second-modal"
-          onHide={this.props.toggleSecurityFunctionsModal}
-          body={
-            <SecurityFunctionsList
-              t={this.props.t}
-              toggleSecurityFunctionsModal={
-                this.props.toggleSecurityFunctionsModal
-              }
-            />
-          }
+          onHide={this.props.toggleEditQuestionModal}
+          body={<span>QUESTIONS</span>}
           title={t('securityFunctionsModalTitle')}
           container={document.getElementById('two-pane-layout')}
           backdrop={true}
-        /> */}
+        />
       </div>
     );
   }
@@ -382,9 +375,9 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     loading: state.ajaxCallsInProgress > 0,
     showEditMeasurementsModal:
       state.manageMeasurements.showEditMeasurementsModal,
-    // showEditCustomerModal: state.showEditCustomerModal,
-    // showEditFacilityModal: state.showEditFacilityModal,
-    // showSecurityFunctionsModal: state.showSecurityFunctionsModal,
+    showEditQuestionModal: state.manageMeasurements.showEditQuestionModal,
+    showEditProcedureModal: state.manageMeasurements.showEditProcedureModal,
+    showEditGroupModal: state.manageMeasurements.showEditGroupModal,
     tableData: state.manageMeasurements.data,
     tableFilters: state.manageMeasurements.tableFilters,
     standardOptions: state.productInfo.standardOptions,
@@ -401,6 +394,9 @@ export default translate('manageMeasurements')(
       // toggleSecurityFunctionsModal,
       getAllMeasurementPointLists,
       toggleEditMeasurementsModal,
+      toggleEditQuestionModal,
+      toggleEditProcedureModal,
+      toggleEditGroupModal,
       closeAllModals,
       // getCustomers,
       setTableFilter,

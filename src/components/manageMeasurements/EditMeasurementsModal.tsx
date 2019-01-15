@@ -5,11 +5,11 @@ import * as React from 'react';
 import { FormUtil } from '../common/FormUtil';
 import { IinitialState, IMeasurementListObject, Ioption } from '../../models';
 import {
-  getFacilitiesByCustomer,
-  toggleEditCustomerModal,
-  toggleEditFacilityModal
-} from '../../actions/commonActions';
-import { toggleEditMeasurementsModal } from '../../actions/manageMeasurementsActions';
+  toggleEditMeasurementsModal,
+  toggleEditGroupModal,
+  toggleEditProcedureModal,
+  toggleEditQuestionModal
+} from '../../actions/manageMeasurementsActions';
 import CommonModal from '../common/CommonModal';
 import EditMeasurementsForm from './EditMeasurementsForm';
 
@@ -26,9 +26,9 @@ interface IdispatchProps {
   productGroupOptions: Ioption[];
   standardOptions: Ioption[];
   toggleEditMeasurementsModal: typeof toggleEditMeasurementsModal;
-  getFacilitiesByCustomer: (value: string) => Promise<void>;
-  toggleEditCustomerModal: typeof toggleEditCustomerModal;
-  toggleEditFacilityModal: typeof toggleEditFacilityModal;
+  toggleEditQuestionModal: typeof toggleEditQuestionModal;
+  toggleEditProcedureModal: typeof toggleEditProcedureModal;
+  toggleEditGroupModal: typeof toggleEditGroupModal;
 }
 
 class EditMeasurementsModal extends React.Component<
@@ -73,8 +73,8 @@ export default connect(
   mapStateToProps,
   {
     toggleEditMeasurementsModal,
-    getFacilitiesByCustomer,
-    toggleEditCustomerModal,
-    toggleEditFacilityModal
+    toggleEditGroupModal,
+    toggleEditProcedureModal,
+    toggleEditQuestionModal
   }
 )(EditMeasurementsModal);

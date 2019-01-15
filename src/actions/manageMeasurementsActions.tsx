@@ -115,6 +115,15 @@ export function getAllMeasurementPointLists(): ThunkResult<void> {
 export const toggleEditMeasurementsModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_MEASUREMENTS
 });
+export const toggleEditQuestionModal = () => ({
+  type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_QUESTION
+});
+export const toggleEditProcedureModal = () => ({
+  type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_PROCEDURE
+});
+export const toggleEditGroupModal = () => ({
+  type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_GROUP
+});
 export const setTableFilter = (filters: ItableFiltersParams) => ({
   type: types.SET_TABLE_FILTER_MANAGE_MEASUREMENTS,
   filters

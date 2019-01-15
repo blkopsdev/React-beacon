@@ -19,10 +19,11 @@ import * as React from 'react';
 import { FormUtil } from '../common/FormUtil';
 import { Ioption, IMeasurementListObject } from '../../models';
 import {
-  toggleEditCustomerModal,
-  toggleEditFacilityModal
-} from '../../actions/commonActions';
-import { toggleEditMeasurementsModal } from '../../actions/manageMeasurementsActions';
+  toggleEditMeasurementsModal,
+  toggleEditGroupModal,
+  toggleEditProcedureModal,
+  toggleEditQuestionModal
+} from '../../actions/manageMeasurementsActions';
 // import EditFacilityModal from '../common/EditFacilityModal';
 import constants from '../../constants/constants';
 
@@ -42,9 +43,7 @@ import constants from '../../constants/constants';
 const buildFieldConfig = (
   typeOptions: any[],
   productGroupOptions: any[],
-  standardOptions: any[],
-  toggleEditCustomerModalCB: typeof toggleEditCustomerModal,
-  toggleEditFacilityModalCB: typeof toggleEditFacilityModal
+  standardOptions: any[]
 ) => {
   // Field config to configure form
   const fieldConfigControls = {
@@ -57,14 +56,7 @@ const buildFieldConfig = (
         placeholder: 'manageMeasurements:typePlaceholder'
       },
       options: {
-        validators: [
-          Validators.required
-          // (c: any) => {
-          //   if (c.value && c.value.value) {
-          //     getFacilitiesByCustomer(c.value.value);
-          //   }
-          // }
-        ]
+        validators: [Validators.required]
       }
     },
     equipmentType: {
@@ -76,14 +68,7 @@ const buildFieldConfig = (
         placeholder: 'manageMeasurements:equipmentTypePlaceholder'
       },
       options: {
-        validators: [
-          Validators.required
-          // (c: any) => {
-          //   if (c.value && c.value.value) {
-          //     getFacilitiesByCustomer(c.value.value);
-          //   }
-          // }
-        ]
+        validators: [Validators.required]
       }
     },
     standard: {
@@ -95,14 +80,7 @@ const buildFieldConfig = (
         placeholder: 'manageMeasurements:standardPlaceholder'
       },
       options: {
-        validators: [
-          Validators.required
-          // (c: any) => {
-          //   if (c.value && c.value.value) {
-          //     getFacilitiesByCustomer(c.value.value);
-          //   }
-          // }
-        ]
+        validators: [Validators.required]
       }
     }
   };
@@ -122,8 +100,9 @@ interface Iprops extends React.Props<EditMeasurementsForm> {
   t: TranslationFunction;
   i18n: I18n;
   toggleEditMeasurementsModal: typeof toggleEditMeasurementsModal;
-  toggleEditCustomerModal: typeof toggleEditCustomerModal;
-  toggleEditFacilityModal: typeof toggleEditFacilityModal;
+  toggleEditQuestionModal: typeof toggleEditQuestionModal;
+  toggleEditProcedureModal: typeof toggleEditProcedureModal;
+  toggleEditGroupModal: typeof toggleEditGroupModal;
 }
 
 class EditMeasurementsForm extends React.Component<Iprops, {}> {
@@ -135,9 +114,7 @@ class EditMeasurementsForm extends React.Component<Iprops, {}> {
       buildFieldConfig(
         this.props.measurementPointListTypeOptions,
         this.props.productGroupOptions,
-        this.props.standardOptions,
-        this.props.toggleEditCustomerModal,
-        this.props.toggleEditFacilityModal
+        this.props.standardOptions
       ),
       this.props.t
     );
@@ -148,48 +125,6 @@ class EditMeasurementsForm extends React.Component<Iprops, {}> {
     if (!this.props.selectedMeasurementPointList) {
       return;
     }
-    // if (
-    //   differenceBy(
-    //     prevProps.facilityOptions,
-    //     this.props.facilityOptions,
-    //     'value'
-    //   ).length ||
-    //   prevProps.facilityOptions.length !== this.props.facilityOptions.length
-    // ) {
-    //   const facilitySelectControl = this.measurementsForm.get(
-    //     'facilities'
-    //   ) as AbstractControlEdited;
-    //   facilitySelectControl.meta.options = this.props.facilityOptions;
-    //   facilitySelectControl.stateChanges.next();
-    //   const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
-    //     return find(this.props.selectedMeasurementPointList.facilities, { id: fac.value })
-    //       ? true
-    //       : false;
-    //   });
-    //   this.measurementsForm.patchValue({ facilities: facilitiesArray });
-    // }
-    // if (
-    //   differenceBy(
-    //     prevProps.customerOptions,
-    //     this.props.customerOptions,
-    //     'value'
-    //   ).length ||
-    //   prevProps.customerOptions.length !== this.props.customerOptions.length
-    // ) {
-    //   const customerSelectControl = this.measurementsForm.get(
-    //     'customerID'
-    //   ) as AbstractControlEdited;
-    //   customerSelectControl.meta.options = this.props.customerOptions;
-    //   customerSelectControl.stateChanges.next();
-    //   // now select the customer the user just added
-    //   // might be a better way to do this, but we are comparing the two arrays and finding the new customer
-    //   const newCustomer = filter(this.props.customerOptions, (cust: any) => {
-    //     return find(prevProps.customerOptions, { value: cust.value })
-    //       ? false
-    //       : true;
-    //   });
-    //   this.measurementsForm.patchValue({ customerID: newCustomer[0] });
-    // }
   }
 
   componentDidMount() {
@@ -239,18 +174,6 @@ class EditMeasurementsForm extends React.Component<Iprops, {}> {
       return;
     }
     console.log(this.measurementsForm.value);
-    // const facilitiesArray = map(
-    //   this.measurementsForm.value.facilities,
-    //   (option: { value: string; label: string }) => {
-    //     return { id: option.value };
-    //   }
-    // );
-    // const securityFunctionsArray = map(
-    //   this.measurementsForm.value.securityFunctions,
-    //   (option: { value: string; label: string }) => {
-    //     return option.value;
-    //   }
-    // );
     // this.props.updateUser({
     //   id: this.props.selectedMeasurementPointList.id,
     //   ...this.measurementsForm.value,
@@ -289,7 +212,11 @@ class EditMeasurementsForm extends React.Component<Iprops, {}> {
             <Button bsStyle="link" className="" onClick={console.log}>
               Add Procedure
             </Button>
-            <Button bsStyle="link" className="" onClick={console.log}>
+            <Button
+              bsStyle="link"
+              className=""
+              onClick={this.props.toggleEditQuestionModal}
+            >
               Add Question
             </Button>
           </Col>

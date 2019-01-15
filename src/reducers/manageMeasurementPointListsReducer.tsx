@@ -16,7 +16,7 @@ function manageMeasurementPointListData(
   action: any
 ): ImeasurementPointList[] {
   switch (action.type) {
-    case types.MANAGE_MEASUREMENTS_SUCCESS:
+    case types.MANAGE_MEASUREMENT_POINT_LISTS_SUCCESS:
       return action.measurements;
     // case types.MEASUREMENTS_ADD_SUCCESS:
     //   return [...state, action.measurement];
@@ -42,7 +42,7 @@ function manageMeasurementPointListTotalPages(
   action: any
 ): number {
   switch (action.type) {
-    case types.MANAGE_MEASUREMENTS_TOTAL_PAGES:
+    case types.MANAGE_MEASUREMENT_POINT_LISTS_TOTAL_PAGES:
       if (action.pages && action.pages > 0) {
         return action.pages;
       }
@@ -64,27 +64,17 @@ export default function manageMeasurementPointLists(
     showEditMeasurementPointListModal: modalToggleWithName(
       state.showEditMeasurementPointListModal,
       action,
-      'EDIT_MEASUREMENTS'
+      'EDIT_MEASUREMENT_POINT_LISTS'
     ),
-    showEditQuestionModal: modalToggleWithName(
-      state.showEditQuestionModal,
+    showEditMeasurementPointQuestionModal: modalToggleWithName(
+      state.showEditMeasurementPointQuestionModal,
       action,
-      'EDIT_MEASUREMENT_QUESTION'
-    ),
-    showEditProcedureModal: modalToggleWithName(
-      state.showEditProcedureModal,
-      action,
-      'EDIT_MEASUREMENT_PROCEDURE'
-    ),
-    showEditGroupModal: modalToggleWithName(
-      state.showEditGroupModal,
-      action,
-      'EDIT_MEASUREMENT_GROUP'
+      'EDIT_MEASUREMENT_POINT_QUESTION'
     ),
     tableFilters: createTableFiltersWithName(
       state.tableFilters,
       action,
-      'MANAGE_MEASUREMENTS'
+      'MANAGE_MEASUREMENT_POINT_LISTS'
     )
   };
 }

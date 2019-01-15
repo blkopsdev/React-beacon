@@ -244,9 +244,7 @@ export default {
     totalPages: 1,
     data: [],
     showEditMeasurementPointListModal: false,
-    showEditQuestionModal: false,
-    showEditGroupModal: false,
-    showEditProcedureModal: false,
+    showEditMeasurementPointQuestionModal: false,
     tableFilters: initialTableFilters
   },
   customers: [],

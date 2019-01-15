@@ -26,9 +26,7 @@ import { emptyTile } from '../../reducers/initialState';
 import {
   getAllMeasurementPointLists,
   toggleEditMeasurementPointListModal,
-  toggleEditQuestionModal,
-  toggleEditProcedureModal,
-  toggleEditGroupModal,
+  toggleEditMeasurementPointQuestionModal,
   setTableFilter
 } from '../../actions/manageMeasurementPointListsActions';
 import { getProductInfo } from '../../actions/manageInventoryActions';
@@ -53,18 +51,16 @@ interface IdispatchProps {
   // getUserManage: typeof getUserManage;
   getAllMeasurementPointLists: typeof getAllMeasurementPointLists;
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
-  toggleEditQuestionModal: typeof toggleEditQuestionModal;
-  toggleEditProcedureModal: typeof toggleEditProcedureModal;
-  toggleEditGroupModal: typeof toggleEditGroupModal;
+  toggleEditMeasurementPointQuestionModal: typeof toggleEditMeasurementPointQuestionModal;
   getProductInfo: typeof getProductInfo;
   productGroupOptions: Ioption[];
   standardOptions: Ioption[];
   customers: Icustomer[];
   closeAllModals: typeof closeAllModals;
   getCustomers: typeof getCustomers;
-  manageMeasurementPointList: ImanageMeasurementPointListsReducer;
+  manageMeasurementPointLists: ImanageMeasurementPointListsReducer;
   showEditMeasurementPointListModal: boolean;
-  showEditQuestionModal: boolean;
+  showEditMeasurementPointQuestionModal: boolean;
   showEditProcedureModal: boolean;
   showEditGroupModal: boolean;
   setTableFilter: typeof setTableFilter;
@@ -98,7 +94,7 @@ class ManageMeasurementPointList extends React.Component<
         type: {
           render: FormUtil.SelectWithoutValidation,
           meta: {
-            label: 'manageMeasurementPointList:type',
+            label: 'manageMeasurementPointLists:type',
             options: constants.measurementPointListTypeOptions,
             colWidth: 3,
             type: 'select',
@@ -109,7 +105,7 @@ class ManageMeasurementPointList extends React.Component<
         equipmentType: {
           render: FormUtil.SelectWithoutValidation,
           meta: {
-            label: 'manageMeasurementPointList:equipmentType',
+            label: 'manageMeasurementPointLists:equipmentType',
             options: this.props.productGroupOptions,
             colWidth: 3,
             type: 'select',
@@ -120,7 +116,7 @@ class ManageMeasurementPointList extends React.Component<
         standard: {
           render: FormUtil.SelectWithoutValidation,
           meta: {
-            label: 'manageMeasurementPointList:standard',
+            label: 'manageMeasurementPointLists:standard',
             options: this.props.standardOptions,
             colWidth: 3,
             type: 'select',
@@ -315,7 +311,7 @@ class ManageMeasurementPointList extends React.Component<
           bsStyle="link"
           onClick={this.props.toggleEditMeasurementPointListModal}
         >
-          {t('manageMeasurementPointList:newMeasurement')}
+          {t('manageMeasurementPointLists:newMeasurement')}
         </Button>
         <ReactTable
           data={this.props.tableData}
@@ -325,7 +321,7 @@ class ManageMeasurementPointList extends React.Component<
           pageSize={this.props.tableData.length}
           page={this.props.tableFilters.page - 1}
           manual // Forces table not to paginate or sort automatically, so we can handle it server-side
-          pages={this.props.manageMeasurementPointList.totalPages}
+          pages={this.props.manageMeasurementPointLists.totalPages}
           showPageSizeOptions={false}
           className={`beacon-table -highlight ${this.state.currentTile.color}`}
           previousText={t('common:previous')}
@@ -348,9 +344,9 @@ class ManageMeasurementPointList extends React.Component<
           t={this.props.t}
         />
         <CommonModal
-          modalVisible={this.props.showEditQuestionModal}
+          modalVisible={this.props.showEditMeasurementPointQuestionModal}
           className="security-modal second-modal"
-          onHide={this.props.toggleEditQuestionModal}
+          onHide={this.props.toggleEditMeasurementPointQuestionModal}
           body={<span>QUESTIONS</span>}
           title={t('securityFunctionsModalTitle')}
           container={document.getElementById('two-pane-layout')}
@@ -368,16 +364,13 @@ class ManageMeasurementPointList extends React.Component<
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
-    manageMeasurementPointList: state.manageMeasurementPointLists,
+    manageMeasurementPointLists: state.manageMeasurementPointLists,
     customers: state.customers,
     loading: state.ajaxCallsInProgress > 0,
     showEditMeasurementPointListModal:
       state.manageMeasurementPointLists.showEditMeasurementPointListModal,
-    showEditQuestionModal:
-      state.manageMeasurementPointLists.showEditQuestionModal,
-    showEditProcedureModal:
-      state.manageMeasurementPointLists.showEditProcedureModal,
-    showEditGroupModal: state.manageMeasurementPointLists.showEditGroupModal,
+    showEditMeasurementPointQuestionModal:
+      state.manageMeasurementPointLists.showEditMeasurementPointQuestionModal,
     tableData: state.manageMeasurementPointLists.data,
     tableFilters: state.manageMeasurementPointLists.tableFilters,
     standardOptions: state.productInfo.standardOptions,
@@ -390,9 +383,7 @@ export default translate('manageMeasurementPointLists')(
     {
       getAllMeasurementPointLists,
       toggleEditMeasurementPointListModal,
-      toggleEditQuestionModal,
-      toggleEditProcedureModal,
-      toggleEditGroupModal,
+      toggleEditMeasurementPointQuestionModal,
       closeAllModals,
       setTableFilter,
       getProductInfo

@@ -20,9 +20,7 @@ import { FormUtil } from '../common/FormUtil';
 import { Ioption, ImeasurementPointList } from '../../models';
 import {
   toggleEditMeasurementPointListModal,
-  toggleEditGroupModal,
-  toggleEditProcedureModal,
-  toggleEditQuestionModal
+  toggleEditMeasurementPointQuestionModal
 } from '../../actions/manageMeasurementPointListsActions';
 // import EditFacilityModal from '../common/EditFacilityModal';
 import constants from '../../constants/constants';
@@ -51,9 +49,9 @@ const buildFieldConfig = (
       render: FormUtil.SelectWithoutValidation,
       meta: {
         options: typeOptions,
-        label: 'manageMeasurementPointList:type',
+        label: 'manageMeasurementPointLists:type',
         colWidth: 12,
-        placeholder: 'manageMeasurementPointList:typePlaceholder'
+        placeholder: 'manageMeasurementPointLists:typePlaceholder'
       },
       options: {
         validators: [Validators.required]
@@ -63,9 +61,9 @@ const buildFieldConfig = (
       render: FormUtil.SelectWithoutValidation,
       meta: {
         options: productGroupOptions,
-        label: 'manageMeasurementPointList:equipmentType',
+        label: 'manageMeasurementPointLists:equipmentType',
         colWidth: 12,
-        placeholder: 'manageMeasurementPointList:equipmentTypePlaceholder'
+        placeholder: 'manageMeasurementPointLists:equipmentTypePlaceholder'
       },
       options: {
         validators: [Validators.required]
@@ -75,9 +73,9 @@ const buildFieldConfig = (
       render: FormUtil.SelectWithoutValidation,
       meta: {
         options: standardOptions,
-        label: 'manageMeasurementPointList:standard',
+        label: 'manageMeasurementPointLists:standard',
         colWidth: 12,
-        placeholder: 'manageMeasurementPointList:standardPlaceholder'
+        placeholder: 'manageMeasurementPointLists:standardPlaceholder'
       },
       options: {
         validators: [Validators.required]
@@ -100,9 +98,7 @@ interface Iprops extends React.Props<EditMeasurementPointListForm> {
   t: TranslationFunction;
   i18n: I18n;
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
-  toggleEditQuestionModal: typeof toggleEditQuestionModal;
-  toggleEditProcedureModal: typeof toggleEditProcedureModal;
-  toggleEditGroupModal: typeof toggleEditGroupModal;
+  toggleEditMeasurementPointQuestionModal: typeof toggleEditMeasurementPointQuestionModal;
 }
 
 class EditMeasurementPointListForm extends React.Component<Iprops, {}> {
@@ -215,7 +211,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, {}> {
             <Button
               bsStyle="link"
               className=""
-              onClick={this.props.toggleEditQuestionModal}
+              onClick={this.props.toggleEditMeasurementPointQuestionModal}
             >
               Add Question
             </Button>

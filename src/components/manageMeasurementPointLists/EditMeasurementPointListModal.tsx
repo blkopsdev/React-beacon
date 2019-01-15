@@ -6,9 +6,7 @@ import { FormUtil } from '../common/FormUtil';
 import { IinitialState, ImeasurementPointList, Ioption } from '../../models';
 import {
   toggleEditMeasurementPointListModal,
-  toggleEditGroupModal,
-  toggleEditProcedureModal,
-  toggleEditQuestionModal
+  toggleEditMeasurementPointQuestionModal
 } from '../../actions/manageMeasurementPointListsActions';
 import CommonModal from '../common/CommonModal';
 import EditMeasurementPointListForm from './EditMeasurementPointListForm';
@@ -26,9 +24,7 @@ interface IdispatchProps {
   productGroupOptions: Ioption[];
   standardOptions: Ioption[];
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
-  toggleEditQuestionModal: typeof toggleEditQuestionModal;
-  toggleEditProcedureModal: typeof toggleEditProcedureModal;
-  toggleEditGroupModal: typeof toggleEditGroupModal;
+  toggleEditMeasurementPointQuestionModal: typeof toggleEditMeasurementPointQuestionModal;
 }
 
 class EditMeasurementPointListModal extends React.Component<
@@ -73,8 +69,6 @@ export default connect(
   mapStateToProps,
   {
     toggleEditMeasurementPointListModal,
-    toggleEditGroupModal,
-    toggleEditProcedureModal,
-    toggleEditQuestionModal
+    toggleEditMeasurementPointQuestionModal
   }
 )(EditMeasurementPointListModal);

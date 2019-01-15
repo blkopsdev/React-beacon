@@ -35,18 +35,18 @@ export function getAllMeasurementPointLists(): ThunkResult<void> {
         } else {
           // console.log(data.data);
           dispatch({
-            type: types.MANAGE_MEASUREMENTS_SUCCESS,
+            type: types.MANAGE_MEASUREMENT_POINT_LISTS_SUCCESS,
             measurements: data.data.result
           });
           dispatch({
-            type: types.MANAGE_MEASUREMENTS_TOTAL_PAGES,
+            type: types.MANAGE_MEASUREMENT_POINT_LISTS_TOTAL_PAGES,
             pages: data.data.pages
           });
           return data;
         }
       })
       .catch((error: any) => {
-        dispatch({ type: types.MANAGE_MEASUREMENTS_FAILED });
+        dispatch({ type: types.MANAGE_MEASUREMENT_POINT_LISTS_FAILED });
         constants.handleError(error, 'get measurements');
         throw error;
       });
@@ -113,18 +113,12 @@ export function getAllMeasurementPointLists(): ThunkResult<void> {
 // }
 
 export const toggleEditMeasurementPointListModal = () => ({
-  type: types.TOGGLE_MODAL_EDIT_MEASUREMENTS
+  type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT_LISTS
 });
-export const toggleEditQuestionModal = () => ({
-  type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_QUESTION
-});
-export const toggleEditProcedureModal = () => ({
-  type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_PROCEDURE
-});
-export const toggleEditGroupModal = () => ({
-  type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_GROUP
+export const toggleEditMeasurementPointQuestionModal = () => ({
+  type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT_QUESTION
 });
 export const setTableFilter = (filters: ItableFiltersParams) => ({
-  type: types.SET_TABLE_FILTER_MANAGE_MEASUREMENTS,
+  type: types.SET_TABLE_FILTER_MANAGE_MEASUREMENT_POINT_LISTS,
   filters
 });

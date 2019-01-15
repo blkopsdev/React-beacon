@@ -340,9 +340,7 @@ export interface ImanageMeasurementPointListsReducer {
   data: ImeasurementPointList[];
   totalPages: number;
   showEditMeasurementPointListModal: boolean;
-  showEditQuestionModal: boolean;
-  showEditGroupModal: boolean;
-  showEditProcedureModal: boolean;
+  showEditMeasurementPointQuestionModal: boolean;
   tableFilters: ItableFiltersReducer;
 }
 

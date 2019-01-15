@@ -3,7 +3,7 @@
 */
 import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { find } from 'lodash';
+import { find, isEqual } from 'lodash';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 import ReactTable, { SortingRule, FinalState, RowInfo } from 'react-table';
@@ -117,6 +117,7 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
     this.props.getUserManage();
     // refresh the list of customers every time the component mounts
     this.props.getCustomers();
+    this.props.closeAllModals();
   }
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
     if (
@@ -126,7 +127,12 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
       this.setState({ selectedRow: null });
     }
     // automatically get inventory every time a fitler changes
-    if (prevProps.tableFilters !== this.props.tableFilters) {
+    if (isEqual(prevProps.tableFilters, this.props.tableFilters) === false) {
+      console.log(
+        'user manage filters changed',
+        prevProps.tableFilters,
+        this.props.tableFilters
+      );
       this.props.getUserManage();
     }
     if (prevProps.customers !== this.props.customers) {

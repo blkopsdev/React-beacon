@@ -22,6 +22,7 @@ export function modalToggleWithName(
 ) {
   switch (action.type) {
     case `TOGGLE_MODAL_${modalName}`:
+      // console.error('toggle modal')
       return !state;
     case types.CLOSE_ALL_MODALS:
       return false;

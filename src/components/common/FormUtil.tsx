@@ -165,7 +165,9 @@ export const FormUtil = {
           autoFocus={meta.autoFocus}
           name={meta.name || ''}
           {...handler()}
-          disabled={meta.disabled} // must go after handler so that it does not get overridden on load
+          disabled={
+            meta.disabled !== undefined ? meta.disabled : handler().disabled
+          } // must go after handler so that it does not get overridden on load
         />
         <FormControl.Feedback />
       </FormGroup>

@@ -197,11 +197,6 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     ) {
       const facility = this.props.facilityOptions[0];
       this.props.setTableFilter({ facility });
-      // this.setState({searchFieldConfig: this.buildSearchControls()}, ()=>{
-
-      // this.props.getLocationsFacility(facility.value);
-      // this.props.getInventory();
-      // })
     }
   }
   componentWillUnmount() {

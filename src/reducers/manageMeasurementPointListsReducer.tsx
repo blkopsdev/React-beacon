@@ -10,6 +10,7 @@ import {
   modalToggleWithName
 } from './commonReducers';
 import initialState from './initialState';
+import { initialMeasurementPointList } from './initialState';
 import * as types from '../actions/actionTypes';
 
 function manageMeasurementPointListData(
@@ -43,22 +44,46 @@ function manageMeasurementPointListData(
     //   });
     case types.MANAGE_MEASUREMENT_POINT_QUESTION_ADD:
       // Grab the correct list
-      // let mpl = find(
-      //   state,
-      //   (l: ImeasurementPointList) => l.id === action.list.id
-      // );
-      // if(!mpl) { return state; }
-      // // Add/Update the question
-      // const q = keyBy(
-      //   [action.question],
-      //   (item: ImeasurementPointQuestion) => item.id
-      // );
-      // const measurementPoints = { ...mpl.measurementPoints, q};
-      // mpl = {...mpl, measurementPoints }
-      return state;
-    // Update the array with updated list and return
+      let mpl = find(
+        state,
+        (l: ImeasurementPointList) => l.id === action.list.id
+      );
+      if (!mpl) {
+        return state;
+      }
+      // Add/Update the question
+      const q = keyBy(
+        [action.question],
+        (item: ImeasurementPointQuestion) => item.id
+      );
+      const measurementPoints = { ...mpl.measurementPoints, ...q };
+      mpl = { ...mpl, measurementPoints };
+      // Update the array with updated list and return
+      return [...state.filter(l => l.id !== action.list.id), mpl];
     case types.USER_LOGOUT_SUCCESS:
       return [];
+    default:
+      return state;
+  }
+}
+
+function manageSelectedMeasurementPointList(
+  state: ImeasurementPointList = initialMeasurementPointList,
+  action: any
+): ImeasurementPointList {
+  switch (action.type) {
+    case types.SELECT_MEASUREMENT_POINT_LIST:
+      return action.measurementPointList;
+    case types.MANAGE_MEASUREMENT_POINT_QUESTION_ADD:
+      // Add/Update the question
+      const q = keyBy(
+        [action.question],
+        (item: ImeasurementPointQuestion) => item.id
+      );
+      const measurementPoints = { ...state.measurementPoints, ...q };
+      return { ...state, measurementPoints };
+    case types.USER_LOGOUT_SUCCESS:
+      return initialMeasurementPointList;
     default:
       return state;
   }
@@ -88,6 +113,10 @@ export default function manageMeasurementPointLists(
   return {
     data: manageMeasurementPointListData(state.data, action),
     totalPages: manageMeasurementPointListTotalPages(state.totalPages, action),
+    selectedMeasurementPointList: manageSelectedMeasurementPointList(
+      state.selectedMeasurementPointList,
+      action
+    ),
     showEditMeasurementPointListModal: modalToggleWithName(
       state.showEditMeasurementPointListModal,
       action,

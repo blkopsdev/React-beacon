@@ -102,6 +102,14 @@ export const initialLesson = {
   courseLessons: [],
   cost: 0
 };
+export const initialMeasurementPointList = {
+  id: '',
+  measurementPoints: {},
+  productGroupID: '',
+  standardID: '',
+  type: 1,
+  customerID: ''
+};
 
 /* 
 * initialState
@@ -243,6 +251,7 @@ export default {
   manageMeasurementPointLists: {
     totalPages: 1,
     data: [],
+    selectedMeasurementPointList: initialMeasurementPointList,
     showEditMeasurementPointListModal: false,
     showEditMeasurementPointQuestionModal: false,
     tableFilters: initialTableFilters

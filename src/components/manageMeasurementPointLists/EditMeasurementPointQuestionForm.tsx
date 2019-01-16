@@ -11,7 +11,7 @@ import {
   FieldConfig
   // Observable
 } from 'react-reactive-form';
-// import { forEach, find } from 'lodash';
+import { forEach, find } from 'lodash';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
@@ -151,17 +151,22 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, {}> {
       return;
     }
     // set values
-    // forEach(this.props.selectedMeasurementPointList, (value, key) => {
-    //   this.measurementsForm.patchValue({ [key]: value });
-    // });
+    forEach(this.props.selectedMeasurementPointList, (value, key) => {
+      this.measurementsForm.patchValue({ [key]: value });
+    });
 
-    // const { type } = this.props.selectedMeasurementPointQuestion;
-    // this.measurementsForm.patchValue({
-    //   type: find(
-    //     constants.measurementPointQuestionTypeOptions,
-    //     (tOpt: any) => tOpt.value === type
-    //   )
-    // });
+    const { type, label } = this.props.selectedMeasurementPointQuestion;
+    if (type < 5) {
+      this.measurementsForm.patchValue({
+        type: find(
+          constants.measurementPointQuestionTypeOptions,
+          (tOpt: any) => tOpt.value === type
+        )
+      });
+    }
+    this.measurementsForm.patchValue({
+      label
+    });
   }
   // componentWillUnmount() {}
 

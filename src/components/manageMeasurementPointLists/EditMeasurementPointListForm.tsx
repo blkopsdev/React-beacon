@@ -3,7 +3,7 @@
 * Edit measurement point lists
 */
 
-import { Col, Button } from 'react-bootstrap';
+import { Col, Button, ListGroup, ListGroupItem } from 'react-bootstrap';
 import {
   Validators,
   FormGenerator,
@@ -11,7 +11,7 @@ import {
   FieldConfig
   // Observable
 } from 'react-reactive-form';
-import { forEach, find } from 'lodash';
+import { forEach, find, map } from 'lodash';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
@@ -208,6 +208,27 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     };
   }
 
+  getQuestionList = () => {
+    return (
+      <ListGroup className="question-list">
+        {map(this.props.selectedMeasurementPointList.measurementPoints, mp => {
+          return (
+            <ListGroupItem
+              className="question-list-item"
+              onClick={() => {
+                this.setSelectedQuestion(mp);
+              }}
+              header={mp.label}
+            >
+              {mp.type < 5 &&
+                constants.measurementPointQuestionTypesInverse[mp.type]}
+            </ListGroupItem>
+          );
+        })}
+      </ListGroup>
+    );
+  };
+
   render() {
     const { t } = this.props;
     // const selectedCustomer = this.measurementsForm
@@ -265,7 +286,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
             </Button>
           </Col>
           <Col xs={12} className="">
-            RENDER QUESTIONS HERE
+            {this.getQuestionList()}
           </Col>
           <Col xs={12} className="form-buttons text-right">
             <Button

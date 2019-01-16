@@ -58,6 +58,13 @@ export function getAllMeasurementPointLists(): ThunkResult<void> {
   };
 }
 
+export const setSelectedMeasurementPointList = (
+  measurementPointList: ImeasurementPointList
+) => ({
+  type: types.SELECT_MEASUREMENT_POINT_LIST,
+  measurementPointList
+});
+
 export const addQuestionToMeasurementPointList = (
   list: ImeasurementPointList,
   question: ImeasurementPointQuestion

@@ -341,6 +341,7 @@ export interface ImeasurementPointList {
 export interface ImanageMeasurementPointListsReducer {
   data: ImeasurementPointList[];
   totalPages: number;
+  selectedMeasurementPointList?: ImeasurementPointList;
   showEditMeasurementPointListModal: boolean;
   showEditMeasurementPointQuestionModal: boolean;
   tableFilters: ItableFiltersReducer;

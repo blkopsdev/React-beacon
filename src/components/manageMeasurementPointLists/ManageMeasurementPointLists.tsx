@@ -27,7 +27,8 @@ import {
   getAllMeasurementPointLists,
   toggleEditMeasurementPointListModal,
   toggleEditMeasurementPointQuestionModal,
-  setTableFilter
+  setTableFilter,
+  setSelectedMeasurementPointList
 } from '../../actions/manageMeasurementPointListsActions';
 import { getProductInfo } from '../../actions/manageInventoryActions';
 import Banner from '../common/Banner';
@@ -52,6 +53,7 @@ interface IdispatchProps {
   getAllMeasurementPointLists: typeof getAllMeasurementPointLists;
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
   toggleEditMeasurementPointQuestionModal: typeof toggleEditMeasurementPointQuestionModal;
+  setSelectedMeasurementPointList: typeof setSelectedMeasurementPointList;
   getProductInfo: typeof getProductInfo;
   productGroupOptions: Ioption[];
   standardOptions: Ioption[];
@@ -221,6 +223,9 @@ class ManageMeasurementPointList extends React.Component<
       return {
         onClick: (e: React.MouseEvent<HTMLFormElement>) => {
           if (!this.buttonInAction) {
+            this.props.setSelectedMeasurementPointList(
+              this.props.tableData[rowInfo.index]
+            );
             this.setState({
               selectedRow: rowInfo.index
             });
@@ -332,9 +337,6 @@ class ManageMeasurementPointList extends React.Component<
           resizable={false}
         />
         <EditMeasurementPointListModal
-          selectedMeasurementPointList={
-            this.props.tableData[this.state.selectedRow]
-          }
           measurementPointListTypeOptions={
             constants.measurementPointListTypeOptions
           }
@@ -371,6 +373,7 @@ export default translate('manageMeasurementPointLists')(
       getAllMeasurementPointLists,
       toggleEditMeasurementPointListModal,
       toggleEditMeasurementPointQuestionModal,
+      setSelectedMeasurementPointList,
       closeAllModals,
       setTableFilter,
       getProductInfo

@@ -10,15 +10,17 @@ import {
 } from '../../actions/manageMeasurementPointListsActions';
 import CommonModal from '../common/CommonModal';
 import EditMeasurementPointListForm from './EditMeasurementPointListForm';
+// import { find } from 'lodash';
 
 interface Iprops {
   measurementPointListTypeOptions: any[];
-  selectedMeasurementPointList: ImeasurementPointList;
+  // selectedMeasurementPointListId: ImeasurementPointList;
   colorButton: any;
   t: TranslationFunction;
 }
 
 interface IdispatchProps {
+  selectedMeasurementPointList: ImeasurementPointList;
   showEditMeasurementPointListModal: boolean;
   loading: boolean;
   productGroupOptions: Ioption[];
@@ -61,7 +63,9 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     showEditCustomerModal: state.showEditCustomerModal,
     showEditFacilityModal: state.showEditFacilityModal,
     standardOptions: state.productInfo.standardOptions,
-    productGroupOptions: state.productInfo.productGroupOptions
+    productGroupOptions: state.productInfo.productGroupOptions,
+    selectedMeasurementPointList:
+      state.manageMeasurementPointLists.selectedMeasurementPointList
   };
 };
 

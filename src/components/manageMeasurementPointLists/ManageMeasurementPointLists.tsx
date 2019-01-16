@@ -33,7 +33,6 @@ import { getProductInfo } from '../../actions/manageInventoryActions';
 import Banner from '../common/Banner';
 // import CommonModal from '../common/CommonModal';
 import EditMeasurementPointListModal from './EditMeasurementPointListModal';
-import EditMeasurementPointQuestionModal from './EditMeasurementPointQuestionModal';
 import SearchTableForm from '../common/SearchTableForm';
 import constants from '../../constants/constants';
 import { FieldConfig } from 'react-reactive-form';
@@ -338,15 +337,6 @@ class ManageMeasurementPointList extends React.Component<
           }
           measurementPointListTypeOptions={
             constants.measurementPointListTypeOptions
-          }
-          colorButton={
-            constants.colors[`${this.state.currentTile.color}Button`]
-          }
-          t={this.props.t}
-        />
-        <EditMeasurementPointQuestionModal
-          selectedMeasurementPointList={
-            this.props.tableData[this.state.selectedRow]
           }
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]

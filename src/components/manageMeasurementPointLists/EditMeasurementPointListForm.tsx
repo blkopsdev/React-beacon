@@ -22,8 +22,9 @@ import {
   toggleEditMeasurementPointListModal,
   toggleEditMeasurementPointQuestionModal
 } from '../../actions/manageMeasurementPointListsActions';
-// import EditFacilityModal from '../common/EditFacilityModal';
+import EditMeasurementPointQuestionModal from './EditMeasurementPointQuestionModal';
 import constants from '../../constants/constants';
+const uuidv4 = require('uuid/v4');
 
 // passing in an object, but we need an array back
 // const securityOptions = [
@@ -101,11 +102,18 @@ interface Iprops extends React.Props<EditMeasurementPointListForm> {
   toggleEditMeasurementPointQuestionModal: typeof toggleEditMeasurementPointQuestionModal;
 }
 
-class EditMeasurementPointListForm extends React.Component<Iprops, {}> {
+interface Istate {
+  selectedMeasurementPointQuestion: any;
+}
+
+class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
   public measurementsForm: AbstractControl;
   public fieldConfig: FieldConfig;
   constructor(props: Iprops) {
     super(props);
+    this.state = {
+      selectedMeasurementPointQuestion: null
+    };
     this.fieldConfig = FormUtil.translateForm(
       buildFieldConfig(
         this.props.measurementPointListTypeOptions,
@@ -186,6 +194,18 @@ class EditMeasurementPointListForm extends React.Component<Iprops, {}> {
     };
   };
 
+  setSelectedQuestion(question: any) {
+    this.setState({ selectedMeasurementPointQuestion: question });
+    this.props.toggleEditMeasurementPointQuestionModal();
+  }
+
+  newQuestion(type: number) {
+    return {
+      id: uuidv4(),
+      type
+    };
+  }
+
   render() {
     const { t } = this.props;
     // const selectedCustomer = this.measurementsForm
@@ -202,19 +222,48 @@ class EditMeasurementPointListForm extends React.Component<Iprops, {}> {
             fieldConfig={this.fieldConfig}
           />
           <Col xs={12} className="">
-            <Button bsStyle="link" className="" onClick={console.log}>
+            <Button
+              bsStyle="link"
+              className=""
+              onClick={() => {
+                this.setSelectedQuestion(
+                  this.newQuestion(
+                    constants.measurementPointQuestionTypes.GROUP
+                  )
+                );
+              }}
+            >
               Add Group
             </Button>
-            <Button bsStyle="link" className="" onClick={console.log}>
+            <Button
+              bsStyle="link"
+              className=""
+              onClick={() => {
+                this.setSelectedQuestion(
+                  this.newQuestion(
+                    constants.measurementPointQuestionTypes.PROCEDURE
+                  )
+                );
+              }}
+            >
               Add Procedure
             </Button>
             <Button
               bsStyle="link"
               className=""
-              onClick={this.props.toggleEditMeasurementPointQuestionModal}
+              onClick={() => {
+                this.setSelectedQuestion(
+                  this.newQuestion(
+                    constants.measurementPointQuestionTypes.QUESTION_PASSFAIL
+                  )
+                );
+              }}
             >
               Add Question
             </Button>
+          </Col>
+          <Col xs={12} className="">
+            RENDER QUESTIONS HERE
           </Col>
           <Col xs={12} className="form-buttons text-right">
             <Button
@@ -234,6 +283,14 @@ class EditMeasurementPointListForm extends React.Component<Iprops, {}> {
             </Button>
           </Col>
         </form>
+        <EditMeasurementPointQuestionModal
+          selectedMeasurementPointList={this.props.selectedMeasurementPointList}
+          selectedMeasurementPointQuestion={
+            this.state.selectedMeasurementPointQuestion
+          }
+          colorButton={this.props.colorButton}
+          t={this.props.t}
+        />
       </div>
     );
   }

@@ -11,13 +11,13 @@ import {
   FieldConfig
   // Observable
 } from 'react-reactive-form';
-import { forEach, find } from 'lodash';
+// import { forEach, find } from 'lodash';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
-import { ImeasurementPointList } from '../../models';
+import { ImeasurementPointList, ImeasurementPointQuestion } from '../../models';
 import {
   toggleEditMeasurementPointListModal,
   toggleEditMeasurementPointQuestionModal
@@ -59,8 +59,38 @@ const buildFieldConfig = (typeOptions: any[]) => {
   return fieldConfig as FieldConfig;
 };
 
+const groupFieldConfig = {
+  controls: {
+    name: {
+      options: {
+        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
+      },
+      render: FormUtil.TextInput,
+      meta: { label: 'name', colWidth: 12, type: 'text', name: 'name' }
+    }
+  }
+};
+
+const procedureFieldConfig = {
+  controls: {
+    procedureText: {
+      options: {
+        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
+      },
+      render: FormUtil.TextInput,
+      meta: {
+        label: 'procedure text',
+        colWidth: 12,
+        type: 'text',
+        name: 'procedureText'
+      }
+    }
+  }
+};
+
 interface Iprops extends React.Props<EditMeasurementPointQuestionForm> {
   selectedMeasurementPointList: ImeasurementPointList;
+  selectedMeasurementPointQuestion: ImeasurementPointQuestion;
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;
@@ -75,14 +105,36 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, {}> {
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(
-      buildFieldConfig(constants.measurementPointQuestionTypeOptions),
+      this.getFormConfig(),
       this.props.t
     );
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setForm = this.setForm.bind(this);
   }
+
+  getFormConfig() {
+    if (
+      this.props.selectedMeasurementPointQuestion &&
+      this.props.selectedMeasurementPointQuestion.type ===
+        constants.measurementPointQuestionTypes.PROCEDURE
+    ) {
+      return procedureFieldConfig;
+    } else if (
+      this.props.selectedMeasurementPointQuestion &&
+      this.props.selectedMeasurementPointQuestion.type ===
+        constants.measurementPointQuestionTypes.GROUP
+    ) {
+      return groupFieldConfig;
+    } else {
+      return buildFieldConfig(constants.measurementPointQuestionTypeOptions);
+    }
+  }
+
   componentDidUpdate(prevProps: Iprops) {
     if (!this.props.selectedMeasurementPointList) {
+      return;
+    }
+    if (!this.props.selectedMeasurementPointQuestion) {
       return;
     }
   }
@@ -92,18 +144,22 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, {}> {
       console.error('missing measurement point list');
       return;
     }
+    if (!this.props.selectedMeasurementPointQuestion) {
+      console.error('missing measurement point question');
+      return;
+    }
     // set values
-    forEach(this.props.selectedMeasurementPointList, (value, key) => {
-      this.measurementsForm.patchValue({ [key]: value });
-    });
+    // forEach(this.props.selectedMeasurementPointList, (value, key) => {
+    //   this.measurementsForm.patchValue({ [key]: value });
+    // });
 
-    const { type } = this.props.selectedMeasurementPointList;
-    this.measurementsForm.patchValue({
-      type: find(
-        constants.measurementPointQuestionTypeOptions,
-        (tOpt: any) => tOpt.value === type
-      )
-    });
+    // const { type } = this.props.selectedMeasurementPointQuestion;
+    // this.measurementsForm.patchValue({
+    //   type: find(
+    //     constants.measurementPointQuestionTypeOptions,
+    //     (tOpt: any) => tOpt.value === type
+    //   )
+    // });
   }
   // componentWillUnmount() {}
 

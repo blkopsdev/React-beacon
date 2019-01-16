@@ -30,6 +30,14 @@ const measurementPointQuestionTypeOptions = [
   { label: 'Numeric', value: 3 },
   { label: 'Select', value: 4 }
 ];
+const measurementPointQuestionTypes = {
+  QUESTION_PASSFAIL: 1,
+  QUESTION_TEXT: 2,
+  QUESTION_NUMERIC: 3,
+  QUESTION_SELECT: 4,
+  GROUP: 5,
+  PROCEDURE: 6
+};
 
 const icons = {
   dashboard: require('../images/icons/BM_Dashboard.png'),
@@ -417,6 +425,7 @@ const constants = {
   icons,
   measurementPointListTypeOptions,
   measurementPointQuestionTypeOptions,
+  measurementPointQuestionTypes,
   hasSecurityFunction: (user: Iuser, securityFunction: string): boolean => {
     if (user.securityFunctions.indexOf(securityFunction) >= 0) {
       return true;

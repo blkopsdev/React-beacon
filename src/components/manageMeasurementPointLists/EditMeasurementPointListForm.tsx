@@ -187,6 +187,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     //   email: this.props.selectedMeasurementPointList.email // have to add back the email because disabling the input removes it
     // });
   };
+
   setForm = (form: AbstractControl) => {
     this.measurementsForm = form;
     this.measurementsForm.meta = {
@@ -202,7 +203,8 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
   newQuestion(type: number) {
     return {
       id: uuidv4(),
-      type
+      type,
+      label: ''
     };
   }
 

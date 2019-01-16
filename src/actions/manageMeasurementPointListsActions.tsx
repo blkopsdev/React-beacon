@@ -2,7 +2,12 @@ import { ThunkAction } from 'redux-thunk';
 // import { toastr } from 'react-redux-toastr';
 import axios from 'axios';
 
-import { IinitialState, ItableFiltersParams } from '../models';
+import {
+  IinitialState,
+  ItableFiltersParams,
+  ImeasurementPointQuestion,
+  ImeasurementPointList
+} from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
 import constants from '../constants/constants';
@@ -52,6 +57,15 @@ export function getAllMeasurementPointLists(): ThunkResult<void> {
       });
   };
 }
+
+export const addQuestionToMeasurementPointList = (
+  list: ImeasurementPointList,
+  question: ImeasurementPointQuestion
+) => ({
+  type: types.MANAGE_MEASUREMENT_POINT_QUESTION_ADD,
+  list,
+  question
+});
 
 // export function updateJob(job: Ijob, users: string[]): ThunkResult<void> {
 //   return dispatch => {

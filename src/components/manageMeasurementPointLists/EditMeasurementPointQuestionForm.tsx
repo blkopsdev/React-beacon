@@ -20,7 +20,8 @@ import { FormUtil } from '../common/FormUtil';
 import { ImeasurementPointList, ImeasurementPointQuestion } from '../../models';
 import {
   toggleEditMeasurementPointListModal,
-  toggleEditMeasurementPointQuestionModal
+  toggleEditMeasurementPointQuestionModal,
+  addQuestionToMeasurementPointList
 } from '../../actions/manageMeasurementPointListsActions';
 import constants from '../../constants/constants';
 
@@ -61,19 +62,19 @@ const buildFieldConfig = (typeOptions: any[]) => {
 
 const groupFieldConfig = {
   controls: {
-    name: {
+    label: {
       options: {
         validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
-      meta: { label: 'name', colWidth: 12, type: 'text', name: 'name' }
+      meta: { label: 'name', colWidth: 12, type: 'text', name: 'label' }
     }
   }
 };
 
 const procedureFieldConfig = {
   controls: {
-    procedureText: {
+    label: {
       options: {
         validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
@@ -82,7 +83,7 @@ const procedureFieldConfig = {
         label: 'procedure text',
         colWidth: 12,
         type: 'text',
-        name: 'procedureText'
+        name: 'label'
       }
     }
   }
@@ -97,6 +98,7 @@ interface Iprops extends React.Props<EditMeasurementPointQuestionForm> {
   i18n: I18n;
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
   toggleEditMeasurementPointQuestionModal: typeof toggleEditMeasurementPointQuestionModal;
+  addQuestionToMeasurementPointList: typeof addQuestionToMeasurementPointList;
 }
 
 class EditMeasurementPointQuestionForm extends React.Component<Iprops, {}> {
@@ -173,8 +175,19 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, {}> {
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-    console.log(this.measurementsForm.value);
+
+    const newQ = {
+      ...this.props.selectedMeasurementPointQuestion,
+      ...this.measurementsForm.value
+    };
+    console.log(newQ);
+    this.props.addQuestionToMeasurementPointList(
+      this.props.selectedMeasurementPointList,
+      newQ
+    );
+    this.props.toggleEditMeasurementPointQuestionModal();
   };
+
   setForm = (form: AbstractControl) => {
     this.measurementsForm = form;
     this.measurementsForm.meta = {
@@ -184,9 +197,6 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, {}> {
 
   render() {
     const { t } = this.props;
-    // const selectedCustomer = this.measurementsForm
-    //   ? this.measurementsForm.value.customerID
-    //   : undefined;
 
     const formClassName = `clearfix beacon-form ${this.props.colorButton}`;
 

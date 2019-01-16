@@ -326,6 +326,7 @@ export interface IproductInfo {
 export interface ImeasurementPointQuestion {
   id: string;
   type: number;
+  label: string;
 }
 
 export interface ImeasurementPointList {

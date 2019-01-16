@@ -1,4 +1,4 @@
-// import { pickBy, map } from 'lodash';
+import { find, keyBy } from 'lodash';
 
 import {
   ImanageMeasurementPointListsReducer,
@@ -11,7 +11,6 @@ import {
 } from './commonReducers';
 import initialState from './initialState';
 import * as types from '../actions/actionTypes';
-import { keyBy } from 'lodash';
 
 function manageMeasurementPointListData(
   state: ImeasurementPointList[] = [],
@@ -42,6 +41,22 @@ function manageMeasurementPointListData(
     //       return job;
     //     }
     //   });
+    case types.MANAGE_MEASUREMENT_POINT_QUESTION_ADD:
+      // Grab the correct list
+      // let mpl = find(
+      //   state,
+      //   (l: ImeasurementPointList) => l.id === action.list.id
+      // );
+      // if(!mpl) { return state; }
+      // // Add/Update the question
+      // const q = keyBy(
+      //   [action.question],
+      //   (item: ImeasurementPointQuestion) => item.id
+      // );
+      // const measurementPoints = { ...mpl.measurementPoints, q};
+      // mpl = {...mpl, measurementPoints }
+      return state;
+    // Update the array with updated list and return
     case types.USER_LOGOUT_SUCCESS:
       return [];
     default:

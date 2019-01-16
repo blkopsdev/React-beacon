@@ -10,7 +10,8 @@ import {
 } from '../../models';
 import {
   toggleEditMeasurementPointListModal,
-  toggleEditMeasurementPointQuestionModal
+  toggleEditMeasurementPointQuestionModal,
+  addQuestionToMeasurementPointList
 } from '../../actions/manageMeasurementPointListsActions';
 import CommonModal from '../common/CommonModal';
 import EditMeasurementPointQuestionForm from './EditMeasurementPointQuestionForm';
@@ -29,6 +30,7 @@ interface IdispatchProps {
   loading: boolean;
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
   toggleEditMeasurementPointQuestionModal: typeof toggleEditMeasurementPointQuestionModal;
+  addQuestionToMeasurementPointList: typeof addQuestionToMeasurementPointList;
 }
 
 class EditMeasurementPointQuestionModal extends React.Component<
@@ -87,6 +89,7 @@ export default connect(
   mapStateToProps,
   {
     toggleEditMeasurementPointListModal,
-    toggleEditMeasurementPointQuestionModal
+    toggleEditMeasurementPointQuestionModal,
+    addQuestionToMeasurementPointList
   }
 )(EditMeasurementPointQuestionModal);

@@ -20,7 +20,9 @@ import { FormUtil } from '../common/FormUtil';
 import { Ioption, ImeasurementPointList } from '../../models';
 import {
   toggleEditMeasurementPointListModal,
-  toggleEditMeasurementPointQuestionModal
+  toggleEditMeasurementPointQuestionModal,
+  addGlobalMeasurementPointList,
+  updateGlobalMeasurementPointList
 } from '../../actions/manageMeasurementPointListsActions';
 import EditMeasurementPointQuestionModal from './EditMeasurementPointQuestionModal';
 import constants from '../../constants/constants';
@@ -100,6 +102,8 @@ interface Iprops extends React.Props<EditMeasurementPointListForm> {
   i18n: I18n;
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
   toggleEditMeasurementPointQuestionModal: typeof toggleEditMeasurementPointQuestionModal;
+  addGlobalMeasurementPointList: typeof addGlobalMeasurementPointList;
+  updateGlobalMeasurementPointList: typeof updateGlobalMeasurementPointList;
 }
 
 interface Istate {
@@ -177,15 +181,21 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-    console.log(this.measurementsForm.value);
-    // this.props.updateUser({
-    //   id: this.props.selectedMeasurementPointList.id,
-    //   ...this.measurementsForm.value,
-    //   customerID: this.measurementsForm.value.customerID.value,
-    //   facilities: facilitiesArray,
-    //   securityFunctions: securityFunctionsArray,
-    //   email: this.props.selectedMeasurementPointList.email // have to add back the email because disabling the input removes it
-    // });
+    const mpl = {
+      ...this.props.selectedMeasurementPointList,
+      productGroupID: this.measurementsForm.value.equipmentType.value,
+      standardID: this.measurementsForm.value.standard.value,
+      type: this.measurementsForm.value.type.value
+    };
+    if (mpl.id === '') {
+      mpl.id = uuidv4();
+      // add new mpl
+      this.props.addGlobalMeasurementPointList(mpl);
+    } else {
+      // update existing mpl
+      this.props.updateGlobalMeasurementPointList(mpl);
+    }
+    // console.log(mpl);
   };
 
   setForm = (form: AbstractControl) => {
@@ -214,6 +224,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
         {map(this.props.selectedMeasurementPointList.measurementPoints, mp => {
           return (
             <ListGroupItem
+              key={mp.id}
               className="question-list-item"
               onClick={() => {
                 this.setSelectedQuestion(mp);

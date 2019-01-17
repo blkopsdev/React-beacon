@@ -72,21 +72,25 @@ const groupFieldConfig = {
   }
 };
 
-const procedureFieldConfig = {
-  controls: {
-    label: {
-      options: {
-        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
-      },
-      render: FormUtil.TextInput,
-      meta: {
-        label: 'procedure text',
-        colWidth: 12,
-        type: 'text',
-        name: 'label'
+const buildProcedureFieldConfig = (initialContent: any) => {
+  return {
+    controls: {
+      label: {
+        options: {
+          // validators: [Validators.required, FormUtil.validators.requiredWithTrim]
+        },
+        render: FormUtil.RichTextEditor,
+        meta: {
+          label: 'procedure text',
+          colWidth: 12,
+          type: 'text',
+          name: 'label',
+          initialContent,
+          readOnly: false
+        }
       }
     }
-  }
+  };
 };
 
 interface Iprops extends React.Props<EditMeasurementPointQuestionForm> {
@@ -120,7 +124,9 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, {}> {
       this.props.selectedMeasurementPointQuestion.type ===
         constants.measurementPointQuestionTypes.PROCEDURE
     ) {
-      return procedureFieldConfig;
+      return buildProcedureFieldConfig(
+        this.props.selectedMeasurementPointQuestion.label
+      );
     } else if (
       this.props.selectedMeasurementPointQuestion &&
       this.props.selectedMeasurementPointQuestion.type ===

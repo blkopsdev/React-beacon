@@ -3,7 +3,7 @@
 */
 import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
-// import { find } from 'lodash';
+import { keys } from 'lodash';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 import ReactTable, { SortingRule, FinalState, RowInfo } from 'react-table';
@@ -22,7 +22,10 @@ import {
 } from '../../models';
 import { TableUtil } from '../common/TableUtil';
 import { closeAllModals, getCustomers } from '../../actions/commonActions';
-import { emptyTile } from '../../reducers/initialState';
+import {
+  emptyTile,
+  initialMeasurementPointList
+} from '../../reducers/initialState';
 import {
   getAllMeasurementPointLists,
   toggleEditMeasurementPointListModal,
@@ -204,7 +207,8 @@ class ManageMeasurementPointList extends React.Component<
           id: 'numQuestions',
           Header: '# of Questions',
           accessor: ({ measurementPoints }: ImeasurementPointList) => {
-            return measurementPoints ? measurementPoints.length : 0;
+            console.log(keys(measurementPoints));
+            return measurementPoints ? keys(measurementPoints).length : 0;
           }
         }
       ],
@@ -314,7 +318,12 @@ class ManageMeasurementPointList extends React.Component<
         <Button
           className="table-add-button"
           bsStyle="link"
-          onClick={this.props.toggleEditMeasurementPointListModal}
+          onClick={() => {
+            this.props.setSelectedMeasurementPointList(
+              initialMeasurementPointList
+            );
+            this.props.toggleEditMeasurementPointListModal();
+          }}
         >
           {t('manageMeasurementPointLists:newMeasurement')}
         </Button>

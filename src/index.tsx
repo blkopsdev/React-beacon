@@ -35,17 +35,14 @@ import {
 } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { runWithAdal } from 'react-adal';
-// import { throttle } from 'lodash';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import ReduxToastr from 'react-redux-toastr';
 import axios from 'axios';
 
-// import { loadState, saveState } from './store/localStorage';
 import { setCachedToken } from './actions/userActions';
 import Login from './components/auth/Login';
 import configureStore from './store/configureStore';
-// import initialState from './reducers/initialState';
 import registerServiceWorker from './registerServiceWorker';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Button } from 'react-bootstrap';
@@ -86,6 +83,8 @@ import 'react-toggle/style.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 import 'react-datetime/css/react-datetime.css';
+// import 'draft-js/dist/Draft.css';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './index.css';
 
 const { store, persistor } = configureStore();

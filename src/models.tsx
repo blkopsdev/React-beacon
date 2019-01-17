@@ -335,7 +335,7 @@ export interface ImeasurementPointList {
   productGroupID: string;
   standardID: string;
   type: number;
-  customerID: string;
+  customerID?: string;
 }
 
 export interface ImanageMeasurementPointListsReducer {

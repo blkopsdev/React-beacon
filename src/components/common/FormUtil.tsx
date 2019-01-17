@@ -21,6 +21,7 @@ import Toggle from 'react-toggle';
 import { Ioption } from '../../models';
 import * as Datetime from 'react-datetime';
 import * as moment from 'moment';
+import RichTextEditor from './RichTextEditor';
 
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -439,6 +440,35 @@ export const FormUtil = {
       </Col>
     );
   },
+  RichTextEditor: ({
+    handler,
+    touched,
+    hasError,
+    meta,
+    pristine,
+    errors,
+    submitted
+  }: AbstractControl) => (
+    <Col xs={meta.colWidth}>
+      <FormGroup
+        validationState={FormUtil.getValidationState(
+          pristine,
+          errors,
+          submitted
+        )}
+        bsSize="sm"
+        style={meta.style}
+      >
+        <ControlLabel>{meta.label}</ControlLabel>
+        <RichTextEditor
+          onChange={handler().onChange}
+          initialContent={meta.initialContent}
+          readOnly={meta.readOnly}
+        />
+        <FormControl.Feedback />
+      </FormGroup>
+    </Col>
+  ),
   translateForm: (config: FieldConfig, t: TranslationFunction) => {
     const newControls = mapValues(config.controls, field => {
       if (field.meta && field.meta.label) {

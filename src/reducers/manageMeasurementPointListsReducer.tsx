@@ -30,8 +30,16 @@ function manageMeasurementPointListData(
         }
         return m;
       });
-    // case types.MEASUREMENTS_ADD_SUCCESS:
-    //   return [...state, action.measurement];
+    case types.MANAGE_MEASUREMENT_POINT_LIST_ADD_SUCCESS:
+      if (action.measurementPointList.measurementPoints) {
+        action.measurementPointList.measurementPoints = keyBy(
+          action.measurementPointList.measurementPoints,
+          (item: ImeasurementPointQuestion) => item.id
+        );
+      } else {
+        action.measurementPointList.measurementPoints = {};
+      }
+      return [...state, action.measurementPointList];
     // case types.MEASUREMENTS_UPDATE_SUCCESS:
     //   return map(state, (job: Ijob) => {
     //     if (job.id === action.job.id) {

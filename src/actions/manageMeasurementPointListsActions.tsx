@@ -1,5 +1,5 @@
 import { ThunkAction } from 'redux-thunk';
-// import { toastr } from 'react-redux-toastr';
+import { toastr } from 'react-redux-toastr';
 import axios from 'axios';
 
 import {
@@ -13,6 +13,7 @@ import API from '../constants/apiEndpoints';
 import constants from '../constants/constants';
 import * as types from './actionTypes';
 // import * as moment from 'moment';
+import { map } from 'lodash';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
@@ -74,64 +75,78 @@ export const addQuestionToMeasurementPointList = (
   question
 });
 
-// export function updateJob(job: Ijob, users: string[]): ThunkResult<void> {
-//   return dispatch => {
-//     dispatch(beginAjaxCall());
-//     dispatch({ type: types.TOGGLE_MODAL_EDIT_JOB });
-//     return axios
-//       .post(`${API.POST.job.update}`, { job, users })
-//       .then(data => {
-//         if (!data.data) {
-//           throw undefined;
-//         } else {
-//           dispatch({
-//             type: types.JOB_UPDATE_SUCCESS,
-//             job: data.data
-//           });
-
-//           // toastr.success('Success', 'Saved job', constants.toastrSuccess);
-//           return data;
-//         }
-//       })
-//       .catch((error: any) => {
-//         dispatch({ type: types.JOB_UPDATE_FAILED });
-//         constants.handleError(error, 'update job');
-//         throw error;
-//       });
-//   };
-// }
+/*
+* save (add) a new product
+*/
+export function addGlobalMeasurementPointList(
+  mpl: ImeasurementPointList
+): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    const measurementPoints = map(mpl.measurementPoints, mp => mp);
+    return axios
+      .post(API.POST.measurements.addglobalmpl, { ...mpl, measurementPoints })
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.MANAGE_MEASUREMENT_POINT_LIST_ADD_SUCCESS,
+            measurementPointList: data.data
+          });
+          dispatch({ type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT_LISTS });
+          toastr.success(
+            'Success',
+            'Created new measurement point list.',
+            constants.toastrSuccess
+          );
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.MANAGE_MEASUREMENT_POINT_LIST_ADD_FAILED });
+        constants.handleError(error, 'create measurement point list');
+        throw error;
+      });
+  };
+}
 
 /*
 * save (add) a new product
 */
-// export function createJob(job: Ijob, users: string[]): ThunkResult<void> {
-//   return (dispatch, getState) => {
-//     dispatch(beginAjaxCall());
-//     return axios
-//       .post(API.POST.job.create, { job, users })
-//       .then(data => {
-//         if (!data.data) {
-//           throw undefined;
-//         } else {
-//           dispatch({
-//             type: types.JOB_ADD_SUCCESS,
-//             job: data.data
-//           });
-//           dispatch({ type: types.TOGGLE_MODAL_EDIT_JOB });
-//           toastr.success(
-//             'Success',
-//             'Created new job.',
-//             constants.toastrSuccess
-//           );
-//         }
-//       })
-//       .catch((error: any) => {
-//         dispatch({ type: types.JOB_ADD_FAILED });
-//         constants.handleError(error, 'create job');
-//         throw error;
-//       });
-//   };
-// }
+export function updateGlobalMeasurementPointList(
+  mpl: ImeasurementPointList
+): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    const measurementPoints = map(mpl.measurementPoints, mp => mp);
+    return axios
+      .put(`${API.PUT.measurements.updateglobalmpl}/${mpl.id}`, {
+        ...mpl,
+        measurementPoints
+      })
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.MANAGE_MEASUREMENT_POINT_LIST_UPDATE_SUCCESS,
+            measurementPointList: data.data
+          });
+          dispatch({ type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT_LISTS });
+          toastr.success(
+            'Success',
+            'Updated measurement point list.',
+            constants.toastrSuccess
+          );
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.MANAGE_MEASUREMENT_POINT_LIST_UPDATE_FAILED });
+        constants.handleError(error, 'update measurement point list');
+        throw error;
+      });
+  };
+}
 
 export const toggleEditMeasurementPointListModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT_LISTS

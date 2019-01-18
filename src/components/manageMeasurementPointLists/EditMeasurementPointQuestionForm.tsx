@@ -38,26 +38,22 @@ import constants from '../../constants/constants';
 //   stateChanges: IstateChanges;
 // }
 
-const buildFieldConfig = (typeOptions: any[]) => {
-  // Field config to configure form
-  const fieldConfigControls = {
-    type: {
-      render: FormUtil.SelectWithoutValidation,
-      meta: {
-        options: typeOptions,
-        label: 'manageMeasurementPointLists:type',
-        colWidth: 12,
-        placeholder: 'manageMeasurementPointLists:typePlaceholder'
-      },
-      options: {
-        validators: [Validators.required]
-      }
+const trueFalseOptions = [
+  { label: 'Yes', value: true },
+  { label: 'No', value: false }
+];
+
+const passFailFieldConfig = {
+  passfaildefault: {
+    options: {},
+    render: FormUtil.SelectWithoutValidation,
+    meta: {
+      label: 'manageMeasurementPointLists:passfaildefault',
+      colWidth: 12,
+      options: constants.measurementPointPassFailOptions,
+      isClearable: false
     }
-  };
-  const fieldConfig = {
-    controls: { ...fieldConfigControls }
-  };
-  return fieldConfig as FieldConfig;
+  }
 };
 
 const groupFieldConfig = {
@@ -67,7 +63,12 @@ const groupFieldConfig = {
         validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
-      meta: { label: 'name', colWidth: 12, type: 'text', name: 'label' }
+      meta: {
+        label: 'manageMeasurementPointLists:groupLabel',
+        colWidth: 12,
+        type: 'text',
+        name: 'label'
+      }
     }
   }
 };
@@ -76,17 +77,12 @@ const buildProcedureFieldConfig = (initialContent: any) => {
   return {
     controls: {
       label: {
-        options: {
-          // validators: [Validators.required, FormUtil.validators.requiredWithTrim]
-        },
+        options: {},
         render: FormUtil.RichTextEditor,
         meta: {
-          label: 'procedure text',
+          label: 'manageMeasurementPointLists:procedureLabel',
           colWidth: 12,
-          type: 'text',
-          name: 'label',
-          initialContent,
-          readOnly: false
+          initialContent
         }
       }
     }
@@ -111,30 +107,41 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, {}> {
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(
-      this.getFormConfig(),
+      this.getFormConfig(this.props.selectedMeasurementPointQuestion.type),
       this.props.t
     );
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setForm = this.setForm.bind(this);
   }
 
-  getFormConfig() {
+  getFormConfig(questionType: number) {
     if (
       this.props.selectedMeasurementPointQuestion &&
-      this.props.selectedMeasurementPointQuestion.type ===
-        constants.measurementPointQuestionTypes.PROCEDURE
+      questionType === constants.measurementPointQuestionTypes.PROCEDURE
     ) {
       return buildProcedureFieldConfig(
         this.props.selectedMeasurementPointQuestion.label
       );
     } else if (
       this.props.selectedMeasurementPointQuestion &&
-      this.props.selectedMeasurementPointQuestion.type ===
-        constants.measurementPointQuestionTypes.GROUP
+      questionType === constants.measurementPointQuestionTypes.GROUP
     ) {
       return groupFieldConfig;
     } else {
-      return buildFieldConfig(constants.measurementPointQuestionTypeOptions);
+      let extraConfig = {};
+      if (
+        questionType ===
+        constants.measurementPointQuestionTypes.QUESTION_PASSFAIL
+      ) {
+        extraConfig = passFailFieldConfig;
+      }
+      return this.buildFieldConfig(
+        constants.measurementPointQuestionTypeOptions,
+        this.props.selectedMeasurementPointQuestion
+          ? this.props.selectedMeasurementPointQuestion.helptext
+          : '',
+        extraConfig
+      );
     }
   }
 
@@ -147,7 +154,92 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, {}> {
     }
   }
 
-  componentDidMount() {
+  // componentDidMount() {}
+  // componentWillUnmount() {}
+
+  buildFieldConfig = (
+    typeOptions: any[],
+    initialContent: any,
+    otherConfig: any
+  ) => {
+    // Field config to configure form
+    const fieldConfigControls = {
+      type: {
+        render: FormUtil.SelectWithoutValidation,
+        meta: {
+          options: typeOptions,
+          label: 'manageMeasurementPointLists:type',
+          colWidth: 12,
+          placeholder: 'manageMeasurementPointLists:typePlaceholder',
+          isClearable: false
+        },
+        options: {
+          validators: [
+            Validators.required,
+            (c: any) => {
+              if (
+                c.value &&
+                c.value.value &&
+                c.value.value !==
+                  this.props.selectedMeasurementPointQuestion.type
+              ) {
+                this.buildForm(c.value.value);
+              }
+            }
+          ]
+        }
+      },
+      label: {
+        options: {
+          validators: [
+            Validators.required,
+            FormUtil.validators.requiredWithTrim
+          ]
+        },
+        render: FormUtil.TextInput,
+        meta: {
+          label: 'manageMeasurementPointLists:questionText',
+          colWidth: 12,
+          type: 'text'
+        }
+      },
+      guidetext: {
+        options: {},
+        render: FormUtil.TextInput,
+        meta: {
+          label: 'manageMeasurementPointLists:guideText',
+          colWidth: 12,
+          type: 'text'
+        }
+      },
+      allownotes: {
+        options: {},
+        render: FormUtil.SelectWithoutValidation,
+        meta: {
+          label: 'manageMeasurementPointLists:allowNotes',
+          colWidth: 12,
+          options: trueFalseOptions,
+          isClearable: false
+        }
+      },
+      helptext: {
+        options: {},
+        render: FormUtil.RichTextEditor,
+        meta: {
+          label: 'manageMeasurementPointLists:helpText',
+          colWidth: 12,
+          type: 'text',
+          initialContent
+        }
+      }
+    };
+    const fieldConfig = {
+      controls: { ...fieldConfigControls, ...otherConfig }
+    };
+    return fieldConfig as FieldConfig;
+  };
+
+  buildForm(questionType: number) {
     if (!this.props.selectedMeasurementPointList) {
       console.error('missing measurement point list');
       return;
@@ -156,25 +248,56 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, {}> {
       console.error('missing measurement point question');
       return;
     }
+
+    console.log('BUILDING FORM', questionType);
+
+    this.fieldConfig = FormUtil.translateForm(
+      this.getFormConfig(questionType),
+      this.props.t
+    );
+
+    this.forceUpdate();
+  }
+
+  patchValues() {
     // set values
     forEach(this.props.selectedMeasurementPointList, (value, key) => {
       this.measurementsForm.patchValue({ [key]: value });
     });
 
     const { type, label } = this.props.selectedMeasurementPointQuestion;
+    this.measurementsForm.patchValue({
+      label
+    });
     if (type < 5) {
+      const {
+        guidetext,
+        allownotes
+      } = this.props.selectedMeasurementPointQuestion;
       this.measurementsForm.patchValue({
         type: find(
           constants.measurementPointQuestionTypeOptions,
           (tOpt: any) => tOpt.value === type
+        ),
+        guidetext,
+        allownotes: find(
+          trueFalseOptions,
+          (tOpt: any) => tOpt.value === allownotes
         )
       });
     }
-    this.measurementsForm.patchValue({
-      label
-    });
+    if (type === 1) {
+      const { passfaildefault } = this.props.selectedMeasurementPointQuestion;
+      if (passfaildefault) {
+        this.measurementsForm.patchValue({
+          passfaildefault: find(
+            constants.measurementPointPassFailOptions,
+            (tOpt: any) => tOpt.value === passfaildefault
+          )
+        });
+      }
+    }
   }
-  // componentWillUnmount() {}
 
   handleSubmit = (
     e: React.MouseEvent<HTMLFormElement>,
@@ -187,10 +310,23 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, {}> {
       return;
     }
 
-    const newQ = {
+    let newQ = {
       ...this.props.selectedMeasurementPointQuestion,
       ...this.measurementsForm.value
     };
+    if (this.props.selectedMeasurementPointQuestion.type < 5) {
+      newQ = {
+        ...newQ,
+        allownotes: this.measurementsForm.value.allownotes.value,
+        type: this.measurementsForm.value.type.value
+      };
+    }
+    if (this.props.selectedMeasurementPointQuestion.type === 1) {
+      newQ = {
+        ...newQ,
+        passfaildefault: this.measurementsForm.value.passfaildefault.value
+      };
+    }
     console.log(newQ);
     this.props.addQuestionToMeasurementPointList(
       this.props.selectedMeasurementPointList,
@@ -204,6 +340,8 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, {}> {
     this.measurementsForm.meta = {
       loading: this.props.loading
     };
+    console.log('PATCHING VALUES');
+    this.patchValues();
   };
 
   render() {

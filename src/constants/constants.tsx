@@ -23,9 +23,8 @@ const measurementPointListTypeOptions = [
   { label: 'Annual', value: 1 },
   { label: 'Verification', value: 2 }
 ];
-
 const measurementPointQuestionTypeOptions = [
-  { label: 'PassFail', value: 1 },
+  { label: 'Pass/Fail', value: 1 },
   { label: 'Text', value: 2 },
   { label: 'Numeric', value: 3 },
   { label: 'Select', value: 4 }
@@ -39,13 +38,18 @@ const measurementPointQuestionTypes = {
   PROCEDURE: 6
 };
 const measurementPointQuestionTypesInverse = {
-  1: 'PassFail',
+  1: 'Pass/Fail',
   2: 'Text',
   3: 'Numeric',
   4: 'Select',
   5: 'Group',
   6: 'Procedure'
 };
+const measurementPointPassFailOptions = [
+  { label: 'Pass', value: 1 },
+  { label: 'Fail', value: 2 },
+  { label: 'Not Applicable', value: 3 }
+];
 
 const icons = {
   dashboard: require('../images/icons/BM_Dashboard.png'),
@@ -435,6 +439,7 @@ const constants = {
   measurementPointQuestionTypeOptions,
   measurementPointQuestionTypes,
   measurementPointQuestionTypesInverse,
+  measurementPointPassFailOptions,
   hasSecurityFunction: (user: Iuser, securityFunction: string): boolean => {
     if (user.securityFunctions.indexOf(securityFunction) >= 0) {
       return true;

@@ -327,6 +327,17 @@ export interface ImeasurementPointQuestion {
   id: string;
   type: number;
   label: string;
+  guidetext?: string;
+  helptext?: string;
+  allownotes?: boolean;
+  passfaildefault?: number;
+  numericminvalue?: number;
+  numericmaxvalue?: number;
+  numericallowdecimals?: boolean;
+  selectdefaultoptionid?: string;
+  selectrememberbetweendevice?: boolean;
+  selectrememberbetweeninspection?: boolean;
+  selectoptions?: any[];
 }
 
 export interface ImeasurementPointList {

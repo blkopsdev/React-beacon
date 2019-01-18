@@ -252,7 +252,14 @@
     "EditMeasurementPointListModalTitle": "ADD MEASUREMENTS",
     "QuestionModalTitle": "ADD QUESTION",
     "ProcedureModalTitle": "ADD PROCEDURE",
-    "GroupModalTitle": "ADD GROUP"
+    "GroupModalTitle": "ADD GROUP",
+    "questionText": "QUESTION TEXT",
+    "guideText": "GUIDE TEXT (Optional)",
+    "allowNotes": "ALLOW NOTES",
+    "helpText": "HELP TEXT (Optional)",
+    "groupLabel": "Name",
+    "procedureLabel": "Procedure Text",
+    "passfaildefault": "Pass/Fail Default"
   },
   "tiles": {
     "alerts": "Alerts",

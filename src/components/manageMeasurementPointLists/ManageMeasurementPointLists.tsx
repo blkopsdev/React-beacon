@@ -207,7 +207,7 @@ class ManageMeasurementPointList extends React.Component<
           id: 'numQuestions',
           Header: '# of Questions',
           accessor: ({ measurementPoints }: ImeasurementPointList) => {
-            console.log(keys(measurementPoints));
+            // console.log(keys(measurementPoints));
             return measurementPoints ? keys(measurementPoints).length : 0;
           }
         }

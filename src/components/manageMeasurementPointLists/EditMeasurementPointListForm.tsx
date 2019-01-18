@@ -214,7 +214,10 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     return {
       id: uuidv4(),
       type,
-      label: ''
+      label: '',
+      guidetext: '',
+      allownotes: true,
+      helptext: ''
     };
   }
 

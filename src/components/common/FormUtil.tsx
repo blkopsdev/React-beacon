@@ -327,7 +327,9 @@ export const FormUtil = {
             placeholder={meta.placeholder}
             isMulti={meta.isMulti}
             classNamePrefix="react-select"
-            isClearable={true}
+            isClearable={
+              typeof meta.isClearable !== 'undefined' ? meta.isClearable : true
+            }
             name={meta.name || ''}
             {...handler()}
           />

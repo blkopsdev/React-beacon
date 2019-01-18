@@ -229,8 +229,11 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
               onClick={() => {
                 this.setSelectedQuestion(mp);
               }}
-              header={mp.label}
             >
+              {mp.type === 6 && (
+                <p dangerouslySetInnerHTML={{ __html: mp.label }} />
+              )}
+              {mp.type !== 6 && <h4>{mp.label}</h4>}
               {mp.type < 5 &&
                 constants.measurementPointQuestionTypesInverse[mp.type]}
             </ListGroupItem>

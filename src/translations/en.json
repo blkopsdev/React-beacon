@@ -259,7 +259,10 @@
     "helpText": "HELP TEXT (Optional)",
     "groupLabel": "Name",
     "procedureLabel": "Procedure Text",
-    "passfaildefault": "Pass/Fail Default"
+    "passfaildefault": "Pass/Fail Default",
+    "numericminvalue": "Min Value",
+    "numericmaxvalue": "Max Value",
+    "numericallowdecimals": "Allow Decimals?"
   },
   "tiles": {
     "alerts": "Alerts",

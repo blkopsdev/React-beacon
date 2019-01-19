@@ -45,8 +45,8 @@ const trueFalseOptions = [
 
 const passFailFieldConfig = {
   passfaildefault: {
-    options: {},
-    render: FormUtil.SelectWithoutValidation,
+    options: { validators: [Validators.required] },
+    render: FormUtil.Select,
     meta: {
       label: 'manageMeasurementPointLists:passfaildefault',
       colWidth: 12,
@@ -78,8 +78,8 @@ const numericFieldConfig = {
     }
   },
   numericallowdecimals: {
-    options: {},
-    render: FormUtil.SelectWithoutValidation,
+    options: { validators: [Validators.required] },
+    render: FormUtil.Select,
     meta: {
       label: 'manageMeasurementPointLists:numericallowdecimals',
       colWidth: 12,
@@ -145,7 +145,7 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, Istate> {
     super(props);
     if (
       !this.props.selectedMeasurementPointList ||
-      !this.props.selectedMeasurementPointQuestion
+      this.props.selectedMeasurementPointQuestion == null
     ) {
       this.props.toggleEditMeasurementPointListModal();
     }

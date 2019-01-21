@@ -25,30 +25,17 @@ import {
 } from '../../actions/manageMeasurementPointListsActions';
 import constants from '../../constants/constants';
 
-// passing in an object, but we need an array back
-// const securityOptions = [
-//   ...FormUtil.convertToOptions(constants.securityFunctions)
-// ];
-
-// interface IstateChanges extends Observable<any> {
-//   next: () => void;
-// }
-
-// interface AbstractControlEdited extends AbstractControl {
-//   stateChanges: IstateChanges;
-// }
-
 const trueFalseOptions = [
   { label: 'Yes', value: true },
   { label: 'No', value: false }
 ];
 
 const passFailFieldConfig = {
-  passfaildefault: {
+  passFailDefault: {
     options: { validators: [Validators.required] },
     render: FormUtil.Select,
     meta: {
-      label: 'manageMeasurementPointLists:passfaildefault',
+      label: 'manageMeasurementPointLists:passFailDefault',
       colWidth: 12,
       options: constants.measurementPointPassFailOptions,
       isClearable: false
@@ -57,31 +44,31 @@ const passFailFieldConfig = {
 };
 
 const numericFieldConfig = {
-  numericminvalue: {
+  numericMinValue: {
     options: {},
     render: FormUtil.TextInput,
     meta: {
-      label: 'manageMeasurementPointLists:numericminvalue',
+      label: 'manageMeasurementPointLists:numericMinValue',
       colWidth: 12,
       type: 'number',
-      name: 'numericminvalue'
+      name: 'numericMinValue'
     }
   },
-  numericmaxvalue: {
+  numericMaxValue: {
     options: {},
     render: FormUtil.TextInput,
     meta: {
-      label: 'manageMeasurementPointLists:numericmaxvalue',
+      label: 'manageMeasurementPointLists:numericMaxValue',
       colWidth: 12,
       type: 'number',
-      name: 'numericmaxvalue'
+      name: 'numericMaxValue'
     }
   },
-  numericallowdecimals: {
+  numericAllowDecimals: {
     options: { validators: [Validators.required] },
     render: FormUtil.Select,
     meta: {
-      label: 'manageMeasurementPointLists:numericallowdecimals',
+      label: 'manageMeasurementPointLists:numericAllowDecimals',
       colWidth: 12,
       options: trueFalseOptions,
       isClearable: false
@@ -151,43 +138,45 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, Istate> {
     }
     this.state = {
       fieldConfig: FormUtil.translateForm(
-        this.getFormConfig(this.props.selectedMeasurementPointQuestion.type),
+        this.getFormConfig(this.props.selectedMeasurementPointQuestion),
         this.props.t
       ),
       question: this.props.selectedMeasurementPointQuestion
     };
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setForm = this.setForm.bind(this);
+    this.getFormConfig = this.getFormConfig.bind(this);
   }
 
-  getFormConfig(questionType: number) {
-    if (questionType === constants.measurementPointQuestionTypes.PROCEDURE) {
-      return buildProcedureFieldConfig(this.state.question.label);
-    } else if (questionType === constants.measurementPointQuestionTypes.GROUP) {
+  getFormConfig(question: ImeasurementPointQuestion) {
+    if (question.type === constants.measurementPointQuestionTypes.PROCEDURE) {
+      return buildProcedureFieldConfig(question.label);
+    } else if (
+      question.type === constants.measurementPointQuestionTypes.GROUP
+    ) {
       return groupFieldConfig;
     } else {
       let extraConfig = {};
       if (
-        questionType ===
+        question.type ===
         constants.measurementPointQuestionTypes.QUESTION_PASSFAIL
       ) {
         extraConfig = passFailFieldConfig;
       } else if (
-        questionType ===
+        question.type ===
         constants.measurementPointQuestionTypes.QUESTION_NUMERIC
       ) {
         extraConfig = numericFieldConfig;
       } else if (
-        questionType === constants.measurementPointQuestionTypes.QUESTION_SELECT
+        question.type ===
+        constants.measurementPointQuestionTypes.QUESTION_SELECT
       ) {
         // TODO ADD SELECT FORM
         extraConfig = {};
       }
       return this.buildFieldConfig(
         constants.measurementPointQuestionTypeOptions,
-        this.props.selectedMeasurementPointQuestion
-          ? this.props.selectedMeasurementPointQuestion.helptext
-          : '',
+        question.helpText,
         extraConfig
       );
     }
@@ -264,13 +253,13 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, Istate> {
           type: 'text'
         }
       },
-      guidetext: {
+      guideText: {
         options: {
           validators: [
             (c: any) => {
               if (c.value && c.value.value) {
                 this.setState({
-                  question: { ...this.state.question, guidetext: c.value.value }
+                  question: { ...this.state.question, guideText: c.value.value }
                 });
               }
             }
@@ -283,7 +272,7 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, Istate> {
           type: 'text'
         }
       },
-      allownotes: {
+      allowNotes: {
         options: {
           validators: [
             (c: any) => {
@@ -291,7 +280,7 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, Istate> {
                 this.setState({
                   question: {
                     ...this.state.question,
-                    allownotes: c.value.value
+                    allowNotes: c.value.value
                   }
                 });
               }
@@ -306,13 +295,13 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, Istate> {
           isClearable: false
         }
       },
-      helptext: {
+      helpText: {
         options: {
           validators: [
             (c: any) => {
               if (c.value && c.value.value) {
                 this.setState({
-                  question: { ...this.state.question, helptext: c.value.value }
+                  question: { ...this.state.question, helpText: c.value.value }
                 });
               }
             }
@@ -334,25 +323,23 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, Istate> {
   };
 
   buildForm(questionType: number) {
-    if (!this.props.selectedMeasurementPointList) {
-      console.error('missing measurement point list');
-      return;
-    }
-    if (!this.props.selectedMeasurementPointQuestion) {
-      console.error('missing measurement point question');
-      return;
-    }
+    // if (!this.props.selectedMeasurementPointList) {
+    //   console.error('missing measurement point list');
+    //   return;
+    // }
+    // if (!this.props.selectedMeasurementPointQuestion) {
+    //   console.error('missing measurement point question');
+    //   return;
+    // }
 
     console.log('BUILDING FORM', questionType);
 
     this.setState({
       fieldConfig: FormUtil.translateForm(
-        this.getFormConfig(questionType),
+        this.getFormConfig(this.state.question),
         this.props.t
       )
     });
-
-    // this.forceUpdate();
   }
 
   patchValues() {
@@ -366,26 +353,26 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, Istate> {
       label
     });
     if (type < 5) {
-      const { guidetext, allownotes } = this.state.question;
+      const { guideText, allowNotes } = this.state.question;
       this.measurementsForm.patchValue({
         type: find(
           constants.measurementPointQuestionTypeOptions,
           (tOpt: any) => tOpt.value === type
         ),
-        guidetext,
-        allownotes: find(
+        guideText,
+        allowNotes: find(
           trueFalseOptions,
-          (tOpt: any) => tOpt.value === allownotes
+          (tOpt: any) => tOpt.value === allowNotes
         )
       });
     }
     if (type === 1) {
-      const { passfaildefault } = this.state.question;
-      if (passfaildefault) {
+      const { passFailDefault } = this.state.question;
+      if (passFailDefault) {
         this.measurementsForm.patchValue({
-          passfaildefault: find(
+          passFailDefault: find(
             constants.measurementPointPassFailOptions,
-            (tOpt: any) => tOpt.value === passfaildefault
+            (tOpt: any) => tOpt.value === passFailDefault
           )
         });
       }
@@ -410,14 +397,21 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, Istate> {
     if (this.state.question.type < 5) {
       newQ = {
         ...newQ,
-        allownotes: this.measurementsForm.value.allownotes.value,
+        allowNotes: this.measurementsForm.value.allowNotes.value,
         type: this.measurementsForm.value.type.value
       };
     }
     if (this.state.question.type === 1) {
       newQ = {
         ...newQ,
-        passfaildefault: this.measurementsForm.value.passfaildefault.value
+        passFailDefault: this.measurementsForm.value.passFailDefault.value
+      };
+    }
+    if (this.state.question.type === 3) {
+      newQ = {
+        ...newQ,
+        numericAllowDecimals: this.measurementsForm.value.numericAllowDecimals
+          .value
       };
     }
     console.log(newQ);

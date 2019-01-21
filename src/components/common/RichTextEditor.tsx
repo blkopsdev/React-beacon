@@ -17,33 +17,18 @@ interface Istate {
 class RichTextEditor extends React.Component<Iprops, Istate> {
   constructor(props: any) {
     super(props);
-    this.state = {
-      editorState: EditorState.createWithContent(
-        stateFromHTML(this.props.initialContent)
-      )
-    };
-    // this.onChange.bind(this);
-    // this.handleKeyCommand.bind(this);
-    // this.onBoldClick.bind(this);
+    const editorState =
+      typeof this.props.initialContent !== 'undefined'
+        ? EditorState.createWithContent(
+            stateFromHTML(this.props.initialContent)
+          )
+        : EditorState.createEmpty();
+    this.state = { editorState };
   }
   onChange = (editorState: any) => {
     this.setState({ editorState });
     this.props.onChange(stateToHTML(editorState.getCurrentContent()));
   };
-  // handleKeyCommand(command: any, editorState: any) {
-  //   const newState = RichUtils.handleKeyCommand(editorState, command);
-  //   if (newState) {
-  //     this.onChange(newState);
-  //     return 'handled';
-  //   }
-  //   return 'not-handled';
-  // }
-  // onBoldClick() {
-  //   this.onChange(RichUtils.toggleInlineStyle(this.state.editorState, 'BOLD'));
-  // }
-  // onULClick() {
-  //   this.onChange(RichUtils.toggleBlockType(this.state.editorState, 'UL'));
-  // }
   render() {
     return (
       <Editor

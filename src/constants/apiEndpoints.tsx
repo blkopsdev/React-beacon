@@ -66,7 +66,15 @@ const API = {
     building: `${root}building`,
     floor: `${root}floor`,
     location: `${root}location`,
-    room: `${root}room`
+    room: `${root}room`,
+    measurements: {
+      deleteglobalmpl: `${root}/MeasurementPoint/deleteglobalmeasurementpointlist`,
+      deletecustomermpl: `${root}/MeasurementPoint/deletecustomermeasurementpointlist`,
+      deleteglobalmeasurementpoint: `${root}/MeasurementPoint/deleteglobalmeasurementpoint`,
+      deletecustomermeasurementpoint: `${root}/MeasurementPoint/deleteglobalmeasurementpoint`,
+      deleteglobalmeasurementpointselectoption: `${root}/MeasurementPoint/deleteglobalmeasurementpointselectoption`,
+      deletecustomermeasurementpointselectoption: `${root}/MeasurementPoint/deletecustomermeasurementpointselectoption`
+    }
   },
   GET: {
     building: {

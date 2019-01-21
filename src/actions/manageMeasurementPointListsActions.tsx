@@ -76,7 +76,7 @@ export const addQuestionToMeasurementPointList = (
 });
 
 /*
-* save (add) a new product
+* save (add) a new mpl
 */
 export function addGlobalMeasurementPointList(
   mpl: ImeasurementPointList
@@ -111,7 +111,7 @@ export function addGlobalMeasurementPointList(
 }
 
 /*
-* save (add) a new product
+* update a mpl
 */
 export function updateGlobalMeasurementPointList(
   mpl: ImeasurementPointList
@@ -143,6 +143,37 @@ export function updateGlobalMeasurementPointList(
       .catch((error: any) => {
         dispatch({ type: types.MANAGE_MEASUREMENT_POINT_LIST_UPDATE_FAILED });
         constants.handleError(error, 'update measurement point list');
+        throw error;
+      });
+  };
+}
+
+/*
+* delete a mpl
+*/
+export function deleteGlobalMeasurementPointList(
+  measurementPointListId: string
+): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    return axios
+      .delete(
+        `${API.DELETE.measurements.deleteglobalmpl}/${measurementPointListId}`
+      )
+      .then(data => {
+        dispatch({
+          type: types.MANAGE_MEASUREMENT_POINT_LIST_DELETE_SUCCESS,
+          measurementPointListId
+        });
+        toastr.success(
+          'Success',
+          'Deleted measurement point list.',
+          constants.toastrSuccess
+        );
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.MANAGE_MEASUREMENT_POINT_LIST_DELETE_FAILED });
+        constants.handleError(error, 'delete measurement point list');
         throw error;
       });
   };

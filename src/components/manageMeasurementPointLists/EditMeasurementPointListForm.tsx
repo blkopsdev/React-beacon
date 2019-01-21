@@ -193,7 +193,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
   // componentWillUnmount() {}
 
   parseQuestions() {
-    let mps = map(
+    const mps = map(
       this.props.selectedMeasurementPointList.measurementPoints,
       mp => {
         return mp;
@@ -202,11 +202,10 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     mps.sort((a: ImeasurementPointQuestion, b: ImeasurementPointQuestion) => {
       return a.order - b.order;
     });
-    mps = map(mps, (mp, index) => {
+    return map(mps, (mp, index) => {
       mp.order = index;
       return mp;
     });
-    return mps;
   }
 
   handleSubmit = (

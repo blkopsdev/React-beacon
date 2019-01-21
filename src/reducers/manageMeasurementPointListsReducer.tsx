@@ -40,16 +40,21 @@ function manageMeasurementPointListData(
         action.measurementPointList.measurementPoints = {};
       }
       return [...state, action.measurementPointList];
-    // case types.MEASUREMENTS_UPDATE_SUCCESS:
-    //   return map(state, (job: Ijob) => {
-    //     if (job.id === action.job.id) {
-    //       return {
-    //         ...pickBy(action.job, (property, key) => property !== null)
-    //       } as Ijob;
-    //     } else {
-    //       return job;
-    //     }
-    //   });
+    case types.MANAGE_MEASUREMENT_POINT_LIST_UPDATE_SUCCESS:
+      if (action.measurementPointList.measurementPoints) {
+        action.measurementPointList.measurementPoints = keyBy(
+          action.measurementPointList.measurementPoints,
+          (item: ImeasurementPointQuestion) => item.id
+        );
+      } else {
+        action.measurementPointList.measurementPoints = {};
+      }
+      return [
+        ...state.filter(l => l.id !== action.measurementPointList.id),
+        action.measurementPointList
+      ];
+    case types.MANAGE_MEASUREMENT_POINT_LIST_DELETE_SUCCESS:
+      return [...state.filter(l => l.id !== action.measurementPointListId)];
     case types.MANAGE_MEASUREMENT_POINT_QUESTION_ADD:
       // Grab the correct list
       let mpl = find(

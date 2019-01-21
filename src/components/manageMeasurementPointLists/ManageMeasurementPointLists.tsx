@@ -7,12 +7,12 @@ import { keys } from 'lodash';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 import ReactTable, { SortingRule, FinalState, RowInfo } from 'react-table';
-// import * as moment from 'moment';
+import { toastr } from 'react-redux-toastr';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col } from 'react-bootstrap';
 
 import { FormUtil } from '../common/FormUtil';
 import {
-  Icustomer,
   IinitialState,
   ItableFiltersReducer,
   Itile,
@@ -21,7 +21,7 @@ import {
   ImanageMeasurementPointListsReducer
 } from '../../models';
 import { TableUtil } from '../common/TableUtil';
-import { closeAllModals, getCustomers } from '../../actions/commonActions';
+import { closeAllModals } from '../../actions/commonActions';
 import {
   emptyTile,
   initialMeasurementPointList
@@ -31,7 +31,8 @@ import {
   toggleEditMeasurementPointListModal,
   toggleEditMeasurementPointQuestionModal,
   setTableFilter,
-  setSelectedMeasurementPointList
+  setSelectedMeasurementPointList,
+  deleteGlobalMeasurementPointList
 } from '../../actions/manageMeasurementPointListsActions';
 import { getProductInfo } from '../../actions/manageInventoryActions';
 import Banner from '../common/Banner';
@@ -50,19 +51,15 @@ interface Iprops extends RouteComponentProps<any> {
 
 interface IdispatchProps {
   // Add your dispatcher properties here
-  // toggleEditUserModal: typeof toggleEditUserModal;
-  // toggleSecurityFunctionsModal: typeof toggleSecurityFunctionsModal;
-  // getUserManage: typeof getUserManage;
   getAllMeasurementPointLists: typeof getAllMeasurementPointLists;
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
   toggleEditMeasurementPointQuestionModal: typeof toggleEditMeasurementPointQuestionModal;
   setSelectedMeasurementPointList: typeof setSelectedMeasurementPointList;
+  deleteGlobalMeasurementPointList: typeof deleteGlobalMeasurementPointList;
   getProductInfo: typeof getProductInfo;
   productGroupOptions: Ioption[];
   standardOptions: Ioption[];
-  customers: Icustomer[];
   closeAllModals: typeof closeAllModals;
-  getCustomers: typeof getCustomers;
   manageMeasurementPointLists: ImanageMeasurementPointListsReducer;
   showEditMeasurementPointListModal: boolean;
   showEditMeasurementPointQuestionModal: boolean;
@@ -85,6 +82,7 @@ class ManageMeasurementPointList extends React.Component<
 > {
   public searchFieldConfig: FieldConfig;
   public buttonInAction = false;
+  public deleteAction = false;
   // private setTableFilterTimeout: any;
   constructor(props: Iprops & IdispatchProps) {
     super(props);
@@ -164,7 +162,7 @@ class ManageMeasurementPointList extends React.Component<
   }
   /*
   * Set Columns sets columns to state
-  * setting columns here in order to reset them if and after we receive customers
+  * setting columns here
   */
   setColumns = () => {
     return TableUtil.translateHeaders(
@@ -210,11 +208,68 @@ class ManageMeasurementPointList extends React.Component<
             // console.log(keys(measurementPoints));
             return measurementPoints ? keys(measurementPoints).length : 0;
           }
+        },
+        {
+          Header: '',
+          Cell: row => (
+            <div>
+              <Button
+                bsStyle="link"
+                style={{ float: 'right', marginRight: 11 }}
+                onClick={() => {
+                  this.buttonInAction = true;
+                  this.handleEdit(row);
+                }}
+              >
+                <FontAwesomeIcon icon={['far', 'edit']}> Edit </FontAwesomeIcon>
+              </Button>
+              <Button
+                bsStyle="link"
+                style={{ float: 'right', color: 'red' }}
+                onClick={() => {
+                  this.buttonInAction = true;
+                  this.deleteAction = true;
+                  this.handleDelete(row.original);
+                }}
+              >
+                <FontAwesomeIcon icon={['far', 'times']}>
+                  {' '}
+                  Delete{' '}
+                </FontAwesomeIcon>
+              </Button>
+            </div>
+          )
         }
       ],
       this.props.t
     );
   };
+
+  handleEdit(rowInfo: RowInfo) {
+    this.props.setSelectedMeasurementPointList(
+      this.props.tableData[rowInfo.index]
+    );
+    this.setState({
+      selectedRow: rowInfo.index
+    });
+    this.props.toggleEditMeasurementPointListModal();
+  }
+
+  handleDelete(deletedItem: ImeasurementPointList) {
+    const toastrConfirmOptions = {
+      onOk: () => {
+        deletedItem = {
+          ...deletedItem
+        };
+        this.props.deleteGlobalMeasurementPointList(deletedItem.id);
+        console.log('deleted', deletedItem);
+      },
+      onCancel: () => console.log('CANCEL: clicked'),
+      okText: this.props.t('deleteListOk'),
+      cancelText: this.props.t('common:cancel')
+    };
+    toastr.confirm(this.props.t('deleteConfirm'), toastrConfirmOptions);
+  }
 
   /*
   * (reusable)
@@ -227,14 +282,11 @@ class ManageMeasurementPointList extends React.Component<
       return {
         onClick: (e: React.MouseEvent<HTMLFormElement>) => {
           if (!this.buttonInAction) {
-            this.props.setSelectedMeasurementPointList(
-              this.props.tableData[rowInfo.index]
-            );
-            this.setState({
-              selectedRow: rowInfo.index
-            });
-            this.props.toggleEditMeasurementPointListModal();
+            this.handleEdit(rowInfo);
           }
+
+          this.buttonInAction = false;
+          this.deleteAction = false;
         },
         style: {
           background:
@@ -363,7 +415,6 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
     manageMeasurementPointLists: state.manageMeasurementPointLists,
-    customers: state.customers,
     loading: state.ajaxCallsInProgress > 0,
     showEditMeasurementPointListModal:
       state.manageMeasurementPointLists.showEditMeasurementPointListModal,
@@ -383,6 +434,7 @@ export default translate('manageMeasurementPointLists')(
       toggleEditMeasurementPointListModal,
       toggleEditMeasurementPointQuestionModal,
       setSelectedMeasurementPointList,
+      deleteGlobalMeasurementPointList,
       closeAllModals,
       setTableFilter,
       getProductInfo

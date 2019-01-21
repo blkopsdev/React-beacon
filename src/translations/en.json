@@ -262,7 +262,9 @@
     "passFailDefault": "Pass/Fail Default",
     "numericMinValue": "Min Value",
     "numericMaxValue": "Max Value",
-    "numericAllowDecimals": "Allow Decimals?"
+    "numericAllowDecimals": "Allow Decimals?",
+    "deleteConfirm": "Are you sure?",
+    "deleteListOk": "Delete This Measurement Point List?"
   },
   "tiles": {
     "alerts": "Alerts",

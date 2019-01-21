@@ -407,14 +407,10 @@ export function mergeProduct(
         }?sourceProductID=${sourceProductID}&targetProductID=${targetProductID}`
       )
       .then(data => {
-        if (!data.data) {
-          throw undefined;
-        } else {
-          dispatch({
-            type: types.PRODUCT_MERGE_SUCCESS
-          });
-          toastr.success('Success', 'merged product', constants.toastrSuccess);
-        }
+        dispatch({
+          type: types.PRODUCT_MERGE_SUCCESS
+        });
+        toastr.success('Success', 'merged product', constants.toastrSuccess);
       })
       .catch((error: any) => {
         dispatch({ type: types.PRODUCT_MERGE_FAILED });

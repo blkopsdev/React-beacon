@@ -66,7 +66,8 @@ interface IdispatchProps {
   tableData: IproductQueueObject[];
   setTableFilter: typeof setTableFilter;
   tableFilters: ItableFiltersReducer;
-  mergeProduct: typeof mergeProduct;
+  // mergeProduct: typeof mergeProduct;
+  mergeProduct: (sprod: string, dproduct: string) => Promise<void>;
 }
 
 interface Istate {
@@ -295,10 +296,11 @@ class ManageProductQueue extends React.Component<
       } ${this.props.t('mergeConfirmPart_02')} ${product.name}?`,
       {
         onOk: () => {
-          this.props.mergeProduct(
-            this.state.selectedQueueObject.product.id,
-            product.id
-          );
+          this.props
+            .mergeProduct(this.state.selectedQueueObject.product.id, product.id)
+            .then(() => {
+              this.props.getProductQueue();
+            });
         }
       }
     );

@@ -404,7 +404,7 @@ export function mergeProduct(
       .post(
         `${
           API.POST.inventory.mergeProduct
-        }?sourcePoductID=${sourceProductID}&targetProductID=${targetProductID}`
+        }?sourceProductID=${sourceProductID}&targetProductID=${targetProductID}`
       )
       .then(data => {
         if (!data.data) {

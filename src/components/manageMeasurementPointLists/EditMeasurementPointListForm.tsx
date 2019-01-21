@@ -203,8 +203,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       return a.order - b.order;
     });
     return map(mps, (mp, index) => {
-      mp.order = index;
-      return mp;
+      return { ...mp, order: index };
     });
   }
 

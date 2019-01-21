@@ -311,7 +311,7 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
     }
     return (
       <form
-        action="https://demo.unitedtranzactions.com/obp/onlineBillPay.asp"
+        action={process.env.REACT_APP_UTA}
         method="post"
         target="MyMedGas"
         name="obpauto"

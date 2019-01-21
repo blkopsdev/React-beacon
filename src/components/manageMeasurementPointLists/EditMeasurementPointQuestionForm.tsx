@@ -24,6 +24,7 @@ import {
   addQuestionToMeasurementPointList
 } from '../../actions/manageMeasurementPointListsActions';
 import constants from '../../constants/constants';
+import { initialMeasurementPointQuestion } from 'src/reducers/initialState';
 
 const trueFalseOptions = [
   { label: 'Yes', value: true },
@@ -131,18 +132,23 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, Istate> {
   constructor(props: Iprops) {
     super(props);
     if (
-      !this.props.selectedMeasurementPointList ||
-      this.props.selectedMeasurementPointQuestion == null
+      this.props.selectedMeasurementPointList &&
+      this.props.selectedMeasurementPointQuestion
     ) {
-      this.props.toggleEditMeasurementPointListModal();
+      this.state = {
+        fieldConfig: FormUtil.translateForm(
+          this.getFormConfig(this.props.selectedMeasurementPointQuestion),
+          this.props.t
+        ),
+        question: this.props.selectedMeasurementPointQuestion
+      };
+    } else {
+      this.state = {
+        fieldConfig: { controls: {} },
+        question: initialMeasurementPointQuestion
+      };
     }
-    this.state = {
-      fieldConfig: FormUtil.translateForm(
-        this.getFormConfig(this.props.selectedMeasurementPointQuestion),
-        this.props.t
-      ),
-      question: this.props.selectedMeasurementPointQuestion
-    };
+
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setForm = this.setForm.bind(this);
     this.getFormConfig = this.getFormConfig.bind(this);
@@ -191,7 +197,14 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, Istate> {
   //   }
   // }
 
-  // componentDidMount() {}
+  componentDidMount() {
+    if (
+      !this.props.selectedMeasurementPointList ||
+      this.props.selectedMeasurementPointQuestion == null
+    ) {
+      this.props.toggleEditMeasurementPointQuestionModal();
+    }
+  }
   // componentWillUnmount() {}
 
   buildFieldConfig = (
@@ -366,13 +379,25 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, Istate> {
         )
       });
     }
-    if (type === 1) {
+    if (type === constants.measurementPointQuestionTypes.QUESTION_PASSFAIL) {
       const { passFailDefault } = this.state.question;
       if (passFailDefault) {
         this.measurementsForm.patchValue({
           passFailDefault: find(
             constants.measurementPointPassFailOptions,
             (tOpt: any) => tOpt.value === passFailDefault
+          )
+        });
+      }
+    }
+    if (type === constants.measurementPointQuestionTypes.QUESTION_NUMERIC) {
+      const { numericAllowDecimals } = this.state.question;
+      if (typeof numericAllowDecimals !== undefined) {
+        console.log('patching', numericAllowDecimals);
+        this.measurementsForm.patchValue({
+          numericAllowDecimals: find(
+            trueFalseOptions,
+            (tOpt: any) => tOpt.value === numericAllowDecimals
           )
         });
       }
@@ -401,13 +426,19 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, Istate> {
         type: this.measurementsForm.value.type.value
       };
     }
-    if (this.state.question.type === 1) {
+    if (
+      this.state.question.type ===
+      constants.measurementPointQuestionTypes.QUESTION_PASSFAIL
+    ) {
       newQ = {
         ...newQ,
         passFailDefault: this.measurementsForm.value.passFailDefault.value
       };
     }
-    if (this.state.question.type === 3) {
+    if (
+      this.state.question.type ===
+      constants.measurementPointQuestionTypes.QUESTION_NUMERIC
+    ) {
       newQ = {
         ...newQ,
         numericAllowDecimals: this.measurementsForm.value.numericAllowDecimals

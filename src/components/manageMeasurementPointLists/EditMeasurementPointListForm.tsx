@@ -11,18 +11,28 @@ import {
   FieldConfig
   // Observable
 } from 'react-reactive-form';
-import { forEach, find, map } from 'lodash';
+import { forEach, find, map, keys, keyBy } from 'lodash';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faSortAmountUp,
+  faSortAmountDown
+} from '@fortawesome/pro-regular-svg-icons';
 
 import { FormUtil } from '../common/FormUtil';
-import { Ioption, ImeasurementPointList } from '../../models';
+import {
+  Ioption,
+  ImeasurementPointList,
+  ImeasurementPointQuestion
+} from '../../models';
 import {
   toggleEditMeasurementPointListModal,
   toggleEditMeasurementPointQuestionModal,
   addGlobalMeasurementPointList,
-  updateGlobalMeasurementPointList
+  updateGlobalMeasurementPointList,
+  addQuestionToMeasurementPointList
 } from '../../actions/manageMeasurementPointListsActions';
 import EditMeasurementPointQuestionModal from './EditMeasurementPointQuestionModal';
 import constants from '../../constants/constants';
@@ -104,10 +114,12 @@ interface Iprops extends React.Props<EditMeasurementPointListForm> {
   toggleEditMeasurementPointQuestionModal: typeof toggleEditMeasurementPointQuestionModal;
   addGlobalMeasurementPointList: typeof addGlobalMeasurementPointList;
   updateGlobalMeasurementPointList: typeof updateGlobalMeasurementPointList;
+  addQuestionToMeasurementPointList: typeof addQuestionToMeasurementPointList;
 }
 
 interface Istate {
   selectedMeasurementPointQuestion: any;
+  questions: ImeasurementPointQuestion[];
 }
 
 class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
@@ -116,7 +128,8 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
   constructor(props: Iprops) {
     super(props);
     this.state = {
-      selectedMeasurementPointQuestion: null
+      selectedMeasurementPointQuestion: null,
+      questions: this.parseQuestions()
     };
     this.fieldConfig = FormUtil.translateForm(
       buildFieldConfig(
@@ -132,6 +145,14 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
   componentDidUpdate(prevProps: Iprops) {
     if (!this.props.selectedMeasurementPointList) {
       return;
+    }
+
+    if (
+      this.props.selectedMeasurementPointList !==
+      prevProps.selectedMeasurementPointList
+    ) {
+      console.log('update!!!!');
+      this.setState({ questions: this.parseQuestions() });
     }
   }
 
@@ -171,6 +192,23 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
   }
   // componentWillUnmount() {}
 
+  parseQuestions() {
+    let mps = map(
+      this.props.selectedMeasurementPointList.measurementPoints,
+      mp => {
+        return mp;
+      }
+    );
+    mps.sort((a: ImeasurementPointQuestion, b: ImeasurementPointQuestion) => {
+      return a.order - b.order;
+    });
+    mps = map(mps, (mp, index) => {
+      mp.order = index;
+      return mp;
+    });
+    return mps;
+  }
+
   handleSubmit = (
     e: React.MouseEvent<HTMLFormElement>,
     shouldApprove?: boolean
@@ -185,7 +223,11 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       ...this.props.selectedMeasurementPointList,
       productGroupID: this.measurementsForm.value.equipmentType.value,
       standardID: this.measurementsForm.value.standard.value,
-      type: this.measurementsForm.value.type.value
+      type: this.measurementsForm.value.type.value,
+      measurementPoints: keyBy(
+        this.state.questions,
+        (item: ImeasurementPointQuestion) => item.id
+      )
     };
     if (mpl.id === '') {
       mpl.id = uuidv4();
@@ -215,31 +257,82 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       id: uuidv4(),
       type,
       label: '',
+      order: keys(this.props.selectedMeasurementPointList.measurementPoints)
+        .length,
       guideText: '',
       allowNotes: true,
       helpText: ''
     };
   }
 
+  swapQuestionOrder(q1Index: number, q2Index: number) {
+    const mps = this.state.questions;
+    console.log('Swapping ', mps[q1Index].label, mps[q2Index].label);
+    const tempOrder = mps[q1Index].order;
+    mps[q1Index] = { ...mps[q1Index], order: mps[q2Index].order };
+    mps[q2Index] = { ...mps[q2Index], order: tempOrder };
+    // this.props.addQuestionToMeasurementPointList(
+    //   this.props.selectedMeasurementPointList,
+    //   mps[q1Index]
+    // );
+    // this.props.addQuestionToMeasurementPointList(
+    //   this.props.selectedMeasurementPointList,
+    //   mps[q2Index]
+    // );
+    mps.sort((a: ImeasurementPointQuestion, b: ImeasurementPointQuestion) => {
+      return a.order - b.order;
+    });
+    // console.log(mps);
+    this.setState({
+      questions: mps
+    });
+  }
+
   getQuestionList = () => {
+    const mps = this.state.questions;
     return (
       <ListGroup className="question-list">
-        {map(this.props.selectedMeasurementPointList.measurementPoints, mp => {
+        {map(mps, (mp, index) => {
           return (
-            <ListGroupItem
-              key={mp.id}
-              className="question-list-item"
-              onClick={() => {
-                this.setSelectedQuestion(mp);
-              }}
-            >
-              {mp.type === 6 && (
-                <p dangerouslySetInnerHTML={{ __html: mp.label }} />
-              )}
-              {mp.type !== 6 && <h4>{mp.label}</h4>}
-              {mp.type < 5 &&
-                constants.measurementPointQuestionTypesInverse[mp.type]}
-            </ListGroupItem>
+            <div className="question-list-item-container" key={mp.id}>
+              <span className="sort-controls">
+                <Button
+                  disabled={mp.order === 0}
+                  onClick={() => {
+                    // console.log('swap up', mp.label, mps[index - 1].label);
+                    this.swapQuestionOrder(index, index - 1);
+                  }}
+                >
+                  <FontAwesomeIcon icon={faSortAmountUp} fixedWidth size="2x" />
+                </Button>
+                <Button
+                  disabled={mp.order === mps.length - 1}
+                  onClick={() => {
+                    // console.log('swap up', mp.label, mps[index + 1].label);
+                    this.swapQuestionOrder(index + 1, index);
+                  }}
+                >
+                  <FontAwesomeIcon
+                    icon={faSortAmountDown}
+                    fixedWidth
+                    size="2x"
+                  />
+                </Button>
+              </span>
+              <ListGroupItem
+                className="question-list-item"
+                onClick={() => {
+                  this.setSelectedQuestion(mp);
+                }}
+              >
+                {mp.type === 6 && (
+                  <p dangerouslySetInnerHTML={{ __html: mp.label }} />
+                )}
+                {mp.type !== 6 && <h4>{mp.label}</h4>}
+                {mp.type < 5 &&
+                  constants.measurementPointQuestionTypesInverse[mp.type]}
+              </ListGroupItem>
+            </div>
           );
         })}
       </ListGroup>

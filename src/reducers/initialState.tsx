@@ -110,6 +110,12 @@ export const initialMeasurementPointList = {
   type: 1,
   customerID: ''
 };
+export const initialMeasurementPointQuestion = {
+  id: '',
+  type: 1,
+  label: '',
+  order: 0
+};
 
 /* 
 * initialState

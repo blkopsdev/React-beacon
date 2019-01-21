@@ -22,7 +22,9 @@ import {
   faSignOut,
   faListAlt,
   faClock,
-  faEdit
+  faEdit,
+  faSortAmountUp,
+  faSortAmountDown
 } from '@fortawesome/pro-regular-svg-icons';
 import {
   faUsers,
@@ -67,7 +69,9 @@ library.add(
   faPlus,
   faMinus,
   faClock,
-  faEdit
+  faEdit,
+  faSortAmountUp,
+  faSortAmountDown
 );
 
 import { authContext } from './actions/userActions';

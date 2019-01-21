@@ -327,6 +327,7 @@ export interface ImeasurementPointQuestion {
   id: string;
   type: number;
   label: string;
+  order: number;
   guideText?: string;
   helpText?: string;
   allowNotes?: boolean;

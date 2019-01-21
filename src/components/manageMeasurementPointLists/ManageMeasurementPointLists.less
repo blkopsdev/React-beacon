@@ -26,8 +26,35 @@
   margin-right: -15px;
 }
 
-.question-list-item:nth-child(odd) {
-  background-color: @lightPurple;
+.sort-controls {
+  position: absolute;
+  right: 0px;
+  width: 40px;
+  height: 90px;
+
+  .btn {
+    width: 40px;
+    height: 45px;
+    border-radius: 0%;
+    padding: 6px 3px;
+  }
+}
+
+.question-list-item {
+  // padding-right: 40px;
+  width: 358px !important;
+  height: 90px;
+}
+
+.question-list-item-container:nth-child(odd) {
+  .question-list-item {
+    background-color: @lightPurple;
+  }
+  .sort-controls {
+    .btn {
+      background-color:  @lightPurple;
+    }
+  }
 }
 
 .DraftEditor-root {

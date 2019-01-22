@@ -16,6 +16,7 @@ const uuidv4 = require('uuid/v4');
 
 interface Iprops {
   meta: any;
+  onChange: any;
 }
 
 interface Istate {
@@ -23,13 +24,15 @@ interface Istate {
   value: string;
 }
 
-class RichTextEditor extends React.Component<Iprops, Istate> {
+class InputList extends React.Component<Iprops, Istate> {
   constructor(props: any) {
     super(props);
-    this.state = { options: [], value: '' };
+    console.log(this.props.meta.startOptions);
+    this.state = { options: this.props.meta.startOptions, value: '' };
     this.handleChange = this.handleChange.bind(this);
     this.addOption = this.addOption.bind(this);
     this.deleteOption = this.deleteOption.bind(this);
+    this.makeDefault = this.makeDefault.bind(this);
   }
   handleChange(e: any) {
     this.setState({ value: e.target.value });
@@ -38,22 +41,55 @@ class RichTextEditor extends React.Component<Iprops, Istate> {
     const newOption: ImeasurementPointQuestionSelectOption = {
       id: uuidv4(),
       label: this.state.value,
-      value: this.state.value
+      value: this.state.value,
+      isDeleted: false,
+      isDefault: this.state.options.length === 0 ? true : false
     };
-    console.log('adding option', newOption);
-    this.setState({
-      options: [...this.state.options, newOption],
-      value: ''
-    });
+    // console.log('adding option', newOption);
+    this.setState(
+      {
+        options: [...this.state.options, newOption],
+        value: ''
+      },
+      () => {
+        this.props.onChange(this.state.options);
+      }
+    );
   }
-  deleteOption(index: number) {
-    this.setState({
-      options: [
-        ...this.state.options.filter((v: any, i: number) => {
-          return i !== index;
-        })
-      ]
-    });
+  deleteOption(mpo: ImeasurementPointQuestionSelectOption) {
+    this.setState(
+      {
+        options: this.state.options.map(
+          (o: ImeasurementPointQuestionSelectOption) => {
+            if (o.id === mpo.id) {
+              return { ...o, isDefault: false, isDeleted: true };
+            }
+            return o;
+          }
+        )
+      },
+      () => {
+        this.props.onChange(this.state.options);
+      }
+    );
+  }
+  makeDefault(mpo: ImeasurementPointQuestionSelectOption) {
+    this.setState(
+      {
+        options: this.state.options.map(
+          (o: ImeasurementPointQuestionSelectOption) => {
+            if (o.id === mpo.id) {
+              return { ...o, isDefault: true };
+            } else {
+              return { ...o, isDefault: false };
+            }
+          }
+        )
+      },
+      () => {
+        this.props.onChange(this.state.options);
+      }
+    );
   }
   render() {
     return (
@@ -66,11 +102,13 @@ class RichTextEditor extends React.Component<Iprops, Istate> {
               value={this.state.value}
               placeholder={this.props.meta.placeholder}
               onChange={this.handleChange}
+              style={{ zIndex: 0 }}
             />
             <InputGroup.Button>
               <Button
                 onClick={this.addOption}
                 bsStyle={this.props.meta.colorButton}
+                style={{ zIndex: 0 }}
               >
                 {this.props.meta.buttonLabel}
               </Button>
@@ -80,12 +118,15 @@ class RichTextEditor extends React.Component<Iprops, Istate> {
             {map(
               this.state.options,
               (mp: ImeasurementPointQuestionSelectOption, index: number) => {
+                if (mp.isDeleted === true) {
+                  return '';
+                }
                 return (
                   <div className="options-list-item-container" key={index}>
                     <span className="button-controls">
                       <Button
                         onClick={() => {
-                          this.deleteOption(index);
+                          this.deleteOption(mp);
                         }}
                       >
                         <FontAwesomeIcon icon={['far', 'times']}>
@@ -94,8 +135,14 @@ class RichTextEditor extends React.Component<Iprops, Istate> {
                         </FontAwesomeIcon>
                       </Button>
                     </span>
-                    <ListGroupItem className="options-list-item">
-                      <h5>{mp.label}</h5>
+                    <ListGroupItem
+                      className="options-list-item"
+                      onClick={() => {
+                        this.makeDefault(mp);
+                      }}
+                    >
+                      {mp.isDefault === true && <h5>{mp.label} (Default)</h5>}
+                      {mp.isDefault === false && <h5>{mp.label}</h5>}
                     </ListGroupItem>
                   </div>
                 );
@@ -108,4 +155,4 @@ class RichTextEditor extends React.Component<Iprops, Istate> {
   }
 }
 
-export default RichTextEditor;
+export default InputList;

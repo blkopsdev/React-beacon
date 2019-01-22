@@ -327,6 +327,8 @@ export interface ImeasurementPointQuestionSelectOption {
   id: string;
   value: string;
   label: string;
+  isDeleted?: boolean;
+  isDefault?: boolean;
 }
 export interface ImeasurementPointQuestion {
   id: string;
@@ -344,6 +346,7 @@ export interface ImeasurementPointQuestion {
   selectRememberBetweenDevice?: boolean;
   selectRememberBetweenInspection?: boolean;
   selectOptions?: ImeasurementPointQuestionSelectOption[];
+  isDeleted?: boolean;
 }
 
 export interface ImeasurementPointList {

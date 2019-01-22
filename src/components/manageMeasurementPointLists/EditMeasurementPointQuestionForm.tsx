@@ -244,25 +244,9 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, Istate> {
         isClearable: false
       }
     },
-    // selectDefaultOptionID: {
-    //   options: { validators: [Validators.required] },
-    //   render: FormUtil.Select,
-    //   meta: {
-    //     label: 'manageMeasurementPointLists:selectDefaultOptionID',
-    //     colWidth: 12,
-    //     options: FormUtil.convertToOptions,
-    //     isClearable: true
-    //   }
-    // },
     selectOptions: {
       options: {
-        validators: [
-          Validators.required
-          // (c: any) => {
-          //   if (c.value) {
-          //   }
-          // }
-        ]
+        validators: [Validators.required]
       },
       render: InputListAbstract,
       meta: {

@@ -43,7 +43,12 @@ class InputList extends React.Component<Iprops, Istate> {
       label: this.state.value,
       value: this.state.value,
       isDeleted: false,
-      isDefault: this.state.options.length === 0 ? true : false
+      isDefault:
+        this.state.options.filter(o => {
+          return o.isDeleted !== true;
+        }).length === 0
+          ? true
+          : false
     };
     // console.log('adding option', newOption);
     this.setState(

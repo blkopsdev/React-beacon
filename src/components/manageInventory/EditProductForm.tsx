@@ -407,6 +407,18 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
     const { t } = this.props;
     return (
       <div className={this.props.colorButton}>
+        {this.props.selectedQueueObject && (
+          <Button
+            bsStyle="link"
+            type="button"
+            disabled={this.props.loading}
+            onClick={this.props.toggleSearchNewProductsModal}
+            style={{ marginBottom: '-10px' }}
+            className="pull-right"
+          >
+            {t('manageInventory:mergeProduct')}
+          </Button>
+        )}
         {!(this.props.selectedItem && this.props.selectedItem.id) && (
           <Col xs={12}>
             <p style={{ lineHeight: '1.4rem' }}>
@@ -420,9 +432,6 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
             onMount={this.setForm}
             fieldConfig={this.fieldConfig}
           />
-          {this.props.selectedQueueObject && (
-            <div style={{ height: '80px', float: 'left', marginTop: '40px' }} />
-          )}
           <Col xs={12} className="form-buttons text-right">
             <Button
               bsStyle="default"
@@ -450,18 +459,6 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
                 onClick={(e: any) => this.handleSubmit(e, true)}
               >
                 {t('manageInventory:saveApprove')}
-              </Button>
-            )}
-            {this.props.selectedQueueObject && (
-              <Button
-                bsStyle={this.props.colorButton}
-                type="button"
-                disabled={this.props.loading}
-                onClick={this.props.toggleSearchNewProductsModal}
-                style={{ marginTop: '10px' }}
-                className="pull-left"
-              >
-                {t('manageInventory:mergeProduct')}
               </Button>
             )}
           </Col>

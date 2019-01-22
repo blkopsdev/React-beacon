@@ -1,5 +1,5 @@
 /* 
-* Edit Shopping Cart Form
+* Edit Quote Shopping Cart Form
 */
 
 import {

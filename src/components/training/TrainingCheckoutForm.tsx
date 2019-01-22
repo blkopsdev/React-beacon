@@ -279,7 +279,10 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
   calculateSubtotal = () => {
     let subtotal = 0;
     forEach(this.props.cart.productsByID, product => {
-      subtotal += product.cost;
+      if (product.cost) {
+        // TODO why is memo in the array of productsByID???
+        subtotal += product.cost;
+      }
     });
     return subtotal;
   };
@@ -317,24 +320,39 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
         name="obpauto"
         className={formClassName}
       >
-        <input hidden={true} name="User" id="1" value="beacon" />
+        <input
+          hidden={true}
+          name="User"
+          id="1"
+          value={process.env.REACT_APP_UTA_USER}
+        />
 
-        <input hidden={true} name="Owner" id="Owner" value="0400008000" />
+        <input
+          hidden={true}
+          name="Owner"
+          id="Owner"
+          value={process.env.REACT_APP_UTA_OWNER}
+        />
         <input
           hidden={true}
           name="CustomerNo"
           id="CustomerNo"
-          value="0400008005"
+          value={process.env.REACT_APP_UTA_CUSTOMER}
         />
 
         <input
           hidden={true}
           name="merchantno"
           id="merchantno"
-          value="0400008000"
+          value={process.env.REACT_APP_UTA_MERCH}
         />
 
-        <input hidden={true} name="password" id="password" value="P@ym3nts" />
+        <input
+          hidden={true}
+          name="password"
+          id="password"
+          value={process.env.REACT_APP_UTA_PASS}
+        />
 
         <input
           hidden={true}
@@ -347,14 +365,16 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
           hidden={true}
           name="transactiondate"
           id="transactiondate"
-          value="11-05-2018"
+          value="01-22-2019"
         />
 
         <input
           hidden={true}
           name="redirect"
           id="redirect"
-          value="https://beacon-mmg-api-phase2-dev.azurewebsites.net/training/acceptutapayment"
+          value={`${
+            process.env.REACT_APP_SERVER_DOMAIN
+          }training/acceptutapayment`}
         />
 
         <FormGenerator

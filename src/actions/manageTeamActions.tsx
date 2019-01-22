@@ -82,7 +82,11 @@ export function saveTeamUser(user: Iuser): ThunkResult<void> {
             user: data.data
           });
           dispatch({ type: types.TOGGLE_MODAL_EDIT_TEAM });
-          toastr.success('Success', 'Saved user', constants.toastrSuccess);
+          toastr.success(
+            'Success',
+            'Team member has been submitted for approval.',
+            constants.toastrSuccess
+          );
           return data;
         }
       })

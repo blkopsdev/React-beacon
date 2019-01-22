@@ -1,6 +1,7 @@
 import * as React from 'react';
 
 import { Col, FormGroup, FormControl } from 'react-bootstrap';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface Props extends React.Props<Question> {
   curQ: any;

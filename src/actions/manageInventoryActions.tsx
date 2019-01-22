@@ -224,7 +224,7 @@ export function saveInstall(
 ): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
-    dispatch({ type: types.TOGGLE_MODAL_EDIT_INSTALL });
+    dispatch({ type: types.CLOSE_ALL_MODALS });
     return axios
       .post(API.POST.inventory.addinstall, install)
       .then(data => {
@@ -392,6 +392,33 @@ export const requestQuote = ({
       });
   };
 };
+
+export function mergeProduct(
+  sourceProductID: string,
+  targetProductID: string
+): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    dispatch({ type: types.CLOSE_ALL_MODALS });
+    return axios
+      .post(
+        `${
+          API.POST.inventory.mergeProduct
+        }?sourceProductID=${sourceProductID}&targetProductID=${targetProductID}`
+      )
+      .then(data => {
+        dispatch({
+          type: types.PRODUCT_MERGE_SUCCESS
+        });
+        toastr.success('Success', 'merged product', constants.toastrSuccess);
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.PRODUCT_MERGE_FAILED });
+        constants.handleError(error, 'merge product');
+        throw error;
+      });
+  };
+}
 
 export const toggleEditProductModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_PRODUCT

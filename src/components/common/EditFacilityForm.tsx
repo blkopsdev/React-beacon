@@ -18,6 +18,7 @@ import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction } from 'react-i18next';
 
 import { FormUtil } from '../common/FormUtil';
+import { Ioption } from 'src/models';
 // import { IqueueObject } from '../../models';
 
 // add the bootstrap form-control class to the react-select select component
@@ -106,6 +107,7 @@ interface Iprops {
 class EditFacilityForm extends React.Component<Iprops, {}> {
   private userForm: AbstractControl;
   private fieldConfig: FieldConfig;
+  private subscription: any;
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(fieldConfig, this.props.t);
@@ -116,9 +118,36 @@ class EditFacilityForm extends React.Component<Iprops, {}> {
 
   // }
 
-  // componentDidMount() {
+  componentDidMount() {
+    if (!this.userForm) {
+      return;
+    }
+    this.subscription = this.userForm
+      .get('countryID')
+      .valueChanges.subscribe((value: Ioption) => {
+        this.onCountryChanges(value.value);
+      });
+  }
+  componentWillUnmount() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
 
-  // }
+  onCountryChanges = (value: string) => {
+    const stateFormControl = this.userForm.get('state');
+    if (value === `ABC5D95C-129F-4837-988C-0BF4AE1F3B67`) {
+      stateFormControl.enable();
+      stateFormControl.setValidators([
+        Validators.required,
+        FormUtil.validators.requiredWithTrim
+      ]);
+      stateFormControl.patchValue(null);
+    } else {
+      stateFormControl.disable();
+      stateFormControl.setValidators(null);
+    }
+  };
 
   handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();

@@ -124,6 +124,7 @@ export const FormUtil = {
           timeFormat={meta.showTime}
           isValidDate={meta.isValidDate}
           {...handler()}
+          // TODO figure out how to handle disabled
         />
         <FormControl.Feedback />
       </Col>
@@ -178,6 +179,9 @@ export const FormUtil = {
           autoFocus={meta.autoFocus}
           name={meta.name || ''}
           {...handler()}
+          disabled={
+            meta.disabled !== undefined ? meta.disabled : handler().disabled
+          }
         />
         <FormControl.Feedback />
       </FormGroup>
@@ -232,6 +236,9 @@ export const FormUtil = {
           componentClass={meta.componentClass}
           name={meta.name || ''}
           {...handler()}
+          disabled={
+            meta.disabled !== undefined ? meta.disabled : handler().disabled
+          }
         />
       </FormGroup>
     </Col>
@@ -270,6 +277,9 @@ export const FormUtil = {
             classNamePrefix="react-select"
             name={meta.name || ''}
             {...handler()}
+            isDisabled={
+              meta.disabled !== undefined ? meta.disabled : handler().disabled
+            }
           />
         </FormGroup>
       </Col>
@@ -310,6 +320,9 @@ export const FormUtil = {
             onCreateOption={meta.handleCreate}
             name={meta.name || ''}
             {...handler()}
+            isDisabled={
+              meta.disabled !== undefined ? meta.disabled : handler().disabled
+            }
           />
         </FormGroup>
       </Col>
@@ -345,6 +358,9 @@ export const FormUtil = {
             }
             name={meta.name || ''}
             {...handler()}
+            isDisabled={
+              meta.disabled !== undefined ? meta.disabled : handler().disabled
+            }
           />
         </FormGroup>
       </Col>
@@ -382,6 +398,9 @@ export const FormUtil = {
               isClearable={meta.isClearable}
               name={meta.name || ''}
               {...handler()}
+              isDisabled={
+                meta.disabled !== undefined ? meta.disabled : handler().disabled
+              }
             />
           </Col>
         </FormGroup>
@@ -430,6 +449,9 @@ export const FormUtil = {
             classNamePrefix="react-select"
             name={meta.name || ''}
             {...handler()}
+            isDisabled={
+              meta.disabled !== undefined ? meta.disabled : handler().disabled
+            }
           />
         </FormGroup>
       </Col>

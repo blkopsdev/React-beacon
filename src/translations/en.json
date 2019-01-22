@@ -51,7 +51,7 @@
     "address2": "Address 2",
     "city": "City",
     "state": "State",
-    "zip": "Zip",
+    "zip": "Postal Code",
     "save": "Save",
     "saveApprove": "Save & Approve",
     "***-***-****": "***-***-****",
@@ -190,7 +190,9 @@
     "floor": "Floor",
     "location": "Location",
     "room": "Room",
-    "position": "Position"
+    "position": "Position",
+    "mergeProduct": "Search for Existing Product",
+    "noProductsFound": "no products found"
   },
   "manageProductQueue": {
     "bannerTitle": "New Product Queue",
@@ -214,7 +216,14 @@
     "mainCategory": "Main Category",
     "rfid": "RFID",
     "remarks": "Remarks",
-    "serialNumber": "Serial Number"
+    "serialNumber": "Serial Number",
+    "mergeConfirmPart_01": "Are you sure you want to replace: ",
+    "mergeConfirmPart_02": "with: ",
+    "searchNewProductModalTitle": "Search and Replace Product",
+    "searchNewProductInstructions":
+      "Please select existing product to replace and approve queue product.  Only products of the same Equipment Type are available.",
+    "searchByName": "Search By Name...",
+    "noProductsFound": "no products found"
   },
   "manageLocation": {
     "bannerTitle": "Manage Locations",

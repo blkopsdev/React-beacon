@@ -84,7 +84,7 @@ interface Props extends RouteComponentProps<RouterParams> {
   t: TranslationFunction;
   i18n: I18n;
   cart: IshoppingCart;
-  trainingCheckout: typeof trainingCheckout;
+  trainingCheckout: any;
   getPurchasedTraining: typeof getPurchasedTraining;
   closeAllModals: typeof closeAllModals;
   purchasedTraining: string[];
@@ -137,7 +137,9 @@ class Courses extends React.Component<Props, State> {
 
     // if we receive a transation number, that means we were recently redirected from a UTA transaction.  Now we need to actually checkout.
     if (query && query.transactionNumber && query.transactionNumber.length) {
-      this.props.trainingCheckout(query.transactionNumber);
+      this.props.trainingCheckout(query.transactionNumber).then(() => {
+        this.props.history.replace('/training');
+      });
     }
 
     // }
@@ -392,11 +394,13 @@ class Courses extends React.Component<Props, State> {
               }
               const shoppingCartItem = { ...gfLesson, quantity: 1 };
               const lp = this.props.lessonProgress[gfLesson.id];
-              const progress = lp
-                ? lp.isComplete
+              let progress = 0;
+              if (lp) {
+                progress = lp.isComplete
                   ? 100
-                  : Math.round(lp.timeSpent / lp.totalTime) * 99
-                : 0;
+                  : Math.round((lp.timeSpent / lp.totalTime) * 99); // multiplying by 99 because we do not want to display 100% here.  display 100% only if .isComplete is true.
+              }
+
               return (
                 <ListGroupItem className="lesson list-item" key={gfLesson.id}>
                   <Media>

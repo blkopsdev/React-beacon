@@ -87,6 +87,7 @@ interface Istate {
   data: any[];
   selectedItem: any;
   deletedItem: any;
+  searchFieldConfig: FieldConfig;
 }
 
 class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
@@ -95,7 +96,6 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
   public buttonInAction = false;
   public deleteAction = false;
   private setTableFilterTimeout: any;
-  private searchFieldConfig: FieldConfig;
   constructor(props: Iprops & IdispatchProps) {
     super(props);
     this.state = {
@@ -104,9 +104,9 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
       columns: [],
       data: [],
       selectedItem: {},
-      deletedItem: {}
+      deletedItem: {},
+      searchFieldConfig: this.buildSearchControls()
     };
-    this.searchFieldConfig = this.buildSearchControls();
   }
   componentWillMount() {
     // since the install modal depends on a selected product in state, we need to make sure and start off with the modals closed
@@ -123,6 +123,7 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
         ? this.props.tableFilters.facility
         : this.props.facilityOptions[0];
       this.props.setTableFilter({ facility });
+      this.props.getLocationsFacility(facility.value);
     } else {
       this.props.getLocationsFacility(this.props.tableFilters.facility.value);
     }
@@ -141,6 +142,13 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
       this.props.getLocationsFacility(
         fac || this.props.facilityOptions[0].value
       );
+      this.setState({ searchFieldConfig: this.buildSearchControls() });
+    }
+    if (
+      prevProps.facilityOptions.length !== this.props.facilityOptions.length
+    ) {
+      const facility = this.props.facilityOptions[0];
+      this.props.setTableFilter({ facility });
     }
   }
 
@@ -263,7 +271,7 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
         className: 'banner-input',
         isClearable: false,
         defaultValue: this.props.tableFilters.facility
-          ? this.props.tableFilters.facility.value
+          ? this.props.tableFilters.facility
           : this.props.facilityOptions[0]
       }
     };
@@ -460,7 +468,7 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
           color={constants.colors[`${this.state.currentTile.color}`]}
         />
         <SearchTableForm
-          fieldConfig={this.searchFieldConfig}
+          fieldConfig={this.state.searchFieldConfig}
           handleSubmit={this.props.getLocationsFacility}
           loading={this.props.loading}
           colorButton={

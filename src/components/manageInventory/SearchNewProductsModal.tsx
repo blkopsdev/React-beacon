@@ -19,9 +19,7 @@ import {
   toggleEditProductModal,
   toggleSearchNewProductsModal,
   getProducts,
-  resetNewProducts,
-  setSelectedProduct,
-  toggleEditInstallModal
+  resetNewProducts
 } from '../../actions/manageInventoryActions';
 import CommonModal from '../common/CommonModal';
 import SearchNewProductsForm from './SearchNewProductsForm';
@@ -43,8 +41,8 @@ interface IdispatchProps {
   getProducts: typeof getProducts;
   newProducts: { [key: string]: Iproduct };
   resetNewProducts: typeof resetNewProducts;
-  setSelectedProduct: typeof setSelectedProduct;
-  toggleEditInstallModal: typeof toggleEditInstallModal;
+  secondModal?: boolean;
+  handleProductSelect: (product: Iproduct) => void;
 }
 
 class SearchNewProductsModal extends React.Component<
@@ -56,10 +54,13 @@ class SearchNewProductsModal extends React.Component<
   }
 
   render() {
+    const className = this.props.secondModal
+      ? 'user-edit second-modal'
+      : 'user-edit';
     return (
       <CommonModal
         modalVisible={this.props.showModal}
-        className="user-edit"
+        className={className}
         onHide={this.props.toggleSearchNewProductsModal}
         body={<SearchNewProductsForm {...this.props} />}
         title={this.props.t('searchNewProductModalTitle')}
@@ -88,8 +89,6 @@ export default connect(
     toggleEditProductModal,
     getProducts,
     toggleSearchNewProductsModal,
-    toggleEditInstallModal,
-    resetNewProducts,
-    setSelectedProduct
+    resetNewProducts
   }
 )(SearchNewProductsModal);

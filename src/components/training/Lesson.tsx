@@ -153,11 +153,11 @@ class Lesson extends React.Component<Props, State> {
         this.startQuiz(quiz, true);
       },
       onCancel: () => console.log('CANCEL: clicked'),
-      okText: 'start quiz',
+      okText: 'start test',
       cancelText: 'cancel'
     };
     toastr.confirm(
-      'This is a timed quiz. You will have 2 hours to complete all of the questions.',
+      'This is a timed test. You have total of 3 attempts during 2 hours to complete/retake the test. Navigating away after starting the test counts as an attempt.',
       toastrConfirmOptions
     );
   };

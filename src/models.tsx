@@ -545,9 +545,9 @@ export interface LessonProgress {
   id?: string;
   lessonID: string;
   userID: string;
-  currentTime: number;
-  percentageComplete: number;
-  totalTime: number;
+  currentTime: number; // the current time of the video as reported from vimeo
+  percentageComplete: number; // the current percent complete as reported  by vimeo
+  totalTime: number; // the total time (or duration) in second of the video, from vimeo
   timeSpent: number;
   isComplete?: boolean;
 }

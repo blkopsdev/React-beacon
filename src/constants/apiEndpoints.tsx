@@ -28,7 +28,8 @@ const API = {
       deleteInstall: `${root}inventory/delete`,
       installContact: `${root}inventory/contact`,
       approveproduct: `${root}inventory/approve`,
-      importInstall: `${root}inventory/import`
+      importInstall: `${root}inventory/import`,
+      mergeProduct: `${root}inventory/mergeproduct`
     },
     user: {
       login: `${root}user/login`,

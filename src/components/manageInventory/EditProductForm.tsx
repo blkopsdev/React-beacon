@@ -22,12 +22,14 @@ import {
   IproductInfo,
   Isubcategory,
   ItableFiltersReducer,
-  IproductQueueObject
+  IproductQueueObject,
+  Iuser
 } from '../../models';
 import {
   saveProduct,
   toggleEditProductModal,
-  updateProduct
+  updateProduct,
+  toggleSearchNewProductsModal
 } from '../../actions/manageInventoryActions';
 import { updateQueueProduct } from '../../actions/manageProductQueueActions';
 import constants from '../../constants/constants';
@@ -41,7 +43,8 @@ interface AbstractControlEdited extends AbstractControl {
 
 const buildFieldConfig = (
   productInfo: IproductInfo,
-  filterSubcategories: (id: string) => void
+  filterSubcategories: (id: string) => void,
+  disabled: boolean
 ) => {
   const fieldConfigControls = {
     name: {
@@ -49,14 +52,20 @@ const buildFieldConfig = (
         validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
-      meta: { label: 'name', colWidth: 12, type: 'input', name: 'product-name' }
+      meta: {
+        label: 'name',
+        colWidth: 12,
+        type: 'input',
+        name: 'product-name',
+        disabled
+      }
     },
     sku: {
       options: {
         validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
-      meta: { label: 'sku', colWidth: 12, type: 'input', name: 'sku' }
+      meta: { label: 'sku', colWidth: 12, type: 'input', name: 'sku', disabled }
     },
     description: {
       options: {
@@ -67,7 +76,8 @@ const buildFieldConfig = (
         label: 'description',
         colWidth: 12,
         componentClass: 'textarea',
-        name: 'description'
+        name: 'description',
+        disabled
       }
     },
     productGroupID: {
@@ -78,7 +88,8 @@ const buildFieldConfig = (
         colWidth: 12,
         placeholder: 'common:searchPlaceholder',
         isMulti: false,
-        name: 'product-group'
+        name: 'product-group',
+        disabled
       },
       options: {
         validators: Validators.required
@@ -92,7 +103,8 @@ const buildFieldConfig = (
         colWidth: 12,
         placeholder: 'common:searchPlaceholder',
         isMulti: false,
-        name: 'brand'
+        name: 'brand',
+        disabled
       },
       options: {
         validators: Validators.required
@@ -106,7 +118,8 @@ const buildFieldConfig = (
         colWidth: 12,
         placeholder: 'common:searchPlaceholder',
         isMulti: false,
-        name: 'manufacturer'
+        name: 'manufacturer',
+        disabled
       },
       options: {
         validators: Validators.required
@@ -120,7 +133,8 @@ const buildFieldConfig = (
         colWidth: 12,
         placeholder: 'common:searchPlaceholder',
         isMulti: false,
-        name: 'main-category'
+        name: 'main-category',
+        disabled
       },
       options: {
         validators: [
@@ -141,7 +155,8 @@ const buildFieldConfig = (
         colWidth: 12,
         placeholder: 'common:searchPlaceholder',
         isMulti: false,
-        name: 'subcategory'
+        name: 'subcategory',
+        disabled
       },
       options: {
         validators: Validators.required
@@ -155,7 +170,8 @@ const buildFieldConfig = (
         colWidth: 6,
         placeholder: 'common:searchPlaceholder',
         isMulti: false,
-        name: 'gas-type'
+        name: 'gas-type',
+        disabled
       }
     },
     powerID: {
@@ -166,7 +182,8 @@ const buildFieldConfig = (
         colWidth: 6,
         placeholder: 'common:searchPlaceholder',
         isMulti: false,
-        name: 'power'
+        name: 'power',
+        disabled
       }
     },
     systemSizeID: {
@@ -177,7 +194,8 @@ const buildFieldConfig = (
         colWidth: 6,
         placeholder: 'common:searchPlaceholder',
         isMulti: false,
-        name: 'system-size'
+        name: 'system-size',
+        disabled
       }
     },
     standardID: {
@@ -188,7 +206,8 @@ const buildFieldConfig = (
         colWidth: 6,
         placeholder: 'common:searchPlaceholder',
         isMulti: false,
-        name: 'standard'
+        name: 'standard',
+        disabled
       }
     }
   };
@@ -210,6 +229,8 @@ interface Iprops {
   saveProduct: typeof saveProduct;
   updateProduct: typeof updateProduct;
   updateQueueProduct: typeof updateQueueProduct;
+  user: Iuser;
+  toggleSearchNewProductsModal: typeof toggleSearchNewProductsModal;
 }
 
 class ManageInventoryForm extends React.Component<Iprops, {}> {
@@ -218,7 +239,11 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(
-      buildFieldConfig(this.props.productInfo, this.filterSubcategories),
+      buildFieldConfig(
+        this.props.productInfo,
+        this.filterSubcategories,
+        this.canEditInstalls() === false
+      ),
       this.props.t
     );
     this.setForm = this.setForm.bind(this);
@@ -371,10 +396,29 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
     };
   };
 
+  canEditInstalls = () => {
+    return constants.hasSecurityFunction(
+      this.props.user,
+      constants.securityFunctions.ManageInventory.id
+    );
+  };
+
   render() {
     const { t } = this.props;
     return (
       <div className={this.props.colorButton}>
+        {this.props.selectedQueueObject && (
+          <Button
+            bsStyle="link"
+            type="button"
+            disabled={this.props.loading}
+            onClick={this.props.toggleSearchNewProductsModal}
+            style={{ marginBottom: '-10px' }}
+            className="pull-right"
+          >
+            {t('manageInventory:mergeProduct')}
+          </Button>
+        )}
         {!(this.props.selectedItem && this.props.selectedItem.id) && (
           <Col xs={12}>
             <p style={{ lineHeight: '1.4rem' }}>
@@ -397,24 +441,26 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
             >
               {t('common:cancel')}
             </Button>
+            {this.canEditInstalls() && (
+              <Button
+                bsStyle={this.props.colorButton}
+                type="submit"
+                disabled={this.props.loading}
+                style={{ marginRight: '20px' }}
+              >
+                {t('common:save')}
+              </Button>
+            )}
             {this.props.selectedQueueObject && (
               <Button
                 bsStyle={this.props.colorButton}
                 type="button"
                 disabled={this.props.loading}
                 onClick={(e: any) => this.handleSubmit(e, true)}
-                style={{ marginRight: '20px' }}
               >
                 {t('manageInventory:saveApprove')}
               </Button>
             )}
-            <Button
-              bsStyle={this.props.colorButton}
-              type="submit"
-              disabled={this.props.loading}
-            >
-              {t('common:save')}
-            </Button>
           </Col>
         </form>
       </div>

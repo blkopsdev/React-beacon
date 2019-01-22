@@ -267,11 +267,17 @@ export const addCourseToCart = (
     if (foundLesson) {
       toastr.warning(
         'Warning',
-        'Please remove all lessons before adding a course.  You cannot purchase courses and lessons at the same time.'
+        'Please remove all lessons before adding a course.  You cannot purchase courses and lessons at the same time.',
+        constants.toastrWarning
       );
       return;
     }
     if (foundCourse) {
+      toastr.warning(
+        'Warning',
+        'Course already added to cart.',
+        constants.toastrWarning
+      );
       console.log('course already added');
       return;
     }
@@ -306,6 +312,11 @@ export const addLessonToCart = (
       return;
     }
     if (foundLesson) {
+      toastr.warning(
+        'Warning',
+        'Lesson already added to cart.',
+        constants.toastrWarning
+      );
       console.log('lesson already added');
       return;
     }
@@ -322,7 +333,7 @@ export const trainingCheckout = (
   return (dispatch, getState) => {
     const products = getState().training.cart.addedIDs;
     dispatch(beginAjaxCall());
-    dispatch({ type: types.TOGGLE_MODAL_SHOPPING_CART_TRAINING });
+    dispatch({ type: types.CLOSE_ALL_MODALS });
     return axios
       .post(API.POST.training.trainingCheckout, {
         PurchasedTraining: products,

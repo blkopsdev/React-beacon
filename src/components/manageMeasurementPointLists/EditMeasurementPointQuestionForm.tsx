@@ -15,12 +15,13 @@ import { forEach, find } from 'lodash';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
+import InputList from './InputList';
 
 import { FormUtil } from '../common/FormUtil';
 import {
   ImeasurementPointList,
-  ImeasurementPointQuestion,
-  ImeasurementPointQuestionSelectOption
+  ImeasurementPointQuestion
+  // ImeasurementPointQuestionSelectOption
 } from '../../models';
 import {
   toggleEditMeasurementPointListModal,
@@ -29,7 +30,7 @@ import {
 } from '../../actions/manageMeasurementPointListsActions';
 import constants from '../../constants/constants';
 import { initialMeasurementPointQuestion } from 'src/reducers/initialState';
-const uuidv4 = require('uuid/v4');
+// const uuidv4 = require('uuid/v4');
 
 interface IstateChanges extends Observable<any> {
   next: () => void;
@@ -37,6 +38,16 @@ interface IstateChanges extends Observable<any> {
 interface AbstractControlEdited extends AbstractControl {
   stateChanges: IstateChanges;
 }
+
+const InputListAbstract = ({
+  handler,
+  touched,
+  hasError,
+  meta,
+  pristine,
+  errors,
+  submitted
+}: AbstractControl) => <InputList meta={meta} />;
 
 const trueFalseOptions = [
   { label: 'Yes', value: true },
@@ -221,30 +232,30 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, Istate> {
 
   handleCreateOption(name: string) {
     console.log('created ', name);
-    const newOption: ImeasurementPointQuestionSelectOption = {
-      id: uuidv4(),
-      label: name,
-      value: name
-    };
-    this.setState(
-      {
-        question: {
-          ...this.state.question,
-          selectOptions: [
-            ...(this.state.question.selectOptions || []),
-            newOption
-          ]
-        }
-      },
-      () => {
-        const control = this.measurementsForm.get(
-          'selectOptions'
-        ) as AbstractControlEdited;
-        // control.meta.options.push(newOption);
-        control.reset();
-        this.buildForm(this.state.question.type);
-      }
-    );
+    // const newOption: ImeasurementPointQuestionSelectOption = {
+    //   id: uuidv4(),
+    //   label: name,
+    //   value: name
+    // };
+    // this.setState(
+    //   {
+    //     question: {
+    //       ...this.state.question,
+    //       selectOptions: [
+    //         ...(this.state.question.selectOptions || []),
+    //         newOption
+    //       ]
+    //     }
+    //   },
+    //   () => {
+    //     const control = this.measurementsForm.get(
+    //       'selectOptions'
+    //     ) as AbstractControlEdited;
+    //     // control.meta.options.push(newOption);
+    //     control.reset();
+    //     this.buildForm(this.state.question.type);
+    //   }
+    // );
   }
 
   selectFieldConfig = () => ({
@@ -280,13 +291,15 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, Istate> {
     },
     selectOptions: {
       options: { validators: [Validators.required] },
-      render: FormUtil.CreatableSelect,
+      render: InputListAbstract,
       meta: {
         label: 'manageMeasurementPointLists:selectOptions',
+        buttonLabel: 'Add Option',
         colWidth: 12,
         placeholder: 'manageMeasurementPointLists:selectOptionsPlaceholder',
-        isMulti: false,
-        handleCreate: this.handleCreateOption
+        colorButton: 'info'
+        // isMulti: false,
+        // handleCreate: this.handleCreateOption
       }
     }
   });

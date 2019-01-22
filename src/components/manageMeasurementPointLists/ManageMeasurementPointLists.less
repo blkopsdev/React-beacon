@@ -24,36 +24,66 @@
 .question-list {
   margin-left: -15px;
   margin-right: -15px;
+  .sort-controls {
+    position: absolute;
+    right: 0px;
+    width: 80px;
+    height: 90px;
+    .btn {
+      width: 40px;
+      height: 45px;
+      border-radius: 0%;
+      padding: 6px 3px;
+    }
+  }
+  .question-list-item {
+    // padding-right: 40px;
+    width: 318px !important;
+    height: 90px;
+    text-overflow: ellipsis;
+  }
+  .question-list-item-container:nth-child(odd) {
+    .question-list-item {
+      background-color: @lightPurple;
+    }
+    .sort-controls {
+      .btn {
+        background-color: @lightPurple;
+      }
+    }
+  }
 }
 
-.sort-controls {
-  position: absolute;
-  right: 0px;
-  width: 80px;
-  height: 90px;
-
-  .btn {
+.options-list {
+  // margin-left: -15px;
+  // margin-right: -15px;
+  margin-top: 10px;
+  .button-controls {
+    position: absolute;
+    right: 15px;
     width: 40px;
     height: 45px;
-    border-radius: 0%;
-    padding: 6px 3px;
-  }
-}
-
-.question-list-item {
-  // padding-right: 40px;
-  width: 318px !important;
-  height: 90px;
-  text-overflow: ellipsis;
-}
-
-.question-list-item-container:nth-child(odd) {
-  .question-list-item {
-    background-color: @lightPurple;
-  }
-  .sort-controls {
     .btn {
-      background-color:  @lightPurple;
+      width: 40px;
+      height: 45px;
+      border-radius: 0%;
+      padding: 6px 3px;
+    }
+  }
+  .options-list-item {
+    padding: 5px 15px;
+    width: 328px !important;
+    height: 45px;
+    text-overflow: ellipsis;
+  }
+  .options-list-item-container:nth-child(odd) {
+    .options-list-item {
+      background-color: @lightPurple;
+    }
+    .button-controls {
+      .btn {
+        background-color: @lightPurple;
+      }
     }
   }
 }
@@ -61,6 +91,7 @@
 .DraftEditor-root {
   min-height: 100px;
   background-color: white;
+  padding-left: 14px;
 }
 
 .rdw-editor-main {

@@ -267,7 +267,7 @@
     "deleteListOk": "Delete This Measurement Point List?",
     "deleteQuestionOk": "Delete This Measurement Point?",
     "selectDefaultOptionID": "Default Option",
-    "selectRememberBetweenInspection": "Remeber Between Inspections?",
+    "selectRememberBetweenInspection": "Remember Between Inspections?",
     "selectOptions": "Create Select Options",
     "selectOptionsPlaceholder": "Start typing to create...",
     "selectRememberBetweenDevice": "Remember Between Devices?"

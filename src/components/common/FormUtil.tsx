@@ -32,6 +32,19 @@ const ControlComponent = (props: any) => (
   </div>
 );
 
+// const OptionComponent = (props: any) => (
+//   <div>
+//     <components.Option {...props} className="select-option" />
+//     <Button
+//       onClick={() => {
+//         console.log(props);
+//       }}
+//     >
+//       Delete
+//     </Button>
+//   </div>
+// );
+
 // const CustomFeedback = ({type}: any) => {
 //   if (type === 'valid'){
 //     return <FontAwesomeIcon icon={['far', 'check']} />

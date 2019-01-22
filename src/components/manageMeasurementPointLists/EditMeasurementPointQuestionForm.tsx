@@ -77,6 +77,48 @@ const numericFieldConfig = {
   }
 };
 
+const selectFieldConfig = {
+  selectRememberBetweenDevice: {
+    options: { validators: [Validators.required] },
+    render: FormUtil.Select,
+    meta: {
+      label: 'manageMeasurementPointLists:selectRememberBetweenDevice',
+      colWidth: 12,
+      options: trueFalseOptions,
+      isClearable: false
+    }
+  },
+  selectRememberBetweenInspection: {
+    options: { validators: [Validators.required] },
+    render: FormUtil.Select,
+    meta: {
+      label: 'manageMeasurementPointLists:selectRememberBetweenInspection',
+      colWidth: 12,
+      options: trueFalseOptions,
+      isClearable: false
+    }
+  },
+  selectOptions: {
+    options: { validators: [Validators.required] },
+    render: FormUtil.CreatableSelect,
+    meta: {
+      label: 'manageMeasurementPointLists:selectOptions',
+      colWidth: 12
+      // options: trueFalseOptions,
+    }
+  },
+  selectDefaultOptionID: {
+    options: { validators: [Validators.required] },
+    render: FormUtil.Select,
+    meta: {
+      label: 'manageMeasurementPointLists:selectDefaultOptionID',
+      colWidth: 12,
+      options: trueFalseOptions,
+      isClearable: false
+    }
+  }
+};
+
 const groupFieldConfig = {
   controls: {
     label: {
@@ -177,8 +219,7 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, Istate> {
         question.type ===
         constants.measurementPointQuestionTypes.QUESTION_SELECT
       ) {
-        // TODO ADD SELECT FORM
-        extraConfig = {};
+        extraConfig = selectFieldConfig;
       }
       return this.buildFieldConfig(
         constants.measurementPointQuestionTypeOptions,

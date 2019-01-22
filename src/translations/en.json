@@ -265,7 +265,11 @@
     "numericAllowDecimals": "Allow Decimals?",
     "deleteConfirm": "Are you sure?",
     "deleteListOk": "Delete This Measurement Point List?",
-    "deleteQuestionOk": "Delete This Measurement Point?"
+    "deleteQuestionOk": "Delete This Measurement Point?",
+    "selectDefaultOptionID": "Default Option",
+    "selectRememberBetweenInspection": "Remeber Between Inspections?",
+    "selectOptions": "Select Options",
+    "selectRememberBetweenDevice": "Remember Between Devices?"
   },
   "tiles": {
     "alerts": "Alerts",

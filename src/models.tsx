@@ -323,6 +323,11 @@ export interface IproductInfo {
   systemSizeOptions: Ioption[];
 }
 
+export interface ImeasurementPointQuestionSelectOption {
+  id: string;
+  value: string;
+  label: string;
+}
 export interface ImeasurementPointQuestion {
   id: string;
   type: number;
@@ -338,7 +343,7 @@ export interface ImeasurementPointQuestion {
   selectDefaultOptionID?: string;
   selectRememberBetweenDevice?: boolean;
   selectRememberBetweenInspection?: boolean;
-  selectOptions?: any[];
+  selectOptions?: ImeasurementPointQuestionSelectOption[];
 }
 
 export interface ImeasurementPointList {

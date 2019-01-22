@@ -7,9 +7,9 @@ import { Col, Button } from 'react-bootstrap';
 import {
   Validators,
   FormGenerator,
+  FieldConfig,
   AbstractControl,
-  FieldConfig
-  // Observable
+  Observable
 } from 'react-reactive-form';
 import { forEach, find } from 'lodash';
 import { toastr } from 'react-redux-toastr';
@@ -17,7 +17,11 @@ import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
-import { ImeasurementPointList, ImeasurementPointQuestion } from '../../models';
+import {
+  ImeasurementPointList,
+  ImeasurementPointQuestion,
+  ImeasurementPointQuestionSelectOption
+} from '../../models';
 import {
   toggleEditMeasurementPointListModal,
   toggleEditMeasurementPointQuestionModal,
@@ -25,6 +29,14 @@ import {
 } from '../../actions/manageMeasurementPointListsActions';
 import constants from '../../constants/constants';
 import { initialMeasurementPointQuestion } from 'src/reducers/initialState';
+const uuidv4 = require('uuid/v4');
+
+interface IstateChanges extends Observable<any> {
+  next: () => void;
+}
+interface AbstractControlEdited extends AbstractControl {
+  stateChanges: IstateChanges;
+}
 
 const trueFalseOptions = [
   { label: 'Yes', value: true },
@@ -70,48 +82,6 @@ const numericFieldConfig = {
     render: FormUtil.Select,
     meta: {
       label: 'manageMeasurementPointLists:numericAllowDecimals',
-      colWidth: 12,
-      options: trueFalseOptions,
-      isClearable: false
-    }
-  }
-};
-
-const selectFieldConfig = {
-  selectRememberBetweenDevice: {
-    options: { validators: [Validators.required] },
-    render: FormUtil.Select,
-    meta: {
-      label: 'manageMeasurementPointLists:selectRememberBetweenDevice',
-      colWidth: 12,
-      options: trueFalseOptions,
-      isClearable: false
-    }
-  },
-  selectRememberBetweenInspection: {
-    options: { validators: [Validators.required] },
-    render: FormUtil.Select,
-    meta: {
-      label: 'manageMeasurementPointLists:selectRememberBetweenInspection',
-      colWidth: 12,
-      options: trueFalseOptions,
-      isClearable: false
-    }
-  },
-  selectOptions: {
-    options: { validators: [Validators.required] },
-    render: FormUtil.CreatableSelect,
-    meta: {
-      label: 'manageMeasurementPointLists:selectOptions',
-      colWidth: 12
-      // options: trueFalseOptions,
-    }
-  },
-  selectDefaultOptionID: {
-    options: { validators: [Validators.required] },
-    render: FormUtil.Select,
-    meta: {
-      label: 'manageMeasurementPointLists:selectDefaultOptionID',
       colWidth: 12,
       options: trueFalseOptions,
       isClearable: false
@@ -194,6 +164,7 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, Istate> {
     this.handleSubmit = this.handleSubmit.bind(this);
     this.setForm = this.setForm.bind(this);
     this.getFormConfig = this.getFormConfig.bind(this);
+    this.handleCreateOption = this.handleCreateOption.bind(this);
   }
 
   getFormConfig(question: ImeasurementPointQuestion) {
@@ -219,7 +190,7 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, Istate> {
         question.type ===
         constants.measurementPointQuestionTypes.QUESTION_SELECT
       ) {
-        extraConfig = selectFieldConfig;
+        extraConfig = this.selectFieldConfig();
       }
       return this.buildFieldConfig(
         constants.measurementPointQuestionTypeOptions,
@@ -247,6 +218,78 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, Istate> {
     }
   }
   // componentWillUnmount() {}
+
+  handleCreateOption(name: string) {
+    console.log('created ', name);
+    const newOption: ImeasurementPointQuestionSelectOption = {
+      id: uuidv4(),
+      label: name,
+      value: name
+    };
+    this.setState(
+      {
+        question: {
+          ...this.state.question,
+          selectOptions: [
+            ...(this.state.question.selectOptions || []),
+            newOption
+          ]
+        }
+      },
+      () => {
+        const control = this.measurementsForm.get(
+          'selectOptions'
+        ) as AbstractControlEdited;
+        // control.meta.options.push(newOption);
+        control.reset();
+        this.buildForm(this.state.question.type);
+      }
+    );
+  }
+
+  selectFieldConfig = () => ({
+    selectRememberBetweenDevice: {
+      options: { validators: [Validators.required] },
+      render: FormUtil.Select,
+      meta: {
+        label: 'manageMeasurementPointLists:selectRememberBetweenDevice',
+        colWidth: 12,
+        options: trueFalseOptions,
+        isClearable: false
+      }
+    },
+    selectRememberBetweenInspection: {
+      options: { validators: [Validators.required] },
+      render: FormUtil.Select,
+      meta: {
+        label: 'manageMeasurementPointLists:selectRememberBetweenInspection',
+        colWidth: 12,
+        options: trueFalseOptions,
+        isClearable: false
+      }
+    },
+    selectDefaultOptionID: {
+      options: { validators: [Validators.required] },
+      render: FormUtil.Select,
+      meta: {
+        label: 'manageMeasurementPointLists:selectDefaultOptionID',
+        colWidth: 12,
+        options: this.state.question.selectOptions,
+        isClearable: true
+      }
+    },
+    selectOptions: {
+      options: { validators: [Validators.required] },
+      render: FormUtil.CreatableSelect,
+      meta: {
+        label: 'manageMeasurementPointLists:selectOptions',
+        colWidth: 12,
+        placeholder: 'manageMeasurementPointLists:selectOptionsPlaceholder',
+        isMulti: false,
+        handleCreate: this.handleCreateOption
+      }
+    }
+  });
 
   buildFieldConfig = (
     typeOptions: any[],
@@ -377,15 +420,6 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, Istate> {
   };
 
   buildForm(questionType: number) {
-    // if (!this.props.selectedMeasurementPointList) {
-    //   console.error('missing measurement point list');
-    //   return;
-    // }
-    // if (!this.props.selectedMeasurementPointQuestion) {
-    //   console.error('missing measurement point question');
-    //   return;
-    // }
-
     console.log('BUILDING FORM', questionType);
 
     this.setState({
@@ -441,6 +475,44 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, Istate> {
             (tOpt: any) => tOpt.value === numericAllowDecimals
           )
         });
+      }
+    }
+    if (type === constants.measurementPointQuestionTypes.QUESTION_SELECT) {
+      const {
+        selectRememberBetweenDevice,
+        selectRememberBetweenInspection,
+        selectDefaultOptionID,
+        selectOptions
+      } = this.state.question;
+      if (typeof selectRememberBetweenDevice !== undefined) {
+        this.measurementsForm.patchValue({
+          selectRememberBetweenDevice: find(
+            trueFalseOptions,
+            (tOpt: any) => tOpt.value === selectRememberBetweenDevice
+          )
+        });
+      }
+      if (typeof selectRememberBetweenInspection !== undefined) {
+        this.measurementsForm.patchValue({
+          selectRememberBetweenInspection: find(
+            trueFalseOptions,
+            (tOpt: any) => tOpt.value === selectRememberBetweenInspection
+          )
+        });
+      }
+      console.log('NEED TO PATCH THESE', selectDefaultOptionID, selectOptions);
+      if (typeof selectOptions !== undefined) {
+        // this.measurementsForm.se
+        const control = this.measurementsForm.get(
+          'selectDefaultOptionID'
+        ) as AbstractControlEdited;
+        console.log(control.meta);
+        // this.measurementsForm.patchValue({
+        //   selectRememberBetweenInspection: find(
+        //     trueFalseOptions,
+        //     (tOpt: any) => tOpt.value === selectRememberBetweenInspection
+        //   )
+        // });
       }
     }
   }

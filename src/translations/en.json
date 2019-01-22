@@ -268,7 +268,8 @@
     "deleteQuestionOk": "Delete This Measurement Point?",
     "selectDefaultOptionID": "Default Option",
     "selectRememberBetweenInspection": "Remeber Between Inspections?",
-    "selectOptions": "Select Options",
+    "selectOptions": "Create Select Options",
+    "selectOptionsPlaceholder": "Start typing to create...",
     "selectRememberBetweenDevice": "Remember Between Devices?"
   },
   "tiles": {

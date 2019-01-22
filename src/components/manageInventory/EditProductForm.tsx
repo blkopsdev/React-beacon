@@ -80,21 +80,7 @@ const buildFieldConfig = (
         disabled
       }
     },
-    productGroupID: {
-      render: FormUtil.Select,
-      meta: {
-        options: productInfo.productGroupOptions,
-        label: 'common:productGroup',
-        colWidth: 12,
-        placeholder: 'common:searchPlaceholder',
-        isMulti: false,
-        name: 'product-group',
-        disabled
-      },
-      options: {
-        validators: Validators.required
-      }
-    },
+
     brandID: {
       render: FormUtil.Select,
       meta: {
@@ -104,21 +90,6 @@ const buildFieldConfig = (
         placeholder: 'common:searchPlaceholder',
         isMulti: false,
         name: 'brand',
-        disabled
-      },
-      options: {
-        validators: Validators.required
-      }
-    },
-    manufacturerID: {
-      render: FormUtil.Select,
-      meta: {
-        options: productInfo.manufacturerOptions,
-        label: 'manufacturer',
-        colWidth: 12,
-        placeholder: 'common:searchPlaceholder',
-        isMulti: false,
-        name: 'manufacturer',
         disabled
       },
       options: {
@@ -331,9 +302,7 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
     console.log(this.userForm.value);
 
     const {
-      productGroupID,
       brandID,
-      manufacturerID,
       subcategoryID,
       mainCategoryID,
       gasTypeID,
@@ -344,9 +313,7 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
 
     let newItem = {
       ...this.userForm.value,
-      productGroupID: productGroupID.value,
       brandID: brandID.value,
-      manufacturerID: manufacturerID.value,
       subcategoryID: subcategoryID ? subcategoryID.value : '',
       mainCategoryID: mainCategoryID.value,
       gasTypeID: gasTypeID ? gasTypeID.value : '',

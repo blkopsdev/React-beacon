@@ -264,7 +264,8 @@
     "numericMaxValue": "Max Value",
     "numericAllowDecimals": "Allow Decimals?",
     "deleteConfirm": "Are you sure?",
-    "deleteListOk": "Delete This Measurement Point List?"
+    "deleteListOk": "Delete This Measurement Point List?",
+    "deleteQuestionOk": "Delete This Measurement Point?"
   },
   "tiles": {
     "alerts": "Alerts",

@@ -9,7 +9,8 @@ import {
   toggleEditMeasurementPointQuestionModal,
   addGlobalMeasurementPointList,
   updateGlobalMeasurementPointList,
-  addQuestionToMeasurementPointList
+  addQuestionToMeasurementPointList,
+  deleteGlobalMeasurementPointQuestion
 } from '../../actions/manageMeasurementPointListsActions';
 import CommonModal from '../common/CommonModal';
 import EditMeasurementPointListForm from './EditMeasurementPointListForm';
@@ -33,6 +34,7 @@ interface IdispatchProps {
   addGlobalMeasurementPointList: typeof addGlobalMeasurementPointList;
   updateGlobalMeasurementPointList: typeof updateGlobalMeasurementPointList;
   addQuestionToMeasurementPointList: typeof addQuestionToMeasurementPointList;
+  deleteGlobalMeasurementPointQuestion: typeof deleteGlobalMeasurementPointQuestion;
 }
 
 class EditMeasurementPointListModal extends React.Component<
@@ -82,6 +84,7 @@ export default connect(
     toggleEditMeasurementPointQuestionModal,
     addGlobalMeasurementPointList,
     updateGlobalMeasurementPointList,
-    addQuestionToMeasurementPointList
+    addQuestionToMeasurementPointList,
+    deleteGlobalMeasurementPointQuestion
   }
 )(EditMeasurementPointListModal);

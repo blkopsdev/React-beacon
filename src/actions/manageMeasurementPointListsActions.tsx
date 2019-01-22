@@ -179,6 +179,43 @@ export function deleteGlobalMeasurementPointList(
   };
 }
 
+/*
+* delete a mpl
+*/
+export function deleteGlobalMeasurementPointQuestion(
+  measurementPointListId: string,
+  measurementPointQuestionId: string
+): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    return axios
+      .delete(
+        `${
+          API.DELETE.measurements.deleteglobalmeasurementpoint
+        }/${measurementPointQuestionId}`
+      )
+      .then(data => {
+        dispatch({
+          type: types.MANAGE_MEASUREMENT_POINT_QUESTION_DELETE_SUCCESS,
+          measurementPointListId,
+          measurementPointQuestionId
+        });
+        toastr.success(
+          'Success',
+          'Deleted measurement point question.',
+          constants.toastrSuccess
+        );
+      })
+      .catch((error: any) => {
+        dispatch({
+          type: types.MANAGE_MEASUREMENT_POINT_QUESTION_DELETE_FAILED
+        });
+        constants.handleError(error, 'delete measurement point question');
+        throw error;
+      });
+  };
+}
+
 export const toggleEditMeasurementPointListModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT_LISTS
 });

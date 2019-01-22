@@ -1,4 +1,4 @@
-import { find, keyBy } from 'lodash';
+import { find, keyBy, filter } from 'lodash';
 
 import {
   ImanageMeasurementPointListsReducer,
@@ -73,6 +73,29 @@ function manageMeasurementPointListData(
       mpl = { ...mpl, measurementPoints };
       // Update the array with updated list and return
       return [...state.filter(l => l.id !== action.list.id), mpl];
+    case types.MANAGE_MEASUREMENT_POINT_QUESTION_DELETE_SUCCESS:
+      // Grab the correct list
+      const mplToMod = find(
+        state,
+        (l: ImeasurementPointList) => l.id === action.measurementPointListId
+      );
+      if (!mplToMod) {
+        return state;
+      }
+      // Delete the question
+      // Update the array with updated list and return
+      return [
+        ...state.filter(l => l.id !== action.measurementPointListId),
+        {
+          ...mplToMod,
+          measurementPoints: keyBy(
+            filter(mplToMod.measurementPoints, mp => {
+              return mp.id !== action.measurementPointQuestionId;
+            }),
+            (item: ImeasurementPointQuestion) => item.id
+          )
+        }
+      ];
     case types.USER_LOGOUT_SUCCESS:
       return [];
     default:
@@ -95,6 +118,21 @@ function manageSelectedMeasurementPointList(
       );
       const measurementPoints = { ...state.measurementPoints, ...q };
       return { ...state, measurementPoints };
+    case types.MANAGE_MEASUREMENT_POINT_QUESTION_DELETE_SUCCESS:
+      if (action.measurementPointListId !== state.id) {
+        return state;
+      }
+      // Delete the question
+      // Update the array with updated list and return
+      return {
+        ...state,
+        measurementPoints: keyBy(
+          filter(state.measurementPoints, mp => {
+            return mp.id !== action.measurementPointQuestionId;
+          }),
+          (item: ImeasurementPointQuestion) => item.id
+        )
+      };
     case types.USER_LOGOUT_SUCCESS:
       return initialMeasurementPointList;
     default:

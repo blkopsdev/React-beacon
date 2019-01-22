@@ -32,7 +32,8 @@ import {
   toggleEditMeasurementPointQuestionModal,
   addGlobalMeasurementPointList,
   updateGlobalMeasurementPointList,
-  addQuestionToMeasurementPointList
+  addQuestionToMeasurementPointList,
+  deleteGlobalMeasurementPointQuestion
 } from '../../actions/manageMeasurementPointListsActions';
 import EditMeasurementPointQuestionModal from './EditMeasurementPointQuestionModal';
 import constants from '../../constants/constants';
@@ -115,6 +116,7 @@ interface Iprops extends React.Props<EditMeasurementPointListForm> {
   addGlobalMeasurementPointList: typeof addGlobalMeasurementPointList;
   updateGlobalMeasurementPointList: typeof updateGlobalMeasurementPointList;
   addQuestionToMeasurementPointList: typeof addQuestionToMeasurementPointList;
+  deleteGlobalMeasurementPointQuestion: typeof deleteGlobalMeasurementPointQuestion;
 }
 
 interface Istate {
@@ -250,6 +252,22 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     this.props.toggleEditMeasurementPointQuestionModal();
   }
 
+  deleteQuestion(question: any) {
+    const toastrConfirmOptions = {
+      onOk: () => {
+        this.props.deleteGlobalMeasurementPointQuestion(
+          this.props.selectedMeasurementPointList.id,
+          question.id
+        );
+        console.log('deleted', question);
+      },
+      onCancel: () => console.log('CANCEL: clicked'),
+      okText: this.props.t('deleteQuestionOk'),
+      cancelText: this.props.t('common:cancel')
+    };
+    toastr.confirm(this.props.t('deleteConfirm'), toastrConfirmOptions);
+  }
+
   newQuestion(type: number) {
     return {
       id: uuidv4(),
@@ -269,18 +287,9 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     const tempOrder = mps[q1Index].order;
     mps[q1Index] = { ...mps[q1Index], order: mps[q2Index].order };
     mps[q2Index] = { ...mps[q2Index], order: tempOrder };
-    // this.props.addQuestionToMeasurementPointList(
-    //   this.props.selectedMeasurementPointList,
-    //   mps[q1Index]
-    // );
-    // this.props.addQuestionToMeasurementPointList(
-    //   this.props.selectedMeasurementPointList,
-    //   mps[q2Index]
-    // );
     mps.sort((a: ImeasurementPointQuestion, b: ImeasurementPointQuestion) => {
       return a.order - b.order;
     });
-    // console.log(mps);
     this.setState({
       questions: mps
     });
@@ -295,6 +304,16 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
             <div className="question-list-item-container" key={mp.id}>
               <span className="sort-controls">
                 <Button
+                  onClick={() => {
+                    this.setSelectedQuestion(mp);
+                  }}
+                >
+                  <FontAwesomeIcon icon={['far', 'edit']}>
+                    {' '}
+                    Edit{' '}
+                  </FontAwesomeIcon>
+                </Button>
+                <Button
                   disabled={mp.order === 0}
                   onClick={() => {
                     // console.log('swap up', mp.label, mps[index - 1].label);
@@ -302,6 +321,16 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
                   }}
                 >
                   <FontAwesomeIcon icon={faSortAmountUp} fixedWidth size="2x" />
+                </Button>
+                <Button
+                  onClick={() => {
+                    this.deleteQuestion(mp);
+                  }}
+                >
+                  <FontAwesomeIcon icon={['far', 'times']}>
+                    {' '}
+                    Delete{' '}
+                  </FontAwesomeIcon>
                 </Button>
                 <Button
                   disabled={mp.order === mps.length - 1}
@@ -326,7 +355,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
                 {mp.type === 6 && (
                   <p dangerouslySetInnerHTML={{ __html: mp.label }} />
                 )}
-                {mp.type !== 6 && <h4>{mp.label}</h4>}
+                {mp.type !== 6 && <h5>{mp.label}</h5>}
                 {mp.type < 5 &&
                   constants.measurementPointQuestionTypesInverse[mp.type]}
               </ListGroupItem>

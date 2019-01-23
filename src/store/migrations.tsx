@@ -4,6 +4,7 @@ import initialState from 'src/reducers/initialState';
 
 /*
 * Migration 1 runs when upgrading from 0 to 1
+* 0.0.1 = 1  and 0.2.2 = 22
 */
 export const migrations = {
   0: state => {

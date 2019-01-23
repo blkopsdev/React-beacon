@@ -28,6 +28,7 @@ import { RouteComponentProps } from 'react-router';
 import * as moment from 'moment';
 import { toastr } from 'react-redux-toastr';
 import constants from 'src/constants/constants';
+import { LinkContainer } from 'react-router-bootstrap';
 
 const TimeLeftBanner = ({ timeLeft }: { timeLeft?: number }) => {
   if (!timeLeft) {
@@ -557,13 +558,9 @@ class Quiz extends React.Component<Props, State> {
                   >
                     Return to Lesson
                   </Button>
-                  <Button
-                    bsStyle="primary"
-                    onClick={this.backToAllCourses}
-                    style={{ marginLeft: 10 }}
-                  >
-                    Return to dashboard
-                  </Button>
+                  <LinkContainer to="/dashboard" style={{ marginLeft: 10 }}>
+                    <Button bsStyle="primary">Return to dashboard</Button>
+                  </LinkContainer>
                 </Col>
               </Row>
             </div>

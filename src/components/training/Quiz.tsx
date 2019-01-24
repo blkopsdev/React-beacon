@@ -5,7 +5,13 @@ import * as React from 'react';
 import initialState from '../../reducers/initialState';
 
 import { connect } from 'react-redux';
-import { GFQuizItem, GFLesson, GFCourse } from '../../models';
+import {
+  GFQuizItem,
+  GFLesson,
+  GFCourse,
+  Iuser,
+  IinitialState
+} from '../../models';
 import {
   getLessonsByCourseID,
   setLesson,
@@ -50,21 +56,25 @@ interface RouterParams {
   quizID: string;
 }
 
-interface Props extends RouteComponentProps<RouterParams> {
-  user: any;
+interface IdispatchProps {
+  // Add your dispatcher properties here
+  user: Iuser;
   quiz: GFQuizItem;
   courses: GFCourse[];
   lesson: GFLesson;
   lessons: GFLesson[];
   quizzes: GFQuizItem[];
-  getLessonsByCourseID: any;
-  // getQuizzesByLessonID: any;
-  setLesson: any;
-  setQuiz: any;
+  getLessonsByCourseID: typeof getLessonsByCourseID;
+  // getQuizzesByLessonID: typeof getQuizzesByLessonID;
+  setLesson: typeof setLesson;
+  setQuiz: typeof setQuiz;
   saveQuizResults: typeof saveQuizResults;
   loading: boolean;
-  params: any;
   startQuiz: (id: string) => Promise<void>;
+}
+
+interface Iprops extends RouteComponentProps<RouterParams> {
+  // Add your regular properties here
 }
 
 interface State {
@@ -78,13 +88,13 @@ interface State {
   timeoutWarningShown: boolean;
 }
 
-class Quiz extends React.Component<Props, State> {
+class Quiz extends React.Component<Iprops & IdispatchProps, State> {
   savingQuiz: boolean;
   checkingAnswer: boolean;
   goingToNextQuestion: boolean;
   quizTimer: any;
 
-  constructor(props: Props) {
+  constructor(props: Iprops & IdispatchProps) {
     super(props);
     this.state = {
       questionIndex: 0,
@@ -113,13 +123,6 @@ class Quiz extends React.Component<Props, State> {
     this.goingToNextQuestion = false;
   }
 
-  componentWillMount() {
-    if (!this.props.match.params.lessonID) {
-      // no lesson id is not allowed
-      this.props.history.replace(`/courses`);
-    }
-  }
-
   /*
   * When the component mounts we want to check for a quizID, if there is not one then we can not load a quiz, 
   * so send them back to the courses page
@@ -128,7 +131,7 @@ class Quiz extends React.Component<Props, State> {
   */
   componentDidMount() {
     if (!this.props.match.params.quizID || !this.props.match.params.lessonID) {
-      console.error('GOT HERE 1');
+      console.error('missing quizid or lessonid');
       this.props.history.replace(`/training`);
       return;
     }
@@ -138,9 +141,9 @@ class Quiz extends React.Component<Props, State> {
       isEmpty(this.props.lessons) ||
       isEmpty(this.props.quizzes)
     ) {
-      console.error('GOT HERE 2');
-      // this.props.history.replace(`/training`);
-      // return;
+      console.error('missing courses, lessons, or quizzes');
+      this.props.history.replace(`/training`);
+      return;
     }
 
     // Check to see if there is any quiz in redux
@@ -167,12 +170,14 @@ class Quiz extends React.Component<Props, State> {
     ) {
       this.reloadExistingQuiz();
     }
-
+    /*
+    * Handle Timed Quizzes
+    */
     if (this.props.quiz.isTimed) {
       this.handleTimedQuiz();
     }
   }
-  componentDidUpdate(prevProps: Props) {
+  componentDidUpdate(prevProps: Iprops & IdispatchProps) {
     if (prevProps.quiz !== this.props.quiz) {
       this.loadQuiz();
     }
@@ -260,8 +265,7 @@ class Quiz extends React.Component<Props, State> {
     if (i >= this.props.quiz.questions.length) {
       // the user refreshed the page after completing the last question.  We don't know if they saved to the API or not
       // so lets assume they did not and show the last question answered and not editable.  this way they can try to re-save
-      // @jfbloom22 why are we calling finishQuiz when the component mounts?  changed it to not do that on 09/28/2017
-      // this.finishQuiz();
+
       const lastQuestion = this.props.quiz.questions[i - 1];
       this.setState({
         questionIndex: i - 1,
@@ -311,11 +315,11 @@ class Quiz extends React.Component<Props, State> {
       );
     } else {
       console.log('did not find lesson in Redux, loading lessons from API');
-      this.getLessonsByCourseID(this.props.match.params.courseID);
+      this.props.getLessonsByCourseID(
+        this.props.match.params.courseID,
+        this.props.user
+      );
     }
-  }
-  getLessonsByCourseID(courseId: string) {
-    this.props.getLessonsByCourseID(courseId, this.props.user);
   }
 
   // showBadge(badge: GFBadge) {
@@ -662,7 +666,7 @@ class Quiz extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: any, ownProps: any) => {
+const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
     courses: state.training.courses,

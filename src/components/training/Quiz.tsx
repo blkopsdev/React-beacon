@@ -539,36 +539,9 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
     return (
       <div>
         <div className="main-content content-without-sidebar quiz animated fadeIn">
-          {this.state.quizComplete && (
-            <div className="sub-header">
-              <Row className="question">
-                <Col md={12} sm={12} xs={12} className="text-center">
-                  {this.printScore()}
-                </Col>
-              </Row>
-              <Row className="question">
-                <Col md={12} sm={12} xs={12} className="text-center">
-                  <Button
-                    bsStyle="primary"
-                    onClick={this.retakeQuiz}
-                    className=""
-                  >
-                    Retake Exercise
-                  </Button>
-                  <Button
-                    bsStyle="primary"
-                    onClick={this.backToLesson}
-                    style={{ marginLeft: 10 }}
-                  >
-                    Return to Lesson
-                  </Button>
-                  <LinkContainer to="/dashboard" style={{ marginLeft: 10 }}>
-                    <Button bsStyle="primary">Return to dashboard</Button>
-                  </LinkContainer>
-                </Col>
-              </Row>
-            </div>
-          )}
+          {/*
+            * Display the Quiz Question and buttons
+            */}
           {!this.state.quizComplete &&
             typeof curQ !== 'undefined' && (
               <div className="sub-header">
@@ -645,7 +618,43 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
                 </form>
               </div>
             )}
+          {/*
+            * Display the Completed Quiz Score
+            */}
+          {this.state.quizComplete && (
+            <div className="sub-header">
+              <Row className="question">
+                <Col md={12} sm={12} xs={12} className="text-center">
+                  {this.printScore()}
+                </Col>
+              </Row>
+              <Row className="question">
+                <Col md={12} sm={12} xs={12} className="text-center">
+                  <Button
+                    bsStyle="primary"
+                    onClick={this.retakeQuiz}
+                    className=""
+                  >
+                    Retake Exercise
+                  </Button>
+                  <Button
+                    bsStyle="primary"
+                    onClick={this.backToLesson}
+                    style={{ marginLeft: 10 }}
+                  >
+                    Return to Lesson
+                  </Button>
+                  <LinkContainer to="/dashboard" style={{ marginLeft: 10 }}>
+                    <Button bsStyle="primary">Return to dashboard</Button>
+                  </LinkContainer>
+                </Col>
+              </Row>
+            </div>
+          )}
         </div>
+        {/*
+       * Display right or wrong
+      */}
         {this.state.checkingAnswer && (
           <div className="animated slideInUp owl-image">
             {/* style={bubble} */}

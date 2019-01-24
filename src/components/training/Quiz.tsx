@@ -90,7 +90,7 @@ interface State {
 
 class Quiz extends React.Component<Iprops & IdispatchProps, State> {
   savingQuiz: boolean;
-  checkingAnswer: boolean;
+  quizLoading: boolean;
   goingToNextQuestion: boolean;
   quizTimer: any;
 
@@ -119,7 +119,7 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
     this.getQuizByID = this.getQuizByID.bind(this);
 
     this.savingQuiz = false;
-    this.checkingAnswer = false;
+    this.quizLoading = false;
     this.goingToNextQuestion = false;
   }
 
@@ -403,24 +403,38 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
   /*
     I need to click check answer and it triggers a statement that lets me know if the answer is wrong.
   */
-  checkAnswer(e: any) {
+  checkAnswer = (e: any) => {
     e.preventDefault();
-    if (this.checkingAnswer) {
+
+    setTimeout(() => {
+      this.quizLoading = false;
+    }, 200);
+    if (this.quizLoading) {
       return;
     }
+    this.quizLoading = true;
+
     if (this.state.checkingAnswer) {
       this.nextQuestion();
       return;
     }
-    this.checkingAnswer = true;
 
-    setTimeout(() => {
-      this.checkingAnswer = false;
-      this.setState({
-        checkingAnswer: true
-      });
-    }, 200);
+    // if timed quiz then skip displaying checked answer
+    if (this.props.quiz.isTimed) {
+      this.saveQuizAnswer();
+      this.nextQuestion();
+      return;
+    }
+
+    // Not a timed quiz, so go ahead and set checkingAnswer to true and save the quiz answer
+    this.setState({
+      checkingAnswer: true
+    });
     // save user selection to redux quiz state
+    this.saveQuizAnswer();
+  };
+
+  saveQuizAnswer = () => {
     const curQ = this.props.quiz.questions[this.state.questionIndex];
     const questions = [
       ...this.props.quiz.questions.map(q => {
@@ -435,7 +449,8 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
     ];
     const quiz = Object.assign({}, this.props.quiz, { questions });
     this.props.setQuiz(quiz);
-  }
+    return quiz;
+  };
 
   finishQuiz() {
     // if student, save the results to the api here, bypassing
@@ -450,13 +465,19 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
       this.savingQuiz = false;
     }, 1000);
 
-    this.props.saveQuizResults(this.props.quiz, this.props.user);
+    // if this is a timed quiz, we need to save the answer
+    let quiz = this.props.quiz;
+    if (this.props.quiz.isTimed) {
+      quiz = this.saveQuizAnswer();
+    }
+
+    this.props.saveQuizResults(quiz, this.props.user);
     this.setState({
       selectedAnswer: {},
       checkingAnswer: false,
       quizComplete: true,
       textAnswer: '',
-      currentQuiz: this.props.quiz,
+      currentQuiz: quiz,
       questionIndex: 0
     });
     // mixpanel.track("Finished Practice Exercise", {
@@ -523,7 +544,6 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
     let totQ = 0;
     let qi = 0;
     let curQ;
-    // let courseName
     if (this.props.quiz && this.props.quiz.id) {
       questions = this.props.quiz.questions;
       totQ = this.props.quiz.questions.length;
@@ -533,9 +553,7 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
     // const bubble = {
     //   backgroundImage: `url(${txtBubble})`
     // };
-    if (this.props.lesson && this.props.lesson.id) {
-      // courseName = this.props.lesson.courseLessons[0].course.name
-    }
+
     return (
       <div>
         <div className="main-content content-without-sidebar quiz animated fadeIn">
@@ -575,29 +593,29 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
                   </Row>
                   <Row className="button-row">
                     <Col md={5} sm={5} className="quiz-buttons">
-                      {!this.state.checkingAnswer && (
-                        <Button
-                          bsStyle="primary"
-                          type="submit"
-                          disabled={
-                            this.state.selectedAnswer.option === undefined
-                          }
-                        >
-                          Check
-                        </Button>
-                      )}
-                      {this.state.checkingAnswer &&
+                      {!this.state.checkingAnswer &&
+                        !this.props.quiz.isTimed && (
+                          <Button
+                            bsStyle="primary"
+                            type="submit"
+                            disabled={
+                              this.state.selectedAnswer.option === undefined
+                            }
+                          >
+                            Check
+                          </Button>
+                        )}
+                      {(this.state.checkingAnswer || this.props.quiz.isTimed) &&
                         qi + 1 < totQ && (
                           <Button
                             bsStyle="primary"
                             className="next-button"
                             type="submit"
-                            disabled={!this.state.checkingAnswer}
                           >
                             Next
                           </Button>
                         )}
-                      {this.state.checkingAnswer &&
+                      {(this.state.checkingAnswer || this.props.quiz.isTimed) &&
                         qi + 1 === totQ && (
                           <Button
                             bsStyle="primary"
@@ -630,13 +648,16 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
               </Row>
               <Row className="question">
                 <Col md={12} sm={12} xs={12} className="text-center">
-                  <Button
-                    bsStyle="primary"
-                    onClick={this.retakeQuiz}
-                    className=""
-                  >
-                    Retake Exercise
-                  </Button>
+                  {!this.props.quiz.isTimed && (
+                    <Button
+                      bsStyle="primary"
+                      onClick={this.retakeQuiz}
+                      className=""
+                    >
+                      Retake Exercise
+                    </Button>
+                  )}
+
                   <Button
                     bsStyle="primary"
                     onClick={this.backToLesson}

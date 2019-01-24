@@ -469,7 +469,7 @@ export interface GFLesson {
   order: number;
   primaryVideoPath: string;
   slideshowPath: string;
-  courseLessons: Array<{ id: string; courseID: string }>;
+  courseLessons: Array<{ id: string; courseID: string; order: number }>;
   cost: number;
   score?: number;
   quizName?: string;

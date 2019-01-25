@@ -25,7 +25,8 @@ import { FormUtil } from '../common/FormUtil';
 import {
   Ioption,
   ImeasurementPointList,
-  ImeasurementPointQuestion
+  ImeasurementPointQuestion,
+  Iuser
 } from '../../models';
 import {
   toggleEditMeasurementPointListModal,
@@ -103,6 +104,7 @@ const buildFieldConfig = (
 };
 
 interface Iprops extends React.Props<EditMeasurementPointListForm> {
+  user: Iuser;
   selectedMeasurementPointList: ImeasurementPointList;
   measurementPointListTypeOptions: any[];
   standardOptions: Ioption[];
@@ -295,55 +297,56 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     });
   }
 
-  getQuestionList = () => {
-    const mps = this.state.questions;
+  getQuestionList = (mps: ImeasurementPointQuestion[], allowEdit: boolean) => {
     return (
       <ListGroup className="question-list">
         {map(mps, (mp, index) => {
           return (
             <div className="question-list-item-container" key={mp.id}>
-              <span className="sort-controls">
-                <Button
-                  style={{ color: '#3FB5FC' }}
-                  onClick={() => {
-                    this.setSelectedQuestion(mp);
-                  }}
-                >
-                  <FontAwesomeIcon icon={['far', 'edit']}>
-                    {' '}
-                    Edit{' '}
-                  </FontAwesomeIcon>
-                </Button>
-                <Button
-                  style={{ color: '#3FB5FC' }}
-                  disabled={mp.order === 0}
-                  onClick={() => {
-                    this.swapQuestionOrder(index, index - 1);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faSortAmountUp} />
-                </Button>
-                <Button
-                  style={{ color: 'red' }}
-                  onClick={() => {
-                    this.deleteQuestion(mp);
-                  }}
-                >
-                  <FontAwesomeIcon icon={['far', 'times']}>
-                    {' '}
-                    Delete{' '}
-                  </FontAwesomeIcon>
-                </Button>
-                <Button
-                  style={{ color: '#3FB5FC' }}
-                  disabled={mp.order === mps.length - 1}
-                  onClick={() => {
-                    this.swapQuestionOrder(index + 1, index);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faSortAmountDown} />
-                </Button>
-              </span>
+              {allowEdit && (
+                <span className="sort-controls">
+                  <Button
+                    style={{ color: '#3FB5FC' }}
+                    onClick={() => {
+                      this.setSelectedQuestion(mp);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={['far', 'edit']}>
+                      {' '}
+                      Edit{' '}
+                    </FontAwesomeIcon>
+                  </Button>
+                  <Button
+                    style={{ color: '#3FB5FC' }}
+                    disabled={mp.order === 0}
+                    onClick={() => {
+                      this.swapQuestionOrder(index, index - 1);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faSortAmountUp} />
+                  </Button>
+                  <Button
+                    style={{ color: 'red' }}
+                    onClick={() => {
+                      this.deleteQuestion(mp);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={['far', 'times']}>
+                      {' '}
+                      Delete{' '}
+                    </FontAwesomeIcon>
+                  </Button>
+                  <Button
+                    style={{ color: '#3FB5FC' }}
+                    disabled={mp.order === mps.length - 1}
+                    onClick={() => {
+                      this.swapQuestionOrder(index + 1, index);
+                    }}
+                  >
+                    <FontAwesomeIcon icon={faSortAmountDown} />
+                  </Button>
+                </span>
+              )}
               <ListGroupItem
                 className="question-list-item"
                 onClick={() => {
@@ -366,11 +369,25 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
 
   render() {
     const { t } = this.props;
-    // const selectedCustomer = this.measurementsForm
-    //   ? this.measurementsForm.value.customerID
-    //   : undefined;
-
     const formClassName = `clearfix beacon-form ${this.props.colorButton}`;
+
+    const isAdmin = constants.hasSecurityFunction(
+      this.props.user,
+      constants.securityFunctions.ManageAllMeasurementPoints.id
+    );
+    const adminMps = this.state.questions.filter(
+      (mps: ImeasurementPointQuestion) => {
+        return !mps.customerID;
+      }
+    );
+    const customerMps = this.state.questions.filter(
+      (mps: ImeasurementPointQuestion) => {
+        return (
+          typeof mps.customerID !== 'undefined' &&
+          mps.customerID === this.props.user.id
+        );
+      }
+    );
 
     return (
       <div>
@@ -421,8 +438,14 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
             </Button>
           </Col>
           <Col xs={12} className="">
-            {this.getQuestionList()}
+            {isAdmin && this.getQuestionList(this.state.questions, true)}
+            {!isAdmin && this.getQuestionList(adminMps, false)}
           </Col>
+          {!isAdmin && (
+            <Col xs={12} className="">
+              {this.getQuestionList(customerMps, true)}
+            </Col>
+          )}
           <Col xs={12} className="form-buttons text-right">
             <Button
               bsStyle="default"

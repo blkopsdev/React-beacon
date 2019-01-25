@@ -401,10 +401,21 @@ const tiles = [
     color: 'purple',
     width: 360,
     height: 400,
+    url: '/customermeasurements',
+    securityFunction: securityFunctions.ManageCustomerMeasurementPoints.id,
+    description: ''
+  },
+  {
+    icon: icons.measurements,
+    iconType: 'img',
+    title: 'manageMeasurementPointList',
+    src: require('src/images/beaconManageUsers.jpg'),
+    srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
+    color: 'purple',
+    width: 360,
+    height: 400,
     url: '/measurements',
-    securityFunction:
-      securityFunctions.ManageAllMeasurementPoints.id ||
-      securityFunctions.ManageCustomerMeasurementPoints.id,
+    securityFunction: securityFunctions.ManageAllMeasurementPoints.id,
     description: ''
   }
 ];

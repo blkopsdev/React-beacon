@@ -272,9 +272,12 @@
     "numericMinValue": "Min Value",
     "numericMaxValue": "Max Value",
     "numericAllowDecimals": "Allow Decimals?",
-    "deleteConfirm": "Are you sure?",
+    "deleteConfirm":
+      "Are you sure you want to delete this measurement point list?",
+    "deleteConfirmMP":
+      "Are you sure you want to delete this measurement point?",
     "deleteListOk": "Delete This Measurement Point List?",
-    "deleteQuestionOk": "Delete This Measurement Point?",
+    "deleteOk": "Yes",
     "selectDefaultOptionID": "Default Option",
     "selectRememberBetweenInspection": "Remember Between Inspections?",
     "selectOptions": "Create Select Options",

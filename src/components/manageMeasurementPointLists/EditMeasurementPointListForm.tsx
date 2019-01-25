@@ -262,10 +262,10 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
         console.log('deleted', question);
       },
       onCancel: () => console.log('CANCEL: clicked'),
-      okText: this.props.t('deleteQuestionOk'),
+      okText: this.props.t('deleteOk'),
       cancelText: this.props.t('common:cancel')
     };
-    toastr.confirm(this.props.t('deleteConfirm'), toastrConfirmOptions);
+    toastr.confirm(this.props.t('deleteConfirmMP'), toastrConfirmOptions);
   }
 
   newQuestion(type: number) {
@@ -304,6 +304,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
             <div className="question-list-item-container" key={mp.id}>
               <span className="sort-controls">
                 <Button
+                  style={{ color: '#3FB5FC' }}
                   onClick={() => {
                     this.setSelectedQuestion(mp);
                   }}
@@ -314,15 +315,16 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
                   </FontAwesomeIcon>
                 </Button>
                 <Button
+                  style={{ color: '#3FB5FC' }}
                   disabled={mp.order === 0}
                   onClick={() => {
-                    // console.log('swap up', mp.label, mps[index - 1].label);
                     this.swapQuestionOrder(index, index - 1);
                   }}
                 >
-                  <FontAwesomeIcon icon={faSortAmountUp} fixedWidth size="2x" />
+                  <FontAwesomeIcon icon={faSortAmountUp} />
                 </Button>
                 <Button
+                  style={{ color: 'red' }}
                   onClick={() => {
                     this.deleteQuestion(mp);
                   }}
@@ -333,17 +335,13 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
                   </FontAwesomeIcon>
                 </Button>
                 <Button
+                  style={{ color: '#3FB5FC' }}
                   disabled={mp.order === mps.length - 1}
                   onClick={() => {
-                    // console.log('swap up', mp.label, mps[index + 1].label);
                     this.swapQuestionOrder(index + 1, index);
                   }}
                 >
-                  <FontAwesomeIcon
-                    icon={faSortAmountDown}
-                    fixedWidth
-                    size="2x"
-                  />
+                  <FontAwesomeIcon icon={faSortAmountDown} />
                 </Button>
               </span>
               <ListGroupItem
@@ -381,7 +379,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
             onMount={this.setForm}
             fieldConfig={this.fieldConfig}
           />
-          <Col xs={12} className="">
+          <Col xs={12} className="" style={{ marginLeft: '-15px' }}>
             <Button
               bsStyle="link"
               className=""

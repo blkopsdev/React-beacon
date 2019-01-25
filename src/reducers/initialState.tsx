@@ -102,6 +102,20 @@ export const initialLesson = {
   courseLessons: [],
   cost: 0
 };
+export const initialMeasurementPointList = {
+  id: '',
+  measurementPoints: {},
+  productGroupID: '',
+  standardID: '',
+  type: 1,
+  customerID: ''
+};
+export const initialMeasurementPointQuestion = {
+  id: '',
+  type: 1,
+  label: '',
+  order: 0
+};
 
 /* 
 * initialState
@@ -239,6 +253,14 @@ export default {
     ],
     tableFilters: initialTableFilters,
     totalPages: 1
+  },
+  manageMeasurementPointLists: {
+    totalPages: 1,
+    data: [],
+    selectedMeasurementPointList: initialMeasurementPointList,
+    showEditMeasurementPointListModal: false,
+    showEditMeasurementPointQuestionModal: false,
+    tableFilters: initialTableFilters
   },
   customers: [],
   facilities: [],

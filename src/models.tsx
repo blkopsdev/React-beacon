@@ -13,6 +13,7 @@ export interface ItableFiltersReducer {
   productGroup?: Ioption;
   manufacturer?: Ioption;
   sorted?: SortingRule[];
+  standard?: Ioption;
 }
 export interface ItableFiltersParams {
   search?: string;
@@ -26,6 +27,7 @@ export interface ItableFiltersParams {
   productGroup?: Ioption;
   manufacturer?: Ioption;
   sorted?: SortingRule[];
+  standard?: Ioption;
 }
 
 export interface Iuser {
@@ -321,6 +323,50 @@ export interface IproductInfo {
   systemSizeOptions: Ioption[];
 }
 
+export interface ImeasurementPointQuestionSelectOption {
+  id: string;
+  value: string;
+  label: string;
+  isDeleted?: boolean;
+  isDefault?: boolean;
+}
+export interface ImeasurementPointQuestion {
+  id: string;
+  type: number;
+  label: string;
+  order: number;
+  guideText?: string;
+  helpText?: string;
+  allowNotes?: boolean;
+  passFailDefault?: number;
+  numericMinValue?: number;
+  numericMaxValue?: number;
+  numericAllowDecimals?: boolean;
+  selectDefaultOptionID?: string;
+  selectRememberBetweenDevice?: boolean;
+  selectRememberBetweenInspection?: boolean;
+  selectOptions?: ImeasurementPointQuestionSelectOption[];
+  isDeleted?: boolean;
+}
+
+export interface ImeasurementPointList {
+  id: string;
+  measurementPoints: { [key: string]: ImeasurementPointQuestion };
+  productGroupID: string;
+  standardID: string;
+  type: number;
+  customerID?: string;
+}
+
+export interface ImanageMeasurementPointListsReducer {
+  data: ImeasurementPointList[];
+  totalPages: number;
+  selectedMeasurementPointList?: ImeasurementPointList;
+  showEditMeasurementPointListModal: boolean;
+  showEditMeasurementPointQuestionModal: boolean;
+  tableFilters: ItableFiltersReducer;
+}
+
 export interface IinitialState {
   user: Iuser;
   ajaxCallsInProgress: number;
@@ -340,6 +386,8 @@ export interface IinitialState {
   showSecurityFunctionsModal: boolean;
   training: ItrainingReducer;
   manageTraining: ImanageTrainingReducer;
+  productInfo: IproductInfo;
+  manageMeasurementPointLists: ImanageMeasurementPointListsReducer;
 }
 
 export interface Itile {
@@ -421,7 +469,7 @@ export interface GFLesson {
   order: number;
   primaryVideoPath: string;
   slideshowPath: string;
-  courseLessons: Array<{ id: string; courseID: string }>;
+  courseLessons: Array<{ id: string; courseID: string; order: number }>;
   cost: number;
   score?: number;
   quizName?: string;

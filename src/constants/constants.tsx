@@ -19,6 +19,38 @@ const jobTypesByID = {
   'ae78eaa3-89c2-490a-90c6-44e5cfa10b01': 'Repair'
 };
 
+const measurementPointListTypeOptions = [
+  { label: 'Annual', value: 1 },
+  { label: 'Verification', value: 2 }
+];
+const measurementPointQuestionTypeOptions = [
+  { label: 'Pass/Fail', value: 1 },
+  { label: 'Text', value: 2 },
+  { label: 'Numeric', value: 3 },
+  { label: 'Select', value: 4 }
+];
+const measurementPointQuestionTypes = {
+  QUESTION_PASSFAIL: 1,
+  QUESTION_TEXT: 2,
+  QUESTION_NUMERIC: 3,
+  QUESTION_SELECT: 4,
+  GROUP: 5,
+  PROCEDURE: 6
+};
+const measurementPointQuestionTypesInverse = {
+  1: 'Pass/Fail',
+  2: 'Text',
+  3: 'Numeric',
+  4: 'Select',
+  5: 'Group',
+  6: 'Procedure'
+};
+const measurementPointPassFailOptions = [
+  { label: 'Pass', value: 1 },
+  { label: 'Fail', value: 2 },
+  { label: 'Not Applicable', value: 3 }
+];
+
 const icons = {
   dashboard: require('../images/icons/BM_Dashboard.png'),
   inventory: require('../images/icons/BM_Inventory.png'),
@@ -29,7 +61,8 @@ const icons = {
   userQueue: require('../images/icons/BM_NewUserQueue.png'),
   payments: require('../images/icons/BM_Payments.png'),
   training: require('../images/icons/BM_Training.png'),
-  locations: require('../images/icons/BM_ManageLocations.png')
+  locations: require('../images/icons/BM_ManageLocations.png'),
+  measurements: require('../images/icons/BM_ManageLocations.png')
 };
 
 const securityFunctions = {
@@ -122,6 +155,16 @@ const securityFunctions = {
     id: '25961E0B-AFB4-4864-BF4C-A341A22553C6',
     name: 'securityF:ManageAllTraining',
     description: "Allows the user to view all user's training progress"
+  },
+  ManageAllMeasurementPoints: {
+    id: 'BE9173D7-B8AA-4065-973F-7B39A2226221',
+    name: 'securityF:ManageAllMeasurementPoints',
+    description: 'Allows the user to manage global measurement points'
+  },
+  ManageCustomerMeasurementPoints: {
+    id: '4EA1668B-220A-4FFB-865B-EB271EF6FF0E',
+    name: 'securityF:ManageCustomerMeasurementPoints',
+    description: 'Allows the user to manage global measurement points'
   }
 };
 
@@ -348,14 +391,25 @@ const tiles = [
     url: '/support',
     securityFunction: '',
     description: ''
+  },
+  {
+    icon: icons.measurements,
+    iconType: 'img',
+    title: 'manageMeasurementPointList',
+    src: require('src/images/beaconManageUsers.jpg'),
+    srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
+    color: 'purple',
+    width: 360,
+    height: 400,
+    url: '/measurements',
+    securityFunction:
+      securityFunctions.ManageAllMeasurementPoints.id ||
+      securityFunctions.ManageCustomerMeasurementPoints.id,
+    description: ''
   }
 ];
 
 const constants = {
-  adalAuth: {
-    tenant: 'a675e2fc-4806-4ec9-b49c-b0dc413b0e6b',
-    clientId: 'e5fb8173-e048-4cda-8acd-a8e735b4c927'
-  },
   toastrError: {
     transitionIn: 'bounceInDown' as transitionInType,
     transitionOut: 'bounceOutUp' as transitionOutType,
@@ -377,6 +431,11 @@ const constants = {
   jobTypeOptions,
   jobTypesByID,
   icons,
+  measurementPointListTypeOptions,
+  measurementPointQuestionTypeOptions,
+  measurementPointQuestionTypes,
+  measurementPointQuestionTypesInverse,
+  measurementPointPassFailOptions,
   hasSecurityFunction: (user: Iuser, securityFunction: string): boolean => {
     if (user.securityFunctions.indexOf(securityFunction) >= 0) {
       return true;

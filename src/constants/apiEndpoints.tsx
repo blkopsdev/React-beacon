@@ -47,19 +47,35 @@ const API = {
       trainingCheckout: `${root}training/savetrainingtransaction`,
       savequiz: `${root}training/savequiz`,
       startQuiz: `${root}training/startquiz`
+    },
+    measurements: {
+      addglobalmpl: `${root}/MeasurementPoint/AddGlobalMeasurementPointList`,
+      addcustomermpl: `${root}/MeasurementPoint/AddCustomerMeasurementPointList`
     }
   },
   PUT: {
     building: `${root}building`,
     floor: `${root}floor`,
     location: `${root}location`,
-    room: `${root}room`
+    room: `${root}room`,
+    measurements: {
+      updateglobalmpl: `${root}/MeasurementPoint/UpdateGlobalMeasurementPointList`,
+      updatecustomermpl: `${root}/MeasurementPoint/UpdateCustomerMeasurementPointList`
+    }
   },
   DELETE: {
     building: `${root}building`,
     floor: `${root}floor`,
     location: `${root}location`,
-    room: `${root}room`
+    room: `${root}room`,
+    measurements: {
+      deleteglobalmpl: `${root}/MeasurementPoint/deleteglobalmeasurementpointlist`,
+      deletecustomermpl: `${root}/MeasurementPoint/deletecustomermeasurementpointlist`,
+      deleteglobalmeasurementpoint: `${root}/MeasurementPoint/deleteglobalmeasurementpoint`,
+      deletecustomermeasurementpoint: `${root}/MeasurementPoint/deleteglobalmeasurementpoint`,
+      deleteglobalmeasurementpointselectoption: `${root}/MeasurementPoint/deleteglobalmeasurementpointselectoption`,
+      deletecustomermeasurementpointselectoption: `${root}/MeasurementPoint/deletecustomermeasurementpointselectoption`
+    }
   },
   GET: {
     building: {
@@ -107,6 +123,9 @@ const API = {
       getPurchasedTraining: `${root}training/getpurchasedtraining`,
       getAdminProgress: `${root}training/getadminprogress`,
       getQuizResults: `${root}/training/getquizresults`
+    },
+    measurements: {
+      getall: `${root}/measurementpoint/GetAllMeasurementPointLists`
     }
   }
 };

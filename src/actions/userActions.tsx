@@ -14,8 +14,8 @@ import * as localForage from 'localforage';
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
 export const authContext = new AuthenticationContext({
-  tenant: constants.adalAuth.tenant,
-  clientId: constants.adalAuth.clientId,
+  tenant: `${process.env.REACT_APP_ADAL_TENANT}`,
+  clientId: `${process.env.REACT_APP_ADAL_CLIENTID}`,
   cacheLocation: 'localStorage',
   redirectUri: `${process.env.REACT_APP_HOST_DOMAIN}`
 });
@@ -96,7 +96,7 @@ export function adalLogin(): ThunkResult<void> {
   return (dispatch, getState) => {
     // dispatch(beginAjaxCall()); removing loading here beacuse when we come back from adal login,
     // is when the success is called and it closses loading while userLogin is still waiting.
-    const resource = constants.adalAuth.clientId;
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
     authContext.acquireToken(
       resource,
       (message: string, token: string, msg: string) => {

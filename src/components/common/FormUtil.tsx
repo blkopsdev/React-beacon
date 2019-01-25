@@ -21,6 +21,7 @@ import Toggle from 'react-toggle';
 import { Ioption } from '../../models';
 import * as Datetime from 'react-datetime';
 import * as moment from 'moment';
+import RichTextEditor from './RichTextEditor';
 
 // import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -30,6 +31,19 @@ const ControlComponent = (props: any) => (
     <components.Control {...props} className="form-control" />
   </div>
 );
+
+// const OptionComponent = (props: any) => (
+//   <div>
+//     <components.Option {...props} className="select-option" />
+//     <Button
+//       onClick={() => {
+//         console.log(props);
+//       }}
+//     >
+//       Delete
+//     </Button>
+//   </div>
+// );
 
 // const CustomFeedback = ({type}: any) => {
 //   if (type === 'valid'){
@@ -339,7 +353,9 @@ export const FormUtil = {
             placeholder={meta.placeholder}
             isMulti={meta.isMulti}
             classNamePrefix="react-select"
-            isClearable={true}
+            isClearable={
+              typeof meta.isClearable !== 'undefined' ? meta.isClearable : true
+            }
             name={meta.name || ''}
             {...handler()}
             isDisabled={
@@ -441,6 +457,55 @@ export const FormUtil = {
       </Col>
     );
   },
+  Button: ({
+    handler,
+    touched,
+    hasError,
+    meta,
+    pristine,
+    errors,
+    submitted,
+    patchValue,
+    setErrors,
+    value
+  }: AbstractControl) => {
+    return (
+      <Col xs={meta.colWidth}>
+        <Button bsStyle="link" className="" onClick={meta.buttonAction}>
+          {meta.buttonName}
+        </Button>
+      </Col>
+    );
+  },
+  RichTextEditor: ({
+    handler,
+    touched,
+    hasError,
+    meta,
+    pristine,
+    errors,
+    submitted
+  }: AbstractControl) => (
+    <Col xs={meta.colWidth}>
+      <FormGroup
+        validationState={FormUtil.getValidationState(
+          pristine,
+          errors,
+          submitted
+        )}
+        bsSize="sm"
+        style={meta.style}
+      >
+        <ControlLabel>{meta.label}</ControlLabel>
+        <RichTextEditor
+          onChange={handler().onChange}
+          initialContent={meta.initialContent}
+          readOnly={meta.readOnly}
+        />
+        <FormControl.Feedback />
+      </FormGroup>
+    </Col>
+  ),
   translateForm: (config: FieldConfig, t: TranslationFunction) => {
     const newControls = mapValues(config.controls, field => {
       if (field.meta && field.meta.label) {

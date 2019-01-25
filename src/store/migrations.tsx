@@ -1,8 +1,10 @@
 import { MigrationManifest } from 'redux-persist';
 import { IinitialState } from 'src/models';
+import initialState from 'src/reducers/initialState';
 
 /*
 * Migration 1 runs when upgrading from 0 to 1
+* 0.0.1 = 1  and 0.2.2 = 22
 */
 export const migrations = {
   0: state => {
@@ -18,6 +20,13 @@ export const migrations = {
     return {
       ...state,
       user: { ...prevState.user, updatedVersionWhohoo: true }
+    };
+  },
+  7: state => {
+    const prevState = state as IinitialState;
+    return {
+      ...prevState,
+      manageMeasurementPointLists: initialState.manageMeasurementPointLists
     };
   }
 } as MigrationManifest;

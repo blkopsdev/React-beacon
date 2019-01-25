@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { filter } from 'lodash';
+import { filter, sortBy } from 'lodash';
 import { connect } from 'react-redux';
 import {
   Iuser,
@@ -182,7 +182,9 @@ class Courses extends React.Component<Props, State> {
       });
       return courseLesson.length ? true : false;
     });
-
+    const sortedLessons = sortBy(filteredLessons, (el: GFLesson) => {
+      return el.courseLessons[0].order;
+    });
     const sc = this.props.courses.filter(
       (course: any) => course.id === gfCourseId
     )[0];
@@ -191,7 +193,7 @@ class Courses extends React.Component<Props, State> {
       this.setState({
         selectedCourse: sc,
         display: 'lessons',
-        filteredLessons
+        filteredLessons: sortedLessons
       });
     } else {
       console.error(
@@ -201,7 +203,7 @@ class Courses extends React.Component<Props, State> {
       );
       // TODO should we just set lessons?
       if (filteredLessons.length) {
-        this.setState({ filteredLessons });
+        this.setState({ filteredLessons: sortedLessons });
       }
     }
 

@@ -191,6 +191,9 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
         selectedItem && selectedItem.id === index
           ? 'list-group-item new-product-item selected'
           : 'list-group-item new-product-item';
+      const subcategory = this.props.productInfo.subcategories[
+        product.subcategoryID
+      ];
       return (
         <li
           className={className}
@@ -203,10 +206,7 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
             <Col xs={5}>{product.sku}</Col>
             <Col xs={7}>{productInfo.brands[product.brandID].name}</Col>
             <Col xs={5}>
-              {
-                productInfo.mainCategories[product.subcategory.mainCategoryID]
-                  .name
-              }
+              {productInfo.mainCategories[subcategory.mainCategoryID].name}
             </Col>
             <Col xs={7}>{productInfo.brands[product.brandID].name}</Col>
           </Row>

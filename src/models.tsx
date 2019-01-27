@@ -101,7 +101,6 @@ export interface Isubcategory extends IbaseDataObject {
 export interface Ibrand extends IbaseDataObject {
   code: string;
 }
-// export interface Imanufacturer extends IbaseDataObject {}
 export interface IgasType extends IbaseDataObject {
   code: string;
 }
@@ -109,9 +108,7 @@ export interface IgasType extends IbaseDataObject {
 export interface IsystemSize extends IbaseDataObject {
   code: string;
 }
-export interface IproductGroup extends IbaseDataObject {
-  code: string;
-}
+
 export interface IinstallBase extends IbaseDataObject {
   code: string;
 
@@ -140,19 +137,15 @@ export interface Iproduct {
   subcategoryID: string;
   standardID: string;
   brandID: string;
-  manufacturerID: string;
   gasTypeID: string;
   powerID: string;
   systemSizeID: string;
-  productGroupID: string;
   subcategory: Isubcategory;
   // standard: IbaseDataObject;
   // brand: Ibrand;
-  // manufacturer: IbaseDataObject;
   // gasType: IgasType;
   // power: IbaseDataObject;
   // systemSize: IsystemSize;
-  // productGroup: IproductGroup;
   installs: IinstallBase[];
   quantity: number;
 }
@@ -305,19 +298,15 @@ export interface Iredirect {
 export interface IproductInfo {
   brands: { [key: string]: Ibrand };
   gasTypes: { [key: string]: IgasType };
-  // manufacturers: { [key: string]: IbaseDataObject };
   mainCategories: { [key: string]: IbaseDataObject };
   powers: { [key: string]: IbaseDataObject };
-  // productGroups: { [key: string]: IproductGroup };
   standards: { [key: string]: IbaseDataObject };
   subcategories: { [key: string]: Isubcategory };
   systemSizes: { [key: string]: IsystemSize };
   brandOptions: Ioption[];
   gasTypeOptions: Ioption[];
   mainCategoryOptions: Ioption[];
-  // manufacturerOptions: Ioption[];
   powerOptions: Ioption[];
-  // productGroupOptions: Ioption[];
   standardOptions: Ioption[];
   subcategoryOptions: Ioption[];
   systemSizeOptions: Ioption[];

@@ -208,7 +208,7 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
             <Col xs={5}>
               {productInfo.mainCategories[subcategory.mainCategoryID].name}
             </Col>
-            <Col xs={7}>{productInfo.brands[product.brandID].name}</Col>
+            <Col xs={7}>{subcategory.name}</Col>
           </Row>
         </li>
       );

@@ -220,7 +220,7 @@ export default function ManageInventory(
   };
 }
 /*
-Brand, GasType, Main Category, Manufacturer, Power, Product Group, Standard, Subcategory, System Size 
+Brand, GasType, Main Category, Power, Product Group, Standard, Subcategory, System Size 
 */
 export function productInfo(
   state: IproductInfo = initialState.manageInventory.productInfo,
@@ -232,9 +232,7 @@ export function productInfo(
       const brands = keyBy(pi[0], (item: Ibrand) => item.id);
       const gasTypes = keyBy(pi[1], (item: IgasType) => item.id);
       const mainCategories = keyBy(pi[2], (item: IbaseDataObject) => item.id);
-      // const manufacturers = keyBy(pi[3], (item: IbaseDataObject) => item.id);
       const powers = keyBy(pi[3], (item: IbaseDataObject) => item.id);
-      // const productGroups = keyBy(pi[5], (item: IproductGroup) => item.id);
       const standards = keyBy(pi[4], (item: IbaseDataObject) => item.id);
       const subcategories = keyBy(pi[5], (item: Isubcategory) => item.id);
       const systemSizes = keyBy(pi[6], (item: IsystemSize) => item.id);
@@ -243,9 +241,7 @@ export function productInfo(
       const brandOptions = FormUtil.convertToOptions(pi[0]);
       const gasTypeOptions = FormUtil.convertToOptions(pi[1]);
       const mainCategoryOptions = FormUtil.convertToOptions(pi[2]);
-      // const manufacturerOptions = FormUtil.convertToOptions(pi[3]);
       const powerOptions = FormUtil.convertToOptions(pi[3]);
-      // const productGroupOptions = FormUtil.convertToOptions(pi[5]);
       const standardOptions = FormUtil.convertToOptions(pi[4]);
       const subcategoryOptions = FormUtil.convertToOptions(pi[5]);
       const systemSizeOptions = FormUtil.convertToOptions(pi[6]);

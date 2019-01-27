@@ -85,17 +85,17 @@ const getInventoryHelper = (dispatch: any, getState: any) => {
     page,
     search,
     facility,
-    manufacturer,
+    brand,
     mainCategory
   } = getState().manageInventory.tableFilters;
   const facilityID = facility
     ? facility.value
     : getState().user.facilities[0].id;
-  const manufacturerID = manufacturer ? manufacturer.value : '';
+  const brandID = brand ? brand.value : '';
   const mainCategoryID = mainCategory ? mainCategory.value : '';
   return axios
     .get(API.GET.inventory.getinventory, {
-      params: { page, search, facilityID, manufacturerID, mainCategoryID }
+      params: { page, search, facilityID, brandID, mainCategoryID }
     })
     .then(data => {
       if (!data.data) {

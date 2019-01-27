@@ -163,7 +163,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       this.setState({ selectedInstall: {} });
     }
 
-    // we only need to check the mainCategory options because both manufacturers and mainCategory options are received in the same API response
+    // we only need to check the mainCategory options because both brands and mainCategory options are received in the same API response
     // and before they are received, there will not be any length.
     if (
       prevProps.productInfo.mainCategoryOptions.length !==

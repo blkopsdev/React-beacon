@@ -46,7 +46,7 @@ export function getProductInfo(): ThunkResult<void> {
 export function getProducts(
   page: number,
   search: string,
-  productGroupID: string
+  mainCategoryID: string
 ): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
@@ -54,7 +54,7 @@ export function getProducts(
     const pagingMode = 'paged';
     return axios
       .get(API.GET.inventory.products, {
-        params: { page, search, productGroupID, pagingMode }
+        params: { page, search, mainCategoryID, pagingMode }
       })
       .then(data => {
         if (!data.data) {
@@ -86,16 +86,16 @@ const getInventoryHelper = (dispatch: any, getState: any) => {
     search,
     facility,
     manufacturer,
-    productGroup
+    mainCategory
   } = getState().manageInventory.tableFilters;
   const facilityID = facility
     ? facility.value
     : getState().user.facilities[0].id;
   const manufacturerID = manufacturer ? manufacturer.value : '';
-  const productGroupID = productGroup ? productGroup.value : '';
+  const mainCategoryID = mainCategory ? mainCategory.value : '';
   return axios
     .get(API.GET.inventory.getinventory, {
-      params: { page, search, facilityID, manufacturerID, productGroupID }
+      params: { page, search, facilityID, manufacturerID, mainCategoryID }
     })
     .then(data => {
       if (!data.data) {

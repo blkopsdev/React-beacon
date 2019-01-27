@@ -163,17 +163,17 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       this.setState({ selectedInstall: {} });
     }
 
-    // we only need to check the productGroup options because both manufacturers and productGroup options are received in the same API response
+    // we only need to check the mainCategory options because both manufacturers and mainCategory options are received in the same API response
     // and before they are received, there will not be any length.
     if (
-      prevProps.productInfo.productGroupOptions.length !==
-        this.props.productInfo.productGroupOptions.length ||
-      prevProps.productInfo.manufacturerOptions.length !==
-        this.props.productInfo.manufacturerOptions.length
+      prevProps.productInfo.mainCategoryOptions.length !==
+        this.props.productInfo.mainCategoryOptions.length ||
+      prevProps.productInfo.brandOptions.length !==
+        this.props.productInfo.brandOptions.length
     ) {
       console.log(
         're setting columns and table filters',
-        this.props.productInfo.manufacturerOptions
+        this.props.productInfo.brandOptions
       );
       this.setColumns();
       this.setState({ searchFieldConfig: this.buildSearchControls() });
@@ -213,9 +213,9 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     this.props.setTableFilter({
       facility,
       customer: undefined,
-      productGroup: undefined,
+      mainCategory: undefined,
       search: '',
-      manufacturer: undefined,
+      brand: undefined,
       page: 1
     });
   };
@@ -259,7 +259,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
 
   /*
   * Set Columns sets columns to state
-  * setting columns here in order to reset them if and after we receive productGroup and manufacturer options
+  * setting columns here in order to reset them if and after we receive mainCategory and brand options
   */
   setColumns = () => {
     const columns = TableUtil.translateHeaders(
@@ -274,18 +274,18 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           accessor: 'name',
           minWidth: 300
         },
-        {
-          Header: 'common:productGroup',
-          accessor: ({ productGroupID }: Iproduct) => {
-            return this.props.productInfo.productGroups[productGroupID].name;
-          },
-          id: 'productGroup',
-          minWidth: 170
-        },
+        // {
+        //   Header: 'common:productGroup',
+        //   accessor: ({ productGroupID }: Iproduct) => {
+        //     return this.props.productInfo.productGroups[productGroupID].name;
+        //   },
+        //   id: 'productGroup',
+        //   minWidth: 170
+        // },
         {
           Header: 'manufacturer',
-          accessor: ({ manufacturerID }: Iproduct) => {
-            return this.props.productInfo.manufacturers[manufacturerID].name;
+          accessor: ({ brandID }: Iproduct) => {
+            return this.props.productInfo.brands[brandID].name;
           },
           id: 'manufacturer',
           minWidth: 170
@@ -326,26 +326,26 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           defaultValue: this.props.tableFilters.search
         }
       },
-      productGroup: {
+      mainCategory: {
         render: FormUtil.SelectWithoutValidation,
         meta: {
-          label: 'common:productGroup',
-          options: this.props.productInfo.productGroupOptions,
+          label: 'common:mainCategory',
+          options: this.props.productInfo.mainCategoryOptions,
           colWidth: 3,
           type: 'select',
-          placeholder: 'productGroupPlaceholder',
-          defaultValue: this.props.tableFilters.productGroup
+          placeholder: 'mainCategoryPlaceholder',
+          defaultValue: this.props.tableFilters.mainCategory
         }
       },
-      manufacturer: {
+      brand: {
         render: FormUtil.SelectWithoutValidation,
         meta: {
           label: 'common:manufacturer',
-          options: this.props.productInfo.manufacturerOptions,
+          options: this.props.productInfo.brandOptions,
           colWidth: 3,
           type: 'select',
           placeholder: 'manufacturerPlaceholder',
-          defaultValue: this.props.tableFilters.manufacturer
+          defaultValue: this.props.tableFilters.brand
         }
       }
     };
@@ -465,11 +465,11 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           this.props.setTableFilter({ search: value, page: 1 }); // this causes performance issues so we use a rudamentary debounce
         }, constants.tableSearchDebounceTime);
         break;
-      case 'productGroup':
-        this.props.setTableFilter({ productGroup: value, page: 1 });
+      case 'mainCategory':
+        this.props.setTableFilter({ mainCategory: value, page: 1 });
         break;
-      case 'manufacturer':
-        this.props.setTableFilter({ manufacturer: value, page: 1 });
+      case 'brand':
+        this.props.setTableFilter({ brand: value, page: 1 });
         break;
       default:
         break;
@@ -510,7 +510,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
   };
   render() {
     console.log('rendering inventory table');
-    if (this.props.productInfo.productGroupOptions.length === 0) {
+    if (this.props.productInfo.mainCategoryOptions.length === 0) {
       return (
         <Col xs={12}>
           <h4> loading... </h4>

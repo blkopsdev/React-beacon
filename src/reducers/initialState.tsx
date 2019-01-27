@@ -105,7 +105,7 @@ export const initialLesson = {
 export const initialMeasurementPointList = {
   id: '',
   measurementPoints: {},
-  productGroupID: '',
+  mainCategoryID: '',
   standardID: '',
   type: 1,
   customerID: ''

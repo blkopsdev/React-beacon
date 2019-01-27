@@ -125,13 +125,13 @@ class ManageProductQueue extends React.Component<
       this.setState({ selectedQueueObject: {} });
     }
 
-    // we only need to check the productGroup options because both manufacturers and productGroup options are received in the same API response
+    // we only need to check the mainCategory options because both manufacturers and mainCategory options are received in the same API response
     // and before they are received, there will not be any length.
     if (
-      prevProps.productInfo.productGroupOptions.length !==
-        this.props.productInfo.productGroupOptions.length ||
-      prevProps.productInfo.manufacturerOptions.length !==
-        this.props.productInfo.manufacturerOptions.length
+      prevProps.productInfo.mainCategoryOptions.length !==
+        this.props.productInfo.mainCategoryOptions.length ||
+      prevProps.productInfo.brandOptions.length !==
+        this.props.productInfo.brandOptions.length
     ) {
       console.log('re setting columns');
       this.setColumns();
@@ -163,7 +163,7 @@ class ManageProductQueue extends React.Component<
 
   /*
   * Set Columns sets columns to state
-  * setting columns here in order to reset them if and after we receive productGroup and manufacturer options
+  * setting columns here in order to reset them if and after we receive mainCategory and manufacturer options
   */
   setColumns = () => {
     const columns = TableUtil.translateHeaders(
@@ -177,18 +177,18 @@ class ManageProductQueue extends React.Component<
           accessor: 'product.name'
         },
         {
-          Header: 'common:productGroup',
+          Header: 'common:mainCategory',
           accessor: ({ product }: IproductQueueObject) => {
-            return this.props.productInfo.productGroups[product.productGroupID]
-              .name;
+            return this.props.productInfo.mainCategories[
+              product.subcategory.mainCategoryID
+            ].name;
           },
-          id: 'productGroup'
+          id: 'mainCategory'
         },
         {
           Header: 'manufacturer',
           accessor: ({ product }: IproductQueueObject) => {
-            return this.props.productInfo.manufacturers[product.manufacturerID]
-              .name;
+            return this.props.productInfo.brands[product.brandID].name;
           },
           id: 'manufacturer'
         },
@@ -307,7 +307,7 @@ class ManageProductQueue extends React.Component<
   };
   render() {
     console.log('rendering inventory table');
-    if (this.props.productInfo.productGroupOptions.length === 0) {
+    if (this.props.productInfo.mainCategoryOptions.length === 0) {
       return (
         <Col xs={12}>
           <h4> loading... </h4>

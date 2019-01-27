@@ -27,7 +27,7 @@ interface IdispatchProps {
   selectedMeasurementPointList: ImeasurementPointList;
   showEditMeasurementPointListModal: boolean;
   loading: boolean;
-  productGroupOptions: Ioption[];
+  mainCategoryOptions: Ioption[];
   standardOptions: Ioption[];
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
   toggleEditMeasurementPointQuestionModal: typeof toggleEditMeasurementPointQuestionModal;
@@ -71,7 +71,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     showEditCustomerModal: state.showEditCustomerModal,
     showEditFacilityModal: state.showEditFacilityModal,
     standardOptions: state.productInfo.standardOptions,
-    productGroupOptions: state.productInfo.productGroupOptions,
+    mainCategoryOptions: state.productInfo.mainCategoryOptions,
     selectedMeasurementPointList:
       state.manageMeasurementPointLists.selectedMeasurementPointList
   };

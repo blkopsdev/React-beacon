@@ -103,25 +103,25 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
     }
   }
   buildFieldConfig = (productInfo: IproductInfo) => {
-    let defaultProductGroup = null;
+    let defaultmainCategory = null;
     if (this.props.selectedQueueObject) {
-      const pg = this.props.productInfo.productGroups[
-        this.props.selectedQueueObject.product.productGroupID
+      const mainC = this.props.productInfo.mainCategories[
+        this.props.selectedQueueObject.product.subcategory.mainCategoryID
       ];
-      defaultProductGroup = { label: pg.name, value: pg.id };
+      defaultmainCategory = { label: mainC.name, value: mainC.id };
     }
     const fieldConfigControls = {
-      productGroupID: {
+      mainCategoryID: {
         render: FormUtil.SelectWithoutValidation,
         meta: {
-          options: productInfo.productGroupOptions,
-          label: 'common:productGroup',
+          options: productInfo.mainCategoryOptions,
+          label: 'common:mainCategory',
           colWidth: 12,
           placeholder: 'common:searchPlaceholder',
           isMulti: false,
           name: 'product-group',
           disabled: !!this.props.selectedQueueObject,
-          defaultValue: defaultProductGroup
+          defaultValue: defaultmainCategory
         }
       },
       search: {
@@ -147,10 +147,10 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
     }
     console.log(this.userForm.value);
 
-    const { productGroupID, search } = this.userForm.value;
-    const productGroupUUID = productGroupID ? productGroupID.value : '';
+    const { mainCategoryID, search } = this.userForm.value;
+    const mainCategoryUUID = mainCategoryID ? mainCategoryID.value : '';
 
-    this.props.getProducts(1, search, productGroupUUID);
+    this.props.getProducts(1, search, mainCategoryUUID);
   };
   setForm = (form: AbstractControl) => {
     this.userForm = form;
@@ -171,7 +171,7 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
       !this.props.loading &&
       this.userForm &&
       this.userForm.value &&
-      (this.userForm.value.search || this.userForm.value.productGroupID)
+      (this.userForm.value.search || this.userForm.value.mainCategoryID)
     ) {
       searchActive = true;
     }
@@ -201,11 +201,12 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
           <h4> {product.name} </h4>
           <Row>
             <Col xs={5}>{product.sku}</Col>
-            <Col xs={7}>
-              {productInfo.manufacturers[product.manufacturerID].name}
-            </Col>
+            <Col xs={7}>{productInfo.brands[product.brandID].name}</Col>
             <Col xs={5}>
-              {productInfo.productGroups[product.productGroupID].name}
+              {
+                productInfo.mainCategories[product.subcategory.mainCategoryID]
+                  .name
+              }
             </Col>
             <Col xs={7}>{productInfo.brands[product.brandID].name}</Col>
           </Row>

@@ -10,8 +10,8 @@ export interface ItableFiltersReducer {
   endDate?: string;
   facility?: Ioption;
   customer?: Ioption;
-  productGroup?: Ioption;
-  manufacturer?: Ioption;
+  mainCategory?: Ioption;
+  brand?: Ioption;
   sorted?: SortingRule[];
   standard?: Ioption;
 }
@@ -24,8 +24,8 @@ export interface ItableFiltersParams {
   endDate?: string;
   facility?: Ioption;
   customer?: Ioption;
-  productGroup?: Ioption;
-  manufacturer?: Ioption;
+  mainCategory?: Ioption;
+  brand?: Ioption;
   sorted?: SortingRule[];
   standard?: Ioption;
 }
@@ -305,19 +305,19 @@ export interface Iredirect {
 export interface IproductInfo {
   brands: { [key: string]: Ibrand };
   gasTypes: { [key: string]: IgasType };
-  manufacturers: { [key: string]: IbaseDataObject };
+  // manufacturers: { [key: string]: IbaseDataObject };
   mainCategories: { [key: string]: IbaseDataObject };
   powers: { [key: string]: IbaseDataObject };
-  productGroups: { [key: string]: IproductGroup };
+  // productGroups: { [key: string]: IproductGroup };
   standards: { [key: string]: IbaseDataObject };
   subcategories: { [key: string]: Isubcategory };
   systemSizes: { [key: string]: IsystemSize };
   brandOptions: Ioption[];
   gasTypeOptions: Ioption[];
   mainCategoryOptions: Ioption[];
-  manufacturerOptions: Ioption[];
+  // manufacturerOptions: Ioption[];
   powerOptions: Ioption[];
-  productGroupOptions: Ioption[];
+  // productGroupOptions: Ioption[];
   standardOptions: Ioption[];
   subcategoryOptions: Ioption[];
   systemSizeOptions: Ioption[];
@@ -352,7 +352,7 @@ export interface ImeasurementPointQuestion {
 export interface ImeasurementPointList {
   id: string;
   measurementPoints: { [key: string]: ImeasurementPointQuestion };
-  productGroupID: string;
+  mainCategoryID: string;
   standardID: string;
   type: number;
   customerID?: string;

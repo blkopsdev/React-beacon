@@ -106,17 +106,6 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
       timeLeft: 0,
       timeoutWarningShown: false
     };
-    this.handleChange = this.handleChange.bind(this);
-    this.backToLesson = this.backToLesson.bind(this);
-    this.backToCourses = this.backToCourses.bind(this);
-    this.retakeQuiz = this.retakeQuiz.bind(this);
-    this.nextQuestion = this.nextQuestion.bind(this);
-    this.printScore = this.printScore.bind(this);
-    this.checkAnswer = this.checkAnswer.bind(this);
-    this.finishQuiz = this.finishQuiz.bind(this);
-    // this.showBadge = this.showBadge.bind(this);
-    this.backToAllCourses = this.backToAllCourses.bind(this);
-    this.getQuizByID = this.getQuizByID.bind(this);
 
     this.savingQuiz = false;
     this.quizLoading = false;
@@ -252,7 +241,7 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
   /*
   * There is a quiz in progress, so lets reload it
   */
-  reloadExistingQuiz() {
+  reloadExistingQuiz = () => {
     window.scrollTo(0, 0);
     let i = 0;
 
@@ -280,10 +269,10 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
         currentQuiz: this.props.quiz
       });
     }
-  }
-  loadQuiz() {
+  };
+  loadQuiz = () => {
     this.setState({ currentQuiz: this.props.quiz });
-  }
+  };
 
   /*
   * First try to find the quiz in the quizzes redux store, then try to get it from the API.
@@ -291,7 +280,7 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
   * we have to use the endpoint that gets all the quizzes for the lesson.
   * 
   */
-  getQuizByID() {
+  getQuizByID = () => {
     const quiz = this.props.quizzes[this.props.match.params.quizID];
     if (!!quiz && quiz.questions.length) {
       this.props.setQuiz(quiz);
@@ -306,8 +295,8 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
         return;
       }
     }
-  }
-  setLesson(lessonID: string) {
+  };
+  setLesson = (lessonID: string) => {
     const newLesson = this.props.lessons[lessonID];
     if (newLesson) {
       this.props.setLesson(
@@ -320,7 +309,7 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
         this.props.user
       );
     }
-  }
+  };
 
   // showBadge(badge: GFBadge) {
   // const toastrOptions = {
@@ -331,7 +320,7 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
   // toastr.success('', '', toastrOptions)
   // }
 
-  handleChange(option: any) {
+  handleChange = (option: any) => {
     // this.setState({ [e.target.name]: e.target.value });
     // it was set to option.option.trim();
     if (option.name === 'textAnswer') {
@@ -339,21 +328,21 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
     } else {
       this.setState({ selectedAnswer: option });
     }
-  }
+  };
 
-  backToLesson() {
+  backToLesson = () => {
     this.props.history.replace(
       `/training/${this.props.match.params.courseID}/${
         this.props.match.params.lessonID
       }`
     );
-  }
+  };
 
-  backToCourses() {
+  backToCourses = () => {
     this.props.history.replace(`/training/${this.props.match.params.courseID}`);
-  }
+  };
 
-  retakeQuiz() {
+  retakeQuiz = () => {
     const questions = this.props.quiz.questions.map(q => {
       return Object.assign({}, q, { userAnswer: {} });
     });
@@ -370,9 +359,9 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
       checkingAnswer: false,
       quizComplete: false
     });
-  }
+  };
 
-  nextQuestion() {
+  nextQuestion = () => {
     // TODO test for the last question and show results
     if (this.goingToNextQuestion) {
       return;
@@ -399,7 +388,7 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
         el.checked = false;
       }
     );
-  }
+  };
   /*
     I need to click check answer and it triggers a statement that lets me know if the answer is wrong.
   */
@@ -452,7 +441,7 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
     return quiz;
   };
 
-  finishQuiz() {
+  finishQuiz = () => {
     // if student, save the results to the api here, bypassing
     // redux flow since we do not need to update the store.
     // prevent doubl submission
@@ -484,9 +473,9 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
     //   quizID: this.props.quiz.id,
     //   quizName: this.props.quiz.name
     // });
-  }
+  };
 
-  printScore() {
+  printScore = () => {
     let numCorrect = 0;
     const tot = this.state.currentQuiz.questions.length;
     forEach(this.state.currentQuiz.questions, q => {
@@ -533,11 +522,11 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
         </div>
       </div>
     );
-  }
+  };
 
-  backToAllCourses() {
+  backToAllCourses = () => {
     this.props.history.replace(`/training`);
-  }
+  };
 
   render() {
     let questions;

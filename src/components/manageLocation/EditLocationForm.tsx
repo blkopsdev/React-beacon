@@ -78,7 +78,6 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(buildFieldConfig(), this.props.t);
-    this.setForm = this.setForm.bind(this);
   }
 
   componentDidMount() {

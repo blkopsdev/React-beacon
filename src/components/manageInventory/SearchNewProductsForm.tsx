@@ -57,7 +57,6 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
       this.buildFieldConfig(this.props.productInfo),
       this.props.t
     );
-    this.setForm = this.setForm.bind(this);
   }
   // componentDidUpdate(prevProps: Iprops) {
   // }

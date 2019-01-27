@@ -193,8 +193,6 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
   private subscription: any;
   constructor(props: Iprops) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.setForm = this.setForm.bind(this);
     this.state = {
       fieldConfig: { controls: {} }
     };
@@ -356,8 +354,15 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
 
         <input
           hidden={true}
-          name="Amount"
-          id="Amount"
+          name="AMOUNT"
+          id="AMOUNT"
+          value={this.calculateSubtotal() / 100}
+        />
+        <input hidden={true} name="INVOICE1" id="INVOICE1" value="0001" />
+        <input
+          hidden={true}
+          name="AMOUNT1"
+          id="AMOUNT1"
           value={this.calculateSubtotal() / 100}
         />
 

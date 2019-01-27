@@ -35,7 +35,6 @@ export default class SearchTableForm extends React.Component<Iprops, Istate> {
   private showBtn: boolean;
   constructor(props: Iprops) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
     this.showBtn =
       typeof this.props.showSearchButton === 'undefined'
         ? true

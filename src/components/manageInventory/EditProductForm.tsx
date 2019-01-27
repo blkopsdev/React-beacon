@@ -47,19 +47,19 @@ const buildFieldConfig = (
   disabled: boolean
 ) => {
   const fieldConfigControls = {
-    name: {
-      options: {
-        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
-      },
-      render: FormUtil.TextInput,
-      meta: {
-        label: 'name',
-        colWidth: 12,
-        type: 'input',
-        name: 'product-name',
-        disabled
-      }
-    },
+    // name: {
+    //   options: {
+    //     validators: [Validators.required, FormUtil.validators.requiredWithTrim]
+    //   },
+    //   render: FormUtil.TextInput,
+    //   meta: {
+    //     label: 'name',
+    //     colWidth: 12,
+    //     type: 'input',
+    //     name: 'product-name',
+    //     disabled
+    //   }
+    // },
     sku: {
       options: {
         validators: [Validators.required, FormUtil.validators.requiredWithTrim]
@@ -142,6 +142,7 @@ const buildFieldConfig = (
         placeholder: 'common:searchPlaceholder',
         isMulti: false,
         name: 'gas-type',
+        isClearable: true,
         disabled
       }
     },
@@ -154,6 +155,7 @@ const buildFieldConfig = (
         placeholder: 'common:searchPlaceholder',
         isMulti: false,
         name: 'power',
+        isClearable: true,
         disabled
       }
     },
@@ -166,6 +168,7 @@ const buildFieldConfig = (
         placeholder: 'common:searchPlaceholder',
         isMulti: false,
         name: 'system-size',
+        isClearable: true,
         disabled
       }
     },
@@ -178,6 +181,7 @@ const buildFieldConfig = (
         placeholder: 'common:searchPlaceholder',
         isMulti: false,
         name: 'standard',
+        isClearable: true,
         disabled
       }
     }
@@ -217,7 +221,6 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
       ),
       this.props.t
     );
-    this.setForm = this.setForm.bind(this);
   }
   // componentDidUpdate(prevProps: Iprops) {
   // }
@@ -239,8 +242,9 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
             )
           });
           // special set for mainCategory
-          if (key === 'subcategory') {
-            const { mainCategoryID } = value || ('' as any);
+          if (key === 'subcategory' && typeof value === 'object') {
+            const subcat = value as Isubcategory;
+            const { mainCategoryID } = subcat;
             this.userForm.patchValue({
               mainCategoryID: find(
                 this.props.productInfo[`mainCategoryOptions`],
@@ -393,6 +397,14 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
             </p>
           </Col>
         )}
+        {this.props.selectedItem &&
+          this.props.selectedItem.id && (
+            <Col xs={12}>
+              <h5 style={{ lineHeight: '1.4rem' }}>
+                Laboratory Air Piston CO2 1Hp Quadraplex
+              </h5>
+            </Col>
+          )}
 
         <form onSubmit={this.handleSubmit} className="clearfix beacon-form">
           <FormGenerator

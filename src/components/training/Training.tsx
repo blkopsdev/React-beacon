@@ -107,14 +107,6 @@ class Courses extends React.Component<Props, State> {
       selectedCourse: { name: '', description: '' },
       filteredLessons: []
     };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.printStudentCourses = this.printStudentCourses.bind(this);
-    this.printLessonsList = this.printLessonsList.bind(this);
-    this.loadCourseLessons = this.loadCourseLessons.bind(this);
-    this.loadLessonAndQuizzes = this.loadLessonAndQuizzes.bind(this);
-    this.goBack = this.goBack.bind(this);
-    this.goToProgress = this.goToProgress.bind(this);
   }
   componentWillMount() {
     this.props.closeAllModals();
@@ -174,7 +166,7 @@ class Courses extends React.Component<Props, State> {
   /*
   * Get the lessons for the selected course and show them
   */
-  loadCourseLessons(gfCourseId: string) {
+  loadCourseLessons = (gfCourseId: string) => {
     // get lessons
     const filteredLessons = filter(this.props.lessons, lesson => {
       const courseLesson = filter(lesson.courseLessons, {
@@ -212,13 +204,13 @@ class Courses extends React.Component<Props, State> {
     if (!filteredLessons.length) {
       this.getLessonsByCourseID(gfCourseId);
     }
-  }
+  };
 
-  getLessonsByCourseID(courseId: string) {
+  getLessonsByCourseID = (courseId: string) => {
     this.props.getLessonsByCourseID(courseId, this.props.user);
-  }
+  };
 
-  loadLessonAndQuizzes(gfLesson: any) {
+  loadLessonAndQuizzes = (gfLesson: any) => {
     // mixpanel.track('Lesson clicked', {
     //   lesson: gfLesson.id,
     //   name: gfLesson.name
@@ -230,25 +222,25 @@ class Courses extends React.Component<Props, State> {
     );
     window.scrollTo(0, 0);
     this.props.history.push(`${this.props.match.url}/${gfLesson.id}`);
-  }
+  };
 
-  handleChange(e: any) {
+  handleChange = (e: any) => {
     this.setState({ [e.target.name]: e.target.value } as State);
-  }
+  };
 
-  goBack() {
+  goBack = () => {
     let path = ``;
     if (this.state.display === 'lessons') {
       this.setState({ display: 'courses' });
       path = `/training`;
     }
     this.props.history.push(path);
-  }
-  goToProgress() {
+  };
+  goToProgress = () => {
     this.props.history.push('/progress');
-  }
+  };
 
-  printStudentCourses() {
+  printStudentCourses = () => {
     const showBuyButton = (id: string) =>
       this.props.purchasedTraining.indexOf(id) === -1;
 
@@ -305,26 +297,26 @@ class Courses extends React.Component<Props, State> {
         </Col>
       </Row>
     );
-  }
-  shortenDescription(text: string) {
+  };
+  shortenDescription = (text: string) => {
     let ret = text;
     const maxLength = 95;
     if (ret.length > maxLength) {
       ret = ret.substr(0, maxLength - 3) + '...';
     }
     return ret;
-  }
+  };
 
-  shortenTitle(text: string) {
+  shortenTitle = (text: string) => {
     let ret = text;
     const maxLength = 55;
     if (ret.length > maxLength) {
       ret = ret.substr(0, maxLength - 3) + '...';
     }
     return ret;
-  }
+  };
 
-  printLessonsList() {
+  printLessonsList = () => {
     const ProgressColumn = ({ progress }: { progress: number }) => (
       <Col md={3}>
         <span
@@ -436,12 +428,12 @@ class Courses extends React.Component<Props, State> {
         </div>
       </div>
     );
-  }
+  };
 
   /*
   * figure out what to display, courses for students, courses for teachers, or a list of lessons after they select a course
   */
-  displayCourseHtml() {
+  displayCourseHtml = () => {
     let displayHtml = <div />;
     if (this.state.display === 'courses') {
       displayHtml = this.printStudentCourses();
@@ -450,9 +442,9 @@ class Courses extends React.Component<Props, State> {
       displayHtml = this.printLessonsList();
     }
     return displayHtml;
-  }
+  };
 
-  getBreadcrumbs() {
+  getBreadcrumbs = () => {
     if (!!this.props.match.params.quizID) {
       return (
         <Breadcrumb>
@@ -547,9 +539,9 @@ class Courses extends React.Component<Props, State> {
     }
 
     return '';
-  }
+  };
 
-  getBannerTitle() {
+  getBannerTitle = () => {
     if (!!this.props.match.params.quizID) {
       return this.props.quiz.name;
     }
@@ -560,7 +552,7 @@ class Courses extends React.Component<Props, State> {
       return this.state.selectedCourse.name;
     }
     return 'Training';
-  }
+  };
 
   render() {
     return (

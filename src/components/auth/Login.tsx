@@ -52,7 +52,6 @@ class Login extends React.Component<Iprops, Istate> {
   constructor(props: Iprops) {
     super(props);
 
-    this.login = this.login.bind(this);
     this.state = {
       userLoginFailed: false
     };
@@ -95,12 +94,12 @@ class Login extends React.Component<Iprops, Istate> {
     // <p>You must log in to view the page at {from.pathname}</p>
   }
 
-  login() {
+  login = () => {
     this.props.setLoginRedirect().then(() => {
       console.log('start adal login');
       this.props.adalLogin();
     });
-  }
+  };
   render() {
     const { t } = this.props;
     // handle potential redirects

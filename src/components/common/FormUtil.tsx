@@ -276,6 +276,9 @@ export const FormUtil = {
             isMulti={meta.isMulti}
             classNamePrefix="react-select"
             name={meta.name || ''}
+            isClearable={
+              typeof meta.isClearable !== 'undefined' ? meta.isClearable : false
+            }
             {...handler()}
             isDisabled={
               meta.disabled !== undefined ? meta.disabled : handler().disabled
@@ -318,6 +321,9 @@ export const FormUtil = {
             isMulti={meta.isMulti}
             classNamePrefix="react-select"
             onCreateOption={meta.handleCreate}
+            isClearable={
+              typeof meta.isClearable !== 'undefined' ? meta.isClearable : false
+            }
             name={meta.name || ''}
             {...handler()}
             isDisabled={
@@ -354,7 +360,7 @@ export const FormUtil = {
             isMulti={meta.isMulti}
             classNamePrefix="react-select"
             isClearable={
-              typeof meta.isClearable !== 'undefined' ? meta.isClearable : true
+              typeof meta.isClearable !== 'undefined' ? meta.isClearable : false
             }
             name={meta.name || ''}
             {...handler()}
@@ -395,7 +401,11 @@ export const FormUtil = {
               placeholder={meta.placeholder}
               isMulti={meta.isMulti}
               classNamePrefix="react-select"
-              isClearable={meta.isClearable}
+              isClearable={
+                typeof meta.isClearable !== 'undefined'
+                  ? meta.isClearable
+                  : false
+              }
               name={meta.name || ''}
               {...handler()}
               isDisabled={

@@ -78,8 +78,6 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       newType: '',
       newItem: {}
     };
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.setForm = this.setForm.bind(this);
   }
   // componentDidUpdate(prevProps: Iprops) {}
 

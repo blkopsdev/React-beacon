@@ -111,8 +111,6 @@ class EditFacilityForm extends React.Component<Iprops, {}> {
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(fieldConfig, this.props.t);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.setForm = this.setForm.bind(this);
   }
   // componentDidUpdate(prevProps: Iprops) {
 

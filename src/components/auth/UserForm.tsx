@@ -100,7 +100,6 @@ class UserForm extends React.Component<Iprops, {}> {
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(fieldConfig, this.props.t);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {

@@ -76,15 +76,6 @@ class Lesson extends React.Component<Props, State> {
     * Wistia: `https://fast.wistia.net/embed/iframe/${this.props.lesson.secondaryVideoPath}?videoFoam=true`
     * Vimeo: `https://player.vimeo.com/video/${this.props.lesson.primaryVideoPath}`
     */
-
-    this.handleChange = this.handleChange.bind(this);
-    this.loadQuizzes = this.loadQuizzes.bind(this);
-    this.goBack = this.goBack.bind(this);
-    this.startQuiz = this.startQuiz.bind(this);
-    this.backToCourses = this.backToCourses.bind(this);
-    this.backToAllCourses = this.backToAllCourses.bind(this);
-    this.displayLessonsHTML = this.displayLessonsHTML.bind(this);
-
     this.timeSpent = 0;
   }
 
@@ -162,7 +153,7 @@ class Lesson extends React.Component<Props, State> {
     );
   };
 
-  setUpPlayer() {
+  setUpPlayer = () => {
     const options = {
       id: this.props.lesson.primaryVideoPath,
       width: this.pElem.offsetWidth, // > 723 ? this.pElem.offsetWidth : 723,
@@ -235,9 +226,9 @@ class Lesson extends React.Component<Props, State> {
         this.player.setCurrentTime(this.props.progress.currentTime);
       }
     });
-  }
+  };
 
-  setLesson(lessonID: string) {
+  setLesson = (lessonID: string) => {
     const newLesson = this.props.lessons[lessonID];
     if (newLesson) {
       this.props.setLesson(
@@ -246,26 +237,26 @@ class Lesson extends React.Component<Props, State> {
     } else {
       console.log('did not find lesson in Redux, loading lessons from API');
     }
-  }
+  };
 
-  loadQuizzes() {
+  loadQuizzes = () => {
     this.props.getQuizzesByLessonID(
       this.props.match.params.lessonID,
       this.props.user
     );
-  }
+  };
 
-  handleChange(e: any) {
+  handleChange = (e: any) => {
     this.setState({ [e.target.name]: e.target.value } as State);
-  }
+  };
 
-  goBack() {
+  goBack = () => {
     this.props.history.replace(`/training/${this.props.match.params.courseID}`);
-  }
+  };
   /*
   * start a quiz
   */
-  startQuiz(gfQuiz: GFQuizItem, skipTimedCheck: boolean = false) {
+  startQuiz = (gfQuiz: GFQuizItem, skipTimedCheck: boolean = false) => {
     // set the current active quiz item
     // mixpanel.track("Practice Exercise started", {
     //   quiz: gfQuiz.id,
@@ -284,17 +275,17 @@ class Lesson extends React.Component<Props, State> {
       this.props.match.params.lessonID
     }/${gfQuiz.id}`;
     this.props.history.push(path);
-  }
+  };
 
-  backToCourses() {
+  backToCourses = () => {
     this.props.history.replace(`/training/${this.props.match.params.courseID}`);
-  }
+  };
 
-  backToAllCourses() {
+  backToAllCourses = () => {
     this.props.history.push(`/training`);
-  }
+  };
 
-  displayLessonsHTML() {
+  displayLessonsHTML = () => {
     return (
       <div className="main-content content-without-sidebar lesson animated fadeIn">
         <Row className="lesson-description">
@@ -348,7 +339,7 @@ class Lesson extends React.Component<Props, State> {
         </ListGroup>
       </div>
     );
-  }
+  };
   render() {
     return this.displayLessonsHTML();
   }

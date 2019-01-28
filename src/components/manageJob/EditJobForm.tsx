@@ -148,7 +148,8 @@ const buildFieldConfig = (
         colWidth: 12,
         placeholder: 'jobManage:typeSearchPlaceholder',
         isMulti: true,
-        name: 'assigned-user'
+        name: 'assigned-user',
+        required: false
       }
     }
   };

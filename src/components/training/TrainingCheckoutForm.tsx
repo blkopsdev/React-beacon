@@ -151,15 +151,13 @@ const buildFieldConfig = (
   const fieldConfigControls = {
     memo: {
       render: FormUtil.TextInput,
-      options: {
-        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
-      },
       meta: {
         label: 'memo',
         colWidth: 12,
         componentClass: 'textarea',
         rows: 6,
-        name: 'memo'
+        name: 'memo',
+        required: false
       }
     }
   };

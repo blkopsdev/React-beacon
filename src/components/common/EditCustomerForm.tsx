@@ -33,7 +33,12 @@ const fieldConfig = {
     },
     vat: {
       render: FormUtil.TextInput,
-      meta: { label: 'customerVatLabel', colWidth: 12, name: 'customer-vat' }
+      meta: {
+        label: 'customerVatLabel',
+        colWidth: 12,
+        name: 'customer-vat',
+        required: false
+      }
     }
   }
 };

@@ -62,23 +62,31 @@ const buildFieldConfig = (
     //   }
     // },
     sku: {
-      options: {
-        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
-      },
+      // options: {
+      //   validators: [Validators.required, FormUtil.validators.requiredWithTrim]
+      // },
       render: FormUtil.TextInput,
-      meta: { label: 'sku', colWidth: 12, type: 'input', name: 'sku', disabled }
+      meta: {
+        label: 'sku',
+        colWidth: 12,
+        type: 'input',
+        name: 'sku',
+        disabled,
+        required: false
+      }
     },
     description: {
-      options: {
-        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
-      },
+      // options: {
+      //   validators: [Validators.required, FormUtil.validators.requiredWithTrim]
+      // },
       render: FormUtil.TextInput,
       meta: {
         label: 'description',
         colWidth: 12,
         componentClass: 'textarea',
         name: 'description',
-        disabled
+        disabled,
+        required: false
       }
     },
 
@@ -144,7 +152,8 @@ const buildFieldConfig = (
         isMulti: false,
         name: 'gas-type',
         isClearable: true,
-        disabled
+        disabled,
+        required: false
       }
     },
     powerID: {
@@ -157,7 +166,8 @@ const buildFieldConfig = (
         isMulti: false,
         name: 'power',
         isClearable: true,
-        disabled
+        disabled,
+        required: false
       }
     },
     systemSizeID: {
@@ -170,7 +180,8 @@ const buildFieldConfig = (
         isMulti: false,
         name: 'system-size',
         isClearable: true,
-        disabled
+        disabled,
+        required: false
       }
     },
     standardID: {
@@ -183,7 +194,8 @@ const buildFieldConfig = (
         isMulti: false,
         name: 'standard',
         isClearable: true,
-        disabled
+        disabled,
+        required: false
       }
     }
   };
@@ -305,11 +317,11 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
     systemSizeID: Ioption
   ) => {
     const category = mainCategoryID ? mainCategoryID.label : '';
-    const subcategory = subcategoryID ? subcategoryID.label : '';
-    const productType = productTypeID ? productTypeID.label : '';
-    const power = powerID ? powerID.label : '';
-    const systemSize = systemSizeID ? systemSizeID.label : '';
-    return `${category} ${subcategory} ${productType} ${power} ${systemSize}`;
+    const subcategory = subcategoryID ? `: ${subcategoryID.label}` : '';
+    const productType = productTypeID ? `: ${productTypeID.label}` : '';
+    const power = powerID ? `: ${powerID.label}` : '';
+    const systemSize = systemSizeID ? `: ${systemSizeID.label}` : '';
+    return `${category}${subcategory}${productType}${power}${systemSize}`;
   };
 
   handleSubmit = (

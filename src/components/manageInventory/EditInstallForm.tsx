@@ -183,7 +183,8 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           colWidth: 12,
           type: 'input',
           name: 'nickname',
-          disabled
+          disabled,
+          required: false
         }
       },
       serialNumber: {
@@ -193,7 +194,8 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           colWidth: 6,
           type: 'input',
           name: 'serial-number',
-          disabled
+          disabled,
+          required: false
         }
       },
       rfid: {
@@ -203,7 +205,8 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           colWidth: 6,
           type: 'input',
           name: 'rfid',
-          disabled
+          disabled,
+          required: false
         }
       },
       remarks: {
@@ -213,7 +216,8 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           colWidth: 12,
           componentClass: 'textarea',
           name: 'remarks',
-          disabled
+          disabled,
+          required: false
         }
       },
       quantity: {
@@ -311,7 +315,8 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           isMulti: false,
           handleCreate: this.handleCreateRoom,
           name: 'room',
-          disabled
+          disabled,
+          required: false
         }
       },
       position: {
@@ -320,7 +325,8 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           label: 'position',
           colWidth: 12,
           name: 'position',
-          disabled
+          disabled,
+          required: false
         }
       }
     };

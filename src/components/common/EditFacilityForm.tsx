@@ -50,7 +50,8 @@ const fieldConfig = {
         label: 'user:address2',
         colWidth: 4,
         type: 'text',
-        name: 'address2'
+        name: 'address2',
+        required: false
       }
     },
     city: {

@@ -134,7 +134,7 @@ export function updateProduct(
         } else {
           dispatch({
             type: types.PRODUCT_UPDATE_SUCCESS,
-            product: data.data,
+            product,
             queueID
           });
           // toastr.success('Success', 'Saved product', constants.toastrSuccess);
@@ -196,7 +196,7 @@ export function updateInstall(
         } else {
           dispatch({
             type: types.INSTALL_UPDATE_SUCCESS,
-            install: data.data
+            install
           });
 
           // toastr.success(

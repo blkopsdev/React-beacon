@@ -6,7 +6,7 @@ import {
   ImanageInventoryReducer,
   IproductInfo,
   Ibrand,
-  IgasType,
+  IproductType,
   IbaseDataObject,
   Isubcategory,
   IsystemSize,
@@ -220,7 +220,7 @@ export default function ManageInventory(
   };
 }
 /*
-Brand, GasType, Main Category, Power, Product Group, Standard, Subcategory, System Size 
+Brand, productType, Main Category, Power, Product Group, Standard, Subcategory, System Size 
 */
 export function productInfo(
   state: IproductInfo = initialState.manageInventory.productInfo,
@@ -230,7 +230,7 @@ export function productInfo(
     case types.GET_PRODUCT_INFO_SUCCESS:
       const pi = action.data;
       const brands = keyBy(pi[0], (item: Ibrand) => item.id);
-      const gasTypes = keyBy(pi[1], (item: IgasType) => item.id);
+      const productTypes = keyBy(pi[1], (item: IproductType) => item.id);
       const mainCategories = keyBy(pi[2], (item: IbaseDataObject) => item.id);
       const powers = keyBy(pi[3], (item: IbaseDataObject) => item.id);
       const standards = keyBy(pi[4], (item: IbaseDataObject) => item.id);
@@ -239,7 +239,7 @@ export function productInfo(
 
       // an options version of each one
       const brandOptions = FormUtil.convertToOptions(pi[0]);
-      const gasTypeOptions = FormUtil.convertToOptions(pi[1]);
+      const productTypeOptions = FormUtil.convertToOptions(pi[1]);
       const mainCategoryOptions = FormUtil.convertToOptions(pi[2]);
       const powerOptions = FormUtil.convertToOptions(pi[3]);
       const standardOptions = FormUtil.convertToOptions(pi[4]);
@@ -248,14 +248,14 @@ export function productInfo(
 
       return {
         brands,
-        gasTypes,
+        productTypes,
         mainCategories,
         powers,
         standards,
         subcategories,
         systemSizes,
         brandOptions,
-        gasTypeOptions,
+        productTypeOptions,
         mainCategoryOptions,
         powerOptions,
         standardOptions,

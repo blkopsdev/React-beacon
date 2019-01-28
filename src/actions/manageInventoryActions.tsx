@@ -168,7 +168,7 @@ export function saveProduct(product: Iproduct): ThunkResult<void> {
           dispatch({ type: types.CLOSE_ALL_MODALS });
           toastr.success(
             'Success',
-            'Submitted new product for approval.',
+            'New product created successfully.',
             constants.toastrSuccess
           );
         }

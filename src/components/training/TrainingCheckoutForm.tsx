@@ -365,13 +365,7 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
           id="AMOUNT1"
           value={this.calculateSubtotal() / 100}
         />
-
-        <input
-          hidden={true}
-          name="transactiondate"
-          id="transactiondate"
-          value="01-22-2019"
-        />
+        <input hidden={true} name="QTY" id="QTY" value="1" />
 
         <input
           hidden={true}

@@ -600,6 +600,10 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
                             bsStyle="primary"
                             className="next-button"
                             type="submit"
+                            disabled={
+                              this.props.quiz.isTimed &&
+                              this.state.selectedAnswer.option === undefined
+                            }
                           >
                             Next
                           </Button>

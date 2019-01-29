@@ -263,7 +263,9 @@ class Courses extends React.Component<Props, State> {
                     className="course animated fadeInUp"
                   >
                     <Panel className="text-center">
-                      <h3>{this.shortenTitle(gfCourse.name)}</h3>
+                      <h3 style={{ fontSize: '20px', lineHeight: '28px' }}>
+                        {this.shortenTitle(gfCourse.name)}
+                      </h3>
                       {showBuyButton(gfCourse.id) && (
                         <span>
                           <Button

@@ -29,7 +29,8 @@ import {
   ItableFiltersReducer,
   Itile,
   Iuser,
-  IshoppingCart
+  IshoppingCart,
+  Ifacility
 } from '../../models';
 import { InstallationsExpander } from './InstallsExpander';
 import { TableUtil } from '../common/TableUtil';
@@ -101,6 +102,7 @@ interface IdispatchProps {
   setSelectedProduct: typeof setSelectedProduct;
   cart: IshoppingCart;
   requestQuote: typeof requestQuote;
+  facility: Ifacility;
 }
 
 interface Istate {
@@ -600,6 +602,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
               getExpanderTrProps={this.getExpanderTrProps}
               showAddInstallation={this.canEditInstalls()}
               showRequestQuote={this.canRequestQuote()}
+              facility={this.props.facility}
             />
           )}
           resizable={false}
@@ -679,7 +682,8 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     tableData: state.manageInventory.data,
     tableFilters: state.manageInventory.tableFilters,
     selectedProduct: state.manageInventory.selectedProduct,
-    cart: state.manageInventory.cart
+    cart: state.manageInventory.cart,
+    facility: state.manageLocation.facility
   };
 };
 export default translate('manageInventory')(

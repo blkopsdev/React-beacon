@@ -126,6 +126,7 @@ export interface IinstallBase extends IbaseDataObject {
   floorID: string;
   locationID: string;
   roomID: string;
+  position: string;
 }
 
 export interface Iproduct {

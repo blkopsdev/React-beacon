@@ -23,41 +23,12 @@ import * as Datetime from 'react-datetime';
 import * as moment from 'moment';
 import RichTextEditor from './RichTextEditor';
 
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 // add the bootstrap form-control class to the react-select select component
 const ControlComponent = (props: any) => (
   <div>
     <components.Control {...props} className="form-control" />
   </div>
 );
-
-// const OptionComponent = (props: any) => (
-//   <div>
-//     <components.Option {...props} className="select-option" />
-//     <Button
-//       onClick={() => {
-//         console.log(props);
-//       }}
-//     >
-//       Delete
-//     </Button>
-//   </div>
-// );
-
-// const CustomFeedback = ({type}: any) => {
-//   if (type === 'valid'){
-//     return <FontAwesomeIcon icon={['far', 'check']} />
-//   } else if (type === 'invalid'){
-//     return <FontAwesomeIcon icon={['far', 'times']}  />
-//   } else {
-//     return null;
-//   }
-// }
-
-// <FormControl.Feedback>
-//           <CustomFeedback />
-//          </FormControl.Feedback>
 
 // TODO add a type that accepts an array or an object:  Array<{ id: string; name: string }>
 export const FormUtil = {
@@ -106,7 +77,6 @@ export const FormUtil = {
   Datetime: ({
     handler,
     touched,
-    hasError,
     meta,
     pristine,
     errors,
@@ -140,15 +110,7 @@ export const FormUtil = {
       </FormGroup>
     );
   },
-  DatetimeWithoutValidation: ({
-    handler,
-    touched,
-    hasError,
-    meta,
-    pristine,
-    errors,
-    submitted
-  }: AbstractControl) => (
+  DatetimeWithoutValidation: ({ handler, meta }: AbstractControl) => (
     <FormGroup bsSize="sm" className="datetime-select">
       <Col xs={meta.colWidth}>
         <ControlLabel>{meta.label}</ControlLabel>
@@ -164,7 +126,6 @@ export const FormUtil = {
   TextInput: ({
     handler,
     touched,
-    hasError,
     meta,
     pristine,
     errors,
@@ -206,7 +167,6 @@ export const FormUtil = {
   Toggle: ({
     handler,
     touched,
-    hasError,
     meta,
     pristine,
     errors,
@@ -241,15 +201,7 @@ export const FormUtil = {
       </Col>
     );
   },
-  TextInputWithoutValidation: ({
-    handler,
-    touched,
-    hasError,
-    meta,
-    pristine,
-    errors,
-    submitted
-  }: AbstractControl) => (
+  TextInputWithoutValidation: ({ handler, meta }: AbstractControl) => (
     <Col xs={meta.colWidth}>
       <FormGroup bsSize="sm">
         <ControlLabel>{meta.label}</ControlLabel>
@@ -268,13 +220,10 @@ export const FormUtil = {
   Select: ({
     handler,
     touched,
-    hasError,
     meta,
     pristine,
     errors,
     submitted,
-    patchValue,
-    setErrors,
     value
   }: AbstractControl) => {
     const selectClassName = meta.isMulti ? 'is-multi' : '';
@@ -318,13 +267,10 @@ export const FormUtil = {
   CreatableSelect: ({
     handler,
     touched,
-    hasError,
     meta,
     pristine,
     errors,
     submitted,
-    patchValue,
-    setErrors,
     value
   }: AbstractControl) => {
     const selectClassName = meta.isMulti ? 'is-multi' : '';
@@ -365,18 +311,7 @@ export const FormUtil = {
       </Col>
     );
   },
-  SelectWithoutValidation: ({
-    handler,
-    touched,
-    hasError,
-    meta,
-    pristine,
-    errors,
-    submitted,
-    patchValue,
-    setErrors,
-    value
-  }: AbstractControl) => {
+  SelectWithoutValidation: ({ handler, meta }: AbstractControl) => {
     // console.log('rendering select', meta.options, value, defaultValue)
     const selectClassName = meta.isMulti ? `is-multi` : ``;
     return (
@@ -403,18 +338,7 @@ export const FormUtil = {
       </Col>
     );
   },
-  SelectWithoutValidationLeftLabel: ({
-    handler,
-    touched,
-    hasError,
-    meta,
-    pristine,
-    errors,
-    submitted,
-    patchValue,
-    setErrors,
-    value
-  }: AbstractControl) => {
+  SelectWithoutValidationLeftLabel: ({ handler, meta }: AbstractControl) => {
     // TODO get rid of this because default values do not work for some unknwon reason.  we patch the values instead
     // console.log('rendering select', meta.options, value, defaultValue)
     const selectClassName = meta.isMulti ? `is-multi` : ``;
@@ -451,13 +375,10 @@ export const FormUtil = {
   SelectWithButton: ({
     handler,
     touched,
-    hasError,
     meta,
     pristine,
     errors,
     submitted,
-    patchValue,
-    setErrors,
     value
   }: AbstractControl) => {
     // console.log('rendering select', meta.options, value, defaultValue)
@@ -502,18 +423,7 @@ export const FormUtil = {
       </Col>
     );
   },
-  Button: ({
-    handler,
-    touched,
-    hasError,
-    meta,
-    pristine,
-    errors,
-    submitted,
-    patchValue,
-    setErrors,
-    value
-  }: AbstractControl) => {
+  Button: ({ handler, meta }: AbstractControl) => {
     return (
       <Col xs={meta.colWidth}>
         <Button bsStyle="link" className="" onClick={meta.buttonAction}>
@@ -525,7 +435,6 @@ export const FormUtil = {
   RichTextEditor: ({
     handler,
     touched,
-    hasError,
     meta,
     pristine,
     errors,
@@ -629,7 +538,6 @@ export const userBaseConfigControls = {
     render: FormUtil.TextInput,
     meta: { label: 'user:email', colWidth: 12, type: 'text', name: 'email' }
   },
-
   phone: {
     options: {
       validators: [

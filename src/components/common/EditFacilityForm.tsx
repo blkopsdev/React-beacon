@@ -143,6 +143,7 @@ class EditFacilityForm extends React.Component<Iprops, {}> {
       ]);
       stateFormControl.patchValue(null);
     } else {
+      stateFormControl.patchValue(null);
       stateFormControl.disable();
       stateFormControl.setValidators(null);
     }

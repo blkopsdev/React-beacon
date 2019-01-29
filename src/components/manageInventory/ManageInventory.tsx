@@ -267,9 +267,12 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     const columns = TableUtil.translateHeaders(
       [
         {
-          Header: 'sku',
-          accessor: 'sku',
-          minWidth: 150
+          Header: 'manufacturer',
+          accessor: ({ brandID }: Iproduct) => {
+            return this.props.productInfo.brands[brandID].name;
+          },
+          id: 'manufacturer',
+          minWidth: 170
         },
         {
           Header: 'name',
@@ -284,14 +287,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         //   id: 'productGroup',
         //   minWidth: 170
         // },
-        {
-          Header: 'manufacturer',
-          accessor: ({ brandID }: Iproduct) => {
-            return this.props.productInfo.brands[brandID].name;
-          },
-          id: 'manufacturer',
-          minWidth: 170
-        },
+
         {
           Header: 'qty',
           id: 'quantity',

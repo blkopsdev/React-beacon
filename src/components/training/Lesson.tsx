@@ -113,8 +113,9 @@ class Lesson extends React.Component<Props, State> {
     if (this.props.lesson.id !== this.props.match.params.lessonID) {
       this.setLesson(this.props.match.params.lessonID);
     }
-
-    this.setUpPlayer();
+    if (this.props.lesson.primaryVideoPath.length > 0) {
+      this.setUpPlayer();
+    }
   }
   componentDidUpdate(prevProps: Props) {
     if (prevProps.quizzes !== this.props.quizzes) {

@@ -95,7 +95,6 @@ export const initialLesson = {
   imagePath: '',
   order: 0,
   primaryVideoPath: '',
-  secondaryVideoPath: '',
   slideshowPath: '',
   courseLessons: [],
   cost: 0

@@ -31,7 +31,6 @@ import {
   ListGroup,
   ListGroupItem,
   Media,
-  Panel,
   Row,
   Col,
   Button,
@@ -39,7 +38,6 @@ import {
   Badge
 } from 'react-bootstrap';
 import queryString from 'query-string';
-import { LinkContainer } from 'react-router-bootstrap';
 
 import { RouteComponentProps, Switch, Route } from 'react-router';
 import Lesson from './Lesson';
@@ -55,6 +53,7 @@ import { getTotal } from 'src/reducers/cartReducer';
 import TrainingCheckoutForm from './TrainingCheckoutForm';
 import { closeAllModals } from 'src/actions/commonActions';
 import Quiz from './Quiz';
+import { TrainingCourse } from './TrainingCourse';
 
 interface RouterParams {
   courseID: string;
@@ -241,9 +240,6 @@ class Courses extends React.Component<Props, State> {
   };
 
   printStudentCourses = () => {
-    const showBuyButton = (id: string) =>
-      this.props.purchasedTraining.indexOf(id) === -1;
-
     return (
       <Row
         key="courses"
@@ -251,50 +247,13 @@ class Courses extends React.Component<Props, State> {
       >
         <Col xs={12} sm={12}>
           <div className="courses-tiles text-center">
-            {this.props.user.isActive &&
-              this.props.courses.map(gfCourse => {
-                const shoppingCartItem = { ...gfCourse, quantity: 1 };
-                return (
-                  <Col
-                    key={gfCourse.id}
-                    xs={12}
-                    sm={4}
-                    md={4}
-                    className="course animated fadeInUp"
-                  >
-                    <Panel className="text-center">
-                      <h3 style={{ fontSize: '20px', lineHeight: '28px' }}>
-                        {this.shortenTitle(gfCourse.name)}
-                      </h3>
-                      {showBuyButton(gfCourse.id) && (
-                        <span>
-                          <Button
-                            bsStyle="warning"
-                            type="button"
-                            onClick={() =>
-                              this.props.addCourseToCart(
-                                shoppingCartItem,
-                                'TRAINING'
-                              )
-                            }
-                          >
-                            Purchase Entire Course
-                          </Button>
-                          <h4>${`${shoppingCartItem.cost / 100}`}</h4>
-                        </span>
-                      )}
-
-                      <p className="purchase-text">
-                        Save 25% by purchasing the entire course rather than all
-                        the lessons individually
-                      </p>
-                      <LinkContainer to={`training/${gfCourse.id}`}>
-                        <div className="course-footer">{'View Lessons'}</div>
-                      </LinkContainer>
-                    </Panel>
-                  </Col>
-                );
-              })}
+            {this.props.courses.map(gfCourse => (
+              <TrainingCourse
+                course={gfCourse}
+                purchasedTraining={this.props.purchasedTraining}
+                addCourseToCartCallback={this.props.addCourseToCart}
+              />
+            ))}
           </div>
         </Col>
       </Row>
@@ -303,15 +262,6 @@ class Courses extends React.Component<Props, State> {
   shortenDescription = (text: string) => {
     let ret = text;
     const maxLength = 95;
-    if (ret.length > maxLength) {
-      ret = ret.substr(0, maxLength - 3) + '...';
-    }
-    return ret;
-  };
-
-  shortenTitle = (text: string) => {
-    let ret = text;
-    const maxLength = 55;
     if (ret.length > maxLength) {
       ret = ret.substr(0, maxLength - 3) + '...';
     }

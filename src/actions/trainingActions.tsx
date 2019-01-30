@@ -10,7 +10,8 @@ import {
   LessonProgress,
   ThunkResult,
   IshoppingCartProduct,
-  GFQuizItem
+  GFQuizItem,
+  GFCourse
 } from 'src/models';
 import axios from 'axios';
 import { find, forEach } from 'lodash';
@@ -21,7 +22,16 @@ export function loadCourses(user: Iuser): ThunkResult<void> {
     dispatch(beginAjaxCall());
     return courseAPI
       .getAll(user)
-      .then((courses: any) => {
+      .then((rawCourses: any) => {
+        // temporary hack to support On-Site courses
+        const courses = rawCourses.map((course: GFCourse) => {
+          const foundOnSite = course.name.search('On-Site');
+          if (foundOnSite > 0) {
+            return { ...course, onSite: true };
+          } else {
+            return { ...course, onSite: false };
+          }
+        });
         dispatch({ type: types.LOAD_COURSES_SUCCESS, courses });
         return courses;
       })

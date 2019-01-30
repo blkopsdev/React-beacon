@@ -121,15 +121,12 @@ export function userLogout(): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch({ type: types.USER_LOGOUT_SUCCESS });
     dispatch({ type: 'RESET_STATE' }); // reset the redux-offline outbox
-    localForage.removeItem('state-core-care-web').then(() => {
-      authContext.logOut();
-    });
 
-    // setTimeout(() => {
-    //   localForage.removeItem('state-core-care-web').then(() => {
-    //     authContext.logOut();
-    //   });
-    // }, 500)
+    setTimeout(() => {
+      localForage.removeItem('state-core-care-web').then(() => {
+        authContext.logOut();
+      });
+    }, 500);
   };
 }
 

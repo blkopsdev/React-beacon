@@ -448,6 +448,7 @@ export interface GFCourse {
   name: string;
   description: string;
   cost: number;
+  onSite: boolean;
 }
 
 export interface GFLesson {

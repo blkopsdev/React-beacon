@@ -3,10 +3,11 @@ import { addCourseToCart } from 'src/actions/trainingActions';
 import * as React from 'react';
 import { Col, Panel, Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
+import NumberFormat from 'react-number-format';
 
 const shortenTitle = (text: string) => {
   let ret = text;
-  const maxLength = 66;
+  const maxLength = 70;
   if (ret.length > maxLength) {
     ret = ret.substr(0, maxLength - 3) + '...';
   }
@@ -50,7 +51,14 @@ export const TrainingCourse = ({
               >
                 Purchase Entire Course
               </Button>
-              <h4>${`${shoppingCartItem.cost / 100}`}</h4>
+              <h4>
+                <NumberFormat
+                  value={shoppingCartItem.cost / 100}
+                  displayType={'text'}
+                  thousandSeparator={true}
+                  prefix={'$'}
+                />
+              </h4>
             </span>
           )}
           <LinkContainer to={`training/${course.id}`}>
@@ -83,7 +91,14 @@ export const TrainingCourse = ({
               >
                 Purchase Entire Course
               </Button>
-              <h4>${`${shoppingCartItem.cost / 100}`}</h4>
+              <h4>
+                <NumberFormat
+                  value={shoppingCartItem.cost / 100}
+                  displayType={'text'}
+                  thousandSeparator={true}
+                  prefix={'$'}
+                />
+              </h4>
             </span>
           )}
 

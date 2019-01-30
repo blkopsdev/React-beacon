@@ -126,6 +126,13 @@ class EditFacilityForm extends React.Component<Iprops, {}> {
       .valueChanges.subscribe((value: Ioption) => {
         this.onCountryChanges(value.value);
       });
+
+    this.userForm.patchValue({
+      countryID: {
+        value: 'ABC5D95C-129F-4837-988C-0BF4AE1F3B67',
+        label: 'United States of America'
+      }
+    });
   }
   componentWillUnmount() {
     if (this.subscription) {

@@ -25,6 +25,7 @@ import { RouteComponentProps } from 'react-router';
 import Player from '@vimeo/player';
 import * as moment from 'moment';
 import { toastr } from 'react-redux-toastr';
+import constants from 'src/constants/constants';
 
 interface RouterParams {
   courseID: string;
@@ -163,70 +164,80 @@ class Lesson extends React.Component<Props, State> {
 
     this.player = new Player('lessonPlayer', options);
     // this.player = new Player("lessonPlayer");
-    this.player.ready().then(() => {
-      // set up event listeners
-      this.player.on('play', (data: any) => {
-        // console.log('PLAY:', data);
-      });
-      this.player.on('pause', (data: any) => {
-        // console.log('PAUSE:', data);
-        this.lastUpdate = null;
-      });
-      this.player.on('ended', (data: any) => {
-        const now = moment().unix();
-        this.lastSave = now;
-        this.lastUpdate = now;
-        const progress: LessonProgress = {
-          lessonID: this.props.lesson.id,
-          currentTime: data.seconds,
-          percentageComplete: data.percent * 100,
-          totalTime: data.duration,
-          timeSpent:
-            this.timeSpent < data.duration ? this.timeSpent : data.duration,
-          userID: this.props.user.id
-        };
-        this.props.saveLessonProgress(progress);
-      });
-      this.player.on('timeupdate', (data: any) => {
-        // increment our TimeSpent variable on each timeupdate event.
-        // this will track total time spent playing the video, regardless of seeks, etc
-        const now = moment().unix();
-        if (!this.lastUpdate) {
-          this.lastUpdate = now;
-        } else {
-          this.timeSpent += now - this.lastUpdate;
-          this.lastUpdate = now;
-        }
-        const progress: LessonProgress = {
-          lessonID: this.props.lesson.id,
-          currentTime: data.seconds,
-          percentageComplete: data.percent * 100,
-          totalTime: data.duration,
-          timeSpent:
-            this.timeSpent < data.duration ? this.timeSpent : data.duration,
-          userID: this.props.user.id
-        };
-        // console.log('TIMEUPDATE:', progress);
-
-        if (!this.lastSave) {
+    this.player
+      .ready()
+      .then(() => {
+        // set up event listeners
+        this.player.on('play', (data: any) => {
+          // console.log('PLAY:', data);
+        });
+        this.player.on('pause', (data: any) => {
+          // console.log('PAUSE:', data);
+          this.lastUpdate = null;
+        });
+        this.player.on('ended', (data: any) => {
+          const now = moment().unix();
           this.lastSave = now;
-        }
-        if (now - this.lastSave >= saveTimeout) {
+          this.lastUpdate = now;
+          const progress: LessonProgress = {
+            lessonID: this.props.lesson.id,
+            currentTime: data.seconds,
+            percentageComplete: data.percent * 100,
+            totalTime: data.duration,
+            timeSpent:
+              this.timeSpent < data.duration ? this.timeSpent : data.duration,
+            userID: this.props.user.id
+          };
           this.props.saveLessonProgress(progress);
-          this.lastSave = now;
-        }
-      });
-      this.player.on('seeked', (data: any) => {
-        // console.log('SEEKED:', data);
-      });
+        });
+        this.player.on('timeupdate', (data: any) => {
+          // increment our TimeSpent variable on each timeupdate event.
+          // this will track total time spent playing the video, regardless of seeks, etc
+          const now = moment().unix();
+          if (!this.lastUpdate) {
+            this.lastUpdate = now;
+          } else {
+            this.timeSpent += now - this.lastUpdate;
+            this.lastUpdate = now;
+          }
+          const progress: LessonProgress = {
+            lessonID: this.props.lesson.id,
+            currentTime: data.seconds,
+            percentageComplete: data.percent * 100,
+            totalTime: data.duration,
+            timeSpent:
+              this.timeSpent < data.duration ? this.timeSpent : data.duration,
+            userID: this.props.user.id
+          };
+          // console.log('TIMEUPDATE:', progress);
 
-      if (this.props.progress) {
-        // set timeSpent
-        this.timeSpent = this.props.progress.timeSpent;
-        // seek to last played time
-        this.player.setCurrentTime(this.props.progress.currentTime);
-      }
-    });
+          if (!this.lastSave) {
+            this.lastSave = now;
+          }
+          if (now - this.lastSave >= saveTimeout) {
+            this.props.saveLessonProgress(progress);
+            this.lastSave = now;
+          }
+        });
+        this.player.on('seeked', (data: any) => {
+          // console.log('SEEKED:', data);
+        });
+
+        if (this.props.progress) {
+          // set timeSpent
+          this.timeSpent = this.props.progress.timeSpent;
+          // seek to last played time
+          this.player.setCurrentTime(this.props.progress.currentTime);
+        }
+      })
+      .catch((error: any) => {
+        console.error(error);
+        toastr.error(
+          'Error',
+          'Video failed to load. Please try again or contact support.',
+          constants.toastrError
+        );
+      });
   };
 
   setLesson = (lessonID: string) => {
@@ -286,63 +297,62 @@ class Lesson extends React.Component<Props, State> {
     this.props.history.push(`/training`);
   };
 
-  displayLessonsHTML = () => {
+  render() {
     return (
-      <div className="main-content content-without-sidebar lesson animated fadeIn">
-        <Row className="lesson-description">
-          <Col
-            md={12}
-            sm={12}
-            xs={12}
-            dangerouslySetInnerHTML={{ __html: this.props.lesson.description }}
-          />
-        </Row>
-        <Row className="lesson-list">
-          <Col md={12} sm={12} xs={12} className="firstVideo text-center">
-            <div
-              id="lessonPlayer"
-              style={{
-                maxWidth: '100%'
+      <div className="main-content content-without-sidebar lesson animated fadeIn row">
+        <Col xs={12}>
+          <Row className="lesson-description">
+            <Col
+              md={12}
+              sm={12}
+              xs={12}
+              dangerouslySetInnerHTML={{
+                __html: this.props.lesson.description
               }}
-              ref={ref => (this.pElem = ref)}
             />
-          </Col>
-        </Row>
-        <ListGroup className="lesson-list">
-          {this.state.lessonQuizzes.map((gfQuiz, index) => {
-            let gfImage = gfQuiz.imagePath;
-            if (gfQuiz.imagePath === null || gfQuiz.imagePath === '') {
-              gfImage = require('../../images/Azure.png');
-            }
-            return (
-              <ListGroupItem
-                key={gfQuiz.id}
-                onClick={() => {
-                  this.startQuiz(gfQuiz);
-                }}
-              >
-                <Media>
-                  <Media.Left>
-                    <img width={32} height={32} src={gfImage} alt="Image" />
-                  </Media.Left>
-                  <Media.Body>
-                    <Media.Heading>{gfQuiz.name}</Media.Heading>
-                  </Media.Body>
-                  {gfQuiz.isComplete === true && (
-                    <Media.Right>
-                      {/* <FontAwesome name="circle 2x blue" /> */}
-                    </Media.Right>
-                  )}
-                </Media>
-              </ListGroupItem>
-            );
-          })}
-        </ListGroup>
+          </Row>
+          <Row className="lesson-list">
+            <Col md={12} sm={12} xs={12} className="firstVideo text-center">
+              <div
+                id="lessonPlayer"
+                className="vimeo-player"
+                ref={ref => (this.pElem = ref)}
+              />
+            </Col>
+          </Row>
+          <ListGroup className="lesson-list">
+            {this.state.lessonQuizzes.map((gfQuiz, index) => {
+              let gfImage = gfQuiz.imagePath;
+              if (gfQuiz.imagePath === null || gfQuiz.imagePath === '') {
+                gfImage = require('../../images/Azure.png');
+              }
+              return (
+                <ListGroupItem
+                  key={gfQuiz.id}
+                  onClick={() => {
+                    this.startQuiz(gfQuiz);
+                  }}
+                >
+                  <Media>
+                    <Media.Left>
+                      <img width={32} height={32} src={gfImage} alt="Image" />
+                    </Media.Left>
+                    <Media.Body>
+                      <Media.Heading>{gfQuiz.name}</Media.Heading>
+                    </Media.Body>
+                    {gfQuiz.isComplete === true && (
+                      <Media.Right>
+                        {/* <FontAwesome name="circle 2x blue" /> */}
+                      </Media.Right>
+                    )}
+                  </Media>
+                </ListGroupItem>
+              );
+            })}
+          </ListGroup>
+        </Col>
       </div>
     );
-  };
-  render() {
-    return this.displayLessonsHTML();
   }
 }
 

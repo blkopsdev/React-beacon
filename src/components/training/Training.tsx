@@ -329,8 +329,14 @@ class Courses extends React.Component<Props, State> {
 
       return lessonPurchased || coursePurchased;
     };
+
     return (
       <div className="courses main-content content-without-sidebar student animated fadeIn">
+        <Row>
+          <Col xs={10} className="course-description">
+            <p>{this.state.selectedCourse.description}</p>
+          </Col>
+        </Row>
         <div className="row courses-list">
           <ListGroup className="col-md-12">
             {this.state.filteredLessons.map((gfLesson, index) => {
@@ -508,7 +514,7 @@ class Courses extends React.Component<Props, State> {
 
   render() {
     return (
-      <div className="manage-training">
+      <div className="training">
         <Banner
           title={this.getBannerTitle()}
           img={this.state.currentTile.srcBanner}

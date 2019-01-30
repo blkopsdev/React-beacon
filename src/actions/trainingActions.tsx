@@ -26,7 +26,7 @@ export function loadCourses(user: Iuser): ThunkResult<void> {
         // temporary hack to support On-Site courses
         const courses = rawCourses.map((course: GFCourse) => {
           const foundOnSite = course.name.search('On-Site');
-          if (foundOnSite > 0) {
+          if (foundOnSite >= 0) {
             return { ...course, onSite: true };
           } else {
             return { ...course, onSite: false };

@@ -38,6 +38,7 @@ import {
 import constants from '../../constants/constants';
 import { requestQuote } from 'src/actions/manageInventoryActions';
 import Select, { components } from 'react-select';
+import NumberFormat from 'react-number-format';
 
 // add the bootstrap form-control class to the react-select select component
 const ControlComponent = (props: any) => (
@@ -110,7 +111,14 @@ const CartProduct = ({
       xs={4}
       style={{ textAlign: 'center', paddingRight: '0', paddingLeft: '0' }}
     >
-      <Badge>${`${meta.cost / 100}`}</Badge>
+      <Badge>
+        <NumberFormat
+          value={meta.cost / 100}
+          displayType={'text'}
+          thousandSeparator={true}
+          prefix={'$'}
+        />
+      </Badge>
       <Button
         bsStyle="link"
         style={{ fontSize: '1.6em' }}
@@ -395,7 +403,13 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
           </FormGroup>
         </Col>
         <Col xs={12} className="cart-totals">
-          Subtotal: ${this.calculateSubtotal() / 100}
+          Subtotal:{' '}
+          <NumberFormat
+            value={this.calculateSubtotal() / 100}
+            displayType={'text'}
+            thousandSeparator={true}
+            prefix={'$'}
+          />
         </Col>
 
         <Col xs={12} className="form-buttons text-right">

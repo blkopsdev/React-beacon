@@ -81,14 +81,23 @@ export function userLogin(): ThunkResult<void> {
         }
       })
       .catch((error: any) => {
+        console.error('failed to login', error);
         dispatch({ type: types.USER_LOGIN_FAILED });
-        constants.handleError(error, 'login');
-        // to avoid getting stuck, go ahead and log the user out after a longer pause
-        setTimeout(() => {
-          authContext.logOut();
-        }, 3000); // give it time to persist this to local storage
 
-        throw error;
+        // to avoid getting stuck, go ahead and log the user out after a longer pause
+        dispatch({ type: types.USER_LOGOUT_SUCCESS });
+        dispatch({ type: 'RESET_STATE' }); // reset the redux-offline outbox
+
+        setTimeout(() => {
+          localForage.removeItem('state-core-care-web').then(() => {
+            authContext.logOut();
+          });
+        }, 500);
+
+        if (error && error.response && error.response.status === 401) {
+          return;
+        }
+        constants.handleError(error, 'login');
       });
   };
 }

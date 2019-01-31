@@ -45,7 +45,7 @@ class CourseAPI {
     Get all lessons
   */
   static getAllLessons(user: Iuser) {
-    const URL = `${root}/lesson/getall`;
+    const URL = `${root}/lesson/getall?userid=${user.id}`;
     const request = new Request(URL, {
       method: "GET",
       headers: this.getHeaders(user)

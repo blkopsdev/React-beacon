@@ -54,6 +54,7 @@ import TrainingCheckoutForm from './TrainingCheckoutForm';
 import { closeAllModals } from 'src/actions/commonActions';
 import Quiz from './Quiz';
 import { TrainingCourse } from './TrainingCourse';
+import { toastr } from 'react-redux-toastr';
 
 interface RouterParams {
   courseID: string;
@@ -214,7 +215,15 @@ class Courses extends React.Component<Props, State> {
     //   lesson: gfLesson.id,
     //   name: gfLesson.name
     // })
-
+    // did they purchase this lesson?
+    if (!this.hasLessonBeenPurchased(gfLesson)) {
+      toastr.warning(
+        'Warning',
+        'Please purchase this lesson.',
+        constants.toastrWarning
+      );
+      return;
+    }
     this.props.setLesson(
       this.props.lessons[gfLesson.id]
       // this.props.lessons.filter((lesson: any) => lesson.id === gfLesson.id)[0]
@@ -237,6 +246,18 @@ class Courses extends React.Component<Props, State> {
   };
   goToProgress = () => {
     this.props.history.push('/progress');
+  };
+  hasLessonBeenPurchased = (lesson: GFLesson) => {
+    const lessonPurchased =
+      this.props.purchasedTraining.indexOf(lesson.id) !== -1;
+    let coursePurchased = false;
+    lesson.courseLessons.forEach(cl => {
+      if (this.props.purchasedTraining.indexOf(cl.courseID) !== -1) {
+        coursePurchased = true;
+      }
+    });
+
+    return lessonPurchased || coursePurchased;
   };
 
   printStudentCourses = () => {
@@ -317,19 +338,6 @@ class Courses extends React.Component<Props, State> {
       </Col>
     );
 
-    const showProgressColumn = (lesson: GFLesson) => {
-      const lessonPurchased =
-        this.props.purchasedTraining.indexOf(lesson.id) !== -1;
-      let coursePurchased = false;
-      lesson.courseLessons.forEach(cl => {
-        if (this.props.purchasedTraining.indexOf(cl.courseID) !== -1) {
-          coursePurchased = true;
-        }
-      });
-
-      return lessonPurchased || coursePurchased;
-    };
-
     return (
       <div className="courses main-content content-without-sidebar student animated fadeIn">
         <Row>
@@ -372,10 +380,10 @@ class Courses extends React.Component<Props, State> {
                           quizName={gfLesson.quizName}
                         />
                       )}
-                    {showProgressColumn(gfLesson) && (
+                    {this.hasLessonBeenPurchased(gfLesson) && (
                       <ProgressColumn progress={progress} />
                     )}
-                    {!showProgressColumn(gfLesson) && (
+                    {!this.hasLessonBeenPurchased(gfLesson) && (
                       <BuyColumn shoppingCartItem={shoppingCartItem} />
                     )}
                   </Media>

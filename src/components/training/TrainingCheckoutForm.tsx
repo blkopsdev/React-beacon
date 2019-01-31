@@ -28,7 +28,8 @@ import {
   IshoppingCartProduct,
   IproductInfo,
   IshoppingCart,
-  ItableFiltersReducer
+  ItableFiltersReducer,
+  Iuser
 } from '../../models';
 import {
   toggleShoppingCartModal,
@@ -189,6 +190,7 @@ interface Iprops {
   deleteFromCart: typeof deleteFromCart;
   cartName: string;
   showCost?: boolean;
+  user: Iuser;
 }
 interface Istate {
   fieldConfig: FieldConfig;
@@ -341,7 +343,7 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
           hidden={true}
           name="CustomerNo"
           id="CustomerNo"
-          value={process.env.REACT_APP_UTA_CUSTOMER}
+          value={this.props.user.customer.name}
         />
 
         <input

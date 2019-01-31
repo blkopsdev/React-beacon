@@ -60,7 +60,7 @@ export interface Iuser {
   appVersion: string;
   manager?: any;
   isActive?: boolean;
-  customer?: Icustomer;
+  customer: Icustomer;
 }
 // export interface ImanageUserQueueReducer {
 //   [key: string]: Iuser;

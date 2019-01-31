@@ -262,7 +262,8 @@ class Courses extends React.Component<Props, State> {
 
   printStudentCourses = () => {
     return (
-      <Row
+      <Col
+        xs={12}
         key="courses"
         className="main-content content-without-sidebar courses animated fadeIn"
       >
@@ -277,7 +278,7 @@ class Courses extends React.Component<Props, State> {
             ))}
           </div>
         </Col>
-      </Row>
+      </Col>
     );
   };
   shortenDescription = (text: string) => {
@@ -339,7 +340,7 @@ class Courses extends React.Component<Props, State> {
     );
 
     return (
-      <div className="courses main-content content-without-sidebar student animated fadeIn">
+      <div className="col-xs-12 lessons courses main-content content-without-sidebar student animated fadeIn">
         <Row>
           <Col xs={10} className="course-description">
             <p>{this.state.selectedCourse.description}</p>
@@ -522,7 +523,7 @@ class Courses extends React.Component<Props, State> {
 
   render() {
     return (
-      <div className="training">
+      <div className="training row">
         <Banner
           title={this.getBannerTitle()}
           img={this.state.currentTile.srcBanner}

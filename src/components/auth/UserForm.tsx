@@ -166,7 +166,9 @@ class UserForm extends React.Component<Iprops, {}> {
       toastr.error(this.props.t('validationError'), '', constants.toastrError);
       return;
     }
-    this.props.handleSubmit(this.userForm.value);
+    const countryID = this.userForm.value.countryID.value;
+    const updatedUser = { ...this.userForm.value, countryID };
+    this.props.handleSubmit(updatedUser);
   };
   setForm = (form: AbstractControl) => {
     this.userForm = form;

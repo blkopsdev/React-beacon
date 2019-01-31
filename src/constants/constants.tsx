@@ -471,7 +471,9 @@ const constants = {
     }
     if (error && error.response && error.response.status === 401) {
       console.warn('catching unauthorized, re-authenticating');
-      authContext.login();
+      setTimeout(() => {
+        authContext.login();
+      }, 800);
     }
     toastr.error('Error', msg, constants.toastrError);
   },

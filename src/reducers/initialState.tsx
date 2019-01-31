@@ -114,6 +114,11 @@ export const initialMeasurementPointQuestion = {
   order: 0
 };
 
+const initialCustomer = {
+  id: '',
+  name: ''
+};
+
 /* 
 * initialState
 */
@@ -138,7 +143,8 @@ export default {
     facilities: [],
     customerID: '',
     hasTeamMembers: false,
-    appVersion: ''
+    appVersion: '',
+    customer: initialCustomer
   },
   redirect: {
     redirectToReferrer: false,

@@ -290,7 +290,13 @@ class Courses extends React.Component<Props, State> {
     return ret;
   };
 
+  /*
+  * printLesonsList prints the list of lessons.  Each lesson is conditionaly displayed if it is not protected or it is protected and all the previous
+  * lessons are complete. Each lesson item conditionaly displays a buy button and prevents viewing or progress
+  */
   printLessonsList = () => {
+    // allLessonsComplete keeps track of all the previously complete lessons
+    let allLessonsComplete = true;
     const ProgressColumn = ({ progress }: { progress: number }) => (
       <Col md={3}>
         <span
@@ -349,6 +355,9 @@ class Courses extends React.Component<Props, State> {
         <div className="row courses-list">
           <ListGroup className="col-md-12">
             {this.state.filteredLessons.map((gfLesson, index) => {
+              if (gfLesson.isProtected && !allLessonsComplete) {
+                return null;
+              }
               let imagePath = gfLesson.imagePath;
               if (imagePath === null || imagePath === '') {
                 imagePath = require('../../images/Azure.png');
@@ -360,6 +369,16 @@ class Courses extends React.Component<Props, State> {
                 progress = lp.isComplete
                   ? 100
                   : Math.round((lp.timeSpent / lp.totalTime) * 99); // multiplying by 99 because we do not want to display 100% here.  display 100% only if .isComplete is true.
+                if (!lp.isComplete) {
+                  allLessonsComplete = false;
+                }
+              } else {
+                console.log(
+                  this.props.lessonProgress,
+                  gfLesson.id,
+                  this.props.lessonProgress[gfLesson.id]
+                );
+                allLessonsComplete = false;
               }
 
               return (

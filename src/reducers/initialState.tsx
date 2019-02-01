@@ -97,7 +97,8 @@ export const initialLesson = {
   primaryVideoPath: '',
   slideshowPath: '',
   courseLessons: [],
-  cost: 0
+  cost: 0,
+  isProtected: false
 };
 export const initialMeasurementPointList = {
   id: '',

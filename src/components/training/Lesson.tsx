@@ -186,7 +186,8 @@ class Lesson extends React.Component<Props, State> {
             totalTime: data.duration,
             timeSpent:
               this.timeSpent < data.duration ? this.timeSpent : data.duration,
-            userID: this.props.user.id
+            userID: this.props.user.id,
+            isComplete: false
           };
           this.props.saveLessonProgress(progress);
         });
@@ -207,7 +208,8 @@ class Lesson extends React.Component<Props, State> {
             totalTime: data.duration,
             timeSpent:
               this.timeSpent < data.duration ? this.timeSpent : data.duration,
-            userID: this.props.user.id
+            userID: this.props.user.id,
+            isComplete: false
           };
           // console.log('TIMEUPDATE:', progress);
 

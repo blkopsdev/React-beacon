@@ -463,6 +463,7 @@ export interface GFLesson {
   cost: number;
   score?: number;
   quizName?: string;
+  isProtected: boolean;
 }
 
 export interface GFLessons {
@@ -539,7 +540,7 @@ export interface LessonProgress {
   percentageComplete: number; // the current percent complete as reported  by vimeo
   totalTime: number; // the total time (or duration) in second of the video, from vimeo
   timeSpent: number;
-  isComplete?: boolean;
+  isComplete: boolean;
 }
 
 export interface ItrainingReducer {

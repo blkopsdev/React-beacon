@@ -373,11 +373,6 @@ class Courses extends React.Component<Props, State> {
                   allLessonsComplete = false;
                 }
               } else {
-                console.log(
-                  this.props.lessonProgress,
-                  gfLesson.id,
-                  this.props.lessonProgress[gfLesson.id]
-                );
                 allLessonsComplete = false;
               }
 

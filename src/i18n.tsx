@@ -10,7 +10,6 @@ const instance = i18n.use(LanguageDetector).init({
     en,
     es
   },
-  appendNamespaceToMissingKey: true,
 
   debug: false,
 

@@ -177,7 +177,6 @@ export function saveQuizResults(
     return axios
       .post(`${API.POST.training.savequiz}`, body)
       .then(data => {
-        console.log('SAVE QUIZ', data);
         dispatch({
           type: types.SAVE_QUIZ_SUCCESS,
           progress: data.data
@@ -198,7 +197,6 @@ export function getAllLessonProgress(): ThunkResult<void> {
     return axios
       .get(`${API.GET.training.getalllessonprogress}`)
       .then(data => {
-        console.log('PROGRESS', data.data);
         dispatch({
           type: types.GET_ALL_LESSON_PROGRESS_SUCCESS,
           progress: data.data
@@ -241,7 +239,6 @@ export function saveLessonProgress(
     return axios
       .post(`${API.POST.training.savelessonprogress}`, progress)
       .then(data => {
-        console.log('SAVE PROGRESS', data.data);
         dispatch({
           type: types.SAVE_LESSON_PROGRESS_SUCCESS,
           progress: { id: data.data, ...progress }

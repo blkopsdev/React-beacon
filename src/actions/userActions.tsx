@@ -72,7 +72,6 @@ export function userLogin(): ThunkResult<void> {
     return axios
       .post(API.POST.user.login)
       .then(data => {
-        console.log('login data', data.data);
         if (!data.data) {
           throw undefined;
         } else {
@@ -114,10 +113,10 @@ export function adalLogin(): ThunkResult<void> {
         } else {
           console.error(`message: ${message}  msg: ${msg}`);
           if (msg === 'login required') {
-            const tokenT = authContext.getCachedToken(
-              authContext.config.clientId
-            );
-            console.log(`should we try to automatically login here? ${tokenT}`);
+            // const tokenT = authContext.getCachedToken(
+            //   authContext.config.clientId
+            // );
+            // console.log(`should we try to automatically login here? ${tokenT}`);
           }
           authContext.login();
         }
@@ -139,10 +138,10 @@ export const adalReauth = () => {
       } else {
         console.error(`message: ${message}  msg: ${msg}`);
         if (msg === 'login required') {
-          const tokenT = authContext.getCachedToken(
-            authContext.config.clientId
-          );
-          console.log(`should we try to automatically login here? ${tokenT}`);
+          // const tokenT = authContext.getCachedToken(
+          //   authContext.config.clientId
+          // );
+          // console.log(`should we try to automatically login here? ${tokenT}`);
         }
         authContext.login();
       }

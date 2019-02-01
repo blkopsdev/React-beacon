@@ -322,6 +322,8 @@
   },
   "training": {
     "shoppingCartTitle": "Shopping Cart",
-    "emptyMessage": "Please add some lessons or courses."
+    "emptyMessage": "Please add some lessons or courses.",
+    "checkout": "Checkout",
+    "memo": "Memo"
   }
 }

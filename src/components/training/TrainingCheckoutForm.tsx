@@ -341,8 +341,20 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
         />
         <input
           hidden={true}
+          name="Email"
+          id="Email"
+          value={this.props.user.email}
+        />
+        <input
+          hidden={true}
           name="CustomerNo"
           id="CustomerNo"
+          value={`${this.props.user.first} ${this.props.user.last}`}
+        />
+        <input
+          hidden={true}
+          name="CustomerName"
+          id="CustomerName"
           value={this.props.user.customer.name}
         />
 

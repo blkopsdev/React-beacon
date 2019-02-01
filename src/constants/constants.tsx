@@ -473,7 +473,7 @@ const constants = {
       console.warn('catching unauthorized, re-authenticating');
       setTimeout(() => {
         authContext.login();
-      }, 1000);
+      }, 1500);
     }
     toastr.error('Error', msg, constants.toastrError);
   },

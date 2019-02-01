@@ -36,10 +36,10 @@ export function loadCourses(user: Iuser): ThunkResult<void> {
         return courses;
       })
       .catch(error => {
+        console.error('error loading courses', error);
         dispatch({ type: types.LOAD_COURSES_FAILED, error });
         const message = 'load courses';
-        constants.handleError(error, message);
-        throw error;
+        constants.handleError({ response: error }, message);
       });
   };
 }
@@ -68,9 +68,8 @@ export function getLessonsByCourseID(
       })
       .catch(error => {
         dispatch({ type: types.LOAD_LESSONS_FAILED, error });
-        constants.handleError(error, 'load lessons');
-        console.error(error);
-        throw error;
+        constants.handleError({ response: error }, 'load lessons');
+        console.error('Error getting a course by ID', error);
       });
   };
 }
@@ -86,9 +85,8 @@ export function getAllLessons(user: Iuser): ThunkResult<void> {
       })
       .catch(error => {
         dispatch({ type: types.LOAD_LESSONS_FAILED, error });
-        constants.handleError(error, 'load lessons');
-        console.error(error);
-        throw error;
+        constants.handleError({ response: error }, 'load lessons');
+        console.error('Error getting all lessons', error);
       });
   };
 }
@@ -118,8 +116,7 @@ export function getAllQuizzes(user: Iuser): ThunkResult<void> {
       .catch(error => {
         console.error('Error when trying to get all quizzes', error);
         dispatch({ type: types.LOAD_QUIZZES_FAILED, error });
-        constants.handleError(error, 'loading all quizzes');
-        throw error;
+        constants.handleError({ response: error }, 'loading all quizzes');
       });
   };
 }
@@ -142,8 +139,7 @@ export function getQuizzesByLessonID(
       .catch(error => {
         console.error('Error when trying to get all quizzes', error);
         dispatch({ type: types.LOAD_QUIZZES_FAILED, error });
-        constants.handleError(error, 'loading all quizzes');
-        throw error;
+        constants.handleError({ response: error }, 'loading all quizzes');
       });
   };
 }
@@ -188,9 +184,9 @@ export function saveQuizResults(
         });
       })
       .catch(error => {
+        console.error('Error saving quiz', error);
         dispatch({ type: types.SAVE_QUIZ_FAILED });
-        constants.handleError(error, 'save quiz');
-        throw error;
+        constants.handleError({ response: error }, 'save quiz');
       });
   };
 }
@@ -209,9 +205,9 @@ export function getAllLessonProgress(): ThunkResult<void> {
         });
       })
       .catch(error => {
+        console.error('Error getting lesson progress', error);
         dispatch({ type: types.GET_ALL_LESSON_PROGRESS_FAILED });
-        constants.handleError(error, 'get all lesson progress');
-        throw error;
+        constants.handleError({ response: error }, 'get all lesson progress');
       });
   };
 }
@@ -229,9 +225,9 @@ export function getProgressByLesson(lessonId: string): ThunkResult<void> {
         });
       })
       .catch(error => {
+        console.error('Error getting lesson progress', error);
         dispatch({ type: types.GET_LESSON_PROGRESS_FAILED });
-        constants.handleError(error, 'get lesson progress');
-        throw error;
+        constants.handleError({ response: error }, 'get lesson progress');
       });
   };
 }
@@ -252,9 +248,9 @@ export function saveLessonProgress(
         });
       })
       .catch(error => {
+        console.error('Error saving lesson progress', error);
         dispatch({ type: types.SAVE_LESSON_PROGRESS_FAILED });
-        constants.handleError(error, 'save lesson progress');
-        throw error;
+        constants.handleError({ response: error }, 'save lesson progress');
       });
   };
 }
@@ -356,9 +352,9 @@ export const trainingCheckout = (
         getPurchasedTrainingHelper(dispatch, getState);
       })
       .catch(error => {
+        console.error('Error checking out', error);
         dispatch({ type: types.CHECKOUT_TRAINING_FAILED });
-        constants.handleError(error, 'purchasing training');
-        throw error;
+        constants.handleError({ response: error }, 'purchasing training');
       });
   };
 };
@@ -381,9 +377,9 @@ const getPurchasedTrainingHelper = (dispatch: any, getState: any) => {
       // toastr.success("Success", "requested quote", constants.toastrSuccess);
     })
     .catch(error => {
+      console.error('Error getting purchased training', error);
       dispatch({ type: types.GET_PURCHASED_TRAINING_FAILED });
-      constants.handleError(error, 'get purchased training');
-      throw error;
+      constants.handleError({ response: error }, 'get purchased training');
     });
 };
 
@@ -400,9 +396,9 @@ export function startQuiz(quizID: string): ThunkResult<void> {
         });
       })
       .catch(error => {
+        console.error('Error starting timed quiz', error);
         dispatch({ type: types.START_QUIZ_FAILED });
-        constants.handleError(error, 'start quiz');
-        throw error;
+        constants.handleError({ response: error }, 'start quiz');
       });
   };
 }
@@ -422,9 +418,9 @@ export function getQuizResults(): ThunkResult<void> {
         });
       })
       .catch(error => {
+        console.error('Error getting quiz result', error);
         dispatch({ type: types.GET_QUIZ_RESULTS_FAILED });
-        constants.handleError(error, 'get quiz results');
-        throw error;
+        constants.handleError({ response: error }, 'get quiz results');
       });
   };
 }

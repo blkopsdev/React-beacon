@@ -381,7 +381,7 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
           id="redirect"
           value={`${
             process.env.REACT_APP_SERVER_DOMAIN
-          }training/acceptutapayment`}
+          }/training/acceptutapayment`}
         />
 
         <FormGenerator

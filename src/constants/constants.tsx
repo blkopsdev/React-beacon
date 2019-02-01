@@ -2,7 +2,7 @@ import { transitionInType, transitionOutType, Iuser, Itile } from '../models';
 import { find } from 'lodash';
 import { emptyTile } from '../reducers/initialState';
 import { toastr } from 'react-redux-toastr';
-import { authContext } from '../actions/userActions';
+import { adalReauth } from '../actions/userActions';
 // import { icon } from "@fortawesome/fontawesome-svg-core";
 
 const jobTypeOptions = [
@@ -472,7 +472,8 @@ const constants = {
     if (error && error.response && error.response.status === 401) {
       console.warn('catching unauthorized, re-authenticating');
       setTimeout(() => {
-        authContext.login();
+        // authContext.login();
+        adalReauth();
       }, 1500);
     }
     toastr.error('Error', msg, constants.toastrError);

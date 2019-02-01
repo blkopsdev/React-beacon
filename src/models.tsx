@@ -34,7 +34,6 @@ export interface Iuser {
   password: string;
   username: string;
   isAuthenticated: boolean;
-  token: string;
   email: string;
   securityFunctions: string[];
   first: string;

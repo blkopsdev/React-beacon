@@ -128,7 +128,6 @@ export default {
     password: '',
     username: '',
     isAuthenticated: false,
-    token: '',
     email: '',
     securityFunctions: [],
     first: '',

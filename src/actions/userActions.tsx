@@ -126,6 +126,30 @@ export function adalLogin(): ThunkResult<void> {
   };
 }
 
+/*
+* reauthenticate in the background if possible
+*/
+export const adalReauth = () => {
+  const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+  authContext.acquireToken(
+    resource,
+    (message: string, token: string, msg: string) => {
+      if (!msg) {
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+      } else {
+        console.error(`message: ${message}  msg: ${msg}`);
+        if (msg === 'login required') {
+          const tokenT = authContext.getCachedToken(
+            authContext.config.clientId
+          );
+          console.log(`should we try to automatically login here? ${tokenT}`);
+        }
+        authContext.login();
+      }
+    }
+  );
+};
+
 export function userLogout(): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch({ type: types.USER_LOGOUT_SUCCESS });

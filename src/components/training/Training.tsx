@@ -395,9 +395,10 @@ class Courses extends React.Component<Props, State> {
                           quizName={gfLesson.quizName}
                         />
                       )}
-                    {this.hasLessonBeenPurchased(gfLesson) && (
-                      <ProgressColumn progress={progress} />
-                    )}
+                    {this.hasLessonBeenPurchased(gfLesson) &&
+                      gfLesson.primaryVideoPath.length > 0 && (
+                        <ProgressColumn progress={progress} />
+                      )}
                     {!this.hasLessonBeenPurchased(gfLesson) && (
                       <BuyColumn shoppingCartItem={shoppingCartItem} />
                     )}

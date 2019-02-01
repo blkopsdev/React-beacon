@@ -496,7 +496,7 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
       grade = 'b';
     } else if (score >= 0 && score <= 59) {
       message =
-        "It looks like you're still learning the material - don't give up.  Review the lesson one more time, and then make sure to see your teacher for some help.";
+        "It looks like you're still learning the material - don't give up.  Review the lesson one more time.";
       grade = 'c';
     }
     return (

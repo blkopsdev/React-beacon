@@ -353,7 +353,7 @@ class Courses extends React.Component<Props, State> {
           </Col>
         </Row>
         <div className="row courses-list">
-          <ListGroup className="col-md-12">
+          <ListGroup>
             {this.state.filteredLessons.map((gfLesson, index) => {
               if (gfLesson.isProtected && !allLessonsComplete) {
                 return null;
@@ -542,43 +542,45 @@ class Courses extends React.Component<Props, State> {
 
   render() {
     return (
-      <div className="training row">
-        <Banner
-          title={this.getBannerTitle()}
-          img={this.state.currentTile.srcBanner}
-          color={constants.colors[`${this.state.currentTile.color}`]}
-        />
-        <Button
-          className="request-for-quote-cart-button"
-          bsStyle="primary"
-          onClick={() => this.props.toggleShoppingCartModal('TRAINING')}
-        >
-          <FontAwesomeIcon icon="shopping-cart" />
-          <Badge>{this.props.cartTotal} </Badge>
-        </Button>
-        {this.getBreadcrumbs()}
-        <Switch>
-          <Route
-            exact
-            path={`/training/:courseID/:lessonID/:quizID`}
-            component={Quiz}
+      <Row className="training">
+        <Col xs={12}>
+          <Banner
+            title={this.getBannerTitle()}
+            img={this.state.currentTile.srcBanner}
+            color={constants.colors[`${this.state.currentTile.color}`]}
           />
-          <Route
-            exact
-            path={`/training/:courseID/:lessonID`}
-            component={Lesson}
-          />
-          <Route
-            exact
-            path={`/training/:courseID`}
-            render={() => this.printLessonsList()}
-          />
-          <Route
-            exact
-            path={`/training`}
-            render={() => this.printStudentCourses()}
-          />
-        </Switch>
+          <Button
+            className="request-for-quote-cart-button"
+            bsStyle="primary"
+            onClick={() => this.props.toggleShoppingCartModal('TRAINING')}
+          >
+            <FontAwesomeIcon icon="shopping-cart" />
+            <Badge>{this.props.cartTotal} </Badge>
+          </Button>
+          {this.getBreadcrumbs()}
+          <Switch>
+            <Route
+              exact
+              path={`/training/:courseID/:lessonID/:quizID`}
+              component={Quiz}
+            />
+            <Route
+              exact
+              path={`/training/:courseID/:lessonID`}
+              component={Lesson}
+            />
+            <Route
+              exact
+              path={`/training/:courseID`}
+              render={() => this.printLessonsList()}
+            />
+            <Route
+              exact
+              path={`/training`}
+              render={() => this.printStudentCourses()}
+            />
+          </Switch>
+        </Col>
         <ShoppingCartModal
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
@@ -590,7 +592,7 @@ class Courses extends React.Component<Props, State> {
           showCost={true}
           ShoppingCartForm={TrainingCheckoutForm}
         />
-      </div>
+      </Row>
     );
   }
 }

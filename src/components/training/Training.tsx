@@ -296,7 +296,11 @@ class Courses extends React.Component<Props, State> {
   */
   printLessonsList = () => {
     // allLessonsComplete keeps track of all the previously complete lessons
-    let allLessonsComplete = true;
+    // temporarily switched to counting completed lessons.
+    // let allLessonsComplete = true;
+    let completedLessons = 0;
+    const requiredCompletedLessons = 29;
+
     const ProgressColumn = ({ progress }: { progress: number }) => (
       <Col md={3}>
         <span
@@ -355,7 +359,16 @@ class Courses extends React.Component<Props, State> {
         <div className="row courses-list">
           <ListGroup>
             {this.state.filteredLessons.map((gfLesson, index) => {
-              if (gfLesson.isProtected && !allLessonsComplete) {
+              // if (gfLesson.isProtected && !allLessonsComplete) {
+              if (
+                gfLesson.isProtected &&
+                completedLessons <= requiredCompletedLessons
+              ) {
+                console.log(
+                  'hiding protected lesson',
+                  gfLesson.name,
+                  completedLessons
+                );
                 return null;
               }
               let imagePath = gfLesson.imagePath;
@@ -369,11 +382,15 @@ class Courses extends React.Component<Props, State> {
                 progress = lp.isComplete
                   ? 100
                   : Math.round((lp.timeSpent / lp.totalTime) * 99); // multiplying by 99 because we do not want to display 100% here.  display 100% only if .isComplete is true.
+
+                if (lp.isComplete) {
+                  completedLessons++;
+                }
                 if (!lp.isComplete) {
-                  allLessonsComplete = false;
+                  // allLessonsComplete = false;
                 }
               } else {
-                allLessonsComplete = false;
+                // allLessonsComplete = false;
               }
 
               return (

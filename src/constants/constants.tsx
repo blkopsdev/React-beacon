@@ -62,7 +62,7 @@ const icons = {
   payments: require('../images/icons/BM_Payments.png'),
   training: require('../images/icons/BM_Training.png'),
   locations: require('../images/icons/BM_ManageLocations.png'),
-  measurements: require('../images/icons/BM_ManageLocations.png')
+  measurements: require('../images/icons/BM_Measurement.png')
 };
 
 const securityFunctions = {

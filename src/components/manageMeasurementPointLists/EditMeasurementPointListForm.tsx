@@ -255,9 +255,10 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
   deleteQuestion(question: any) {
     const toastrConfirmOptions = {
       onOk: () => {
-        this.props.deleteGlobalMeasurementPointQuestion(
-          this.props.selectedMeasurementPointList.id,
-          question.id
+        question = { ...question, isDeleted: true };
+        this.props.addQuestionToMeasurementPointList(
+          this.props.selectedMeasurementPointList,
+          question
         );
         console.log('deleted', question);
       },
@@ -375,14 +376,15 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     );
     const adminMps = this.state.questions.filter(
       (mps: ImeasurementPointQuestion) => {
-        return !mps.customerID;
+        return !mps.customerID && !mps.isDeleted;
       }
     );
     const customerMps = this.state.questions.filter(
       (mps: ImeasurementPointQuestion) => {
         return (
           typeof mps.customerID !== 'undefined' &&
-          mps.customerID === this.props.user.id
+          mps.customerID === this.props.user.id &&
+          mps.isDeleted === false
         );
       }
     );
@@ -436,7 +438,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
             </Button>
           </Col>
           <Col xs={12} className="">
-            {isAdmin && this.getQuestionList(this.state.questions, true)}
+            {isAdmin && this.getQuestionList(adminMps, true)}
             {!isAdmin && this.getQuestionList(adminMps, false)}
           </Col>
           {!isAdmin && (

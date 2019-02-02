@@ -166,10 +166,6 @@ class EditMeasurementPointQuestionForm extends React.Component<Iprops, Istate> {
         question: initialMeasurementPointQuestion
       };
     }
-
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.setForm = this.setForm.bind(this);
-    this.getFormConfig = this.getFormConfig.bind(this);
   }
 
   getFormConfig(question: ImeasurementPointQuestion) {

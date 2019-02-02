@@ -54,9 +54,9 @@ const uuidv4 = require('uuid/v4');
 // }
 
 const buildFieldConfig = (
-  typeOptions: any[],
-  mainCategoryOptions: any[],
-  standardOptions: any[]
+  typeOptions: Ioption[],
+  mainCategoryOptions: Ioption[],
+  standardOptions: Ioption[]
 ) => {
   // Field config to configure form
   const fieldConfigControls = {
@@ -106,7 +106,7 @@ const buildFieldConfig = (
 interface Iprops extends React.Props<EditMeasurementPointListForm> {
   user: Iuser;
   selectedMeasurementPointList: ImeasurementPointList;
-  measurementPointListTypeOptions: any[];
+  measurementPointListTypeOptions: Ioption[];
   standardOptions: Ioption[];
   mainCategoryOptions: Ioption[];
   loading: boolean;
@@ -209,10 +209,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     });
   }
 
-  handleSubmit = (
-    e: React.MouseEvent<HTMLFormElement>,
-    shouldApprove?: boolean
-  ) => {
+  handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (this.measurementsForm.status === 'INVALID') {
       this.measurementsForm.markAsSubmitted();
@@ -247,12 +244,12 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     };
   };
 
-  setSelectedQuestion(question: any) {
+  setSelectedQuestion(question: ImeasurementPointQuestion) {
     this.setState({ selectedMeasurementPointQuestion: question });
     this.props.toggleEditMeasurementPointQuestionModal();
   }
 
-  deleteQuestion(question: any) {
+  deleteQuestion(question: ImeasurementPointQuestion) {
     const toastrConfirmOptions = {
       onOk: () => {
         question = { ...question, isDeleted: true };
@@ -398,6 +395,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
           />
           <Col xs={12} className="" style={{ marginLeft: '-15px' }}>
             <Button
+              type="button"
               bsStyle="link"
               className=""
               onClick={() => {
@@ -411,6 +409,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
               Add Group
             </Button>
             <Button
+              type="button"
               bsStyle="link"
               className=""
               onClick={() => {
@@ -424,6 +423,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
               Add Procedure
             </Button>
             <Button
+              type="button"
               bsStyle="link"
               className=""
               onClick={() => {

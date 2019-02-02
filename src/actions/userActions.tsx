@@ -14,8 +14,8 @@ import * as localForage from 'localforage';
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
 export const authContext = new AuthenticationContext({
-  tenant: constants.adalAuth.tenant,
-  clientId: constants.adalAuth.clientId,
+  tenant: `${process.env.REACT_APP_ADAL_TENANT}`,
+  clientId: `${process.env.REACT_APP_ADAL_CLIENTID}`,
   cacheLocation: 'localStorage',
   redirectUri: `${process.env.REACT_APP_HOST_DOMAIN}`
 });
@@ -72,7 +72,6 @@ export function userLogin(): ThunkResult<void> {
     return axios
       .post(API.POST.user.login)
       .then(data => {
-        console.log('login data', data.data);
         if (!data.data) {
           throw undefined;
         } else {
@@ -81,14 +80,23 @@ export function userLogin(): ThunkResult<void> {
         }
       })
       .catch((error: any) => {
+        console.error('failed to login', error);
         dispatch({ type: types.USER_LOGIN_FAILED });
-        constants.handleError(error, 'login');
-        // to avoid getting stuck, go ahead and log the user out after a longer pause
-        setTimeout(() => {
-          authContext.logOut();
-        }, 3000); // give it time to persist this to local storage
 
-        throw error;
+        // to avoid getting stuck, go ahead and log the user out after a longer pause
+        dispatch({ type: types.USER_LOGOUT_SUCCESS });
+        dispatch({ type: 'RESET_STATE' }); // reset the redux-offline outbox
+
+        setTimeout(() => {
+          localForage.removeItem('state-core-care-web').then(() => {
+            authContext.logOut();
+          });
+        }, 500);
+
+        if (error && error.response && error.response.status === 401) {
+          return;
+        }
+        constants.handleError(error, 'login');
       });
   };
 }
@@ -96,7 +104,7 @@ export function adalLogin(): ThunkResult<void> {
   return (dispatch, getState) => {
     // dispatch(beginAjaxCall()); removing loading here beacuse when we come back from adal login,
     // is when the success is called and it closses loading while userLogin is still waiting.
-    const resource = constants.adalAuth.clientId;
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
     authContext.acquireToken(
       resource,
       (message: string, token: string, msg: string) => {
@@ -105,10 +113,10 @@ export function adalLogin(): ThunkResult<void> {
         } else {
           console.error(`message: ${message}  msg: ${msg}`);
           if (msg === 'login required') {
-            const tokenT = authContext.getCachedToken(
-              authContext.config.clientId
-            );
-            console.log(`should we try to automatically login here? ${tokenT}`);
+            // const tokenT = authContext.getCachedToken(
+            //   authContext.config.clientId
+            // );
+            // console.log(`should we try to automatically login here? ${tokenT}`);
           }
           authContext.login();
         }
@@ -117,19 +125,40 @@ export function adalLogin(): ThunkResult<void> {
   };
 }
 
+/*
+* reauthenticate in the background if possible
+*/
+export const adalReauth = () => {
+  const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+  authContext.acquireToken(
+    resource,
+    (message: string, token: string, msg: string) => {
+      if (!msg) {
+        axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
+      } else {
+        console.error(`message: ${message}  msg: ${msg}`);
+        if (msg === 'login required') {
+          // const tokenT = authContext.getCachedToken(
+          //   authContext.config.clientId
+          // );
+          // console.log(`should we try to automatically login here? ${tokenT}`);
+        }
+        authContext.login();
+      }
+    }
+  );
+};
+
 export function userLogout(): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch({ type: types.USER_LOGOUT_SUCCESS });
     dispatch({ type: 'RESET_STATE' }); // reset the redux-offline outbox
-    localForage.removeItem('state-core-care-web').then(() => {
-      authContext.logOut();
-    });
 
-    // setTimeout(() => {
-    //   localForage.removeItem('state-core-care-web').then(() => {
-    //     authContext.logOut();
-    //   });
-    // }, 500)
+    setTimeout(() => {
+      localForage.removeItem('state-core-care-web').then(() => {
+        authContext.logOut();
+      });
+    }, 500);
   };
 }
 

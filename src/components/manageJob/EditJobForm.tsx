@@ -148,7 +148,8 @@ const buildFieldConfig = (
         colWidth: 12,
         placeholder: 'jobManage:typeSearchPlaceholder',
         isMulti: true,
-        name: 'assigned-user'
+        name: 'assigned-user',
+        required: false
       }
     }
   };
@@ -188,8 +189,6 @@ class EditJobForm extends React.Component<Iprops, {}> {
       ),
       this.props.t
     );
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.setForm = this.setForm.bind(this);
   }
   componentDidUpdate(prevProps: Iprops) {
     if (

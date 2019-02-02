@@ -69,18 +69,16 @@ class SignUpDirect extends React.Component<Iprops, Istate> {
       redirectToLogin: false,
       showSignupSuccess: false
     };
-    this.cancel = this.cancel.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  cancel() {
+  cancel = () => {
     this.setState({ redirectToLogin: true });
-  }
-  handleSubmit(newUser: ItempUser) {
+  };
+  handleSubmit = (newUser: ItempUser) => {
     return this.props.signUpDirect(newUser).then(() => {
       this.setState({ showSignupSuccess: true });
     });
-  }
+  };
   render() {
     const { t } = this.props;
     if (this.props.user.isAuthenticated) {

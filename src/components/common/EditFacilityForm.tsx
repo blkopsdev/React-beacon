@@ -50,7 +50,8 @@ const fieldConfig = {
         label: 'user:address2',
         colWidth: 4,
         type: 'text',
-        name: 'address2'
+        name: 'address2',
+        required: false
       }
     },
     city: {
@@ -111,8 +112,6 @@ class EditFacilityForm extends React.Component<Iprops, {}> {
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(fieldConfig, this.props.t);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.setForm = this.setForm.bind(this);
   }
   // componentDidUpdate(prevProps: Iprops) {
 
@@ -127,6 +126,13 @@ class EditFacilityForm extends React.Component<Iprops, {}> {
       .valueChanges.subscribe((value: Ioption) => {
         this.onCountryChanges(value.value);
       });
+
+    this.userForm.patchValue({
+      countryID: {
+        value: 'ABC5D95C-129F-4837-988C-0BF4AE1F3B67',
+        label: 'United States of America'
+      }
+    });
   }
   componentWillUnmount() {
     if (this.subscription) {
@@ -144,6 +150,7 @@ class EditFacilityForm extends React.Component<Iprops, {}> {
       ]);
       stateFormControl.patchValue(null);
     } else {
+      stateFormControl.patchValue(null);
       stateFormControl.disable();
       stateFormControl.setValidators(null);
     }

@@ -33,8 +33,6 @@ const azure = require('../../images/Azure.png');
 class SignUpWithMS extends React.Component<Iprops, any> {
   constructor(props: Iprops) {
     super(props);
-
-    this.login = this.login.bind(this);
   }
   componentWillMount() {
     // if there is no username and there is a token, get the user
@@ -46,12 +44,12 @@ class SignUpWithMS extends React.Component<Iprops, any> {
     this.props.setRedirectPathname('/signupWithMS');
   }
 
-  login() {
+  login = () => {
     this.props.setLoginRedirect().then(() => {
       console.log('start adal login');
       this.props.adalLogin();
     });
-  }
+  };
   render() {
     let showSignUpForm: boolean = false;
 

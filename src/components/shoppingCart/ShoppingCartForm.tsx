@@ -185,8 +185,6 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
   private subscription: any;
   constructor(props: Iprops) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.setForm = this.setForm.bind(this);
     this.state = {
       fieldConfig: { controls: {} }
     };

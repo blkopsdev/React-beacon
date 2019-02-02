@@ -10,7 +10,8 @@ import {
   LessonProgress,
   ThunkResult,
   IshoppingCartProduct,
-  GFQuizItem
+  GFQuizItem,
+  GFCourse
 } from 'src/models';
 import axios from 'axios';
 import { find, forEach } from 'lodash';
@@ -21,15 +22,24 @@ export function loadCourses(user: Iuser): ThunkResult<void> {
     dispatch(beginAjaxCall());
     return courseAPI
       .getAll(user)
-      .then((courses: any) => {
+      .then((rawCourses: any) => {
+        // temporary hack to support On-Site courses
+        const courses = rawCourses.map((course: GFCourse) => {
+          const foundOnSite = course.name.search('On-Site');
+          if (foundOnSite >= 0) {
+            return { ...course, onSite: true };
+          } else {
+            return { ...course, onSite: false };
+          }
+        });
         dispatch({ type: types.LOAD_COURSES_SUCCESS, courses });
         return courses;
       })
       .catch(error => {
+        console.error('error loading courses', error);
         dispatch({ type: types.LOAD_COURSES_FAILED, error });
         const message = 'load courses';
-        constants.handleError(error, message);
-        throw error;
+        constants.handleError({ response: error }, message);
       });
   };
 }
@@ -58,9 +68,8 @@ export function getLessonsByCourseID(
       })
       .catch(error => {
         dispatch({ type: types.LOAD_LESSONS_FAILED, error });
-        constants.handleError(error, 'load lessons');
-        console.error(error);
-        throw error;
+        constants.handleError({ response: error }, 'load lessons');
+        console.error('Error getting a course by ID', error);
       });
   };
 }
@@ -76,9 +85,8 @@ export function getAllLessons(user: Iuser): ThunkResult<void> {
       })
       .catch(error => {
         dispatch({ type: types.LOAD_LESSONS_FAILED, error });
-        constants.handleError(error, 'load lessons');
-        console.error(error);
-        throw error;
+        constants.handleError({ response: error }, 'load lessons');
+        console.error('Error getting all lessons', error);
       });
   };
 }
@@ -108,8 +116,7 @@ export function getAllQuizzes(user: Iuser): ThunkResult<void> {
       .catch(error => {
         console.error('Error when trying to get all quizzes', error);
         dispatch({ type: types.LOAD_QUIZZES_FAILED, error });
-        constants.handleError(error, 'loading all quizzes');
-        throw error;
+        constants.handleError({ response: error }, 'loading all quizzes');
       });
   };
 }
@@ -132,8 +139,7 @@ export function getQuizzesByLessonID(
       .catch(error => {
         console.error('Error when trying to get all quizzes', error);
         dispatch({ type: types.LOAD_QUIZZES_FAILED, error });
-        constants.handleError(error, 'loading all quizzes');
-        throw error;
+        constants.handleError({ response: error }, 'loading all quizzes');
       });
   };
 }
@@ -171,16 +177,15 @@ export function saveQuizResults(
     return axios
       .post(`${API.POST.training.savequiz}`, body)
       .then(data => {
-        console.log('SAVE QUIZ', data);
         dispatch({
           type: types.SAVE_QUIZ_SUCCESS,
           progress: data.data
         });
       })
       .catch(error => {
+        console.error('Error saving quiz', error);
         dispatch({ type: types.SAVE_QUIZ_FAILED });
         constants.handleError(error, 'save quiz');
-        throw error;
       });
   };
 }
@@ -192,16 +197,15 @@ export function getAllLessonProgress(): ThunkResult<void> {
     return axios
       .get(`${API.GET.training.getalllessonprogress}`)
       .then(data => {
-        console.log('PROGRESS', data.data);
         dispatch({
           type: types.GET_ALL_LESSON_PROGRESS_SUCCESS,
           progress: data.data
         });
       })
       .catch(error => {
+        console.error('Error getting lesson progress', error);
         dispatch({ type: types.GET_ALL_LESSON_PROGRESS_FAILED });
         constants.handleError(error, 'get all lesson progress');
-        throw error;
       });
   };
 }
@@ -219,9 +223,9 @@ export function getProgressByLesson(lessonId: string): ThunkResult<void> {
         });
       })
       .catch(error => {
+        console.error('Error getting lesson progress', error);
         dispatch({ type: types.GET_LESSON_PROGRESS_FAILED });
         constants.handleError(error, 'get lesson progress');
-        throw error;
       });
   };
 }
@@ -235,16 +239,15 @@ export function saveLessonProgress(
     return axios
       .post(`${API.POST.training.savelessonprogress}`, progress)
       .then(data => {
-        console.log('SAVE PROGRESS', data.data);
         dispatch({
           type: types.SAVE_LESSON_PROGRESS_SUCCESS,
           progress: { id: data.data, ...progress }
         });
       })
       .catch(error => {
+        console.error('Error saving lesson progress', error);
         dispatch({ type: types.SAVE_LESSON_PROGRESS_FAILED });
         constants.handleError(error, 'save lesson progress');
-        throw error;
       });
   };
 }
@@ -346,9 +349,9 @@ export const trainingCheckout = (
         getPurchasedTrainingHelper(dispatch, getState);
       })
       .catch(error => {
+        console.error('Error checking out', error);
         dispatch({ type: types.CHECKOUT_TRAINING_FAILED });
         constants.handleError(error, 'purchasing training');
-        throw error;
       });
   };
 };
@@ -371,9 +374,9 @@ const getPurchasedTrainingHelper = (dispatch: any, getState: any) => {
       // toastr.success("Success", "requested quote", constants.toastrSuccess);
     })
     .catch(error => {
+      console.error('Error getting purchased training', error);
       dispatch({ type: types.GET_PURCHASED_TRAINING_FAILED });
       constants.handleError(error, 'get purchased training');
-      throw error;
     });
 };
 
@@ -390,9 +393,9 @@ export function startQuiz(quizID: string): ThunkResult<void> {
         });
       })
       .catch(error => {
+        console.error('Error starting timed quiz', error);
         dispatch({ type: types.START_QUIZ_FAILED });
         constants.handleError(error, 'start quiz');
-        throw error;
       });
   };
 }
@@ -412,9 +415,9 @@ export function getQuizResults(): ThunkResult<void> {
         });
       })
       .catch(error => {
+        console.error('Error getting quiz result', error);
         dispatch({ type: types.GET_QUIZ_RESULTS_FAILED });
         constants.handleError(error, 'get quiz results');
-        throw error;
       });
   };
 }

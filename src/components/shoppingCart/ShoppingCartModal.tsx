@@ -11,7 +11,8 @@ import {
   IinitialState,
   IproductInfo,
   IshoppingCart,
-  ItableFiltersReducer
+  ItableFiltersReducer,
+  Iuser
 } from '../../models';
 import {
   addToCart,
@@ -45,6 +46,7 @@ interface IdispatchProps {
   cartName: string;
   ShoppingCartForm: any;
   showCost?: boolean;
+  user: Iuser;
 }
 
 class EditQuoteModal extends React.Component<Iprops & IdispatchProps, {}> {

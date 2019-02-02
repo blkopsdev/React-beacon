@@ -35,7 +35,7 @@ export function getUserManage(): ThunkResult<void> {
       })
       .catch((error: any) => {
         dispatch({ type: types.USER_MANAGE_FAILED });
-        constants.handleError(error, 'get user queue');
+        constants.handleError(error, 'get users');
         throw error;
       });
   };

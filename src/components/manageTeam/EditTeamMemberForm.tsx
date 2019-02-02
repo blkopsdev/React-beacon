@@ -89,8 +89,6 @@ class EditTeamMemberForm extends React.Component<Iprops, {}> {
       buildFieldConfig(this.props.facilityOptions),
       this.props.t
     );
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.setForm = this.setForm.bind(this);
   }
   componentDidUpdate(prevProps: Iprops) {
     if (

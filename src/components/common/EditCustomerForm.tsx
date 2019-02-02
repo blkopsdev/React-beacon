@@ -33,7 +33,12 @@ const fieldConfig = {
     },
     vat: {
       render: FormUtil.TextInput,
-      meta: { label: 'customerVatLabel', colWidth: 12, name: 'customer-vat' }
+      meta: {
+        label: 'customerVatLabel',
+        colWidth: 12,
+        name: 'customer-vat',
+        required: false
+      }
     }
   }
 };
@@ -52,8 +57,6 @@ class EditCustomerForm extends React.Component<Iprops, {}> {
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(fieldConfig, this.props.t);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.setForm = this.setForm.bind(this);
   }
   // componentDidUpdate(prevProps: Iprops) {
 

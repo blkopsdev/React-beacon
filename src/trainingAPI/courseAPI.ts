@@ -1,7 +1,7 @@
 const root = process.env.REACT_APP_SERVER_DOMAIN_TRAINING;
 import { sortBy, forEach } from "lodash";
 import { Iuser } from "src/models";
-import { getCachedToken } from "src/actions/userActions";
+import Axios from "axios";
 
 class CourseAPI {
   /*
@@ -144,9 +144,10 @@ class CourseAPI {
   */
   static getHeaders(user: Iuser) {
     const headers = new Headers();
+    const token = Axios.defaults.headers.common['Authorization']
     headers.append("Content-Type", "application/json");
     headers.append("Accept", "application/json");
-    headers.append("Authorization", "Bearer " + getCachedToken());
+    headers.append("Authorization", token);
     return headers;
   }
 }

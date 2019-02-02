@@ -190,16 +190,13 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
     this.props.setTableFilter({
       facility,
       customer: undefined,
-      productGroup: undefined,
       search: '',
-      manufacturer: undefined,
       page: 1
     });
   };
 
   /*
   * Set Columns sets columns to state
-  * setting columns here in order to reset them if and after we receive productGroup and manufacturer options
   */
   setColumns = () => {
     const columns = TableUtil.translateHeaders(

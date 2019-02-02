@@ -23,7 +23,8 @@ import {
   Isubcategory,
   ItableFiltersReducer,
   IproductQueueObject,
-  Iuser
+  Iuser,
+  Ioption
 } from '../../models';
 import {
   saveProduct,
@@ -47,54 +48,48 @@ const buildFieldConfig = (
   disabled: boolean
 ) => {
   const fieldConfigControls = {
-    name: {
-      options: {
-        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
-      },
+    // name: {
+    //   options: {
+    //     validators: [Validators.required, FormUtil.validators.requiredWithTrim]
+    //   },
+    //   render: FormUtil.TextInput,
+    //   meta: {
+    //     label: 'name',
+    //     colWidth: 12,
+    //     type: 'input',
+    //     name: 'product-name',
+    //     disabled
+    //   }
+    // },
+    sku: {
+      // options: {
+      //   validators: [Validators.required, FormUtil.validators.requiredWithTrim]
+      // },
       render: FormUtil.TextInput,
       meta: {
-        label: 'name',
+        label: 'sku',
         colWidth: 12,
         type: 'input',
-        name: 'product-name',
-        disabled
+        name: 'sku',
+        disabled,
+        required: false
       }
     },
-    sku: {
-      options: {
-        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
-      },
-      render: FormUtil.TextInput,
-      meta: { label: 'sku', colWidth: 12, type: 'input', name: 'sku', disabled }
-    },
     description: {
-      options: {
-        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
-      },
+      // options: {
+      //   validators: [Validators.required, FormUtil.validators.requiredWithTrim]
+      // },
       render: FormUtil.TextInput,
       meta: {
         label: 'description',
         colWidth: 12,
         componentClass: 'textarea',
         name: 'description',
-        disabled
+        disabled,
+        required: false
       }
     },
-    productGroupID: {
-      render: FormUtil.Select,
-      meta: {
-        options: productInfo.productGroupOptions,
-        label: 'common:productGroup',
-        colWidth: 12,
-        placeholder: 'common:searchPlaceholder',
-        isMulti: false,
-        name: 'product-group',
-        disabled
-      },
-      options: {
-        validators: Validators.required
-      }
-    },
+
     brandID: {
       render: FormUtil.Select,
       meta: {
@@ -104,21 +99,6 @@ const buildFieldConfig = (
         placeholder: 'common:searchPlaceholder',
         isMulti: false,
         name: 'brand',
-        disabled
-      },
-      options: {
-        validators: Validators.required
-      }
-    },
-    manufacturerID: {
-      render: FormUtil.Select,
-      meta: {
-        options: productInfo.manufacturerOptions,
-        label: 'manufacturer',
-        colWidth: 12,
-        placeholder: 'common:searchPlaceholder',
-        isMulti: false,
-        name: 'manufacturer',
         disabled
       },
       options: {
@@ -162,16 +142,18 @@ const buildFieldConfig = (
         validators: Validators.required
       }
     },
-    gasTypeID: {
+    productTypeID: {
       render: FormUtil.Select,
       meta: {
-        options: productInfo.gasTypeOptions,
-        label: 'gasType',
+        options: productInfo.productTypeOptions,
+        label: 'productType',
         colWidth: 6,
         placeholder: 'common:searchPlaceholder',
         isMulti: false,
         name: 'gas-type',
-        disabled
+        isClearable: true,
+        disabled,
+        required: false
       }
     },
     powerID: {
@@ -183,7 +165,9 @@ const buildFieldConfig = (
         placeholder: 'common:searchPlaceholder',
         isMulti: false,
         name: 'power',
-        disabled
+        isClearable: true,
+        disabled,
+        required: false
       }
     },
     systemSizeID: {
@@ -195,7 +179,9 @@ const buildFieldConfig = (
         placeholder: 'common:searchPlaceholder',
         isMulti: false,
         name: 'system-size',
-        disabled
+        isClearable: true,
+        disabled,
+        required: false
       }
     },
     standardID: {
@@ -207,7 +193,9 @@ const buildFieldConfig = (
         placeholder: 'common:searchPlaceholder',
         isMulti: false,
         name: 'standard',
-        disabled
+        isClearable: true,
+        disabled,
+        required: false
       }
     }
   };
@@ -246,7 +234,6 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
       ),
       this.props.t
     );
-    this.setForm = this.setForm.bind(this);
   }
   // componentDidUpdate(prevProps: Iprops) {
   // }
@@ -268,8 +255,9 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
             )
           });
           // special set for mainCategory
-          if (key === 'subcategory') {
-            const { mainCategoryID } = value || ('' as any);
+          if (key === 'subcategory' && typeof value === 'object') {
+            const subcat = value as Isubcategory;
+            const { mainCategoryID } = subcat;
             this.userForm.patchValue({
               mainCategoryID: find(
                 this.props.productInfo[`mainCategoryOptions`],
@@ -318,6 +306,24 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
     }
   };
 
+  /*
+  * product names are generated by: category, subcategory, type, power, model
+  */
+  createProductName = (
+    mainCategoryID: Ioption,
+    subcategoryID: Ioption,
+    productTypeID: Ioption,
+    powerID: Ioption,
+    systemSizeID: Ioption
+  ) => {
+    const category = mainCategoryID ? mainCategoryID.label : '';
+    const subcategory = subcategoryID ? `: ${subcategoryID.label}` : '';
+    const productType = productTypeID ? `: ${productTypeID.label}` : '';
+    const power = powerID ? `: ${powerID.label}` : '';
+    const systemSize = systemSizeID ? `: ${systemSizeID.label}` : '';
+    return `${category}${subcategory}${productType}${power}${systemSize}`;
+  };
+
   handleSubmit = (
     e: React.MouseEvent<HTMLFormElement>,
     shouldApprove: boolean = false
@@ -331,28 +337,40 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
     console.log(this.userForm.value);
 
     const {
-      productGroupID,
       brandID,
-      manufacturerID,
       subcategoryID,
       mainCategoryID,
-      gasTypeID,
+      productTypeID,
       powerID,
       systemSizeID,
       standardID
-    } = this.userForm.value;
+    } = this.userForm.value as {
+      brandID: Ioption;
+      subcategoryID: Ioption;
+      mainCategoryID: Ioption;
+      productTypeID: Ioption;
+      powerID: Ioption;
+      systemSizeID: Ioption;
+      standardID: Ioption;
+    };
+    const productName = this.createProductName(
+      mainCategoryID,
+      subcategoryID,
+      productTypeID,
+      powerID,
+      systemSizeID
+    );
 
     let newItem = {
       ...this.userForm.value,
-      productGroupID: productGroupID.value,
       brandID: brandID.value,
-      manufacturerID: manufacturerID.value,
       subcategoryID: subcategoryID ? subcategoryID.value : '',
       mainCategoryID: mainCategoryID.value,
-      gasTypeID: gasTypeID ? gasTypeID.value : '',
+      productTypeID: productTypeID ? productTypeID.value : '',
       powerID: powerID ? powerID.value : '',
       systemSizeID: systemSizeID ? systemSizeID.value : '',
-      standardID: standardID ? standardID.value : ''
+      standardID: standardID ? standardID.value : '',
+      name: productName
     };
 
     if (
@@ -426,6 +444,14 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
             </p>
           </Col>
         )}
+        {this.props.selectedItem &&
+          this.props.selectedItem.id && (
+            <Col xs={12}>
+              <h5 style={{ lineHeight: '1.4rem' }}>
+                {this.props.selectedItem.name}
+              </h5>
+            </Col>
+          )}
 
         <form onSubmit={this.handleSubmit} className="clearfix beacon-form">
           <FormGenerator

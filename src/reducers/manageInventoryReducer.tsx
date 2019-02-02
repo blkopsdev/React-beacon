@@ -6,9 +6,8 @@ import {
   ImanageInventoryReducer,
   IproductInfo,
   Ibrand,
-  IgasType,
+  IproductType,
   IbaseDataObject,
-  IproductGroup,
   Isubcategory,
   IsystemSize,
   IinstallBase
@@ -221,7 +220,7 @@ export default function ManageInventory(
   };
 }
 /*
-Brand, GasType, Main Category, Manufacturer, Power, Product Group, Standard, Subcategory, System Size 
+Brand, productType, Main Category, Power, Product Group, Standard, Subcategory, System Size 
 */
 export function productInfo(
   state: IproductInfo = initialState.manageInventory.productInfo,
@@ -231,42 +230,34 @@ export function productInfo(
     case types.GET_PRODUCT_INFO_SUCCESS:
       const pi = action.data;
       const brands = keyBy(pi[0], (item: Ibrand) => item.id);
-      const gasTypes = keyBy(pi[1], (item: IgasType) => item.id);
+      const productTypes = keyBy(pi[1], (item: IproductType) => item.id);
       const mainCategories = keyBy(pi[2], (item: IbaseDataObject) => item.id);
-      const manufacturers = keyBy(pi[3], (item: IbaseDataObject) => item.id);
-      const powers = keyBy(pi[4], (item: IbaseDataObject) => item.id);
-      const productGroups = keyBy(pi[5], (item: IproductGroup) => item.id);
-      const standards = keyBy(pi[6], (item: IbaseDataObject) => item.id);
-      const subcategories = keyBy(pi[7], (item: Isubcategory) => item.id);
-      const systemSizes = keyBy(pi[8], (item: IsystemSize) => item.id);
+      const powers = keyBy(pi[3], (item: IbaseDataObject) => item.id);
+      const standards = keyBy(pi[4], (item: IbaseDataObject) => item.id);
+      const subcategories = keyBy(pi[5], (item: Isubcategory) => item.id);
+      const systemSizes = keyBy(pi[6], (item: IsystemSize) => item.id);
 
       // an options version of each one
       const brandOptions = FormUtil.convertToOptions(pi[0]);
-      const gasTypeOptions = FormUtil.convertToOptions(pi[1]);
+      const productTypeOptions = FormUtil.convertToOptions(pi[1]);
       const mainCategoryOptions = FormUtil.convertToOptions(pi[2]);
-      const manufacturerOptions = FormUtil.convertToOptions(pi[3]);
-      const powerOptions = FormUtil.convertToOptions(pi[4]);
-      const productGroupOptions = FormUtil.convertToOptions(pi[5]);
-      const standardOptions = FormUtil.convertToOptions(pi[6]);
-      const subcategoryOptions = FormUtil.convertToOptions(pi[7]);
-      const systemSizeOptions = FormUtil.convertToOptions(pi[8]);
+      const powerOptions = FormUtil.convertToOptions(pi[3]);
+      const standardOptions = FormUtil.convertToOptions(pi[4]);
+      const subcategoryOptions = FormUtil.convertToOptions(pi[5]);
+      const systemSizeOptions = FormUtil.convertToOptions(pi[6]);
 
       return {
         brands,
-        gasTypes,
+        productTypes,
         mainCategories,
-        manufacturers,
         powers,
-        productGroups,
         standards,
         subcategories,
         systemSizes,
         brandOptions,
-        gasTypeOptions,
+        productTypeOptions,
         mainCategoryOptions,
-        manufacturerOptions,
         powerOptions,
-        productGroupOptions,
         standardOptions,
         subcategoryOptions,
         systemSizeOptions

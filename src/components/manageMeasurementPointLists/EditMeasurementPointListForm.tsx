@@ -55,7 +55,7 @@ const uuidv4 = require('uuid/v4');
 
 const buildFieldConfig = (
   typeOptions: any[],
-  productGroupOptions: any[],
+  mainCategoryOptions: any[],
   standardOptions: any[]
 ) => {
   // Field config to configure form
@@ -75,7 +75,7 @@ const buildFieldConfig = (
     equipmentType: {
       render: FormUtil.SelectWithoutValidation,
       meta: {
-        options: productGroupOptions,
+        options: mainCategoryOptions,
         label: 'manageMeasurementPointLists:equipmentType',
         colWidth: 12,
         placeholder: 'manageMeasurementPointLists:equipmentTypePlaceholder'
@@ -108,7 +108,7 @@ interface Iprops extends React.Props<EditMeasurementPointListForm> {
   selectedMeasurementPointList: ImeasurementPointList;
   measurementPointListTypeOptions: any[];
   standardOptions: Ioption[];
-  productGroupOptions: Ioption[];
+  mainCategoryOptions: Ioption[];
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;
@@ -138,13 +138,11 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     this.fieldConfig = FormUtil.translateForm(
       buildFieldConfig(
         this.props.measurementPointListTypeOptions,
-        this.props.productGroupOptions,
+        this.props.mainCategoryOptions,
         this.props.standardOptions
       ),
       this.props.t
     );
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.setForm = this.setForm.bind(this);
   }
   componentDidUpdate(prevProps: Iprops) {
     if (!this.props.selectedMeasurementPointList) {
@@ -172,7 +170,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
 
     const {
       type,
-      productGroupID,
+      mainCategoryID,
       standardID
     } = this.props.selectedMeasurementPointList;
     this.measurementsForm.patchValue({
@@ -183,8 +181,8 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     });
     this.measurementsForm.patchValue({
       equipmentType: find(
-        this.props.productGroupOptions,
-        (tOpt: any) => tOpt.value === productGroupID
+        this.props.mainCategoryOptions,
+        (tOpt: any) => tOpt.value === mainCategoryID
       )
     });
     this.measurementsForm.patchValue({
@@ -223,7 +221,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     }
     const mpl = {
       ...this.props.selectedMeasurementPointList,
-      productGroupID: this.measurementsForm.value.equipmentType.value,
+      mainCategoryID: this.measurementsForm.value.equipmentType.value,
       standardID: this.measurementsForm.value.standard.value,
       type: this.measurementsForm.value.type.value,
       measurementPoints: keyBy(

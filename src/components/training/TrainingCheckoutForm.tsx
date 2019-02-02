@@ -28,7 +28,8 @@ import {
   IshoppingCartProduct,
   IproductInfo,
   IshoppingCart,
-  ItableFiltersReducer
+  ItableFiltersReducer,
+  Iuser
 } from '../../models';
 import {
   toggleShoppingCartModal,
@@ -38,6 +39,7 @@ import {
 import constants from '../../constants/constants';
 import { requestQuote } from 'src/actions/manageInventoryActions';
 import Select, { components } from 'react-select';
+import NumberFormat from 'react-number-format';
 
 // add the bootstrap form-control class to the react-select select component
 const ControlComponent = (props: any) => (
@@ -110,7 +112,14 @@ const CartProduct = ({
       xs={4}
       style={{ textAlign: 'center', paddingRight: '0', paddingLeft: '0' }}
     >
-      <Badge>${`${meta.cost / 100}`}</Badge>
+      <Badge>
+        <NumberFormat
+          value={meta.cost / 100}
+          displayType={'text'}
+          thousandSeparator={true}
+          prefix={'$'}
+        />
+      </Badge>
       <Button
         bsStyle="link"
         style={{ fontSize: '1.6em' }}
@@ -151,15 +160,13 @@ const buildFieldConfig = (
   const fieldConfigControls = {
     memo: {
       render: FormUtil.TextInput,
-      options: {
-        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
-      },
       meta: {
         label: 'memo',
         colWidth: 12,
         componentClass: 'textarea',
         rows: 6,
-        name: 'memo'
+        name: 'memo',
+        required: false
       }
     }
   };
@@ -183,6 +190,7 @@ interface Iprops {
   deleteFromCart: typeof deleteFromCart;
   cartName: string;
   showCost?: boolean;
+  user: Iuser;
 }
 interface Istate {
   fieldConfig: FieldConfig;
@@ -193,8 +201,6 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
   private subscription: any;
   constructor(props: Iprops) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.setForm = this.setForm.bind(this);
     this.state = {
       fieldConfig: { controls: {} }
     };
@@ -335,9 +341,21 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
         />
         <input
           hidden={true}
+          name="Email"
+          id="Email"
+          value={this.props.user.email}
+        />
+        <input
+          hidden={true}
           name="CustomerNo"
           id="CustomerNo"
-          value={process.env.REACT_APP_UTA_CUSTOMER}
+          value={`${this.props.user.first} ${this.props.user.last}`}
+        />
+        <input
+          hidden={true}
+          name="CustomerName"
+          id="CustomerName"
+          value={this.props.user.customer.name}
         />
 
         <input
@@ -356,17 +374,18 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
 
         <input
           hidden={true}
-          name="Amount"
-          id="Amount"
+          name="AMOUNT"
+          id="AMOUNT"
           value={this.calculateSubtotal() / 100}
         />
-
+        <input hidden={true} name="INVOICE1" id="INVOICE1" value="0001" />
         <input
           hidden={true}
-          name="transactiondate"
-          id="transactiondate"
-          value="01-22-2019"
+          name="AMOUNT1"
+          id="AMOUNT1"
+          value={this.calculateSubtotal() / 100}
         />
+        <input hidden={true} name="QTY" id="QTY" value="1" />
 
         <input
           hidden={true}
@@ -374,7 +393,7 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
           id="redirect"
           value={`${
             process.env.REACT_APP_SERVER_DOMAIN
-          }training/acceptutapayment`}
+          }/training/acceptutapayment`}
         />
 
         <FormGenerator
@@ -398,7 +417,13 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
           </FormGroup>
         </Col>
         <Col xs={12} className="cart-totals">
-          Subtotal: ${this.calculateSubtotal() / 100}
+          Subtotal:{' '}
+          <NumberFormat
+            value={this.calculateSubtotal() / 100}
+            displayType={'text'}
+            thousandSeparator={true}
+            prefix={'$'}
+          />
         </Col>
 
         <Col xs={12} className="form-buttons text-right">

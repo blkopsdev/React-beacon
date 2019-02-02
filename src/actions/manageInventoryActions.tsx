@@ -46,7 +46,7 @@ export function getProductInfo(): ThunkResult<void> {
 export function getProducts(
   page: number,
   search: string,
-  productGroupID: string
+  mainCategoryID: string
 ): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
@@ -54,7 +54,7 @@ export function getProducts(
     const pagingMode = 'paged';
     return axios
       .get(API.GET.inventory.products, {
-        params: { page, search, productGroupID, pagingMode }
+        params: { page, search, mainCategoryID, pagingMode }
       })
       .then(data => {
         if (!data.data) {
@@ -85,17 +85,17 @@ const getInventoryHelper = (dispatch: any, getState: any) => {
     page,
     search,
     facility,
-    manufacturer,
-    productGroup
+    brand,
+    mainCategory
   } = getState().manageInventory.tableFilters;
   const facilityID = facility
     ? facility.value
     : getState().user.facilities[0].id;
-  const manufacturerID = manufacturer ? manufacturer.value : '';
-  const productGroupID = productGroup ? productGroup.value : '';
+  const brandID = brand ? brand.value : '';
+  const mainCategoryID = mainCategory ? mainCategory.value : '';
   return axios
     .get(API.GET.inventory.getinventory, {
-      params: { page, search, facilityID, manufacturerID, productGroupID }
+      params: { page, search, facilityID, brandID, mainCategoryID }
     })
     .then(data => {
       if (!data.data) {
@@ -134,7 +134,7 @@ export function updateProduct(
         } else {
           dispatch({
             type: types.PRODUCT_UPDATE_SUCCESS,
-            product: data.data,
+            product,
             queueID
           });
           // toastr.success('Success', 'Saved product', constants.toastrSuccess);
@@ -168,7 +168,7 @@ export function saveProduct(product: Iproduct): ThunkResult<void> {
           dispatch({ type: types.CLOSE_ALL_MODALS });
           toastr.success(
             'Success',
-            'Submitted new product for approval.',
+            'New product created successfully.',
             constants.toastrSuccess
           );
         }
@@ -196,7 +196,7 @@ export function updateInstall(
         } else {
           dispatch({
             type: types.INSTALL_UPDATE_SUCCESS,
-            install: data.data
+            install
           });
 
           // toastr.success(

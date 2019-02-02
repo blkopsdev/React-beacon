@@ -2,7 +2,7 @@ import { transitionInType, transitionOutType, Iuser, Itile } from '../models';
 import { find } from 'lodash';
 import { emptyTile } from '../reducers/initialState';
 import { toastr } from 'react-redux-toastr';
-import { authContext } from '../actions/userActions';
+import { adalReauth } from '../actions/userActions';
 // import { icon } from "@fortawesome/fontawesome-svg-core";
 
 const jobTypeOptions = [
@@ -421,10 +421,6 @@ const tiles = [
 ];
 
 const constants = {
-  adalAuth: {
-    tenant: 'a675e2fc-4806-4ec9-b49c-b0dc413b0e6b',
-    clientId: 'e5fb8173-e048-4cda-8acd-a8e735b4c927'
-  },
   toastrError: {
     transitionIn: 'bounceInDown' as transitionInType,
     transitionOut: 'bounceOutUp' as transitionOutType,
@@ -486,7 +482,10 @@ const constants = {
     }
     if (error && error.response && error.response.status === 401) {
       console.warn('catching unauthorized, re-authenticating');
-      authContext.login();
+      setTimeout(() => {
+        // authContext.login();
+        adalReauth();
+      }, 1500);
     }
     toastr.error('Error', msg, constants.toastrError);
   },

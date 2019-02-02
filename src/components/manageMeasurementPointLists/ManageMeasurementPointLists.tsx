@@ -57,7 +57,7 @@ interface IdispatchProps {
   setSelectedMeasurementPointList: typeof setSelectedMeasurementPointList;
   deleteGlobalMeasurementPointList: typeof deleteGlobalMeasurementPointList;
   getProductInfo: typeof getProductInfo;
-  productGroupOptions: Ioption[];
+  mainCategoryOptions: Ioption[];
   standardOptions: Ioption[];
   closeAllModals: typeof closeAllModals;
   manageMeasurementPointLists: ImanageMeasurementPointListsReducer;
@@ -109,11 +109,11 @@ class ManageMeasurementPointList extends React.Component<
           render: FormUtil.SelectWithoutValidation,
           meta: {
             label: 'manageMeasurementPointLists:equipmentType',
-            options: this.props.productGroupOptions,
+            options: this.props.mainCategoryOptions,
             colWidth: 3,
             type: 'select',
             placeholder: 'equipmentTypePlaceholder',
-            defaultValue: this.props.tableFilters.productGroup
+            defaultValue: this.props.tableFilters.mainCategory
           }
         },
         standard: {
@@ -182,13 +182,13 @@ class ManageMeasurementPointList extends React.Component<
         {
           id: 'equipmentType',
           Header: 'equipment type',
-          accessor: ({ productGroupID }: ImeasurementPointList) => {
-            const item = this.props.productGroupOptions.filter(
+          accessor: ({ mainCategoryID }: ImeasurementPointList) => {
+            const item = this.props.mainCategoryOptions.filter(
               (opt: Ioption) => {
-                return opt.value === productGroupID;
+                return opt.value === mainCategoryID;
               }
             )[0];
-            return productGroupID ? item.label : '';
+            return mainCategoryID ? item.label : '';
           }
         },
         {
@@ -317,7 +317,7 @@ class ManageMeasurementPointList extends React.Component<
         this.props.setTableFilter({ type: value, page: 1 });
         break;
       case 'equipmentType':
-        this.props.setTableFilter({ productGroup: value, page: 1 });
+        this.props.setTableFilter({ mainCategory: value, page: 1 });
         break;
       case 'standard':
         this.props.setTableFilter({ standard: value, page: 1 });
@@ -340,7 +340,7 @@ class ManageMeasurementPointList extends React.Component<
   };
 
   render() {
-    if (this.props.productGroupOptions.length === 0) {
+    if (this.props.mainCategoryOptions.length === 0) {
       return (
         <Col xs={12}>
           <h4> loading... </h4>
@@ -423,7 +423,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     tableData: state.manageMeasurementPointLists.data,
     tableFilters: state.manageMeasurementPointLists.tableFilters,
     standardOptions: state.productInfo.standardOptions,
-    productGroupOptions: state.productInfo.productGroupOptions
+    mainCategoryOptions: state.productInfo.mainCategoryOptions
   };
 };
 export default translate('manageMeasurementPointLists')(

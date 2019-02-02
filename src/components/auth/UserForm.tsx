@@ -16,6 +16,7 @@ import constants from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
+import { Ioption } from 'src/models';
 
 // Field config to configure form
 const fieldConfigControls = {
@@ -67,6 +68,19 @@ const fieldConfigControls = {
     },
     render: FormUtil.TextInput,
     meta: { label: 'zip', colWidth: 4, type: 'tel', name: 'temp-zip' }
+  },
+  countryID: {
+    options: {
+      validators: Validators.required
+    },
+    render: FormUtil.Select,
+    meta: {
+      options: constants.countries,
+      label: 'user:country',
+      colWidth: 12,
+      placeholder: 'userQueue:countrySearchPlaceholder',
+      name: 'country'
+    }
   }
 };
 const fieldConfig = {
@@ -97,10 +111,10 @@ interface Iprops extends React.Props<UserForm> {
 class UserForm extends React.Component<Iprops, {}> {
   public userForm: AbstractControl;
   public fieldConfig: FieldConfig;
+  private subscription: any;
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(fieldConfig, this.props.t);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
   componentDidMount() {
@@ -109,7 +123,41 @@ class UserForm extends React.Component<Iprops, {}> {
         this.userForm.patchValue({ [key]: value });
       });
     }
+    this.subscription = this.userForm
+      .get('countryID')
+      .valueChanges.subscribe((value: Ioption) => {
+        this.onCountryChanges(value.value);
+      });
+
+    this.userForm.patchValue({
+      countryID: {
+        value: 'ABC5D95C-129F-4837-988C-0BF4AE1F3B67',
+        label: 'United States of America'
+      }
+    });
   }
+
+  componentWillUnmount() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+
+  onCountryChanges = (value: string) => {
+    const stateFormControl = this.userForm.get('tempState');
+    if (value === `ABC5D95C-129F-4837-988C-0BF4AE1F3B67`) {
+      stateFormControl.enable();
+      stateFormControl.setValidators([
+        Validators.required,
+        FormUtil.validators.requiredWithTrim
+      ]);
+      stateFormControl.patchValue(null);
+    } else {
+      stateFormControl.patchValue(null);
+      stateFormControl.disable();
+      stateFormControl.setValidators(null);
+    }
+  };
 
   handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -118,7 +166,9 @@ class UserForm extends React.Component<Iprops, {}> {
       toastr.error(this.props.t('validationError'), '', constants.toastrError);
       return;
     }
-    this.props.handleSubmit(this.userForm.value);
+    const countryID = this.userForm.value.countryID.value;
+    const updatedUser = { ...this.userForm.value, countryID };
+    this.props.handleSubmit(updatedUser);
   };
   setForm = (form: AbstractControl) => {
     this.userForm = form;

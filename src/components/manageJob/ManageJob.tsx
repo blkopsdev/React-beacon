@@ -40,7 +40,6 @@ interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
   t: TranslationFunction;
   i18n: I18n;
-  loading: boolean;
 }
 
 interface IdispatchProps {
@@ -59,6 +58,7 @@ interface IdispatchProps {
   tableData: Ijob[];
   jobTypes: any[];
   fseUsers: Iuser[];
+  loading: boolean;
 }
 
 interface Istate {
@@ -72,7 +72,6 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
   // private setTableFilterTimeout: any;
   constructor(props: Iprops & IdispatchProps) {
     super(props);
-    this.getTrProps = this.getTrProps.bind(this);
     this.state = {
       selectedRow: null,
       currentTile: emptyTile

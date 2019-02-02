@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { filter } from 'lodash';
+import { filter, sortBy } from 'lodash';
 import { connect } from 'react-redux';
 import {
   Iuser,
@@ -31,7 +31,6 @@ import {
   ListGroup,
   ListGroupItem,
   Media,
-  Panel,
   Row,
   Col,
   Button,
@@ -39,7 +38,6 @@ import {
   Badge
 } from 'react-bootstrap';
 import queryString from 'query-string';
-import { LinkContainer } from 'react-router-bootstrap';
 
 import { RouteComponentProps, Switch, Route } from 'react-router';
 import Lesson from './Lesson';
@@ -55,6 +53,8 @@ import { getTotal } from 'src/reducers/cartReducer';
 import TrainingCheckoutForm from './TrainingCheckoutForm';
 import { closeAllModals } from 'src/actions/commonActions';
 import Quiz from './Quiz';
+import { TrainingCourse } from './TrainingCourse';
+import { toastr } from 'react-redux-toastr';
 
 interface RouterParams {
   courseID: string;
@@ -107,14 +107,6 @@ class Courses extends React.Component<Props, State> {
       selectedCourse: { name: '', description: '' },
       filteredLessons: []
     };
-
-    this.handleChange = this.handleChange.bind(this);
-    this.printStudentCourses = this.printStudentCourses.bind(this);
-    this.printLessonsList = this.printLessonsList.bind(this);
-    this.loadCourseLessons = this.loadCourseLessons.bind(this);
-    this.loadLessonAndQuizzes = this.loadLessonAndQuizzes.bind(this);
-    this.goBack = this.goBack.bind(this);
-    this.goToProgress = this.goToProgress.bind(this);
   }
   componentWillMount() {
     this.props.closeAllModals();
@@ -174,7 +166,7 @@ class Courses extends React.Component<Props, State> {
   /*
   * Get the lessons for the selected course and show them
   */
-  loadCourseLessons(gfCourseId: string) {
+  loadCourseLessons = (gfCourseId: string) => {
     // get lessons
     const filteredLessons = filter(this.props.lessons, lesson => {
       const courseLesson = filter(lesson.courseLessons, {
@@ -182,7 +174,9 @@ class Courses extends React.Component<Props, State> {
       });
       return courseLesson.length ? true : false;
     });
-
+    const sortedLessons = sortBy(filteredLessons, (el: GFLesson) => {
+      return el.courseLessons[0].order;
+    });
     const sc = this.props.courses.filter(
       (course: any) => course.id === gfCourseId
     )[0];
@@ -191,7 +185,7 @@ class Courses extends React.Component<Props, State> {
       this.setState({
         selectedCourse: sc,
         display: 'lessons',
-        filteredLessons
+        filteredLessons: sortedLessons
       });
     } else {
       console.error(
@@ -201,7 +195,7 @@ class Courses extends React.Component<Props, State> {
       );
       // TODO should we just set lessons?
       if (filteredLessons.length) {
-        this.setState({ filteredLessons });
+        this.setState({ filteredLessons: sortedLessons });
       }
     }
 
@@ -210,119 +204,99 @@ class Courses extends React.Component<Props, State> {
     if (!filteredLessons.length) {
       this.getLessonsByCourseID(gfCourseId);
     }
-  }
+  };
 
-  getLessonsByCourseID(courseId: string) {
+  getLessonsByCourseID = (courseId: string) => {
     this.props.getLessonsByCourseID(courseId, this.props.user);
-  }
+  };
 
-  loadLessonAndQuizzes(gfLesson: any) {
+  loadLessonAndQuizzes = (gfLesson: any) => {
     // mixpanel.track('Lesson clicked', {
     //   lesson: gfLesson.id,
     //   name: gfLesson.name
     // })
-
+    // did they purchase this lesson?
+    if (!this.hasLessonBeenPurchased(gfLesson)) {
+      toastr.warning(
+        'Warning',
+        'Please purchase this lesson.',
+        constants.toastrWarning
+      );
+      return;
+    }
     this.props.setLesson(
       this.props.lessons[gfLesson.id]
       // this.props.lessons.filter((lesson: any) => lesson.id === gfLesson.id)[0]
     );
     window.scrollTo(0, 0);
     this.props.history.push(`${this.props.match.url}/${gfLesson.id}`);
-  }
+  };
 
-  handleChange(e: any) {
+  handleChange = (e: any) => {
     this.setState({ [e.target.name]: e.target.value } as State);
-  }
+  };
 
-  goBack() {
+  goBack = () => {
     let path = ``;
     if (this.state.display === 'lessons') {
       this.setState({ display: 'courses' });
       path = `/training`;
     }
     this.props.history.push(path);
-  }
-  goToProgress() {
+  };
+  goToProgress = () => {
     this.props.history.push('/progress');
-  }
+  };
+  hasLessonBeenPurchased = (lesson: GFLesson) => {
+    const lessonPurchased =
+      this.props.purchasedTraining.indexOf(lesson.id) !== -1;
+    let coursePurchased = false;
+    lesson.courseLessons.forEach(cl => {
+      if (this.props.purchasedTraining.indexOf(cl.courseID) !== -1) {
+        coursePurchased = true;
+      }
+    });
 
-  printStudentCourses() {
-    const showBuyButton = (id: string) =>
-      this.props.purchasedTraining.indexOf(id) === -1;
+    return lessonPurchased || coursePurchased;
+  };
 
+  printStudentCourses = () => {
     return (
-      <Row
+      <Col
+        xs={12}
         key="courses"
         className="main-content content-without-sidebar courses animated fadeIn"
       >
         <Col xs={12} sm={12}>
           <div className="courses-tiles text-center">
-            {this.props.user.isActive &&
-              this.props.courses.map(gfCourse => {
-                const shoppingCartItem = { ...gfCourse, quantity: 1 };
-                return (
-                  <Col
-                    key={gfCourse.id}
-                    xs={12}
-                    sm={4}
-                    md={4}
-                    className="course animated fadeInUp"
-                  >
-                    <Panel className="text-center">
-                      <h2>{this.shortenTitle(gfCourse.name)}</h2>
-                      {showBuyButton(gfCourse.id) && (
-                        <span>
-                          <Button
-                            bsStyle="warning"
-                            type="button"
-                            onClick={() =>
-                              this.props.addCourseToCart(
-                                shoppingCartItem,
-                                'TRAINING'
-                              )
-                            }
-                          >
-                            Purchase Entire Course
-                          </Button>
-                          <h4>${`${shoppingCartItem.cost / 100}`}</h4>
-                        </span>
-                      )}
-
-                      <p className="purchase-text">
-                        Save 25% by purchasing the entire course rather than all
-                        the lessons individually
-                      </p>
-                      <LinkContainer to={`training/${gfCourse.id}`}>
-                        <div className="course-footer">{'View Lessons'}</div>
-                      </LinkContainer>
-                    </Panel>
-                  </Col>
-                );
-              })}
+            {this.props.courses.map(gfCourse => (
+              <TrainingCourse
+                course={gfCourse}
+                purchasedTraining={this.props.purchasedTraining}
+                addCourseToCartCallback={this.props.addCourseToCart}
+              />
+            ))}
           </div>
         </Col>
-      </Row>
+      </Col>
     );
-  }
-  shortenDescription(text: string) {
+  };
+  shortenDescription = (text: string) => {
     let ret = text;
     const maxLength = 95;
     if (ret.length > maxLength) {
       ret = ret.substr(0, maxLength - 3) + '...';
     }
     return ret;
-  }
+  };
 
-  shortenTitle(text: string) {
-    let ret = text;
-    const maxLength = 55;
-    if (ret.length > maxLength) {
-      ret = ret.substr(0, maxLength - 3) + '...';
-    }
-    return ret;
-  }
-
-  printLessonsList() {
+  /*
+  * printLesonsList prints the list of lessons.  Each lesson is conditionaly displayed if it is not protected or it is protected and all the previous
+  * lessons are complete. Each lesson item conditionaly displays a buy button and prevents viewing or progress
+  */
+  printLessonsList = () => {
+    // allLessonsComplete keeps track of all the previously complete lessons
+    let allLessonsComplete = true;
     const ProgressColumn = ({ progress }: { progress: number }) => (
       <Col md={3}>
         <span
@@ -371,23 +345,19 @@ class Courses extends React.Component<Props, State> {
       </Col>
     );
 
-    const showProgressColumn = (lesson: GFLesson) => {
-      const lessonPurchased =
-        this.props.purchasedTraining.indexOf(lesson.id) !== -1;
-      let coursePurchased = false;
-      lesson.courseLessons.forEach(cl => {
-        if (this.props.purchasedTraining.indexOf(cl.courseID) !== -1) {
-          coursePurchased = true;
-        }
-      });
-
-      return lessonPurchased || coursePurchased;
-    };
     return (
-      <div className="courses main-content content-without-sidebar student animated fadeIn">
+      <div className="col-xs-12 lessons courses main-content content-without-sidebar student animated fadeIn">
+        <Row>
+          <Col xs={10} className="course-description">
+            <p>{this.state.selectedCourse.description}</p>
+          </Col>
+        </Row>
         <div className="row courses-list">
-          <ListGroup className="col-md-12">
+          <ListGroup>
             {this.state.filteredLessons.map((gfLesson, index) => {
+              if (gfLesson.isProtected && !allLessonsComplete) {
+                return null;
+              }
               let imagePath = gfLesson.imagePath;
               if (imagePath === null || imagePath === '') {
                 imagePath = require('../../images/Azure.png');
@@ -399,6 +369,11 @@ class Courses extends React.Component<Props, State> {
                 progress = lp.isComplete
                   ? 100
                   : Math.round((lp.timeSpent / lp.totalTime) * 99); // multiplying by 99 because we do not want to display 100% here.  display 100% only if .isComplete is true.
+                if (!lp.isComplete) {
+                  allLessonsComplete = false;
+                }
+              } else {
+                allLessonsComplete = false;
               }
 
               return (
@@ -420,10 +395,11 @@ class Courses extends React.Component<Props, State> {
                           quizName={gfLesson.quizName}
                         />
                       )}
-                    {showProgressColumn(gfLesson) && (
-                      <ProgressColumn progress={progress} />
-                    )}
-                    {!showProgressColumn(gfLesson) && (
+                    {this.hasLessonBeenPurchased(gfLesson) &&
+                      gfLesson.primaryVideoPath.length > 0 && (
+                        <ProgressColumn progress={progress} />
+                      )}
+                    {!this.hasLessonBeenPurchased(gfLesson) && (
                       <BuyColumn shoppingCartItem={shoppingCartItem} />
                     )}
                   </Media>
@@ -434,12 +410,12 @@ class Courses extends React.Component<Props, State> {
         </div>
       </div>
     );
-  }
+  };
 
   /*
   * figure out what to display, courses for students, courses for teachers, or a list of lessons after they select a course
   */
-  displayCourseHtml() {
+  displayCourseHtml = () => {
     let displayHtml = <div />;
     if (this.state.display === 'courses') {
       displayHtml = this.printStudentCourses();
@@ -448,9 +424,9 @@ class Courses extends React.Component<Props, State> {
       displayHtml = this.printLessonsList();
     }
     return displayHtml;
-  }
+  };
 
-  getBreadcrumbs() {
+  getBreadcrumbs = () => {
     if (!!this.props.match.params.quizID) {
       return (
         <Breadcrumb>
@@ -545,9 +521,9 @@ class Courses extends React.Component<Props, State> {
     }
 
     return '';
-  }
+  };
 
-  getBannerTitle() {
+  getBannerTitle = () => {
     if (!!this.props.match.params.quizID) {
       return this.props.quiz.name;
     }
@@ -558,47 +534,49 @@ class Courses extends React.Component<Props, State> {
       return this.state.selectedCourse.name;
     }
     return 'Training';
-  }
+  };
 
   render() {
     return (
-      <div className="manage-training">
-        <Banner
-          title={this.getBannerTitle()}
-          img={this.state.currentTile.srcBanner}
-          color={constants.colors[`${this.state.currentTile.color}`]}
-        />
-        <Button
-          className="request-for-quote-cart-button"
-          bsStyle="primary"
-          onClick={() => this.props.toggleShoppingCartModal('TRAINING')}
-        >
-          <FontAwesomeIcon icon="shopping-cart" />
-          <Badge>{this.props.cartTotal} </Badge>
-        </Button>
-        {this.getBreadcrumbs()}
-        <Switch>
-          <Route
-            exact
-            path={`/training/:courseID/:lessonID/:quizID`}
-            component={Quiz}
+      <Row className="training">
+        <Col xs={12}>
+          <Banner
+            title={this.getBannerTitle()}
+            img={this.state.currentTile.srcBanner}
+            color={constants.colors[`${this.state.currentTile.color}`]}
           />
-          <Route
-            exact
-            path={`/training/:courseID/:lessonID`}
-            component={Lesson}
-          />
-          <Route
-            exact
-            path={`/training/:courseID`}
-            render={() => this.printLessonsList()}
-          />
-          <Route
-            exact
-            path={`/training`}
-            render={() => this.printStudentCourses()}
-          />
-        </Switch>
+          <Button
+            className="request-for-quote-cart-button"
+            bsStyle="primary"
+            onClick={() => this.props.toggleShoppingCartModal('TRAINING')}
+          >
+            <FontAwesomeIcon icon="shopping-cart" />
+            <Badge>{this.props.cartTotal} </Badge>
+          </Button>
+          {this.getBreadcrumbs()}
+          <Switch>
+            <Route
+              exact
+              path={`/training/:courseID/:lessonID/:quizID`}
+              component={Quiz}
+            />
+            <Route
+              exact
+              path={`/training/:courseID/:lessonID`}
+              component={Lesson}
+            />
+            <Route
+              exact
+              path={`/training/:courseID`}
+              render={() => this.printLessonsList()}
+            />
+            <Route
+              exact
+              path={`/training`}
+              render={() => this.printStudentCourses()}
+            />
+          </Switch>
+        </Col>
         <ShoppingCartModal
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
@@ -610,7 +588,7 @@ class Courses extends React.Component<Props, State> {
           showCost={true}
           ShoppingCartForm={TrainingCheckoutForm}
         />
-      </div>
+      </Row>
     );
   }
 }

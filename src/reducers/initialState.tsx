@@ -9,11 +9,9 @@ export const initialProduct = {
   subcategoryID: '',
   standardID: '',
   brandID: '',
-  manufacturerID: '',
-  gasTypeID: '',
+  productTypeID: '',
   powerID: '',
   systemSizeID: '',
-  productGroupID: '',
   subcategory: {
     mainCategoryID: '',
     id: '',
@@ -97,15 +95,15 @@ export const initialLesson = {
   imagePath: '',
   order: 0,
   primaryVideoPath: '',
-  secondaryVideoPath: '',
   slideshowPath: '',
   courseLessons: [],
-  cost: 0
+  cost: 0,
+  isProtected: false
 };
 export const initialMeasurementPointList = {
   id: '',
   measurementPoints: {},
-  productGroupID: '',
+  mainCategoryID: '',
   standardID: '',
   type: 1,
   customerID: ''
@@ -117,6 +115,11 @@ export const initialMeasurementPointQuestion = {
   order: 0
 };
 
+const initialCustomer = {
+  id: '',
+  name: ''
+};
+
 /* 
 * initialState
 */
@@ -126,7 +129,6 @@ export default {
     password: '',
     username: '',
     isAuthenticated: false,
-    token: '',
     email: '',
     securityFunctions: [],
     first: '',
@@ -141,7 +143,8 @@ export default {
     facilities: [],
     customerID: '',
     hasTeamMembers: false,
-    appVersion: ''
+    appVersion: '',
+    customer: initialCustomer
   },
   redirect: {
     redirectToReferrer: false,
@@ -200,20 +203,16 @@ export default {
     },
     productInfo: {
       brands: {},
-      gasTypes: {},
-      manufacturers: {},
+      productTypes: {},
       mainCategories: {},
       powers: {},
-      productGroups: {},
       standards: {},
       subcategories: {},
       systemSizes: {},
       brandOptions: [],
-      gasTypeOptions: [],
+      productTypeOptions: [],
       mainCategoryOptions: [],
-      manufacturerOptions: [],
       powerOptions: [],
-      productGroupOptions: [],
       standardOptions: [],
       subcategoryOptions: [],
       systemSizeOptions: []

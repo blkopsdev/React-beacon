@@ -10,8 +10,8 @@ export interface ItableFiltersReducer {
   endDate?: string;
   facility?: Ioption;
   customer?: Ioption;
-  productGroup?: Ioption;
-  manufacturer?: Ioption;
+  mainCategory?: Ioption;
+  brand?: Ioption;
   sorted?: SortingRule[];
   standard?: Ioption;
 }
@@ -24,8 +24,8 @@ export interface ItableFiltersParams {
   endDate?: string;
   facility?: Ioption;
   customer?: Ioption;
-  productGroup?: Ioption;
-  manufacturer?: Ioption;
+  mainCategory?: Ioption;
+  brand?: Ioption;
   sorted?: SortingRule[];
   standard?: Ioption;
 }
@@ -34,7 +34,6 @@ export interface Iuser {
   password: string;
   username: string;
   isAuthenticated: boolean;
-  token: string;
   email: string;
   securityFunctions: string[];
   first: string;
@@ -60,7 +59,7 @@ export interface Iuser {
   appVersion: string;
   manager?: any;
   isActive?: boolean;
-  customer?: Icustomer;
+  customer: Icustomer;
 }
 // export interface ImanageUserQueueReducer {
 //   [key: string]: Iuser;
@@ -101,17 +100,14 @@ export interface Isubcategory extends IbaseDataObject {
 export interface Ibrand extends IbaseDataObject {
   code: string;
 }
-// export interface Imanufacturer extends IbaseDataObject {}
-export interface IgasType extends IbaseDataObject {
+export interface IproductType extends IbaseDataObject {
   code: string;
 }
 // export interface Ipower extends IbaseDataObject {}
 export interface IsystemSize extends IbaseDataObject {
   code: string;
 }
-export interface IproductGroup extends IbaseDataObject {
-  code: string;
-}
+
 export interface IinstallBase extends IbaseDataObject {
   code: string;
 
@@ -129,6 +125,7 @@ export interface IinstallBase extends IbaseDataObject {
   floorID: string;
   locationID: string;
   roomID: string;
+  position: string;
 }
 
 export interface Iproduct {
@@ -140,19 +137,15 @@ export interface Iproduct {
   subcategoryID: string;
   standardID: string;
   brandID: string;
-  manufacturerID: string;
-  gasTypeID: string;
+  productTypeID: string;
   powerID: string;
   systemSizeID: string;
-  productGroupID: string;
   subcategory: Isubcategory;
   // standard: IbaseDataObject;
   // brand: Ibrand;
-  // manufacturer: IbaseDataObject;
-  // gasType: IgasType;
+  // productType: IproductType;
   // power: IbaseDataObject;
   // systemSize: IsystemSize;
-  // productGroup: IproductGroup;
   installs: IinstallBase[];
   quantity: number;
 }
@@ -304,20 +297,16 @@ export interface Iredirect {
 }
 export interface IproductInfo {
   brands: { [key: string]: Ibrand };
-  gasTypes: { [key: string]: IgasType };
-  manufacturers: { [key: string]: IbaseDataObject };
+  productTypes: { [key: string]: IproductType };
   mainCategories: { [key: string]: IbaseDataObject };
   powers: { [key: string]: IbaseDataObject };
-  productGroups: { [key: string]: IproductGroup };
   standards: { [key: string]: IbaseDataObject };
   subcategories: { [key: string]: Isubcategory };
   systemSizes: { [key: string]: IsystemSize };
   brandOptions: Ioption[];
-  gasTypeOptions: Ioption[];
+  productTypeOptions: Ioption[];
   mainCategoryOptions: Ioption[];
-  manufacturerOptions: Ioption[];
   powerOptions: Ioption[];
-  productGroupOptions: Ioption[];
   standardOptions: Ioption[];
   subcategoryOptions: Ioption[];
   systemSizeOptions: Ioption[];
@@ -353,7 +342,7 @@ export interface ImeasurementPointQuestion {
 export interface ImeasurementPointList {
   id: string;
   measurementPoints: { [key: string]: ImeasurementPointQuestion };
-  productGroupID: string;
+  mainCategoryID: string;
   standardID: string;
   type: number;
   customerID?: string;
@@ -459,6 +448,7 @@ export interface GFCourse {
   name: string;
   description: string;
   cost: number;
+  onSite: boolean;
 }
 
 export interface GFLesson {
@@ -470,10 +460,11 @@ export interface GFLesson {
   order: number;
   primaryVideoPath: string;
   slideshowPath: string;
-  courseLessons: Array<{ id: string; courseID: string }>;
+  courseLessons: Array<{ id: string; courseID: string; order: number }>;
   cost: number;
   score?: number;
   quizName?: string;
+  isProtected: boolean;
 }
 
 export interface GFLessons {
@@ -550,7 +541,7 @@ export interface LessonProgress {
   percentageComplete: number; // the current percent complete as reported  by vimeo
   totalTime: number; // the total time (or duration) in second of the video, from vimeo
   timeSpent: number;
-  isComplete?: boolean;
+  isComplete: boolean;
 }
 
 export interface ItrainingReducer {

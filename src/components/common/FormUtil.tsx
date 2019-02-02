@@ -23,41 +23,12 @@ import * as Datetime from 'react-datetime';
 import * as moment from 'moment';
 import RichTextEditor from './RichTextEditor';
 
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-
 // add the bootstrap form-control class to the react-select select component
 const ControlComponent = (props: any) => (
   <div>
     <components.Control {...props} className="form-control" />
   </div>
 );
-
-// const OptionComponent = (props: any) => (
-//   <div>
-//     <components.Option {...props} className="select-option" />
-//     <Button
-//       onClick={() => {
-//         console.log(props);
-//       }}
-//     >
-//       Delete
-//     </Button>
-//   </div>
-// );
-
-// const CustomFeedback = ({type}: any) => {
-//   if (type === 'valid'){
-//     return <FontAwesomeIcon icon={['far', 'check']} />
-//   } else if (type === 'invalid'){
-//     return <FontAwesomeIcon icon={['far', 'times']}  />
-//   } else {
-//     return null;
-//   }
-// }
-
-// <FormControl.Feedback>
-//           <CustomFeedback />
-//          </FormControl.Feedback>
 
 // TODO add a type that accepts an array or an object:  Array<{ id: string; name: string }>
 export const FormUtil = {
@@ -106,39 +77,40 @@ export const FormUtil = {
   Datetime: ({
     handler,
     touched,
-    hasError,
     meta,
     pristine,
     errors,
     submitted
-  }: AbstractControl) => (
-    <FormGroup
-      validationState={FormUtil.getValidationState(pristine, errors, submitted)}
-      bsSize="sm"
-      className="datetime-select"
-    >
-      <Col xs={meta.colWidth}>
-        <ControlLabel>{meta.label}</ControlLabel>
-        <Datetime
-          defaultValue={meta.defaultValue}
-          timeFormat={meta.showTime}
-          isValidDate={meta.isValidDate}
-          {...handler()}
-          // TODO figure out how to handle disabled
-        />
-        <FormControl.Feedback />
-      </Col>
-    </FormGroup>
-  ),
-  DatetimeWithoutValidation: ({
-    handler,
-    touched,
-    hasError,
-    meta,
-    pristine,
-    errors,
-    submitted
-  }: AbstractControl) => (
+  }: AbstractControl) => {
+    const requiredLabel = meta.required === false ? ' - optional' : '';
+    return (
+      <FormGroup
+        validationState={FormUtil.getValidationState(
+          pristine,
+          errors,
+          submitted
+        )}
+        bsSize="sm"
+        className="datetime-select"
+      >
+        <Col xs={meta.colWidth}>
+          <ControlLabel>
+            {meta.label}
+            <i className="required-label">{requiredLabel}</i>
+          </ControlLabel>
+          <Datetime
+            defaultValue={meta.defaultValue}
+            timeFormat={meta.showTime}
+            isValidDate={meta.isValidDate}
+            {...handler()}
+            // TODO figure out how to handle disabled
+          />
+          <FormControl.Feedback />
+        </Col>
+      </FormGroup>
+    );
+  },
+  DatetimeWithoutValidation: ({ handler, meta }: AbstractControl) => (
     <FormGroup bsSize="sm" className="datetime-select">
       <Col xs={meta.colWidth}>
         <ControlLabel>{meta.label}</ControlLabel>
@@ -154,80 +126,82 @@ export const FormUtil = {
   TextInput: ({
     handler,
     touched,
-    hasError,
     meta,
     pristine,
     errors,
     submitted
-  }: AbstractControl) => (
-    <Col xs={meta.colWidth}>
-      <FormGroup
-        validationState={FormUtil.getValidationState(
-          pristine,
-          errors,
-          submitted
-        )}
-        bsSize="sm"
-        style={meta.style}
-      >
-        <ControlLabel>{meta.label}</ControlLabel>
-        <FormControl
-          placeholder={meta.placeholder}
-          componentClass={meta.componentClass}
-          type={meta.type || 'text'}
-          rows={meta.rows}
-          autoFocus={meta.autoFocus}
-          name={meta.name || ''}
-          {...handler()}
-          disabled={
-            meta.disabled !== undefined ? meta.disabled : handler().disabled
-          }
-        />
-        <FormControl.Feedback />
-      </FormGroup>
-    </Col>
-  ),
+  }: AbstractControl) => {
+    const requiredLabel = meta.required === false ? ' - optional' : '';
+    return (
+      <Col xs={meta.colWidth}>
+        <FormGroup
+          validationState={FormUtil.getValidationState(
+            pristine,
+            errors,
+            submitted
+          )}
+          bsSize="sm"
+          style={meta.style}
+        >
+          <ControlLabel>
+            {meta.label}
+            <i className="required-label">{requiredLabel}</i>
+          </ControlLabel>
+          <FormControl
+            placeholder={meta.placeholder}
+            componentClass={meta.componentClass}
+            type={meta.type || 'text'}
+            rows={meta.rows}
+            autoFocus={meta.autoFocus}
+            name={meta.name || ''}
+            {...handler()}
+            disabled={
+              meta.disabled !== undefined ? meta.disabled : handler().disabled
+            }
+          />
+          <FormControl.Feedback />
+        </FormGroup>
+      </Col>
+    );
+  },
   Toggle: ({
     handler,
     touched,
-    hasError,
     meta,
     pristine,
     errors,
     submitted,
     value
-  }: AbstractControl) => (
-    <Col xs={meta.colWidth}>
-      <FormGroup
-        validationState={FormUtil.getValidationState(
-          pristine,
-          errors,
-          submitted
-        )}
-        bsSize="sm"
-      >
-        <label className="control-label">
-          <Toggle
-            icons={false}
-            checked={value}
-            {...handler()}
-            className="beacon-toggle"
-            name={meta.name || ''}
-          />
-          <span className="react-toggle-label">{meta.label}</span>
-        </label>
-      </FormGroup>
-    </Col>
-  ),
-  TextInputWithoutValidation: ({
-    handler,
-    touched,
-    hasError,
-    meta,
-    pristine,
-    errors,
-    submitted
-  }: AbstractControl) => (
+  }: AbstractControl) => {
+    const requiredLabel = meta.required === false ? ' - optional' : '';
+    return (
+      <Col xs={meta.colWidth}>
+        <FormGroup
+          validationState={FormUtil.getValidationState(
+            pristine,
+            errors,
+            submitted
+          )}
+          bsSize="sm"
+        >
+          <label className="control-label">
+            <Toggle
+              icons={false}
+              checked={value}
+              {...handler()}
+              className="beacon-toggle"
+              name={meta.name || ''}
+            />
+            <span className="react-toggle-label">
+              {meta.label}
+              <i className="required-label">{requiredLabel}</i>
+            </span>
+          </label>
+        </FormGroup>
+      </Col>
+    );
+  },
+  TextInputWithoutValidation: ({ handler, meta }: AbstractControl) => (
     <Col xs={meta.colWidth}>
       <FormGroup bsSize="sm">
         <ControlLabel>{meta.label}</ControlLabel>
@@ -246,17 +220,16 @@ export const FormUtil = {
   Select: ({
     handler,
     touched,
-    hasError,
     meta,
     pristine,
     errors,
     submitted,
-    patchValue,
-    setErrors,
     value
   }: AbstractControl) => {
     const selectClassName = meta.isMulti ? 'is-multi' : '';
     const selectValidationClass = value && !pristine ? 'has-success' : '';
+    console.log('validator', errors);
+    const requiredLabel = meta.required === false ? ' - optional' : '';
     return (
       <Col xs={meta.colWidth}>
         <FormGroup
@@ -267,7 +240,10 @@ export const FormUtil = {
           )}
           bsSize="sm"
         >
-          <ControlLabel>{meta.label}</ControlLabel>
+          <ControlLabel>
+            {meta.label}
+            <i className="required-label">{requiredLabel}</i>
+          </ControlLabel>
           <Select
             options={meta.options}
             className={`${selectClassName} ${selectValidationClass}`}
@@ -276,6 +252,9 @@ export const FormUtil = {
             isMulti={meta.isMulti}
             classNamePrefix="react-select"
             name={meta.name || ''}
+            isClearable={
+              typeof meta.isClearable !== 'undefined' ? meta.isClearable : false
+            }
             {...handler()}
             isDisabled={
               meta.disabled !== undefined ? meta.disabled : handler().disabled
@@ -288,17 +267,15 @@ export const FormUtil = {
   CreatableSelect: ({
     handler,
     touched,
-    hasError,
     meta,
     pristine,
     errors,
     submitted,
-    patchValue,
-    setErrors,
     value
   }: AbstractControl) => {
     const selectClassName = meta.isMulti ? 'is-multi' : '';
     const selectValidationClass = value && !pristine ? 'has-success' : '';
+    const requiredLabel = meta.required === false ? ' - optional' : '';
     return (
       <Col xs={meta.colWidth}>
         <FormGroup
@@ -309,7 +286,10 @@ export const FormUtil = {
           )}
           bsSize="sm"
         >
-          <ControlLabel>{meta.label}</ControlLabel>
+          <ControlLabel>
+            {meta.label}
+            <i className="required-label">{requiredLabel}</i>
+          </ControlLabel>
           <CreatableSelect
             options={meta.options}
             className={`${selectClassName} ${selectValidationClass}`}
@@ -318,6 +298,9 @@ export const FormUtil = {
             isMulti={meta.isMulti}
             classNamePrefix="react-select"
             onCreateOption={meta.handleCreate}
+            isClearable={
+              typeof meta.isClearable !== 'undefined' ? meta.isClearable : false
+            }
             name={meta.name || ''}
             {...handler()}
             isDisabled={
@@ -328,18 +311,7 @@ export const FormUtil = {
       </Col>
     );
   },
-  SelectWithoutValidation: ({
-    handler,
-    touched,
-    hasError,
-    meta,
-    pristine,
-    errors,
-    submitted,
-    patchValue,
-    setErrors,
-    value
-  }: AbstractControl) => {
+  SelectWithoutValidation: ({ handler, meta }: AbstractControl) => {
     // console.log('rendering select', meta.options, value, defaultValue)
     const selectClassName = meta.isMulti ? `is-multi` : ``;
     return (
@@ -354,7 +326,7 @@ export const FormUtil = {
             isMulti={meta.isMulti}
             classNamePrefix="react-select"
             isClearable={
-              typeof meta.isClearable !== 'undefined' ? meta.isClearable : true
+              typeof meta.isClearable !== 'undefined' ? meta.isClearable : false
             }
             name={meta.name || ''}
             {...handler()}
@@ -366,18 +338,7 @@ export const FormUtil = {
       </Col>
     );
   },
-  SelectWithoutValidationLeftLabel: ({
-    handler,
-    touched,
-    hasError,
-    meta,
-    pristine,
-    errors,
-    submitted,
-    patchValue,
-    setErrors,
-    value
-  }: AbstractControl) => {
+  SelectWithoutValidationLeftLabel: ({ handler, meta }: AbstractControl) => {
     // TODO get rid of this because default values do not work for some unknwon reason.  we patch the values instead
     // console.log('rendering select', meta.options, value, defaultValue)
     const selectClassName = meta.isMulti ? `is-multi` : ``;
@@ -395,7 +356,11 @@ export const FormUtil = {
               placeholder={meta.placeholder}
               isMulti={meta.isMulti}
               classNamePrefix="react-select"
-              isClearable={meta.isClearable}
+              isClearable={
+                typeof meta.isClearable !== 'undefined'
+                  ? meta.isClearable
+                  : false
+              }
               name={meta.name || ''}
               {...handler()}
               isDisabled={
@@ -410,18 +375,16 @@ export const FormUtil = {
   SelectWithButton: ({
     handler,
     touched,
-    hasError,
     meta,
     pristine,
     errors,
     submitted,
-    patchValue,
-    setErrors,
     value
   }: AbstractControl) => {
     // console.log('rendering select', meta.options, value, defaultValue)
     const selectClassName = meta.isMulti ? 'is-multi' : '';
     const selectValidationClass = value && !pristine ? 'has-success' : '';
+    const requiredLabel = meta.required === false ? ' - optional' : '';
     return (
       <Col xs={meta.colWidth}>
         <FormGroup
@@ -432,7 +395,10 @@ export const FormUtil = {
           )}
           bsSize="sm"
         >
-          <ControlLabel>{meta.label}</ControlLabel>
+          <ControlLabel>
+            {meta.label}
+            <i className="required-label">{requiredLabel}</i>
+          </ControlLabel>
           <Button
             bsStyle="link"
             className="pull-right right-side"
@@ -457,18 +423,7 @@ export const FormUtil = {
       </Col>
     );
   },
-  Button: ({
-    handler,
-    touched,
-    hasError,
-    meta,
-    pristine,
-    errors,
-    submitted,
-    patchValue,
-    setErrors,
-    value
-  }: AbstractControl) => {
+  Button: ({ handler, meta }: AbstractControl) => {
     return (
       <Col xs={meta.colWidth}>
         <Button bsStyle="link" className="" onClick={meta.buttonAction}>
@@ -480,32 +435,37 @@ export const FormUtil = {
   RichTextEditor: ({
     handler,
     touched,
-    hasError,
     meta,
     pristine,
     errors,
     submitted
-  }: AbstractControl) => (
-    <Col xs={meta.colWidth}>
-      <FormGroup
-        validationState={FormUtil.getValidationState(
-          pristine,
-          errors,
-          submitted
-        )}
-        bsSize="sm"
-        style={meta.style}
-      >
-        <ControlLabel>{meta.label}</ControlLabel>
-        <RichTextEditor
-          onChange={handler().onChange}
-          initialContent={meta.initialContent}
-          readOnly={meta.readOnly}
-        />
-        <FormControl.Feedback />
-      </FormGroup>
-    </Col>
-  ),
+  }: AbstractControl) => {
+    const requiredLabel = meta.required === false ? ' - optional' : '';
+    return (
+      <Col xs={meta.colWidth}>
+        <FormGroup
+          validationState={FormUtil.getValidationState(
+            pristine,
+            errors,
+            submitted
+          )}
+          bsSize="sm"
+          style={meta.style}
+        >
+          <ControlLabel>
+            {meta.label}
+            <i className="required-label">{requiredLabel}</i>
+          </ControlLabel>
+          <RichTextEditor
+            onChange={handler().onChange}
+            initialContent={meta.initialContent}
+            readOnly={meta.readOnly}
+          />
+          <FormControl.Feedback />
+        </FormGroup>
+      </Col>
+    );
+  },
   translateForm: (config: FieldConfig, t: TranslationFunction) => {
     const newControls = mapValues(config.controls, field => {
       if (field.meta && field.meta.label) {
@@ -578,7 +538,6 @@ export const userBaseConfigControls = {
     render: FormUtil.TextInput,
     meta: { label: 'user:email', colWidth: 12, type: 'text', name: 'email' }
   },
-
   phone: {
     options: {
       validators: [

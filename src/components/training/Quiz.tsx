@@ -5,7 +5,13 @@ import * as React from 'react';
 import initialState from '../../reducers/initialState';
 
 import { connect } from 'react-redux';
-import { GFQuizItem, GFLesson, GFCourse } from '../../models';
+import {
+  GFQuizItem,
+  GFLesson,
+  GFCourse,
+  Iuser,
+  IinitialState
+} from '../../models';
 import {
   getLessonsByCourseID,
   setLesson,
@@ -28,6 +34,7 @@ import { RouteComponentProps } from 'react-router';
 import * as moment from 'moment';
 import { toastr } from 'react-redux-toastr';
 import constants from 'src/constants/constants';
+import { LinkContainer } from 'react-router-bootstrap';
 
 const TimeLeftBanner = ({ timeLeft }: { timeLeft?: number }) => {
   if (!timeLeft) {
@@ -49,21 +56,25 @@ interface RouterParams {
   quizID: string;
 }
 
-interface Props extends RouteComponentProps<RouterParams> {
-  user: any;
+interface IdispatchProps {
+  // Add your dispatcher properties here
+  user: Iuser;
   quiz: GFQuizItem;
   courses: GFCourse[];
   lesson: GFLesson;
   lessons: GFLesson[];
   quizzes: GFQuizItem[];
-  getLessonsByCourseID: any;
-  // getQuizzesByLessonID: any;
-  setLesson: any;
-  setQuiz: any;
+  getLessonsByCourseID: typeof getLessonsByCourseID;
+  // getQuizzesByLessonID: typeof getQuizzesByLessonID;
+  setLesson: typeof setLesson;
+  setQuiz: typeof setQuiz;
   saveQuizResults: typeof saveQuizResults;
   loading: boolean;
-  params: any;
   startQuiz: (id: string) => Promise<void>;
+}
+
+interface Iprops extends RouteComponentProps<RouterParams> {
+  // Add your regular properties here
 }
 
 interface State {
@@ -77,13 +88,13 @@ interface State {
   timeoutWarningShown: boolean;
 }
 
-class Quiz extends React.Component<Props, State> {
+class Quiz extends React.Component<Iprops & IdispatchProps, State> {
   savingQuiz: boolean;
-  checkingAnswer: boolean;
+  quizLoading: boolean;
   goingToNextQuestion: boolean;
   quizTimer: any;
 
-  constructor(props: Props) {
+  constructor(props: Iprops & IdispatchProps) {
     super(props);
     this.state = {
       questionIndex: 0,
@@ -95,28 +106,10 @@ class Quiz extends React.Component<Props, State> {
       timeLeft: 0,
       timeoutWarningShown: false
     };
-    this.handleChange = this.handleChange.bind(this);
-    this.backToLesson = this.backToLesson.bind(this);
-    this.backToCourses = this.backToCourses.bind(this);
-    this.retakeQuiz = this.retakeQuiz.bind(this);
-    this.nextQuestion = this.nextQuestion.bind(this);
-    this.printScore = this.printScore.bind(this);
-    this.checkAnswer = this.checkAnswer.bind(this);
-    this.finishQuiz = this.finishQuiz.bind(this);
-    // this.showBadge = this.showBadge.bind(this);
-    this.backToAllCourses = this.backToAllCourses.bind(this);
-    this.getQuizByID = this.getQuizByID.bind(this);
 
     this.savingQuiz = false;
-    this.checkingAnswer = false;
+    this.quizLoading = false;
     this.goingToNextQuestion = false;
-  }
-
-  componentWillMount() {
-    if (!this.props.match.params.lessonID) {
-      // no lesson id is not allowed
-      this.props.history.replace(`/courses`);
-    }
   }
 
   /*
@@ -127,7 +120,7 @@ class Quiz extends React.Component<Props, State> {
   */
   componentDidMount() {
     if (!this.props.match.params.quizID || !this.props.match.params.lessonID) {
-      console.error('GOT HERE 1');
+      console.error('missing quizid or lessonid');
       this.props.history.replace(`/training`);
       return;
     }
@@ -137,9 +130,9 @@ class Quiz extends React.Component<Props, State> {
       isEmpty(this.props.lessons) ||
       isEmpty(this.props.quizzes)
     ) {
-      console.error('GOT HERE 2');
-      // this.props.history.replace(`/training`);
-      // return;
+      console.error('missing courses, lessons, or quizzes');
+      this.props.history.replace(`/training`);
+      return;
     }
 
     // Check to see if there is any quiz in redux
@@ -166,12 +159,14 @@ class Quiz extends React.Component<Props, State> {
     ) {
       this.reloadExistingQuiz();
     }
-
+    /*
+    * Handle Timed Quizzes
+    */
     if (this.props.quiz.isTimed) {
       this.handleTimedQuiz();
     }
   }
-  componentDidUpdate(prevProps: Props) {
+  componentDidUpdate(prevProps: Iprops & IdispatchProps) {
     if (prevProps.quiz !== this.props.quiz) {
       this.loadQuiz();
     }
@@ -246,7 +241,7 @@ class Quiz extends React.Component<Props, State> {
   /*
   * There is a quiz in progress, so lets reload it
   */
-  reloadExistingQuiz() {
+  reloadExistingQuiz = () => {
     window.scrollTo(0, 0);
     let i = 0;
 
@@ -259,8 +254,7 @@ class Quiz extends React.Component<Props, State> {
     if (i >= this.props.quiz.questions.length) {
       // the user refreshed the page after completing the last question.  We don't know if they saved to the API or not
       // so lets assume they did not and show the last question answered and not editable.  this way they can try to re-save
-      // @jfbloom22 why are we calling finishQuiz when the component mounts?  changed it to not do that on 09/28/2017
-      // this.finishQuiz();
+
       const lastQuestion = this.props.quiz.questions[i - 1];
       this.setState({
         questionIndex: i - 1,
@@ -275,10 +269,10 @@ class Quiz extends React.Component<Props, State> {
         currentQuiz: this.props.quiz
       });
     }
-  }
-  loadQuiz() {
+  };
+  loadQuiz = () => {
     this.setState({ currentQuiz: this.props.quiz });
-  }
+  };
 
   /*
   * First try to find the quiz in the quizzes redux store, then try to get it from the API.
@@ -286,7 +280,7 @@ class Quiz extends React.Component<Props, State> {
   * we have to use the endpoint that gets all the quizzes for the lesson.
   * 
   */
-  getQuizByID() {
+  getQuizByID = () => {
     const quiz = this.props.quizzes[this.props.match.params.quizID];
     if (!!quiz && quiz.questions.length) {
       this.props.setQuiz(quiz);
@@ -301,8 +295,8 @@ class Quiz extends React.Component<Props, State> {
         return;
       }
     }
-  }
-  setLesson(lessonID: string) {
+  };
+  setLesson = (lessonID: string) => {
     const newLesson = this.props.lessons[lessonID];
     if (newLesson) {
       this.props.setLesson(
@@ -310,12 +304,12 @@ class Quiz extends React.Component<Props, State> {
       );
     } else {
       console.log('did not find lesson in Redux, loading lessons from API');
-      this.getLessonsByCourseID(this.props.match.params.courseID);
+      this.props.getLessonsByCourseID(
+        this.props.match.params.courseID,
+        this.props.user
+      );
     }
-  }
-  getLessonsByCourseID(courseId: string) {
-    this.props.getLessonsByCourseID(courseId, this.props.user);
-  }
+  };
 
   // showBadge(badge: GFBadge) {
   // const toastrOptions = {
@@ -326,7 +320,7 @@ class Quiz extends React.Component<Props, State> {
   // toastr.success('', '', toastrOptions)
   // }
 
-  handleChange(option: any) {
+  handleChange = (option: any) => {
     // this.setState({ [e.target.name]: e.target.value });
     // it was set to option.option.trim();
     if (option.name === 'textAnswer') {
@@ -334,21 +328,21 @@ class Quiz extends React.Component<Props, State> {
     } else {
       this.setState({ selectedAnswer: option });
     }
-  }
+  };
 
-  backToLesson() {
+  backToLesson = () => {
     this.props.history.replace(
       `/training/${this.props.match.params.courseID}/${
         this.props.match.params.lessonID
       }`
     );
-  }
+  };
 
-  backToCourses() {
+  backToCourses = () => {
     this.props.history.replace(`/training/${this.props.match.params.courseID}`);
-  }
+  };
 
-  retakeQuiz() {
+  retakeQuiz = () => {
     const questions = this.props.quiz.questions.map(q => {
       return Object.assign({}, q, { userAnswer: {} });
     });
@@ -365,9 +359,9 @@ class Quiz extends React.Component<Props, State> {
       checkingAnswer: false,
       quizComplete: false
     });
-  }
+  };
 
-  nextQuestion() {
+  nextQuestion = () => {
     // TODO test for the last question and show results
     if (this.goingToNextQuestion) {
       return;
@@ -394,28 +388,42 @@ class Quiz extends React.Component<Props, State> {
         el.checked = false;
       }
     );
-  }
+  };
   /*
     I need to click check answer and it triggers a statement that lets me know if the answer is wrong.
   */
-  checkAnswer(e: any) {
+  checkAnswer = (e: any) => {
     e.preventDefault();
-    if (this.checkingAnswer) {
+
+    setTimeout(() => {
+      this.quizLoading = false;
+    }, 200);
+    if (this.quizLoading) {
       return;
     }
+    this.quizLoading = true;
+
     if (this.state.checkingAnswer) {
       this.nextQuestion();
       return;
     }
-    this.checkingAnswer = true;
 
-    setTimeout(() => {
-      this.checkingAnswer = false;
-      this.setState({
-        checkingAnswer: true
-      });
-    }, 200);
+    // if timed quiz then skip displaying checked answer
+    if (this.props.quiz.isTimed) {
+      this.saveQuizAnswer();
+      this.nextQuestion();
+      return;
+    }
+
+    // Not a timed quiz, so go ahead and set checkingAnswer to true and save the quiz answer
+    this.setState({
+      checkingAnswer: true
+    });
     // save user selection to redux quiz state
+    this.saveQuizAnswer();
+  };
+
+  saveQuizAnswer = () => {
     const curQ = this.props.quiz.questions[this.state.questionIndex];
     const questions = [
       ...this.props.quiz.questions.map(q => {
@@ -430,9 +438,10 @@ class Quiz extends React.Component<Props, State> {
     ];
     const quiz = Object.assign({}, this.props.quiz, { questions });
     this.props.setQuiz(quiz);
-  }
+    return quiz;
+  };
 
-  finishQuiz() {
+  finishQuiz = () => {
     // if student, save the results to the api here, bypassing
     // redux flow since we do not need to update the store.
     // prevent doubl submission
@@ -445,22 +454,28 @@ class Quiz extends React.Component<Props, State> {
       this.savingQuiz = false;
     }, 1000);
 
-    this.props.saveQuizResults(this.props.quiz, this.props.user);
+    // if this is a timed quiz, we need to save the answer
+    let quiz = this.props.quiz;
+    if (this.props.quiz.isTimed) {
+      quiz = this.saveQuizAnswer();
+    }
+
+    this.props.saveQuizResults(quiz, this.props.user);
     this.setState({
       selectedAnswer: {},
       checkingAnswer: false,
       quizComplete: true,
       textAnswer: '',
-      currentQuiz: this.props.quiz,
+      currentQuiz: quiz,
       questionIndex: 0
     });
     // mixpanel.track("Finished Practice Exercise", {
     //   quizID: this.props.quiz.id,
     //   quizName: this.props.quiz.name
     // });
-  }
+  };
 
-  printScore() {
+  printScore = () => {
     let numCorrect = 0;
     const tot = this.state.currentQuiz.questions.length;
     forEach(this.state.currentQuiz.questions, q => {
@@ -481,7 +496,7 @@ class Quiz extends React.Component<Props, State> {
       grade = 'b';
     } else if (score >= 0 && score <= 59) {
       message =
-        "It looks like you're still learning the material - don't give up.  Review the lesson one more time, and then make sure to see your teacher for some help.";
+        "It looks like you're still learning the material - don't give up.  Review the lesson one more time.";
       grade = 'c';
     }
     return (
@@ -507,18 +522,17 @@ class Quiz extends React.Component<Props, State> {
         </div>
       </div>
     );
-  }
+  };
 
-  backToAllCourses() {
+  backToAllCourses = () => {
     this.props.history.replace(`/training`);
-  }
+  };
 
   render() {
     let questions;
     let totQ = 0;
     let qi = 0;
     let curQ;
-    // let courseName
     if (this.props.quiz && this.props.quiz.id) {
       questions = this.props.quiz.questions;
       totQ = this.props.quiz.questions.length;
@@ -528,46 +542,13 @@ class Quiz extends React.Component<Props, State> {
     // const bubble = {
     //   backgroundImage: `url(${txtBubble})`
     // };
-    if (this.props.lesson && this.props.lesson.id) {
-      // courseName = this.props.lesson.courseLessons[0].course.name
-    }
+
     return (
       <div>
         <div className="main-content content-without-sidebar quiz animated fadeIn">
-          {this.state.quizComplete && (
-            <div className="sub-header">
-              <Row className="question">
-                <Col md={12} sm={12} xs={12} className="text-center">
-                  {this.printScore()}
-                </Col>
-              </Row>
-              <Row className="question">
-                <Col md={12} sm={12} xs={12} className="text-center">
-                  <Button
-                    bsStyle="primary"
-                    onClick={this.retakeQuiz}
-                    className=""
-                  >
-                    Retake Exercise
-                  </Button>
-                  <Button
-                    bsStyle="primary"
-                    onClick={this.backToLesson}
-                    style={{ marginLeft: 10 }}
-                  >
-                    Return to Lesson
-                  </Button>
-                  <Button
-                    bsStyle="primary"
-                    onClick={this.backToAllCourses}
-                    style={{ marginLeft: 10 }}
-                  >
-                    Return to dashboard
-                  </Button>
-                </Col>
-              </Row>
-            </div>
-          )}
+          {/*
+            * Display the Quiz Question and buttons
+            */}
           {!this.state.quizComplete &&
             typeof curQ !== 'undefined' && (
               <div className="sub-header">
@@ -601,29 +582,33 @@ class Quiz extends React.Component<Props, State> {
                   </Row>
                   <Row className="button-row">
                     <Col md={5} sm={5} className="quiz-buttons">
-                      {!this.state.checkingAnswer && (
-                        <Button
-                          bsStyle="primary"
-                          type="submit"
-                          disabled={
-                            this.state.selectedAnswer.option === undefined
-                          }
-                        >
-                          Check
-                        </Button>
-                      )}
-                      {this.state.checkingAnswer &&
+                      {!this.state.checkingAnswer &&
+                        !this.props.quiz.isTimed && (
+                          <Button
+                            bsStyle="primary"
+                            type="submit"
+                            disabled={
+                              this.state.selectedAnswer.option === undefined
+                            }
+                          >
+                            Check
+                          </Button>
+                        )}
+                      {(this.state.checkingAnswer || this.props.quiz.isTimed) &&
                         qi + 1 < totQ && (
                           <Button
                             bsStyle="primary"
                             className="next-button"
                             type="submit"
-                            disabled={!this.state.checkingAnswer}
+                            disabled={
+                              this.props.quiz.isTimed &&
+                              this.state.selectedAnswer.option === undefined
+                            }
                           >
                             Next
                           </Button>
                         )}
-                      {this.state.checkingAnswer &&
+                      {(this.state.checkingAnswer || this.props.quiz.isTimed) &&
                         qi + 1 === totQ && (
                           <Button
                             bsStyle="primary"
@@ -644,7 +629,46 @@ class Quiz extends React.Component<Props, State> {
                 </form>
               </div>
             )}
+          {/*
+            * Display the Completed Quiz Score
+            */}
+          {this.state.quizComplete && (
+            <div className="sub-header">
+              <Row className="question">
+                <Col md={12} sm={12} xs={12} className="text-center">
+                  {this.printScore()}
+                </Col>
+              </Row>
+              <Row className="question">
+                <Col md={12} sm={12} xs={12} className="text-center">
+                  {!this.props.quiz.isTimed && (
+                    <Button
+                      bsStyle="primary"
+                      onClick={this.retakeQuiz}
+                      className=""
+                    >
+                      Retake Exercise
+                    </Button>
+                  )}
+
+                  <Button
+                    bsStyle="primary"
+                    onClick={this.backToLesson}
+                    style={{ marginLeft: 10 }}
+                  >
+                    Return to Lesson
+                  </Button>
+                  <LinkContainer to="/dashboard" style={{ marginLeft: 10 }}>
+                    <Button bsStyle="primary">Return to dashboard</Button>
+                  </LinkContainer>
+                </Col>
+              </Row>
+            </div>
+          )}
         </div>
+        {/*
+       * Display right or wrong
+      */}
         {this.state.checkingAnswer && (
           <div className="animated slideInUp owl-image">
             {/* style={bubble} */}
@@ -665,7 +689,7 @@ class Quiz extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: any, ownProps: any) => {
+const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
     courses: state.training.courses,

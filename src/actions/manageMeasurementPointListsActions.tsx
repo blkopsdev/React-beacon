@@ -23,14 +23,14 @@ export function getAllMeasurementPointLists(): ThunkResult<void> {
     const {
       page,
       type,
-      productGroup,
+      mainCategory,
       standard
     } = getState().manageMeasurementPointLists.tableFilters;
     return axios
       .get(API.GET.measurements.getall, {
         params: {
           page,
-          productGroupID: productGroup && productGroup.value,
+          mainCategoryID: mainCategory && mainCategory.value,
           type: type && type.value,
           standardID: standard && standard.value
         }

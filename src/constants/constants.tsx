@@ -472,9 +472,9 @@ const constants = {
     if (error && error.response && error.response.status === 401) {
       console.warn('catching unauthorized, re-authenticating');
       setTimeout(() => {
-        // authContext.login();
         adalReauth();
-      }, 1500);
+      }, 1000);
+      return; // don't show an error
     }
     toastr.error('Error', msg, constants.toastrError);
   },

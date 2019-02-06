@@ -24,7 +24,7 @@
     "lodash": "^4.17.10",
     "moment": "^2.22.2",
     "npm": "^6.3.0",
-    "query-string": "^6.2.0",
+    "query-string": "^5.1.1",
     "react": "^16.5.2",
     "react-adal": "git+https://github.com/jfbloom22/react-adal.git#master",
     "react-bootstrap": "^0.32.1",

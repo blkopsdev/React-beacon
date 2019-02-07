@@ -15,7 +15,6 @@ import {
 } from '../../models';
 import {
   loadCourses,
-  getLessonsByCourseID,
   setLesson,
   getAllLessons,
   getAllQuizzes,
@@ -71,7 +70,6 @@ interface Props extends RouteComponentProps<RouterParams> {
   lesson: GFLesson;
   lessonProgress: { [key: string]: LessonProgress };
   loadCourses: any;
-  getLessonsByCourseID: any;
   setLesson: any;
   loading: boolean;
   getAllLessons: typeof getAllLessons;
@@ -198,16 +196,6 @@ class Courses extends React.Component<Props, State> {
         this.setState({ filteredLessons: sortedLessons });
       }
     }
-
-    // if we do not have the lessons, then try one more time
-    // maybe the user's plan is out of date
-    if (!filteredLessons.length) {
-      this.getLessonsByCourseID(gfCourseId);
-    }
-  };
-
-  getLessonsByCourseID = (courseId: string) => {
-    this.props.getLessonsByCourseID(courseId, this.props.user);
   };
 
   loadLessonAndQuizzes = (gfLesson: any) => {
@@ -614,7 +602,6 @@ export default translate('training')(
     mapStateToProps,
     {
       loadCourses,
-      getLessonsByCourseID,
       setLesson,
       getAllLessons,
       getAllQuizzes,

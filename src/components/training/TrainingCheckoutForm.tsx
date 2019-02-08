@@ -332,13 +332,6 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
           id="1"
           value={process.env.REACT_APP_UTA_USER}
         />
-
-        <input
-          hidden={true}
-          name="Owner"
-          id="Owner"
-          value={process.env.REACT_APP_UTA_OWNER}
-        />
         <input
           hidden={true}
           name="Email"

@@ -21,12 +21,16 @@
     .btn{
       margin-top: 5px;
     }
+    
+  }
+  .contact-button {
+    color: @green;
   }
 }
 
-.ReactTable.beacon-table .rt-expandable{
-  display: none;
-}
+// .ReactTable.beacon-table .rt-expandable{
+//   display: none;
+// }
 .request-for-quote-cart-button .badge{
   position: absolute;
   top: 12px;
@@ -73,3 +77,29 @@
     }
   }
 }
+.beacon-list-group{
+  background-color: #fff;
+
+  .new-product-item:nth-child(odd){
+    background-color: fade(@green, 5%)
+  }
+  .new-product-item{
+    h4{
+      font-size: 1.3rem;
+      margin-top: 0;
+      margin-bottom: 5px;
+    }
+    div {
+      line-height: 18px;
+    }
+    &:hover, &.selected{
+      background-color: fade(@green, 20%)
+    }
+  }
+}
+.table-import-button{
+  position: absolute;
+  top: 93px;
+  right: 150px;
+}
+

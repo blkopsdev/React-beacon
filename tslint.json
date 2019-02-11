@@ -12,6 +12,7 @@
     "interface-name": false,
     "no-string-literal": false,
     "no-var-requires": false,
+    "no-debugger": false,
     "no-console": [
       false,
       "log",

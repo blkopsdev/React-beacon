@@ -35,7 +35,7 @@ class ImportInstallModal extends React.Component<Iprops & IdispatchProps, {}> {
     return (
       <CommonModal
         modalVisible={this.props.showModal}
-        className="user-edit second-modal"
+        className="user-edit"
         onHide={this.props.toggleImportInstallModal}
         body={<ImportInstallForm {...this.props} />}
         title={this.props.t('importInstallModalTitle')}

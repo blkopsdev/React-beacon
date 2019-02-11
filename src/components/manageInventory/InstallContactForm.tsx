@@ -63,19 +63,24 @@ class InstallContactform extends React.Component<Iprops, {}> {
         meta: {
           label: 'productInfoLabel',
           colWidth: 12,
-          defaultValue: this.props.productName
+          defaultValue: this.props.productName,
+          name: 'install'
         }
       },
       message: {
         render: FormUtil.TextInput,
         options: {
-          validators: Validators.required
+          validators: [
+            Validators.required,
+            FormUtil.validators.requiredWithTrim
+          ]
         },
         meta: {
           label: 'contactMessageLabel',
           colWidth: 12,
           componentClass: 'textarea',
-          rows: 8
+          rows: 8,
+          name: 'message'
         }
       }
     };
@@ -109,36 +114,31 @@ class InstallContactform extends React.Component<Iprops, {}> {
   render() {
     const { t } = this.props;
 
-    const formClassName = `user-form manage-form ${this.props.colorButton}`;
+    const formClassName = `beacon-form install-contact-form ${
+      this.props.colorButton
+    }`;
     return (
-      <div>
-        <div className={formClassName}>
-          <form onSubmit={this.handleSubmit} className="user-form">
-            <FormGenerator
-              onMount={this.setForm}
-              fieldConfig={this.fieldConfig}
-            />
+      <form onSubmit={this.handleSubmit} className={formClassName}>
+        <FormGenerator onMount={this.setForm} fieldConfig={this.fieldConfig} />
 
-            <Col xs={12} className="form-buttons text-right">
-              <Button
-                bsStyle="link"
-                type="button"
-                className="pull-left left-side"
-                onClick={this.props.toggleInstallContactModal}
-              >
-                {t('common:cancel')}
-              </Button>
-              <Button
-                bsStyle={this.props.colorButton}
-                type="submit"
-                disabled={this.props.loading}
-              >
-                {t('contactButton')}
-              </Button>
-            </Col>
-          </form>
-        </div>
-      </div>
+        <Col xs={12} className="form-buttons text-right">
+          <Button
+            bsStyle="default"
+            type="button"
+            className="pull-left"
+            onClick={this.props.toggleInstallContactModal}
+          >
+            {t('common:cancel')}
+          </Button>
+          <Button
+            bsStyle={this.props.colorButton}
+            type="submit"
+            disabled={this.props.loading}
+          >
+            {t('contactButton')}
+          </Button>
+        </Col>
+      </form>
     );
   }
 }

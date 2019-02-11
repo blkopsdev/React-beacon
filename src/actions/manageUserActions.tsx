@@ -8,6 +8,7 @@ import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
 import constants from '../constants/constants';
 import * as types from './actionTypes';
+import * as localForage from 'localforage';
 
 // import {AxiosResponse} from 'axios';
 
@@ -34,7 +35,7 @@ export function getUserManage(): ThunkResult<void> {
       })
       .catch((error: any) => {
         dispatch({ type: types.USER_MANAGE_FAILED });
-        constants.handleError(error, 'get user queue');
+        constants.handleError(error, 'get users');
         throw error;
       });
   };
@@ -55,10 +56,9 @@ const checkForLoggedInUser = (
     );
     setTimeout(() => {
       dispatch({ type: types.USER_LOGOUT_SUCCESS });
-      localStorage.removeItem('state-core-care');
-      setTimeout(() => {
+      localForage.removeItem('state-core-care-web').then(() => {
         authContext.logOut();
-      }, 100); // give it time to persist this to local storage
+      });
     }, 5000);
   }
 };

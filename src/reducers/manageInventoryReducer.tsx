@@ -6,9 +6,8 @@ import {
   ImanageInventoryReducer,
   IproductInfo,
   Ibrand,
-  IgasType,
+  IproductType,
   IbaseDataObject,
-  IproductGroup,
   Isubcategory,
   IsystemSize,
   IinstallBase
@@ -17,8 +16,8 @@ import {
   createTableFiltersWithName,
   modalToggleWithName
 } from './commonReducers';
-import cartReducer, { getAddedIDs, getQuantity } from './cartReducer';
-import initialState from './initialState';
+import { cartReducerWithName } from './cartReducer';
+import initialState, { initialProduct } from './initialState';
 import * as types from '../actions/actionTypes';
 
 function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
@@ -138,6 +137,39 @@ function totalPagesReducer(state: number = 1, action: any): number {
   }
 }
 
+function selectedProductReducer(
+  state: Iproduct = initialProduct,
+  action: any
+): Iproduct {
+  switch (action.type) {
+    case types.SET_SELECTED_PRODUCT:
+      return action.product ? action.product : initialProduct;
+    case types.USER_LOGOUT_SUCCESS:
+      return initialProduct;
+    default:
+      return state;
+  }
+}
+
+function newProductsReducer(
+  state: { [key: string]: Iproduct } = {},
+  action: any
+): { [key: string]: Iproduct } {
+  switch (action.type) {
+    case types.GET_PRODUCTS_SUCCESS:
+      return action.products ? action.products : {};
+    // return map(action.products, d => {
+    //   return {
+    //     ...(pickBy(d, (property, key) => property !== null) as Iproduct)
+    //   };
+    // });
+    case types.NEW_PRODUCTS_RESET:
+      return {};
+    default:
+      return state;
+  }
+}
+
 export default function ManageInventory(
   state: ImanageInventoryReducer = initialState.manageInventory,
   action: any
@@ -145,17 +177,24 @@ export default function ManageInventory(
   return {
     data: dataReducer(state.data, action),
     totalPages: totalPagesReducer(state.totalPages, action),
-    cart: cartReducer(state.cart, action),
+    cart: cartReducerWithName(state.cart, action, 'INVENTORY'),
     productInfo: productInfo(state.productInfo, action),
-    showEditQuoteModal: modalToggleWithName(
-      state.showEditQuoteModal,
+    selectedProduct: selectedProductReducer(state.selectedProduct, action),
+    newProducts: newProductsReducer(state.newProducts, action),
+    showShoppingCartModal: modalToggleWithName(
+      state.showShoppingCartModal,
       action,
-      'EDIT_QUOTE'
+      'SHOPPING_CART_INVENTORY'
     ),
     showEditProductModal: modalToggleWithName(
       state.showEditProductModal,
       action,
       'EDIT_PRODUCT'
+    ),
+    showSearchNewProductsModal: modalToggleWithName(
+      state.showSearchNewProductsModal,
+      action,
+      'SEARCH_NEW_PRODUCTS'
     ),
     showEditInstallModal: modalToggleWithName(
       state.showEditInstallModal,
@@ -181,7 +220,7 @@ export default function ManageInventory(
   };
 }
 /*
-Brand, GasType, Main Category, Manufacturer, Power, Product Group, Standard, Subcategory, System Size 
+Brand, productType, Main Category, Power, Product Group, Standard, Subcategory, System Size 
 */
 export function productInfo(
   state: IproductInfo = initialState.manageInventory.productInfo,
@@ -191,42 +230,34 @@ export function productInfo(
     case types.GET_PRODUCT_INFO_SUCCESS:
       const pi = action.data;
       const brands = keyBy(pi[0], (item: Ibrand) => item.id);
-      const gasTypes = keyBy(pi[1], (item: IgasType) => item.id);
+      const productTypes = keyBy(pi[1], (item: IproductType) => item.id);
       const mainCategories = keyBy(pi[2], (item: IbaseDataObject) => item.id);
-      const manufacturers = keyBy(pi[3], (item: IbaseDataObject) => item.id);
-      const powers = keyBy(pi[4], (item: IbaseDataObject) => item.id);
-      const productGroups = keyBy(pi[5], (item: IproductGroup) => item.id);
-      const standards = keyBy(pi[6], (item: IbaseDataObject) => item.id);
-      const subcategories = keyBy(pi[7], (item: Isubcategory) => item.id);
-      const systemSizes = keyBy(pi[8], (item: IsystemSize) => item.id);
+      const powers = keyBy(pi[3], (item: IbaseDataObject) => item.id);
+      const standards = keyBy(pi[4], (item: IbaseDataObject) => item.id);
+      const subcategories = keyBy(pi[5], (item: Isubcategory) => item.id);
+      const systemSizes = keyBy(pi[6], (item: IsystemSize) => item.id);
 
       // an options version of each one
       const brandOptions = FormUtil.convertToOptions(pi[0]);
-      const gasTypeOptions = FormUtil.convertToOptions(pi[1]);
+      const productTypeOptions = FormUtil.convertToOptions(pi[1]);
       const mainCategoryOptions = FormUtil.convertToOptions(pi[2]);
-      const manufacturerOptions = FormUtil.convertToOptions(pi[3]);
-      const powerOptions = FormUtil.convertToOptions(pi[4]);
-      const productGroupOptions = FormUtil.convertToOptions(pi[5]);
-      const standardOptions = FormUtil.convertToOptions(pi[6]);
-      const subcategoryOptions = FormUtil.convertToOptions(pi[7]);
-      const systemSizeOptions = FormUtil.convertToOptions(pi[8]);
+      const powerOptions = FormUtil.convertToOptions(pi[3]);
+      const standardOptions = FormUtil.convertToOptions(pi[4]);
+      const subcategoryOptions = FormUtil.convertToOptions(pi[5]);
+      const systemSizeOptions = FormUtil.convertToOptions(pi[6]);
 
       return {
         brands,
-        gasTypes,
+        productTypes,
         mainCategories,
-        manufacturers,
         powers,
-        productGroups,
         standards,
         subcategories,
         systemSizes,
         brandOptions,
-        gasTypeOptions,
+        productTypeOptions,
         mainCategoryOptions,
-        manufacturerOptions,
         powerOptions,
-        productGroupOptions,
         standardOptions,
         subcategoryOptions,
         systemSizeOptions
@@ -237,21 +268,3 @@ export function productInfo(
       return state;
   }
 }
-
-// getters for shopping cart
-// const getAddedIds = (cart: IshoppingCart) => getAddedIDs(cart)
-// const getQuantity = (cart: IshoppingCart, id: string) => getQuantity(cart, id)
-const getProduct = (productInfoState: IproductInfo, id: string) =>
-  productInfoState.productGroups[id];
-
-export const getTotal = (state: ImanageInventoryReducer) =>
-  state.cart.addedIDs.reduce(
-    (total, id) => total + getQuantity(state.cart, id),
-    0
-  );
-
-export const getCartProducts = (state: ImanageInventoryReducer) =>
-  getAddedIDs(state.cart).map(id => ({
-    ...getProduct(state.productInfo, id),
-    quantity: getQuantity(state.cart, id)
-  }));

@@ -1,0 +1,207 @@
+@import '../../less/variables.less';
+
+.breadcrumb {
+  background-color: #eee;
+  font-size: 1.2em;
+  margin-bottom: 0px;
+  padding-top: 30px;
+  padding-left: 35px;
+  font-weight: 600;
+  a {
+    color: @primaryBlue;
+  }
+}
+.manage-training .main-content{
+  height: calc(100vh - 204px);
+}
+.courses.main-content{
+  height: calc(100vh - 144px);
+}
+.lessons.courses.main-content{
+  height: calc(100vh - 210px);
+}
+.course-description p{
+  padding-left: 20px;
+  line-height: 1.5;
+  font-size: 1.3em;
+  margin-bottom: 20px;
+  margin-top: 10px;
+
+}
+
+.vimeo-player{
+  margin-left: 140px;
+  margin-right: 140px;
+  margin-bottom: 60px;
+}
+.gf-breadcrumb {
+  ol.breadcrumb {
+    padding-left: 20px;
+    background-color: #eceff4;
+    margin-bottom: 5px;
+    padding-bottom: 5px;
+    li.active span {
+      text-decoration: none;
+    }
+    a span, span {
+      font-size: 17px;
+      font-family: @headerFont;
+      color: @blue;
+      font-weight: 500;
+      text-decoration: underline;
+    }
+    a span:hover {
+      color: #7e9db4;
+    }
+  }
+  .breadcrumb > li + li::before {
+    color: @blue;
+  }
+  li::before {
+    font-size: 20px;
+    color: @blue;
+  }
+}
+
+.courses {
+  .course.animated.fadeInUp {
+    text-align: center;
+    min-width: 330px;
+    padding: 0px 30px 0px 0px;
+    display: inline-block;
+  }
+  .panel-default h3 {
+    font-family: @headerFont;
+    padding-left: 20px;
+    padding-right: 20px;
+    
+  }
+  .lesson-name {
+    padding-left: 25px;
+    font-family: @headerFont;
+    font-size: 16px;
+    font-weight: 400;
+  }
+  .lesson-progress {
+    padding-left: 0;
+  }
+  .courses-list {
+    cursor: pointer;
+    .list-group {
+      li:nth-child(odd) {
+        background-color: fade(@blue, 5%);
+        &:hover {
+          background-color: fade(@blue, 10%);
+        }
+      }
+      li:nth-child(even) {
+        &:hover {
+          background-color: fade(#fff, 10%);
+        }
+      }
+    }
+  }
+  .courses-tiles {
+    padding-top: 30px;
+    padding-left: 15px;
+    padding-right: 30px;
+    .list-group {
+      padding-left: 15px;
+    }
+    .course {
+      margin-bottom: 20px;
+      .btn .fa {
+        text-shadow: 0px 2px 2px rgba(0, 0, 0, 0.49);
+      }
+      .panel {
+        background-color: #fff;
+        border-radius: 4px;
+        position: relative;
+        min-height: 261px;
+        min-width: 220px;
+        .panel-body {
+          padding-bottom: 0px;
+          padding-top: 0px;
+        }
+        .purchase-text {
+          line-height: 20px;
+          padding-left: 20px;
+          padding-right: 20px;
+          margin-bottom: 60px;
+        }
+      }
+      .course-footer {
+        cursor: pointer;
+        position: absolute;
+        padding: 10px;
+        font-weight: 600;
+        // position: absolute;
+        bottom: -10px;
+        background-color: @blue;
+        border-bottom: 4px solid @darkerBlue;
+        border-radius: 0 0 4px 4px;
+        min-height: 30px;
+        color: #fff;
+        width: 100%;
+        .btn {
+          background-color: @blue;
+          border: 0px;
+          color: #fff;
+        }
+        .btn:hover {
+          background-color: #d4bb33;
+        }
+        .btn:active {
+          background-color: @darkOrange;
+        }
+      }
+    }
+  }
+  .modal-container {
+    position: relative;
+  }
+  .modal-container .modal, .modal-container .modal-backdrop {
+    position: absolute;
+  }
+}
+
+.modal-body input[type="text"]:focus, input[type="number"]:focus {
+  box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075);
+  border-color: #ccc;
+}
+
+.gf-breadcrumb.course {
+  padding-left: 0px;
+}
+
+// .update-profile-link:hover {
+//   color: #7E9DB4;
+//   text-decoration: underline;
+//   cursor: pointer;
+// }
+.update-profile-link.btn.btn-link {
+  font-weight: 500;
+  font-family: 'museo', sans-serif;
+  font-size: 24px;
+  line-height: 34px;
+}
+
+.students-badge {
+  margin: 0px 20px 10px 0px;
+  img {
+    max-width: 64px;
+    max-height: 64px;
+    min-width: 64px;
+    min-height: 64px;
+  }
+}
+
+.training-manage .beacon-table .rt-table .rt-tr{
+  cursor:default;
+}
+
+.training{
+  .banner .title{
+    margin-left: 30px;
+  }
+}

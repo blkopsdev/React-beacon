@@ -45,7 +45,18 @@ class Dashboard extends React.Component<Iprops, {}> {
             <div className={`tile ${tile.color}`} style={styles}>
               <img src={tile.src} style={styles} />
               <span className="title">
-                <FontAwesomeIcon icon={tile.icon} />
+                {tile.iconType === 'fa' && <FontAwesomeIcon icon={tile.icon} />}
+                {tile.iconType === 'img' && (
+                  <span>
+                    <img
+                      src={tile.icon}
+                      width={40}
+                      height={40}
+                      style={{ opacity: 100, marginBottom: 10 }}
+                    />
+                    <br />
+                  </span>
+                )}
                 {this.props.t(tile.title)}
               </span>
             </div>
@@ -55,15 +66,18 @@ class Dashboard extends React.Component<Iprops, {}> {
     });
     console.log('dashboard render', tileElements);
     return (
-      <Masonry
-        className={'dashboard'} // default ''
-        elementType={'div'} // default 'div'
-        options={masonryOptions} // default {}
-        disableImagesLoaded={false} // default false
-        updateOnEachImageLoad={false} // default false and works only if disableImagesLoaded is false
-      >
-        {tileElements}
-      </Masonry>
+      <div>
+        <div className="dashboard-background" />
+        <Masonry
+          className={'dashboard'} // default ''
+          elementType={'div'} // default 'div'
+          options={masonryOptions} // default {}
+          disableImagesLoaded={false} // default false
+          updateOnEachImageLoad={false} // default false and works only if disableImagesLoaded is false
+        >
+          {tileElements}
+        </Masonry>
+      </div>
     );
   }
 }

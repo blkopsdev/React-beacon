@@ -1,5 +1,5 @@
 /*
-* Edit Quote Modal - Container
+* Edit Shopping Cart Modal - Container
 */
 
 import { TranslationFunction } from 'react-i18next';
@@ -11,18 +11,18 @@ import {
   IinitialState,
   IproductInfo,
   IshoppingCart,
-  ItableFiltersReducer
+  ItableFiltersReducer,
+  Iuser
 } from '../../models';
 import {
   addToCart,
   decreaseFromCart,
   deleteFromCart,
   updateQuantityCart,
-  checkout
+  toggleShoppingCartModal
 } from '../../actions/shoppingCartActions';
-import { toggleEditQuoteModal } from '../../actions/manageInventoryActions';
 import CommonModal from '../common/CommonModal';
-import EditQuoteForm from './EditQuoteForm';
+import { requestQuote } from 'src/actions/manageInventoryActions';
 
 interface Iprops {
   colorButton: any;
@@ -38,10 +38,15 @@ interface IdispatchProps {
   updateQuantityCart: typeof updateQuantityCart;
   decreaseFromCart: typeof decreaseFromCart;
   deleteFromCart: typeof deleteFromCart;
-  checkout: typeof checkout;
-  toggleEditQuoteModal: typeof toggleEditQuoteModal;
+  checkout?: typeof requestQuote;
+  toggleShoppingCartModal: typeof toggleShoppingCartModal;
   cart: IshoppingCart;
   tableFilters: ItableFiltersReducer;
+  title: string;
+  cartName: string;
+  ShoppingCartForm: any;
+  showCost?: boolean;
+  user: Iuser;
 }
 
 class EditQuoteModal extends React.Component<Iprops & IdispatchProps, {}> {
@@ -54,9 +59,9 @@ class EditQuoteModal extends React.Component<Iprops & IdispatchProps, {}> {
       <CommonModal
         modalVisible={this.props.showModal}
         className="user-edit"
-        onHide={this.props.toggleEditQuoteModal}
-        body={<EditQuoteForm {...this.props} />}
-        title={this.props.t('manageInventory:requestForQuote')}
+        onHide={this.props.toggleShoppingCartModal}
+        body={<this.props.ShoppingCartForm {...this.props} />}
+        title={this.props.title}
         container={document.getElementById('two-pane-layout')}
       />
     );
@@ -68,9 +73,10 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
     facilityOptions: FormUtil.convertToOptions(state.user.facilities),
-    showModal: state.manageInventory.showEditQuoteModal,
+    showModal:
+      state.manageInventory.showShoppingCartModal ||
+      state.training.showShoppingCartModal,
     productInfo: state.manageInventory.productInfo,
-    cart: state.manageInventory.cart,
     tableFilters: state.manageInventory.tableFilters
   };
 };
@@ -81,8 +87,7 @@ export default connect(
     addToCart,
     decreaseFromCart,
     deleteFromCart,
-    toggleEditQuoteModal,
-    checkout,
+    toggleShoppingCartModal,
     updateQuantityCart
   }
 )(EditQuoteModal);

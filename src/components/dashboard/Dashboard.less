@@ -1,5 +1,7 @@
 @import '../../less/variables.less';
 .dashboard {
+
+
   .tile {
     outline: 1px solid @white;
     .title {
@@ -47,4 +49,20 @@
   .purple {
     background-color: @purple;
   }
+
+
+}
+
+.dashboard-background:after {
+  content: "";
+  display: block;
+  position: absolute;
+  top: 0;
+  left: 0;
+  background-image: url('images/BM_Dashboard_LogoBG.png');
+  background-repeat: no-repeat;
+  background-size: cover;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
 }

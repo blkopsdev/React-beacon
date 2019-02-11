@@ -77,10 +77,17 @@ body {
   }
 }
 
-.user-form {
-  display: inline-block;
+.slide-modal form{
+  margin-bottom: 20px;
+}
+
+.beacon-form {
+  display: block;
   .form-buttons {
     margin-top: 20px;
+  }
+  .datetime-select .form-control-feedback{
+    right: 10px;
   }
   .react-toggle-label{
     margin-left: 10px;
@@ -140,6 +147,10 @@ body {
       }
     }
   }
+  .required-label{
+    text-transform: capitalize;
+    color: @darkGrey;
+  }
 }
 
 .form-group {
@@ -161,11 +172,17 @@ body {
     height: 33px;
 
   }
+  .input-group-btn {
+    .btn {
+      margin-top: -5px;
+      padding: 6px 18px 5px 18px;
+    }
+  }
   .react-select__multi-value{
     padding: 2px;
   }
   .react-select__control{
-    
+
     height: 33px;
     min-height: 33px;
     //  overrides for react-select 
@@ -177,11 +194,16 @@ body {
     .react-select__value-container {
       padding: 0;
     }
+    
   }
   .is-multi .react-select__control{
     min-height: 40px;
     height: auto;
   }
+  .react-select__option{
+    color: black;
+  }
+
 }
 
 
@@ -192,14 +214,26 @@ body {
 //   padding: 5px;
 // }
 //fade(#F5F5F5, 90%)
-.slide-modal {
+.slide-modal{
+  .modal-footer {
+    display: none;
+  }
+}
+
+// enable if we want the second modal backdrop to be above the first modal, 
+//also need to update the containers for the modals to "second-modal" and "first-modal"
+// #modal-two .modal-backdrop{
+//   z-index: 1050;
+// }
+
+.two-pane-layout .slide-modal {
   overflow: hidden;
   .modal-body {
     padding: 15px 0 40px 0;
     overflow-y: auto;
     height: calc(100vh - @headerHeight - 60px);
     .form-buttons{
-      position: fixed;
+      position: absolute;
       bottom: 0;
       padding-bottom: 10px;
       padding-top: 10px;
@@ -259,16 +293,24 @@ body {
   width: 100%;
   img {
     opacity: .3;
-    max-width: 100%;
+    width: 100%;
     height: 100%;
+    min-width: 1120px;
   }
-  span {
+  .title {
     font-size: 24px;
     color: #FFFFFF;
     position: absolute;
     left: 20px;
     top: 17px;
     text-transform: uppercase;
+    .breadcrumb {
+      background-color: transparent;
+      padding: 0px 0px;
+      span, a {
+        color: white;
+      }
+    }
   }
 }
 .beacon-toggle{
@@ -285,11 +327,13 @@ body {
   font-weight: 400;
   border-top: none;
   max-height: calc(100vh - @maxTableHeightDifference);
+  min-height: 130px;
   overflow: auto;
 
   // margin-bottom: 90px; // space for the "no rows found" message
   .rt-noData{
-    transform: translate(-50%, 80%);
+    transform: translate(-50%, -90%);
+    padding: 5px 10px;
   }
   &.dark .rt-tr.-odd {
     background-color: fade(@dark, 5%);
@@ -342,6 +386,7 @@ body {
   .rt-td {
     padding: 5px 5px 0 5px;
     min-height: 38px;
+    white-space: normal;
   }
   .rt-tr {
     background-color: white;
@@ -414,4 +459,8 @@ body {
   .list-group-item-heading{
     color: @blue;
   }
+}
+
+.form-control-feedback{
+  z-index: 0;
 }

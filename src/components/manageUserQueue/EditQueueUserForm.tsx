@@ -8,7 +8,7 @@
 * 
 */
 
-import { Col, Button, FormGroup, ControlLabel } from 'react-bootstrap';
+import { Col, Button } from 'react-bootstrap';
 import {
   Validators,
   FormGenerator,
@@ -42,16 +42,6 @@ interface AbstractControlEdited extends AbstractControl {
   stateChanges: IstateChanges;
 }
 
-const TextLabel = ({ handler, meta }: any) => {
-  return (
-    <Col xs={meta.colWidth}>
-      <FormGroup bsSize="sm">
-        <ControlLabel>{meta.label}</ControlLabel>
-        <h5 className="queue-form-label">{handler().value}</h5>
-      </FormGroup>
-    </Col>
-  );
-};
 const buildFieldConfig = (
   customerOptions: any[],
   facilityOptions: any[],
@@ -62,19 +52,23 @@ const buildFieldConfig = (
   // Field config to configure form
   const fieldConfigControls = {
     tempCompany: {
-      render: TextLabel,
-      meta: { label: 'userQueue:userCustomer', colWidth: 12 }
+      render: FormUtil.TextLabel,
+      meta: {
+        label: 'userQueue:userCustomer',
+        colWidth: 12,
+        name: 'temp-company'
+      }
     },
     customerID: {
       render: FormUtil.SelectWithButton,
       meta: {
         options: customerOptions,
         label: 'common:customer',
-
         colWidth: 12,
         placeholder: 'userQueue:customerSearchPlaceholder',
         buttonName: 'userQueue:addCustomerButton',
-        buttonAction: toggleEditCustomerModalCB
+        buttonAction: toggleEditCustomerModalCB,
+        name: 'customer'
       },
       options: {
         validators: [
@@ -97,7 +91,8 @@ const buildFieldConfig = (
         placeholder: 'userQueue:facilitySearchPlaceholder',
         buttonName: 'userQueue:facilityButton',
         buttonAction: toggleEditFacilityModalCB,
-        isMulti: true
+        isMulti: true,
+        name: 'facilities'
       },
       options: {
         validators: Validators.required
@@ -105,7 +100,7 @@ const buildFieldConfig = (
     },
 
     providedAddress: {
-      render: TextLabel,
+      render: FormUtil.TextLabel,
       meta: { label: 'userQueue:providedAddress', colWidth: 12 }
     }
   };
@@ -146,8 +141,6 @@ class UserQueueForm extends React.Component<Iprops, {}> {
       ),
       this.props.t
     );
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.setForm = this.setForm.bind(this);
   }
   componentDidUpdate(prevProps: Iprops) {
     if (!this.props.selectedQueueObject) {
@@ -289,7 +282,8 @@ class UserQueueForm extends React.Component<Iprops, {}> {
         ...this.userForm.value,
         customerID: this.userForm.value.customerID.value,
         facilities: facilitiesArray,
-        email: this.props.selectedQueueObject.user.email // have to add back the email because disabling the input removes it
+        email: this.props.selectedQueueObject.user.email, // have to add back the email because disabling the input removes it
+        isActive: true // hardcode this because if the user is not active, they will be approved, but not active and will not be able to login
       },
       shouldApprove,
       this.props.selectedQueueObject.id
@@ -308,57 +302,57 @@ class UserQueueForm extends React.Component<Iprops, {}> {
       ? this.userForm.value.customerID
       : undefined;
 
-    const formClassName = `user-form queue-form ${this.props.colorButton}`;
+    const formClassName = `clearfix beacon-form queue-form ${
+      this.props.colorButton
+    }`;
 
     return (
       <div>
-        <div className={formClassName}>
-          <form onSubmit={this.handleSubmit} className="user-form">
-            {this.props.selectedQueueObject &&
-              this.props.selectedQueueObject.user.managerID && (
-                <Col xs={12}>
-                  <div className="form-group form-group-sm">
-                    <label className="control-label">Manager:</label>
-                    <h5 className="queue-form-label">
-                      {this.props.selectedQueueObject.user.manager.first}&nbsp;
-                      {this.props.selectedQueueObject.user.manager.last}
-                    </h5>
-                  </div>
-                </Col>
-              )}
-            <FormGenerator
-              onMount={this.setForm}
-              fieldConfig={this.fieldConfig}
-            />
+        <form onSubmit={this.handleSubmit} className={formClassName}>
+          {this.props.selectedQueueObject &&
+            this.props.selectedQueueObject.user.managerID && (
+              <Col xs={12}>
+                <div className="form-group form-group-sm">
+                  <label className="control-label">Manager:</label>
+                  <h5 className="queue-form-label">
+                    {this.props.selectedQueueObject.user.manager.first}&nbsp;
+                    {this.props.selectedQueueObject.user.manager.last}
+                  </h5>
+                </div>
+              </Col>
+            )}
+          <FormGenerator
+            onMount={this.setForm}
+            fieldConfig={this.fieldConfig}
+          />
 
-            <Col xs={12} className="form-buttons text-right">
-              <Button
-                bsStyle="link"
-                type="button"
-                className="pull-left left-side"
-                onClick={this.props.toggleEditQueueUserModal}
-              >
-                {t('cancel')}
-              </Button>
-              <Button
-                bsStyle={this.props.colorButton}
-                type="submit"
-                disabled={this.props.loading}
-                style={{ marginRight: '20px' }}
-              >
-                {t('save')}
-              </Button>
-              <Button
-                bsStyle={this.props.colorButton}
-                type="button"
-                disabled={this.props.loading}
-                onClick={(e: any) => this.handleSubmit(e, true)}
-              >
-                {t('saveApprove')}
-              </Button>
-            </Col>
-          </form>
-        </div>
+          <Col xs={12} className="form-buttons text-right">
+            <Button
+              bsStyle="default"
+              type="button"
+              className="pull-left"
+              onClick={this.props.toggleEditQueueUserModal}
+            >
+              {t('common:cancel')}
+            </Button>
+            <Button
+              bsStyle={this.props.colorButton}
+              type="submit"
+              disabled={this.props.loading}
+              style={{ marginRight: '20px' }}
+            >
+              {t('save')}
+            </Button>
+            <Button
+              bsStyle={this.props.colorButton}
+              type="button"
+              disabled={this.props.loading}
+              onClick={(e: any) => this.handleSubmit(e, true)}
+            >
+              {t('saveApprove')}
+            </Button>
+          </Col>
+        </form>
         <EditFacilityModal
           t={this.props.t}
           colorButton={this.props.colorButton}

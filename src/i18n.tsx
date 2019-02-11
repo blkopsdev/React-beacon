@@ -11,7 +11,7 @@ const instance = i18n.use(LanguageDetector).init({
     es
   },
 
-  debug: true,
+  debug: false,
 
   interpolation: {
     escapeValue: false // not needed for react!!

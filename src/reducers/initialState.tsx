@@ -1,13 +1,134 @@
 export const initialOption = { value: '', label: '' };
 export const initialTableFilters = { search: '', page: 1 };
+export const initialProduct = {
+  id: '',
+  name: '',
+  sku: '',
+  description: '',
+  imagePath: '',
+  subcategoryID: '',
+  standardID: '',
+  brandID: '',
+  productTypeID: '',
+  powerID: '',
+  systemSizeID: '',
+  subcategory: {
+    mainCategoryID: '',
+    id: '',
+    name: '',
+    createDate: '',
+    updateDate: '',
+    creatorID: '',
+    updaterID: '',
+    mainCategory: {
+      id: '',
+      name: '',
+      createDate: '',
+      updateDate: '',
+      creatorID: '',
+      updaterID: ''
+    }
+  },
+  installs: [],
+  quantity: 1
+};
+export const initialFacility = {
+  id: '',
+  name: '',
+  customerID: '',
+  address: '',
+  address2: '',
+  city: '',
+  state: '',
+  postalCode: '',
+  buildings: []
+};
 
+export const initialLoc = {
+  name: '',
+  rooms: [],
+  floorID: ''
+};
+export const initialBuilding = {
+  name: '',
+  floors: []
+};
+export const initialFloor = {
+  name: '',
+  locations: []
+};
+
+export const initialRoom = {
+  name: ''
+};
+/*
+*  TRAINING initial state
+*/
+
+export const initialQuiz = {
+  id: '',
+  name: '',
+  imagePath: '',
+  isComplete: false,
+  videoPath: '',
+  instructions: '',
+  lessonID: '',
+  isTimed: false,
+  questions: [
+    {
+      id: '',
+      text: '',
+      type: '',
+      options: [],
+      correctAnswer: '',
+      correctText: '',
+      wrongText: '',
+      order: 0
+    }
+  ]
+};
+export const initialLesson = {
+  id: '',
+  name: '',
+  description: '',
+  courseID: '',
+  imagePath: '',
+  order: 0,
+  primaryVideoPath: '',
+  slideshowPath: '',
+  courseLessons: [],
+  cost: 0,
+  isProtected: false
+};
+export const initialMeasurementPointList = {
+  id: '',
+  measurementPoints: {},
+  mainCategoryID: '',
+  standardID: '',
+  type: 1,
+  customerID: ''
+};
+export const initialMeasurementPointQuestion = {
+  id: '',
+  type: 1,
+  label: '',
+  order: 0
+};
+
+const initialCustomer = {
+  id: '',
+  name: ''
+};
+
+/* 
+* initialState
+*/
 export default {
   ajaxCallsInProgress: 0,
   user: {
     password: '',
     username: '',
     isAuthenticated: false,
-    token: '',
     email: '',
     securityFunctions: [],
     first: '',
@@ -22,7 +143,8 @@ export default {
     facilities: [],
     customerID: '',
     hasTeamMembers: false,
-    appVersion: ''
+    appVersion: '',
+    customer: initialCustomer
   },
   redirect: {
     redirectToReferrer: false,
@@ -41,6 +163,25 @@ export default {
     showEditUserModal: false,
     tableFilters: initialTableFilters
   },
+  manageJob: {
+    totalPages: 1,
+    data: [],
+    jobTypes: [],
+    fseUsers: [],
+    showEditJobModal: false,
+    tableFilters: initialTableFilters
+  },
+  manageLocation: {
+    totalPages: 1,
+    facility: initialFacility,
+    data: [],
+    showEditLocationModal: false,
+    tableFilters: initialTableFilters,
+    selectedBuilding: initialBuilding,
+    selectedFloor: initialFloor,
+    selectedLocation: initialLoc,
+    selectedRoom: initialRoom
+  },
   manageTeam: {
     totalPages: 1,
     data: [],
@@ -50,8 +191,9 @@ export default {
   manageInventory: {
     showEditProductModal: false,
     showEditInstallModal: false,
-    showEditQuoteModal: false,
+    showShoppingCartModal: false,
     showInstallContactModal: false,
+    showSearchNewProductsModal: false,
     showImportInstall: false,
     totalPages: 1,
     data: [],
@@ -61,30 +203,62 @@ export default {
     },
     productInfo: {
       brands: {},
-      gasTypes: {},
-      manufacturers: {},
+      productTypes: {},
       mainCategories: {},
       powers: {},
-      productGroups: {},
       standards: {},
       subcategories: {},
       systemSizes: {},
       brandOptions: [],
-      gasTypeOptions: [],
+      productTypeOptions: [],
       mainCategoryOptions: [],
-      manufacturerOptions: [],
       powerOptions: [],
-      productGroupOptions: [],
       standardOptions: [],
       subcategoryOptions: [],
       systemSizeOptions: []
     },
-    tableFilters: initialTableFilters
+    tableFilters: initialTableFilters,
+    selectedProduct: initialProduct,
+    newProducts: {}
   },
   manageProductQueue: {
     showApproveProductModal: false,
     totalPages: 1,
     data: [],
+    tableFilters: initialTableFilters
+  },
+  training: {
+    cart: {
+      addedIDs: [],
+      productsByID: {}
+    },
+    showShoppingCartModal: false,
+    courses: [],
+    lessons: {},
+    lesson: initialLesson,
+    quizzes: {},
+    quiz: initialQuiz,
+    lessonProgress: {},
+    purchasedTraining: []
+  },
+  manageTraining: {
+    data: [
+      {
+        userName: 'Joe Dill',
+        courseName: 'Beacon Training 101',
+        progress: '1/12',
+        results: '80%, 90%'
+      }
+    ],
+    tableFilters: initialTableFilters,
+    totalPages: 1
+  },
+  manageMeasurementPointLists: {
+    totalPages: 1,
+    data: [],
+    selectedMeasurementPointList: initialMeasurementPointList,
+    showEditMeasurementPointListModal: false,
+    showEditMeasurementPointQuestionModal: false,
     tableFilters: initialTableFilters
   },
   customers: [],
@@ -109,3 +283,5 @@ export const emptyTile = {
   securityFunction: '',
   description: ''
 };
+
+export const initialQuizAnswers = { show: false, quizAnswers: {} };

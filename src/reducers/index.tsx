@@ -12,6 +12,11 @@ import user from './userReducer';
 import manageUser from './manageUserReducer';
 import manageUserQueue from './manageUserQueueReducer';
 import manageProductQueue from './manageProductQueueReducer';
+import manageJob from './manageJobReducer';
+import manageLocation from './manageLocationReducer';
+import training from './trainingReducer';
+import manageTraining from './manageTrainingReducer';
+import manageMeasurementPointLists from './manageMeasurementPointListsReducer';
 
 const rootReducer = combineReducers({
   ajaxCallsInProgress,
@@ -20,12 +25,17 @@ const rootReducer = combineReducers({
   redirect,
   manageUserQueue,
   manageUser,
+  manageJob,
   manageTeam,
+  manageLocation,
   customers,
   facilities,
   manageInventory,
   manageProductQueue,
   productInfo,
+  training,
+  manageTraining,
+  manageMeasurementPointLists,
   showEditCustomerModal: createShowModalWithNamedType('EDIT_CUSTOMER'),
   showEditFacilityModal: createShowModalWithNamedType('EDIT_FACILITY'),
   showEditProfileModal: createShowModalWithNamedType('EDIT_PROFILE'),

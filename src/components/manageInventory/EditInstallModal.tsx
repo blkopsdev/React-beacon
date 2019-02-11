@@ -6,21 +6,22 @@ import { TranslationFunction } from 'react-i18next';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import { FormUtil } from '../common/FormUtil';
 import {
   IinitialState,
   IinstallBase,
   Iproduct,
   IproductInfo,
-  ItableFiltersReducer
+  ItableFiltersReducer,
+  Ifacility,
+  Iuser
 } from '../../models';
 import {
   updateInstall,
   saveInstall,
   toggleEditInstallModal,
-  toggleImportInstallModal,
   deleteInstall
 } from '../../actions/manageInventoryActions';
+import { saveAnyLocation } from '../../actions/manageLocationActions';
 import CommonModal from '../common/CommonModal';
 import EditInstallForm from './EditInstallForm';
 
@@ -34,14 +35,16 @@ interface Iprops {
 interface IdispatchProps {
   showModal: boolean;
   loading: boolean;
-  facilityOptions: any[];
+  facility: Ifacility;
   updateInstall: typeof updateInstall;
   saveInstall: typeof saveInstall;
   toggleEditInstallModal: typeof toggleEditInstallModal;
   productInfo: IproductInfo;
   deleteInstall: typeof deleteInstall;
   tableFilters: ItableFiltersReducer;
-  toggleImportInstallModal: typeof toggleImportInstallModal;
+  secondModal: boolean;
+  saveAnyLocation: typeof saveAnyLocation;
+  user: Iuser;
 }
 
 class ManageInstallModal extends React.Component<Iprops & IdispatchProps, {}> {
@@ -56,10 +59,14 @@ class ManageInstallModal extends React.Component<Iprops & IdispatchProps, {}> {
     } else {
       modalTitle = this.props.t('manageInventory:saveInstallModalTitle');
     }
+    const className = this.props.secondModal
+      ? 'install-edit second-modal'
+      : 'install-edit';
+
     return (
       <CommonModal
         modalVisible={this.props.showModal}
-        className="install-edit"
+        className={className}
         onHide={this.props.toggleEditInstallModal}
         body={<EditInstallForm {...this.props} />}
         title={modalTitle}
@@ -73,10 +80,11 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
-    facilityOptions: FormUtil.convertToOptions(state.user.facilities),
+    facility: state.manageLocation.facility,
     showModal: state.manageInventory.showEditInstallModal,
     productInfo: state.manageInventory.productInfo,
-    tableFilters: state.manageInventory.tableFilters
+    tableFilters: state.manageInventory.tableFilters,
+    secondModal: state.manageInventory.showSearchNewProductsModal
   };
 };
 
@@ -87,6 +95,6 @@ export default connect(
     saveInstall,
     toggleEditInstallModal,
     deleteInstall,
-    toggleImportInstallModal
+    saveAnyLocation
   }
 )(ManageInstallModal);

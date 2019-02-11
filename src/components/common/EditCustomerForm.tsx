@@ -26,14 +26,19 @@ const fieldConfig = {
   controls: {
     name: {
       options: {
-        validators: Validators.required
+        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
-      meta: { label: 'customerNameLabel', colWidth: 12 }
+      meta: { label: 'customerNameLabel', colWidth: 12, name: 'customer-name' }
     },
     vat: {
       render: FormUtil.TextInput,
-      meta: { label: 'customerVatLabel', colWidth: 12 }
+      meta: {
+        label: 'customerVatLabel',
+        colWidth: 12,
+        name: 'customer-vat',
+        required: false
+      }
     }
   }
 };
@@ -52,8 +57,6 @@ class EditCustomerForm extends React.Component<Iprops, {}> {
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(fieldConfig, this.props.t);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.setForm = this.setForm.bind(this);
   }
   // componentDidUpdate(prevProps: Iprops) {
 
@@ -84,31 +87,26 @@ class EditCustomerForm extends React.Component<Iprops, {}> {
     const { t } = this.props;
 
     return (
-      <div className="user-form customer-form">
-        <form onSubmit={this.handleSubmit} className="user-form">
-          <FormGenerator
-            onMount={this.setForm}
-            fieldConfig={this.fieldConfig}
-          />
-          <Col xs={12} className="form-buttons text-right">
-            <Button
-              bsStyle="link"
-              type="button"
-              className="pull-left left-side"
-              onClick={this.props.handleCancel}
-            >
-              {t('cancel')}
-            </Button>
-            <Button
-              bsStyle={this.props.colorButton}
-              type="submit"
-              disabled={this.props.loading}
-            >
-              {t('save')}
-            </Button>
-          </Col>
-        </form>
-      </div>
+      <form onSubmit={this.handleSubmit} className="clearfix beacon-form">
+        <FormGenerator onMount={this.setForm} fieldConfig={this.fieldConfig} />
+        <Col xs={12} className="form-buttons text-right">
+          <Button
+            bsStyle="default"
+            type="button"
+            className="pull-left"
+            onClick={this.props.handleCancel}
+          >
+            {t('common:cancel')}
+          </Button>
+          <Button
+            bsStyle={this.props.colorButton}
+            type="submit"
+            disabled={this.props.loading}
+          >
+            {t('save')}
+          </Button>
+        </Col>
+      </form>
     );
   }
 }

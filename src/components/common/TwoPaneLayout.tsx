@@ -12,10 +12,15 @@ import ManageUser from '../manageUser/ManageUser';
 import ManageTeam from '../manageTeam/ManageTeam';
 import ManageInventory from '../manageInventory/ManageInventory';
 import ManageProductQueue from '../manageProductQueue/ManageProductQueue';
+import ManageJob from '../manageJob/ManageJob';
+import ManageLocation from '../manageLocation/ManageLocation';
+import Training from '../training/Training';
+import ManageTraining from '../manageTraining/ManageTraining';
 import constants from '../../constants/constants';
 import { IinitialState } from '../../models';
 
 import 'react-table/react-table.css';
+import ManageMeasurementPointList from '../manageMeasurementPointLists/ManageMeasurementPointLists';
 
 // const testme = () => {
 //   return <h3>Your test is a success</h3>;
@@ -42,11 +47,10 @@ const TwoPaneLayout = (props: any) => {
 
           <Col className="col-fluid">
             <div style={{ padding: '20px' }}>
-              {' '}
               <h4>
-                No access too {tile.title}. Please contact support and request
+                No access to {tile.title}. Please contact support and request
                 access.
-              </h4>{' '}
+              </h4>
             </div>
           </Col>
         </Row>
@@ -59,6 +63,8 @@ const TwoPaneLayout = (props: any) => {
       id="two-pane-layout"
       fluid={true}
     >
+      <div id="modal-one" />
+      <div id="modal-two" />
       <Row>
         <Col className="col-fixed">
           <SideMenu {...props} />
@@ -71,6 +77,18 @@ const TwoPaneLayout = (props: any) => {
             <Route exact path="/team" component={ManageTeam} />
             <Route exact path="/inventory" component={ManageInventory} />
             <Route exact path="/productqueue" component={ManageProductQueue} />
+            <Route exact path="/managejobs" component={ManageJob} />
+            <Route exact path="/locations" component={ManageLocation} />
+            <Route
+              path="/training/:courseID?/:lessonID?/:quizID?"
+              component={Training}
+            />
+            <Route exact path="/manageTraining" component={ManageTraining} />
+            <Route
+              exact
+              path="/measurements"
+              component={ManageMeasurementPointList}
+            />
           </Switch>
         </Col>
       </Row>

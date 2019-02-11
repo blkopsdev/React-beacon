@@ -31,12 +31,12 @@ interface AbstractControlEdited extends AbstractControl {
 const buildFieldConfig = (facilityOptions: any[]) => {
   // Field config to configure form
   const fieldConfigControls = {
-    customer: {
+    customerName: {
       options: {
-        validators: Validators.required
+        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
-      meta: { label: 'company', colWidth: 12, type: 'text' }
+      meta: { label: 'company', colWidth: 12, type: 'text', name: 'customer' }
     },
     facilities: {
       render: FormUtil.Select,
@@ -45,7 +45,8 @@ const buildFieldConfig = (facilityOptions: any[]) => {
         label: 'common:facility',
         colWidth: 12,
         placeholder: 'userQueue:facilitySearchPlaceholder',
-        isMulti: true
+        isMulti: true,
+        name: 'facilities'
       },
       options: {
         validators: Validators.required
@@ -81,9 +82,6 @@ class UserProfileForm extends React.Component<Iprops, {}> {
       buildFieldConfig(this.props.facilityOptions),
       this.props.t
     );
-
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.setForm = this.setForm.bind(this);
   }
 
   componentWillMount() {
@@ -95,25 +93,21 @@ class UserProfileForm extends React.Component<Iprops, {}> {
     forEach(this.props.user, (value, key) => {
       this.userForm.patchValue({ [key]: value });
     });
+    const { facilities, customer } = this.props.user;
+
     const emailControl = this.userForm.get('email') as AbstractControlEdited;
     emailControl.disable();
 
-    // get the customer name
-    const customer = (find(
-      this.props.customers,
-      (cust: Icustomer) => cust.id === this.props.user.customerID
-    ) as Icustomer) || { name: '' };
-
     if (customer && customer.name.length) {
-      this.userForm.patchValue({ customer: customer.name });
+      this.userForm.patchValue({ customerName: customer.name });
     }
     const customerControl = this.userForm.get(
-      'customer'
+      'customerName'
     ) as AbstractControlEdited;
     customerControl.disable();
 
     const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
-      return find(this.props.user.facilities, { id: fac.value }) ? true : false;
+      return find(facilities, { id: fac.value }) ? true : false;
     });
     this.userForm.patchValue({ facilities: facilitiesArray });
   }
@@ -173,36 +167,29 @@ class UserProfileForm extends React.Component<Iprops, {}> {
   render() {
     const { t } = this.props;
 
-    const formClassName = `user-form profile-form ${this.props.colorButton}`;
+    const formClassName = `clearfix beacon-form ${this.props.colorButton}`;
 
     return (
-      <div>
-        <div className={formClassName}>
-          <form onSubmit={this.handleSubmit} className="user-form">
-            <FormGenerator
-              onMount={this.setForm}
-              fieldConfig={this.fieldConfig}
-            />
-            <Col xs={12} className="form-buttons text-right">
-              <Button
-                bsStyle="link"
-                type="button"
-                className="pull-left left-side"
-                onClick={this.props.handleCancel}
-              >
-                {t('cancel')}
-              </Button>
-              <Button
-                bsStyle={this.props.colorButton}
-                type="submit"
-                disabled={this.props.loading}
-              >
-                {t('save')}
-              </Button>
-            </Col>
-          </form>
-        </div>
-      </div>
+      <form onSubmit={this.handleSubmit} className={formClassName}>
+        <FormGenerator onMount={this.setForm} fieldConfig={this.fieldConfig} />
+        <Col xs={12} className="form-buttons text-right">
+          <Button
+            bsStyle="default"
+            type="button"
+            className="pull-left"
+            onClick={this.props.handleCancel}
+          >
+            {t('common:cancel')}
+          </Button>
+          <Button
+            bsStyle={this.props.colorButton}
+            type="submit"
+            disabled={this.props.loading}
+          >
+            {t('save')}
+          </Button>
+        </Col>
+      </form>
     );
   }
 }

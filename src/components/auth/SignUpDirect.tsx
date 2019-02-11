@@ -20,7 +20,6 @@ import { Col, Grid, Row, Button } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 
-import { isFullyAuthenticated } from '../../actions/userActions';
 import UserForm from './UserForm';
 
 interface Iprops extends RouteComponentProps<{}> {
@@ -45,7 +44,7 @@ interface Istate {
 const SignUpSuccess = (props: any) => {
   const { t } = props;
   return (
-    <div className="loginForm signup-success" style={{ color: 'white' }}>
+    <div className="login-form signup-success" style={{ color: 'white' }}>
       <h2>{t('successTitle')}</h2>
       <p>{t('successBody1')}</p>
       <p>
@@ -70,21 +69,19 @@ class SignUpDirect extends React.Component<Iprops, Istate> {
       redirectToLogin: false,
       showSignupSuccess: false
     };
-    this.cancel = this.cancel.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  cancel() {
+  cancel = () => {
     this.setState({ redirectToLogin: true });
-  }
-  handleSubmit(newUser: ItempUser) {
+  };
+  handleSubmit = (newUser: ItempUser) => {
     return this.props.signUpDirect(newUser).then(() => {
       this.setState({ showSignupSuccess: true });
     });
-  }
+  };
   render() {
     const { t } = this.props;
-    if (isFullyAuthenticated(this.props.user)) {
+    if (this.props.user.isAuthenticated) {
       this.props.removeLoginRedirect();
       return <Redirect to={'/dashboard'} />;
     }

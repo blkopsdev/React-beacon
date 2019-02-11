@@ -17,23 +17,24 @@ import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
-import { Ioption, Iuser } from '../../models';
-import { getFacilitiesByCustomer } from '../../actions/commonActions';
+import { Iuser } from '../../models';
 import {
+  deleteTeamUser,
   saveTeamUser,
   toggleEditTeamUserModal,
   updateTeamUser
 } from '../../actions/manageTeamActions';
+import { getFacilitiesByCustomer } from '../../actions/commonActions';
 import constants from '../../constants/constants';
 
 const buildFieldConfig = (facilityOptions: any[]) => {
   const fieldConfigControls = {
     customer: {
       options: {
-        validators: Validators.required
+        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
-      meta: { label: 'company', colWidth: 12, type: 'text' }
+      meta: { label: 'company', colWidth: 12, type: 'text', name: 'customer' }
     },
     facilities: {
       render: FormUtil.Select,
@@ -42,7 +43,8 @@ const buildFieldConfig = (facilityOptions: any[]) => {
         label: 'common:facility',
         colWidth: 12,
         placeholder: 'userQueue:facilitySearchPlaceholder',
-        isMulti: true
+        isMulti: true,
+        name: 'facilities'
       },
       options: {
         validators: Validators.required
@@ -75,6 +77,7 @@ interface Iprops {
   getFacilitiesByCustomer: typeof getFacilitiesByCustomer;
   facilityOptions: any[];
   user: Iuser;
+  deleteTeamUser: typeof deleteTeamUser;
 }
 
 class EditTeamMemberForm extends React.Component<Iprops, {}> {
@@ -86,8 +89,6 @@ class EditTeamMemberForm extends React.Component<Iprops, {}> {
       buildFieldConfig(this.props.facilityOptions),
       this.props.t
     );
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.setForm = this.setForm.bind(this);
   }
   componentDidUpdate(prevProps: Iprops) {
     if (
@@ -123,13 +124,10 @@ class EditTeamMemberForm extends React.Component<Iprops, {}> {
 
   componentDidMount() {
     // get the customer name
-    const { customerID } = this.props.user;
-    const customer = (find(
-      this.props.customerOptions,
-      (cust: Ioption) => cust.value === customerID
-    ) as Ioption) || { name: '' };
-    if (customer && customer.label && customer.label.length) {
-      this.userForm.patchValue({ customer: customer.label });
+    const { customer, customerID } = this.props.user;
+
+    if (customer) {
+      this.userForm.patchValue({ customer: customer.name });
     }
     const customerControl = this.userForm.get(
       'customer'
@@ -193,6 +191,18 @@ class EditTeamMemberForm extends React.Component<Iprops, {}> {
       });
     }
   };
+  handleDelete = () => {
+    if (this.props.selectedUser) {
+      this.props.deleteTeamUser(this.props.selectedUser.id);
+    } else {
+      console.error('unable to delete, missing user');
+      toastr.error(
+        'Error',
+        'Unable to delete, missing user',
+        constants.toastrError
+      );
+    }
+  };
   setForm = (form: AbstractControl) => {
     this.userForm = form;
     this.userForm.meta = {
@@ -203,36 +213,44 @@ class EditTeamMemberForm extends React.Component<Iprops, {}> {
   render() {
     const { t } = this.props;
 
-    const formClassName = `user-form manage-form ${this.props.colorButton}`;
+    const formClassName = `clearfix beacon-form team-member-form ${
+      this.props.colorButton
+    }`;
 
     return (
-      <div>
-        <div className={formClassName}>
-          <form onSubmit={this.handleSubmit} className="user-form">
-            <FormGenerator
-              onMount={this.setForm}
-              fieldConfig={this.fieldConfig}
-            />
-            <Col xs={12} className="form-buttons text-right">
-              <Button
-                bsStyle="link"
-                type="button"
-                className="pull-left left-side"
-                onClick={this.props.toggleEditTeamUserModal}
-              >
-                {t('cancel')}
-              </Button>
-              <Button
-                bsStyle={this.props.colorButton}
-                type="submit"
-                disabled={this.props.loading}
-              >
-                {t('save')}
-              </Button>
-            </Col>
-          </form>
-        </div>
-      </div>
+      <form onSubmit={this.handleSubmit} className={formClassName}>
+        <FormGenerator onMount={this.setForm} fieldConfig={this.fieldConfig} />
+        <Col xs={12} className="form-buttons text-right">
+          <Button
+            bsStyle="default"
+            type="button"
+            className="pull-left"
+            onClick={this.props.toggleEditTeamUserModal}
+          >
+            {t('common:cancel')}
+          </Button>
+          {!!this.props.selectedUser && (
+            <Button
+              bsStyle="warning"
+              style={{ marginRight: '15px' }}
+              type="button"
+              className=""
+              disabled={this.props.loading}
+              onClick={this.handleDelete}
+            >
+              {t('common:delete')}
+            </Button>
+          )}
+
+          <Button
+            bsStyle={this.props.colorButton}
+            type="submit"
+            disabled={this.props.loading}
+          >
+            {t('save')}
+          </Button>
+        </Col>
+      </form>
     );
   }
 }

@@ -149,8 +149,6 @@ class EditUserForm extends React.Component<Iprops, {}> {
       ),
       this.props.t
     );
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.setForm = this.setForm.bind(this);
   }
   componentDidUpdate(prevProps: Iprops) {
     if (!this.props.selectedUser) {
@@ -267,7 +265,6 @@ class EditUserForm extends React.Component<Iprops, {}> {
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-    console.log(this.userForm.value);
     const facilitiesArray = map(
       this.userForm.value.facilities,
       (option: { value: string; label: string }) => {
@@ -302,35 +299,33 @@ class EditUserForm extends React.Component<Iprops, {}> {
       ? this.userForm.value.customerID
       : undefined;
 
-    const formClassName = `user-form manage-form ${this.props.colorButton}`;
+    const formClassName = `clearfix beacon-form ${this.props.colorButton}`;
 
     return (
       <div>
-        <div className={formClassName}>
-          <form onSubmit={this.handleSubmit} className="user-form">
-            <FormGenerator
-              onMount={this.setForm}
-              fieldConfig={this.fieldConfig}
-            />
-            <Col xs={12} className="form-buttons text-right">
-              <Button
-                bsStyle="link"
-                type="button"
-                className="pull-left left-side"
-                onClick={this.props.toggleEditUserModal}
-              >
-                {t('cancel')}
-              </Button>
-              <Button
-                bsStyle={this.props.colorButton}
-                type="submit"
-                disabled={this.props.loading}
-              >
-                {t('save')}
-              </Button>
-            </Col>
-          </form>
-        </div>
+        <form onSubmit={this.handleSubmit} className={formClassName}>
+          <FormGenerator
+            onMount={this.setForm}
+            fieldConfig={this.fieldConfig}
+          />
+          <Col xs={12} className="form-buttons text-right">
+            <Button
+              bsStyle="default"
+              type="button"
+              className="pull-left"
+              onClick={this.props.toggleEditUserModal}
+            >
+              {t('cancel')}
+            </Button>
+            <Button
+              bsStyle={this.props.colorButton}
+              type="submit"
+              disabled={this.props.loading}
+            >
+              {t('save')}
+            </Button>
+          </Col>
+        </form>
         <EditFacilityModal
           t={this.props.t}
           colorButton={this.props.colorButton}

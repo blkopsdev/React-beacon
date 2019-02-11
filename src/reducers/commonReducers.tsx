@@ -22,6 +22,7 @@ export function modalToggleWithName(
 ) {
   switch (action.type) {
     case `TOGGLE_MODAL_${modalName}`:
+      // console.error('toggle modal')
       return !state;
     case types.CLOSE_ALL_MODALS:
       return false;
@@ -38,6 +39,8 @@ export function createTableFiltersWithName(
   switch (action.type) {
     case `SET_TABLE_FILTER_${tableName}`:
       return { ...state, ...action.filters } as ItableFiltersReducer;
+    case types.USER_LOGOUT_SUCCESS:
+      return initialTableFilters;
     default:
       return state;
   }

@@ -11,10 +11,10 @@ import {
   ItableFiltersParams
 } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
-import { approveProduct } from './manageProductQueueActions';
 import API from '../constants/apiEndpoints';
 import constants from '../constants/constants';
 import * as types from './actionTypes';
+import { map } from 'lodash';
 
 // import {AxiosResponse} from 'axios';
 
@@ -43,6 +43,37 @@ export function getProductInfo(): ThunkResult<void> {
   };
 }
 
+export function getProducts(
+  page: number,
+  search: string,
+  mainCategoryID: string
+): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+
+    const pagingMode = 'paged';
+    return axios
+      .get(API.GET.inventory.products, {
+        params: { page, search, mainCategoryID, pagingMode }
+      })
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.GET_PRODUCTS_SUCCESS,
+            products: data.data.result
+          });
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.GET_PRODUCTS_FAILED });
+        constants.handleError(error, 'get products');
+        throw error;
+      });
+  };
+}
+
 export function getInventory(): ThunkResult<void> {
   return (dispatch, getState) => {
     getInventoryHelper(dispatch, getState);
@@ -54,17 +85,17 @@ const getInventoryHelper = (dispatch: any, getState: any) => {
     page,
     search,
     facility,
-    manufacturer,
-    productGroup
+    brand,
+    mainCategory
   } = getState().manageInventory.tableFilters;
   const facilityID = facility
     ? facility.value
     : getState().user.facilities[0].id;
-  const manufacturerID = manufacturer ? manufacturer.value : '';
-  const productGroupID = productGroup ? productGroup.value : '';
+  const brandID = brand ? brand.value : '';
+  const mainCategoryID = mainCategory ? mainCategory.value : '';
   return axios
     .get(API.GET.inventory.getinventory, {
-      params: { page, search, facilityID, manufacturerID, productGroupID }
+      params: { page, search, facilityID, brandID, mainCategoryID }
     })
     .then(data => {
       if (!data.data) {
@@ -90,7 +121,6 @@ const getInventoryHelper = (dispatch: any, getState: any) => {
 
 export function updateProduct(
   product: Iproduct,
-  shouldApprove?: boolean,
   queueID?: string
 ): ThunkResult<void> {
   return (dispatch, getState) => {
@@ -104,14 +134,10 @@ export function updateProduct(
         } else {
           dispatch({
             type: types.PRODUCT_UPDATE_SUCCESS,
-            product: data.data,
+            product,
             queueID
           });
           // toastr.success('Success', 'Saved product', constants.toastrSuccess);
-          if (shouldApprove && queueID) {
-            dispatch(beginAjaxCall());
-            approveProduct(queueID, dispatch); // don't return this because if we do, we will see two errors
-          }
         }
       })
       .catch((error: any) => {
@@ -138,10 +164,11 @@ export function saveProduct(product: Iproduct): ThunkResult<void> {
             type: types.PRODUCT_ADD_SUCCESS,
             product: data.data
           });
-          dispatch({ type: types.TOGGLE_MODAL_EDIT_PRODUCT });
+          // dispatch({ type: types.TOGGLE_MODAL_EDIT_PRODUCT });
+          dispatch({ type: types.CLOSE_ALL_MODALS });
           toastr.success(
             'Success',
-            'Submitted new product for approval.',
+            'New product created successfully.',
             constants.toastrSuccess
           );
         }
@@ -169,7 +196,7 @@ export function updateInstall(
         } else {
           dispatch({
             type: types.INSTALL_UPDATE_SUCCESS,
-            install: data.data
+            install
           });
 
           // toastr.success(
@@ -189,6 +216,7 @@ export function updateInstall(
 
 /*
 * save (add) an install (an install might have a quantity greater than 1 so we might be adding multiple installs)
+* If this is a new product, then also add the product
 */
 export function saveInstall(
   install: IinstallBase,
@@ -196,7 +224,7 @@ export function saveInstall(
 ): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
-    dispatch({ type: types.TOGGLE_MODAL_EDIT_INSTALL });
+    dispatch({ type: types.CLOSE_ALL_MODALS });
     return axios
       .post(API.POST.inventory.addinstall, install)
       .then(data => {
@@ -208,7 +236,9 @@ export function saveInstall(
             installs: data.data,
             productID
           });
-          // toastr.success('Success', 'Saved install', constants.toastrSuccess);
+          toastr.success('Success', 'Saved install', constants.toastrSuccess);
+          // get updated inventory
+          getInventoryHelper(dispatch, getState);
         }
       })
       .catch((error: any) => {
@@ -331,6 +361,65 @@ export function importInstall(file: any): ThunkResult<void> {
   };
 }
 
+export const requestQuote = ({
+  message,
+  facilityID
+}: {
+  message: string;
+  facilityID: string;
+}): ThunkResult<void> => {
+  return (dispatch, getState) => {
+    const QuoteItems = map(
+      getState().manageInventory.cart.productsByID,
+      (product, key) => {
+        return { productID: key, quantity: product.quantity };
+      }
+    );
+    dispatch(beginAjaxCall());
+    dispatch({ type: types.TOGGLE_MODAL_SHOPPING_CART_INVENTORY });
+    return axios
+      .post(API.POST.inventory.quote, { QuoteItems, facilityID, message })
+      .then(data => {
+        dispatch({
+          type: types.CHECKOUT_INVENTORY_SUCCESS
+        });
+        toastr.success('Success', 'requested quote', constants.toastrSuccess);
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.CHECKOUT_INVENTORY_FAILED });
+        constants.handleError(error, 'requesting quote');
+        throw error;
+      });
+  };
+};
+
+export function mergeProduct(
+  sourceProductID: string,
+  targetProductID: string
+): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    dispatch({ type: types.CLOSE_ALL_MODALS });
+    return axios
+      .post(
+        `${
+          API.POST.inventory.mergeProduct
+        }?sourceProductID=${sourceProductID}&targetProductID=${targetProductID}`
+      )
+      .then(data => {
+        dispatch({
+          type: types.PRODUCT_MERGE_SUCCESS
+        });
+        toastr.success('Success', 'merged product', constants.toastrSuccess);
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.PRODUCT_MERGE_FAILED });
+        constants.handleError(error, 'merge product');
+        throw error;
+      });
+  };
+}
+
 export const toggleEditProductModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_PRODUCT
 });
@@ -339,11 +428,11 @@ export const toggleEditInstallModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_INSTALL
 });
 
-export const toggleEditQuoteModal = () => ({
-  type: types.TOGGLE_MODAL_EDIT_QUOTE
-});
 export const toggleInstallContactModal = () => ({
   type: types.TOGGLE_MODAL_INSTALL_CONTACT
+});
+export const toggleSearchNewProductsModal = () => ({
+  type: types.TOGGLE_MODAL_SEARCH_NEW_PRODUCTS
 });
 export const toggleImportInstallModal = () => ({
   type: types.TOGGLE_MODAL_IMPORT_INSTALL
@@ -352,4 +441,12 @@ export const toggleImportInstallModal = () => ({
 export const setTableFilter = (filters: ItableFiltersParams) => ({
   type: types.SET_TABLE_FILTER_MANAGE_INVENTORY,
   filters
+});
+
+export const setSelectedProduct = (product?: Iproduct) => ({
+  type: types.SET_SELECTED_PRODUCT,
+  product
+});
+export const resetNewProducts = () => ({
+  type: types.NEW_PRODUCTS_RESET
 });

@@ -6,19 +6,21 @@ import { TranslationFunction } from 'react-i18next';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import { FormUtil } from '../common/FormUtil';
 import {
   IinitialState,
   Iproduct,
   IproductInfo,
   ItableFiltersReducer,
-  IproductQueueObject
+  IproductQueueObject,
+  Iuser
 } from '../../models';
 import {
   updateProduct,
   saveProduct,
-  toggleEditProductModal
+  toggleEditProductModal,
+  toggleSearchNewProductsModal
 } from '../../actions/manageInventoryActions';
+import { updateQueueProduct } from '../../actions/manageProductQueueActions';
 import CommonModal from '../common/CommonModal';
 import EditProductForm from './EditProductForm';
 
@@ -32,12 +34,15 @@ interface Iprops {
 interface IdispatchProps {
   showModal: boolean;
   loading: boolean;
-  facilityOptions: any[];
   updateProduct: typeof updateProduct;
   saveProduct: typeof saveProduct;
   toggleEditProductModal: typeof toggleEditProductModal;
   productInfo: IproductInfo;
   tableFilters: ItableFiltersReducer;
+  secondModal: boolean;
+  updateQueueProduct: typeof updateQueueProduct;
+  user: Iuser;
+  toggleSearchNewProductsModal: typeof toggleSearchNewProductsModal;
 }
 
 class ManageInventoryModal extends React.Component<
@@ -57,10 +62,13 @@ class ManageInventoryModal extends React.Component<
     } else {
       modalTitle = this.props.t('manageInventory:saveModalTitle');
     }
+    const className = this.props.secondModal
+      ? 'user-edit second-modal'
+      : 'user-edit';
     return (
       <CommonModal
         modalVisible={this.props.showModal}
-        className="user-edit"
+        className={className}
         onHide={this.props.toggleEditProductModal}
         body={<EditProductForm {...this.props} />}
         title={modalTitle}
@@ -74,7 +82,6 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
-    facilityOptions: FormUtil.convertToOptions(state.user.facilities),
     showModal: state.manageInventory.showEditProductModal,
     productInfo: state.manageInventory.productInfo,
     tableFilters: state.manageInventory.tableFilters
@@ -86,6 +93,8 @@ export default connect(
   {
     updateProduct,
     saveProduct,
-    toggleEditProductModal
+    toggleEditProductModal,
+    updateQueueProduct,
+    toggleSearchNewProductsModal
   }
 )(ManageInventoryModal);

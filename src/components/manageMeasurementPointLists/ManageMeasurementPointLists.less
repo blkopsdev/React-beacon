@@ -1,0 +1,119 @@
+@import '../../less/variables.less';
+.manage-form-label {
+  color: @textBlue;
+  margin-top: -5px;
+}
+
+.user-manage {
+  .banner {
+    background-color: @orange;
+  }
+  .approve-buttons {
+    padding-right: 12px;
+    .btn {
+      padding-left: 8px;
+      padding-right: 8px;
+    }
+  }
+}
+
+.manage-form {
+  .form-buttons {}
+}
+
+.question-list {
+  margin-left: -15px;
+  margin-right: -15px;
+  .sort-controls {
+    position: absolute;
+    right: 0px;
+    width: 80px;
+    height: 90px;
+    .btn {
+      width: 40px;
+      height: 45px;
+      border-radius: 0%;
+      padding: 6px 3px;
+    }
+  }
+  .question-list-item {
+    // padding-right: 40px;
+    width: 318px !important;
+    height: 90px;
+    text-overflow: ellipsis;
+  }
+  .question-list-item-container:nth-child(odd) {
+    .question-list-item {
+      background-color: @lightPurple;
+    }
+    .sort-controls {
+      .btn {
+        background-color: @lightPurple;
+      }
+    }
+  }
+}
+
+.options-list {
+  // margin-left: -15px;
+  // margin-right: -15px;
+  margin-top: 10px;
+  .button-controls {
+    position: absolute;
+    right: 15px;
+    width: 40px;
+    height: 45px;
+    .btn {
+      width: 40px;
+      height: 45px;
+      border-radius: 0%;
+      padding: 6px 3px;
+    }
+  }
+  .options-list-item {
+    padding: 5px 15px;
+    width: 328px !important;
+    height: 45px;
+    text-overflow: ellipsis;
+  }
+  .options-list-item-container:nth-child(odd) {
+    .options-list-item {
+      background-color: @lightPurple;
+    }
+    .button-controls {
+      .btn {
+        background-color: @lightPurple;
+      }
+    }
+  }
+}
+
+.DraftEditor-root {
+  min-height: 100px;
+  background-color: white;
+  padding-left: 14px;
+}
+
+.rdw-editor-main {
+  background-color: white;
+}
+
+.rdw-editor-toolbar {
+  margin-bottom: 0px;
+  border-bottom: 1px silver solid;
+}
+
+.DraftEditor-editorContainer, .DraftEditor-root, .public-DraftEditor-content {
+  line-height: 12px;
+  letter-spacing: 2px;
+  font-size: 12px;
+}
+
+.public-DraftStyleDefault-ol, .public-DraftStyleDefault-ul {
+  margin: 0;
+  padding: 0;
+}
+
+.public-DraftStyleDefault-orderedListItem {
+  list-style-type: decimal;
+}

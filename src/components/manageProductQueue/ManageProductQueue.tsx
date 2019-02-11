@@ -19,7 +19,8 @@ import {
   IproductInfo,
   ItableFiltersReducer,
   Itile,
-  Iuser
+  Iuser,
+  Iproduct
 } from '../../models';
 import { TableUtil } from '../common/TableUtil';
 import { addToCart } from '../../actions/shoppingCartActions';
@@ -27,7 +28,8 @@ import { closeAllModals } from '../../actions/commonActions';
 import { emptyTile } from '../../reducers/initialState';
 import {
   getProductInfo,
-  toggleEditProductModal
+  toggleEditProductModal,
+  mergeProduct
 } from '../../actions/manageInventoryActions';
 import {
   getProductQueue,
@@ -37,6 +39,8 @@ import Banner from '../common/Banner';
 import EditProductModal from '../manageInventory/EditProductModal';
 import SearchTableForm from '../common/SearchTableForm';
 import constants from '../../constants/constants';
+import SearchNewProductsModal from '../manageInventory/SearchNewProductsModal';
+import { toastr } from 'react-redux-toastr';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -62,6 +66,8 @@ interface IdispatchProps {
   tableData: IproductQueueObject[];
   setTableFilter: typeof setTableFilter;
   tableFilters: ItableFiltersReducer;
+  // mergeProduct: typeof mergeProduct;
+  mergeProduct: (sprod: string, dproduct: string) => Promise<void>;
 }
 
 interface Istate {
@@ -119,13 +125,13 @@ class ManageProductQueue extends React.Component<
       this.setState({ selectedQueueObject: {} });
     }
 
-    // we only need to check the productGroup options because both manufacturers and productGroup options are received in the same API response
+    // we only need to check the mainCategory options because both brands and mainCategory options are received in the same API response
     // and before they are received, there will not be any length.
     if (
-      prevProps.productInfo.productGroupOptions.length !==
-        this.props.productInfo.productGroupOptions.length ||
-      prevProps.productInfo.manufacturerOptions.length !==
-        this.props.productInfo.manufacturerOptions.length
+      prevProps.productInfo.mainCategoryOptions.length !==
+        this.props.productInfo.mainCategoryOptions.length ||
+      prevProps.productInfo.brandOptions.length !==
+        this.props.productInfo.brandOptions.length
     ) {
       console.log('re setting columns');
       this.setColumns();
@@ -157,7 +163,7 @@ class ManageProductQueue extends React.Component<
 
   /*
   * Set Columns sets columns to state
-  * setting columns here in order to reset them if and after we receive productGroup and manufacturer options
+  * setting columns here in order to reset them if and after we receive mainCategory and manufacturer options
   */
   setColumns = () => {
     const columns = TableUtil.translateHeaders(
@@ -171,18 +177,18 @@ class ManageProductQueue extends React.Component<
           accessor: 'product.name'
         },
         {
-          Header: 'productGroup',
+          Header: 'common:mainCategory',
           accessor: ({ product }: IproductQueueObject) => {
-            return this.props.productInfo.productGroups[product.productGroupID]
-              .name;
+            return this.props.productInfo.mainCategories[
+              product.subcategory.mainCategoryID
+            ].name;
           },
-          id: 'productGroup'
+          id: 'mainCategory'
         },
         {
           Header: 'manufacturer',
           accessor: ({ product }: IproductQueueObject) => {
-            return this.props.productInfo.manufacturers[product.manufacturerID]
-              .name;
+            return this.props.productInfo.brands[product.brandID].name;
           },
           id: 'manufacturer'
         },
@@ -275,9 +281,33 @@ class ManageProductQueue extends React.Component<
     this.props.setTableFilter({ sorted: newSorted });
     this.setState({ selectedRow: {} });
   };
+
+  /*
+  * Handle Product Select
+  */
+  handleProductSelect = (product: Iproduct) => {
+    // const newProduct = {
+    //   ...product,
+    //   subcategory: this.props.productInfo.subcategories[product.subcategoryID]
+    // };
+    toastr.confirm(
+      `${this.props.t('mergeConfirmPart_01')} \n ${
+        this.state.selectedQueueObject.product.name
+      } ${this.props.t('mergeConfirmPart_02')} ${product.name}?`,
+      {
+        onOk: () => {
+          this.props
+            .mergeProduct(this.state.selectedQueueObject.product.id, product.id)
+            .then(() => {
+              this.props.getProductQueue();
+            });
+        }
+      }
+    );
+  };
   render() {
     console.log('rendering inventory table');
-    if (this.props.productInfo.productGroupOptions.length === 0) {
+    if (this.props.productInfo.mainCategoryOptions.length === 0) {
       return (
         <Col xs={12}>
           <h4> loading... </h4>
@@ -331,6 +361,17 @@ class ManageProductQueue extends React.Component<
             constants.colors[`${this.state.currentTile.color}Button`]
           }
           t={this.props.t}
+          secondModal={false}
+        />
+        <SearchNewProductsModal
+          selectedItem={this.state.selectedQueueObject}
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+          t={this.props.t}
+          secondModal={true}
+          handleProductSelect={this.handleProductSelect}
+          selectedQueueObject={this.state.selectedQueueObject}
         />
       </div>
     );
@@ -362,7 +403,8 @@ export default translate('manageProductQueue')(
       closeAllModals,
       getProductInfo,
       addToCart,
-      setTableFilter
+      setTableFilter,
+      mergeProduct
     }
   )(ManageProductQueue)
 );

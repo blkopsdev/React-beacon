@@ -11,8 +11,9 @@ interface Props extends React.Props<CommonModal> {
   className: string;
   body: JSX.Element;
   footer?: JSX.Element;
-  title: string;
+  title: string | JSX.Element;
   container: any;
+  backdrop?: string | boolean;
 }
 
 interface State {
@@ -31,6 +32,7 @@ class CommonModal extends React.Component<Props, State> {
     const className = `${this.props.className} ${
       this.state.classNameAnimation
     } slide-modal from-left`;
+    const backdrop = this.props.backdrop ? this.props.backdrop : 'static';
     return (
       <Modal
         show={this.props.modalVisible}
@@ -48,11 +50,20 @@ class CommonModal extends React.Component<Props, State> {
           }, 200);
         }}
         container={this.props.container}
+        backdrop={backdrop}
       >
         <Modal.Header>
-          <Modal.Title>{this.props.title}</Modal.Title>
+          <Modal.Title
+            style={{
+              whiteSpace: 'nowrap',
+              overflow: 'hidden',
+              textOverflow: 'ellipsis'
+            }}
+          >
+            {this.props.title}
+          </Modal.Title>
         </Modal.Header>
-        <Modal.Body>{this.props.body}</Modal.Body>
+        <Modal.Body className="clearfix">{this.props.body}</Modal.Body>
 
         <Modal.Footer>{this.props.footer}</Modal.Footer>
       </Modal>

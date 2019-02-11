@@ -1,5 +1,5 @@
 /* 
-* Edit Quote Form
+* Edit Quote Shopping Cart Form
 */
 
 import {
@@ -7,7 +7,8 @@ import {
   Button,
   FormGroup,
   ControlLabel,
-  FormControl
+  FormControl,
+  Badge
 } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
@@ -24,15 +25,22 @@ import * as React from 'react';
 import { FormUtil } from '../common/FormUtil';
 import {
   Ioption,
-  Iproduct,
+  IshoppingCartProduct,
   IproductInfo,
   IshoppingCart,
   ItableFiltersReducer
 } from '../../models';
-import { checkout } from '../../actions/shoppingCartActions';
-import { toggleEditQuoteModal } from '../../actions/manageInventoryActions';
+import {
+  toggleShoppingCartModal,
+  updateQuantityCart,
+  deleteFromCart
+} from '../../actions/shoppingCartActions';
 import constants from '../../constants/constants';
+import { requestQuote } from 'src/actions/manageInventoryActions';
 
+/*
+* Input row with a button to delete the cart item
+*/
 const NumberInputWithButton = ({
   handler,
   touched,
@@ -57,6 +65,7 @@ const NumberInputWithButton = ({
         style={{ width: '50%', display: 'inline' }}
         placeholder={meta.placeholder}
         type="number"
+        name="quantity"
         {...handler()}
       />
       <Button
@@ -70,21 +79,64 @@ const NumberInputWithButton = ({
   </FormGroup>
 );
 
+/*
+* Card product with a button to delete it
+*/
+const CartProduct = ({
+  handler,
+  touched,
+  hasError,
+  meta,
+  pristine,
+  errors,
+  submitted
+}: AbstractControl) => (
+  <FormGroup
+    bsSize="sm"
+    validationState={FormUtil.getValidationState(pristine, errors, submitted)}
+  >
+    <Col xs={8}>
+      <ControlLabel>{meta.label}</ControlLabel>
+    </Col>
+    <Col
+      xs={4}
+      style={{ textAlign: 'center', paddingRight: '0', paddingLeft: '0' }}
+    >
+      <Badge>${`${meta.cost / 100}`}</Badge>
+      <Button
+        bsStyle="link"
+        style={{ fontSize: '1.6em' }}
+        onClick={() => meta.buttonAction(meta.id)}
+      >
+        <FontAwesomeIcon icon={['far', 'times']} />
+      </Button>
+    </Col>
+  </FormGroup>
+);
+
 const buildFieldConfig = (
-  products: { [key: string]: Iproduct },
-  deleteFromCart: any
+  products: { [key: string]: IshoppingCartProduct },
+  deleteFromCartCB: typeof deleteFromCart,
+  cartName: string,
+  showCost: boolean = false
 ) => {
   const productControls = mapValues(products, prod => {
     return {
-      render: NumberInputWithButton,
+      render: showCost ? CartProduct : NumberInputWithButton,
       options: {
-        validators: [Validators.min(1), Validators.max(1000)]
+        validators: [
+          Validators.min(1),
+          Validators.max(1000),
+          Validators.required
+        ]
       },
       meta: {
         label: prod.name,
         defaultValue: prod.quantity,
-        buttonAction: deleteFromCart,
-        id: prod.id
+        buttonAction: (id: string) => deleteFromCartCB(id, cartName),
+        id: prod.id,
+        cost: prod.cost,
+        name: 'product'
       }
     };
   });
@@ -92,13 +144,14 @@ const buildFieldConfig = (
     message: {
       render: FormUtil.TextInput,
       options: {
-        validators: Validators.required
+        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       meta: {
         label: 'message',
         colWidth: 12,
         componentClass: 'textarea',
-        rows: 8
+        rows: 8,
+        name: 'message'
       }
     }
   };
@@ -108,8 +161,8 @@ const buildFieldConfig = (
 };
 
 interface Iprops {
-  checkout: typeof checkout;
-  toggleEditQuoteModal: typeof toggleEditQuoteModal;
+  checkout?: typeof requestQuote;
+  toggleShoppingCartModal: typeof toggleShoppingCartModal;
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;
@@ -118,8 +171,10 @@ interface Iprops {
   facilityOptions: Ioption[];
   cart: IshoppingCart;
   tableFilters: ItableFiltersReducer;
-  updateQuantityCart: any;
-  deleteFromCart: any;
+  updateQuantityCart: typeof updateQuantityCart;
+  deleteFromCart: typeof deleteFromCart;
+  cartName: string;
+  showCost?: boolean;
 }
 interface Istate {
   fieldConfig: FieldConfig;
@@ -130,8 +185,6 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
   private subscription: any;
   constructor(props: Iprops) {
     super(props);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.setForm = this.setForm.bind(this);
     this.state = {
       fieldConfig: { controls: {} }
     };
@@ -160,6 +213,10 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
       return;
     }
     console.log(this.userForm.value);
+    if (!this.props.checkout) {
+      console.error('missing checkout function');
+      return;
+    }
 
     this.props.checkout({
       message: this.userForm.value.message,
@@ -174,7 +231,9 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
         fieldConfig: FormUtil.translateForm(
           buildFieldConfig(
             this.props.cart.productsByID,
-            this.props.deleteFromCart
+            this.props.deleteFromCart,
+            this.props.cartName,
+            this.props.showCost
           ),
           this.props.t
         )
@@ -192,7 +251,11 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
             this.subscription = this.userForm
               .get(key)
               .valueChanges.subscribe((value: any) => {
-                this.props.updateQuantityCart(parseInt(value, 10), key);
+                this.props.updateQuantityCart(
+                  parseInt(value, 10),
+                  key,
+                  this.props.cartName
+                );
               });
           }
         });
@@ -207,44 +270,71 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
     };
   };
 
+  calculateSubtotal = () => {
+    let subtotal = 0;
+    forEach(this.props.cart.productsByID, product => {
+      subtotal += product.cost;
+    });
+    return subtotal;
+  };
+
   render() {
     const { t } = this.props;
 
-    const formClassName = `user-form manage-form ${this.props.colorButton}`;
+    const formClassName = `clearfix beacon-form manage-form ${
+      this.props.colorButton
+    }`;
     if (this.props.cart.addedIDs.length === 0) {
       return (
-        <h4 style={{ padding: '15px' }}>{this.props.t('emptyQuoteMessage')}</h4>
+        <div>
+          <h4 style={{ padding: '15px' }}>
+            {this.props.t('emptyQuoteMessage')}
+          </h4>
+          <Col xs={12} className="form-buttons text-right">
+            <Button
+              bsStyle="default"
+              type="button"
+              className="pull-left"
+              onClick={() =>
+                this.props.toggleShoppingCartModal(this.props.cartName)
+              }
+            >
+              {t('common:cancel')}
+            </Button>
+          </Col>
+        </div>
       );
     }
     return (
-      <div>
-        <div className={formClassName}>
-          <form onSubmit={this.handleSubmit} className="user-form">
-            <FormGenerator
-              onMount={this.setForm}
-              fieldConfig={this.state.fieldConfig}
-            />
+      <form onSubmit={this.handleSubmit} className={formClassName}>
+        <FormGenerator
+          onMount={this.setForm}
+          fieldConfig={this.state.fieldConfig}
+        />
+        <Col xs={12} className="cart-totals">
+          Subtotal: ${this.calculateSubtotal() / 100}
+        </Col>
 
-            <Col xs={12} className="form-buttons text-right">
-              <Button
-                bsStyle="link"
-                type="button"
-                className="pull-left left-side"
-                onClick={this.props.toggleEditQuoteModal}
-              >
-                {t('common:cancel')}
-              </Button>
-              <Button
-                bsStyle={this.props.colorButton}
-                type="submit"
-                disabled={this.props.loading}
-              >
-                {t('request')}
-              </Button>
-            </Col>
-          </form>
-        </div>
-      </div>
+        <Col xs={12} className="form-buttons text-right">
+          <Button
+            bsStyle="default"
+            type="button"
+            className="pull-left"
+            onClick={() =>
+              this.props.toggleShoppingCartModal(this.props.cartName)
+            }
+          >
+            {t('common:cancel')}
+          </Button>
+          <Button
+            bsStyle={this.props.colorButton}
+            type="submit"
+            disabled={this.props.loading}
+          >
+            {t('checkout')}
+          </Button>
+        </Col>
+      </form>
     );
   }
 }

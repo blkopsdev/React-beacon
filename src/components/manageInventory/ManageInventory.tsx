@@ -28,11 +28,16 @@ import {
   IproductInfo,
   ItableFiltersReducer,
   Itile,
-  Iuser
+  Iuser,
+  IshoppingCart,
+  Ifacility
 } from '../../models';
 import { InstallationsExpander } from './InstallsExpander';
 import { TableUtil } from '../common/TableUtil';
-import { addToCart } from '../../actions/shoppingCartActions';
+import {
+  addToCart,
+  toggleShoppingCartModal
+} from '../../actions/shoppingCartActions';
 import { closeAllModals } from '../../actions/commonActions';
 import { emptyTile } from '../../reducers/initialState';
 import {
@@ -42,17 +47,24 @@ import {
   toggleInstallContactModal,
   toggleEditInstallModal,
   toggleEditProductModal,
-  toggleEditQuoteModal
+  toggleSearchNewProductsModal,
+  toggleImportInstallModal,
+  setSelectedProduct,
+  requestQuote
 } from '../../actions/manageInventoryActions';
-import { getTotal } from '../../reducers/manageInventoryReducer';
+import ShoppingCartForm from '../shoppingCart/ShoppingCartForm';
+
+import { getLocationsFacility } from '../../actions/manageLocationActions';
 import Banner from '../common/Banner';
 import EditInstallModal from './EditInstallModal';
 import EditProductModal from './EditProductModal';
-import EditQuoteModal from '../shoppingCart/EditQuoteModal';
+import ShoppingCartModal from '../shoppingCart/ShoppingCartModal';
 import ImportInstallModal from './ImportInstallModal';
 import InstallContactModal from './InstallContactModal';
 import SearchTableForm from '../common/SearchTableForm';
 import constants from '../../constants/constants';
+import SearchNewProductsModal from './SearchNewProductsModal';
+import { getTotal } from 'src/reducers/cartReducer';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -68,8 +80,11 @@ interface IdispatchProps {
   // Add your dispatcher properties here
   toggleEditProductModal: typeof toggleEditProductModal;
   toggleEditInstallModal: typeof toggleEditInstallModal;
-  toggleEditQuoteModal: typeof toggleEditQuoteModal;
+  toggleShoppingCartModal: typeof toggleShoppingCartModal;
+  toggleSearchNewProductsModal: typeof toggleSearchNewProductsModal;
+  toggleImportInstallModal: typeof toggleImportInstallModal;
   getProductInfo: typeof getProductInfo;
+  getLocationsFacility: typeof getLocationsFacility;
   toggleSecurityFunctionsModal: () => void;
   getInventory: typeof getInventory;
   customers: Icustomer[];
@@ -83,32 +98,34 @@ interface IdispatchProps {
   setTableFilter: typeof setTableFilter;
   tableFilters: ItableFiltersReducer;
   toggleInstallContactModal: typeof toggleInstallContactModal;
+  selectedProduct: Iproduct;
+  setSelectedProduct: typeof setSelectedProduct;
+  cart: IshoppingCart;
+  requestQuote: typeof requestQuote;
+  facility: Ifacility;
 }
 
 interface Istate {
   selectedRow: any;
   currentTile: Itile;
-  columns: any;
-  selectedProduct: any;
+  columns: any[];
   selectedInstall: any;
+  searchFieldConfig: FieldConfig;
 }
 
 class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
-  // public searchFieldConfig: any;
   public searchFieldConfigBanner: any;
   public buttonInAction = false;
   private setTableFilterTimeout: any;
-  private searchFieldConfig: FieldConfig;
   constructor(props: Iprops & IdispatchProps) {
     super(props);
     this.state = {
       selectedRow: {},
       currentTile: emptyTile,
       columns: [],
-      selectedProduct: {},
-      selectedInstall: {}
+      selectedInstall: {},
+      searchFieldConfig: this.buildSearchControls()
     };
-    this.searchFieldConfig = this.buildSearchControls();
   }
   componentWillMount() {
     // since the install modal depends on a selected product in state, we need to make sure and start off with the modals closed
@@ -127,6 +144,9 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         ? this.props.tableFilters.facility
         : this.props.facilityOptions[0];
       this.props.setTableFilter({ facility });
+      this.props.getLocationsFacility(facility.value);
+    } else {
+      this.props.getLocationsFacility(this.props.tableFilters.facility.value);
     }
   }
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
@@ -134,26 +154,31 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       prevProps.showEditProductModal !== this.props.showEditProductModal &&
       !this.props.showEditProductModal
     ) {
-      this.setState({ selectedProduct: {} });
+      this.props.setSelectedProduct();
     }
 
     if (
       prevProps.showEditInstallModal !== this.props.showEditInstallModal &&
       !this.props.showEditInstallModal
     ) {
-      this.setState({ selectedProduct: {}, selectedInstall: {} });
+      this.props.setSelectedProduct();
+      this.setState({ selectedInstall: {} });
     }
 
-    // we only need to check the productGroup options because both manufacturers and productGroup options are received in the same API response
+    // we only need to check the mainCategory options because both brands and mainCategory options are received in the same API response
     // and before they are received, there will not be any length.
     if (
-      prevProps.productInfo.productGroupOptions.length !==
-        this.props.productInfo.productGroupOptions.length ||
-      prevProps.productInfo.manufacturerOptions.length !==
-        this.props.productInfo.manufacturerOptions.length
+      prevProps.productInfo.mainCategoryOptions.length !==
+        this.props.productInfo.mainCategoryOptions.length ||
+      prevProps.productInfo.brandOptions.length !==
+        this.props.productInfo.brandOptions.length
     ) {
-      console.log('re setting columns');
+      console.log(
+        're setting columns and table filters',
+        this.props.productInfo.brandOptions
+      );
       this.setColumns();
+      this.setState({ searchFieldConfig: this.buildSearchControls() });
     }
 
     // update the table when we get new products or new installs
@@ -164,6 +189,16 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     // automatically get inventory every time a fitler changes
     if (prevProps.tableFilters !== this.props.tableFilters) {
       this.props.getInventory();
+      if (this.props.tableFilters.facility) {
+        this.props.getLocationsFacility(this.props.tableFilters.facility.value);
+      }
+      this.setState({ searchFieldConfig: this.buildSearchControls() });
+    }
+    if (
+      prevProps.facilityOptions.length !== this.props.facilityOptions.length
+    ) {
+      const facility = this.props.facilityOptions[0];
+      this.props.setTableFilter({ facility });
     }
   }
   componentWillUnmount() {
@@ -180,9 +215,9 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     this.props.setTableFilter({
       facility,
       customer: undefined,
-      productGroup: undefined,
+      mainCategory: undefined,
       search: '',
-      manufacturer: undefined,
+      brand: undefined,
       page: 1
     });
   };
@@ -226,45 +261,45 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
 
   /*
   * Set Columns sets columns to state
-  * setting columns here in order to reset them if and after we receive productGroup and manufacturer options
+  * setting columns here in order to reset them if and after we receive mainCategory and brand options
   */
   setColumns = () => {
     const columns = TableUtil.translateHeaders(
       [
         {
-          Header: 'sku',
-          accessor: 'sku'
+          Header: 'manufacturer',
+          accessor: ({ brandID }: Iproduct) => {
+            return this.props.productInfo.brands[brandID].name;
+          },
+          id: 'manufacturer',
+          minWidth: 170
         },
         {
           Header: 'name',
-          accessor: 'name'
+          accessor: 'name',
+          minWidth: 300
         },
+        // {
+        //   Header: 'common:productGroup',
+        //   accessor: ({ productGroupID }: Iproduct) => {
+        //     return this.props.productInfo.productGroups[productGroupID].name;
+        //   },
+        //   id: 'productGroup',
+        //   minWidth: 170
+        // },
+
         {
-          Header: 'productGroup',
-          accessor: ({ productGroupID }: Iproduct) => {
-            return this.props.productInfo.productGroups[productGroupID].name;
-          },
-          id: 'productGroup'
-        },
-        {
-          Header: 'manufacturer',
-          accessor: ({ manufacturerID }: Iproduct) => {
-            return this.props.productInfo.manufacturers[manufacturerID].name;
-          },
-          id: 'manufacturer'
-        },
-        {
-          Header: 'quantity',
+          Header: 'qty',
           id: 'quantity',
+          minWidth: 50,
           accessor: ({ installs }: { installs: IinstallBase[] }) => {
             return installs.length; // using this rather than data.quantity because when we add new installs, we don't want to update the quantity on the product
-          },
-          minWidth: 50
+          }
         },
         {
           id: 'expander-toggle',
-          Cell: this.expanderToggle,
-          minWidth: 20,
+          expander: true,
+          Expander: this.expanderToggle,
           style: {
             cursor: 'pointer',
             textAlign: 'center',
@@ -289,26 +324,26 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           defaultValue: this.props.tableFilters.search
         }
       },
-      productGroup: {
+      mainCategory: {
         render: FormUtil.SelectWithoutValidation,
         meta: {
-          label: 'common:productGroup',
-          options: this.props.productInfo.productGroupOptions,
+          label: 'common:mainCategory',
+          options: this.props.productInfo.mainCategoryOptions,
           colWidth: 3,
           type: 'select',
-          placeholder: 'productGroupPlaceholder',
-          defaultValue: this.props.tableFilters.productGroup
+          placeholder: 'mainCategoryPlaceholder',
+          defaultValue: this.props.tableFilters.mainCategory
         }
       },
-      manufacturer: {
+      brand: {
         render: FormUtil.SelectWithoutValidation,
         meta: {
           label: 'common:manufacturer',
-          options: this.props.productInfo.manufacturerOptions,
+          options: this.props.productInfo.brandOptions,
           colWidth: 3,
           type: 'select',
           placeholder: 'manufacturerPlaceholder',
-          defaultValue: this.props.tableFilters.manufacturer
+          defaultValue: this.props.tableFilters.brand
         }
       }
     };
@@ -324,7 +359,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         className: 'banner-input',
         isClearable: false,
         defaultValue: this.props.tableFilters.facility
-          ? this.props.tableFilters.facility.value
+          ? this.props.tableFilters.facility
           : this.props.facilityOptions[0]
       }
     };
@@ -346,8 +381,9 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     const selectedProduct = find(this.props.tableData, {
       id: install.productID
     });
-
-    this.setState({ selectedInstall: install, selectedProduct }, () => {
+    this.props.setSelectedProduct(selectedProduct);
+    // TODO test to make sure the contact modal has the selected product defined
+    this.setState({ selectedInstall: install }, () => {
       this.buttonInAction = false;
       this.props.toggleInstallContactModal();
     });
@@ -363,9 +399,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       return {
         onClick: (e: React.MouseEvent<HTMLFormElement>) => {
           if (!this.buttonInAction) {
-            this.setState({
-              selectedProduct: rowInfo.original
-            });
+            this.props.setSelectedProduct(rowInfo.original);
             this.props.toggleEditProductModal();
           }
         },
@@ -393,9 +427,10 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
             // grab the product by using the productID from installbase
             const selectedProduct = find(this.props.tableData, {
               id: rowInfo.original.productID
-            });
+            }) as Iproduct;
+            this.props.setSelectedProduct(selectedProduct);
+            console.error('INSTALL:', rowInfo.original);
             this.setState({
-              selectedProduct,
               selectedInstall: rowInfo.original
             });
             this.props.toggleEditInstallModal();
@@ -428,11 +463,11 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           this.props.setTableFilter({ search: value, page: 1 }); // this causes performance issues so we use a rudamentary debounce
         }, constants.tableSearchDebounceTime);
         break;
-      case 'productGroup':
-        this.props.setTableFilter({ productGroup: value, page: 1 });
+      case 'mainCategory':
+        this.props.setTableFilter({ mainCategory: value, page: 1 });
         break;
-      case 'manufacturer':
-        this.props.setTableFilter({ manufacturer: value, page: 1 });
+      case 'brand':
+        this.props.setTableFilter({ brand: value, page: 1 });
         break;
       default:
         break;
@@ -446,9 +481,34 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     this.props.setTableFilter({ sorted: newSorted });
     this.setState({ selectedRow: {} });
   };
+
+  canEditInstalls = () => {
+    return constants.hasSecurityFunction(
+      this.props.user,
+      constants.securityFunctions.ManageInventory.id
+    );
+  };
+  canRequestQuote = () => {
+    return constants.hasSecurityFunction(
+      this.props.user,
+      constants.securityFunctions.QuoteForInvoice.id
+    );
+  };
+
+  /*
+  * Handle Product Select
+  */
+  handleProductSelect = (product: Iproduct) => {
+    const newProduct = {
+      ...product,
+      subcategory: this.props.productInfo.subcategories[product.subcategoryID]
+    };
+    this.props.toggleEditInstallModal();
+    this.props.setSelectedProduct(newProduct);
+  };
   render() {
     console.log('rendering inventory table');
-    if (this.props.productInfo.productGroupOptions.length === 0) {
+    if (this.props.productInfo.mainCategoryOptions.length === 0) {
       return (
         <Col xs={12}>
           <h4> loading... </h4>
@@ -465,7 +525,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           color={constants.colors[`${this.state.currentTile.color}`]}
         />
         <SearchTableForm
-          fieldConfig={this.searchFieldConfig}
+          fieldConfig={this.state.searchFieldConfig}
           handleSubmit={this.props.getInventory}
           loading={this.props.loading}
           colorButton={
@@ -475,22 +535,37 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           onValueChanges={this.onSearchValueChanges}
           t={this.props.t}
         />
-        <Button
-          className="request-for-quote-cart-button"
-          bsStyle="primary"
-          onClick={this.props.toggleEditQuoteModal}
-        >
-          <FontAwesomeIcon icon="shopping-cart" />
-          <Badge>{this.props.cartTotal} </Badge>
-        </Button>
+        {this.canRequestQuote() && (
+          <Button
+            className="request-for-quote-cart-button"
+            bsStyle="primary"
+            onClick={() => this.props.toggleShoppingCartModal('INVENTORY')}
+          >
+            <FontAwesomeIcon icon="shopping-cart" />
+            <Badge>{this.props.cartTotal} </Badge>
+          </Button>
+        )}
 
-        <Button
-          className="table-add-button"
-          bsStyle="link"
-          onClick={this.props.toggleEditProductModal}
-        >
-          {t('manageInventory:newProduct')}
-        </Button>
+        {this.canEditInstalls() && (
+          <div>
+            <Button
+              className="table-import-button"
+              bsStyle="link"
+              onClick={this.props.toggleImportInstallModal}
+            >
+              {t('import')}
+            </Button>
+
+            <Button
+              className="table-add-button"
+              bsStyle="link"
+              onClick={this.props.toggleSearchNewProductsModal}
+            >
+              {t('manageInventory:newProduct')}
+            </Button>
+          </div>
+        )}
+
         <ReactTable
           data={this.props.tableData}
           columns={this.state.columns}
@@ -512,37 +587,44 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
             <InstallationsExpander
               {...rowInfo}
               contactAboutInstall={this.contactAboutInstall}
-              addToQuote={this.props.addToCart}
+              addToCart={this.props.addToCart}
               addInstallation={() => {
-                this.setState(
-                  { selectedProduct: rowInfo.original, selectedInstall: {} },
-                  () => {
-                    this.props.toggleEditInstallModal();
-                  }
-                );
+                this.props.setSelectedProduct(rowInfo.original);
+                this.setState({ selectedInstall: {} }, () => {
+                  this.props.toggleEditInstallModal();
+                });
               }}
               t={this.props.t}
               getExpanderTrProps={this.getExpanderTrProps}
+              showAddInstallation={this.canEditInstalls()}
+              showRequestQuote={this.canRequestQuote()}
+              facility={this.props.facility}
             />
           )}
           resizable={false}
           expanded={this.state.selectedRow}
         />
         <EditProductModal
-          selectedItem={this.state.selectedProduct}
+          selectedItem={this.props.selectedProduct}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
           t={this.props.t}
+          secondModal={this.props.userManage.showSearchNewProductsModal}
         />
-        <EditQuoteModal
+        <ShoppingCartModal
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
           t={this.props.t}
+          cart={this.props.cart}
+          title={this.props.t('manageInventory:requestForQuote')}
+          checkout={this.props.requestQuote}
+          cartName="INVENTORY"
+          ShoppingCartForm={ShoppingCartForm}
         />
         <EditInstallModal
-          selectedProduct={this.state.selectedProduct}
+          selectedProduct={this.props.selectedProduct}
           selectedItem={this.state.selectedInstall}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
@@ -550,12 +632,21 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           t={this.props.t}
         />
         <InstallContactModal
-          selectedProduct={this.state.selectedProduct}
+          selectedProduct={this.props.selectedProduct}
           selectedInstall={this.state.selectedInstall}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
           t={this.props.t}
+        />
+
+        <SearchNewProductsModal
+          selectedItem={this.props.selectedProduct}
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+          t={this.props.t}
+          handleProductSelect={this.handleProductSelect}
         />
         <ImportInstallModal
           colorButton={
@@ -583,9 +674,12 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     showInstallContactModal: state.manageInventory.showInstallContactModal,
     facilityOptions: FormUtil.convertToOptions(state.user.facilities),
     productInfo: state.manageInventory.productInfo,
-    cartTotal: getTotal(state.manageInventory),
+    cartTotal: getTotal(state.manageInventory.cart),
     tableData: state.manageInventory.data,
-    tableFilters: state.manageInventory.tableFilters
+    tableFilters: state.manageInventory.tableFilters,
+    selectedProduct: state.manageInventory.selectedProduct,
+    cart: state.manageInventory.cart,
+    facility: state.manageLocation.facility
   };
 };
 export default translate('manageInventory')(
@@ -595,12 +689,17 @@ export default translate('manageInventory')(
       getInventory,
       toggleEditProductModal,
       toggleEditInstallModal,
-      toggleEditQuoteModal,
+      toggleShoppingCartModal,
+      toggleSearchNewProductsModal,
       closeAllModals,
       getProductInfo,
+      getLocationsFacility,
       addToCart,
       setTableFilter,
-      toggleInstallContactModal
+      toggleInstallContactModal,
+      setSelectedProduct,
+      toggleImportInstallModal,
+      requestQuote
     }
   )(ManageInventory)
 );

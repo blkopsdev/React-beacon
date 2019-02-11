@@ -8,7 +8,6 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { IinitialState, Iuser } from '../../models';
 import { userLogout, toggleEditProfileModal } from '../../actions/userActions';
-import { isFullyAuthenticated } from '../../actions/userActions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ButtonToolbar, Dropdown, MenuItem } from 'react-bootstrap';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
@@ -49,7 +48,7 @@ class Header extends React.Component<Iprops, Istate> {
 
   render() {
     const { t } = this.props;
-    if (!isFullyAuthenticated(this.props.user) && this.props.loading) {
+    if (!this.props.user.isAuthenticated && this.props.loading) {
       return (
         <div className="sk-cube-grid">
           <div className="sk-cube sk-cube1" />
@@ -63,7 +62,7 @@ class Header extends React.Component<Iprops, Istate> {
           <div className="sk-cube sk-cube9" />
         </div>
       );
-    } else if (!isFullyAuthenticated(this.props.user) && !this.props.loading) {
+    } else if (!this.props.user.isAuthenticated && !this.props.loading) {
       return null;
     }
     const menuClass = this.state.menuOpen ? 'menu-open' : '';

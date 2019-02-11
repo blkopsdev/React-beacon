@@ -66,7 +66,6 @@ class TeamManage extends React.Component<Iprops & IdispatchProps, Istate> {
 
   constructor(props: Iprops & IdispatchProps) {
     super(props);
-    this.getTrProps = this.getTrProps.bind(this);
     this.state = {
       selectedRow: null,
       currentTile: emptyTile
@@ -233,7 +232,7 @@ class TeamManage extends React.Component<Iprops & IdispatchProps, Istate> {
         />
         <Button
           className="table-add-button"
-          bsStyle={constants.colors[`${this.state.currentTile.color}Button`]}
+          bsStyle="link"
           onClick={this.props.toggleEditTeamUserModal}
         >
           {t('teamManage:newTeamMember')}

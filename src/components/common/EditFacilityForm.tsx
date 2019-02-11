@@ -18,6 +18,7 @@ import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction } from 'react-i18next';
 
 import { FormUtil } from '../common/FormUtil';
+import { Ioption } from 'src/models';
 // import { IqueueObject } from '../../models';
 
 // add the bootstrap form-control class to the react-select select component
@@ -26,35 +27,46 @@ const fieldConfig = {
   controls: {
     name: {
       options: {
-        validators: Validators.required
+        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
-      meta: { label: 'facilityNameLabel', colWidth: 12 }
+      meta: { label: 'facilityNameLabel', colWidth: 12, name: 'fac-name' }
     },
     address: {
       options: {
-        validators: Validators.required
+        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
-      meta: { label: 'user:address', colWidth: 8, type: 'text' }
+      meta: {
+        label: 'user:address',
+        colWidth: 8,
+        type: 'text',
+        name: 'address'
+      }
     },
     address2: {
       render: FormUtil.TextInput,
-      meta: { label: 'user:address2', colWidth: 4, type: 'text' }
+      meta: {
+        label: 'user:address2',
+        colWidth: 4,
+        type: 'text',
+        name: 'address2',
+        required: false
+      }
     },
     city: {
       options: {
-        validators: Validators.required
+        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
-      meta: { label: 'user:city', colWidth: 5, type: 'text' }
+      meta: { label: 'user:city', colWidth: 5, type: 'text', name: 'city' }
     },
     state: {
       options: {
-        validators: Validators.required
+        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
-      meta: { label: 'user:state', colWidth: 3, type: 'text' }
+      meta: { label: 'user:state', colWidth: 3, type: 'text', name: 'state' }
     },
     postalCode: {
       options: {
@@ -66,7 +78,7 @@ const fieldConfig = {
         ]
       },
       render: FormUtil.TextInput,
-      meta: { label: 'user:zip', colWidth: 4, type: 'tel' }
+      meta: { label: 'user:zip', colWidth: 4, type: 'tel', name: 'postal-code' }
     },
     countryID: {
       options: {
@@ -77,7 +89,8 @@ const fieldConfig = {
         options: constants.countries,
         label: 'user:country',
         colWidth: 12,
-        placeholder: 'userQueue:countrySearchPlaceholder'
+        placeholder: 'userQueue:countrySearchPlaceholder',
+        name: 'country'
       }
     }
   }
@@ -95,19 +108,53 @@ interface Iprops {
 class EditFacilityForm extends React.Component<Iprops, {}> {
   private userForm: AbstractControl;
   private fieldConfig: FieldConfig;
+  private subscription: any;
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(fieldConfig, this.props.t);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.setForm = this.setForm.bind(this);
   }
   // componentDidUpdate(prevProps: Iprops) {
 
   // }
 
-  // componentDidMount() {
+  componentDidMount() {
+    if (!this.userForm) {
+      return;
+    }
+    this.subscription = this.userForm
+      .get('countryID')
+      .valueChanges.subscribe((value: Ioption) => {
+        this.onCountryChanges(value.value);
+      });
 
-  // }
+    this.userForm.patchValue({
+      countryID: {
+        value: 'ABC5D95C-129F-4837-988C-0BF4AE1F3B67',
+        label: 'United States of America'
+      }
+    });
+  }
+  componentWillUnmount() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+
+  onCountryChanges = (value: string) => {
+    const stateFormControl = this.userForm.get('state');
+    if (value === `ABC5D95C-129F-4837-988C-0BF4AE1F3B67`) {
+      stateFormControl.enable();
+      stateFormControl.setValidators([
+        Validators.required,
+        FormUtil.validators.requiredWithTrim
+      ]);
+      stateFormControl.patchValue(null);
+    } else {
+      stateFormControl.patchValue(null);
+      stateFormControl.disable();
+      stateFormControl.setValidators(null);
+    }
+  };
 
   handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -135,38 +182,48 @@ class EditFacilityForm extends React.Component<Iprops, {}> {
     const { t } = this.props;
     if (!this.props.selectedCustomer) {
       return (
-        <Col xs={12}>
-          <h4>{t('selectCustomerWarning')}</h4>
-        </Col>
-      );
-    }
-
-    return (
-      <div className="user-form facility-form">
-        <form onSubmit={this.handleSubmit} className="user-form">
-          <FormGenerator
-            onMount={this.setForm}
-            fieldConfig={this.fieldConfig}
-          />
+        <div>
+          <Col xs={12}>
+            <h4>{t('selectCustomerWarning')}</h4>
+          </Col>
           <Col xs={12} className="form-buttons text-right">
             <Button
-              bsStyle="link"
+              bsStyle="default"
               type="button"
-              className="pull-left left-side"
+              className="pull-left"
               onClick={this.props.handleCancel}
             >
               {t('cancel')}
             </Button>
-            <Button
-              bsStyle={this.props.colorButton}
-              type="submit"
-              disabled={this.props.loading}
-            >
-              {t('save')}
-            </Button>
           </Col>
-        </form>
-      </div>
+        </div>
+      );
+    }
+
+    return (
+      <form
+        onSubmit={this.handleSubmit}
+        className="clearfix beacon-form facility-form"
+      >
+        <FormGenerator onMount={this.setForm} fieldConfig={this.fieldConfig} />
+        <Col xs={12} className="form-buttons text-right">
+          <Button
+            bsStyle="default"
+            type="button"
+            className="pull-left"
+            onClick={this.props.handleCancel}
+          >
+            {t('cancel')}
+          </Button>
+          <Button
+            bsStyle={this.props.colorButton}
+            type="submit"
+            disabled={this.props.loading}
+          >
+            {t('save')}
+          </Button>
+        </Col>
+      </form>
     );
   }
 }

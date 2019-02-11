@@ -11,9 +11,13 @@ import { Button } from 'react-bootstrap';
 // import { LinkContainer } from "react-router-bootstrap";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TranslationFunction } from 'react-i18next';
+import { addToCart } from '../../actions/shoppingCartActions';
+import { IinstallBase, Ifacility } from 'src/models';
+import { find } from 'lodash';
+import { TableUtil } from '../common/TableUtil';
 
 interface ExpanderProps extends RowInfo {
-  addToQuote: (product: any) => void;
+  addToCart: typeof addToCart;
   addInstallation: () => void;
   contactAboutInstall: (install: any) => void;
   t: TranslationFunction;
@@ -21,6 +25,9 @@ interface ExpanderProps extends RowInfo {
     state: FinalState,
     rowInfo: RowInfo
   ) => object | undefined;
+  showAddInstallation: boolean;
+  showRequestQuote: boolean;
+  facility: Ifacility;
 }
 
 /*
@@ -36,16 +43,52 @@ export const InstallationsExpander = (props: ExpanderProps) => {
         className="expander-button-bar text-right"
         style={{ position: 'absolute', top: 0, left: 0, width: '100%' }}
       >
-        <Button bsStyle="link" onClick={() => props.addToQuote(props.original)}>
-          {props.t('addToQuote')}
-        </Button>
-        <Button bsStyle="link" onClick={props.addInstallation}>
-          {props.t('addInstallation')}
-        </Button>
+        {props.showRequestQuote && (
+          <Button
+            bsStyle="link"
+            onClick={() => props.addToCart(props.original, 'INVENTORY')}
+          >
+            {props.t('addToQuote')}
+          </Button>
+        )}
+
+        {props.showAddInstallation && (
+          <Button bsStyle="link" onClick={props.addInstallation}>
+            {props.t('addInstallation')}
+          </Button>
+        )}
       </span>
     );
   };
 
+  /*
+  * take the install and find the names for the location id's.  building, floor, locations, rooms, position
+  */
+  const buildLocation = (inst: object) => {
+    const install = inst as IinstallBase;
+    let locationString = '';
+    const building = find(props.facility.buildings, { id: install.buildingID });
+
+    if (building) {
+      locationString += building.name;
+      const floor = find(building.floors, { id: install.floorID });
+      if (floor) {
+        locationString += `: ${floor.name}`;
+        const location = find(floor.locations, { id: install.locationID });
+        if (location) {
+          locationString += `: ${location.name}`;
+          const room = find(location.rooms, { id: install.locationID });
+          if (room) {
+            locationString += `: ${room.name}`;
+          }
+        }
+      }
+    }
+    if (install.position) {
+      locationString += `: ${install.position}`;
+    }
+    return locationString;
+  };
   /*
 * TODO add the location column
   {
@@ -55,39 +98,42 @@ export const InstallationsExpander = (props: ExpanderProps) => {
   },
 */
 
-  const expanderColumns = [
-    {
-      Footer: ExpanderButtonBar,
-      minWidth: 20,
-      id: 'indent-column-button-bar'
-    },
-    {
-      Header: 'S/N',
-      accessor: 'serialNumber',
-      minWidth: 100
-    },
-    {
-      Header: 'Nickname',
-      accessor: 'nickname',
-      minWidth: 100
-    },
-    {
-      Header: 'RFID',
-      accessor: 'rfid',
-      minWidth: 100
-    },
-
-    {
-      Header: '',
-      id: 'contact-button',
-      Cell: (
-        <span>
-          <FontAwesomeIcon icon="envelope" />{' '}
-        </span>
-      ),
-      minWidth: 25
-    }
-  ] as Column[];
+  const expanderColumns = TableUtil.translateHeaders(
+    [
+      {
+        Footer: ExpanderButtonBar,
+        minWidth: 20,
+        id: 'indent-column-button-bar'
+      },
+      {
+        Header: 'serialNumber',
+        accessor: 'serialNumber',
+        minWidth: 100
+      },
+      {
+        Header: 'RFID',
+        accessor: 'rfid',
+        minWidth: 100
+      },
+      {
+        Header: 'Location',
+        id: 'location',
+        accessor: install => buildLocation(install),
+        minWidth: 200
+      },
+      {
+        Header: '',
+        id: 'contact-button',
+        Cell: (
+          <span className="contact-button">
+            <FontAwesomeIcon icon="envelope" />
+          </span>
+        ),
+        minWidth: 25
+      }
+    ],
+    props.t
+  ) as Column[];
 
   const expanderHandleTdProps = (
     state: FinalState,
@@ -134,11 +180,7 @@ export const InstallationsExpander = (props: ExpanderProps) => {
         data={props.original.installs}
         sortable={false}
         columns={expanderColumns}
-        defaultPageSize={
-          props.original.installs.length < 10
-            ? props.original.installs.length
-            : 10
-        }
+        minRows={0}
         showPageSizeOptions={false}
         rowsText="installs"
         key={props.original.installs.length}
@@ -146,6 +188,7 @@ export const InstallationsExpander = (props: ExpanderProps) => {
         noDataText="No installations found."
         resizable={false}
         getTrProps={props.getExpanderTrProps}
+        showPagination={props.original.installs.length >= 10}
       />
     </div>
   );

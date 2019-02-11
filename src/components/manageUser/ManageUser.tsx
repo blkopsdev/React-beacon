@@ -3,7 +3,7 @@
 */
 import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { find } from 'lodash';
+import { find, isEqual } from 'lodash';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 import ReactTable, { SortingRule, FinalState, RowInfo } from 'react-table';
@@ -65,21 +65,88 @@ interface IdispatchProps {
 interface Istate {
   selectedRow: any;
   currentTile: Itile;
+  columns: any[];
 }
 
 class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
-  public columns: any[];
   public searchFieldConfig: FieldConfig;
   public buttonInAction = false;
   private setTableFilterTimeout: any;
   constructor(props: Iprops & IdispatchProps) {
     super(props);
-    this.getTrProps = this.getTrProps.bind(this);
     this.state = {
       selectedRow: null,
-      currentTile: emptyTile
+      currentTile: emptyTile,
+      columns: []
     };
-    this.columns = TableUtil.translateHeaders(
+    this.searchFieldConfig = {
+      controls: {
+        search: {
+          render: FormUtil.TextInputWithoutValidation,
+          meta: {
+            label: 'common:search',
+            colWidth: 4,
+            type: 'text',
+            placeholder: 'searchPlaceholder',
+            defaultValue: this.props.tableFilters.search
+          }
+        },
+        customer: {
+          render: FormUtil.SelectWithoutValidation,
+          meta: {
+            label: 'common:customer',
+            options: FormUtil.convertToOptions(this.props.customers),
+            colWidth: 4,
+            type: 'select',
+            placeholder: 'customerPlaceholder',
+            defaultValue: this.props.tableFilters.customer
+          }
+        }
+      }
+    };
+  }
+  componentWillMount() {
+    this.setState({
+      currentTile: constants.getTileByURL(this.props.location.pathname),
+      columns: this.setColumns()
+    });
+  }
+  componentDidMount() {
+    // refresh the userManage every time the component mounts
+    this.props.getUserManage();
+    // refresh the list of customers every time the component mounts
+    this.props.getCustomers();
+    this.props.closeAllModals();
+  }
+  componentDidUpdate(prevProps: Iprops & IdispatchProps) {
+    if (
+      prevProps.showEditUserModal !== this.props.showEditUserModal &&
+      !this.props.showEditUserModal
+    ) {
+      this.setState({ selectedRow: null });
+    }
+    // automatically get inventory every time a fitler changes
+    if (isEqual(prevProps.tableFilters, this.props.tableFilters) === false) {
+      console.log(
+        'user manage filters changed',
+        prevProps.tableFilters,
+        this.props.tableFilters
+      );
+      this.props.getUserManage();
+    }
+    if (prevProps.customers !== this.props.customers) {
+      this.setState({ columns: this.setColumns() });
+    }
+  }
+  componentWillUnmount() {
+    this.props.closeAllModals();
+  }
+  /*
+  * Set Columns sets columns to state
+  * setting columns here in order to reset them if and after we receive customers
+  */
+  setColumns = () => {
+    return TableUtil.translateHeaders(
       [
         {
           id: 'name',
@@ -130,58 +197,7 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
       ],
       this.props.t
     );
-    this.searchFieldConfig = {
-      controls: {
-        search: {
-          render: FormUtil.TextInputWithoutValidation,
-          meta: {
-            label: 'common:search',
-            colWidth: 4,
-            type: 'text',
-            placeholder: 'searchPlaceholder',
-            defaultValue: this.props.tableFilters.search
-          }
-        },
-        customer: {
-          render: FormUtil.SelectWithoutValidation,
-          meta: {
-            label: 'common:customer',
-            options: FormUtil.convertToOptions(this.props.customers),
-            colWidth: 4,
-            type: 'select',
-            placeholder: 'customerPlaceholder',
-            defaultValue: this.props.tableFilters.customer
-          }
-        }
-      }
-    };
-  }
-  componentWillMount() {
-    this.setState({
-      currentTile: constants.getTileByURL(this.props.location.pathname)
-    });
-  }
-  componentDidMount() {
-    // refresh the userManage every time the component mounts
-    this.props.getUserManage();
-    // refresh the list of customers every time the component mounts
-    this.props.getCustomers();
-  }
-  componentDidUpdate(prevProps: Iprops & IdispatchProps) {
-    if (
-      prevProps.showEditUserModal !== this.props.showEditUserModal &&
-      !this.props.showEditUserModal
-    ) {
-      this.setState({ selectedRow: null });
-    }
-    // automatically get inventory every time a fitler changes
-    if (prevProps.tableFilters !== this.props.tableFilters) {
-      this.props.getUserManage();
-    }
-  }
-  componentWillUnmount() {
-    this.props.closeAllModals();
-  }
+  };
 
   /*
   * (reusable)
@@ -274,7 +290,7 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
         <ReactTable
           data={this.props.tableData}
           onSortedChange={this.onSortedChanged}
-          columns={this.columns}
+          columns={this.state.columns}
           getTrProps={this.getTrProps}
           pageSize={this.props.tableData.length}
           page={this.props.tableFilters.page - 1}
@@ -306,9 +322,17 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
           modalVisible={this.props.showSecurityFunctionsModal}
           className="security-modal second-modal"
           onHide={this.props.toggleSecurityFunctionsModal}
-          body={<SecurityFunctionsList t={this.props.t} />}
+          body={
+            <SecurityFunctionsList
+              t={this.props.t}
+              toggleSecurityFunctionsModal={
+                this.props.toggleSecurityFunctionsModal
+              }
+            />
+          }
           title={t('securityFunctionsModalTitle')}
           container={document.getElementById('two-pane-layout')}
+          backdrop={true}
         />
       </div>
     );

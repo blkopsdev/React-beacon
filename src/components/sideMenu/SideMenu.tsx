@@ -10,12 +10,15 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 
 const Item = (props: any) => {
-  const { url, title, icon } = props;
+  const { url, title, icon, iconType } = props;
   return (
     <LinkContainer to={url}>
       <ListGroupItem>
-        <FontAwesomeIcon icon={icon} fixedWidth />
-        {props.t(title)}
+        {iconType === 'fa' && <FontAwesomeIcon icon={icon} fixedWidth />}
+        {iconType === 'img' && (
+          <img src={icon} width={25} height={25} style={{ marginRight: 15 }} />
+        )}
+        <span>{props.t(title)}</span>
       </ListGroupItem>
     </LinkContainer>
   );
@@ -25,7 +28,13 @@ const MenuItems = ({ user, t }: any) => (
   <ListGroup>
     <LinkContainer to={'/dashboard'}>
       <ListGroupItem>
-        <FontAwesomeIcon icon={['far', 'th']} /> Dashboard
+        <img
+          src={constants.icons.dashboard}
+          width={25}
+          height={25}
+          style={{ marginRight: 15 }}
+        />
+        Dashboard
       </ListGroupItem>
     </LinkContainer>
     {map(constants.tiles, tile => {

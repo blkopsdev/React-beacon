@@ -38,15 +38,15 @@ import {
 } from '../../actions/shoppingCartActions';
 import constants from '../../constants/constants';
 import { requestQuote } from 'src/actions/manageInventoryActions';
-// import { components } from 'react-select';
+import Select, { components } from 'react-select';
 import NumberFormat from 'react-number-format';
 
 // add the bootstrap form-control class to the react-select select component
-// const ControlComponent = (props: any) => (
-//   <div>
-//     <components.Control {...props} className="form-control" />
-//   </div>
-// );
+const ControlComponent = (props: any) => (
+  <div>
+    <components.Control {...props} className="form-control" />
+  </div>
+);
 
 /*
 * Input row with a button to delete the cart item
@@ -394,13 +394,12 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
             process.env.REACT_APP_SERVER_DOMAIN
           }/training/acceptutapayment`}
         />
-        <input hidden={true} name="paymenttype" id="paymenttype" value="2" />
 
         <FormGenerator
           onMount={this.setForm}
           fieldConfig={this.state.fieldConfig}
         />
-        {/* <Col xs={12}>
+        <Col xs={12}>
           <FormGroup bsSize="sm">
             <ControlLabel>Payment Method</ControlLabel>
             <Select
@@ -415,7 +414,7 @@ class EditQuoteForm extends React.Component<Iprops, Istate> {
               components={{ Control: ControlComponent }}
             />
           </FormGroup>
-        </Col> */}
+        </Col>
         <Col xs={12} className="cart-totals">
           Subtotal:{' '}
           <NumberFormat

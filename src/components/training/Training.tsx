@@ -123,7 +123,6 @@ class Courses extends React.Component<Props, State> {
     this.props.getPurchasedTraining();
     this.props.getQuizResults();
     const query = queryString.parse(this.props.location.search);
-    console.log('query params', query, query.transactionNumber);
 
     // if we receive a transation number, that means we were recently redirected from a UTA transaction.  Now we need to actually checkout.
     if (query && query.transactionNumber && query.transactionNumber.length) {

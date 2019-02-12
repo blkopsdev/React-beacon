@@ -1,5 +1,9 @@
 const root = process.env.REACT_APP_SERVER_DOMAIN;
-console.log(`ENV: ${process.env.NODE_ENV} SERVER_DOMAIN: ${root}/`);
+console.log(
+  `ENV: ${process.env.NODE_ENV} SERVER_DOMAIN: ${root}/ Version: ${
+    process.env.REACT_APP_VERSION
+  }`
+);
 
 const API = {
   POST: {

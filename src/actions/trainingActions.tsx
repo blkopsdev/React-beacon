@@ -23,10 +23,12 @@ export function loadCourses(user: Iuser): ThunkResult<void> {
     return courseAPI
       .getAll(user)
       .then((rawCourses: any) => {
-        // temporary hack to support On-Site courses
+        // temporary hack to support On-Site and Webinar courses
         const courses = rawCourses.map((course: GFCourse) => {
           const foundOnSite = course.name.search('On-Site');
-          if (foundOnSite >= 0) {
+          const foundWebinar = course.name.search('Webinar');
+
+          if (foundOnSite >= 0 || foundWebinar >= 0) {
             return { ...course, onSite: true };
           } else {
             return { ...course, onSite: false };

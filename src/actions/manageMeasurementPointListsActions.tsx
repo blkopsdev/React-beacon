@@ -54,7 +54,7 @@ export function getAllMeasurementPointLists(): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.MANAGE_MEASUREMENT_POINT_LISTS_FAILED });
         constants.handleError(error, 'get measurements');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -105,7 +105,7 @@ export function addGlobalMeasurementPointList(
       .catch((error: any) => {
         dispatch({ type: types.MANAGE_MEASUREMENT_POINT_LIST_ADD_FAILED });
         constants.handleError(error, 'create measurement point list');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -143,7 +143,7 @@ export function updateGlobalMeasurementPointList(
       .catch((error: any) => {
         dispatch({ type: types.MANAGE_MEASUREMENT_POINT_LIST_UPDATE_FAILED });
         constants.handleError(error, 'update measurement point list');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -174,7 +174,7 @@ export function deleteGlobalMeasurementPointList(
       .catch((error: any) => {
         dispatch({ type: types.MANAGE_MEASUREMENT_POINT_LIST_DELETE_FAILED });
         constants.handleError(error, 'delete measurement point list');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -211,7 +211,7 @@ export function deleteGlobalMeasurementPointQuestion(
           type: types.MANAGE_MEASUREMENT_POINT_QUESTION_DELETE_FAILED
         });
         constants.handleError(error, 'delete measurement point question');
-        throw error;
+        console.error(error);
       });
   };
 }

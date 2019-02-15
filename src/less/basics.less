@@ -35,7 +35,7 @@ body {
   }
 
   &.btn-sm {
-    padding: 6.5px 18px;
+    padding: 6px 18px;
     font-size: 1em;
   }
 
@@ -238,6 +238,7 @@ body {
     min-height: 40px;
     height: auto;
   }
+
   .react-select__option {
     color: black;
   }
@@ -270,7 +271,8 @@ body {
   .modal-body {
     padding: 15px 0 40px 0;
     overflow-y: auto;
-    height: calc(100vh - @headerHeight - 60px);
+    overflow-x: hidden;
+    height: calc(100vh - @headerHeight - 60px - 55px);
 
     .form-buttons {
       position: fixed;
@@ -278,7 +280,11 @@ body {
       padding-bottom: 10px;
       padding-top: 10px;
       background-color: #F5F5F5;
-      border-top: 1px solid darken(#F5F5F5, 10%)
+      border-top: 1px solid darken(#F5F5F5, 10%);
+      padding-left: 15px;
+      padding-right: 15px;
+      width: 398px;
+
     }
   }
 
@@ -347,7 +353,7 @@ body {
   }
 
   .title {
-    font-size: 2em;
+    font-size: 1.8em;
     color: #FFFFFF;
     position: absolute;
     left: 20px;
@@ -548,4 +554,8 @@ body {
 
 .form-control-feedback {
   z-index: 0;
+}
+.main-body-content{
+  overflow: hidden;
+  height: 100%;
 }

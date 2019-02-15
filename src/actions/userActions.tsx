@@ -28,7 +28,7 @@ export function setCachedToken() {
   const cachedToken = authContext.getCachedToken(authContext.config.clientId);
 
   if (!cachedToken) {
-    authContext.login();
+    adalReauth();
   } else {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + cachedToken;
   }
@@ -180,7 +180,7 @@ export function signUpDirect(tempUser: ItempUser): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.USER_SIGNUP_FAILED });
         constants.handleError(error, 'sign up');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -212,7 +212,7 @@ export function updateUserProfile(user: Iuser): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.USER_UPDATE_PROFILE_FAILED });
         constants.handleError(error, 'update profile');
-        throw error;
+        console.error(error);
       });
   };
 }

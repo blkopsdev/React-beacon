@@ -30,7 +30,6 @@ export function getUserQueue(): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.USER_QUEUE_FAILED });
         constants.handleError(error, 'get user queue');
-        throw error;
       });
   };
 }
@@ -55,7 +54,6 @@ function handleApproveUser(userQueueID: string, dispatch: any) {
     .catch((error: any) => {
       dispatch({ type: types.USER_APPROVE_FAILED });
       constants.handleError(error, 'approve user');
-      throw error;
     });
 }
 
@@ -80,7 +78,6 @@ export function rejectUser(userQueueID: string) {
       .catch((error: any) => {
         dispatch({ type: types.USER_REJECT_FAILED });
         constants.handleError(error, 'reject user');
-        throw error;
       });
   };
 }
@@ -115,7 +112,6 @@ export function updateQueueUser(
       .catch((error: any) => {
         dispatch({ type: types.USER_QUEUE_UPDATE_FAILED });
         constants.handleError(error, 'update user');
-        throw error;
       });
   };
 }

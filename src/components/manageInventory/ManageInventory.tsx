@@ -534,6 +534,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           subscribeValueChanges={true}
           onValueChanges={this.onSearchValueChanges}
           t={this.props.t}
+          showSearchButton={false}
         />
         {this.canRequestQuote() && (
           <Button

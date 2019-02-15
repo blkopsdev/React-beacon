@@ -152,7 +152,7 @@ runWithAdal(
         <Provider store={store}>
           <PersistGate loading={null} persistor={persistor}>
             <Router>
-              <div>
+              <div className="main-body-content">
                 <Header />
                 <Switch>
                   <Route exact path="/" component={Login} />

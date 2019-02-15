@@ -37,7 +37,7 @@ export function getProductQueue(): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.PRODUCT_QUEUE_FAILED });
         constants.handleError(error, 'get product queue');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -58,7 +58,7 @@ export function approveProduct(productQueueID: string, dispatch: any) {
     .catch((error: any) => {
       dispatch({ type: types.PRODUCT_APPROVE_FAILED });
       constants.handleError(error, 'approve product');
-      throw error;
+      console.error(error);
     });
 }
 
@@ -91,7 +91,7 @@ export function updateQueueProduct(
       .catch((error: any) => {
         dispatch({ type: types.PRODUCT_UPDATE_FAILED });
         constants.handleError(error, 'update product');
-        throw error;
+        console.error(error);
       });
   };
 }

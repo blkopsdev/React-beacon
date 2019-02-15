@@ -86,6 +86,7 @@ const persistedReducer = persistReducer(
 
 export default function configureStore() {
   if (process.env.NODE_ENV !== 'production') {
+    // if (false) {
     const composeEnhancers = require('redux-devtools-extension').composeWithDevTools(
       {
         actionsBlacklist: ['persist/REHYDRATE'], // this improves the perfomance of redux devtools

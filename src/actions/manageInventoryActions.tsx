@@ -38,7 +38,7 @@ export function getProductInfo(): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.GET_PRODUCT_INFO_FAILED });
         constants.handleError(error, 'get product info');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -69,7 +69,7 @@ export function getProducts(
       .catch((error: any) => {
         dispatch({ type: types.GET_PRODUCTS_FAILED });
         constants.handleError(error, 'get products');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -115,7 +115,7 @@ const getInventoryHelper = (dispatch: any, getState: any) => {
     .catch((error: any) => {
       dispatch({ type: types.GET_INVENTORY_FAILED });
       constants.handleError(error, 'get inventory');
-      throw error;
+      console.error(error);
     });
 };
 
@@ -143,7 +143,7 @@ export function updateProduct(
       .catch((error: any) => {
         dispatch({ type: types.PRODUCT_UPDATE_FAILED });
         constants.handleError(error, 'update product');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -176,7 +176,7 @@ export function saveProduct(product: Iproduct): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.PRODUCT_ADD_FAILED });
         constants.handleError(error, 'save product');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -209,7 +209,7 @@ export function updateInstall(
       .catch((error: any) => {
         dispatch({ type: types.INSTALL_UPDATE_FAILED });
         constants.handleError(error, 'update installation');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -244,7 +244,7 @@ export function saveInstall(
       .catch((error: any) => {
         dispatch({ type: types.INSTALL_ADD_FAILED });
         constants.handleError(error, 'save install');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -268,7 +268,7 @@ export function deleteInstall(
       .catch((error: any) => {
         dispatch({ type: types.INSTALL_DELETE_FAILED });
         constants.handleError(error, 'delete install');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -303,7 +303,7 @@ export function installContact(
       .catch((error: any) => {
         dispatch({ type: types.INSTALL_CONTACT_FAILED });
         constants.handleError(error, 'contact support');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -356,7 +356,7 @@ export function importInstall(file: any): ThunkResult<void> {
           'Please check your email for details on the failed import.',
           constants.toastrError
         );
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -388,7 +388,7 @@ export const requestQuote = ({
       .catch((error: any) => {
         dispatch({ type: types.CHECKOUT_INVENTORY_FAILED });
         constants.handleError(error, 'requesting quote');
-        throw error;
+        console.error(error);
       });
   };
 };
@@ -415,7 +415,7 @@ export function mergeProduct(
       .catch((error: any) => {
         dispatch({ type: types.PRODUCT_MERGE_FAILED });
         constants.handleError(error, 'merge product');
-        throw error;
+        console.error(error);
       });
   };
 }

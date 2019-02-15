@@ -36,7 +36,7 @@ export function getUserManage(): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.USER_MANAGE_FAILED });
         constants.handleError(error, 'get users');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -84,7 +84,7 @@ export function updateUser(user: Iuser): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.USER_UPDATE_FAILED });
         constants.handleError(error, 'update user');
-        throw error;
+        console.error(error);
       });
   };
 }

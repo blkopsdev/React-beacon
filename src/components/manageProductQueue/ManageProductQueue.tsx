@@ -173,19 +173,6 @@ class ManageProductQueue extends React.Component<
           accessor: 'product.sku'
         },
         {
-          Header: 'name',
-          accessor: 'product.name'
-        },
-        {
-          Header: 'common:mainCategory',
-          accessor: ({ product }: IproductQueueObject) => {
-            return this.props.productInfo.mainCategories[
-              product.subcategory.mainCategoryID
-            ].name;
-          },
-          id: 'mainCategory'
-        },
-        {
           Header: 'manufacturer',
           accessor: ({ product }: IproductQueueObject) => {
             return this.props.productInfo.brands[product.brandID].name;
@@ -193,11 +180,9 @@ class ManageProductQueue extends React.Component<
           id: 'manufacturer'
         },
         {
-          Header: 'brand',
-          id: 'brand',
-          accessor: ({ product }: IproductQueueObject) => {
-            return this.props.productInfo.brands[product.brandID].name;
-          }
+          Header: 'name',
+          accessor: 'product.name',
+          minWidth: 300
         }
       ],
       this.props.t

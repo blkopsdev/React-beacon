@@ -85,8 +85,8 @@ export function userLogin(): ThunkResult<void> {
 
         // to avoid getting stuck, go ahead and log the user out after a longer pause
         dispatch({ type: types.USER_LOGOUT_SUCCESS });
-        dispatch({ type: 'RESET_STATE' }); // reset the redux-offline outbox
-        dispatch({ type: 'CLEAN_TOASTR' }); // reset the toastr
+        dispatch({ type: 'Offline/RESET_STATE' }); // reset the redux-offline outbox
+        dispatch({ type: '@ReduxToastr/toastr/CLEAN_TOASTR' }); // reset the toastr
 
         setTimeout(() => {
           localForage.removeItem('state-core-care-web').then(() => {
@@ -153,8 +153,8 @@ export const adalReauth = () => {
 export function userLogout(): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch({ type: types.USER_LOGOUT_SUCCESS });
-    dispatch({ type: 'RESET_STATE' }); // reset the redux-offline outbox
-    dispatch({ type: 'CLEAN_TOASTR' }); // reset the toastr
+    dispatch({ type: 'Offline/RESET_STATE' }); // reset the redux-offline outbox
+    dispatch({ type: '@ReduxToastr/toastr/CLEAN_TOASTR' }); // reset the toastr
 
     setTimeout(() => {
       localForage.removeItem('state-core-care-web').then(() => {

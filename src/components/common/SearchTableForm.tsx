@@ -37,7 +37,7 @@ export default class SearchTableForm extends React.Component<Iprops, Istate> {
     super(props);
     this.showBtn =
       typeof this.props.showSearchButton === 'undefined'
-        ? true
+        ? false
         : this.props.showSearchButton;
     this.state = {
       fieldConfig: FormUtil.translateForm(this.props.fieldConfig, this.props.t)

@@ -110,7 +110,6 @@ export interface IsystemSize extends IbaseDataObject {
 
 export interface IinstallBase extends IbaseDataObject {
   code: string;
-
   productID: string;
   product: Iproduct;
   facilityID: string;
@@ -125,6 +124,7 @@ export interface IinstallBase extends IbaseDataObject {
   floorID: string;
   locationID: string;
   roomID: string;
+  quantity?: number;
   position: string;
 }
 
@@ -406,7 +406,7 @@ export interface Ifacility {
   city: string;
   state: string;
   postalCode: string;
-  buildings?: Ibuilding[];
+  buildings: Ibuilding[];
 }
 export interface IfacilityComplete extends Ifacility {
   buildings: Ibuilding[];

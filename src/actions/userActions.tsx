@@ -137,14 +137,14 @@ export const adalReauth = () => {
       if (!msg) {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
       } else {
-        console.error(`message: ${message}  msg: ${msg}`);
+        console.error(`Error with reAuth: message: ${message}  msg: ${msg}`);
         if (msg === 'login required') {
           // const tokenT = authContext.getCachedToken(
           //   authContext.config.clientId
           // );
           // console.log(`should we try to automatically login here? ${tokenT}`);
         }
-        authContext.login();
+        // authContext.login();
       }
     }
   );

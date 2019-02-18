@@ -3,15 +3,16 @@
 * Edit Install items
 */
 
-import { Col, Button } from 'react-bootstrap';
+import { Col, Button, FormGroup, ControlLabel } from 'react-bootstrap';
 import {
   Validators,
   FormGenerator,
   AbstractControl,
   FieldConfig,
-  Observable
+  Observable,
+  GroupProps
 } from 'react-reactive-form';
-import { forEach, find } from 'lodash';
+import { find } from 'lodash';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
@@ -25,7 +26,8 @@ import {
   Ibuilding,
   Ifloor,
   Ilocation,
-  Iuser
+  Iuser,
+  Ioption
 } from '../../models';
 import {
   saveInstall,
@@ -67,20 +69,19 @@ interface Istate {
 
 class ManageInstallForm extends React.Component<Iprops, Istate> {
   public userForm: AbstractControl;
-  public fieldConfig: FieldConfig;
+  private subscription: any;
+  private fieldConfig: FieldConfig;
   constructor(props: Iprops) {
     super(props);
-    this.fieldConfig = FormUtil.translateForm(
-      this.buildFieldConfig(),
-      this.props.t
-    );
     this.state = {
       newType: '',
       newItem: {}
     };
+    this.fieldConfig = FormUtil.translateForm(
+      this.buildFieldConfig(),
+      this.props.t
+    );
   }
-  // componentDidUpdate(prevProps: Iprops) {}
-
   componentDidMount() {
     if (!this.props.selectedProduct.id) {
       console.error('missing product');
@@ -91,77 +92,94 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       );
       this.props.toggleEditInstallModal();
     }
-    this.userForm.patchValue({ productInfo: this.props.selectedProduct.name });
-    if (
-      !this.props.selectedItem ||
-      (this.props.selectedItem && !this.props.selectedItem.id)
-    ) {
-      console.log('adding a new install');
-      this.userForm.patchValue({ quantity: 1 });
-    } else {
-      // set values
-      forEach(this.props.selectedItem, (value, key) => {
-        this.userForm.patchValue({ [key]: value });
-      });
-      // we don't use quantity on existing products, but we need to pass validation
-      this.userForm.patchValue({ quantity: 1 });
-      const quantityControl = this.userForm.get('quantity');
-      quantityControl.meta = {
-        ...quantityControl.meta,
-        style: { display: 'none' }
-      };
-
-      if (this.props.selectedItem.buildingID) {
-        const bControl = this.userForm.get(
-          'buildingID'
-        ) as AbstractControlEdited;
-        const selectedBuilding = find(bControl.meta.options, {
-          value: this.props.selectedItem.buildingID
-        });
-        this.userForm.patchValue({ buildingID: selectedBuilding });
-        //
-        this.filterFloors(this.props.selectedItem.buildingID);
-      }
-      if (this.props.selectedItem.floorID) {
-        this.filterLocations(this.props.selectedItem.floorID);
-      }
-      if (this.props.selectedItem.locationID) {
-        this.filterRooms(this.props.selectedItem.locationID);
-      }
-    }
   }
 
   componentDidUpdate(prevProps: Iprops) {
     if (prevProps.facility !== this.props.facility) {
-      // console.log('DATA CHANGED');
-      const itemID = `${this.state.newType.toLowerCase()}ID`;
-      const control = this.userForm.get(itemID) as AbstractControlEdited;
-      const selectedItem = {
-        value: this.state.newItem.id,
-        label: this.state.newItem.name
-      };
-      control.meta.options.push(selectedItem);
-      if (this.state.newType === 'Building') {
-        this.userForm.patchValue({ buildingID: selectedItem });
-      } else if (this.state.newType === 'Floor') {
-        this.userForm.patchValue({ floorID: selectedItem });
-      } else if (this.state.newType === 'Location') {
-        this.userForm.patchValue({ locationID: selectedItem });
-      } else if (this.state.newType === 'Room') {
-        this.userForm.patchValue({ roomID: selectedItem });
+      if (this.state.newType.length) {
+        const control = this.userForm.get(
+          this.state.newType
+        ) as AbstractControlEdited;
+        const newOption = {
+          value: this.state.newItem.id,
+          label: this.state.newItem.name
+        };
+        control.meta.options = [...control.meta.options, newOption];
+        control.stateChanges.next();
+        this.userForm.patchValue({ [this.state.newType]: newOption });
+        this.setState({ newType: '' });
       }
     }
   }
+  componentWillUnmount() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+
+  subscribeToValueChanges = () => {
+    this.subscription = this.userForm
+      .get('buildingID')
+      .valueChanges.subscribe((value: Ioption | null) => {
+        if (value !== null) {
+          this.filterFloors(value.value);
+        }
+      });
+    this.subscription = this.userForm
+      .get('floorID')
+      .valueChanges.subscribe((value: Ioption | null) => {
+        if (value !== null) {
+          this.filterLocations(value.value);
+        }
+      });
+    this.subscription = this.userForm
+      .get('locationID')
+      .valueChanges.subscribe((value: Ioption | null) => {
+        if (value !== null) {
+          this.filterRooms(value.value);
+        }
+      });
+  };
   buildFieldConfig = () => {
     const disabled = this.canEditInstalls() === false;
+    const {
+      nickname,
+      serialNumber,
+      rfid,
+      remarks,
+      quantity,
+      buildingID,
+      floorID,
+      locationID,
+      roomID,
+      id,
+      position
+    } = this.props.selectedItem;
     const shouldRequireQuantity =
-      disabled === false &&
-      this.props.selectedItem &&
-      this.props.selectedItem.id
-        ? false
-        : true;
+      disabled === false && this.props.selectedItem && id ? false : true;
+    let selectedBuilding = null;
+    let selectedFloor = null;
+    let selectedLocation = null;
+    let selectedRoom = null;
 
-    const buildings = FormUtil.convertToOptions(this.props.facility.buildings);
+    if (buildingID) {
+      selectedBuilding = find(this.props.facility.buildings, {
+        id: buildingID
+      }) as Ibuilding;
+      if (selectedBuilding) {
+        selectedFloor = find(selectedBuilding.floors, {
+          id: floorID
+        });
+        if (selectedFloor) {
+          selectedLocation = find(selectedFloor.locations, {
+            id: locationID
+          });
+          if (selectedLocation) {
+            selectedRoom = find(selectedLocation.rooms, { id: roomID });
+          }
+        }
+      }
+    }
     let quantityValidators = [Validators.min(1), Validators.max(1000)];
     if (shouldRequireQuantity) {
       quantityValidators = [
@@ -172,9 +190,17 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
     }
 
     const fieldConfigControls = {
-      productInfo: {
-        render: FormUtil.TextLabel,
-        meta: { label: 'productInfo', colWidth: 12, name: 'product-info' }
+      $field_0: {
+        render: () => (
+          <Col xs={12} key="productInfo">
+            <FormGroup bsSize="sm">
+              <ControlLabel>{this.props.t('productInfo')}</ControlLabel>
+              <h5 className="queue-form-label">
+                {this.props.selectedProduct.name}
+              </h5>
+            </FormGroup>
+          </Col>
+        )
       },
       nickname: {
         render: FormUtil.TextInput,
@@ -183,9 +209,9 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           colWidth: 12,
           type: 'input',
           name: 'nickname',
-          disabled,
           required: false
-        }
+        },
+        formState: { value: nickname, disabled }
       },
       serialNumber: {
         render: FormUtil.TextInput,
@@ -194,9 +220,9 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           colWidth: 6,
           type: 'input',
           name: 'serial-number',
-          disabled,
           required: false
-        }
+        },
+        formState: { value: serialNumber, disabled }
       },
       rfid: {
         render: FormUtil.TextInput,
@@ -205,9 +231,9 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           colWidth: 6,
           type: 'input',
           name: 'rfid',
-          disabled,
           required: false
-        }
+        },
+        formState: { value: rfid, disabled }
       },
       remarks: {
         render: FormUtil.TextInput,
@@ -216,9 +242,9 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           colWidth: 12,
           componentClass: 'textarea',
           name: 'remarks',
-          disabled,
           required: false
-        }
+        },
+        formState: { value: remarks, disabled }
       },
       quantity: {
         options: {
@@ -231,9 +257,9 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           colWidth: 6,
           type: 'number',
           defaultValue: 1,
-          name: 'quantity',
-          disabled
-        }
+          name: 'quantity'
+        },
+        formState: { value: quantity || 1, disabled }
       },
       locLabel: {
         render: FormUtil.TextLabel,
@@ -242,81 +268,81 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       buildingID: {
         render: FormUtil.CreatableSelect,
         meta: {
-          options: buildings,
+          options: FormUtil.convertToOptions(this.props.facility.buildings),
           label: 'building',
           colWidth: 12,
           placeholder: 'common:searchPlaceholder',
           isMulti: false,
           handleCreate: this.handleCreateBuilding,
-          name: 'building',
-          disabled
+          name: 'building'
         },
         options: {
-          validators: [
-            Validators.required,
-            (c: any) => {
-              if (c.value && c.value.value) {
-                this.filterFloors(c.value.value);
-              }
-            }
-          ]
+          validators: [Validators.required]
+        },
+        formState: {
+          value: FormUtil.convertToSingleOption(selectedBuilding),
+          disabled
         }
       },
       floorID: {
         render: FormUtil.CreatableSelect,
         meta: {
+          options: selectedBuilding
+            ? FormUtil.convertToOptions(selectedBuilding.floors)
+            : [],
           label: 'floor',
           colWidth: 12,
           placeholder: 'common:searchPlaceholder',
           isMulti: false,
           handleCreate: this.handleCreateFloor,
-          name: 'floor',
-          disabled
+          name: 'floor'
         },
         options: {
-          validators: [
-            Validators.required,
-            (c: any) => {
-              if (c.value && c.value.value) {
-                this.filterLocations(c.value.value);
-              }
-            }
-          ]
+          validators: [Validators.required]
+        },
+        formState: {
+          value: FormUtil.convertToSingleOption(selectedFloor),
+          disabled
         }
       },
       locationID: {
         render: FormUtil.CreatableSelect,
         meta: {
+          options: selectedFloor
+            ? FormUtil.convertToOptions(selectedFloor.locations)
+            : [],
           label: 'location',
           colWidth: 12,
           placeholder: 'common:searchPlaceholder',
           isMulti: false,
           handleCreate: this.handleCreateLocation,
-          name: 'location',
-          disabled
+          name: 'location'
         },
         options: {
-          validators: [
-            Validators.required,
-            (c: any) => {
-              if (c.value && c.value.value) {
-                this.filterRooms(c.value.value);
-              }
-            }
-          ]
+          validators: [Validators.required]
+        },
+        formState: {
+          value: FormUtil.convertToSingleOption(selectedLocation),
+          disabled
         }
       },
       roomID: {
         render: FormUtil.CreatableSelect,
         meta: {
+          options: selectedLocation
+            ? FormUtil.convertToOptions(selectedLocation.rooms)
+            : [],
           label: 'room',
           colWidth: 12,
           placeholder: 'common:searchPlaceholder',
           isMulti: false,
           handleCreate: this.handleCreateRoom,
           name: 'room',
-          disabled,
           required: false
+        },
+        formState: {
+          value: FormUtil.convertToSingleOption(selectedRoom),
+          disabled
         }
       },
       position: {
@@ -325,11 +351,11 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           label: 'position',
           colWidth: 12,
           name: 'position',
-          disabled,
           required: false
-        }
+        },
+        formState: { value: position, disabled }
       }
-    };
+    } as { [key: string]: GroupProps };
     return {
       controls: { ...fieldConfigControls }
     };
@@ -342,7 +368,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       facilityID: this.props.facility.id,
       floors: []
     };
-    this.setState({ newItem: newBuilding, newType: 'Building' });
+    this.setState({ newItem: newBuilding, newType: 'buildingID' });
     this.props.saveAnyLocation(newBuilding, 'Building', this.props.facility.id);
   };
 
@@ -362,7 +388,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       buildingID: buildingID.value,
       locations: []
     };
-    this.setState({ newItem: newFloor, newType: 'Floor' });
+    this.setState({ newItem: newFloor, newType: 'floorID' });
     this.props.saveAnyLocation(newFloor, 'Floor', this.props.facility.id);
   };
   handleCreateLocation = (name: string) => {
@@ -382,7 +408,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       floorID: floorID.value,
       rooms: []
     };
-    this.setState({ newItem: newLocation, newType: 'Location' });
+    this.setState({ newItem: newLocation, newType: 'locationID' });
     this.props.saveAnyLocation(newLocation, 'Location', this.props.facility.id);
   };
   handleCreateRoom = (name: string) => {
@@ -402,7 +428,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       floorID: floorID.value,
       locationID: locationID.value
     };
-    this.setState({ newItem: newRoom, newType: 'Room' });
+    this.setState({ newItem: newRoom, newType: 'roomID' });
     this.props.saveAnyLocation(newRoom, 'Room', this.props.facility.id);
   };
 
@@ -534,6 +560,8 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
         }) || { value: '' };
         if (selectedRoom.value.length) {
           this.userForm.patchValue({ roomID: selectedRoom });
+        } else {
+          this.userForm.patchValue({ roomID: null });
         }
       } else {
         this.userForm.patchValue({ roomID: null });
@@ -542,6 +570,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
   };
 
   handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
+    console.log('install form valuess: ', this.userForm);
     e.preventDefault();
     if (this.userForm.status === 'INVALID') {
       this.userForm.markAsSubmitted();
@@ -591,10 +620,15 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
     toastr.confirm(this.props.t('installDeleteConfirm'), toastrConfirmOptions);
   };
   setForm = (form: AbstractControl) => {
+    if (!form) {
+      console.error('missing form for setForm');
+      return;
+    }
     this.userForm = form;
     this.userForm.meta = {
       loading: this.props.loading
     };
+    this.subscribeToValueChanges();
   };
   canEditInstalls = () => {
     return constants.hasSecurityFunction(

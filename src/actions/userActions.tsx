@@ -143,6 +143,7 @@ export const adalReauth = () => {
           //   authContext.config.clientId
           // );
           // console.log(`should we try to automatically login here? ${tokenT}`);
+          authContext.login();
         }
         // authContext.login();
       }

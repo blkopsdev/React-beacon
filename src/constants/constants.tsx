@@ -288,19 +288,19 @@ const tiles = [
     securityFunction: '',
     description: ''
   },
-  // {
-  //   icon: icons.manageTeam,
-  //   iconType: 'img',
-  //   title: 'manageTeam',
-  //   src: require('src/images/beaconManageTeam.jpg'),
-  //   srcBanner: require('src/images/beaconManageTeamHeader.jpg'),
-  //   color: 'blue',
-  //   width: 360,
-  //   height: 400,
-  //   url: '/team',
-  //   securityFunction: securityFunctions.ManageTeamMembers.id,
-  //   description: ''
-  // },
+  {
+    icon: icons.manageTeam,
+    iconType: 'img',
+    title: 'manageTeam',
+    src: require('src/images/beaconManageTeam.jpg'),
+    srcBanner: require('src/images/beaconManageTeamHeader.jpg'),
+    color: 'blue',
+    width: 360,
+    height: 400,
+    url: '/team',
+    securityFunction: securityFunctions.ManageTeamMembers.id,
+    description: ''
+  },
   {
     icon: 'icon-docs',
     iconType: 'fa',
@@ -314,19 +314,19 @@ const tiles = [
     securityFunction: '',
     description: ''
   },
-  // {
-  //   icon: icons.inventory,
-  //   iconType: 'img',
-  //   title: 'inventory',
-  //   src: require('src/images/beaconManageInventory.jpg'),
-  //   srcBanner: require('src/images/beaconManageInventoryHeader.jpg'),
-  //   color: 'green',
-  //   width: 360,
-  //   height: 400,
-  //   url: '/inventory',
-  //   securityFunction: securityFunctions.ViewInventory.id,
-  //   description: ''
-  // },
+  {
+    icon: icons.inventory,
+    iconType: 'img',
+    title: 'inventory',
+    src: require('src/images/beaconManageInventory.jpg'),
+    srcBanner: require('src/images/beaconManageInventoryHeader.jpg'),
+    color: 'green',
+    width: 360,
+    height: 400,
+    url: '/inventory',
+    securityFunction: securityFunctions.ViewInventory.id,
+    description: ''
+  },
   {
     icon: icons.productQueue,
     iconType: 'img',

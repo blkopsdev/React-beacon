@@ -33,7 +33,7 @@ export function getUserManage(): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.TEAM_MANAGE_FAILED });
         constants.handleError(error, 'get team members');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -60,7 +60,7 @@ export function updateTeamUser(user: Iuser): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.TEAM_UPDATE_FAILED });
         constants.handleError(error, 'update user');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -93,7 +93,32 @@ export function saveTeamUser(user: Iuser): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.TEAM_SAVE_FAILED });
         constants.handleError(error, 'save user');
-        throw error;
+        console.error(error);
+      });
+  };
+}
+
+/*
+* delete a team member
+*/
+export function deleteTeamUser(memberID: string): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    dispatch({ type: types.TOGGLE_MODAL_EDIT_TEAM });
+    return axios
+      .post(API.POST.user.deleteTeamMember, { ID: memberID })
+      .then(data => {
+        dispatch({
+          type: types.TEAM_DELETE_SUCCESS,
+          memberID
+        });
+
+        // toastr.success('Success', 'Deleted user', constants.toastrSuccess);
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.TEAM_DELETE_FAILED });
+        constants.handleError(error, 'delete user');
+        console.error(error);
       });
   };
 }

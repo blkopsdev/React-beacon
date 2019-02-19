@@ -5,7 +5,9 @@ import {
   FormGroup,
   FormControl,
   ControlLabel,
-  Button
+  Button,
+  ToggleButtonGroup,
+  ToggleButton
 } from 'react-bootstrap';
 import {
   Validators,
@@ -56,6 +58,17 @@ export const FormUtil = {
         label: item.name || item.code || item.first + ' ' + item.last
       };
     });
+  },
+  convertToSingleOption: (item: any): Ioption | null => {
+    if (item) {
+      return {
+        value: item.id,
+        // TODO: verify this will not explode
+        label: item.name || item.code || item.first + ' ' + item.last
+      };
+    } else {
+      return null;
+    }
   },
 
   getValidationState: (
@@ -155,9 +168,6 @@ export const FormUtil = {
             autoFocus={meta.autoFocus}
             name={meta.name || ''}
             {...handler()}
-            disabled={
-              meta.disabled !== undefined ? meta.disabled : handler().disabled
-            }
           />
           <FormControl.Feedback />
         </FormGroup>
@@ -255,6 +265,7 @@ export const FormUtil = {
             isClearable={
               typeof meta.isClearable !== 'undefined' ? meta.isClearable : false
             }
+            isDisabled={handler().disabled}
             {...handler()}
             isDisabled={
               meta.disabled !== undefined ? meta.disabled : handler().disabled
@@ -302,10 +313,8 @@ export const FormUtil = {
               typeof meta.isClearable !== 'undefined' ? meta.isClearable : false
             }
             name={meta.name || ''}
+            isDisabled={handler().disabled}
             {...handler()}
-            isDisabled={
-              meta.disabled !== undefined ? meta.disabled : handler().disabled
-            }
           />
         </FormGroup>
       </Col>
@@ -329,6 +338,7 @@ export const FormUtil = {
               typeof meta.isClearable !== 'undefined' ? meta.isClearable : false
             }
             name={meta.name || ''}
+            isDisabled={handler().disabled}
             {...handler()}
             isDisabled={
               meta.disabled !== undefined ? meta.disabled : handler().disabled
@@ -362,6 +372,7 @@ export const FormUtil = {
                   : false
               }
               name={meta.name || ''}
+              isDisabled={handler().disabled}
               {...handler()}
               isDisabled={
                 meta.disabled !== undefined ? meta.disabled : handler().disabled
@@ -414,11 +425,55 @@ export const FormUtil = {
             isMulti={meta.isMulti}
             classNamePrefix="react-select"
             name={meta.name || ''}
+            isDisabled={handler().disabled}
             {...handler()}
             isDisabled={
               meta.disabled !== undefined ? meta.disabled : handler().disabled
             }
           />
+        </FormGroup>
+      </Col>
+    );
+  },
+  Button: ({ handler, meta }: AbstractControl) => {
+    return (
+      <Col xs={meta.colWidth}>
+        <Button bsStyle="link" className="" onClick={meta.buttonAction}>
+          {meta.buttonName}
+        </Button>
+      </Col>
+    );
+  },
+  RichTextEditor: ({
+    handler,
+    touched,
+    meta,
+    pristine,
+    errors,
+    submitted
+  }: AbstractControl) => {
+    const requiredLabel = meta.required === false ? ' - optional' : '';
+    return (
+      <Col xs={meta.colWidth}>
+        <FormGroup
+          validationState={FormUtil.getValidationState(
+            pristine,
+            errors,
+            submitted
+          )}
+          bsSize="sm"
+          style={meta.style}
+        >
+          <ControlLabel>
+            {meta.label}
+            <i className="required-label">{requiredLabel}</i>
+          </ControlLabel>
+          <RichTextEditor
+            onChange={handler().onChange}
+            initialContent={meta.initialContent}
+            readOnly={meta.readOnly}
+          />
+          <FormControl.Feedback />
         </FormGroup>
       </Col>
     );
@@ -505,6 +560,78 @@ export const FormUtil = {
         <FormGroup bsSize="sm">
           <ControlLabel>{meta.label}</ControlLabel>
           <h5 className="queue-form-label">{handler().value}</h5>
+        </FormGroup>
+      </Col>
+    );
+  },
+  PassFail: ({
+    handler,
+    touched,
+    meta,
+    pristine,
+    errors,
+    submitted
+  }: AbstractControl) => {
+    const requiredLabel = meta.required === false ? ' - optional' : '';
+    return (
+      <Col xs={meta.colWidth}>
+        <FormGroup
+          validationState={FormUtil.getValidationState(
+            pristine,
+            errors,
+            submitted
+          )}
+          bsSize="sm"
+          style={meta.style}
+        >
+          <ControlLabel>
+            {meta.label}
+            <i className="required-label">{requiredLabel}</i>
+          </ControlLabel>
+          <ToggleButtonGroup name="pass-fail" {...handler()} type="radio">
+            <ToggleButton value={1}>Pass</ToggleButton>
+            <ToggleButton value={2}>Fail</ToggleButton>
+            <ToggleButton value={3}>N/A</ToggleButton>
+          </ToggleButtonGroup>
+          <FormControl.Feedback />
+        </FormGroup>
+      </Col>
+    );
+  },
+  NumericInput: ({
+    handler,
+    touched,
+    meta,
+    pristine,
+    errors,
+    submitted
+  }: AbstractControl) => {
+    const requiredLabel = meta.required === false ? ' - optional' : '';
+    return (
+      <Col xs={meta.colWidth}>
+        <FormGroup
+          validationState={FormUtil.getValidationState(
+            pristine,
+            errors,
+            submitted
+          )}
+          bsSize="sm"
+          style={meta.style}
+        >
+          <ControlLabel>
+            {meta.label}
+            <i className="required-label">{requiredLabel}</i>
+          </ControlLabel>
+          <FormControl
+            placeholder={meta.placeholder}
+            componentClass={meta.componentClass}
+            type="number"
+            rows={meta.rows}
+            autoFocus={meta.autoFocus}
+            name={meta.name || ''}
+            {...handler()}
+          />
+          <FormControl.Feedback />
         </FormGroup>
       </Col>
     );

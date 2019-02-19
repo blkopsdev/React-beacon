@@ -40,7 +40,7 @@ export function getLocationsFacility(facilityID: string): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.LOCATION_MANAGE_FAILED });
         constants.handleError(error, 'get facility locations');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -87,7 +87,7 @@ export function saveAnyLocation(
       .catch((error: any) => {
         dispatch({ type: types.LOCATION_ADD_FAILED });
         constants.handleError(error, `save ${lType}`);
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -130,7 +130,7 @@ export function updateAnyLocation(item: any, lType: string): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.LOCATION_UPDATE_FAILED });
         constants.handleError(error, `update ${lType}`);
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -172,7 +172,7 @@ export function deleteAnyLocation(item: any, lType: string): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.LOCATION_DELETE_FAILED });
         constants.handleError(error, `delete ${lType}`);
-        throw error;
+        console.error(error);
       });
   };
 }

@@ -1,6 +1,6 @@
 {
   "name": "state-core-care-web",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "private": true,
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.2.0",
@@ -46,6 +46,7 @@
     "redux": "^4.0.0",
     "redux-persist": "^5.10.0",
     "redux-thunk": "^2.3.0",
+    "remote-redux-devtools": "^0.5.16",
     "uuid": "^3.3.2"
   },
   "lint-staged": {

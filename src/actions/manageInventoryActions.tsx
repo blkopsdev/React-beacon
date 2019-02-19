@@ -38,7 +38,38 @@ export function getProductInfo(): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.GET_PRODUCT_INFO_FAILED });
         constants.handleError(error, 'get product info');
-        throw error;
+        console.error(error);
+      });
+  };
+}
+
+export function getProducts(
+  page: number,
+  search: string,
+  mainCategoryID: string
+): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+
+    const pagingMode = 'paged';
+    return axios
+      .get(API.GET.inventory.products, {
+        params: { page, search, mainCategoryID, pagingMode }
+      })
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.GET_PRODUCTS_SUCCESS,
+            products: data.data.result
+          });
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.GET_PRODUCTS_FAILED });
+        constants.handleError(error, 'get products');
+        console.error(error);
       });
   };
 }
@@ -115,7 +146,7 @@ const getInventoryHelper = (dispatch: any, getState: any) => {
     .catch((error: any) => {
       dispatch({ type: types.GET_INVENTORY_FAILED });
       constants.handleError(error, 'get inventory');
-      throw error;
+      console.error(error);
     });
 };
 
@@ -143,7 +174,7 @@ export function updateProduct(
       .catch((error: any) => {
         dispatch({ type: types.PRODUCT_UPDATE_FAILED });
         constants.handleError(error, 'update product');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -176,7 +207,7 @@ export function saveProduct(product: Iproduct): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.PRODUCT_ADD_FAILED });
         constants.handleError(error, 'save product');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -209,7 +240,7 @@ export function updateInstall(
       .catch((error: any) => {
         dispatch({ type: types.INSTALL_UPDATE_FAILED });
         constants.handleError(error, 'update installation');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -244,7 +275,7 @@ export function saveInstall(
       .catch((error: any) => {
         dispatch({ type: types.INSTALL_ADD_FAILED });
         constants.handleError(error, 'save install');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -268,7 +299,7 @@ export function deleteInstall(
       .catch((error: any) => {
         dispatch({ type: types.INSTALL_DELETE_FAILED });
         constants.handleError(error, 'delete install');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -303,7 +334,7 @@ export function installContact(
       .catch((error: any) => {
         dispatch({ type: types.INSTALL_CONTACT_FAILED });
         constants.handleError(error, 'contact support');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -356,7 +387,66 @@ export function importInstall(file: any): ThunkResult<void> {
           'Please check your email for details on the failed import.',
           constants.toastrError
         );
-        throw error;
+        console.error(error);
+      });
+  };
+}
+
+export const requestQuote = ({
+  message,
+  facilityID
+}: {
+  message: string;
+  facilityID: string;
+}): ThunkResult<void> => {
+  return (dispatch, getState) => {
+    const QuoteItems = map(
+      getState().manageInventory.cart.productsByID,
+      (product, key) => {
+        return { productID: key, quantity: product.quantity };
+      }
+    );
+    dispatch(beginAjaxCall());
+    dispatch({ type: types.TOGGLE_MODAL_SHOPPING_CART_INVENTORY });
+    return axios
+      .post(API.POST.inventory.quote, { QuoteItems, facilityID, message })
+      .then(data => {
+        dispatch({
+          type: types.CHECKOUT_INVENTORY_SUCCESS
+        });
+        toastr.success('Success', 'requested quote', constants.toastrSuccess);
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.CHECKOUT_INVENTORY_FAILED });
+        constants.handleError(error, 'requesting quote');
+        console.error(error);
+      });
+  };
+};
+
+export function mergeProduct(
+  sourceProductID: string,
+  targetProductID: string
+): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    dispatch({ type: types.CLOSE_ALL_MODALS });
+    return axios
+      .post(
+        `${
+          API.POST.inventory.mergeProduct
+        }?sourceProductID=${sourceProductID}&targetProductID=${targetProductID}`
+      )
+      .then(data => {
+        dispatch({
+          type: types.PRODUCT_MERGE_SUCCESS
+        });
+        toastr.success('Success', 'merged product', constants.toastrSuccess);
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.PRODUCT_MERGE_FAILED });
+        constants.handleError(error, 'merge product');
+        console.error(error);
       });
   };
 }

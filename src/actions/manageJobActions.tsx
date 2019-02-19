@@ -47,7 +47,7 @@ export function getJobs(): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.JOB_MANAGE_FAILED });
         constants.handleError(error, 'get jobs');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -73,7 +73,7 @@ export function getJobTypes(): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.GET_JOBTYPES_FAILED });
         constants.handleError(error, 'get jobtypes');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -99,7 +99,7 @@ export function getFSEUsers(): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.GET_FSE_FAILED });
         constants.handleError(error, 'get fse users');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -126,7 +126,7 @@ export function updateJob(job: Ijob, users: string[]): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.JOB_UPDATE_FAILED });
         constants.handleError(error, 'update job');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -158,7 +158,7 @@ export function createJob(job: Ijob, users: string[]): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.JOB_ADD_FAILED });
         constants.handleError(error, 'create job');
-        throw error;
+        console.error(error);
       });
   };
 }

@@ -35,7 +35,7 @@ export function getFacilitiesByCustomer(customerID: string) {
       .catch((error: any) => {
         dispatch({ type: types.GET_FACILITIES_FAILED });
         constants.handleError(error, 'get facilities');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -57,7 +57,7 @@ export function getCustomers() {
       .catch((error: any) => {
         dispatch({ type: types.GET_CUSTOMERS_FAILED });
         constants.handleError(error, 'get companies');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -89,7 +89,7 @@ export function addCustomer({
       .catch((error: any) => {
         dispatch({ type: types.CUSTOMER_UPDATE_FAILED });
         constants.handleError(error, 'add customer');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -122,7 +122,7 @@ export function addFacility(facility: Ifacility): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.FACILITY_UPDATE_FAILED });
         constants.handleError(error, 'add facility');
-        throw error;
+        console.error(error);
       });
   };
 }

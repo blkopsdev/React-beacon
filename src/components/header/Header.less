@@ -1,10 +1,12 @@
 @import '../../less/variables.less';
+
 .header {
   width: 100%;
   height: @headerHeight;
   background-color: @white;
   border-bottom: 1px solid rgba(0, 0, 0, .15);
-  .white-rectangle{
+
+  .white-rectangle {
     position: absolute;
     top: -20px;
     right: 0;
@@ -13,28 +15,33 @@
     height: 82px;
     background-color: #fff;
   }
-  .profile-text{
+
+  .profile-text {
     z-index: 100;
     right: 55px;
     position: absolute;
   }
+
   img {
     height: 53px;
     margin-top: 15px;
     margin-left: 30px;
   }
+
   .profile {
     float: right;
-    font-size: 20px;
+    font-size: 1.6em;
     margin-top: 29px;
     // height: 84px;
     vertical-align: middle;
     text-align: center;
+
     .name {
-      font-size: 24px;
+      font-size: 1.2em;
       color: @textBlue;
       text-transform: capitalize;
     }
+
     .vertical {
       width: 0;
       outline: 1px solid @dark;
@@ -44,18 +51,22 @@
       vertical-align: top;
     }
   }
-  .header-menu{
+
+  .header-menu {
     display: inline-block;
-    .caret{
+
+    .caret {
       display: none;
     }
 
     float: right;
     margin-top: -8px;
-    .dropdown-toggle{
+
+    .dropdown-toggle {
       z-index: 13;
     }
-    .dropdown-menu{
+
+    .dropdown-menu {
       top: 61px;
       left: -93px;
       z-index: 10;
@@ -67,13 +78,18 @@
 
       display: block;
       box-shadow: none;
-      li > a{
+
+      li>a {
         color: @primaryBlue;
-        font-size: 1.5rem;
       }
-      
+      .active>a {
+        background-color:transparent;
+        color: @greyText;
+      }
+
     }
-    .dropdown-menu.menu-open{
+
+    .dropdown-menu.menu-open {
       transform: translateY(0%);
       transition: transform .5s ease-in-out, z-index .5s steps(2) 1s;
       z-index: 10;
@@ -100,33 +116,56 @@
     height: 33%;
     background-color: @orange;
     float: left;
-    animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out; 
+    animation: sk-cubeGridScaleDelay 1.3s infinite ease-in-out;
   }
+
   .sk-cube-grid .sk-cube1 {
-    animation-delay: 0.2s; }
-    .sk-cube-grid .sk-cube2 {
-      animation-delay: 0.3s; }
-      .sk-cube-grid .sk-cube3 {
-        animation-delay: 0.4s; }
-        .sk-cube-grid .sk-cube4 {
-          animation-delay: 0.1s; }
-          .sk-cube-grid .sk-cube5 {
-            animation-delay: 0.2s; }
-            .sk-cube-grid .sk-cube6 {
-              animation-delay: 0.3s; }
-              .sk-cube-grid .sk-cube7 {
-                animation-delay: 0s; }
-                .sk-cube-grid .sk-cube8 {
-                  animation-delay: 0.1s; }
-                  .sk-cube-grid .sk-cube9 {
-                    animation-delay: 0.2s; }
+    animation-delay: 0.2s;
+  }
+
+  .sk-cube-grid .sk-cube2 {
+    animation-delay: 0.3s;
+  }
+
+  .sk-cube-grid .sk-cube3 {
+    animation-delay: 0.4s;
+  }
+
+  .sk-cube-grid .sk-cube4 {
+    animation-delay: 0.1s;
+  }
+
+  .sk-cube-grid .sk-cube5 {
+    animation-delay: 0.2s;
+  }
+
+  .sk-cube-grid .sk-cube6 {
+    animation-delay: 0.3s;
+  }
+
+  .sk-cube-grid .sk-cube7 {
+    animation-delay: 0s;
+  }
+
+  .sk-cube-grid .sk-cube8 {
+    animation-delay: 0.1s;
+  }
+
+  .sk-cube-grid .sk-cube9 {
+    animation-delay: 0.2s;
+  }
 
 
-                    @keyframes sk-cubeGridScaleDelay {
-                      0%, 70%, 100% {
-                        transform: scale3D(1, 1, 1);
-                      } 35% {
-                        transform: scale3D(0, 0, 1);
-                      } 
-                    }
-                  }
+  @keyframes sk-cubeGridScaleDelay {
+
+    0%,
+    70%,
+    100% {
+      transform: scale3D(1, 1, 1);
+    }
+
+    35% {
+      transform: scale3D(0, 0, 1);
+    }
+  }
+}

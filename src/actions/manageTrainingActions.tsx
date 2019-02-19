@@ -35,7 +35,7 @@ export function getManageTraining(): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.MANAGE_TRAINING_FAILED });
         constants.handleError(error, 'get user training progress');
-        throw error;
+        console.error(error);
       });
   };
 }

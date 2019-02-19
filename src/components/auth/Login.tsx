@@ -141,7 +141,7 @@ class Login extends React.Component<Iprops, Istate> {
                   {t('loginButton')}
                 </Button>
                 <LinkContainer to={'/signup'}>
-                  <Button bsStyle="link" className="signupBtn">
+                  <Button bsStyle="link" className="signupBtn" bsSize="large">
                     {t('signUp')}
                   </Button>
                 </LinkContainer>

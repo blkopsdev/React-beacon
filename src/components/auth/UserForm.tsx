@@ -61,9 +61,7 @@ const fieldConfigControls = {
     options: {
       validators: [
         Validators.required,
-        Validators.pattern(
-          /(^[0-9]{5}(-[0-9]{4})?$)|(^[ABCEGHJKLMNPRSTVXYabceghjklmnprstvxy]{1}[0-9]{1}[ABCEGHJKLMNPRSTVWXYZabceghjklmnprstv‌​xy]{1} *[0-9]{1}[ABCEGHJKLMNPRSTVWXYZabceghjklmnprstvxy]{1}[0-9]{1}$)/
-        )
+        Validators.pattern(/^[a-zA-Z0-9][a-zA-Z0-9\- ]{0,10}[a-zA-Z0-9]$/)
       ]
     },
     render: FormUtil.TextInput,

@@ -28,7 +28,7 @@ export function setCachedToken() {
   const cachedToken = authContext.getCachedToken(authContext.config.clientId);
 
   if (!cachedToken) {
-    authContext.login();
+    adalReauth();
   } else {
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + cachedToken;
   }
@@ -85,7 +85,8 @@ export function userLogin(): ThunkResult<void> {
 
         // to avoid getting stuck, go ahead and log the user out after a longer pause
         dispatch({ type: types.USER_LOGOUT_SUCCESS });
-        dispatch({ type: 'RESET_STATE' }); // reset the redux-offline outbox
+        dispatch({ type: 'Offline/RESET_STATE' }); // reset the redux-offline outbox
+        dispatch({ type: '@ReduxToastr/toastr/CLEAN_TOASTR' }); // reset the toastr
 
         setTimeout(() => {
           localForage.removeItem('state-core-care-web').then(() => {
@@ -136,14 +137,15 @@ export const adalReauth = () => {
       if (!msg) {
         axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
       } else {
-        console.error(`message: ${message}  msg: ${msg}`);
+        console.error(`Error with reAuth: message: ${message}  msg: ${msg}`);
         if (msg === 'login required') {
           // const tokenT = authContext.getCachedToken(
           //   authContext.config.clientId
           // );
           // console.log(`should we try to automatically login here? ${tokenT}`);
+          authContext.login();
         }
-        authContext.login();
+        // authContext.login();
       }
     }
   );
@@ -152,7 +154,8 @@ export const adalReauth = () => {
 export function userLogout(): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch({ type: types.USER_LOGOUT_SUCCESS });
-    dispatch({ type: 'RESET_STATE' }); // reset the redux-offline outbox
+    dispatch({ type: 'Offline/RESET_STATE' }); // reset the redux-offline outbox
+    dispatch({ type: '@ReduxToastr/toastr/CLEAN_TOASTR' }); // reset the toastr
 
     setTimeout(() => {
       localForage.removeItem('state-core-care-web').then(() => {
@@ -178,7 +181,7 @@ export function signUpDirect(tempUser: ItempUser): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.USER_SIGNUP_FAILED });
         constants.handleError(error, 'sign up');
-        throw error;
+        console.error(error);
       });
   };
 }
@@ -210,7 +213,7 @@ export function updateUserProfile(user: Iuser): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.USER_UPDATE_PROFILE_FAILED });
         constants.handleError(error, 'update profile');
-        throw error;
+        console.error(error);
       });
   };
 }

@@ -114,12 +114,8 @@ export function adalLogin(): ThunkResult<void> {
         } else {
           console.error(`message: ${message}  msg: ${msg}`);
           if (msg === 'login required') {
-            // const tokenT = authContext.getCachedToken(
-            //   authContext.config.clientId
-            // );
-            // console.log(`should we try to automatically login here? ${tokenT}`);
+            authContext.login();
           }
-          authContext.login();
         }
       }
     );
@@ -139,13 +135,8 @@ export const adalReauth = () => {
       } else {
         console.error(`Error with reAuth: message: ${message}  msg: ${msg}`);
         if (msg === 'login required') {
-          // const tokenT = authContext.getCachedToken(
-          //   authContext.config.clientId
-          // );
-          // console.log(`should we try to automatically login here? ${tokenT}`);
           authContext.login();
         }
-        // authContext.login();
       }
     }
   );

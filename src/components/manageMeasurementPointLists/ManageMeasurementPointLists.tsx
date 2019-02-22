@@ -29,7 +29,7 @@ import {
 import {
   getAllMeasurementPointLists,
   toggleEditMeasurementPointListModal,
-  toggleEditMeasurementPointQuestionModal,
+  toggleEditMeasurementPointModal,
   setTableFilter,
   setSelectedMeasurementPointList,
   deleteGlobalMeasurementPointList
@@ -53,7 +53,7 @@ interface IdispatchProps {
   // Add your dispatcher properties here
   getAllMeasurementPointLists: typeof getAllMeasurementPointLists;
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
-  toggleEditMeasurementPointQuestionModal: typeof toggleEditMeasurementPointQuestionModal;
+  toggleEditMeasurementPointModal: typeof toggleEditMeasurementPointModal;
   setSelectedMeasurementPointList: typeof setSelectedMeasurementPointList;
   deleteGlobalMeasurementPointList: typeof deleteGlobalMeasurementPointList;
   getProductInfo: typeof getProductInfo;
@@ -62,7 +62,7 @@ interface IdispatchProps {
   closeAllModals: typeof closeAllModals;
   manageMeasurementPointLists: ImanageMeasurementPointListsReducer;
   showEditMeasurementPointListModal: boolean;
-  showEditMeasurementPointQuestionModal: boolean;
+  showEditMeasurementPointModal: boolean;
   showEditProcedureModal: boolean;
   showEditGroupModal: boolean;
   setTableFilter: typeof setTableFilter;
@@ -418,8 +418,8 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     loading: state.ajaxCallsInProgress > 0,
     showEditMeasurementPointListModal:
       state.manageMeasurementPointLists.showEditMeasurementPointListModal,
-    showEditMeasurementPointQuestionModal:
-      state.manageMeasurementPointLists.showEditMeasurementPointQuestionModal,
+    showEditMeasurementPointModal:
+      state.manageMeasurementPointLists.showEditMeasurementPointModal,
     tableData: state.manageMeasurementPointLists.data,
     tableFilters: state.manageMeasurementPointLists.tableFilters,
     standardOptions: state.productInfo.standardOptions,
@@ -432,7 +432,7 @@ export default translate('manageMeasurementPointLists')(
     {
       getAllMeasurementPointLists,
       toggleEditMeasurementPointListModal,
-      toggleEditMeasurementPointQuestionModal,
+      toggleEditMeasurementPointModal,
       setSelectedMeasurementPointList,
       deleteGlobalMeasurementPointList,
       closeAllModals,

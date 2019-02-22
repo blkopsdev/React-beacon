@@ -23,13 +23,13 @@ const measurementPointListTypeOptions = [
   { label: 'Annual', value: 1 },
   { label: 'Verification', value: 2 }
 ];
-const measurementPointQuestionTypeOptions = [
+const measurementPointTypeOptions = [
   { label: 'Pass/Fail', value: 1 },
   { label: 'Text', value: 2 },
   { label: 'Numeric', value: 3 },
   { label: 'Select', value: 4 }
 ];
-const measurementPointQuestionTypes = {
+const measurementPointTypes = {
   QUESTION_PASSFAIL: 1,
   QUESTION_TEXT: 2,
   QUESTION_NUMERIC: 3,
@@ -37,7 +37,7 @@ const measurementPointQuestionTypes = {
   GROUP: 5,
   PROCEDURE: 6
 };
-const measurementPointQuestionTypesInverse = {
+const measurementPointTypesInverse = {
   1: 'Pass/Fail',
   2: 'Text',
   3: 'Numeric',
@@ -432,9 +432,9 @@ const constants = {
   jobTypesByID,
   icons,
   measurementPointListTypeOptions,
-  measurementPointQuestionTypeOptions,
-  measurementPointQuestionTypes,
-  measurementPointQuestionTypesInverse,
+  measurementPointTypeOptions,
+  measurementPointTypes,
+  measurementPointTypesInverse,
   measurementPointPassFailOptions,
   hasSecurityFunction: (user: Iuser, securityFunction: string): boolean => {
     if (user.securityFunctions.indexOf(securityFunction) >= 0) {

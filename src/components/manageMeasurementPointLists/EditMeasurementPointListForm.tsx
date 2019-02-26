@@ -25,17 +25,17 @@ import { FormUtil } from '../common/FormUtil';
 import {
   Ioption,
   ImeasurementPointList,
-  ImeasurementPointQuestion
+  ImeasurementPoint
 } from '../../models';
 import {
   toggleEditMeasurementPointListModal,
-  toggleEditMeasurementPointQuestionModal,
+  toggleEditMeasurementPointModal,
   addGlobalMeasurementPointList,
   updateGlobalMeasurementPointList,
   addQuestionToMeasurementPointList,
-  deleteGlobalMeasurementPointQuestion
+  deleteGlobalMeasurementPoint
 } from '../../actions/manageMeasurementPointListsActions';
-import EditMeasurementPointQuestionModal from './EditMeasurementPointQuestionModal';
+import EditMeasurementPointModal from './EditMeasurementPointModal';
 import constants from '../../constants/constants';
 const uuidv4 = require('uuid/v4');
 
@@ -112,16 +112,16 @@ interface Iprops extends React.Props<EditMeasurementPointListForm> {
   t: TranslationFunction;
   i18n: I18n;
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
-  toggleEditMeasurementPointQuestionModal: typeof toggleEditMeasurementPointQuestionModal;
+  toggleEditMeasurementPointModal: typeof toggleEditMeasurementPointModal;
   addGlobalMeasurementPointList: typeof addGlobalMeasurementPointList;
   updateGlobalMeasurementPointList: typeof updateGlobalMeasurementPointList;
   addQuestionToMeasurementPointList: typeof addQuestionToMeasurementPointList;
-  deleteGlobalMeasurementPointQuestion: typeof deleteGlobalMeasurementPointQuestion;
+  deleteGlobalMeasurementPoint: typeof deleteGlobalMeasurementPoint;
 }
 
 interface Istate {
-  selectedMeasurementPointQuestion: any;
-  questions: ImeasurementPointQuestion[];
+  selectedMeasurementPoint: any;
+  questions: ImeasurementPoint[];
 }
 
 class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
@@ -130,7 +130,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
   constructor(props: Iprops) {
     super(props);
     this.state = {
-      selectedMeasurementPointQuestion: null,
+      selectedMeasurementPoint: null,
       questions: this.parseQuestions()
     };
     this.fieldConfig = FormUtil.translateForm(
@@ -199,7 +199,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
         return mp;
       }
     );
-    mps.sort((a: ImeasurementPointQuestion, b: ImeasurementPointQuestion) => {
+    mps.sort((a: ImeasurementPoint, b: ImeasurementPoint) => {
       return a.order - b.order;
     });
     return map(mps, (mp, index) => {
@@ -224,7 +224,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       type: this.measurementsForm.value.type.value,
       measurementPoints: keyBy(
         this.state.questions,
-        (item: ImeasurementPointQuestion) => item.id
+        (item: ImeasurementPoint) => item.id
       )
     };
     if (mpl.id === '') {
@@ -246,14 +246,14 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
   };
 
   setSelectedQuestion(question: any) {
-    this.setState({ selectedMeasurementPointQuestion: question });
-    this.props.toggleEditMeasurementPointQuestionModal();
+    this.setState({ selectedMeasurementPoint: question });
+    this.props.toggleEditMeasurementPointModal();
   }
 
   deleteQuestion(question: any) {
     const toastrConfirmOptions = {
       onOk: () => {
-        this.props.deleteGlobalMeasurementPointQuestion(
+        this.props.deleteGlobalMeasurementPoint(
           this.props.selectedMeasurementPointList.id,
           question.id
         );
@@ -285,7 +285,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     const tempOrder = mps[q1Index].order;
     mps[q1Index] = { ...mps[q1Index], order: mps[q2Index].order };
     mps[q2Index] = { ...mps[q2Index], order: tempOrder };
-    mps.sort((a: ImeasurementPointQuestion, b: ImeasurementPointQuestion) => {
+    mps.sort((a: ImeasurementPoint, b: ImeasurementPoint) => {
       return a.order - b.order;
     });
     this.setState({
@@ -354,8 +354,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
                   <p dangerouslySetInnerHTML={{ __html: mp.label }} />
                 )}
                 {mp.type !== 6 && <h5>{mp.label}</h5>}
-                {mp.type < 5 &&
-                  constants.measurementPointQuestionTypesInverse[mp.type]}
+                {mp.type < 5 && constants.measurementPointTypesInverse[mp.type]}
               </ListGroupItem>
             </div>
           );
@@ -385,9 +384,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
               className=""
               onClick={() => {
                 this.setSelectedQuestion(
-                  this.newQuestion(
-                    constants.measurementPointQuestionTypes.GROUP
-                  )
+                  this.newQuestion(constants.measurementPointTypes.GROUP)
                 );
               }}
             >
@@ -398,9 +395,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
               className=""
               onClick={() => {
                 this.setSelectedQuestion(
-                  this.newQuestion(
-                    constants.measurementPointQuestionTypes.PROCEDURE
-                  )
+                  this.newQuestion(constants.measurementPointTypes.PROCEDURE)
                 );
               }}
             >
@@ -412,7 +407,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
               onClick={() => {
                 this.setSelectedQuestion(
                   this.newQuestion(
-                    constants.measurementPointQuestionTypes.QUESTION_PASSFAIL
+                    constants.measurementPointTypes.QUESTION_PASSFAIL
                   )
                 );
               }}
@@ -441,11 +436,9 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
             </Button>
           </Col>
         </form>
-        <EditMeasurementPointQuestionModal
+        <EditMeasurementPointModal
           selectedMeasurementPointList={this.props.selectedMeasurementPointList}
-          selectedMeasurementPointQuestion={
-            this.state.selectedMeasurementPointQuestion
-          }
+          selectedMeasurementPoint={this.state.selectedMeasurementPoint}
           colorButton={this.props.colorButton}
           t={this.props.t}
         />

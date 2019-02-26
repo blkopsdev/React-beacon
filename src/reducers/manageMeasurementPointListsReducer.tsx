@@ -3,7 +3,7 @@ import { find, keyBy, filter } from 'lodash';
 import {
   ImanageMeasurementPointListsReducer,
   ImeasurementPointList,
-  ImeasurementPointQuestion
+  ImeasurementPoint
 } from '../models';
 import {
   createTableFiltersWithName,
@@ -23,7 +23,7 @@ function manageMeasurementPointListData(
         if (m.measurementPoints) {
           m.measurementPoints = keyBy(
             m.measurementPoints,
-            (item: ImeasurementPointQuestion) => item.id
+            (item: ImeasurementPoint) => item.id
           );
         } else {
           m.measurementPoints = {};
@@ -34,7 +34,7 @@ function manageMeasurementPointListData(
       if (action.measurementPointList.measurementPoints) {
         action.measurementPointList.measurementPoints = keyBy(
           action.measurementPointList.measurementPoints,
-          (item: ImeasurementPointQuestion) => item.id
+          (item: ImeasurementPoint) => item.id
         );
       } else {
         action.measurementPointList.measurementPoints = {};
@@ -44,7 +44,7 @@ function manageMeasurementPointListData(
       if (action.measurementPointList.measurementPoints) {
         action.measurementPointList.measurementPoints = keyBy(
           action.measurementPointList.measurementPoints,
-          (item: ImeasurementPointQuestion) => item.id
+          (item: ImeasurementPoint) => item.id
         );
       } else {
         action.measurementPointList.measurementPoints = {};
@@ -65,10 +65,7 @@ function manageMeasurementPointListData(
         return state;
       }
       // Add/Update the question
-      const q = keyBy(
-        [action.question],
-        (item: ImeasurementPointQuestion) => item.id
-      );
+      const q = keyBy([action.question], (item: ImeasurementPoint) => item.id);
       const measurementPoints = { ...mpl.measurementPoints, ...q };
       mpl = { ...mpl, measurementPoints };
       // Update the array with updated list and return
@@ -90,9 +87,9 @@ function manageMeasurementPointListData(
           ...mplToMod,
           measurementPoints: keyBy(
             filter(mplToMod.measurementPoints, mp => {
-              return mp.id !== action.measurementPointQuestionId;
+              return mp.id !== action.measurementPointId;
             }),
-            (item: ImeasurementPointQuestion) => item.id
+            (item: ImeasurementPoint) => item.id
           )
         }
       ];
@@ -112,10 +109,7 @@ function manageSelectedMeasurementPointList(
       return action.measurementPointList;
     case types.MANAGE_MEASUREMENT_POINT_QUESTION_ADD:
       // Add/Update the question
-      const q = keyBy(
-        [action.question],
-        (item: ImeasurementPointQuestion) => item.id
-      );
+      const q = keyBy([action.question], (item: ImeasurementPoint) => item.id);
       const measurementPoints = { ...state.measurementPoints, ...q };
       return { ...state, measurementPoints };
     case types.MANAGE_MEASUREMENT_POINT_QUESTION_DELETE_SUCCESS:
@@ -128,9 +122,9 @@ function manageSelectedMeasurementPointList(
         ...state,
         measurementPoints: keyBy(
           filter(state.measurementPoints, mp => {
-            return mp.id !== action.measurementPointQuestionId;
+            return mp.id !== action.measurementPointId;
           }),
-          (item: ImeasurementPointQuestion) => item.id
+          (item: ImeasurementPoint) => item.id
         )
       };
     case types.USER_LOGOUT_SUCCESS:
@@ -173,8 +167,8 @@ export default function manageMeasurementPointLists(
       action,
       'EDIT_MEASUREMENT_POINT_LISTS'
     ),
-    showEditMeasurementPointQuestionModal: modalToggleWithName(
-      state.showEditMeasurementPointQuestionModal,
+    showEditMeasurementPointModal: modalToggleWithName(
+      state.showEditMeasurementPointModal,
       action,
       'EDIT_MEASUREMENT_POINT_QUESTION'
     ),

@@ -108,7 +108,7 @@ export const initialMeasurementPointList = {
   type: 1,
   customerID: ''
 };
-export const initialMeasurementPointQuestion = {
+export const initialMeasurementPoint = {
   id: '',
   type: 1,
   label: '',
@@ -258,7 +258,7 @@ export default {
     data: [],
     selectedMeasurementPointList: initialMeasurementPointList,
     showEditMeasurementPointListModal: false,
-    showEditMeasurementPointQuestionModal: false,
+    showEditMeasurementPointModal: false,
     tableFilters: initialTableFilters
   },
   customers: [],

@@ -71,9 +71,9 @@ const buildFieldConfig = (
         colWidth: 12,
         type: 'input',
         name: 'sku',
-        disabled,
         required: false
-      }
+      },
+      formState: { disabled }
     },
     description: {
       // options: {
@@ -85,9 +85,9 @@ const buildFieldConfig = (
         colWidth: 12,
         componentClass: 'textarea',
         name: 'description',
-        disabled,
         required: false
-      }
+      },
+      formState: { disabled }
     },
 
     brandID: {
@@ -98,12 +98,12 @@ const buildFieldConfig = (
         colWidth: 12,
         placeholder: 'common:searchPlaceholder',
         isMulti: false,
-        name: 'brand',
-        disabled
+        name: 'brand'
       },
       options: {
         validators: Validators.required
-      }
+      },
+      formState: { disabled }
     },
     mainCategoryID: {
       render: FormUtil.Select,
@@ -113,8 +113,7 @@ const buildFieldConfig = (
         colWidth: 12,
         placeholder: 'common:searchPlaceholder',
         isMulti: false,
-        name: 'main-category',
-        disabled
+        name: 'main-category'
       },
       options: {
         validators: [
@@ -125,7 +124,8 @@ const buildFieldConfig = (
             }
           }
         ]
-      }
+      },
+      formState: { disabled }
     },
     subcategoryID: {
       render: FormUtil.Select,
@@ -135,12 +135,12 @@ const buildFieldConfig = (
         colWidth: 12,
         placeholder: 'common:searchPlaceholder',
         isMulti: false,
-        name: 'subcategory',
-        disabled
+        name: 'subcategory'
       },
       options: {
         validators: Validators.required
-      }
+      },
+      formState: { disabled }
     },
     productTypeID: {
       render: FormUtil.Select,
@@ -152,9 +152,9 @@ const buildFieldConfig = (
         isMulti: false,
         name: 'gas-type',
         isClearable: true,
-        disabled,
         required: false
-      }
+      },
+      formState: { disabled }
     },
     powerID: {
       render: FormUtil.Select,
@@ -166,9 +166,9 @@ const buildFieldConfig = (
         isMulti: false,
         name: 'power',
         isClearable: true,
-        disabled,
         required: false
-      }
+      },
+      formState: { disabled }
     },
     systemSizeID: {
       render: FormUtil.Select,
@@ -180,9 +180,9 @@ const buildFieldConfig = (
         isMulti: false,
         name: 'system-size',
         isClearable: true,
-        disabled,
         required: false
-      }
+      },
+      formState: { disabled }
     },
     standardID: {
       render: FormUtil.Select,
@@ -194,9 +194,9 @@ const buildFieldConfig = (
         isMulti: false,
         name: 'standard',
         isClearable: true,
-        disabled,
         required: false
-      }
+      },
+      formState: { disabled }
     }
   };
   return {

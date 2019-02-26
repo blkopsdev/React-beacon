@@ -95,7 +95,9 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
   }
 
   componentDidUpdate(prevProps: Iprops) {
-    if (prevProps.facility !== this.props.facility) {
+    if (
+      JSON.stringify(prevProps.facility) !== JSON.stringify(this.props.facility)
+    ) {
       if (this.state.newType.length) {
         const control = this.userForm.get(
           this.state.newType
@@ -584,7 +586,9 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
             <FormGroup bsSize="sm">
               <ControlLabel>{this.props.t('productInfo')}</ControlLabel>
               <h5 className="queue-form-label">
-                {this.props.selectedProduct.name}
+                {this.props.selectedProduct
+                  ? this.props.selectedProduct.name
+                  : this.props.selectedItem.name}
               </h5>
             </FormGroup>
           </Col>
@@ -645,7 +649,8 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           colWidth: 6,
           type: 'number',
           defaultValue: 1,
-          name: 'quantity'
+          name: 'quantity',
+          style: id ? { display: 'none' } : undefined
         },
         formState: { value: quantity || 1, disabled }
       },
@@ -756,8 +761,13 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       facilityID: this.props.facility.id,
       floors: []
     };
-    this.setState({ newItem: newBuilding, newType: 'buildingID' });
-    this.props.saveAnyLocation(newBuilding, 'Building', this.props.facility.id);
+    this.setState({ newItem: newBuilding, newType: 'Building' }, () => {
+      this.props.saveAnyLocation(
+        newBuilding,
+        'Building',
+        this.props.facility.id
+      );
+    });
   };
 
   handleCreateFloor = (name: string) => {
@@ -776,8 +786,9 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       buildingID: buildingID.value,
       locations: []
     };
-    this.setState({ newItem: newFloor, newType: 'floorID' });
-    this.props.saveAnyLocation(newFloor, 'Floor', this.props.facility.id);
+    this.setState({ newItem: newFloor, newType: 'Floor' }, () => {
+      this.props.saveAnyLocation(newFloor, 'Floor', this.props.facility.id);
+    });
   };
   handleCreateLocation = (name: string) => {
     const { buildingID, floorID } = this.userForm.value;
@@ -796,8 +807,13 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       floorID: floorID.value,
       rooms: []
     };
-    this.setState({ newItem: newLocation, newType: 'locationID' });
-    this.props.saveAnyLocation(newLocation, 'Location', this.props.facility.id);
+    this.setState({ newItem: newLocation, newType: 'Location' }, () => {
+      this.props.saveAnyLocation(
+        newLocation,
+        'Location',
+        this.props.facility.id
+      );
+    });
   };
   handleCreateRoom = (name: string) => {
     const { buildingID, floorID, locationID } = this.userForm.value;
@@ -816,8 +832,9 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       floorID: floorID.value,
       locationID: locationID.value
     };
-    this.setState({ newItem: newRoom, newType: 'roomID' });
-    this.props.saveAnyLocation(newRoom, 'Room', this.props.facility.id);
+    this.setState({ newItem: newRoom, newType: 'Room' }, () => {
+      this.props.saveAnyLocation(newRoom, 'Room', this.props.facility.id);
+    });
   };
 
   filterFloors = (buildingID: string) => {

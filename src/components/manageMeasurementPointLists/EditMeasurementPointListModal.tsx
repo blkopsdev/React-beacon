@@ -6,11 +6,11 @@ import { FormUtil } from '../common/FormUtil';
 import { IinitialState, ImeasurementPointList, Ioption } from '../../models';
 import {
   toggleEditMeasurementPointListModal,
-  toggleEditMeasurementPointQuestionModal,
+  toggleEditMeasurementPointModal,
   addGlobalMeasurementPointList,
   updateGlobalMeasurementPointList,
   addQuestionToMeasurementPointList,
-  deleteGlobalMeasurementPointQuestion
+  deleteGlobalMeasurementPoint
 } from '../../actions/manageMeasurementPointListsActions';
 import CommonModal from '../common/CommonModal';
 import EditMeasurementPointListForm from './EditMeasurementPointListForm';
@@ -30,11 +30,11 @@ interface IdispatchProps {
   mainCategoryOptions: Ioption[];
   standardOptions: Ioption[];
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
-  toggleEditMeasurementPointQuestionModal: typeof toggleEditMeasurementPointQuestionModal;
+  toggleEditMeasurementPointModal: typeof toggleEditMeasurementPointModal;
   addGlobalMeasurementPointList: typeof addGlobalMeasurementPointList;
   updateGlobalMeasurementPointList: typeof updateGlobalMeasurementPointList;
   addQuestionToMeasurementPointList: typeof addQuestionToMeasurementPointList;
-  deleteGlobalMeasurementPointQuestion: typeof deleteGlobalMeasurementPointQuestion;
+  deleteGlobalMeasurementPoint: typeof deleteGlobalMeasurementPoint;
 }
 
 class EditMeasurementPointListModal extends React.Component<
@@ -81,10 +81,10 @@ export default connect(
   mapStateToProps,
   {
     toggleEditMeasurementPointListModal,
-    toggleEditMeasurementPointQuestionModal,
+    toggleEditMeasurementPointModal,
     addGlobalMeasurementPointList,
     updateGlobalMeasurementPointList,
     addQuestionToMeasurementPointList,
-    deleteGlobalMeasurementPointQuestion
+    deleteGlobalMeasurementPoint
   }
 )(EditMeasurementPointListModal);

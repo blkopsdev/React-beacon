@@ -1,5 +1,14 @@
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
+
+## Production Release Process
+- create a release branch
+- verify that manage team and inventory tiles are hidden
+- bumb version
+- update changelog
+- merge into master
+- tag release
+
 ## Technical Dept / Ideas for Improvement
 * we can improve how we are passing the types of our redux actions into the controllers.
 1. use "typeof" in the component interfaces

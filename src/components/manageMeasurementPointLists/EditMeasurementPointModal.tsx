@@ -6,34 +6,34 @@ import * as React from 'react';
 import {
   IinitialState,
   ImeasurementPointList,
-  ImeasurementPointQuestion
+  ImeasurementPoint
 } from '../../models';
 import {
   toggleEditMeasurementPointListModal,
-  toggleEditMeasurementPointQuestionModal,
+  toggleEditMeasurementPointModal,
   addQuestionToMeasurementPointList
 } from '../../actions/manageMeasurementPointListsActions';
 import CommonModal from '../common/CommonModal';
-import EditMeasurementPointQuestionForm from './EditMeasurementPointQuestionForm';
+import EditMeasurementPointForm from './EditMeasurementPointForm';
 import constants from '../../constants/constants';
 
 interface Iprops {
   selectedMeasurementPointList: ImeasurementPointList;
-  selectedMeasurementPointQuestion: ImeasurementPointQuestion;
+  selectedMeasurementPoint: ImeasurementPoint;
   colorButton: any;
   t: TranslationFunction;
 }
 
 interface IdispatchProps {
   showEditMeasurementPointListModal: boolean;
-  showEditMeasurementPointQuestionModal: boolean;
+  showEditMeasurementPointModal: boolean;
   loading: boolean;
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
-  toggleEditMeasurementPointQuestionModal: typeof toggleEditMeasurementPointQuestionModal;
+  toggleEditMeasurementPointModal: typeof toggleEditMeasurementPointModal;
   addQuestionToMeasurementPointList: typeof addQuestionToMeasurementPointList;
 }
 
-class EditMeasurementPointQuestionModal extends React.Component<
+class EditMeasurementPointModal extends React.Component<
   Iprops & IdispatchProps,
   {}
 > {
@@ -43,15 +43,15 @@ class EditMeasurementPointQuestionModal extends React.Component<
 
   getTitle() {
     if (
-      this.props.selectedMeasurementPointQuestion &&
-      this.props.selectedMeasurementPointQuestion.type ===
-        constants.measurementPointQuestionTypes.PROCEDURE
+      this.props.selectedMeasurementPoint &&
+      this.props.selectedMeasurementPoint.type ===
+        constants.measurementPointTypes.PROCEDURE
     ) {
       return 'ProcedureModalTitle';
     } else if (
-      this.props.selectedMeasurementPointQuestion &&
-      this.props.selectedMeasurementPointQuestion.type ===
-        constants.measurementPointQuestionTypes.GROUP
+      this.props.selectedMeasurementPoint &&
+      this.props.selectedMeasurementPoint.type ===
+        constants.measurementPointTypes.GROUP
     ) {
       return 'GroupModalTitle';
     } else {
@@ -62,10 +62,10 @@ class EditMeasurementPointQuestionModal extends React.Component<
   render() {
     return (
       <CommonModal
-        modalVisible={this.props.showEditMeasurementPointQuestionModal}
+        modalVisible={this.props.showEditMeasurementPointModal}
         className="measurements-edit second-modal"
-        onHide={this.props.toggleEditMeasurementPointQuestionModal}
-        body={<EditMeasurementPointQuestionForm {...this.props} />}
+        onHide={this.props.toggleEditMeasurementPointModal}
+        body={<EditMeasurementPointForm {...this.props} />}
         title={this.props.t(this.getTitle())}
         container={document.getElementById('two-pane-layout')}
       />
@@ -80,8 +80,8 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     loading: state.ajaxCallsInProgress > 0,
     showEditMeasurementPointListModal:
       state.manageMeasurementPointLists.showEditMeasurementPointListModal,
-    showEditMeasurementPointQuestionModal:
-      state.manageMeasurementPointLists.showEditMeasurementPointQuestionModal
+    showEditMeasurementPointModal:
+      state.manageMeasurementPointLists.showEditMeasurementPointModal
   };
 };
 
@@ -89,7 +89,7 @@ export default connect(
   mapStateToProps,
   {
     toggleEditMeasurementPointListModal,
-    toggleEditMeasurementPointQuestionModal,
+    toggleEditMeasurementPointModal,
     addQuestionToMeasurementPointList
   }
-)(EditMeasurementPointQuestionModal);
+)(EditMeasurementPointModal);

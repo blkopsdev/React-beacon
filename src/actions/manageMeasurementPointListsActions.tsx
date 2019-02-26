@@ -5,7 +5,7 @@ import axios from 'axios';
 import {
   IinitialState,
   ItableFiltersParams,
-  ImeasurementPointQuestion,
+  ImeasurementPoint,
   ImeasurementPointList
 } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
@@ -68,7 +68,7 @@ export const setSelectedMeasurementPointList = (
 
 export const addQuestionToMeasurementPointList = (
   list: ImeasurementPointList,
-  question: ImeasurementPointQuestion
+  question: ImeasurementPoint
 ) => ({
   type: types.MANAGE_MEASUREMENT_POINT_QUESTION_ADD,
   list,
@@ -182,9 +182,9 @@ export function deleteGlobalMeasurementPointList(
 /*
 * delete a mpl
 */
-export function deleteGlobalMeasurementPointQuestion(
+export function deleteGlobalMeasurementPoint(
   measurementPointListId: string,
-  measurementPointQuestionId: string
+  measurementPointId: string
 ): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
@@ -192,13 +192,13 @@ export function deleteGlobalMeasurementPointQuestion(
       .delete(
         `${
           API.DELETE.measurements.deleteglobalmeasurementpoint
-        }/${measurementPointQuestionId}`
+        }/${measurementPointId}`
       )
       .then(data => {
         dispatch({
           type: types.MANAGE_MEASUREMENT_POINT_QUESTION_DELETE_SUCCESS,
           measurementPointListId,
-          measurementPointQuestionId
+          measurementPointId
         });
         toastr.success(
           'Success',
@@ -219,7 +219,7 @@ export function deleteGlobalMeasurementPointQuestion(
 export const toggleEditMeasurementPointListModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT_LISTS
 });
-export const toggleEditMeasurementPointQuestionModal = () => ({
+export const toggleEditMeasurementPointModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT_QUESTION
 });
 export const setTableFilter = (filters: ItableFiltersParams) => ({

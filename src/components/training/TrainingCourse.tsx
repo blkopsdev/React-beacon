@@ -102,10 +102,10 @@ export const TrainingCourse = ({
             </span>
           )}
 
-          <p className="purchase-text">
+          {/* <p className="purchase-text">
             Save 25% by purchasing the entire course rather than all the lessons
             individually
-          </p>
+          </p> */}
           <LinkContainer to={`training/${course.id}`}>
             <div className="course-footer">{'View Lessons'}</div>
           </LinkContainer>

@@ -74,37 +74,6 @@ export function getProducts(
   };
 }
 
-export function getProducts(
-  page: number,
-  search: string,
-  mainCategoryID: string
-): ThunkResult<void> {
-  return (dispatch, getState) => {
-    dispatch(beginAjaxCall());
-
-    const pagingMode = 'paged';
-    return axios
-      .get(API.GET.inventory.products, {
-        params: { page, search, mainCategoryID, pagingMode }
-      })
-      .then(data => {
-        if (!data.data) {
-          throw undefined;
-        } else {
-          dispatch({
-            type: types.GET_PRODUCTS_SUCCESS,
-            products: data.data.result
-          });
-        }
-      })
-      .catch((error: any) => {
-        dispatch({ type: types.GET_PRODUCTS_FAILED });
-        constants.handleError(error, 'get products');
-        throw error;
-      });
-  };
-}
-
 export function getInventory(): ThunkResult<void> {
   return (dispatch, getState) => {
     getInventoryHelper(dispatch, getState);
@@ -447,65 +416,6 @@ export function mergeProduct(
         dispatch({ type: types.PRODUCT_MERGE_FAILED });
         constants.handleError(error, 'merge product');
         console.error(error);
-      });
-  };
-}
-
-export const requestQuote = ({
-  message,
-  facilityID
-}: {
-  message: string;
-  facilityID: string;
-}): ThunkResult<void> => {
-  return (dispatch, getState) => {
-    const QuoteItems = map(
-      getState().manageInventory.cart.productsByID,
-      (product, key) => {
-        return { productID: key, quantity: product.quantity };
-      }
-    );
-    dispatch(beginAjaxCall());
-    dispatch({ type: types.TOGGLE_MODAL_SHOPPING_CART_INVENTORY });
-    return axios
-      .post(API.POST.inventory.quote, { QuoteItems, facilityID, message })
-      .then(data => {
-        dispatch({
-          type: types.CHECKOUT_INVENTORY_SUCCESS
-        });
-        toastr.success('Success', 'requested quote', constants.toastrSuccess);
-      })
-      .catch((error: any) => {
-        dispatch({ type: types.CHECKOUT_INVENTORY_FAILED });
-        constants.handleError(error, 'requesting quote');
-        throw error;
-      });
-  };
-};
-
-export function mergeProduct(
-  sourceProductID: string,
-  targetProductID: string
-): ThunkResult<void> {
-  return (dispatch, getState) => {
-    dispatch(beginAjaxCall());
-    dispatch({ type: types.CLOSE_ALL_MODALS });
-    return axios
-      .post(
-        `${
-          API.POST.inventory.mergeProduct
-        }?sourceProductID=${sourceProductID}&targetProductID=${targetProductID}`
-      )
-      .then(data => {
-        dispatch({
-          type: types.PRODUCT_MERGE_SUCCESS
-        });
-        toastr.success('Success', 'merged product', constants.toastrSuccess);
-      })
-      .catch((error: any) => {
-        dispatch({ type: types.PRODUCT_MERGE_FAILED });
-        constants.handleError(error, 'merge product');
-        throw error;
       });
   };
 }

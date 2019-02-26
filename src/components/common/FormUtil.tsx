@@ -220,9 +220,6 @@ export const FormUtil = {
           componentClass={meta.componentClass}
           name={meta.name || ''}
           {...handler()}
-          disabled={
-            meta.disabled !== undefined ? meta.disabled : handler().disabled
-          }
         />
       </FormGroup>
     </Col>
@@ -267,9 +264,6 @@ export const FormUtil = {
             }
             isDisabled={handler().disabled}
             {...handler()}
-            isDisabled={
-              meta.disabled !== undefined ? meta.disabled : handler().disabled
-            }
           />
         </FormGroup>
       </Col>
@@ -340,9 +334,6 @@ export const FormUtil = {
             name={meta.name || ''}
             isDisabled={handler().disabled}
             {...handler()}
-            isDisabled={
-              meta.disabled !== undefined ? meta.disabled : handler().disabled
-            }
           />
         </FormGroup>
       </Col>
@@ -374,9 +365,6 @@ export const FormUtil = {
               name={meta.name || ''}
               isDisabled={handler().disabled}
               {...handler()}
-              isDisabled={
-                meta.disabled !== undefined ? meta.disabled : handler().disabled
-              }
             />
           </Col>
         </FormGroup>
@@ -427,53 +415,7 @@ export const FormUtil = {
             name={meta.name || ''}
             isDisabled={handler().disabled}
             {...handler()}
-            isDisabled={
-              meta.disabled !== undefined ? meta.disabled : handler().disabled
-            }
           />
-        </FormGroup>
-      </Col>
-    );
-  },
-  Button: ({ handler, meta }: AbstractControl) => {
-    return (
-      <Col xs={meta.colWidth}>
-        <Button bsStyle="link" className="" onClick={meta.buttonAction}>
-          {meta.buttonName}
-        </Button>
-      </Col>
-    );
-  },
-  RichTextEditor: ({
-    handler,
-    touched,
-    meta,
-    pristine,
-    errors,
-    submitted
-  }: AbstractControl) => {
-    const requiredLabel = meta.required === false ? ' - optional' : '';
-    return (
-      <Col xs={meta.colWidth}>
-        <FormGroup
-          validationState={FormUtil.getValidationState(
-            pristine,
-            errors,
-            submitted
-          )}
-          bsSize="sm"
-          style={meta.style}
-        >
-          <ControlLabel>
-            {meta.label}
-            <i className="required-label">{requiredLabel}</i>
-          </ControlLabel>
-          <RichTextEditor
-            onChange={handler().onChange}
-            initialContent={meta.initialContent}
-            readOnly={meta.readOnly}
-          />
-          <FormControl.Feedback />
         </FormGroup>
       </Col>
     );

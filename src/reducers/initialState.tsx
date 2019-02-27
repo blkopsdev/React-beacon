@@ -1,5 +1,23 @@
 export const initialOption = { value: '', label: '' };
 export const initialTableFilters = { search: '', page: 1 };
+const initialSubcategory = {
+  mainCategoryID: '',
+  id: '',
+  name: '',
+  createDate: '',
+  updateDate: '',
+  creatorID: '',
+  updaterID: '',
+  mainCategoryIDs: [],
+  mainCategory: {
+    id: '',
+    name: '',
+    createDate: '',
+    updateDate: '',
+    creatorID: '',
+    updaterID: ''
+  }
+};
 export const initialProduct = {
   id: '',
   name: '',
@@ -12,23 +30,7 @@ export const initialProduct = {
   productTypeID: '',
   powerID: '',
   systemSizeID: '',
-  subcategory: {
-    mainCategoryID: '',
-    id: '',
-    name: '',
-    createDate: '',
-    updateDate: '',
-    creatorID: '',
-    updaterID: '',
-    mainCategory: {
-      id: '',
-      name: '',
-      createDate: '',
-      updateDate: '',
-      creatorID: '',
-      updaterID: ''
-    }
-  },
+  subcategory: initialSubcategory,
   installs: [],
   quantity: 1
 };

@@ -9,9 +9,10 @@ import {
   FormGenerator,
   AbstractControl,
   FieldConfig,
-  Observable
+  Observable,
+  GroupProps
 } from 'react-reactive-form';
-import { forEach, find, filter } from 'lodash';
+import { filter } from 'lodash';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
@@ -42,171 +43,9 @@ interface AbstractControlEdited extends AbstractControl {
   stateChanges: IstateChanges;
 }
 
-const buildFieldConfig = (
-  productInfo: IproductInfo,
-  filterSubcategories: (id: string) => void,
-  disabled: boolean
-) => {
-  const fieldConfigControls = {
-    // name: {
-    //   options: {
-    //     validators: [Validators.required, FormUtil.validators.requiredWithTrim]
-    //   },
-    //   render: FormUtil.TextInput,
-    //   meta: {
-    //     label: 'name',
-    //     colWidth: 12,
-    //     type: 'input',
-    //     name: 'product-name',
-    //     disabled
-    //   }
-    // },
-    sku: {
-      // options: {
-      //   validators: [Validators.required, FormUtil.validators.requiredWithTrim]
-      // },
-      render: FormUtil.TextInput,
-      meta: {
-        label: 'sku',
-        colWidth: 12,
-        type: 'input',
-        name: 'sku',
-        required: false
-      },
-      formState: { disabled }
-    },
-    description: {
-      // options: {
-      //   validators: [Validators.required, FormUtil.validators.requiredWithTrim]
-      // },
-      render: FormUtil.TextInput,
-      meta: {
-        label: 'description',
-        colWidth: 12,
-        componentClass: 'textarea',
-        name: 'description',
-        required: false
-      },
-      formState: { disabled }
-    },
-
-    brandID: {
-      render: FormUtil.Select,
-      meta: {
-        options: productInfo.brandOptions,
-        label: 'brand',
-        colWidth: 12,
-        placeholder: 'common:searchPlaceholder',
-        isMulti: false,
-        name: 'brand'
-      },
-      options: {
-        validators: Validators.required
-      },
-      formState: { disabled }
-    },
-    mainCategoryID: {
-      render: FormUtil.Select,
-      meta: {
-        options: productInfo.mainCategoryOptions,
-        label: 'mainCategory',
-        colWidth: 12,
-        placeholder: 'common:searchPlaceholder',
-        isMulti: false,
-        name: 'main-category'
-      },
-      options: {
-        validators: [
-          Validators.required,
-          (c: any) => {
-            if (c.value && c.value.value) {
-              filterSubcategories(c.value.value);
-            }
-          }
-        ]
-      },
-      formState: { disabled }
-    },
-    subcategoryID: {
-      render: FormUtil.Select,
-      meta: {
-        // options: productInfo.subcategoryOptions,
-        label: 'subcategory',
-        colWidth: 12,
-        placeholder: 'common:searchPlaceholder',
-        isMulti: false,
-        name: 'subcategory'
-      },
-      options: {
-        validators: Validators.required
-      },
-      formState: { disabled }
-    },
-    productTypeID: {
-      render: FormUtil.Select,
-      meta: {
-        options: productInfo.productTypeOptions,
-        label: 'productType',
-        colWidth: 6,
-        placeholder: 'common:searchPlaceholder',
-        isMulti: false,
-        name: 'gas-type',
-        isClearable: true,
-        required: false
-      },
-      formState: { disabled }
-    },
-    powerID: {
-      render: FormUtil.Select,
-      meta: {
-        options: productInfo.powerOptions,
-        label: 'power',
-        colWidth: 6,
-        placeholder: 'common:searchPlaceholder',
-        isMulti: false,
-        name: 'power',
-        isClearable: true,
-        required: false
-      },
-      formState: { disabled }
-    },
-    systemSizeID: {
-      render: FormUtil.Select,
-      meta: {
-        options: productInfo.systemSizeOptions,
-        label: 'systemSize',
-        colWidth: 6,
-        placeholder: 'common:searchPlaceholder',
-        isMulti: false,
-        name: 'system-size',
-        isClearable: true,
-        required: false
-      },
-      formState: { disabled }
-    },
-    standardID: {
-      render: FormUtil.Select,
-      meta: {
-        options: productInfo.standardOptions,
-        label: 'standard',
-        colWidth: 6,
-        placeholder: 'common:searchPlaceholder',
-        isMulti: false,
-        name: 'standard',
-        isClearable: true,
-        required: false
-      },
-      formState: { disabled }
-    }
-  };
-  return {
-    controls: { ...fieldConfigControls }
-  };
-};
-
 interface Iprops {
   toggleEditProductModal: typeof toggleEditProductModal;
-  selectedItem?: Iproduct;
+  selectedItem: Iproduct;
   selectedQueueObject?: IproductQueueObject;
   loading: boolean;
   colorButton: string;
@@ -224,12 +63,13 @@ interface Iprops {
 class ManageInventoryForm extends React.Component<Iprops, {}> {
   public userForm: AbstractControl;
   public fieldConfig: FieldConfig;
+  private subscription: any;
+
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(
-      buildFieldConfig(
+      this.buildFieldConfig(
         this.props.productInfo,
-        this.filterSubcategories,
         this.canEditInstalls() === false
       ),
       this.props.t
@@ -238,37 +78,282 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
   // componentDidUpdate(prevProps: Iprops) {
   // }
 
-  componentDidMount() {
-    if (!this.props.selectedItem) {
-      console.log('adding a new user');
-    } else {
-      // set values
-      forEach(this.props.selectedItem, (value, key) => {
-        if (typeof value === 'string' && key.split('ID').length === 1) {
-          // it is a string and did Not find 'ID'
-          this.userForm.patchValue({ [key]: value });
-        } else if (value !== null) {
-          this.userForm.patchValue({
-            [key]: find(
-              this.props.productInfo[`${key.split('ID')[0]}Options`],
-              { value }
-            )
-          });
-          // special set for mainCategory
-          if (key === 'subcategory' && typeof value === 'object') {
-            const subcat = value as Isubcategory;
-            const { mainCategoryID } = subcat;
-            this.userForm.patchValue({
-              mainCategoryID: find(
-                this.props.productInfo[`mainCategoryOptions`],
-                { value: mainCategoryID }
-              )
-            });
-          }
-        }
-      });
+  // componentDidMount() {
+  //   if (!this.props.selectedItem) {
+  //     console.log('adding a new user');
+  //   } else {
+  //     // set values
+  //     forEach(this.props.selectedItem, (value, key) => {
+  //       if (typeof value === 'string' && key.split('ID').length === 1) {
+  //         // it is a string and did Not find 'ID'
+  //         this.userForm.patchValue({ [key]: value });
+  //       } else if (value !== null) {
+  //         this.userForm.patchValue({
+  //           [key]: find(
+  //             this.props.productInfo[`${key.split('ID')[0]}Options`],
+  //             { value }
+  //           )
+  //         });
+  //         // special set for mainCategory
+  //         if (key === 'subcategory' && typeof value === 'object') {
+  //           const subcat = value as Isubcategory;
+  //           const { mainCategoryID } = subcat;
+  //           this.userForm.patchValue({
+  //             mainCategoryID: find(
+  //               this.props.productInfo[`mainCategoryOptions`],
+  //               { value: mainCategoryID }
+  //             )
+  //           });
+  //         }
+  //       }
+  //     });
+  //   }
+  // }
+
+  componentWillUnmount() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
+
+  subscribeToValueChanges = () => {
+    this.subscription = this.userForm
+      .get('mainCategoryID')
+      .valueChanges.subscribe((value: Ioption | null) => {
+        if (value !== null) {
+          this.filterSubcategories(value.value);
+        }
+      });
+    // this.subscription = this.userForm
+    //   .get('floorID')
+    //   .valueChanges.subscribe((value: Ioption | null) => {
+    //     if (value !== null) {
+    //       this.filterLocations(value.value);
+    //     }
+    //   });
+    // this.subscription = this.userForm
+    //   .get('locationID')
+    //   .valueChanges.subscribe((value: Ioption | null) => {
+    //     if (value !== null) {
+    //       this.filterRooms(value.value);
+    //     }
+    //   });
+  };
+  buildFieldConfig = (productInfo: IproductInfo, disabled: boolean) => {
+    const {
+      sku,
+      description,
+      brandID,
+      subcategoryID,
+      productTypeID,
+      powerID,
+      systemSizeID,
+      standardID
+    } = this.props.selectedItem;
+    let filteredSubcategories: Isubcategory[] = [];
+    // let selectedSubcategoryID = null;
+    let selectedMainCategory: any = null;
+    const selectedBrand = brandID ? productInfo.brands[brandID] : null;
+    const selectedSubcategory = subcategoryID
+      ? productInfo.subcategories[subcategoryID]
+      : null;
+    const selectedProductType = productTypeID
+      ? productInfo.productTypes[productTypeID]
+      : null;
+    const selectedPower = powerID ? productInfo.powers[powerID] : null;
+    const selectedSystemSize = systemSizeID
+      ? productInfo.systemSizes[systemSizeID]
+      : null;
+    const selectedStandard = standardID
+      ? productInfo.standards[standardID]
+      : null;
+    if (subcategoryID) {
+      // TODO for now grabbing the first mainCategoryID.  when we actually support having multiple mainCategories related to a single subCategory, we will need to store the mainCategoryID on the product object
+      const mainCategoryID =
+        productInfo.subcategories[subcategoryID].mainCategoryIDs[0];
+      if (mainCategoryID) {
+        selectedMainCategory = productInfo.mainCategories[mainCategoryID];
+        filteredSubcategories = filter(
+          productInfo.subcategories,
+          (sub: Isubcategory) => {
+            return sub.mainCategoryIDs.indexOf(mainCategoryID) !== -1;
+          }
+        );
+      }
+    }
+    const fieldConfigControls = {
+      // name: {
+      //   options: {
+      //     validators: [Validators.required, FormUtil.validators.requiredWithTrim]
+      //   },
+      //   render: FormUtil.TextInput,
+      //   meta: {
+      //     label: 'name',
+      //     colWidth: 12,
+      //     type: 'input',
+      //     name: 'product-name',
+      //     disabled
+      //   }
+      // },
+      sku: {
+        // options: {
+        //   validators: [Validators.required, FormUtil.validators.requiredWithTrim]
+        // },
+        render: FormUtil.TextInput,
+        meta: {
+          label: 'sku',
+          colWidth: 12,
+          type: 'input',
+          name: 'sku',
+          required: false
+        },
+        formState: { value: sku, disabled }
+      },
+      description: {
+        // options: {
+        //   validators: [Validators.required, FormUtil.validators.requiredWithTrim]
+        // },
+        render: FormUtil.TextInput,
+        meta: {
+          label: 'description',
+          colWidth: 12,
+          componentClass: 'textarea',
+          name: 'description',
+          required: false
+        },
+        formState: { value: description, disabled }
+      },
+
+      brandID: {
+        render: FormUtil.Select,
+        meta: {
+          options: productInfo.brandOptions,
+          label: 'brand',
+          colWidth: 12,
+          placeholder: 'common:searchPlaceholder',
+          isMulti: false,
+          name: 'brand'
+        },
+        options: {
+          validators: Validators.required
+        },
+        formState: {
+          value: FormUtil.convertToSingleOption(selectedBrand),
+          disabled
+        }
+      },
+      mainCategoryID: {
+        render: FormUtil.Select,
+        meta: {
+          options: productInfo.mainCategoryOptions,
+          label: 'mainCategory',
+          colWidth: 12,
+          placeholder: 'common:searchPlaceholder',
+          isMulti: false,
+          name: 'main-category'
+        },
+        options: {
+          validators: [Validators.required]
+        },
+        formState: {
+          value: FormUtil.convertToSingleOption(selectedMainCategory),
+          disabled
+        }
+      },
+      subcategoryID: {
+        render: FormUtil.Select,
+        meta: {
+          options: selectedMainCategory
+            ? FormUtil.convertToOptions(filteredSubcategories)
+            : [],
+          label: 'subcategory',
+          colWidth: 12,
+          placeholder: 'common:searchPlaceholder',
+          isMulti: false,
+          name: 'subcategory'
+        },
+        options: {
+          validators: Validators.required
+        },
+        formState: {
+          value: FormUtil.convertToSingleOption(selectedSubcategory),
+          disabled
+        }
+      },
+      productTypeID: {
+        render: FormUtil.Select,
+        meta: {
+          options: productInfo.productTypeOptions,
+          label: 'productType',
+          colWidth: 6,
+          placeholder: 'common:searchPlaceholder',
+          isMulti: false,
+          name: 'gas-type',
+          isClearable: true,
+          required: false
+        },
+        formState: {
+          value: FormUtil.convertToSingleOption(selectedProductType),
+          disabled
+        }
+      },
+      powerID: {
+        render: FormUtil.Select,
+        meta: {
+          options: productInfo.powerOptions,
+          label: 'power',
+          colWidth: 6,
+          placeholder: 'common:searchPlaceholder',
+          isMulti: false,
+          name: 'power',
+          isClearable: true,
+          required: false
+        },
+        formState: {
+          value: FormUtil.convertToSingleOption(selectedPower),
+          disabled
+        }
+      },
+      systemSizeID: {
+        render: FormUtil.Select,
+        meta: {
+          options: productInfo.systemSizeOptions,
+          label: 'systemSize',
+          colWidth: 6,
+          placeholder: 'common:searchPlaceholder',
+          isMulti: false,
+          name: 'system-size',
+          isClearable: true,
+          required: false
+        },
+        formState: {
+          value: FormUtil.convertToSingleOption(selectedSystemSize),
+          disabled
+        }
+      },
+      standardID: {
+        render: FormUtil.Select,
+        meta: {
+          options: productInfo.standardOptions,
+          label: 'standard',
+          colWidth: 6,
+          placeholder: 'common:searchPlaceholder',
+          isMulti: false,
+          name: 'standard',
+          isClearable: true,
+          required: false
+        },
+        formState: {
+          value: FormUtil.convertToSingleOption(selectedStandard),
+          disabled
+        }
+      }
+    } as { [key: string]: GroupProps };
+    return {
+      controls: { ...fieldConfigControls }
+    };
+  };
+
   filterSubcategories = (mainCategoryID: string) => {
     if (mainCategoryID) {
       const filteredSubcategories = filter(
@@ -284,25 +369,7 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
         filteredSubcategories
       );
       subcategoryControl.stateChanges.next();
-      // try to set the value to the one selected by the user
-      if (this.props.selectedItem) {
-        const newSubcategory = find(subcategoryControl.meta.options, {
-          value: this.props.selectedItem.subcategoryID
-        }) || { value: '' };
-        this.userForm.patchValue({ subcategoryID: newSubcategory });
-        if (!newSubcategory.value.length) {
-          subcategoryControl.markAsDirty();
-          subcategoryControl.setErrors({
-            required: { required: { message: 'this is required' } }
-          });
-          this.userForm.patchValue({ subcategoryID: null });
-        }
-      } else {
-        // subcategoryControl.reset();
-        // subcategoryControl.markAsPristine();
-        // subcategoryControl.stateChanges.next();
-        this.userForm.patchValue({ subcategoryID: null });
-      }
+      this.userForm.patchValue({ subcategoryID: null });
     }
   };
 
@@ -412,6 +479,7 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
     this.userForm.meta = {
       loading: this.props.loading
     };
+    this.subscribeToValueChanges();
   };
 
   canEditInstalls = () => {

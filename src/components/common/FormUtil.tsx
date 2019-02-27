@@ -235,7 +235,7 @@ export const FormUtil = {
   }: AbstractControl) => {
     const selectClassName = meta.isMulti ? 'is-multi' : '';
     const selectValidationClass = value && !pristine ? 'has-success' : '';
-    console.log('validator', errors);
+    // console.log('validator', errors);
     const requiredLabel = meta.required === false ? ' - optional' : '';
     return (
       <Col xs={meta.colWidth}>

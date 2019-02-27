@@ -165,6 +165,8 @@ function newProductsReducer(
     // });
     case types.NEW_PRODUCTS_RESET:
       return {};
+    case types.USER_LOGOUT_SUCCESS:
+      return {};
     default:
       return state;
   }
@@ -173,7 +175,7 @@ function newProductsReducer(
 export default function ManageInventory(
   state: ImanageInventoryReducer = initialState.manageInventory,
   action: any
-) {
+): ImanageInventoryReducer {
   return {
     data: dataReducer(state.data, action),
     totalPages: totalPagesReducer(state.totalPages, action),

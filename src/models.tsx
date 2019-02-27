@@ -95,6 +95,7 @@ export interface IbaseDataObject {
 export interface Isubcategory extends IbaseDataObject {
   mainCategoryID: string;
   mainCategory: IbaseDataObject;
+  mainCategoryIDs: string[];
 }
 // export interface Istandard extends IbaseDataObject {}
 export interface Ibrand extends IbaseDataObject {

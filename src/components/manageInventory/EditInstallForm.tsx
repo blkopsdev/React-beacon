@@ -465,22 +465,8 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       ) as AbstractControlEdited;
       floorControl.meta.options = newFloorOptions;
       floorControl.stateChanges.next();
-      if (this.props.selectedItem) {
-        const selectedFloor = find(floorControl.meta.options, {
-          value: this.props.selectedItem.floorID
-        }) || { value: '' };
-        if (!selectedFloor.value.length) {
-          floorControl.markAsDirty();
-          floorControl.setErrors({
-            required: { required: { message: 'this is required' } }
-          });
-          this.userForm.patchValue({ floorID: null });
-        } else {
-          this.userForm.patchValue({ floorID: selectedFloor });
-        }
-      } else {
-        this.userForm.patchValue({ floorID: null });
-      }
+      this.userForm.patchValue({ floorID: null });
+
       // Reset other selects
       const locationControl = this.userForm.get(
         'locationID'
@@ -518,22 +504,8 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       ) as AbstractControlEdited;
       locationControl.meta.options = newLocationOptions;
       locationControl.stateChanges.next();
-      if (this.props.selectedItem) {
-        const selectedLoc = find(locationControl.meta.options, {
-          value: this.props.selectedItem.locationID
-        }) || { value: '' };
-        if (!selectedLoc.value.length) {
-          locationControl.markAsDirty();
-          locationControl.setErrors({
-            required: { required: { message: 'this is required' } }
-          });
-          this.userForm.patchValue({ locationID: null });
-        } else {
-          this.userForm.patchValue({ locationID: selectedLoc });
-        }
-      } else {
-        this.userForm.patchValue({ locationID: null });
-      }
+      this.userForm.patchValue({ locationID: null });
+
       // Reset other selects
       const roomControl = this.userForm.get('roomID') as AbstractControlEdited;
       roomControl.meta.options = [];
@@ -571,18 +543,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       const roomControl = this.userForm.get('roomID') as AbstractControlEdited;
       roomControl.meta.options = newRoomOptions;
       roomControl.stateChanges.next();
-      if (this.props.selectedItem) {
-        const selectedRoom = find(roomControl.meta.options, {
-          value: this.props.selectedItem.roomID
-        }) || { value: '' };
-        if (selectedRoom.value.length) {
-          this.userForm.patchValue({ roomID: selectedRoom });
-        } else {
-          this.userForm.patchValue({ roomID: null });
-        }
-      } else {
-        this.userForm.patchValue({ roomID: null });
-      }
+      this.userForm.patchValue({ roomID: null });
     }
   };
 

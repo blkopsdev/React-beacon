@@ -129,13 +129,11 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
     }
   }
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
-    // update the table when we get new data
-    if (prevProps.tableData !== this.props.tableData) {
-      console.log('DATA CHANGED');
-    }
-
     // automatically get facility every time a filter changes
-    if (prevProps.tableFilters !== this.props.tableFilters) {
+    if (
+      JSON.stringify(prevProps.tableFilters) !==
+      JSON.stringify(this.props.tableFilters)
+    ) {
       const fac =
         this.props.tableFilters.facility &&
         this.props.tableFilters.facility.value;

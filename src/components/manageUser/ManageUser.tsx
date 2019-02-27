@@ -3,7 +3,7 @@
 */
 import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { find, isEqual } from 'lodash';
+import { find } from 'lodash';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 import ReactTable, { SortingRule, FinalState, RowInfo } from 'react-table';
@@ -126,7 +126,10 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
       this.setState({ selectedRow: null });
     }
     // automatically get inventory every time a fitler changes
-    if (isEqual(prevProps.tableFilters, this.props.tableFilters) === false) {
+    if (
+      JSON.stringify(prevProps.tableFilters) !==
+      JSON.stringify(this.props.tableFilters)
+    ) {
       console.log(
         'user manage filters changed',
         prevProps.tableFilters,
@@ -134,7 +137,10 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
       );
       this.props.getUserManage();
     }
-    if (prevProps.customers !== this.props.customers) {
+    if (
+      JSON.stringify(prevProps.customers) !==
+      JSON.stringify(this.props.customers)
+    ) {
       this.setState({ columns: this.setColumns() });
     }
   }

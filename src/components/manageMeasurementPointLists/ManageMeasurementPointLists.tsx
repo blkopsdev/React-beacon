@@ -152,8 +152,11 @@ class ManageMeasurementPointList extends React.Component<
     ) {
       this.setState({ selectedRow: null });
     }
-    // automatically get inventory every time a filter changes
-    if (prevProps.tableFilters !== this.props.tableFilters) {
+    // automatically get measurement point lists every time a filter changes
+    if (
+      JSON.stringify(prevProps.tableFilters) !==
+      JSON.stringify(this.props.tableFilters)
+    ) {
       this.props.getAllMeasurementPointLists();
     }
   }

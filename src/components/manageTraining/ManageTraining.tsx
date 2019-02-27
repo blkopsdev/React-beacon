@@ -87,7 +87,10 @@ class ManageTraining extends React.Component<Iprops & IdispatchProps, Istate> {
   }
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
     // automatically get data every time a fitler changes
-    if (prevProps.tableFilters !== this.props.tableFilters) {
+    if (
+      JSON.stringify(prevProps.tableFilters) !==
+      JSON.stringify(this.props.tableFilters)
+    ) {
       this.props.getManageTraining();
     }
   }

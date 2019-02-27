@@ -137,13 +137,11 @@ class ManageProductQueue extends React.Component<
       this.setColumns();
     }
 
-    // update the table when we get new products or new installs
-    if (prevProps.tableData !== this.props.tableData) {
-      console.log('DATA CHANGED');
-    }
-
     // automatically get inventory every time a fitler changes
-    if (prevProps.tableFilters !== this.props.tableFilters) {
+    if (
+      JSON.stringify(prevProps.tableFilters) !==
+      JSON.stringify(this.props.tableFilters)
+    ) {
       this.props.getProductQueue();
     }
   }

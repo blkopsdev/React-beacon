@@ -167,7 +167,7 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
     }
   }
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
-    if (prevProps.quiz !== this.props.quiz) {
+    if (JSON.stringify(prevProps.quiz) !== JSON.stringify(this.props.quiz)) {
       this.loadQuiz();
     }
     // if (prevProps.quizzes !== this.props.quizzes) {

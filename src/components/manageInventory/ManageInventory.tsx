@@ -181,13 +181,16 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       this.setState({ searchFieldConfig: this.buildSearchControls() });
     }
 
-    // update the table when we get new products or new installs
+    // the table will update when we get new products or new installs which are already filtered when they are received from the API
     if (prevProps.tableData !== this.props.tableData) {
       console.log('DATA CHANGED');
     }
 
     // automatically get inventory every time a fitler changes
-    if (prevProps.tableFilters !== this.props.tableFilters) {
+    if (
+      JSON.stringify(prevProps.tableFilters) !==
+      JSON.stringify(this.props.tableFilters)
+    ) {
       this.props.getInventory();
       if (this.props.tableFilters.facility) {
         this.props.getLocationsFacility(this.props.tableFilters.facility.value);

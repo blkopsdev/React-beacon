@@ -153,7 +153,10 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
       this.setState({ selectedRow: null });
     }
     // automatically get inventory every time a fitler changes
-    if (prevProps.tableFilters !== this.props.tableFilters) {
+    if (
+      JSON.stringify(prevProps.tableFilters) !==
+      JSON.stringify(this.props.tableFilters)
+    ) {
       this.props.getJobs();
     }
   }

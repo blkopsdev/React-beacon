@@ -142,19 +142,6 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       this.props.t
     );
   }
-  componentDidUpdate(prevProps: Iprops) {
-    if (!this.props.selectedMeasurementPointList) {
-      return;
-    }
-
-    if (
-      this.props.selectedMeasurementPointList !==
-      prevProps.selectedMeasurementPointList
-    ) {
-      console.log('update!!!!');
-      this.setState({ questions: this.parseQuestions() });
-    }
-  }
 
   componentDidMount() {
     if (!this.props.selectedMeasurementPointList) {
@@ -190,7 +177,20 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       )
     });
   }
-  // componentWillUnmount() {}
+  componentDidUpdate(prevProps: Iprops) {
+    if (!this.props.selectedMeasurementPointList) {
+      console.error('missing selected measurement point');
+      return;
+    }
+
+    if (
+      JSON.stringify(this.props.selectedMeasurementPointList) !==
+      JSON.stringify(prevProps.selectedMeasurementPointList)
+    ) {
+      console.log('update!!!!');
+      this.setState({ questions: this.parseQuestions() });
+    }
+  }
 
   parseQuestions() {
     const mps = map(

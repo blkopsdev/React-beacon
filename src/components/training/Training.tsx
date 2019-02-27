@@ -147,7 +147,8 @@ class Courses extends React.Component<Props, State> {
   }
   componentDidUpdate(prevProps: Props) {
     if (
-      prevProps.lessons !== this.props.lessons &&
+      JSON.stringify(prevProps.lessons) !==
+        JSON.stringify(this.props.lessons) &&
       !!this.props.match.params.courseID
     ) {
       this.loadCourseLessons(this.props.match.params.courseID);

@@ -119,14 +119,18 @@ class Lesson extends React.Component<Props, State> {
     }
   }
   componentDidUpdate(prevProps: Props) {
-    if (prevProps.quizzes !== this.props.quizzes) {
+    if (
+      JSON.stringify(prevProps.quizzes) !== JSON.stringify(this.props.quizzes)
+    ) {
       // this.loadQuizzes();
       const lessonQuizzes = filter(this.props.quizzes, {
         lessonID: this.props.match.params.lessonID
       });
       this.setState({ lessonQuizzes } as State);
     }
-    if (prevProps.lessons !== this.props.lessons) {
+    if (
+      JSON.stringify(prevProps.lessons) !== JSON.stringify(this.props.lessons)
+    ) {
       this.setLesson(this.props.match.params.lessonID);
     }
   }

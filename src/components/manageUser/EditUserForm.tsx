@@ -150,53 +150,6 @@ class EditUserForm extends React.Component<Iprops, {}> {
       this.props.t
     );
   }
-  componentDidUpdate(prevProps: Iprops) {
-    if (!this.props.selectedUser) {
-      return;
-    }
-    if (
-      differenceBy(
-        prevProps.facilityOptions,
-        this.props.facilityOptions,
-        'value'
-      ).length ||
-      prevProps.facilityOptions.length !== this.props.facilityOptions.length
-    ) {
-      const facilitySelectControl = this.userForm.get(
-        'facilities'
-      ) as AbstractControlEdited;
-      facilitySelectControl.meta.options = this.props.facilityOptions;
-      facilitySelectControl.stateChanges.next();
-      const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
-        return find(this.props.selectedUser.facilities, { id: fac.value })
-          ? true
-          : false;
-      });
-      this.userForm.patchValue({ facilities: facilitiesArray });
-    }
-    if (
-      differenceBy(
-        prevProps.customerOptions,
-        this.props.customerOptions,
-        'value'
-      ).length ||
-      prevProps.customerOptions.length !== this.props.customerOptions.length
-    ) {
-      const customerSelectControl = this.userForm.get(
-        'customerID'
-      ) as AbstractControlEdited;
-      customerSelectControl.meta.options = this.props.customerOptions;
-      customerSelectControl.stateChanges.next();
-      // now select the customer the user just added
-      // might be a better way to do this, but we are comparing the two arrays and finding the new customer
-      const newCustomer = filter(this.props.customerOptions, (cust: any) => {
-        return find(prevProps.customerOptions, { value: cust.value })
-          ? false
-          : true;
-      });
-      this.userForm.patchValue({ customerID: newCustomer[0] });
-    }
-  }
 
   componentDidMount() {
     if (!this.props.selectedUser) {
@@ -242,6 +195,54 @@ class EditUserForm extends React.Component<Iprops, {}> {
 
     const emailControl = this.userForm.get('email') as AbstractControlEdited;
     emailControl.disable();
+  }
+  componentDidUpdate(prevProps: Iprops) {
+    if (!this.props.selectedUser) {
+      console.error('missing selected User');
+      return;
+    }
+    if (
+      differenceBy(
+        prevProps.facilityOptions,
+        this.props.facilityOptions,
+        'value'
+      ).length ||
+      prevProps.facilityOptions.length !== this.props.facilityOptions.length
+    ) {
+      const facilitySelectControl = this.userForm.get(
+        'facilities'
+      ) as AbstractControlEdited;
+      facilitySelectControl.meta.options = this.props.facilityOptions;
+      facilitySelectControl.stateChanges.next();
+      const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
+        return find(this.props.selectedUser.facilities, { id: fac.value })
+          ? true
+          : false;
+      });
+      this.userForm.patchValue({ facilities: facilitiesArray });
+    }
+    if (
+      differenceBy(
+        prevProps.customerOptions,
+        this.props.customerOptions,
+        'value'
+      ).length ||
+      prevProps.customerOptions.length !== this.props.customerOptions.length
+    ) {
+      const customerSelectControl = this.userForm.get(
+        'customerID'
+      ) as AbstractControlEdited;
+      customerSelectControl.meta.options = this.props.customerOptions;
+      customerSelectControl.stateChanges.next();
+      // now select the customer the user just added
+      // might be a better way to do this, but we are comparing the two arrays and finding the new customer
+      const newCustomer = filter(this.props.customerOptions, (cust: any) => {
+        return find(prevProps.customerOptions, { value: cust.value })
+          ? false
+          : true;
+      });
+      this.userForm.patchValue({ customerID: newCustomer[0] });
+    }
   }
   componentWillUnmount() {
     document.removeEventListener('newFacility', this.handleNewFacility, false);

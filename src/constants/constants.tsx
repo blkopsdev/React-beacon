@@ -3,6 +3,7 @@ import { find } from 'lodash';
 import { emptyTile } from '../reducers/initialState';
 import { toastr } from 'react-redux-toastr';
 import { adalReauth } from '../actions/userActions';
+import ajaxStatusReducer from 'src/reducers/ajaxStatusReducer';
 // import { icon } from "@fortawesome/fontawesome-svg-core";
 
 const jobTypeOptions = [
@@ -18,6 +19,19 @@ const jobTypesByID = {
   '9c7fde18-0b94-4af8-b4aa-913c40e5aed0': 'Validation',
   'ae78eaa3-89c2-490a-90c6-44e5cfa10b01': 'Repair'
 };
+
+/*
+New - No results have been saved for the job
+Started - Results are in the job
+Completed - Leader has clicked complete button
+Reopened - Leader reopened the job after closing
+*/
+// const jobStatus= {
+//   0: "new",
+//   1: "started",
+//   2: "completed",
+//   3: "reopened"
+// }
 
 const measurementPointListTypeOptions = [
   { label: 'Annual', value: 1 },

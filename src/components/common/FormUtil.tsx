@@ -233,7 +233,9 @@ export const FormUtil = {
     submitted,
     value
   }: AbstractControl) => {
-    const selectClassName = meta.isMulti ? 'is-multi' : '';
+    const selectClassName = meta.isMulti
+      ? 'is-multi beacon-select'
+      : 'beacon-select';
     const selectValidationClass = value && !pristine ? 'has-success' : '';
     // console.log('validator', errors);
     const requiredLabel = meta.required === false ? ' - optional' : '';
@@ -278,7 +280,9 @@ export const FormUtil = {
     submitted,
     value
   }: AbstractControl) => {
-    const selectClassName = meta.isMulti ? 'is-multi' : '';
+    const selectClassName = meta.isMulti
+      ? 'is-multi beacon-select'
+      : 'beacon-select';
     const selectValidationClass = value && !pristine ? 'has-success' : '';
     const requiredLabel = meta.required === false ? ' - optional' : '';
     return (
@@ -316,7 +320,9 @@ export const FormUtil = {
   },
   SelectWithoutValidation: ({ handler, meta }: AbstractControl) => {
     // console.log('rendering select', meta.options, value, defaultValue)
-    const selectClassName = meta.isMulti ? `is-multi` : ``;
+    const selectClassName = meta.isMulti
+      ? 'is-multi beacon-select'
+      : 'beacon-select';
     return (
       <Col xs={meta.colWidth} className={meta.className || ''}>
         <FormGroup bsSize="sm">
@@ -342,7 +348,9 @@ export const FormUtil = {
   SelectWithoutValidationLeftLabel: ({ handler, meta }: AbstractControl) => {
     // TODO get rid of this because default values do not work for some unknwon reason.  we patch the values instead
     // console.log('rendering select', meta.options, value, defaultValue)
-    const selectClassName = meta.isMulti ? `is-multi` : ``;
+    const selectClassName = meta.isMulti
+      ? 'is-multi beacon-select'
+      : 'beacon-select';
     return (
       <Col xs={meta.colWidth} className={meta.className || ''}>
         <FormGroup bsSize="sm">
@@ -381,7 +389,9 @@ export const FormUtil = {
     value
   }: AbstractControl) => {
     // console.log('rendering select', meta.options, value, defaultValue)
-    const selectClassName = meta.isMulti ? 'is-multi' : '';
+    const selectClassName = meta.isMulti
+      ? 'is-multi beacon-select'
+      : 'beacon-select';
     const selectValidationClass = value && !pristine ? 'has-success' : '';
     const requiredLabel = meta.required === false ? ' - optional' : '';
     return (

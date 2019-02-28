@@ -26,6 +26,7 @@ REACT_APP_SERVER_DOMAIN=https://virtserver.swaggerhub.com/Big-Pixel/Core-Care/1.
 ## Design Spec
 https://xd.adobe.com/spec/47fd156c-3ae2-477f-5fea-e7826b206201-31cc/
 https://xd.adobe.com/view/ab0b5766-bfd5-4610-6fa1-694ebec38af6-dd3a/
+https://photos.google.com/share/AF1QipO4h0sY9Yi_1ABgGjDvI3jKQwsZTBhxM3QXv9gnjBfltO2sLVgAu0tGmCrnVaizlA?key=eE9uZUVub3Atd19aVzA1Y2pzalpXd004STVBNW9B
 
 ## up to date Security Functions
 https://github.com/thebigpixel/Beacon-CoreCare-API/blob/David-Dev/Data/Constants.cs

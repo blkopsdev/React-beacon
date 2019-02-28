@@ -21,7 +21,7 @@ import {
   installContact,
   toggleInstallContactModal
 } from '../../actions/manageInventoryActions';
-import constants from '../../constants/constants';
+import { constants } from 'src/constants/constants';
 
 const TextLabel = ({ handler, meta }: any) => {
   return (

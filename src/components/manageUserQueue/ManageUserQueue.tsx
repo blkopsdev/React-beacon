@@ -34,7 +34,7 @@ import Banner from '../common/Banner';
 import EditCustomerModal from '../common/EditCustomerModal';
 import EditQueueUserModal from './EditQueueUserModal';
 import SearchTableForm from '../common/SearchTableForm';
-import constants from '../../constants/constants';
+import { constants } from 'src/constants/constants';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here

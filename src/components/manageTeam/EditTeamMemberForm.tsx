@@ -25,7 +25,7 @@ import {
   updateTeamUser
 } from '../../actions/manageTeamActions';
 import { getFacilitiesByCustomer } from '../../actions/commonActions';
-import constants from '../../constants/constants';
+import { constants } from 'src/constants/constants';
 
 const buildFieldConfig = (facilityOptions: any[]) => {
   const fieldConfigControls = {

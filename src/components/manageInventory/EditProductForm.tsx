@@ -34,7 +34,7 @@ import {
   toggleSearchNewProductsModal
 } from '../../actions/manageInventoryActions';
 import { updateQueueProduct } from '../../actions/manageProductQueueActions';
-import constants from '../../constants/constants';
+import { constants } from 'src/constants/constants';
 
 interface IstateChanges extends Observable<any> {
   next: () => void;

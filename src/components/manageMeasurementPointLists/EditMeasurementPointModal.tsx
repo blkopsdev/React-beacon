@@ -15,7 +15,7 @@ import {
 } from '../../actions/manageMeasurementPointListsActions';
 import CommonModal from '../common/CommonModal';
 import EditMeasurementPointForm from './EditMeasurementPointForm';
-import constants from '../../constants/constants';
+import { constants } from 'src/constants/constants';
 
 interface Iprops {
   selectedMeasurementPointList: ImeasurementPointList;

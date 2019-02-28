@@ -31,7 +31,7 @@ import {
 import Banner from '../common/Banner';
 import EditTeamMemberModal from './EditTeamMemberModal';
 import SearchTableForm from '../common/SearchTableForm';
-import constants from '../../constants/constants';
+import { constants } from 'src/constants/constants';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here

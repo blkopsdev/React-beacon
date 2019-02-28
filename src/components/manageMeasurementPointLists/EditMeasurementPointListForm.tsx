@@ -36,7 +36,7 @@ import {
   deleteGlobalMeasurementPoint
 } from '../../actions/manageMeasurementPointListsActions';
 import EditMeasurementPointModal from './EditMeasurementPointModal';
-import constants from '../../constants/constants';
+import { constants } from 'src/constants/constants';
 const uuidv4 = require('uuid/v4');
 
 // passing in an object, but we need an array back

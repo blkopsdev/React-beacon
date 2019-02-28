@@ -3,7 +3,7 @@ import axios from 'axios';
 
 import { Ifacility, ThunkResult } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
-import constants from '../constants/constants';
+import { constants } from 'src/constants/constants';
 import * as types from './actionTypes';
 import API from '../constants/apiEndpoints';
 

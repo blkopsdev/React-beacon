@@ -15,7 +15,7 @@ import thunk, { ThunkMiddleware } from 'redux-thunk';
 
 import { IinitialState } from '../models';
 import { migrations } from './migrations';
-import constants from '../constants/constants';
+import { constants } from 'src/constants/constants';
 import rootReducer from '../reducers';
 import hardSet from 'redux-persist/lib/stateReconciler/hardSet';
 

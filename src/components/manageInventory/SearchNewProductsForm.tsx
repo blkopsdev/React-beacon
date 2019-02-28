@@ -27,7 +27,7 @@ import {
   toggleEditProductModal,
   resetNewProducts
 } from '../../actions/manageInventoryActions';
-import constants from '../../constants/constants';
+import { constants } from 'src/constants/constants';
 
 interface Iprops {
   toggleSearchNewProductsModal: typeof toggleSearchNewProductsModal;

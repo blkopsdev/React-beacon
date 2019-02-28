@@ -35,7 +35,7 @@ import {
   updateQuantityCart,
   deleteFromCart
 } from '../../actions/shoppingCartActions';
-import constants from '../../constants/constants';
+import { constants } from 'src/constants/constants';
 import { requestQuote } from 'src/actions/manageInventoryActions';
 
 /*

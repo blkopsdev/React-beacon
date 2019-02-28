@@ -5,7 +5,7 @@ import { IinitialState, Iuser } from '../../models';
 import { RouteComponentProps } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import { map } from 'lodash';
-import constants from '../../constants/constants';
+import { constants } from 'src/constants/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 

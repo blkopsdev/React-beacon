@@ -13,7 +13,7 @@ import {
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
 // import { forEach, find } from "lodash";
-import constants from '../../constants/constants';
+import { constants } from 'src/constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction } from 'react-i18next';
 

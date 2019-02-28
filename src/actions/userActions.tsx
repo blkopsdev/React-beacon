@@ -3,7 +3,7 @@ import * as types from './actionTypes';
 import API from '../constants/apiEndpoints';
 import { beginAjaxCall } from './ajaxStatusActions';
 import { toastr } from 'react-redux-toastr';
-import constants from '../constants/constants';
+import { constants } from 'src/constants/constants';
 import * as AuthenticationContext from 'adal-angular';
 
 import { ItempUser, Iuser, IinitialState } from '../models';

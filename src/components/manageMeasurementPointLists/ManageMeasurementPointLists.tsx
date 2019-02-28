@@ -39,7 +39,7 @@ import Banner from '../common/Banner';
 // import CommonModal from '../common/CommonModal';
 import EditMeasurementPointListModal from './EditMeasurementPointListModal';
 import SearchTableForm from '../common/SearchTableForm';
-import constants from '../../constants/constants';
+import { constants } from 'src/constants/constants';
 import { FieldConfig } from 'react-reactive-form';
 
 interface Iprops extends RouteComponentProps<any> {

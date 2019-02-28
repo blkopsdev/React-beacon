@@ -25,7 +25,7 @@ import { RouteComponentProps } from 'react-router';
 import Player from '@vimeo/player';
 import * as moment from 'moment';
 import { toastr } from 'react-redux-toastr';
-import constants from 'src/constants/constants';
+import { constants } from 'src/constants/constants';
 
 interface RouterParams {
   courseID: string;

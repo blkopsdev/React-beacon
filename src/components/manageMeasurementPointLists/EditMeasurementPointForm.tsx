@@ -29,7 +29,7 @@ import {
   toggleEditMeasurementPointModal,
   addQuestionToMeasurementPointList
 } from '../../actions/manageMeasurementPointListsActions';
-import constants from '../../constants/constants';
+import { constants } from 'src/constants/constants';
 import { initialMeasurementPoint } from 'src/reducers/initialState';
 // const uuidv4 = require('uuid/v4');
 

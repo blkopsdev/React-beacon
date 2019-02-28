@@ -3,8 +3,6 @@ import { find } from 'lodash';
 import { emptyTile } from '../reducers/initialState';
 import { toastr } from 'react-redux-toastr';
 import { adalReauth } from '../actions/userActions';
-import ajaxStatusReducer from 'src/reducers/ajaxStatusReducer';
-// import { icon } from "@fortawesome/fontawesome-svg-core";
 
 const jobTypeOptions = [
   { value: '80eedbac-ec22-45ef-9ac7-f2eb4be2db4c', label: 'Audit' },
@@ -423,7 +421,7 @@ const tiles = [
   }
 ];
 
-const constants = {
+export const constants = {
   toastrError: {
     transitionIn: 'bounceInDown' as transitionInType,
     transitionOut: 'bounceOutUp' as transitionOutType,
@@ -495,5 +493,3 @@ const constants = {
   tableSearchDebounceTime: 300,
   timedQuizHours: 7
 };
-
-export default constants;

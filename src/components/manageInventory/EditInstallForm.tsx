@@ -35,7 +35,7 @@ import {
   updateInstall
 } from '../../actions/manageInventoryActions';
 import { saveAnyLocation } from '../../actions/manageLocationActions';
-import constants from '../../constants/constants';
+import { constants } from 'src/constants/constants';
 const uuidv4 = require('uuid/v4');
 
 interface IstateChanges extends Observable<any> {

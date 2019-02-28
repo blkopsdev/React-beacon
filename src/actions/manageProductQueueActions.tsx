@@ -4,7 +4,7 @@ import axios from 'axios';
 import { IinitialState, Iproduct, ItableFiltersParams } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
-import constants from '../constants/constants';
+import { constants } from 'src/constants/constants';
 import * as types from './actionTypes';
 
 // import {AxiosResponse} from 'axios';

@@ -12,7 +12,7 @@ import {
   FieldConfig
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
-import constants from '../../constants/constants';
+import { constants } from 'src/constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import { Iuser, Icustomer } from '../../models';

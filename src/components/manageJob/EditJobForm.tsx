@@ -23,7 +23,7 @@ import {
   updateJob,
   createJob
 } from '../../actions/manageJobActions';
-import constants from '../../constants/constants';
+import { constants } from 'src/constants/constants';
 import * as moment from 'moment';
 
 interface IstateChanges extends Observable<any> {

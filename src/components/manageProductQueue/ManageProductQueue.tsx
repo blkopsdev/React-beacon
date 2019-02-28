@@ -38,7 +38,7 @@ import {
 import Banner from '../common/Banner';
 import EditProductModal from '../manageInventory/EditProductModal';
 import SearchTableForm from '../common/SearchTableForm';
-import constants from '../../constants/constants';
+import { constants } from 'src/constants/constants';
 import SearchNewProductsModal from '../manageInventory/SearchNewProductsModal';
 import { toastr } from 'react-redux-toastr';
 

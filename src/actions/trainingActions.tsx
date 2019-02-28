@@ -2,7 +2,7 @@ import * as types from './actionTypes';
 import courseAPI from '../trainingAPI/courseAPI';
 import API from '../constants/apiEndpoints';
 import { beginAjaxCall } from './ajaxStatusActions';
-import constants from '../constants/constants';
+import { constants } from 'src/constants/constants';
 import {
   Iuser,
   GFLesson,

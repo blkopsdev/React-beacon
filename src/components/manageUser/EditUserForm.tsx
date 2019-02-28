@@ -28,7 +28,7 @@ import {
   toggleSecurityFunctionsModal
 } from '../../actions/manageUserActions';
 import EditFacilityModal from '../common/EditFacilityModal';
-import constants from '../../constants/constants';
+import { constants } from 'src/constants/constants';
 
 // passing in an object, but we need an array back
 const securityOptions = [

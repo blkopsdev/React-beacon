@@ -33,7 +33,7 @@ import { forEach, isEmpty } from 'lodash';
 import { RouteComponentProps } from 'react-router';
 import * as moment from 'moment';
 import { toastr } from 'react-redux-toastr';
-import constants from 'src/constants/constants';
+import { constants } from 'src/constants/constants';
 import { LinkContainer } from 'react-router-bootstrap';
 
 const TimeLeftBanner = ({ timeLeft }: { timeLeft?: number }) => {

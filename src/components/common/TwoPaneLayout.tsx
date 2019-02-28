@@ -16,7 +16,7 @@ import ManageJob from '../manageJob/ManageJob';
 import ManageLocation from '../manageLocation/ManageLocation';
 import Training from '../training/Training';
 import ManageTraining from '../manageTraining/ManageTraining';
-import constants from '../../constants/constants';
+import { constants } from 'src/constants/constants';
 import { IinitialState } from '../../models';
 
 import 'react-table/react-table.css';

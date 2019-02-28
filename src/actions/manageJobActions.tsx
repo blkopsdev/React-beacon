@@ -5,7 +5,7 @@ import axios from 'axios';
 import { IinitialState, ItableFiltersParams, Ijob } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
-import constants from '../constants/constants';
+import { constants } from 'src/constants/constants';
 import * as types from './actionTypes';
 import * as moment from 'moment';
 

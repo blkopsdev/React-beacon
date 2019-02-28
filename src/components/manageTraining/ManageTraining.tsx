@@ -20,7 +20,7 @@ import { emptyTile } from '../../reducers/initialState';
 import Banner from '../common/Banner';
 
 import SearchTableForm from '../common/SearchTableForm';
-import constants from '../../constants/constants';
+import { constants } from 'src/constants/constants';
 import { FieldConfig } from 'react-reactive-form';
 import {
   getManageTraining,

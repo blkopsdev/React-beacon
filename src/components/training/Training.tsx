@@ -41,7 +41,7 @@ import queryString from 'query-string';
 import { RouteComponentProps, Switch, Route } from 'react-router';
 import Lesson from './Lesson';
 import Banner from '../common/Banner';
-import constants from '../../constants/constants';
+import { constants } from 'src/constants/constants';
 import { emptyTile } from '../../reducers/initialState';
 import ShoppingCartModal from '../shoppingCart/ShoppingCartModal';
 import { toggleShoppingCartModal } from '../../actions/shoppingCartActions';

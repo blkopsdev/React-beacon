@@ -29,7 +29,7 @@ import {
   updateAnyLocation,
   toggleEditLocationModal
 } from '../../actions/manageLocationActions';
-import constants from '../../constants/constants';
+import { constants } from 'src/constants/constants';
 
 const uuidv4 = require('uuid/v4');
 

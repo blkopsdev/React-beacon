@@ -34,7 +34,7 @@ import EditCustomerModal from '../common/EditCustomerModal';
 import EditUserModal from './EditUserModal';
 import SearchTableForm from '../common/SearchTableForm';
 import SecurityFunctionsList from './SecurityFunctionsList';
-import constants from '../../constants/constants';
+import { constants } from 'src/constants/constants';
 import { FieldConfig } from 'react-reactive-form';
 
 interface Iprops extends RouteComponentProps<any> {

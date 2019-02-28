@@ -32,7 +32,7 @@ import {
   updateQueueUser
 } from '../../actions/manageUserQueueActions';
 import EditFacilityModal from '../common/EditFacilityModal';
-import constants from '../../constants/constants';
+import { constants } from 'src/constants/constants';
 
 interface IstateChanges extends Observable<any> {
   next: () => void;

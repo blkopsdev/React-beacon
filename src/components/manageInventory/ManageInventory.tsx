@@ -62,7 +62,7 @@ import ShoppingCartModal from '../shoppingCart/ShoppingCartModal';
 import ImportInstallModal from './ImportInstallModal';
 import InstallContactModal from './InstallContactModal';
 import SearchTableForm from '../common/SearchTableForm';
-import constants from '../../constants/constants';
+import { constants } from 'src/constants/constants';
 import SearchNewProductsModal from './SearchNewProductsModal';
 import { getTotal } from 'src/reducers/cartReducer';
 

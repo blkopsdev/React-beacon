@@ -1,17 +1,37 @@
 This project was bootstrapped with [Create React App](https://github.com/facebookincubator/create-react-app).
 
-iK4uY&QM
+
+## Production Release Process
+- create a release branch
+- verify that manage team and inventory tiles are hidden
+- bumb version
+- update changelog
+- merge into master
+- tag release
+
+## Technical Dept / Ideas for Improvement
+* we can improve how we are passing the types of our redux actions into the controllers.
+1. use "typeof" in the component interfaces
+2. correctly type the actions
+  Step two has proven to be rather challenging.
+  - official documentation: https://github.com/reduxjs/redux-thunk/blob/master/test/typescript.ts
+  - One example:  https://stackoverflow.com/questions/49799736/simplifying-redux-thunk-actions-with-typescript
+  - This example appears to be wrong or out of date:  https://gist.github.com/milankorsos/ffb9d32755db0304545f92b11f0e4beb
+  - in the meantime if we use a .then() you need to change the type from "typeof" to something like `: (value: string) => Promise<void>;``
 
 ## API documentation:
 Swagger: https://app.swaggerhub.com/apis/Big-Pixel/Core-Care
+REACT_APP_SERVER_DOMAIN=https://virtserver.swaggerhub.com/Big-Pixel/Core-Care/1.0.21/
 
 ## Design Spec
-https://xd.adobe.com/view/98de6938-9789-4098-6f9a-955b46301e31-eeef/
-https://xd.adobe.com/spec/ec9f6390-2e34-4630-61ee-c0aabe3c71bb-9aae/#screen/e6e7393c-93d5-4ae4-b71b-d22b520ec322/Dashboard
+https://xd.adobe.com/spec/47fd156c-3ae2-477f-5fea-e7826b206201-31cc/
+https://xd.adobe.com/view/ab0b5766-bfd5-4610-6fa1-694ebec38af6-dd3a/
+https://photos.google.com/share/AF1QipO4h0sY9Yi_1ABgGjDvI3jKQwsZTBhxM3QXv9gnjBfltO2sLVgAu0tGmCrnVaizlA?key=eE9uZUVub3Atd19aVzA1Y2pzalpXd004STVBNW9B
+
+## up to date Security Functions
+https://github.com/thebigpixel/Beacon-CoreCare-API/blob/David-Dev/Data/Constants.cs
 
 ## Random notes
-
- 135 hours for the project.  6 weeks
 
  ### Azure Active Directory Test Data:
  Display name
@@ -38,7 +58,7 @@ fd71f683-7423-4ba0-9ed3-fba0547be076 // cliend ID and Application ID for Native 
 * Header - layout
   - ProfileItem - connected
 * Dashboard - connected
-* TwoPaneLayout - layout
+* TwoPaneLayout - connected (secondary routing is here)
   - SideMenu
   - Training
     + TrainingListItem
@@ -49,28 +69,21 @@ fd71f683-7423-4ba0-9ed3-fba0547be076 // cliend ID and Application ID for Native 
     + editUserModal - connected
       * UserQueueForm
 
-## How to handle pagination and filtering notes
-### Idea 1
-* QueueReducer - contains an array of all the new users in the queue
-* QueueFilter - keep track of the filter applied to the queue
-  - the paging will be stored in a query param?
-
-### Idea 2
-  * have a TwoPaneView reducer where we store
-    - the current tile from constants
-    - the filter
-    - pagination
-
 
 ## Initial Setup
 
 `npm install`
+createa a .env.development.local file for local development
 
 ## Envirenment Variables
 Available environments: `development, test, production`
 These are not manually configurable.
 Update env variables in the .env file or the .env.development file.
 The node env variables must be set on the server.
+
+## Suggested dev tools
+https://github.com/Galooshi/import-js
+jsprettier
 
 
 ## FontAwesome

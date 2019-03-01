@@ -1,6 +1,6 @@
 @import "../../less/variables.less";
 .loginlayout {
-  .loginForm {
+  .login-form {
     position: relative;
     margin-left: auto;
     margin-right: auto;
@@ -8,7 +8,7 @@
     padding: 20px 10px 20px 10px;
     min-height: 320px;
     height: auto;
-    width: 400px;
+    width: 450px;
     background-color: fade(@blue, 70%);
     border: 2px solid @white;
     box-shadow: @shadow;
@@ -33,12 +33,11 @@
     }
     .loginTitle {
       color: @white;
-      font-size: 24px;
+      font-size: 2em;
       line-height: 29px;
     }
     .loginBtn {
       color: @textBlue;
-      font-size: 14px;
       box-shadow: @shadow;
       display: block;
       width: 250px;
@@ -49,8 +48,6 @@
     }
     .signupBtn {
       color: @white;
-      font-size: 18px;
-      display: block;
       margin-top: 20px;
     }
     .ok-button{
@@ -74,6 +71,68 @@
       padding-right: 30px;
     }
   }
+  .spinner {
+    width: 34px;
+    top: 0;
+    left: 200px;
+    height: 34px;
+    position: absolute;
+  }
+  /* entire container, keeps perspective */
+  .flip-container {
+    perspective: 1000px;
+    margin: 0 auto;
+  }
+  .flip-container.flip .flipper {
+    transform: rotateY(180deg);
+  }
+  
+  .flip-container, .front, .back {
+    width: 450px;
+    height: 670px;
+  }
+
+  /* flip speed goes here */
+  .flipper {
+    transition: 0.6s;
+    transform-style: preserve-3d;
+
+    position: relative;
+  }
+
+  /* hide back of pane during swap */
+  .front, .back {
+    backface-visibility: hidden;
+
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+
+  /* front pane, placed above back */
+  .front {
+    z-index: 2;
+    /* for firefox 31 */
+    transform: rotateY(0deg);
+  }
+
+  /* back, initially hidden pane */
+  .back {
+    transform: rotateY(180deg);
+  }
+  @media all and (-ms-high-contrast: none),
+  (-ms-high-contrast: active) {
+    /* IE10+ CSS styles go here */
+    .flip-container.flip {
+      .front {
+        display: none;
+      }
+
+      .back {
+        backface-visibility: visible;
+      }
+    }
+  }
 }
 
 .loginlayout:after {
@@ -82,9 +141,11 @@
   position: absolute;
   top: 0;
   left: 0;
-  background-image: url(http://placekitten.com/1440/900);
+  background-image: url('images/beaconHome.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
   width: 100%;
-  height: 100%;
+  height: 130%;
   opacity: 0.2;
   z-index: -1;
 }

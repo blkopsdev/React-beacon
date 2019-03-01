@@ -7,23 +7,28 @@
 * 2) provide a plane for the user to begin logging in
 */
 
-import * as React from 'react';
-import { connect } from 'react-redux';
-import { Redirect } from 'react-router-dom';
+import { Button, Col, Grid, Row } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { InitialState, Iuser, Iredirect } from '../../models';
-import { adalLogin, userLogin, userLogout } from '../../actions/userActions';
+import { Redirect, RouteComponentProps } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { translate, TranslationFunction, I18n } from 'react-i18next';
+import * as React from 'react';
+
+import { IinitialState, Iuser, Iredirect } from '../../models';
+import {
+  adalLogin,
+  checkCachedToken,
+  setCachedToken,
+  userLogin,
+  userLogout
+} from '../../actions/userActions';
 import {
   setLoginRedirect,
   removeLoginRedirect,
   setRedirectPathname
 } from '../../actions/redirectToReferrerAction';
-import { Button, Col, Grid, Row } from 'react-bootstrap';
-import { RouteComponentProps } from 'react-router-dom';
-import {
-  isAuthenticated,
-  isFullyAuthenticated
-} from '../../actions/userActions';
+
+const Loading = () => <h3>Loading...</h3>;
 
 interface Iprops extends RouteComponentProps<{}> {
   userLogin?: any;
@@ -34,6 +39,8 @@ interface Iprops extends RouteComponentProps<{}> {
   removeLoginRedirect?: any;
   user: Iuser;
   redirect: Iredirect;
+  t: TranslationFunction;
+  i18n: I18n;
 }
 interface Istate {
   userLoginFailed: boolean;
@@ -45,53 +52,70 @@ class Login extends React.Component<Iprops, Istate> {
   constructor(props: Iprops) {
     super(props);
 
-    this.login = this.login.bind(this);
     this.state = {
       userLoginFailed: false
     };
   }
   componentWillMount() {
-    const { from } = this.props.location.state || { from: { pathname: '/' } };
-    if (
-      !isFullyAuthenticated(this.props.user) &&
-      isAuthenticated() &&
-      from.pathname !== '/signup' &&
-      !this.state.userLoginFailed
-    ) {
-      this.props.userLogin().catch((err: any) => {
-        console.error('error logging in', err);
-        this.setState({ userLoginFailed: true });
-      }); // TODO how do we handle this if it fails?
+    const { from } = this.props.location.state || {
+      from: { pathname: '/dashboard' }
+    };
+    /*
+    * If we have a Azure AD token, then set it.  If we have a token, but the user is not authenticated, then use the token to login to the API
+    */
+    if (checkCachedToken()) {
+      setCachedToken();
+      if (!this.props.user.isAuthenticated) {
+        this.props
+          .userLogin()
+          .then(() => {
+            this.props.history.push(from.pathname);
+          })
+          .catch(() => {
+            console.error('login failed in login.tsx');
+            this.setState({ userLoginFailed: true });
+          });
+      } else {
+        // user is authenticated, so take them back to where they came from or to the default route
+        this.props.history.push(from.pathname);
+      }
     }
   }
   componentDidMount() {
     // store the referring loation in redux
     const { from } = this.props.location.state || { from: { pathname: '/' } };
-    this.props.setRedirectPathname(from.pathname);
+
+    // if we are not already redirecting, then set it
+    if (!this.props.redirect.redirectToReferrer) {
+      this.props.setRedirectPathname(from.pathname);
+    }
+
     // TODO show a toast message if this.props.redirect.pathname does not equal "/"
     // <p>You must log in to view the page at {from.pathname}</p>
   }
 
-  login() {
+  login = () => {
     this.props.setLoginRedirect().then(() => {
       console.log('start adal login');
       this.props.adalLogin();
     });
-  }
+  };
   render() {
+    const { t } = this.props;
     // handle potential redirects
     const { from } = { from: { pathname: this.props.redirect.pathname } } || {
       from: { pathname: '/' }
     };
     const { redirectToReferrer } = this.props.redirect;
 
-    // if (!this.props.user.email.length){
-    //   return <div>loading... </div>;
-    // }
+    // if the user is authenticated but not fully, show loading
+    if (checkCachedToken()) {
+      return <Loading />;
+    }
 
     // if user is authenticated and exists in the backend
     // redirect to the redirect.pathname or the dashboard
-    if (isFullyAuthenticated(this.props.user)) {
+    if (this.props.user.isAuthenticated) {
       const loggedInPath: string = redirectToReferrer
         ? from.pathname
         : '/dashboard';
@@ -106,18 +130,19 @@ class Login extends React.Component<Iprops, Istate> {
         <Grid>
           <Row>
             <Col>
-              <div className="loginForm login">
-                <span className="loginTitle">Welcome to CatCare!</span>
+              <div className="login-form login">
+                <span className="loginTitle">{t('welcome')}</span>
                 <Button
                   bsStyle="default"
                   className="loginBtn"
                   onClick={this.login}
                 >
-                  <img width="20" height="20" src={azure} /> Login with Meozure
+                  <img width="20" height="20" src={azure} />
+                  {t('loginButton')}
                 </Button>
                 <LinkContainer to={'/signup'}>
-                  <Button bsStyle="link" className="signupBtn">
-                    Signup
+                  <Button bsStyle="link" className="signupBtn" bsSize="large">
+                    {t('signUp')}
                   </Button>
                 </LinkContainer>
               </div>
@@ -128,23 +153,23 @@ class Login extends React.Component<Iprops, Istate> {
     );
   }
 }
-const mapStateToProps = (state: InitialState, ownProps: any) => {
+const mapStateToProps = (state: IinitialState, ownProps: any) => {
   return {
     user: state.user,
     redirect: state.redirect
   };
 };
 
-// export default LoginLayout;
-
-export default connect(
-  mapStateToProps,
-  {
-    userLogin,
-    adalLogin,
-    userLogout,
-    setLoginRedirect,
-    removeLoginRedirect,
-    setRedirectPathname
-  }
-)(Login);
+export default translate('auth')(
+  connect(
+    mapStateToProps,
+    {
+      userLogin,
+      adalLogin,
+      userLogout,
+      setLoginRedirect,
+      removeLoginRedirect,
+      setRedirectPathname
+    }
+  )(Login)
+);

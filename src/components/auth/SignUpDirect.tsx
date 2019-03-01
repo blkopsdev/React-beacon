@@ -4,7 +4,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { InitialState, Iuser, Iredirect, ItempUser } from '../../models';
+import { IinitialState, Iuser, Iredirect, ItempUser } from '../../models';
 import {
   adalLogin,
   userLogin,
@@ -18,7 +18,8 @@ import {
 } from '../../actions/redirectToReferrerAction';
 import { Col, Grid, Row, Button } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
-import { isFullyAuthenticated } from '../../actions/userActions';
+import { translate, TranslationFunction, I18n } from 'react-i18next';
+
 import UserForm from './UserForm';
 
 interface Iprops extends RouteComponentProps<{}> {
@@ -31,6 +32,9 @@ interface Iprops extends RouteComponentProps<{}> {
   user: Iuser;
   redirect: Iredirect;
   signUpDirect: any;
+  loading: boolean;
+  t: TranslationFunction;
+  i18n: I18n;
 }
 interface Istate {
   redirectToLogin: boolean;
@@ -38,24 +42,21 @@ interface Istate {
 }
 
 const SignUpSuccess = (props: any) => {
+  const { t } = props;
   return (
-    <div className="loginForm signup-success" style={{ color: 'white' }}>
-      <h2> Success! </h2>
+    <div className="login-form signup-success" style={{ color: 'white' }}>
+      <h2>{t('successTitle')}</h2>
+      <p>{t('successBody1')}</p>
       <p>
-        You have been successfully added into the system. An BeaconMedaes admin
-        will review your application and be in touch with you soon.{' '}
-      </p>
-      <p>
-        Please make sure that no-reply@beaconmedaes.com is cleared so that it
-        does not end up in your spam.
+        {t('successBody2')} <br /> {t('successBody3')}
       </p>
       <Button
         bsStyle="link"
         className="pull-right ok-button"
-        style={{ color: 'white' }}
+        style={{ color: 'white', margin: '12px' }}
         onClick={props.handleCancel}
       >
-        Ok
+        {t('ok')}
       </Button>
     </div>
   );
@@ -68,40 +69,47 @@ class SignUpDirect extends React.Component<Iprops, Istate> {
       redirectToLogin: false,
       showSignupSuccess: false
     };
-    this.cancel = this.cancel.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
   }
 
-  cancel() {
+  cancel = () => {
     this.setState({ redirectToLogin: true });
-  }
-  handleSubmit(newUser: ItempUser) {
-    this.props.signUpDirect(newUser).then(() => {
+  };
+  handleSubmit = (newUser: ItempUser) => {
+    return this.props.signUpDirect(newUser).then(() => {
       this.setState({ showSignupSuccess: true });
     });
-  }
+  };
   render() {
-    if (isFullyAuthenticated(this.props.user)) {
+    const { t } = this.props;
+    if (this.props.user.isAuthenticated) {
       this.props.removeLoginRedirect();
       return <Redirect to={'/dashboard'} />;
     }
     if (this.state.redirectToLogin) {
       return <Redirect to={'/'} />;
     }
-
+    const flipClass = this.state.showSignupSuccess
+      ? 'flip-container flip'
+      : 'flip-container';
     return (
       <div className="loginlayout signup">
         <Grid>
           <Row>
             <Col>
-              {this.state.showSignupSuccess ? (
-                <SignUpSuccess handleCancel={this.cancel} />
-              ) : (
-                <UserForm
-                  handleSubmit={this.handleSubmit}
-                  handleCancel={this.cancel}
-                />
-              )}
+              <div className={flipClass}>
+                <div className="flipper">
+                  <div className="front">
+                    <UserForm
+                      handleSubmit={this.handleSubmit}
+                      handleCancel={this.cancel}
+                      loading={this.props.loading}
+                    />
+                  </div>
+                  <div className="back">
+                    <SignUpSuccess handleCancel={this.cancel} t={t} />
+                  </div>
+                </div>
+              </div>
             </Col>
           </Row>
         </Grid>
@@ -109,24 +117,27 @@ class SignUpDirect extends React.Component<Iprops, Istate> {
     );
   }
 }
-const mapStateToProps = (state: InitialState, ownProps: any) => {
+const mapStateToProps = (state: IinitialState, ownProps: any) => {
   return {
     user: state.user,
-    redirect: state.redirect
+    redirect: state.redirect,
+    loading: state.ajaxCallsInProgress > 0
   };
 };
 
 // export default LoginLayout;
 
-export default connect(
-  mapStateToProps,
-  {
-    userLogin,
-    adalLogin,
-    userLogout,
-    setLoginRedirect,
-    removeLoginRedirect,
-    setRedirectPathname,
-    signUpDirect
-  }
-)(SignUpDirect);
+export default translate('auth')(
+  connect(
+    mapStateToProps,
+    {
+      userLogin,
+      adalLogin,
+      userLogout,
+      setLoginRedirect,
+      removeLoginRedirect,
+      setRedirectPathname,
+      signUpDirect
+    }
+  )(SignUpDirect)
+);

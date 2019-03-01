@@ -5,7 +5,7 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { InitialState, Iuser, Iredirect } from '../../models';
+import { IinitialState, Iuser, Iredirect } from '../../models';
 import { adalLogin, userLogin, userLogout } from '../../actions/userActions';
 import {
   setLoginRedirect,
@@ -14,10 +14,6 @@ import {
 } from '../../actions/redirectToReferrerAction';
 import { Button, Col, Grid, Row } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
-import {
-  isAuthenticated,
-  isFullyAuthenticated
-} from '../../actions/userActions';
 import UserForm from './UserForm';
 
 interface Iprops extends RouteComponentProps<{}> {
@@ -29,6 +25,7 @@ interface Iprops extends RouteComponentProps<{}> {
   removeLoginRedirect?: any;
   user: Iuser;
   redirect: Iredirect;
+  loading: boolean;
 }
 
 const azure = require('../../images/Azure.png');
@@ -36,8 +33,6 @@ const azure = require('../../images/Azure.png');
 class SignUpWithMS extends React.Component<Iprops, any> {
   constructor(props: Iprops) {
     super(props);
-
-    this.login = this.login.bind(this);
   }
   componentWillMount() {
     // if there is no username and there is a token, get the user
@@ -49,19 +44,29 @@ class SignUpWithMS extends React.Component<Iprops, any> {
     this.props.setRedirectPathname('/signupWithMS');
   }
 
-  login() {
+  login = () => {
     this.props.setLoginRedirect().then(() => {
       console.log('start adal login');
       this.props.adalLogin();
     });
-  }
+  };
   render() {
     let showSignUpForm: boolean = false;
-    if (isFullyAuthenticated(this.props.user)) {
+
+    // TODO not sure how to update these...
+    // if (isFullyAuthenticated(this.props.user)) {
+    //   this.props.removeLoginRedirect();
+    //   return <Redirect to={'/dashboard'} />;
+    // }
+    // if (!isFullyAuthenticated(this.props.user) && isAuthenticated()) {
+    //   this.props.removeLoginRedirect();
+    //   showSignUpForm = true;
+    // }
+    if (this.props.user.isAuthenticated) {
       this.props.removeLoginRedirect();
       return <Redirect to={'/dashboard'} />;
     }
-    if (!isFullyAuthenticated(this.props.user) && isAuthenticated()) {
+    if (!this.props.user.isAuthenticated) {
       this.props.removeLoginRedirect();
       showSignUpForm = true;
     }
@@ -72,11 +77,12 @@ class SignUpWithMS extends React.Component<Iprops, any> {
         <Grid>
           <Row>
             <Col>
-              <div className="loginForm">
+              <div className="login-form">
                 {showSignUpForm && (
                   <UserForm
                     handleSubmit={this.login}
                     handleCancel={this.login}
+                    loading={this.props.loading}
                   />
                 )}
                 {!showSignUpForm && (
@@ -100,10 +106,11 @@ class SignUpWithMS extends React.Component<Iprops, any> {
     );
   }
 }
-const mapStateToProps = (state: InitialState, ownProps: any) => {
+const mapStateToProps = (state: IinitialState, ownProps: any) => {
   return {
     user: state.user,
-    redirect: state.redirect
+    redirect: state.redirect,
+    loading: state.ajaxCallsInProgress > 0
   };
 };
 

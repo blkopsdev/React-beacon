@@ -52,10 +52,11 @@ export const FormUtil = {
   },
   convertToOptions: (items: any): Ioption[] => {
     return map(items, (item: any) => {
+      const lastOption =
+        item.first && item.last ? item.first + ' ' + item.last : 'unknown';
       return {
         value: item.id,
-        // TODO: verify this will not explode
-        label: item.name || item.code || item.first + ' ' + item.last
+        label: item.name || item.code || item.label || lastOption
       };
     });
   },

@@ -298,7 +298,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
         <Banner
           title={t('bannerTitle')}
           img={this.state.currentTile.srcBanner}
-          color={constants.colors[`${this.state.currentTile.color}`]}
+          color={this.state.currentTile.color}
         />
         <SearchTableForm
           fieldConfig={this.buildSearchFieldConfig()}

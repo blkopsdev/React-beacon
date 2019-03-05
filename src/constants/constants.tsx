@@ -184,15 +184,19 @@ const colors = {
   green: '#1ABC9C',
   greenButton: 'success', // use the bootstrap success button color
   greenTr: 'rgba(26,188,156,.2)',
+  greenBanner: 'rgba(26,188,156,.7)',
   blue: '#027AC3',
   blueTr: 'rgba(2,122,195,.2)',
+  blueBanner: 'rgba(2,122,195,.7)',
   blueButton: 'primary',
   orange: '#FFA663',
   orangeTr: 'rgba(255,166,99,.2)',
+  orangeBanner: 'rgba(255,166,99,.7)',
   orangeButton: 'warning',
   purple: '#62499D',
   purpleButton: 'info', // use the bootstrap info button color
   purpleTr: 'rgba(98,73,157,.2)',
+  purpleBanner: 'rgba(98,73,157,.7)',
   dark: '#060A33'
 };
 const tiles = [

@@ -356,7 +356,7 @@ class ManageMeasurementPointList extends React.Component<
         <Banner
           title={t('bannerTitle')}
           img={this.state.currentTile.srcBanner}
-          color={constants.colors[`${this.state.currentTile.color}`]}
+          color={this.state.currentTile.color}
         />
         <SearchTableForm
           fieldConfig={this.searchFieldConfig}

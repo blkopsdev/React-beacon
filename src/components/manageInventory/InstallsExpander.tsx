@@ -12,8 +12,7 @@ import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TranslationFunction } from 'react-i18next';
 import { addToCart } from '../../actions/shoppingCartActions';
-import { IinstallBase, Ifacility } from 'src/models';
-import { find } from 'lodash';
+import { Ifacility, IinstallBase } from 'src/models';
 import { TableUtil } from '../common/TableUtil';
 
 interface ExpanderProps extends RowInfo {
@@ -61,43 +60,6 @@ export const InstallationsExpander = (props: ExpanderProps) => {
     );
   };
 
-  /*
-  * take the install and find the names for the location id's.  building, floor, locations, rooms, position
-  */
-  const buildLocation = (inst: object) => {
-    const install = inst as IinstallBase;
-    let locationString = '';
-    const building = find(props.facility.buildings, { id: install.buildingID });
-
-    if (building) {
-      locationString += building.name;
-      const floor = find(building.floors, { id: install.floorID });
-      if (floor) {
-        locationString += `: ${floor.name}`;
-        const location = find(floor.locations, { id: install.locationID });
-        if (location) {
-          locationString += `: ${location.name}`;
-          const room = find(location.rooms, { id: install.locationID });
-          if (room) {
-            locationString += `: ${room.name}`;
-          }
-        }
-      }
-    }
-    if (install.position) {
-      locationString += `: ${install.position}`;
-    }
-    return locationString;
-  };
-  /*
-* TODO add the location column
-  {
-    Header: "Location",
-    accessor: 'location',
-    minWidth: 100
-  },
-*/
-
   const expanderColumns = TableUtil.translateHeaders(
     [
       {
@@ -118,7 +80,8 @@ export const InstallationsExpander = (props: ExpanderProps) => {
       {
         Header: 'Location',
         id: 'location',
-        accessor: install => buildLocation(install),
+        accessor: (install: IinstallBase) =>
+          TableUtil.buildLocation(install, props.facility),
         minWidth: 200
       },
       {

@@ -531,7 +531,7 @@ class Courses extends React.Component<Props, State> {
           <Banner
             title={this.getBannerTitle()}
             img={this.state.currentTile.srcBanner}
-            color={constants.colors[`${this.state.currentTile.color}`]}
+            color={this.state.currentTile.color}
           />
           <Button
             className="request-for-quote-cart-button"

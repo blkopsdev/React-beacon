@@ -432,7 +432,6 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
               id: rowInfo.original.productID
             }) as Iproduct;
             this.props.setSelectedProduct(selectedProduct);
-            console.error('INSTALL:', rowInfo.original);
             this.setState({
               selectedInstall: rowInfo.original
             });

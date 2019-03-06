@@ -273,10 +273,9 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           placeholder: 'common:searchPlaceholder',
           isMulti: false,
           handleCreate: this.handleCreateBuilding,
-          name: 'building'
-        },
-        options: {
-          validators: [Validators.required]
+          name: 'building',
+          required: false,
+          isClearable: true
         },
         formState: {
           value: FormUtil.convertToSingleOption(selectedBuilding),
@@ -294,10 +293,9 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           placeholder: 'common:searchPlaceholder',
           isMulti: false,
           handleCreate: this.handleCreateFloor,
-          name: 'floor'
-        },
-        options: {
-          validators: [Validators.required]
+          name: 'floor',
+          required: false,
+          isClearable: true
         },
         formState: {
           value: FormUtil.convertToSingleOption(selectedFloor),
@@ -544,15 +542,22 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
     }
     console.log(this.userForm.value);
     if (this.props.tableFilters.facility) {
-      const { buildingID, floorID, locationID, roomID } = this.userForm.value;
+      const {
+        buildingID,
+        floorID,
+        locationID,
+        roomID,
+        quantity
+      } = this.userForm.value;
       let newItem = {
         ...this.userForm.value,
         facilityID: this.props.tableFilters.facility.value,
         productID: this.props.selectedProduct.id,
-        buildingID: buildingID.value,
-        floorID: floorID.value,
+        buildingID: buildingID ? buildingID.value : '',
+        floorID: floorID ? floorID.value : '',
         locationID: locationID ? locationID.value : '',
-        roomID: roomID ? roomID.value : '' // since this is not required, it might be null
+        roomID: roomID ? roomID.value : '',
+        quantity: quantity ? parseInt(quantity, 10) : 1
       };
 
       if (this.props.selectedItem && this.props.selectedItem.id) {

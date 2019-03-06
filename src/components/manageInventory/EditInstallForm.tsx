@@ -123,23 +123,17 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
     this.subscription = this.userForm
       .get('buildingID')
       .valueChanges.subscribe((value: Ioption | null) => {
-        if (value !== null) {
-          this.filterFloors(value.value);
-        }
+        this.filterFloors(value);
       });
     this.subscription = this.userForm
       .get('floorID')
       .valueChanges.subscribe((value: Ioption | null) => {
-        if (value !== null) {
-          this.filterLocations(value.value);
-        }
+        this.filterLocations(value);
       });
     this.subscription = this.userForm
       .get('locationID')
       .valueChanges.subscribe((value: Ioption | null) => {
-        if (value !== null) {
-          this.filterRooms(value.value);
-        }
+        this.filterRooms(value);
       });
   };
   buildFieldConfig = () => {
@@ -449,8 +443,9 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
     });
   };
 
-  filterFloors = (buildingID: string) => {
-    if (buildingID) {
+  filterFloors = (value: Ioption | null) => {
+    if (value && value.value) {
+      const buildingID = value.value;
       console.log('Filtering by building id:', buildingID);
       const building = find(this.props.facility.buildings, (b: Ibuilding) => {
         return b.id === buildingID;
@@ -465,25 +460,23 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       ) as AbstractControlEdited;
       floorControl.meta.options = newFloorOptions;
       floorControl.stateChanges.next();
-      this.userForm.patchValue({ floorID: null });
-
-      // Reset other selects
-      const locationControl = this.userForm.get(
-        'locationID'
-      ) as AbstractControlEdited;
-      locationControl.meta.options = [];
-      locationControl.stateChanges.next();
-      this.userForm.patchValue({ locationID: null });
-      const roomControl = this.userForm.get('roomID') as AbstractControlEdited;
-      roomControl.meta.options = [];
-      this.userForm.patchValue({ roomID: null });
-      roomControl.stateChanges.next();
     }
+    const locationControl = this.userForm.get(
+      'locationID'
+    ) as AbstractControlEdited;
+    locationControl.meta.options = [];
+    locationControl.stateChanges.next();
+    const roomControl = this.userForm.get('roomID') as AbstractControlEdited;
+    roomControl.meta.options = [];
+    roomControl.stateChanges.next();
+    this.userForm.patchValue({ floorID: null });
+    this.userForm.patchValue({ locationID: null });
+    this.userForm.patchValue({ roomID: null });
   };
-  filterLocations = (floorID: string) => {
+  filterLocations = (value: Ioption | null) => {
     const { buildingID } = this.userForm.value;
-    // const buildingID = this.userForm.value.buildingID.value;
-    if (buildingID && floorID) {
+    if (buildingID && value && value.value) {
+      const floorID = value.value;
       console.info('Filtering by building & floor:', buildingID, floorID);
       const building = find(this.props.facility.buildings, (b: Ibuilding) => {
         return b.id === buildingID.value;
@@ -504,23 +497,17 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       ) as AbstractControlEdited;
       locationControl.meta.options = newLocationOptions;
       locationControl.stateChanges.next();
-      this.userForm.patchValue({ locationID: null });
-
-      // Reset other selects
-      const roomControl = this.userForm.get('roomID') as AbstractControlEdited;
-      roomControl.meta.options = [];
-      this.userForm.patchValue({ roomID: null });
     }
+    this.userForm.patchValue({ locationID: null });
+    // Reset other selects
+    const roomControl = this.userForm.get('roomID') as AbstractControlEdited;
+    roomControl.meta.options = [];
+    this.userForm.patchValue({ roomID: null });
   };
-  filterRooms = (locationID: string) => {
+  filterRooms = (value: Ioption | null) => {
     const { buildingID, floorID } = this.userForm.value;
-    if (buildingID && floorID && locationID) {
-      console.info(
-        'Filtering by building & floor & location:',
-        buildingID,
-        floorID,
-        locationID
-      );
+    if (buildingID && floorID && value && value.value) {
+      const locationID = value.value;
       const building = find(this.props.facility.buildings, (b: Ibuilding) => {
         return b.id === buildingID.value;
       });
@@ -539,12 +526,12 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           }
         }
       }
-
       const roomControl = this.userForm.get('roomID') as AbstractControlEdited;
       roomControl.meta.options = newRoomOptions;
       roomControl.stateChanges.next();
-      this.userForm.patchValue({ roomID: null });
     }
+    // set to null outside of the if, because we might receive null as the value
+    this.userForm.patchValue({ roomID: null });
   };
 
   handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {

@@ -321,10 +321,9 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           placeholder: 'common:searchPlaceholder',
           isMulti: false,
           handleCreate: this.handleCreateLocation,
-          name: 'location'
-        },
-        options: {
-          validators: [Validators.required]
+          name: 'location',
+          required: false,
+          isClearable: true
         },
         formState: {
           value: FormUtil.convertToSingleOption(selectedLocation),
@@ -343,7 +342,8 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           isMulti: false,
           handleCreate: this.handleCreateRoom,
           name: 'room',
-          required: false
+          required: false,
+          isClearable: true
         },
         formState: {
           value: FormUtil.convertToSingleOption(selectedRoom),
@@ -373,7 +373,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       facilityID: this.props.facility.id,
       floors: []
     };
-    this.setState({ newItem: newBuilding, newType: 'Building' }, () => {
+    this.setState({ newItem: newBuilding, newType: 'buildingID' }, () => {
       this.props.saveAnyLocation(
         newBuilding,
         'Building',
@@ -398,7 +398,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       buildingID: buildingID.value,
       locations: []
     };
-    this.setState({ newItem: newFloor, newType: 'Floor' }, () => {
+    this.setState({ newItem: newFloor, newType: 'floorID' }, () => {
       this.props.saveAnyLocation(newFloor, 'Floor', this.props.facility.id);
     });
   };
@@ -419,7 +419,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       floorID: floorID.value,
       rooms: []
     };
-    this.setState({ newItem: newLocation, newType: 'Location' }, () => {
+    this.setState({ newItem: newLocation, newType: 'locationID' }, () => {
       this.props.saveAnyLocation(
         newLocation,
         'Location',
@@ -444,7 +444,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       floorID: floorID.value,
       locationID: locationID.value
     };
-    this.setState({ newItem: newRoom, newType: 'Room' }, () => {
+    this.setState({ newItem: newRoom, newType: 'roomID' }, () => {
       this.props.saveAnyLocation(newRoom, 'Room', this.props.facility.id);
     });
   };
@@ -564,7 +564,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
         productID: this.props.selectedProduct.id,
         buildingID: buildingID.value,
         floorID: floorID.value,
-        locationID: locationID.value,
+        locationID: locationID ? locationID.value : '',
         roomID: roomID ? roomID.value : '' // since this is not required, it might be null
       };
 

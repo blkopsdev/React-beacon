@@ -14,7 +14,8 @@ import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
 import { constants } from 'src/constants/constants';
 import * as types from './actionTypes';
-import { map } from 'lodash';
+import { map, values } from 'lodash';
+const uuidv4 = require('uuid/v4');
 
 // import {AxiosResponse} from 'axios';
 
@@ -225,15 +226,30 @@ export function saveInstall(
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     dispatch({ type: types.CLOSE_ALL_MODALS });
+    // if quantity is greater than 1, we are creating multiple installs
+    const newID = uuidv4();
+    let newInstalls = {};
+
+    if (install.quantity && install.quantity > 1) {
+      for (let i = install.quantity - 1; i >= 0; i--) {
+        const newIDb = uuidv4();
+        newInstalls = {
+          ...newInstalls,
+          [newIDb]: { ...install, id: newIDb, quantity: 1 }
+        };
+      }
+    } else {
+      newInstalls = { [newID]: { ...install, id: newID } };
+    }
     return axios
-      .post(API.POST.inventory.addinstall, install)
+      .post(API.POST.inventory.addinstall, values(newInstalls))
       .then(data => {
         if (!data.data) {
           throw undefined;
         } else {
           dispatch({
             type: types.INSTALL_ADD_SUCCESS,
-            installs: data.data,
+            installs: values(newInstalls),
             productID
           });
           toastr.success('Success', 'Saved install', constants.toastrSuccess);

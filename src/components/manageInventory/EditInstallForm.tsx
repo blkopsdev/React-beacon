@@ -123,23 +123,17 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
     this.subscription = this.userForm
       .get('buildingID')
       .valueChanges.subscribe((value: Ioption | null) => {
-        if (value !== null) {
-          this.filterFloors(value.value);
-        }
+        this.filterFloors(value);
       });
     this.subscription = this.userForm
       .get('floorID')
       .valueChanges.subscribe((value: Ioption | null) => {
-        if (value !== null) {
-          this.filterLocations(value.value);
-        }
+        this.filterLocations(value);
       });
     this.subscription = this.userForm
       .get('locationID')
       .valueChanges.subscribe((value: Ioption | null) => {
-        if (value !== null) {
-          this.filterRooms(value.value);
-        }
+        this.filterRooms(value);
       });
   };
   buildFieldConfig = () => {
@@ -279,10 +273,9 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           placeholder: 'common:searchPlaceholder',
           isMulti: false,
           handleCreate: this.handleCreateBuilding,
-          name: 'building'
-        },
-        options: {
-          validators: [Validators.required]
+          name: 'building',
+          required: false,
+          isClearable: true
         },
         formState: {
           value: FormUtil.convertToSingleOption(selectedBuilding),
@@ -300,10 +293,9 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           placeholder: 'common:searchPlaceholder',
           isMulti: false,
           handleCreate: this.handleCreateFloor,
-          name: 'floor'
-        },
-        options: {
-          validators: [Validators.required]
+          name: 'floor',
+          required: false,
+          isClearable: true
         },
         formState: {
           value: FormUtil.convertToSingleOption(selectedFloor),
@@ -321,10 +313,9 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           placeholder: 'common:searchPlaceholder',
           isMulti: false,
           handleCreate: this.handleCreateLocation,
-          name: 'location'
-        },
-        options: {
-          validators: [Validators.required]
+          name: 'location',
+          required: false,
+          isClearable: true
         },
         formState: {
           value: FormUtil.convertToSingleOption(selectedLocation),
@@ -343,7 +334,8 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           isMulti: false,
           handleCreate: this.handleCreateRoom,
           name: 'room',
-          required: false
+          required: false,
+          isClearable: true
         },
         formState: {
           value: FormUtil.convertToSingleOption(selectedRoom),
@@ -373,7 +365,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       facilityID: this.props.facility.id,
       floors: []
     };
-    this.setState({ newItem: newBuilding, newType: 'Building' }, () => {
+    this.setState({ newItem: newBuilding, newType: 'buildingID' }, () => {
       this.props.saveAnyLocation(
         newBuilding,
         'Building',
@@ -398,7 +390,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       buildingID: buildingID.value,
       locations: []
     };
-    this.setState({ newItem: newFloor, newType: 'Floor' }, () => {
+    this.setState({ newItem: newFloor, newType: 'floorID' }, () => {
       this.props.saveAnyLocation(newFloor, 'Floor', this.props.facility.id);
     });
   };
@@ -419,7 +411,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       floorID: floorID.value,
       rooms: []
     };
-    this.setState({ newItem: newLocation, newType: 'Location' }, () => {
+    this.setState({ newItem: newLocation, newType: 'locationID' }, () => {
       this.props.saveAnyLocation(
         newLocation,
         'Location',
@@ -444,13 +436,14 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       floorID: floorID.value,
       locationID: locationID.value
     };
-    this.setState({ newItem: newRoom, newType: 'Room' }, () => {
+    this.setState({ newItem: newRoom, newType: 'roomID' }, () => {
       this.props.saveAnyLocation(newRoom, 'Room', this.props.facility.id);
     });
   };
 
-  filterFloors = (buildingID: string) => {
-    if (buildingID) {
+  filterFloors = (value: Ioption | null) => {
+    if (value && value.value) {
+      const buildingID = value.value;
       console.log('Filtering by building id:', buildingID);
       const building = find(this.props.facility.buildings, (b: Ibuilding) => {
         return b.id === buildingID;
@@ -465,25 +458,23 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       ) as AbstractControlEdited;
       floorControl.meta.options = newFloorOptions;
       floorControl.stateChanges.next();
-      this.userForm.patchValue({ floorID: null });
-
-      // Reset other selects
-      const locationControl = this.userForm.get(
-        'locationID'
-      ) as AbstractControlEdited;
-      locationControl.meta.options = [];
-      locationControl.stateChanges.next();
-      this.userForm.patchValue({ locationID: null });
-      const roomControl = this.userForm.get('roomID') as AbstractControlEdited;
-      roomControl.meta.options = [];
-      this.userForm.patchValue({ roomID: null });
-      roomControl.stateChanges.next();
     }
+    const locationControl = this.userForm.get(
+      'locationID'
+    ) as AbstractControlEdited;
+    locationControl.meta.options = [];
+    locationControl.stateChanges.next();
+    const roomControl = this.userForm.get('roomID') as AbstractControlEdited;
+    roomControl.meta.options = [];
+    roomControl.stateChanges.next();
+    this.userForm.patchValue({ floorID: null });
+    this.userForm.patchValue({ locationID: null });
+    this.userForm.patchValue({ roomID: null });
   };
-  filterLocations = (floorID: string) => {
+  filterLocations = (value: Ioption | null) => {
     const { buildingID } = this.userForm.value;
-    // const buildingID = this.userForm.value.buildingID.value;
-    if (buildingID && floorID) {
+    if (buildingID && value && value.value) {
+      const floorID = value.value;
       console.info('Filtering by building & floor:', buildingID, floorID);
       const building = find(this.props.facility.buildings, (b: Ibuilding) => {
         return b.id === buildingID.value;
@@ -504,23 +495,17 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       ) as AbstractControlEdited;
       locationControl.meta.options = newLocationOptions;
       locationControl.stateChanges.next();
-      this.userForm.patchValue({ locationID: null });
-
-      // Reset other selects
-      const roomControl = this.userForm.get('roomID') as AbstractControlEdited;
-      roomControl.meta.options = [];
-      this.userForm.patchValue({ roomID: null });
     }
+    this.userForm.patchValue({ locationID: null });
+    // Reset other selects
+    const roomControl = this.userForm.get('roomID') as AbstractControlEdited;
+    roomControl.meta.options = [];
+    this.userForm.patchValue({ roomID: null });
   };
-  filterRooms = (locationID: string) => {
+  filterRooms = (value: Ioption | null) => {
     const { buildingID, floorID } = this.userForm.value;
-    if (buildingID && floorID && locationID) {
-      console.info(
-        'Filtering by building & floor & location:',
-        buildingID,
-        floorID,
-        locationID
-      );
+    if (buildingID && floorID && value && value.value) {
+      const locationID = value.value;
       const building = find(this.props.facility.buildings, (b: Ibuilding) => {
         return b.id === buildingID.value;
       });
@@ -539,12 +524,12 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           }
         }
       }
-
       const roomControl = this.userForm.get('roomID') as AbstractControlEdited;
       roomControl.meta.options = newRoomOptions;
       roomControl.stateChanges.next();
-      this.userForm.patchValue({ roomID: null });
     }
+    // set to null outside of the if, because we might receive null as the value
+    this.userForm.patchValue({ roomID: null });
   };
 
   handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
@@ -557,15 +542,22 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
     }
     console.log(this.userForm.value);
     if (this.props.tableFilters.facility) {
-      const { buildingID, floorID, locationID, roomID } = this.userForm.value;
+      const {
+        buildingID,
+        floorID,
+        locationID,
+        roomID,
+        quantity
+      } = this.userForm.value;
       let newItem = {
         ...this.userForm.value,
         facilityID: this.props.tableFilters.facility.value,
         productID: this.props.selectedProduct.id,
-        buildingID: buildingID.value,
-        floorID: floorID.value,
-        locationID: locationID.value,
-        roomID: roomID ? roomID.value : '' // since this is not required, it might be null
+        buildingID: buildingID ? buildingID.value : '',
+        floorID: floorID ? floorID.value : '',
+        locationID: locationID ? locationID.value : '',
+        roomID: roomID ? roomID.value : '',
+        quantity: quantity ? parseInt(quantity, 10) : 1
       };
 
       if (this.props.selectedItem && this.props.selectedItem.id) {

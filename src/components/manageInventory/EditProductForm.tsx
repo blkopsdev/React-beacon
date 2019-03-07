@@ -483,9 +483,15 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
   };
 
   canEditInstalls = () => {
-    return constants.hasSecurityFunction(
-      this.props.user,
-      constants.securityFunctions.ManageInventory.id
+    return (
+      constants.hasSecurityFunction(
+        this.props.user,
+        constants.securityFunctions.ManageInventory.id
+      ) ||
+      constants.hasSecurityFunction(
+        this.props.user,
+        constants.securityFunctions.FSE.id
+      )
     );
   };
 

@@ -485,11 +485,18 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
   };
 
   canEditInstalls = () => {
-    return constants.hasSecurityFunction(
-      this.props.user,
-      constants.securityFunctions.ManageInventory.id
+    return (
+      constants.hasSecurityFunction(
+        this.props.user,
+        constants.securityFunctions.ManageInventory.id
+      ) ||
+      constants.hasSecurityFunction(
+        this.props.user,
+        constants.securityFunctions.FSE.id
+      )
     );
   };
+
   canRequestQuote = () => {
     return constants.hasSecurityFunction(
       this.props.user,

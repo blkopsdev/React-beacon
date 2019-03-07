@@ -25,7 +25,8 @@ import { TableUtil } from '../common/TableUtil';
 import { closeAllModals } from '../../actions/commonActions';
 import {
   emptyTile,
-  initialMeasurementPointList
+  initialMeasurementPointList,
+  initialMeasurementPointTab
 } from '../../reducers/initialState';
 import {
   getAllMeasurementPointLists,
@@ -41,6 +42,7 @@ import EditMeasurementPointListModal from './EditMeasurementPointListModal';
 import SearchTableForm from '../common/SearchTableForm';
 import { constants } from 'src/constants/constants';
 import { FieldConfig } from 'react-reactive-form';
+const uuidv4 = require('uuid/v4');
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -387,9 +389,13 @@ class ManageMeasurementPointList extends React.Component<
             className="table-add-button"
             bsStyle="link"
             onClick={() => {
-              this.props.setSelectedMeasurementPointList(
-                initialMeasurementPointList
-              );
+              this.props.setSelectedMeasurementPointList({
+                ...initialMeasurementPointList,
+                id: uuidv4(),
+                measurementPointTabs: [
+                  { ...initialMeasurementPointTab, id: uuidv4() }
+                ]
+              });
               this.props.toggleEditMeasurementPointListModal();
             }}
           >
@@ -415,9 +421,6 @@ class ManageMeasurementPointList extends React.Component<
           resizable={false}
         />
         <EditMeasurementPointListModal
-          measurementPointListTypeOptions={
-            constants.measurementPointListTypeOptions
-          }
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }

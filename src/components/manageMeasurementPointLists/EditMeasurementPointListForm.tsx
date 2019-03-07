@@ -8,27 +8,29 @@ import {
   Validators,
   FormGenerator,
   AbstractControl,
-  FieldConfig
+  FieldConfig,
+  GroupProps
   // Observable
 } from 'react-reactive-form';
-import { forEach, find, keys, filter } from 'lodash';
+import { keys, filter } from 'lodash';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
 import {
-  Ioption,
   ImeasurementPointList,
   ImeasurementPoint,
   Iuser,
-  ImeasurementPointListTab
+  ImeasurementPointListTab,
+  IproductInfo
 } from '../../models';
 import {
   toggleEditMeasurementPointListModal,
   toggleEditMeasurementPointModal,
   addGlobalMeasurementPointList,
-  updateGlobalMeasurementPointList
+  updateGlobalMeasurementPointList,
+  setSelectedTabID
 } from '../../actions/manageMeasurementPointListsActions';
 import EditMeasurementPointModal from './EditMeasurementPointModal';
 import { constants } from 'src/constants/constants';
@@ -36,62 +38,10 @@ import { initialMeasurementPoint } from 'src/reducers/initialState';
 import { MeasurementPointList } from './MeasurementPointList';
 const uuidv4 = require('uuid/v4');
 
-const buildFieldConfig = (
-  typeOptions: Ioption[],
-  mainCategoryOptions: Ioption[],
-  standardOptions: Ioption[]
-) => {
-  // Field config to configure form
-  const fieldConfigControls = {
-    type: {
-      render: FormUtil.SelectWithoutValidation,
-      meta: {
-        options: typeOptions,
-        label: 'manageMeasurementPointLists:type',
-        colWidth: 12,
-        placeholder: 'manageMeasurementPointLists:typePlaceholder'
-      },
-      options: {
-        validators: [Validators.required]
-      }
-    },
-    equipmentType: {
-      render: FormUtil.SelectWithoutValidation,
-      meta: {
-        options: mainCategoryOptions,
-        label: 'manageMeasurementPointLists:equipmentType',
-        colWidth: 12,
-        placeholder: 'manageMeasurementPointLists:equipmentTypePlaceholder'
-      },
-      options: {
-        validators: [Validators.required]
-      }
-    },
-    standard: {
-      render: FormUtil.SelectWithoutValidation,
-      meta: {
-        options: standardOptions,
-        label: 'manageMeasurementPointLists:standard',
-        colWidth: 12,
-        placeholder: 'manageMeasurementPointLists:standardPlaceholder'
-      },
-      options: {
-        validators: [Validators.required]
-      }
-    }
-  };
-  const fieldConfig = {
-    controls: { ...fieldConfigControls }
-  };
-  return fieldConfig as FieldConfig;
-};
-
 interface Iprops extends React.Props<EditMeasurementPointListForm> {
   user: Iuser;
   selectedMeasurementPointList: ImeasurementPointList;
-  measurementPointListTypeOptions: Ioption[];
-  standardOptions: Ioption[];
-  mainCategoryOptions: Ioption[];
+  productInfo: IproductInfo;
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;
@@ -102,66 +52,33 @@ interface Iprops extends React.Props<EditMeasurementPointListForm> {
   updateGlobalMeasurementPointList: typeof updateGlobalMeasurementPointList;
   selectedTabID: string;
   selectedTab: ImeasurementPointListTab;
+  setSelectedTabID: typeof setSelectedTabID;
 }
 
 interface Istate {
   selectedMeasurementPoint: ImeasurementPoint;
   questions: ImeasurementPoint[];
+  fieldConfig: FieldConfig;
 }
 
 class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
   public measurementsForm: AbstractControl;
-  public fieldConfig: FieldConfig;
   constructor(props: Iprops) {
     super(props);
     this.state = {
       selectedMeasurementPoint: initialMeasurementPoint,
-      questions: this.parseQuestions()
+      questions: this.parseQuestions(),
+      fieldConfig: FormUtil.translateForm(this.buildFieldConfig(), this.props.t)
     };
-    this.fieldConfig = FormUtil.translateForm(
-      buildFieldConfig(
-        this.props.measurementPointListTypeOptions,
-        this.props.mainCategoryOptions,
-        this.props.standardOptions
-      ),
-      this.props.t
-    );
   }
-
-  componentDidMount() {
-    if (!this.props.selectedMeasurementPointList) {
-      console.error('missing measurement point list');
-      return;
+  componentWillMount() {
+    // if there are tabs set the initial tab
+    const { measurementPointTabs } = this.props.selectedMeasurementPointList;
+    if (measurementPointTabs.length) {
+      this.props.setSelectedTabID(measurementPointTabs[0].id);
     }
-    // set values
-    forEach(this.props.selectedMeasurementPointList, (value, key) => {
-      this.measurementsForm.patchValue({ [key]: value });
-    });
-
-    const {
-      type,
-      mainCategoryID,
-      standardID
-    } = this.props.selectedMeasurementPointList;
-    this.measurementsForm.patchValue({
-      type: find(
-        this.props.measurementPointListTypeOptions,
-        (tOpt: any) => tOpt.value === type
-      )
-    });
-    this.measurementsForm.patchValue({
-      equipmentType: find(
-        this.props.mainCategoryOptions,
-        (tOpt: any) => tOpt.value === mainCategoryID
-      )
-    });
-    this.measurementsForm.patchValue({
-      standard: find(
-        this.props.standardOptions,
-        (tOpt: any) => tOpt.value === standardID
-      )
-    });
   }
+
   componentDidUpdate(prevProps: Iprops) {
     if (!this.props.selectedMeasurementPointList) {
       console.error('missing selected measurement point');
@@ -176,6 +93,118 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       this.setState({ questions: this.parseQuestions() });
     }
   }
+  buildFieldConfig = () => {
+    const {
+      selectedMeasurementPointList,
+      selectedTabID,
+      productInfo
+    } = this.props;
+
+    const {
+      measurementPointTabs,
+      type,
+      mainCategoryID,
+      standardID
+    } = selectedMeasurementPointList;
+
+    const {
+      mainCategories,
+      standards,
+      mainCategoryOptions,
+      standardOptions
+    } = productInfo;
+
+    const tabOptions = FormUtil.convertToOptions(measurementPointTabs);
+    const disabled = !this.canEditGlobal();
+
+    let selectedType = null;
+    let selectedMainCategory = null;
+    let selectedStandard = null;
+    let selectedTab = null;
+    if (type !== 0) {
+      selectedType = {
+        label:
+          constants.measurementPointTypeEnum[selectedMeasurementPointList.type],
+        value: selectedMeasurementPointList.type
+      };
+    }
+    if (mainCategoryID.length) {
+      selectedMainCategory = FormUtil.convertToSingleOption(
+        mainCategories[mainCategoryID]
+      );
+    }
+    if (standardID.length) {
+      selectedStandard = FormUtil.convertToSingleOption(standards[standardID]);
+    }
+    if (selectedTabID.length && measurementPointTabs.length) {
+      selectedTab = FormUtil.convertToSingleOption(
+        measurementPointTabs.find(tab => tab.id === selectedTabID)
+      );
+    }
+
+    // Field config to configure form
+    const fieldConfigControls = {
+      type: {
+        render: FormUtil.SelectWithoutValidation,
+        meta: {
+          options: constants.measurementPointListTypeOptions,
+          label: 'manageMeasurementPointLists:type',
+          colWidth: 12,
+          placeholder: 'manageMeasurementPointLists:typePlaceholder'
+        },
+        options: {
+          validators: [Validators.required]
+        },
+        formState: {
+          value: selectedType,
+          disabled
+        }
+      },
+      mainCategoryID: {
+        render: FormUtil.SelectWithoutValidation,
+        meta: {
+          options: mainCategoryOptions,
+          label: 'manageMeasurementPointLists:equipmentType',
+          colWidth: 12,
+          placeholder: 'manageMeasurementPointLists:equipmentTypePlaceholder'
+        },
+        options: {
+          validators: [Validators.required]
+        },
+        formState: {
+          value: selectedMainCategory,
+          disabled
+        }
+      },
+      standard: {
+        render: FormUtil.SelectWithoutValidation,
+        meta: {
+          options: standardOptions,
+          label: 'manageMeasurementPointLists:standard',
+          colWidth: 12,
+          placeholder: 'manageMeasurementPointLists:standardPlaceholder'
+        },
+        options: {
+          validators: [Validators.required]
+        },
+        formState: { value: selectedStandard, disabled }
+      },
+      selectedTab: {
+        render: FormUtil.SelectWithoutValidation,
+        meta: {
+          options: tabOptions,
+          label: 'manageMeasurementPointLists:selectTabLabel',
+          colWidth: 12,
+          placeholder: 'manageMeasurementPointLists:selectTabPlaceholder'
+        },
+        formState: { value: selectedTab, disabled: false }
+      }
+    } as { [key: string]: GroupProps };
+    const fieldConfig = {
+      controls: { ...fieldConfigControls }
+    };
+    return fieldConfig as FieldConfig;
+  };
 
   /*
   * Remove deleted measurementPoints and sort them
@@ -298,7 +327,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
         <form onSubmit={this.handleSubmit} className={formClassName}>
           <FormGenerator
             onMount={this.setForm}
-            fieldConfig={this.fieldConfig}
+            fieldConfig={this.state.fieldConfig}
           />
           <Col xs={12} className="" style={{ marginLeft: '-15px' }}>
             <Button

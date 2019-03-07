@@ -257,6 +257,8 @@
     "equipmentTypePlaceholder": "Select Category...",
     "standard": "Standard",
     "standardPlaceholder": "Select standard...",
+    "selectTabLabel": "Tab",
+    "selectTabPlaceholder": "Select a Tab",
     "newMeasurement": "Add Measurements",
     "EditMeasurementPointListModalTitle": "ADD MEASUREMENTS",
     "QuestionModalTitle": "ADD QUESTION",

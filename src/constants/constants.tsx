@@ -35,6 +35,16 @@ const measurementPointListTypeOptions = [
   { label: 'Annual', value: 1 },
   { label: 'Verification', value: 2 }
 ];
+const measurementPointListTypeEnum = {
+  1: 'Annual',
+  2: 'Verification'
+};
+const measurementPointTypeEnum = {
+  1: 'Pass/Fail',
+  2: 'Text',
+  3: 'Numeric',
+  4: 'Select'
+};
 const measurementPointTypeOptions = [
   { label: 'Pass/Fail', value: 1 },
   { label: 'Text', value: 2 },
@@ -458,6 +468,8 @@ export const constants = {
   jobTypeOptions,
   jobTypesByID,
   icons,
+  measurementPointListTypeEnum,
+  measurementPointTypeEnum,
   measurementPointListTypeOptions,
   measurementPointTypeOptions,
   measurementPointTypes,

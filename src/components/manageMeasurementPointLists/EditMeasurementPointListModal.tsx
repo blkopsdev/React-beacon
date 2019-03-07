@@ -2,19 +2,19 @@ import { TranslationFunction } from 'react-i18next';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import { FormUtil } from '../common/FormUtil';
 import {
   IinitialState,
   ImeasurementPointList,
-  Ioption,
   Iuser,
-  ImeasurementPointListTab
+  ImeasurementPointListTab,
+  IproductInfo
 } from '../../models';
 import {
   toggleEditMeasurementPointListModal,
   toggleEditMeasurementPointModal,
   addGlobalMeasurementPointList,
-  updateGlobalMeasurementPointList
+  updateGlobalMeasurementPointList,
+  setSelectedTabID
 } from '../../actions/manageMeasurementPointListsActions';
 import CommonModal from '../common/CommonModal';
 import EditMeasurementPointListForm from './EditMeasurementPointListForm';
@@ -22,8 +22,6 @@ import { initialMeasurementPointTab } from 'src/reducers/initialState';
 // import { find } from 'lodash';
 
 interface Iprops {
-  measurementPointListTypeOptions: any[];
-  // selectedMeasurementPointListId: ImeasurementPointList;
   colorButton: any;
   t: TranslationFunction;
 }
@@ -33,14 +31,14 @@ interface IdispatchProps {
   selectedMeasurementPointList: ImeasurementPointList;
   showEditMeasurementPointListModal: boolean;
   loading: boolean;
-  mainCategoryOptions: Ioption[];
-  standardOptions: Ioption[];
+  productInfo: IproductInfo;
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
   toggleEditMeasurementPointModal: typeof toggleEditMeasurementPointModal;
   addGlobalMeasurementPointList: typeof addGlobalMeasurementPointList;
   updateGlobalMeasurementPointList: typeof updateGlobalMeasurementPointList;
   selectedTabID: string;
   selectedTab: ImeasurementPointListTab;
+  setSelectedTabID: typeof setSelectedTabID;
 }
 
 class EditMeasurementPointListModal extends React.Component<
@@ -74,14 +72,11 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     user: state.user,
     userManage: state.manageUser,
     loading: state.ajaxCallsInProgress > 0,
-    customerOptions: FormUtil.convertToOptions(state.customers),
-    facilityOptions: FormUtil.convertToOptions(state.facilities),
     showEditMeasurementPointListModal:
       state.manageMeasurementPointLists.showEditMeasurementPointListModal,
     showEditCustomerModal: state.showEditCustomerModal,
     showEditFacilityModal: state.showEditFacilityModal,
-    standardOptions: state.productInfo.standardOptions,
-    mainCategoryOptions: state.productInfo.mainCategoryOptions,
+    productInfo: state.productInfo,
     selectedTabID: state.manageMeasurementPointLists.selectedTabID,
     selectedTab,
     selectedMeasurementPointList:
@@ -95,6 +90,7 @@ export default connect(
     toggleEditMeasurementPointListModal,
     toggleEditMeasurementPointModal,
     addGlobalMeasurementPointList,
-    updateGlobalMeasurementPointList
+    updateGlobalMeasurementPointList,
+    setSelectedTabID
   }
 )(EditMeasurementPointListModal);

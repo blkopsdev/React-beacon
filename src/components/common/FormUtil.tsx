@@ -61,11 +61,12 @@ export const FormUtil = {
     });
   },
   convertToSingleOption: (item: any): Ioption | null => {
-    if (item) {
+    if (item && item.id && item.id.length) {
+      const lastOption =
+        item.first && item.last ? item.first + ' ' + item.last : 'unknown';
       return {
         value: item.id,
-        // TODO: verify this will not explode
-        label: item.name || item.code || item.first + ' ' + item.last
+        label: item.name || item.code || item.label || lastOption
       };
     } else {
       return null;

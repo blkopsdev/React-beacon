@@ -17,8 +17,12 @@ interface Iprops {
   setSelectedMeasurementPoint: (m: ImeasurementPoint) => void;
   swapQuestionOrder: (q1Index: number, q2Index: number) => void;
   deleteMeasurementPoint: (m: ImeasurementPoint) => void;
+  canEditGlobal: boolean;
 }
 
+/*
+* If the user can not edit global Measurement Points and there is not a CustomerID on the MP, then they can not edit.
+*/
 export const MeasurementPointList = (props: Iprops) => {
   const mps = props.measurementPointList;
   return (
@@ -28,6 +32,8 @@ export const MeasurementPointList = (props: Iprops) => {
           <div className="question-list-item-container" key={mp.id}>
             <span className="sort-controls">
               <Button
+                type="button"
+                disabled={!props.canEditGlobal && !mp.customerID}
                 onClick={() => {
                   props.setSelectedMeasurementPoint(mp);
                 }}
@@ -35,7 +41,9 @@ export const MeasurementPointList = (props: Iprops) => {
                 <FontAwesomeIcon icon={['far', 'edit']}>Edit</FontAwesomeIcon>
               </Button>
               <Button
-                disabled={mp.order === 0}
+                disabled={
+                  mp.order === 0 || (!props.canEditGlobal && !mp.customerID)
+                }
                 onClick={() => {
                   // console.log('swap up', mp.label, mps[index - 1].label);
                   props.swapQuestionOrder(index, index - 1);
@@ -44,6 +52,8 @@ export const MeasurementPointList = (props: Iprops) => {
                 <FontAwesomeIcon icon={faSortAmountUp} fixedWidth size="2x" />
               </Button>
               <Button
+                type="button"
+                disabled={!props.canEditGlobal && !mp.customerID}
                 onClick={() => {
                   props.deleteMeasurementPoint(mp);
                 }}
@@ -53,7 +63,11 @@ export const MeasurementPointList = (props: Iprops) => {
                 </FontAwesomeIcon>
               </Button>
               <Button
-                disabled={mp.order === mps.length - 1}
+                type="button"
+                disabled={
+                  mp.order === mps.length - 1 ||
+                  (!props.canEditGlobal && !mp.customerID)
+                }
                 onClick={() => {
                   // console.log('swap up', mp.label, mps[index + 1].label);
                   props.swapQuestionOrder(index + 1, index);

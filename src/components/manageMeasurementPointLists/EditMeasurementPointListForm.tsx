@@ -11,7 +11,7 @@ import {
   FieldConfig
   // Observable
 } from 'react-reactive-form';
-import { forEach, find, map, keys, keyBy } from 'lodash';
+import { forEach, find, keys, keyBy, filter } from 'lodash';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
@@ -20,7 +20,8 @@ import { FormUtil } from '../common/FormUtil';
 import {
   Ioption,
   ImeasurementPointList,
-  ImeasurementPoint
+  ImeasurementPoint,
+  Iuser
 } from '../../models';
 import {
   toggleEditMeasurementPointListModal,
@@ -87,6 +88,7 @@ const buildFieldConfig = (
 };
 
 interface Iprops extends React.Props<EditMeasurementPointListForm> {
+  user: Iuser;
   selectedMeasurementPointList: ImeasurementPointList;
   measurementPointListTypeOptions: Ioption[];
   standardOptions: Ioption[];
@@ -176,19 +178,19 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     }
   }
 
+  /*
+  * Remove deleted measurementPoints and sort them
+  */
   parseQuestions = () => {
-    const mps = map(
+    const filteredMPs = filter(
       this.props.selectedMeasurementPointList.measurementPoints,
-      mp => {
-        return mp;
-      }
+      mp => mp.isDeleted === false
     );
-    mps.sort((a: ImeasurementPoint, b: ImeasurementPoint) => {
+
+    filteredMPs.sort((a: ImeasurementPoint, b: ImeasurementPoint) => {
       return a.order - b.order;
     });
-    return map(mps, (mp, index) => {
-      return { ...mp, order: index };
-    });
+    return filteredMPs;
   };
 
   handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
@@ -244,7 +246,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       okText: this.props.t('deleteMeasurementPointOk'),
       cancelText: this.props.t('common:cancel')
     };
-    toastr.confirm(this.props.t('deleteConfirm'), toastrConfirmOptions);
+    toastr.confirm(this.props.t('deleteConfirmMP'), toastrConfirmOptions);
   };
 
   newMeasurementPoint = (type: number): ImeasurementPoint => {
@@ -274,10 +276,34 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     });
   };
 
+  canEditGlobal = () => {
+    return constants.hasSecurityFunction(
+      this.props.user,
+      constants.securityFunctions.ManageAllMeasurementPoints.id
+    );
+  };
   render() {
     const { t } = this.props;
-
     const formClassName = `clearfix beacon-form ${this.props.colorButton}`;
+
+    // const isAdmin = constants.hasSecurityFunction(
+    //   this.props.user,
+    //   constants.securityFunctions.ManageAllMeasurementPoints.id
+    // );
+    // const adminMps = this.state.questions.filter(
+    //   (mps: ImeasurementPointQuestion) => {
+    //     return !mps.customerID && !mps.isDeleted;
+    //   }
+    // );
+    // const customerMps = this.state.questions.filter(
+    //   (mps: ImeasurementPointQuestion) => {
+    //     return (
+    //       typeof mps.customerID !== 'undefined' &&
+    //       mps.customerID === this.props.user.id &&
+    //       mps.isDeleted === false
+    //     );
+    //   }
+    // );
 
     return (
       <div>
@@ -286,7 +312,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
             onMount={this.setForm}
             fieldConfig={this.fieldConfig}
           />
-          <Col xs={12} className="">
+          <Col xs={12} className="" style={{ marginLeft: '-15px' }}>
             <Button
               bsStyle="link"
               type="button"
@@ -336,8 +362,10 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
               setSelectedMeasurementPoint={this.setSelectedMeasurementPoint}
               swapQuestionOrder={this.swapQuestionOrder}
               deleteMeasurementPoint={this.deleteMeasurementPoint}
+              canEditGlobal={this.canEditGlobal()}
             />
           </Col>
+
           <Col xs={12} className="form-buttons text-right">
             <Button
               bsStyle="default"

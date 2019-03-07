@@ -272,7 +272,10 @@
     "numericMinValue": "Min Value",
     "numericMaxValue": "Max Value",
     "numericAllowDecimals": "Allow Decimals?",
-    "deleteConfirm": "Are you sure?",
+    "deleteConfirm":
+      "Are you sure you want to delete this measurement point list?",
+    "deleteConfirmMP":
+      "Are you sure you want to delete this measurement point?",
     "deleteListOk": "Delete This Measurement Point List?",
     "deleteMeasurementPointOk": "Delete This Measurement Point?",
     "selectDefaultOptionID": "Default Option",

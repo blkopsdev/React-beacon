@@ -179,8 +179,113 @@ export function deleteGlobalMeasurementPointList(
   };
 }
 
+// CUSTOMER MP endpoints
+/*
+* save (add) a new mpl
+*/
+export function addCustomerMeasurementPointList(
+  mpl: ImeasurementPointList
+): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    const measurementPoints = map(mpl.measurementPoints, mp => mp);
+    return axios
+      .post(API.POST.measurements.addcustomermpl, { ...mpl, measurementPoints })
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.MANAGE_MEASUREMENT_POINT_LIST_ADD_SUCCESS,
+            measurementPointList: data.data
+          });
+          dispatch({ type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT_LISTS });
+          toastr.success(
+            'Success',
+            'Created new measurement point list.',
+            constants.toastrSuccess
+          );
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.MANAGE_MEASUREMENT_POINT_LIST_ADD_FAILED });
+        constants.handleError(error, 'create measurement point list');
+        throw error;
+      });
+  };
+}
+
+/*
+* update a mpl
+*/
+export function updateCustomerMeasurementPointList(
+  mpl: ImeasurementPointList
+): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    const measurementPoints = map(mpl.measurementPoints, mp => mp);
+    return axios
+      .put(`${API.PUT.measurements.updatecustomermpl}/${mpl.id}`, {
+        ...mpl,
+        measurementPoints
+      })
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.MANAGE_MEASUREMENT_POINT_LIST_UPDATE_SUCCESS,
+            measurementPointList: data.data
+          });
+          dispatch({ type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT_LISTS });
+          toastr.success(
+            'Success',
+            'Updated measurement point list.',
+            constants.toastrSuccess
+          );
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.MANAGE_MEASUREMENT_POINT_LIST_UPDATE_FAILED });
+        constants.handleError(error, 'update measurement point list');
+        throw error;
+      });
+  };
+}
+
 /*
 * delete a mpl
+*/
+export function deleteCustomerMeasurementPointList(
+  measurementPointListId: string
+): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    return axios
+      .delete(
+        `${API.DELETE.measurements.deletecustomermpl}/${measurementPointListId}`
+      )
+      .then(data => {
+        dispatch({
+          type: types.MANAGE_MEASUREMENT_POINT_LIST_DELETE_SUCCESS,
+          measurementPointListId
+        });
+        toastr.success(
+          'Success',
+          'Deleted measurement point list.',
+          constants.toastrSuccess
+        );
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.MANAGE_MEASUREMENT_POINT_LIST_DELETE_FAILED });
+        constants.handleError(error, 'delete measurement point list');
+        throw error;
+      });
+  };
+}
+
+/*
+* delete a mpl question (deprecated in favor of isDeleted)
 */
 export function deleteGlobalMeasurementPoint(
   measurementPointListId: string,

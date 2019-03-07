@@ -3,7 +3,12 @@ import { connect } from 'react-redux';
 import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
-import { IinitialState, ImeasurementPointList, Ioption } from '../../models';
+import {
+  IinitialState,
+  ImeasurementPointList,
+  Ioption,
+  Iuser
+} from '../../models';
 import {
   toggleEditMeasurementPointListModal,
   toggleEditMeasurementPointModal,
@@ -24,6 +29,7 @@ interface Iprops {
 }
 
 interface IdispatchProps {
+  user: Iuser;
   selectedMeasurementPointList: ImeasurementPointList;
   showEditMeasurementPointListModal: boolean;
   loading: boolean;

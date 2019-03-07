@@ -3,7 +3,7 @@
 */
 import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { keys } from 'lodash';
+import { filter } from 'lodash';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 import ReactTable, { SortingRule, FinalState, RowInfo } from 'react-table';
@@ -18,7 +18,8 @@ import {
   Itile,
   Ioption,
   ImeasurementPointList,
-  ImanageMeasurementPointListsReducer
+  ImanageMeasurementPointListsReducer,
+  Iuser
 } from '../../models';
 import { TableUtil } from '../common/TableUtil';
 import { closeAllModals } from '../../actions/commonActions';
@@ -51,6 +52,7 @@ interface Iprops extends RouteComponentProps<any> {
 
 interface IdispatchProps {
   // Add your dispatcher properties here
+  user: Iuser;
   getAllMeasurementPointLists: typeof getAllMeasurementPointLists;
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
   toggleEditMeasurementPointModal: typeof toggleEditMeasurementPointModal;
@@ -208,8 +210,11 @@ class ManageMeasurementPointList extends React.Component<
           id: 'numQuestions',
           Header: '# of Questions',
           accessor: ({ measurementPoints }: ImeasurementPointList) => {
-            // console.log(keys(measurementPoints));
-            return measurementPoints ? keys(measurementPoints).length : 0;
+            if (measurementPoints) {
+              return filter(measurementPoints, mp => mp.isDeleted === false)
+                .length;
+            }
+            return 0;
           }
         },
         {
@@ -268,7 +273,7 @@ class ManageMeasurementPointList extends React.Component<
         console.log('deleted', deletedItem);
       },
       onCancel: () => console.log('CANCEL: clicked'),
-      okText: this.props.t('deleteListOk'),
+      okText: this.props.t('deleteOk'),
       cancelText: this.props.t('common:cancel')
     };
     toastr.confirm(this.props.t('deleteConfirm'), toastrConfirmOptions);
@@ -350,6 +355,10 @@ class ManageMeasurementPointList extends React.Component<
         </Col>
       );
     }
+    const isAdmin = constants.hasSecurityFunction(
+      this.props.user,
+      constants.securityFunctions.ManageAllMeasurementPoints.id
+    );
     const { t } = this.props;
     return (
       <div className="user-manage">
@@ -370,18 +379,20 @@ class ManageMeasurementPointList extends React.Component<
           onValueChanges={this.onSearchValueChanges}
           showSearchButton={false}
         />
-        <Button
-          className="table-add-button"
-          bsStyle="link"
-          onClick={() => {
-            this.props.setSelectedMeasurementPointList(
-              initialMeasurementPointList
-            );
-            this.props.toggleEditMeasurementPointListModal();
-          }}
-        >
-          {t('manageMeasurementPointLists:newMeasurement')}
-        </Button>
+        {isAdmin && (
+          <Button
+            className="table-add-button"
+            bsStyle="link"
+            onClick={() => {
+              this.props.setSelectedMeasurementPointList(
+                initialMeasurementPointList
+              );
+              this.props.toggleEditMeasurementPointListModal();
+            }}
+          >
+            {t('manageMeasurementPointLists:newMeasurement')}
+          </Button>
+        )}
         <ReactTable
           data={this.props.tableData}
           onSortedChange={this.onSortedChanged}

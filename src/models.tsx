@@ -337,6 +337,7 @@ export interface ImeasurementPoint {
   selectRememberBetweenInspection?: boolean;
   selectOptions?: ImeasurementPointSelectOption[];
   isDeleted?: boolean;
+  customerID?: string;
 }
 
 export interface ImeasurementPointList {

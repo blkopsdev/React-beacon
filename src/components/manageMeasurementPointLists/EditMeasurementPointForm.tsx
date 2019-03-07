@@ -151,7 +151,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
     super(props);
     if (
       this.props.selectedMeasurementPointList &&
-      this.props.selectedMeasurementPoint
+      this.props.selectedMeasurementPoint.id.length
     ) {
       this.state = {
         fieldConfig: FormUtil.translateForm(
@@ -210,8 +210,9 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
   componentDidMount() {
     if (
       !this.props.selectedMeasurementPointList ||
-      this.props.selectedMeasurementPoint == null
+      !this.props.selectedMeasurementPoint.id.length
     ) {
+      console.error('missing measurementPoint List or MeasurementPoint');
       this.props.toggleEditMeasurementPointModal();
     }
   }

@@ -3,7 +3,7 @@
 * Edit measurement point lists
 */
 
-import { Col, Button, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Col, Button } from 'react-bootstrap';
 import {
   Validators,
   FormGenerator,
@@ -15,11 +15,6 @@ import { forEach, find, map, keys, keyBy } from 'lodash';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faSortAmountUp,
-  faSortAmountDown
-} from '@fortawesome/pro-regular-svg-icons';
 
 import { FormUtil } from '../common/FormUtil';
 import {
@@ -37,25 +32,14 @@ import {
 } from '../../actions/manageMeasurementPointListsActions';
 import EditMeasurementPointModal from './EditMeasurementPointModal';
 import { constants } from 'src/constants/constants';
+import { initialMeasurementPoint } from 'src/reducers/initialState';
+import { MeasurementPointList } from './MeasurementPointList';
 const uuidv4 = require('uuid/v4');
 
-// passing in an object, but we need an array back
-// const securityOptions = [
-//   ...FormUtil.convertToOptions(constants.securityFunctions)
-// ];
-
-// interface IstateChanges extends Observable<any> {
-//   next: () => void;
-// }
-
-// interface AbstractControlEdited extends AbstractControl {
-//   stateChanges: IstateChanges;
-// }
-
 const buildFieldConfig = (
-  typeOptions: any[],
-  mainCategoryOptions: any[],
-  standardOptions: any[]
+  typeOptions: Ioption[],
+  mainCategoryOptions: Ioption[],
+  standardOptions: Ioption[]
 ) => {
   // Field config to configure form
   const fieldConfigControls = {
@@ -104,7 +88,7 @@ const buildFieldConfig = (
 
 interface Iprops extends React.Props<EditMeasurementPointListForm> {
   selectedMeasurementPointList: ImeasurementPointList;
-  measurementPointListTypeOptions: any[];
+  measurementPointListTypeOptions: Ioption[];
   standardOptions: Ioption[];
   mainCategoryOptions: Ioption[];
   loading: boolean;
@@ -120,7 +104,7 @@ interface Iprops extends React.Props<EditMeasurementPointListForm> {
 }
 
 interface Istate {
-  selectedMeasurementPoint: any;
+  selectedMeasurementPoint: ImeasurementPoint;
   questions: ImeasurementPoint[];
 }
 
@@ -130,7 +114,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
   constructor(props: Iprops) {
     super(props);
     this.state = {
-      selectedMeasurementPoint: null,
+      selectedMeasurementPoint: initialMeasurementPoint,
       questions: this.parseQuestions()
     };
     this.fieldConfig = FormUtil.translateForm(
@@ -192,7 +176,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     }
   }
 
-  parseQuestions() {
+  parseQuestions = () => {
     const mps = map(
       this.props.selectedMeasurementPointList.measurementPoints,
       mp => {
@@ -205,12 +189,9 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     return map(mps, (mp, index) => {
       return { ...mp, order: index };
     });
-  }
+  };
 
-  handleSubmit = (
-    e: React.MouseEvent<HTMLFormElement>,
-    shouldApprove?: boolean
-  ) => {
+  handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (this.measurementsForm.status === 'INVALID') {
       this.measurementsForm.markAsSubmitted();
@@ -245,28 +226,28 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     };
   };
 
-  setSelectedQuestion(question: any) {
-    this.setState({ selectedMeasurementPoint: question });
+  setSelectedMeasurementPoint = (measurementPoint: ImeasurementPoint) => {
+    this.setState({ selectedMeasurementPoint: measurementPoint });
     this.props.toggleEditMeasurementPointModal();
-  }
+  };
 
-  deleteQuestion(question: any) {
+  deleteMeasurementPoint = (measurementPoint: ImeasurementPoint) => {
     const toastrConfirmOptions = {
       onOk: () => {
         this.props.deleteGlobalMeasurementPoint(
           this.props.selectedMeasurementPointList.id,
-          question.id
+          measurementPoint.id
         );
-        console.log('deleted', question);
+        console.log('deleted', measurementPoint);
       },
       onCancel: () => console.log('CANCEL: clicked'),
-      okText: this.props.t('deleteQuestionOk'),
+      okText: this.props.t('deleteMeasurementPointOk'),
       cancelText: this.props.t('common:cancel')
     };
     toastr.confirm(this.props.t('deleteConfirm'), toastrConfirmOptions);
-  }
+  };
 
-  newQuestion(type: number) {
+  newMeasurementPoint = (type: number): ImeasurementPoint => {
     return {
       id: uuidv4(),
       type,
@@ -277,9 +258,9 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       allowNotes: true,
       helpText: ''
     };
-  }
+  };
 
-  swapQuestionOrder(q1Index: number, q2Index: number) {
+  swapQuestionOrder = (q1Index: number, q2Index: number) => {
     const mps = this.state.questions;
     console.log('Swapping ', mps[q1Index].label, mps[q2Index].label);
     const tempOrder = mps[q1Index].order;
@@ -291,83 +272,10 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     this.setState({
       questions: mps
     });
-  }
-
-  getQuestionList = () => {
-    const mps = this.state.questions;
-    return (
-      <ListGroup className="question-list">
-        {map(mps, (mp, index) => {
-          return (
-            <div className="question-list-item-container" key={mp.id}>
-              <span className="sort-controls">
-                <Button
-                  onClick={() => {
-                    this.setSelectedQuestion(mp);
-                  }}
-                >
-                  <FontAwesomeIcon icon={['far', 'edit']}>
-                    {' '}
-                    Edit{' '}
-                  </FontAwesomeIcon>
-                </Button>
-                <Button
-                  disabled={mp.order === 0}
-                  onClick={() => {
-                    // console.log('swap up', mp.label, mps[index - 1].label);
-                    this.swapQuestionOrder(index, index - 1);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faSortAmountUp} fixedWidth size="2x" />
-                </Button>
-                <Button
-                  onClick={() => {
-                    this.deleteQuestion(mp);
-                  }}
-                >
-                  <FontAwesomeIcon icon={['far', 'times']}>
-                    {' '}
-                    Delete{' '}
-                  </FontAwesomeIcon>
-                </Button>
-                <Button
-                  disabled={mp.order === mps.length - 1}
-                  onClick={() => {
-                    // console.log('swap up', mp.label, mps[index + 1].label);
-                    this.swapQuestionOrder(index + 1, index);
-                  }}
-                >
-                  <FontAwesomeIcon
-                    icon={faSortAmountDown}
-                    fixedWidth
-                    size="2x"
-                  />
-                </Button>
-              </span>
-              <ListGroupItem
-                className="question-list-item"
-                onClick={() => {
-                  this.setSelectedQuestion(mp);
-                }}
-              >
-                {mp.type === 6 && (
-                  <p dangerouslySetInnerHTML={{ __html: mp.label }} />
-                )}
-                {mp.type !== 6 && <h5>{mp.label}</h5>}
-                {mp.type < 5 && constants.measurementPointTypesInverse[mp.type]}
-              </ListGroupItem>
-            </div>
-          );
-        })}
-      </ListGroup>
-    );
   };
 
   render() {
     const { t } = this.props;
-    // const selectedCustomer = this.measurementsForm
-    //   ? this.measurementsForm.value.customerID
-    //   : undefined;
 
     const formClassName = `clearfix beacon-form ${this.props.colorButton}`;
 
@@ -381,10 +289,13 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
           <Col xs={12} className="">
             <Button
               bsStyle="link"
+              type="button"
               className=""
               onClick={() => {
-                this.setSelectedQuestion(
-                  this.newQuestion(constants.measurementPointTypes.GROUP)
+                this.setSelectedMeasurementPoint(
+                  this.newMeasurementPoint(
+                    constants.measurementPointTypes.GROUP
+                  )
                 );
               }}
             >
@@ -392,10 +303,13 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
             </Button>
             <Button
               bsStyle="link"
+              type="button"
               className=""
               onClick={() => {
-                this.setSelectedQuestion(
-                  this.newQuestion(constants.measurementPointTypes.PROCEDURE)
+                this.setSelectedMeasurementPoint(
+                  this.newMeasurementPoint(
+                    constants.measurementPointTypes.PROCEDURE
+                  )
                 );
               }}
             >
@@ -403,10 +317,11 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
             </Button>
             <Button
               bsStyle="link"
+              type="button"
               className=""
               onClick={() => {
-                this.setSelectedQuestion(
-                  this.newQuestion(
+                this.setSelectedMeasurementPoint(
+                  this.newMeasurementPoint(
                     constants.measurementPointTypes.QUESTION_PASSFAIL
                   )
                 );
@@ -416,7 +331,12 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
             </Button>
           </Col>
           <Col xs={12} className="">
-            {this.getQuestionList()}
+            <MeasurementPointList
+              measurementPointList={this.state.questions}
+              setSelectedMeasurementPoint={this.setSelectedMeasurementPoint}
+              swapQuestionOrder={this.swapQuestionOrder}
+              deleteMeasurementPoint={this.deleteMeasurementPoint}
+            />
           </Col>
           <Col xs={12} className="form-buttons text-right">
             <Button

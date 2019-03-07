@@ -274,7 +274,7 @@
     "numericAllowDecimals": "Allow Decimals?",
     "deleteConfirm": "Are you sure?",
     "deleteListOk": "Delete This Measurement Point List?",
-    "deleteQuestionOk": "Delete This Measurement Point?",
+    "deleteMeasurementPointOk": "Delete This Measurement Point?",
     "selectDefaultOptionID": "Default Option",
     "selectRememberBetweenInspection": "Remember Between Inspections?",
     "selectOptions": "Create Select Options",

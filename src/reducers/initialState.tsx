@@ -104,17 +104,23 @@ export const initialLesson = {
 };
 export const initialMeasurementPointList = {
   id: '',
-  measurementPoints: {},
+  measurementPointTabs: [],
   mainCategoryID: '',
   standardID: '',
   type: 1,
   customerID: ''
 };
+export const initialMeasurementPointTab = {
+  id: '',
+  name: '',
+  measurementPoints: {}
+};
 export const initialMeasurementPoint = {
   id: '',
   type: 1,
   label: '',
-  order: 0
+  order: 0,
+  customerID: ''
 };
 
 const initialCustomer = {
@@ -255,13 +261,14 @@ export default {
     tableFilters: initialTableFilters,
     totalPages: 1
   },
-  manageMeasurementPointLists: {
+  manageMeasurementPointListsReducer: {
     totalPages: 1,
-    data: [],
+    data: {},
     selectedMeasurementPointList: initialMeasurementPointList,
     showEditMeasurementPointListModal: false,
     showEditMeasurementPointModal: false,
-    tableFilters: initialTableFilters
+    tableFilters: initialTableFilters,
+    selectedTabID: ''
   },
   customers: [],
   facilities: [],

@@ -3,7 +3,7 @@
 */
 import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { filter } from 'lodash';
+import { filter, values } from 'lodash';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 import ReactTable, { SortingRule, FinalState, RowInfo } from 'react-table';
@@ -32,8 +32,7 @@ import {
   toggleEditMeasurementPointListModal,
   toggleEditMeasurementPointModal,
   setTableFilter,
-  setSelectedMeasurementPointList,
-  deleteGlobalMeasurementPointList
+  setSelectedMeasurementPointList
 } from '../../actions/manageMeasurementPointListsActions';
 import { getProductInfo } from '../../actions/manageInventoryActions';
 import Banner from '../common/Banner';
@@ -57,7 +56,6 @@ interface IdispatchProps {
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
   toggleEditMeasurementPointModal: typeof toggleEditMeasurementPointModal;
   setSelectedMeasurementPointList: typeof setSelectedMeasurementPointList;
-  deleteGlobalMeasurementPointList: typeof deleteGlobalMeasurementPointList;
   getProductInfo: typeof getProductInfo;
   mainCategoryOptions: Ioption[];
   standardOptions: Ioption[];
@@ -209,12 +207,17 @@ class ManageMeasurementPointList extends React.Component<
         {
           id: 'numQuestions',
           Header: '# of Questions',
-          accessor: ({ measurementPoints }: ImeasurementPointList) => {
-            if (measurementPoints) {
-              return filter(measurementPoints, mp => mp.isDeleted === false)
-                .length;
-            }
-            return 0;
+          accessor: ({ measurementPointTabs }: ImeasurementPointList) => {
+            let count = 0;
+            measurementPointTabs.forEach(tab => {
+              if (tab.measurementPoints.length) {
+                count += filter(
+                  tab.measurementPoints,
+                  mp => mp.isDeleted === false
+                ).length;
+              }
+            });
+            return count;
           }
         },
         {
@@ -269,7 +272,7 @@ class ManageMeasurementPointList extends React.Component<
         deletedItem = {
           ...deletedItem
         };
-        this.props.deleteGlobalMeasurementPointList(deletedItem.id);
+        // this.props.deleteGlobalMeasurementPointList(deletedItem.id); // TODO fix this
         console.log('deleted', deletedItem);
       },
       onCancel: () => console.log('CANCEL: clicked'),
@@ -434,7 +437,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
       state.manageMeasurementPointLists.showEditMeasurementPointListModal,
     showEditMeasurementPointModal:
       state.manageMeasurementPointLists.showEditMeasurementPointModal,
-    tableData: state.manageMeasurementPointLists.data,
+    tableData: values(state.manageMeasurementPointLists.data),
     tableFilters: state.manageMeasurementPointLists.tableFilters,
     standardOptions: state.productInfo.standardOptions,
     mainCategoryOptions: state.productInfo.mainCategoryOptions
@@ -448,7 +451,6 @@ export default translate('manageMeasurementPointLists')(
       toggleEditMeasurementPointListModal,
       toggleEditMeasurementPointModal,
       setSelectedMeasurementPointList,
-      deleteGlobalMeasurementPointList,
       closeAllModals,
       setTableFilter,
       getProductInfo

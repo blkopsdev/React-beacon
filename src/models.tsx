@@ -313,6 +313,9 @@ export interface IproductInfo {
   systemSizeOptions: Ioption[];
 }
 
+/*
+* Measurement Points
+*/
 export interface ImeasurementPointSelectOption {
   id: string;
   value: string;
@@ -337,25 +340,32 @@ export interface ImeasurementPoint {
   selectRememberBetweenInspection?: boolean;
   selectOptions?: ImeasurementPointSelectOption[];
   isDeleted?: boolean;
-  customerID?: string;
+  customerID: string;
+}
+
+export interface ImeasurementPointListTab {
+  id: string;
+  name: string;
+  measurementPoints: { [key: string]: ImeasurementPoint };
 }
 
 export interface ImeasurementPointList {
   id: string;
-  measurementPoints: { [key: string]: ImeasurementPoint };
+  // measurementPointTabs: {[key: string]: ImeasurementPointListTab};
+  measurementPointTabs: ImeasurementPointListTab[];
   mainCategoryID: string;
   standardID: string;
   type: number;
-  customerID?: string;
 }
 
 export interface ImanageMeasurementPointListsReducer {
-  data: ImeasurementPointList[];
+  data: { [key: string]: ImeasurementPointList };
   totalPages: number;
-  selectedMeasurementPointList?: ImeasurementPointList;
+  selectedMeasurementPointList: ImeasurementPointList;
   showEditMeasurementPointListModal: boolean;
   showEditMeasurementPointModal: boolean;
   tableFilters: ItableFiltersReducer;
+  selectedTabID: string;
 }
 
 export interface IinitialState {

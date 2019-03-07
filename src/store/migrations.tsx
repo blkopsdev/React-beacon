@@ -26,14 +26,16 @@ export const migrations = {
     const prevState = state as IinitialState;
     return {
       ...prevState,
-      manageMeasurementPointLists: initialState.manageMeasurementPointLists
+      manageMeasurementPointLists:
+        initialState.manageMeasurementPointListsReducer
     };
   },
   8: state => {
     const prevState = state as IinitialState;
     return {
       ...prevState,
-      manageMeasurementPointLists: initialState.manageMeasurementPointLists,
+      manageMeasurementPointLists:
+        initialState.manageMeasurementPointListsReducer,
       manageUserQueue: initialState.manageUserQueue,
       manageInventory: initialState.manageInventory
     };

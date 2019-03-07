@@ -7,18 +7,18 @@ import {
   IinitialState,
   ImeasurementPointList,
   Ioption,
-  Iuser
+  Iuser,
+  ImeasurementPointListTab
 } from '../../models';
 import {
   toggleEditMeasurementPointListModal,
   toggleEditMeasurementPointModal,
   addGlobalMeasurementPointList,
-  updateGlobalMeasurementPointList,
-  addQuestionToMeasurementPointList,
-  deleteGlobalMeasurementPoint
+  updateGlobalMeasurementPointList
 } from '../../actions/manageMeasurementPointListsActions';
 import CommonModal from '../common/CommonModal';
 import EditMeasurementPointListForm from './EditMeasurementPointListForm';
+import { initialMeasurementPointTab } from 'src/reducers/initialState';
 // import { find } from 'lodash';
 
 interface Iprops {
@@ -39,8 +39,8 @@ interface IdispatchProps {
   toggleEditMeasurementPointModal: typeof toggleEditMeasurementPointModal;
   addGlobalMeasurementPointList: typeof addGlobalMeasurementPointList;
   updateGlobalMeasurementPointList: typeof updateGlobalMeasurementPointList;
-  addQuestionToMeasurementPointList: typeof addQuestionToMeasurementPointList;
-  deleteGlobalMeasurementPoint: typeof deleteGlobalMeasurementPoint;
+  selectedTabID: string;
+  selectedTab: ImeasurementPointListTab;
 }
 
 class EditMeasurementPointListModal extends React.Component<
@@ -66,6 +66,10 @@ class EditMeasurementPointListModal extends React.Component<
 }
 
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
+  const selectedTab =
+    state.manageMeasurementPointLists.selectedMeasurementPointList.measurementPointTabs.find(
+      tab => tab.id === state.manageMeasurementPointLists.selectedTabID
+    ) || initialMeasurementPointTab;
   return {
     user: state.user,
     userManage: state.manageUser,
@@ -78,6 +82,8 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     showEditFacilityModal: state.showEditFacilityModal,
     standardOptions: state.productInfo.standardOptions,
     mainCategoryOptions: state.productInfo.mainCategoryOptions,
+    selectedTabID: state.manageMeasurementPointLists.selectedTabID,
+    selectedTab,
     selectedMeasurementPointList:
       state.manageMeasurementPointLists.selectedMeasurementPointList
   };
@@ -89,8 +95,6 @@ export default connect(
     toggleEditMeasurementPointListModal,
     toggleEditMeasurementPointModal,
     addGlobalMeasurementPointList,
-    updateGlobalMeasurementPointList,
-    addQuestionToMeasurementPointList,
-    deleteGlobalMeasurementPoint
+    updateGlobalMeasurementPointList
   }
 )(EditMeasurementPointListModal);

@@ -11,7 +11,7 @@ import {
   FieldConfig
   // Observable
 } from 'react-reactive-form';
-import { forEach, find, keys, keyBy, filter } from 'lodash';
+import { forEach, find, keys, filter } from 'lodash';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
@@ -21,15 +21,14 @@ import {
   Ioption,
   ImeasurementPointList,
   ImeasurementPoint,
-  Iuser
+  Iuser,
+  ImeasurementPointListTab
 } from '../../models';
 import {
   toggleEditMeasurementPointListModal,
   toggleEditMeasurementPointModal,
   addGlobalMeasurementPointList,
-  updateGlobalMeasurementPointList,
-  addQuestionToMeasurementPointList,
-  deleteGlobalMeasurementPoint
+  updateGlobalMeasurementPointList
 } from '../../actions/manageMeasurementPointListsActions';
 import EditMeasurementPointModal from './EditMeasurementPointModal';
 import { constants } from 'src/constants/constants';
@@ -101,8 +100,8 @@ interface Iprops extends React.Props<EditMeasurementPointListForm> {
   toggleEditMeasurementPointModal: typeof toggleEditMeasurementPointModal;
   addGlobalMeasurementPointList: typeof addGlobalMeasurementPointList;
   updateGlobalMeasurementPointList: typeof updateGlobalMeasurementPointList;
-  addQuestionToMeasurementPointList: typeof addQuestionToMeasurementPointList;
-  deleteGlobalMeasurementPoint: typeof deleteGlobalMeasurementPoint;
+  selectedTabID: string;
+  selectedTab: ImeasurementPointListTab;
 }
 
 interface Istate {
@@ -183,7 +182,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
   */
   parseQuestions = () => {
     const filteredMPs = filter(
-      this.props.selectedMeasurementPointList.measurementPoints,
+      this.props.selectedTab.measurementPoints,
       mp => mp.isDeleted === false
     );
 
@@ -193,6 +192,10 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     return filteredMPs;
   };
 
+  /*
+  * We will allways have a selectedMeasurmentPointList because either a temporary one was created, or we are editing one that we received from the API.
+  * we are only updating the mainCategory, standard, and type on this form.
+  */
   handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (this.measurementsForm.status === 'INVALID') {
@@ -200,25 +203,14 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
+
     const mpl = {
       ...this.props.selectedMeasurementPointList,
       mainCategoryID: this.measurementsForm.value.equipmentType.value,
       standardID: this.measurementsForm.value.standard.value,
-      type: this.measurementsForm.value.type.value,
-      measurementPoints: keyBy(
-        this.state.questions,
-        (item: ImeasurementPoint) => item.id
-      )
+      type: this.measurementsForm.value.type.value
     };
-    if (mpl.id === '') {
-      mpl.id = uuidv4();
-      // add new mpl
-      this.props.addGlobalMeasurementPointList(mpl);
-    } else {
-      // update existing mpl
-      this.props.updateGlobalMeasurementPointList(mpl);
-    }
-    // console.log(mpl);
+    this.props.updateGlobalMeasurementPointList(mpl);
   };
 
   setForm = (form: AbstractControl) => {
@@ -236,10 +228,10 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
   deleteMeasurementPoint = (measurementPoint: ImeasurementPoint) => {
     const toastrConfirmOptions = {
       onOk: () => {
-        this.props.deleteGlobalMeasurementPoint(
-          this.props.selectedMeasurementPointList.id,
-          measurementPoint.id
-        );
+        // this.props.deleteGlobalMeasurementPoint(
+        //   this.props.selectedMeasurementPointList.id,
+        //   measurementPoint.id
+        // );
         console.log('deleted', measurementPoint);
       },
       onCancel: () => console.log('CANCEL: clicked'),
@@ -251,14 +243,10 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
 
   newMeasurementPoint = (type: number): ImeasurementPoint => {
     return {
+      ...initialMeasurementPoint,
       id: uuidv4(),
       type,
-      label: '',
-      order: keys(this.props.selectedMeasurementPointList.measurementPoints)
-        .length,
-      guideText: '',
-      allowNotes: true,
-      helpText: ''
+      order: keys(this.props.selectedTab.measurementPoints).length
     };
   };
 
@@ -385,7 +373,6 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
           </Col>
         </form>
         <EditMeasurementPointModal
-          selectedMeasurementPointList={this.props.selectedMeasurementPointList}
           selectedMeasurementPoint={this.state.selectedMeasurementPoint}
           colorButton={this.props.colorButton}
           t={this.props.t}

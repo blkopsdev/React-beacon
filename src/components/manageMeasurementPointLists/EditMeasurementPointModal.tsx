@@ -6,7 +6,8 @@ import * as React from 'react';
 import {
   IinitialState,
   ImeasurementPointList,
-  ImeasurementPoint
+  ImeasurementPoint,
+  ImeasurementPointListTab
 } from '../../models';
 import {
   toggleEditMeasurementPointListModal,
@@ -16,9 +17,9 @@ import {
 import CommonModal from '../common/CommonModal';
 import EditMeasurementPointForm from './EditMeasurementPointForm';
 import { constants } from 'src/constants/constants';
+import { initialMeasurementPointTab } from 'src/reducers/initialState';
 
 interface Iprops {
-  selectedMeasurementPointList: ImeasurementPointList;
   selectedMeasurementPoint: ImeasurementPoint;
   colorButton: any;
   t: TranslationFunction;
@@ -31,6 +32,8 @@ interface IdispatchProps {
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
   toggleEditMeasurementPointModal: typeof toggleEditMeasurementPointModal;
   addQuestionToMeasurementPointList: typeof addQuestionToMeasurementPointList;
+  selectedMeasurementPointList: ImeasurementPointList;
+  selectedTab: ImeasurementPointListTab;
 }
 
 class EditMeasurementPointModal extends React.Component<
@@ -74,6 +77,11 @@ class EditMeasurementPointModal extends React.Component<
 }
 
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
+  const selectedTab =
+    state.manageMeasurementPointLists.selectedMeasurementPointList.measurementPointTabs.find(
+      tab => tab.id === state.manageMeasurementPointLists.selectedTabID
+    ) || initialMeasurementPointTab;
+
   return {
     user: state.user,
     // userManage: state.manageUser,
@@ -81,7 +89,10 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     showEditMeasurementPointListModal:
       state.manageMeasurementPointLists.showEditMeasurementPointListModal,
     showEditMeasurementPointModal:
-      state.manageMeasurementPointLists.showEditMeasurementPointModal
+      state.manageMeasurementPointLists.showEditMeasurementPointModal,
+    selectedTab,
+    selectedMeasurementPointList:
+      state.manageMeasurementPointLists.selectedMeasurementPointList
   };
 };
 

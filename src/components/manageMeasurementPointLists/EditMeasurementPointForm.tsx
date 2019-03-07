@@ -538,9 +538,11 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
           : ''
       };
     }
+    const tabID = ''; // TODO fix this
     console.log(newQ);
     this.props.addQuestionToMeasurementPointList(
-      this.props.selectedMeasurementPointList,
+      this.props.selectedMeasurementPointList.id,
+      tabID,
       newQ
     );
     this.props.toggleEditMeasurementPointModal();

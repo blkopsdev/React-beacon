@@ -166,13 +166,18 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
         question: initialMeasurementPoint
       };
     }
-
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.setForm = this.setForm.bind(this);
-    this.getFormConfig = this.getFormConfig.bind(this);
   }
 
-  getFormConfig(question: ImeasurementPoint) {
+  componentDidMount() {
+    if (
+      !this.props.selectedMeasurementPointList ||
+      !this.props.selectedMeasurementPoint.id.length
+    ) {
+      console.error('missing measurementPoint List or MeasurementPoint');
+      this.props.toggleEditMeasurementPointModal();
+    }
+  }
+  getFormConfig = (question: ImeasurementPoint) => {
     if (question.type === constants.measurementPointTypes.PROCEDURE) {
       return buildProcedureFieldConfig(question.label);
     } else if (question.type === constants.measurementPointTypes.GROUP) {
@@ -196,26 +201,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
         extraConfig
       );
     }
-  }
-
-  // componentDidUpdate(prevProps: Iprops) {
-  //   if (!this.props.selectedMeasurementPointList) {
-  //     return;
-  //   }
-  //   if (!this.props.selectedMeasurementPoint) {
-  //     return;
-  //   }
-  // }
-
-  componentDidMount() {
-    if (
-      !this.props.selectedMeasurementPointList ||
-      !this.props.selectedMeasurementPoint.id.length
-    ) {
-      console.error('missing measurementPoint List or MeasurementPoint');
-      this.props.toggleEditMeasurementPointModal();
-    }
-  }
+  };
 
   selectFieldConfig = (question: ImeasurementPoint) => ({
     selectRememberBetweenDevice: {
@@ -389,7 +375,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
     return fieldConfig as FieldConfig;
   };
 
-  buildForm(questionType: number) {
+  buildForm = (questionType: number) => {
     console.log('BUILDING FORM', questionType);
 
     this.setState({
@@ -398,9 +384,9 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
         this.props.t
       )
     });
-  }
+  };
 
-  patchValues() {
+  patchValues = () => {
     // set values
     forEach(this.state.question, (value, key) => {
       this.measurementsForm.patchValue({ [key]: value });
@@ -479,7 +465,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
         console.log(control);
       }
     }
-  }
+  };
 
   handleSubmit = (
     e: React.MouseEvent<HTMLFormElement>,

@@ -72,11 +72,9 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     };
   }
   componentWillMount() {
-    // if there are tabs set the initial tab
     const { measurementPointTabs } = this.props.selectedMeasurementPointList;
-    if (measurementPointTabs.length) {
-      this.props.setSelectedTabID(measurementPointTabs[0].id);
-    }
+    this.props.setSelectedTabID(measurementPointTabs[0].id);
+    this.setState({ questions: this.parseQuestions() });
   }
 
   componentDidUpdate(prevProps: Iprops) {
@@ -84,12 +82,19 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       console.error('missing selected measurement point');
       return;
     }
+    if (
+      JSON.stringify(prevProps.selectedTab) !==
+      JSON.stringify(this.props.selectedTab)
+    ) {
+      console.log('selectedTab updated!!!!');
+      this.setState({ questions: this.parseQuestions() });
+    }
 
     if (
       JSON.stringify(this.props.selectedMeasurementPointList) !==
       JSON.stringify(prevProps.selectedMeasurementPointList)
     ) {
-      console.log('update!!!!');
+      console.log('selectedMeasurementPointList updated!!!!');
       this.setState({ questions: this.parseQuestions() });
     }
   }
@@ -136,10 +141,15 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     if (standardID.length) {
       selectedStandard = FormUtil.convertToSingleOption(standards[standardID]);
     }
-    if (selectedTabID.length && measurementPointTabs.length) {
-      selectedTab = FormUtil.convertToSingleOption(
-        measurementPointTabs.find(tab => tab.id === selectedTabID)
-      );
+
+    const foundSelectedTab = FormUtil.convertToSingleOption(
+      measurementPointTabs.find(tab => tab.id === selectedTabID)
+    );
+    if (selectedTabID.length && foundSelectedTab) {
+      selectedTab = foundSelectedTab;
+    } else {
+      // select the first one if none are selected
+      selectedTab = FormUtil.convertToSingleOption(measurementPointTabs[0]);
     }
 
     // Field config to configure form
@@ -249,6 +259,9 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     };
   };
 
+  /*
+  set a single measurement point
+  */
   setSelectedMeasurementPoint = (measurementPoint: ImeasurementPoint) => {
     this.setState({ selectedMeasurementPoint: measurementPoint });
     this.props.toggleEditMeasurementPointModal();

@@ -346,6 +346,7 @@ export interface ImeasurementPoint {
 export interface ImeasurementPointListTab {
   id: string;
   name: string;
+  order: number;
   measurementPoints: { [key: string]: ImeasurementPoint };
 }
 
@@ -354,6 +355,7 @@ export interface ImeasurementPointList {
   // measurementPointTabs: {[key: string]: ImeasurementPointListTab};
   measurementPointTabs: ImeasurementPointListTab[];
   mainCategoryID: string;
+  testProcedures: string;
   standardID: string;
   type: number;
 }

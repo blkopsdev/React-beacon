@@ -57,7 +57,7 @@ interface Iprops extends React.Props<EditMeasurementPointListForm> {
 
 interface Istate {
   selectedMeasurementPoint: ImeasurementPoint;
-  questions: ImeasurementPoint[];
+  measurementPoints: ImeasurementPoint[];
   fieldConfig: FieldConfig;
 }
 
@@ -67,14 +67,14 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     super(props);
     this.state = {
       selectedMeasurementPoint: initialMeasurementPoint,
-      questions: this.parseQuestions(),
+      measurementPoints: this.parseMeasurementPoints(),
       fieldConfig: FormUtil.translateForm(this.buildFieldConfig(), this.props.t)
     };
   }
   componentWillMount() {
     const { measurementPointTabs } = this.props.selectedMeasurementPointList;
     this.props.setSelectedTabID(measurementPointTabs[0].id);
-    this.setState({ questions: this.parseQuestions() });
+    this.setState({ measurementPoints: this.parseMeasurementPoints() });
   }
 
   componentDidUpdate(prevProps: Iprops) {
@@ -87,7 +87,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       JSON.stringify(this.props.selectedTab)
     ) {
       console.log('selectedTab updated!!!!');
-      this.setState({ questions: this.parseQuestions() });
+      this.setState({ measurementPoints: this.parseMeasurementPoints() });
     }
 
     if (
@@ -95,7 +95,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       JSON.stringify(prevProps.selectedMeasurementPointList)
     ) {
       console.log('selectedMeasurementPointList updated!!!!');
-      this.setState({ questions: this.parseQuestions() });
+      this.setState({ measurementPoints: this.parseMeasurementPoints() });
     }
   }
   buildFieldConfig = () => {
@@ -155,7 +155,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     // Field config to configure form
     const fieldConfigControls = {
       type: {
-        render: FormUtil.SelectWithoutValidation,
+        render: FormUtil.Select,
         meta: {
           options: constants.measurementPointListTypeOptions,
           label: 'manageMeasurementPointLists:type',
@@ -171,7 +171,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
         }
       },
       mainCategoryID: {
-        render: FormUtil.SelectWithoutValidation,
+        render: FormUtil.Select,
         meta: {
           options: mainCategoryOptions,
           label: 'manageMeasurementPointLists:equipmentType',
@@ -187,7 +187,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
         }
       },
       standard: {
-        render: FormUtil.SelectWithoutValidation,
+        render: FormUtil.Select,
         meta: {
           options: standardOptions,
           label: 'manageMeasurementPointLists:standard',
@@ -200,12 +200,14 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
         formState: { value: selectedStandard, disabled }
       },
       selectedTab: {
-        render: FormUtil.SelectWithoutValidation,
+        render: FormUtil.CreatableSelect,
         meta: {
           options: tabOptions,
           label: 'manageMeasurementPointLists:selectTabLabel',
           colWidth: 12,
-          placeholder: 'manageMeasurementPointLists:selectTabPlaceholder'
+          placeholder: 'manageMeasurementPointLists:selectTabPlaceholder',
+          isMulti: false,
+          handleCreate: this.handleCreateTab
         },
         formState: { value: selectedTab, disabled: false }
       }
@@ -217,9 +219,32 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
   };
 
   /*
+  Handle creating a new tab
+  */
+  handleCreateTab = (name: string) => {
+    const newTab: ImeasurementPointListTab = {
+      id: uuidv4(),
+      name,
+      order:
+        this.props.selectedMeasurementPointList.measurementPointTabs.length + 1,
+      measurementPoints: {}
+    };
+
+    this.props.updateGlobalMeasurementPointList(
+      {
+        ...this.props.selectedMeasurementPointList,
+        measurementPointTabs: [
+          ...this.props.selectedMeasurementPointList.measurementPointTabs,
+          newTab
+        ]
+      },
+      false
+    );
+  };
+  /*
   * Remove deleted measurementPoints and sort them
   */
-  parseQuestions = () => {
+  parseMeasurementPoints = () => {
     const filteredMPs = filter(
       this.props.selectedTab.measurementPoints,
       mp => mp.isDeleted === false
@@ -249,7 +274,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       standardID: this.measurementsForm.value.standard.value,
       type: this.measurementsForm.value.type.value
     };
-    this.props.updateGlobalMeasurementPointList(mpl);
+    this.props.updateGlobalMeasurementPointList(mpl, true);
   };
 
   setForm = (form: AbstractControl) => {
@@ -292,8 +317,8 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     };
   };
 
-  swapQuestionOrder = (q1Index: number, q2Index: number) => {
-    const mps = this.state.questions;
+  swapMeasurementPointOrder = (q1Index: number, q2Index: number) => {
+    const mps = this.state.measurementPoints;
     console.log('Swapping ', mps[q1Index].label, mps[q2Index].label);
     const tempOrder = mps[q1Index].order;
     mps[q1Index] = { ...mps[q1Index], order: mps[q2Index].order };
@@ -302,7 +327,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       return a.order - b.order;
     });
     this.setState({
-      questions: mps
+      measurementPoints: mps
     });
   };
 
@@ -320,12 +345,12 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     //   this.props.user,
     //   constants.securityFunctions.ManageAllMeasurementPoints.id
     // );
-    // const adminMps = this.state.questions.filter(
+    // const adminMps = this.state.measurementPoints.filter(
     //   (mps: ImeasurementPointQuestion) => {
     //     return !mps.customerID && !mps.isDeleted;
     //   }
     // );
-    // const customerMps = this.state.questions.filter(
+    // const customerMps = this.state.measurementPoints.filter(
     //   (mps: ImeasurementPointQuestion) => {
     //     return (
     //       typeof mps.customerID !== 'undefined' &&
@@ -378,7 +403,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
               onClick={() => {
                 this.setSelectedMeasurementPoint(
                   this.newMeasurementPoint(
-                    constants.measurementPointTypes.QUESTION_PASSFAIL
+                    constants.measurementPointTypes.MEASUREMENT_POINT_PASSFAIL
                   )
                 );
               }}
@@ -388,9 +413,9 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
           </Col>
           <Col xs={12} className="">
             <MeasurementPointList
-              measurementPointList={this.state.questions}
+              measurementPointList={this.state.measurementPoints}
               setSelectedMeasurementPoint={this.setSelectedMeasurementPoint}
-              swapQuestionOrder={this.swapQuestionOrder}
+              swapMeasurementPointOrder={this.swapMeasurementPointOrder}
               deleteMeasurementPoint={this.deleteMeasurementPoint}
               canEditGlobal={this.canEditGlobal()}
             />

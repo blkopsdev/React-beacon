@@ -27,7 +27,7 @@ import {
 import {
   toggleEditMeasurementPointListModal,
   toggleEditMeasurementPointModal,
-  addQuestionToMeasurementPointList
+  addMeasurementPointToMeasurementPointList
 } from '../../actions/manageMeasurementPointListsActions';
 import { constants } from 'src/constants/constants';
 import { initialMeasurementPoint } from 'src/reducers/initialState';
@@ -137,7 +137,7 @@ interface Iprops extends React.Props<EditMeasurementPointForm> {
   i18n: I18n;
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
   toggleEditMeasurementPointModal: typeof toggleEditMeasurementPointModal;
-  addQuestionToMeasurementPointList: typeof addQuestionToMeasurementPointList;
+  addMeasurementPointToMeasurementPointList: typeof addMeasurementPointToMeasurementPointList;
 }
 
 interface Istate {
@@ -184,14 +184,19 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
       return groupFieldConfig;
     } else {
       let extraConfig = {};
-      if (question.type === constants.measurementPointTypes.QUESTION_PASSFAIL) {
+      if (
+        question.type ===
+        constants.measurementPointTypes.MEASUREMENT_POINT_PASSFAIL
+      ) {
         extraConfig = passFailFieldConfig;
       } else if (
-        question.type === constants.measurementPointTypes.QUESTION_NUMERIC
+        question.type ===
+        constants.measurementPointTypes.MEASUREMENT_POINT_NUMERIC
       ) {
         extraConfig = numericFieldConfig;
       } else if (
-        question.type === constants.measurementPointTypes.QUESTION_SELECT
+        question.type ===
+        constants.measurementPointTypes.MEASUREMENT_POINT_SELECT
       ) {
         extraConfig = this.selectFieldConfig(question);
       }
@@ -410,7 +415,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
         )
       });
     }
-    if (type === constants.measurementPointTypes.QUESTION_PASSFAIL) {
+    if (type === constants.measurementPointTypes.MEASUREMENT_POINT_PASSFAIL) {
       const { passFailDefault } = this.state.question;
       if (passFailDefault) {
         this.measurementsForm.patchValue({
@@ -421,7 +426,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
         });
       }
     }
-    if (type === constants.measurementPointTypes.QUESTION_NUMERIC) {
+    if (type === constants.measurementPointTypes.MEASUREMENT_POINT_NUMERIC) {
       const { numericAllowDecimals } = this.state.question;
       if (typeof numericAllowDecimals !== undefined) {
         console.log('patching', numericAllowDecimals);
@@ -433,7 +438,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
         });
       }
     }
-    if (type === constants.measurementPointTypes.QUESTION_SELECT) {
+    if (type === constants.measurementPointTypes.MEASUREMENT_POINT_SELECT) {
       const {
         selectRememberBetweenDevice,
         selectRememberBetweenInspection,
@@ -491,7 +496,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
     }
     if (
       this.state.question.type ===
-      constants.measurementPointTypes.QUESTION_PASSFAIL
+      constants.measurementPointTypes.MEASUREMENT_POINT_PASSFAIL
     ) {
       newQ = {
         ...newQ,
@@ -500,7 +505,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
     }
     if (
       this.state.question.type ===
-      constants.measurementPointTypes.QUESTION_NUMERIC
+      constants.measurementPointTypes.MEASUREMENT_POINT_NUMERIC
     ) {
       newQ = {
         ...newQ,
@@ -510,7 +515,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
     }
     if (
       this.state.question.type ===
-      constants.measurementPointTypes.QUESTION_SELECT
+      constants.measurementPointTypes.MEASUREMENT_POINT_SELECT
     ) {
       // console.log(this.measurementsForm.value.selectOptions);
       // return;
@@ -540,7 +545,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
     }
     const tabID = ''; // TODO fix this
     console.log(newQ);
-    this.props.addQuestionToMeasurementPointList(
+    this.props.addMeasurementPointToMeasurementPointList(
       this.props.selectedMeasurementPointList.id,
       tabID,
       newQ

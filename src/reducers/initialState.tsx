@@ -107,12 +107,14 @@ export const initialMeasurementPointList = {
   measurementPointTabs: [],
   mainCategoryID: '',
   standardID: '',
-  type: 1
+  type: 1,
+  testProcedures: ''
 };
 export const initialMeasurementPointTab = {
   id: '',
   name: 'Default Tab',
-  measurementPoints: {}
+  measurementPoints: {},
+  order: 0
 };
 export const initialMeasurementPoint = {
   id: '',

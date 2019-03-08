@@ -58,7 +58,7 @@ function manageMeasurementPointListData(
         ...state,
         [action.measurementPointList.id]: action.measurementPointList
       };
-    case types.MANAGE_MEASUREMENT_POINT_QUESTION_ADD:
+    case types.MANAGE_MEASUREMENT_POINT_ADD:
       const newTabs = state[action.listID].measurementPointTabs.map(tab => {
         if (tab.id === action.tabID) {
           return {
@@ -93,7 +93,7 @@ function manageSelectedMeasurementPointList(
   switch (action.type) {
     case types.SELECT_MEASUREMENT_POINT_LIST:
       return action.measurementPointList;
-    case types.MANAGE_MEASUREMENT_POINT_QUESTION_ADD:
+    case types.MANAGE_MEASUREMENT_POINT_ADD:
       const newTabsB = state.measurementPointTabs.map(tab => {
         if (tab.id === action.tabID) {
           return {
@@ -164,7 +164,7 @@ export default function manageMeasurementPointLists(
     showEditMeasurementPointModal: modalToggleWithName(
       state.showEditMeasurementPointModal,
       action,
-      'EDIT_MEASUREMENT_POINT_QUESTION'
+      'EDIT_MEASUREMENT_POINT'
     ),
     tableFilters: createTableFiltersWithName(
       state.tableFilters,

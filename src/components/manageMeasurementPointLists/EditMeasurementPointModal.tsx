@@ -12,7 +12,7 @@ import {
 import {
   toggleEditMeasurementPointListModal,
   toggleEditMeasurementPointModal,
-  addQuestionToMeasurementPointList
+  addMeasurementPointToMeasurementPointList
 } from '../../actions/manageMeasurementPointListsActions';
 import CommonModal from '../common/CommonModal';
 import EditMeasurementPointForm from './EditMeasurementPointForm';
@@ -31,7 +31,7 @@ interface IdispatchProps {
   loading: boolean;
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
   toggleEditMeasurementPointModal: typeof toggleEditMeasurementPointModal;
-  addQuestionToMeasurementPointList: typeof addQuestionToMeasurementPointList;
+  addMeasurementPointToMeasurementPointList: typeof addMeasurementPointToMeasurementPointList;
   selectedMeasurementPointList: ImeasurementPointList;
   selectedTab: ImeasurementPointListTab;
 }
@@ -58,7 +58,7 @@ class EditMeasurementPointModal extends React.Component<
     ) {
       return 'GroupModalTitle';
     } else {
-      return 'QuestionModalTitle';
+      return 'measurementPointModalTitle';
     }
   }
 
@@ -101,6 +101,6 @@ export default connect(
   {
     toggleEditMeasurementPointListModal,
     toggleEditMeasurementPointModal,
-    addQuestionToMeasurementPointList
+    addMeasurementPointToMeasurementPointList
   }
 )(EditMeasurementPointModal);

@@ -66,12 +66,12 @@ export const setSelectedMeasurementPointList = (
   measurementPointList
 });
 
-export const addQuestionToMeasurementPointList = (
+export const addMeasurementPointToMeasurementPointList = (
   listID: string,
   tabID: string,
   measurementPoint: ImeasurementPoint
 ) => ({
-  type: types.MANAGE_MEASUREMENT_POINT_QUESTION_ADD,
+  type: types.MANAGE_MEASUREMENT_POINT_ADD,
   listID,
   tabID,
   measurementPoint
@@ -124,42 +124,44 @@ export function addGlobalMeasurementPointList(
 * update a mpl
 */
 export function updateGlobalMeasurementPointList(
-  mpl: ImeasurementPointList
+  mpl: ImeasurementPointList,
+  persistToAPI: boolean
 ): ThunkResult<void> {
   return (dispatch, getState) => {
-    dispatch(beginAjaxCall());
-
-    // convert the measementPoints back to an array
-    const measurementPointTabs = mpl.measurementPointTabs.map(tab => {
-      return { ...tab, measurementPoints: values(tab.measurementPoints) };
-    });
-    const listForAPI = { ...mpl, measurementPointTabs };
-
     dispatch({
       type: types.MANAGE_MEASUREMENT_POINT_LIST_UPDATE,
       measurementPointList: mpl
     });
-
-    return axios
-      .put(`${API.PUT.measurements.updateglobalmpl}/${mpl.id}`, listForAPI)
-      .then(data => {
-        if (!data.data) {
-          throw undefined;
-        } else {
-          dispatch(endAjaxCall());
-          dispatch({ type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT_LISTS });
-          toastr.success(
-            'Success',
-            'Updated measurement point list.',
-            constants.toastrSuccess
-          );
-        }
-      })
-      .catch((error: any) => {
-        dispatch({ type: types.MANAGE_MEASUREMENT_POINT_LIST_UPDATE_FAILED });
-        constants.handleError(error, 'update measurement point list');
-        console.error(error);
+    if (persistToAPI) {
+      dispatch(beginAjaxCall());
+      // convert the measementPoints back to an array
+      const measurementPointTabs = mpl.measurementPointTabs.map(tab => {
+        return { ...tab, measurementPoints: values(tab.measurementPoints) };
       });
+      const listForAPI = { ...mpl, measurementPointTabs };
+      return axios
+        .put(`${API.PUT.measurements.updateglobalmpl}/${mpl.id}`, listForAPI)
+        .then(data => {
+          if (!data.data) {
+            throw undefined;
+          } else {
+            dispatch(endAjaxCall());
+            dispatch({ type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT_LISTS });
+            toastr.success(
+              'Success',
+              'Updated measurement point list.',
+              constants.toastrSuccess
+            );
+          }
+        })
+        .catch((error: any) => {
+          dispatch({ type: types.MANAGE_MEASUREMENT_POINT_LIST_UPDATE_FAILED });
+          constants.handleError(error, 'update measurement point list');
+          console.error(error);
+        });
+    } else {
+      return Promise.resolve(true);
+    }
   };
 }
 
@@ -218,7 +220,7 @@ export const toggleEditMeasurementPointListModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT_LISTS
 });
 export const toggleEditMeasurementPointModal = () => ({
-  type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT_QUESTION
+  type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT
 });
 export const setTableFilter = (filters: ItableFiltersParams) => ({
   type: types.SET_TABLE_FILTER_MANAGE_MEASUREMENT_POINT_LISTS,

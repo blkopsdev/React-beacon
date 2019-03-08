@@ -15,7 +15,7 @@ import { constants } from 'src/constants/constants';
 interface Iprops {
   measurementPointList: ImeasurementPoint[];
   setSelectedMeasurementPoint: (m: ImeasurementPoint) => void;
-  swapQuestionOrder: (q1Index: number, q2Index: number) => void;
+  swapMeasurementPointOrder: (q1Index: number, q2Index: number) => void;
   deleteMeasurementPoint: (m: ImeasurementPoint) => void;
   canEditGlobal: boolean;
 }
@@ -46,7 +46,7 @@ export const MeasurementPointList = (props: Iprops) => {
                 }
                 onClick={() => {
                   // console.log('swap up', mp.label, mps[index - 1].label);
-                  props.swapQuestionOrder(index, index - 1);
+                  props.swapMeasurementPointOrder(index, index - 1);
                 }}
               >
                 <FontAwesomeIcon icon={faSortAmountUp} fixedWidth size="2x" />
@@ -70,7 +70,7 @@ export const MeasurementPointList = (props: Iprops) => {
                 }
                 onClick={() => {
                   // console.log('swap up', mp.label, mps[index + 1].label);
-                  props.swapQuestionOrder(index + 1, index);
+                  props.swapMeasurementPointOrder(index + 1, index);
                 }}
               >
                 <FontAwesomeIcon icon={faSortAmountDown} fixedWidth size="2x" />

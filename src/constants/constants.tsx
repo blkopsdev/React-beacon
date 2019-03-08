@@ -52,10 +52,10 @@ const measurementPointTypeOptions = [
   { label: 'Select', value: 4 }
 ];
 const measurementPointTypes = {
-  QUESTION_PASSFAIL: 1,
-  QUESTION_TEXT: 2,
-  QUESTION_NUMERIC: 3,
-  QUESTION_SELECT: 4,
+  MEASUREMENT_POINT_PASSFAIL: 1,
+  MEASUREMENT_POINT_TEXT: 2,
+  MEASUREMENT_POINT_NUMERIC: 3,
+  MEASUREMENT_POINT_SELECT: 4,
   GROUP: 5,
   PROCEDURE: 6
 };

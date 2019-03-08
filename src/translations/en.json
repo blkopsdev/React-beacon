@@ -261,7 +261,7 @@
     "selectTabPlaceholder": "Select a Tab",
     "newMeasurement": "Add Measurements",
     "EditMeasurementPointListModalTitle": "ADD MEASUREMENTS",
-    "QuestionModalTitle": "ADD QUESTION",
+    "measurementPointModalTitle": "ADD QUESTION",
     "ProcedureModalTitle": "ADD PROCEDURE",
     "GroupModalTitle": "ADD GROUP",
     "questionText": "QUESTION TEXT",

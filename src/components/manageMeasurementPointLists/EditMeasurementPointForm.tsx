@@ -1,6 +1,6 @@
 /* 
 * EditMeasurementPointForm 
-* Edit measurement point questions
+* Edit measurement point
 */
 
 import { Col, Button } from 'react-bootstrap';
@@ -30,7 +30,6 @@ import {
   addMeasurementPointToMeasurementPointList
 } from '../../actions/manageMeasurementPointListsActions';
 import { constants } from 'src/constants/constants';
-import { initialMeasurementPoint } from 'src/reducers/initialState';
 // const uuidv4 = require('uuid/v4');
 
 interface IstateChanges extends Observable<any> {
@@ -141,7 +140,7 @@ interface Iprops extends React.Props<EditMeasurementPointForm> {
 }
 
 interface Istate {
-  question: ImeasurementPoint;
+  measurementPoint: ImeasurementPoint;
   fieldConfig: FieldConfig;
 }
 class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
@@ -149,23 +148,13 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
   // public fieldConfig: FieldConfig;
   constructor(props: Iprops) {
     super(props);
-    if (
-      this.props.selectedMeasurementPointList &&
-      this.props.selectedMeasurementPoint.id.length
-    ) {
-      this.state = {
-        fieldConfig: FormUtil.translateForm(
-          this.getFormConfig(this.props.selectedMeasurementPoint),
-          this.props.t
-        ),
-        question: this.props.selectedMeasurementPoint
-      };
-    } else {
-      this.state = {
-        fieldConfig: { controls: {} },
-        question: initialMeasurementPoint
-      };
-    }
+    this.state = {
+      fieldConfig: FormUtil.translateForm(
+        this.getFormConfig(this.props.selectedMeasurementPoint),
+        this.props.t
+      ),
+      measurementPoint: this.props.selectedMeasurementPoint
+    };
   }
 
   componentDidMount() {
@@ -177,38 +166,40 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
       this.props.toggleEditMeasurementPointModal();
     }
   }
-  getFormConfig = (question: ImeasurementPoint) => {
-    if (question.type === constants.measurementPointTypes.PROCEDURE) {
-      return buildProcedureFieldConfig(question.label);
-    } else if (question.type === constants.measurementPointTypes.GROUP) {
+  getFormConfig = (measurementPoint: ImeasurementPoint) => {
+    if (measurementPoint.type === constants.measurementPointTypes.PROCEDURE) {
+      return buildProcedureFieldConfig(measurementPoint.label);
+    } else if (
+      measurementPoint.type === constants.measurementPointTypes.GROUP
+    ) {
       return groupFieldConfig;
     } else {
       let extraConfig = {};
       if (
-        question.type ===
+        measurementPoint.type ===
         constants.measurementPointTypes.MEASUREMENT_POINT_PASSFAIL
       ) {
         extraConfig = passFailFieldConfig;
       } else if (
-        question.type ===
+        measurementPoint.type ===
         constants.measurementPointTypes.MEASUREMENT_POINT_NUMERIC
       ) {
         extraConfig = numericFieldConfig;
       } else if (
-        question.type ===
+        measurementPoint.type ===
         constants.measurementPointTypes.MEASUREMENT_POINT_SELECT
       ) {
-        extraConfig = this.selectFieldConfig(question);
+        extraConfig = this.selectFieldConfig(measurementPoint);
       }
       return this.buildFieldConfig(
         constants.measurementPointTypeOptions,
-        question.helpText,
+        measurementPoint.helpText,
         extraConfig
       );
     }
   };
 
-  selectFieldConfig = (question: ImeasurementPoint) => ({
+  selectFieldConfig = (measurementPoint: ImeasurementPoint) => ({
     selectRememberBetweenDevice: {
       options: { validators: [Validators.required] },
       render: FormUtil.Select,
@@ -240,10 +231,10 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
         colWidth: 12,
         placeholder: 'manageMeasurementPointLists:selectOptionsPlaceholder',
         colorButton: 'info',
-        startOptions: map(question.selectOptions, mpo => {
+        startOptions: map(measurementPoint.selectOptions, mpo => {
           return {
             ...mpo,
-            isDefault: question.selectDefaultOptionID === mpo.id,
+            isDefault: measurementPoint.selectDefaultOptionID === mpo.id,
             isDeleted:
               typeof mpo.isDeleted !== 'undefined' ? mpo.isDeleted : false
           };
@@ -275,11 +266,14 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
               if (
                 c.value &&
                 c.value.value &&
-                c.value.value !== this.state.question.type
+                c.value.value !== this.state.measurementPoint.type
               ) {
                 this.setState(
                   {
-                    question: { ...this.state.question, type: c.value.value }
+                    measurementPoint: {
+                      ...this.state.measurementPoint,
+                      type: c.value.value
+                    }
                   },
                   () => {
                     this.buildForm(c.value.value);
@@ -298,7 +292,10 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
             (c: any) => {
               if (c.value && c.value.value) {
                 this.setState({
-                  question: { ...this.state.question, label: c.value.value }
+                  measurementPoint: {
+                    ...this.state.measurementPoint,
+                    label: c.value.value
+                  }
                 });
               }
             }
@@ -306,7 +303,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
         },
         render: FormUtil.TextInput,
         meta: {
-          label: 'manageMeasurementPointLists:questionText',
+          label: 'manageMeasurementPointLists:measurementPointText',
           colWidth: 12,
           type: 'text'
         }
@@ -317,7 +314,10 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
             (c: any) => {
               if (c.value && c.value.value) {
                 this.setState({
-                  question: { ...this.state.question, guideText: c.value.value }
+                  measurementPoint: {
+                    ...this.state.measurementPoint,
+                    guideText: c.value.value
+                  }
                 });
               }
             }
@@ -336,8 +336,8 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
             (c: any) => {
               if (c.value && c.value.value) {
                 this.setState({
-                  question: {
-                    ...this.state.question,
+                  measurementPoint: {
+                    ...this.state.measurementPoint,
                     allowNotes: c.value.value
                   }
                 });
@@ -359,7 +359,10 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
             (c: any) => {
               if (c.value && c.value.value) {
                 this.setState({
-                  question: { ...this.state.question, helpText: c.value.value }
+                  measurementPoint: {
+                    ...this.state.measurementPoint,
+                    helpText: c.value.value
+                  }
                 });
               }
             }
@@ -380,12 +383,12 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
     return fieldConfig as FieldConfig;
   };
 
-  buildForm = (questionType: number) => {
-    console.log('BUILDING FORM', questionType);
+  buildForm = (measurementPointType: number) => {
+    console.log('BUILDING FORM', measurementPointType);
 
     this.setState({
       fieldConfig: FormUtil.translateForm(
-        this.getFormConfig(this.state.question),
+        this.getFormConfig(this.state.measurementPoint),
         this.props.t
       )
     });
@@ -393,16 +396,16 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
 
   patchValues = () => {
     // set values
-    forEach(this.state.question, (value, key) => {
+    forEach(this.state.measurementPoint, (value, key) => {
       this.measurementsForm.patchValue({ [key]: value });
     });
 
-    const { type, label } = this.state.question;
+    const { type, label } = this.state.measurementPoint;
     this.measurementsForm.patchValue({
       label
     });
     if (type < 5) {
-      const { guideText, allowNotes } = this.state.question;
+      const { guideText, allowNotes } = this.state.measurementPoint;
       this.measurementsForm.patchValue({
         type: find(
           constants.measurementPointTypeOptions,
@@ -416,7 +419,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
       });
     }
     if (type === constants.measurementPointTypes.MEASUREMENT_POINT_PASSFAIL) {
-      const { passFailDefault } = this.state.question;
+      const { passFailDefault } = this.state.measurementPoint;
       if (passFailDefault) {
         this.measurementsForm.patchValue({
           passFailDefault: find(
@@ -427,7 +430,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
       }
     }
     if (type === constants.measurementPointTypes.MEASUREMENT_POINT_NUMERIC) {
-      const { numericAllowDecimals } = this.state.question;
+      const { numericAllowDecimals } = this.state.measurementPoint;
       if (typeof numericAllowDecimals !== undefined) {
         console.log('patching', numericAllowDecimals);
         this.measurementsForm.patchValue({
@@ -444,7 +447,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
         selectRememberBetweenInspection,
         selectDefaultOptionID,
         selectOptions
-      } = this.state.question;
+      } = this.state.measurementPoint;
       if (typeof selectRememberBetweenDevice !== undefined) {
         this.measurementsForm.patchValue({
           selectRememberBetweenDevice: find(
@@ -482,44 +485,53 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-
+    const {
+      allowNotes,
+      type,
+      passFailDefault,
+      numericAllowDecimals,
+      selectOptions,
+      selectRememberBetweenDevice,
+      selectRememberBetweenInspection
+    } = this.measurementsForm.value;
     let newQ = {
-      ...this.state.question,
+      ...this.state.measurementPoint,
       ...this.measurementsForm.value
     };
-    if (this.state.question.type < 5) {
+    if (this.state.measurementPoint.type < 5) {
       newQ = {
         ...newQ,
-        allowNotes: this.measurementsForm.value.allowNotes.value,
-        type: this.measurementsForm.value.type.value
+        allowNotes: allowNotes ? allowNotes.value : false,
+        type: type ? type.value : ''
       };
     }
     if (
-      this.state.question.type ===
+      this.state.measurementPoint.type ===
       constants.measurementPointTypes.MEASUREMENT_POINT_PASSFAIL
     ) {
       newQ = {
         ...newQ,
-        passFailDefault: this.measurementsForm.value.passFailDefault.value
+        passFailDefault: passFailDefault ? passFailDefault.value : ''
       };
     }
     if (
-      this.state.question.type ===
+      this.state.measurementPoint.type ===
       constants.measurementPointTypes.MEASUREMENT_POINT_NUMERIC
     ) {
       newQ = {
         ...newQ,
-        numericAllowDecimals: this.measurementsForm.value.numericAllowDecimals
-          .value
+        numericAllowDecimals: numericAllowDecimals
+          ? numericAllowDecimals.value
+          : ''
       };
     }
     if (
-      this.state.question.type ===
+      this.state.measurementPoint.type ===
       constants.measurementPointTypes.MEASUREMENT_POINT_SELECT
     ) {
       // console.log(this.measurementsForm.value.selectOptions);
       // return;
-      const selectDefaultOption = this.measurementsForm.value.selectOptions.filter(
+      const selectDefaultOption = selectOptions.filter(
         (mpo: ImeasurementPointSelectOption) => {
           return mpo.isDefault === true;
         }
@@ -527,12 +539,14 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
 
       newQ = {
         ...newQ,
-        selectRememberBetweenDevice: this.measurementsForm.value
-          .selectRememberBetweenDevice.value,
-        selectRememberBetweenInspection: this.measurementsForm.value
-          .selectRememberBetweenInspection.value,
+        selectRememberBetweenDevice: selectRememberBetweenDevice
+          ? selectRememberBetweenDevice.value
+          : '',
+        selectRememberBetweenInspection: selectRememberBetweenInspection
+          ? selectRememberBetweenInspection.value
+          : '',
         selectOptions: map(
-          this.measurementsForm.value.selectOptions,
+          selectOptions,
           (mpo: ImeasurementPointSelectOption) => {
             delete mpo.isDefault;
             return mpo;

@@ -9,7 +9,8 @@ import {
   FormGenerator,
   FieldConfig,
   AbstractControl,
-  Observable
+  Observable,
+  GroupProps
 } from 'react-reactive-form';
 import { forEach, find, map } from 'lodash';
 import { toastr } from 'react-redux-toastr';
@@ -38,6 +39,10 @@ interface IstateChanges extends Observable<any> {
 interface AbstractControlEdited extends AbstractControl {
   stateChanges: IstateChanges;
 }
+interface IformSate {
+  value: any;
+  disabled: boolean;
+}
 
 const InputListAbstract = ({ handler, meta }: AbstractControl) => (
   <InputList meta={meta} onChange={handler().onChange} />
@@ -48,67 +53,96 @@ const trueFalseOptions = [
   { label: 'No', value: false }
 ];
 
-const passFailFieldConfig = {
-  passFailDefault: {
-    options: { validators: [Validators.required] },
-    render: FormUtil.Select,
-    meta: {
-      label: 'manageMeasurementPointLists:passFailDefault',
-      colWidth: 12,
-      options: constants.measurementPointPassFailOptions,
-      isClearable: false
-    }
+const trueFalseOption = (value: boolean | null) => {
+  if (value === true) {
+    return { label: 'Yes', value: true };
+  } else if (value === false) {
+    return { label: 'No', value: false };
+  } else {
+    return null;
   }
 };
 
-const numericFieldConfig = {
-  numericMinValue: {
-    options: {},
-    render: FormUtil.TextInput,
-    meta: {
-      label: 'manageMeasurementPointLists:numericMinValue',
-      colWidth: 12,
-      type: 'number',
-      name: 'numericMinValue'
-    }
-  },
-  numericMaxValue: {
-    options: {},
-    render: FormUtil.TextInput,
-    meta: {
-      label: 'manageMeasurementPointLists:numericMaxValue',
-      colWidth: 12,
-      type: 'number',
-      name: 'numericMaxValue'
-    }
-  },
-  numericAllowDecimals: {
-    options: { validators: [Validators.required] },
-    render: FormUtil.Select,
-    meta: {
-      label: 'manageMeasurementPointLists:numericAllowDecimals',
-      colWidth: 12,
-      options: trueFalseOptions,
-      isClearable: false
-    }
-  }
-};
-
-const groupFieldConfig = {
-  controls: {
-    label: {
-      options: {
-        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
+const passFailFieldConfig = (formState: IformSate) => {
+  return {
+    passFailDefault: {
+      options: { validators: [Validators.required] },
+      render: FormUtil.Select,
+      meta: {
+        label: 'manageMeasurementPointLists:passFailDefault',
+        colWidth: 12,
+        options: constants.measurementPointPassFailOptions,
+        isClearable: false
       },
+      formState
+    } as GroupProps
+  };
+};
+
+const numericFieldConfig = (
+  selectedNumericMinValue: number | null,
+  selectedNumericMaxValue: number | null,
+  selectedNumericAllowDecimals: boolean | null,
+  disabled: boolean
+) => {
+  return {
+    numericMinValue: {
+      options: {},
       render: FormUtil.TextInput,
       meta: {
-        label: 'manageMeasurementPointLists:groupLabel',
+        label: 'manageMeasurementPointLists:numericMinValue',
         colWidth: 12,
-        type: 'text',
-        name: 'label'
-      }
+        type: 'number',
+        name: 'numericMinValue'
+      },
+      formState: { value: selectedNumericMinValue, disabled }
+    },
+    numericMaxValue: {
+      options: {},
+      render: FormUtil.TextInput,
+      meta: {
+        label: 'manageMeasurementPointLists:numericMaxValue',
+        colWidth: 12,
+        type: 'number',
+        name: 'numericMaxValue'
+      },
+      formState: { value: selectedNumericMaxValue, disabled }
+    },
+    numericAllowDecimals: {
+      options: { validators: [Validators.required] },
+      render: FormUtil.Select,
+      meta: {
+        label: 'manageMeasurementPointLists:numericAllowDecimals',
+        colWidth: 12,
+        options: trueFalseOptions,
+        isClearable: false
+      },
+      formState: { value: selectedNumericAllowDecimals, disabled }
     }
-  }
+  } as { [key: string]: GroupProps };
+};
+
+const groupFieldConfig = (formState: IformSate) => {
+  return {
+    controls: {
+      label: {
+        options: {
+          validators: [
+            Validators.required,
+            FormUtil.validators.requiredWithTrim
+          ]
+        },
+        render: FormUtil.TextInput,
+        meta: {
+          label: 'manageMeasurementPointLists:groupLabel',
+          colWidth: 12,
+          type: 'text',
+          name: 'label'
+        },
+        formState
+      }
+    } as { [key: string]: GroupProps }
+  };
 };
 
 const buildProcedureFieldConfig = (initialContent: any) => {
@@ -166,139 +200,157 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
       this.props.toggleEditMeasurementPointModal();
     }
   }
+
+  /*
+  * update which form controls based on the type of measurement point
+  */
   getFormConfig = (measurementPoint: ImeasurementPoint) => {
-    if (measurementPoint.type === constants.measurementPointTypes.PROCEDURE) {
-      return buildProcedureFieldConfig(measurementPoint.label);
-    } else if (
-      measurementPoint.type === constants.measurementPointTypes.GROUP
-    ) {
-      return groupFieldConfig;
+    const {
+      type,
+      label,
+      passFailDefault,
+      numericMinValue = null,
+      numericMaxValue = null,
+      numericAllowDecimals = null
+    } = measurementPoint;
+
+    let selectedPassFailDefault = null;
+    if (passFailDefault) {
+      selectedPassFailDefault =
+        find(
+          constants.measurementPointPassFailOptions,
+          (tOpt: any) => tOpt.value === passFailDefault
+        ) || null;
+    }
+    const mpTypes = constants.measurementPointTypes;
+    const disabled = false;
+
+    if (type === mpTypes.PROCEDURE) {
+      return buildProcedureFieldConfig(label); // TODO remove procedure
+    } else if (type === mpTypes.GROUP) {
+      return groupFieldConfig({ value: label, disabled });
     } else {
       let extraConfig = {};
-      if (
-        measurementPoint.type ===
-        constants.measurementPointTypes.MEASUREMENT_POINT_PASSFAIL
-      ) {
-        extraConfig = passFailFieldConfig;
-      } else if (
-        measurementPoint.type ===
-        constants.measurementPointTypes.MEASUREMENT_POINT_NUMERIC
-      ) {
-        extraConfig = numericFieldConfig;
-      } else if (
-        measurementPoint.type ===
-        constants.measurementPointTypes.MEASUREMENT_POINT_SELECT
-      ) {
-        extraConfig = this.selectFieldConfig(measurementPoint);
+      if (type === mpTypes.MEASUREMENT_POINT_PASSFAIL) {
+        extraConfig = passFailFieldConfig({
+          value: selectedPassFailDefault,
+          disabled
+        });
+      } else if (type === mpTypes.MEASUREMENT_POINT_NUMERIC) {
+        extraConfig = numericFieldConfig(
+          numericMinValue,
+          numericMaxValue,
+          numericAllowDecimals,
+          disabled
+        );
+      } else if (type === mpTypes.MEASUREMENT_POINT_SELECT) {
+        extraConfig = this.selectFieldConfig(measurementPoint, disabled);
       }
-      return this.buildFieldConfig(
-        constants.measurementPointTypeOptions,
-        measurementPoint.helpText,
-        extraConfig
-      );
+      return this.buildFieldConfig(measurementPoint, extraConfig, disabled);
     }
   };
 
-  selectFieldConfig = (measurementPoint: ImeasurementPoint) => ({
-    selectRememberBetweenDevice: {
-      options: { validators: [Validators.required] },
-      render: FormUtil.Select,
-      meta: {
-        label: 'manageMeasurementPointLists:selectRememberBetweenDevice',
-        colWidth: 12,
-        options: trueFalseOptions,
-        isClearable: false
-      }
-    },
-    selectRememberBetweenInspection: {
-      options: { validators: [Validators.required] },
-      render: FormUtil.Select,
-      meta: {
-        label: 'manageMeasurementPointLists:selectRememberBetweenInspection',
-        colWidth: 12,
-        options: trueFalseOptions,
-        isClearable: false
-      }
-    },
-    selectOptions: {
-      options: {
-        validators: [Validators.required]
+  selectFieldConfig = (
+    measurementPoint: ImeasurementPoint,
+    disabled: boolean
+  ) => {
+    const {
+      selectRememberBetweenDevice = null,
+      selectRememberBetweenInspection = null,
+      selectOptions = [],
+      selectDefaultOptionID = ''
+    } = measurementPoint;
+
+    return {
+      selectRememberBetweenDevice: {
+        options: { validators: [Validators.required] },
+        render: FormUtil.Select,
+        meta: {
+          label: 'manageMeasurementPointLists:selectRememberBetweenDevice',
+          colWidth: 12,
+          options: trueFalseOptions,
+          isClearable: false
+        },
+        formState: {
+          value: trueFalseOption(selectRememberBetweenDevice),
+          disabled
+        }
       },
-      render: InputListAbstract,
-      meta: {
-        label: 'manageMeasurementPointLists:selectOptions',
-        buttonLabel: 'Add Option',
-        colWidth: 12,
-        placeholder: 'manageMeasurementPointLists:selectOptionsPlaceholder',
-        colorButton: 'info',
-        startOptions: map(measurementPoint.selectOptions, mpo => {
-          return {
-            ...mpo,
-            isDefault: measurementPoint.selectDefaultOptionID === mpo.id,
-            isDeleted:
-              typeof mpo.isDeleted !== 'undefined' ? mpo.isDeleted : false
-          };
-        })
+      selectRememberBetweenInspection: {
+        options: { validators: [Validators.required] },
+        render: FormUtil.Select,
+        meta: {
+          label: 'manageMeasurementPointLists:selectRememberBetweenInspection',
+          colWidth: 12,
+          options: trueFalseOptions,
+          isClearable: false
+        },
+        formState: {
+          value: trueFalseOption(selectRememberBetweenInspection),
+          disabled
+        }
+      },
+      selectOptions: {
+        options: {
+          validators: [Validators.required]
+        },
+        render: InputListAbstract,
+        meta: {
+          label: 'manageMeasurementPointLists:selectOptions',
+          buttonLabel: 'Add Option',
+          colWidth: 12,
+          placeholder: 'manageMeasurementPointLists:selectOptionsPlaceholder',
+          colorButton: 'info',
+          startOptions: map(selectOptions, mpo => {
+            return {
+              ...mpo,
+              isDefault: selectDefaultOptionID === mpo.id,
+              isDeleted:
+                typeof mpo.isDeleted !== 'undefined' ? mpo.isDeleted : false
+            };
+          })
+        },
+        formState: { value: null, disabled }
       }
-    }
-  });
+    } as { [key: string]: GroupProps };
+  };
 
   buildFieldConfig = (
-    typeOptions: any[],
-    initialContent: any,
-    otherConfig: any
+    measurementPoint: ImeasurementPoint,
+    otherConfig: { [key: string]: GroupProps },
+    disabled: boolean
   ) => {
+    const {
+      helpText = '',
+      type,
+      guideText = null,
+      allowNotes = null,
+      label
+    } = measurementPoint;
+    const selectedType = type
+      ? { label: constants.measurementPointTypeEnum[type], value: type }
+      : null;
     // Field config to configure form
     const fieldConfigControls = {
       type: {
         render: FormUtil.SelectWithoutValidation,
         meta: {
-          options: typeOptions,
+          options: constants.measurementPointListTypeOptions,
           label: 'manageMeasurementPointLists:type',
           colWidth: 12,
           placeholder: 'manageMeasurementPointLists:typePlaceholder',
           isClearable: false
         },
         options: {
-          validators: [
-            Validators.required,
-            (c: any) => {
-              if (
-                c.value &&
-                c.value.value &&
-                c.value.value !== this.state.measurementPoint.type
-              ) {
-                this.setState(
-                  {
-                    measurementPoint: {
-                      ...this.state.measurementPoint,
-                      type: c.value.value
-                    }
-                  },
-                  () => {
-                    this.buildForm(c.value.value);
-                  }
-                );
-              }
-            }
-          ]
-        }
+          validators: [Validators.required]
+        },
+        formState: { value: selectedType, disabled }
       },
       label: {
         options: {
           validators: [
             Validators.required,
-            FormUtil.validators.requiredWithTrim,
-            (c: any) => {
-              if (c.value && c.value.value) {
-                this.setState({
-                  measurementPoint: {
-                    ...this.state.measurementPoint,
-                    label: c.value.value
-                  }
-                });
-              }
-            }
+            FormUtil.validators.requiredWithTrim
           ]
         },
         render: FormUtil.TextInput,
@@ -306,77 +358,38 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
           label: 'manageMeasurementPointLists:measurementPointText',
           colWidth: 12,
           type: 'text'
-        }
+        },
+        formState: { value: label, disabled }
       },
       guideText: {
-        options: {
-          validators: [
-            (c: any) => {
-              if (c.value && c.value.value) {
-                this.setState({
-                  measurementPoint: {
-                    ...this.state.measurementPoint,
-                    guideText: c.value.value
-                  }
-                });
-              }
-            }
-          ]
-        },
         render: FormUtil.TextInput,
         meta: {
           label: 'manageMeasurementPointLists:guideText',
           colWidth: 12,
           type: 'text'
-        }
+        },
+        formState: { value: guideText, disabled }
       },
       allowNotes: {
-        options: {
-          validators: [
-            (c: any) => {
-              if (c.value && c.value.value) {
-                this.setState({
-                  measurementPoint: {
-                    ...this.state.measurementPoint,
-                    allowNotes: c.value.value
-                  }
-                });
-              }
-            }
-          ]
-        },
         render: FormUtil.SelectWithoutValidation,
         meta: {
           label: 'manageMeasurementPointLists:allowNotes',
           colWidth: 12,
           options: trueFalseOptions,
           isClearable: false
-        }
+        },
+        formState: { value: trueFalseOption(allowNotes), disabled }
       },
       helpText: {
-        options: {
-          validators: [
-            (c: any) => {
-              if (c.value && c.value.value) {
-                this.setState({
-                  measurementPoint: {
-                    ...this.state.measurementPoint,
-                    helpText: c.value.value
-                  }
-                });
-              }
-            }
-          ]
-        },
         render: FormUtil.RichTextEditor,
         meta: {
           label: 'manageMeasurementPointLists:helpText',
           colWidth: 12,
           type: 'text',
-          initialContent
+          initialContent: helpText
         }
       }
-    };
+    } as { [key: string]: GroupProps };
     const fieldConfig = {
       controls: { ...fieldConfigControls, ...otherConfig }
     };
@@ -573,7 +586,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
       loading: this.props.loading
     };
     console.log('PATCHING VALUES');
-    this.patchValues();
+    // this.patchValues();
   };
 
   render() {

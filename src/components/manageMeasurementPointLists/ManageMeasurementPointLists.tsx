@@ -25,8 +25,7 @@ import { TableUtil } from '../common/TableUtil';
 import { closeAllModals } from '../../actions/commonActions';
 import {
   emptyTile,
-  initialMeasurementPointList,
-  initialMeasurementPointTab
+  initialMeasurementPointList
 } from '../../reducers/initialState';
 import {
   getAllMeasurementPointLists,
@@ -246,8 +245,7 @@ class ManageMeasurementPointList extends React.Component<
                 }}
               >
                 <FontAwesomeIcon icon={['far', 'times']}>
-                  {' '}
-                  Delete{' '}
+                  Delete
                 </FontAwesomeIcon>
               </Button>
             </div>
@@ -352,6 +350,16 @@ class ManageMeasurementPointList extends React.Component<
     this.setState({ selectedRow: {} });
   };
 
+  handleNewMeasurementList = () => {
+    this.props.setSelectedMeasurementPointList({
+      ...initialMeasurementPointList,
+      id: uuidv4(),
+      measurementPointTabs: [],
+      temporary: true
+    });
+    this.props.toggleEditMeasurementPointListModal();
+  };
+
   render() {
     if (this.props.mainCategoryOptions.length === 0) {
       return (
@@ -388,16 +396,7 @@ class ManageMeasurementPointList extends React.Component<
           <Button
             className="table-add-button"
             bsStyle="link"
-            onClick={() => {
-              this.props.setSelectedMeasurementPointList({
-                ...initialMeasurementPointList,
-                id: uuidv4(),
-                measurementPointTabs: [
-                  { ...initialMeasurementPointTab, id: uuidv4() }
-                ]
-              });
-              this.props.toggleEditMeasurementPointListModal();
-            }}
+            onClick={this.handleNewMeasurementList}
           >
             {t('manageMeasurementPointLists:newMeasurement')}
           </Button>

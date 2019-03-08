@@ -358,6 +358,7 @@ export interface ImeasurementPointList {
   testProcedures: string;
   standardID: string;
   type: number;
+  temporary?: boolean;
 }
 
 export interface ImanageMeasurementPointListsReducer {

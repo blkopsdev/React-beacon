@@ -67,6 +67,7 @@ interface Istate {
 class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
   public measurementsForm: AbstractControl;
   private subscription: any;
+  // private persistTimeout: any; // all inputs are selects so we don't care about a debounce
   constructor(props: Iprops) {
     super(props);
     this.state = {
@@ -77,8 +78,10 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
   }
   componentWillMount() {
     const { measurementPointTabs } = this.props.selectedMeasurementPointList;
-    this.props.setSelectedTabID(measurementPointTabs[0].id);
-    this.setState({ measurementPoints: this.parseMeasurementPoints() });
+    if (measurementPointTabs.length) {
+      this.props.setSelectedTabID(measurementPointTabs[0].id);
+      this.setState({ measurementPoints: this.parseMeasurementPoints() });
+    }
   }
 
   componentDidUpdate(prevProps: Iprops) {
@@ -293,18 +296,43 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       standardID: standardID ? standardID.value : '',
       type: type ? type.value : ''
     };
-    this.props.updateGlobalMeasurementPointList(mpl, true);
+    if (mpl.temporary !== true) {
+      this.props.updateGlobalMeasurementPointList(mpl, true);
+    } else {
+      this.props.addGlobalMeasurementPointList({ ...mpl, temporary: false });
+    }
   };
 
   subscribeToValueChanges = () => {
-    this.subscription = this.measurementsForm
-      .get('selectedTab')
-      .valueChanges.subscribe((value: Ioption | null) => {
-        // this.setState({measurementPoints: this.parseMeasurementPoints()})
+    const controls = ['selectedTab', 'type', 'mainCategoryID', 'standardID'];
+    controls.forEach((key: string) => {
+      this.subscription = this.measurementsForm
+        .get(key)
+        .valueChanges.subscribe((value: Ioption | null) => {
+          this.handleValueChange(key, value);
+        });
+    });
+  };
+
+  handleValueChange = (key: string, value: null | Ioption) => {
+    // clearTimeout(this.persistTimeout);
+    // this.persistTimeout = setTimeout(() => {
+    switch (key) {
+      case 'selectedTab':
         if (value && value.value) {
           this.props.setSelectedTabID(value.value);
         }
-      });
+        break;
+      default:
+        if (value && value.value) {
+          this.props.updateGlobalMeasurementPointList(
+            { ...this.props.selectedMeasurementPointList, [key]: value.value },
+            false
+          );
+        }
+        break;
+    }
+    // }, 200);
   };
 
   setForm = (form: AbstractControl) => {

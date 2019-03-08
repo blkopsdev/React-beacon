@@ -258,7 +258,7 @@
     "standard": "Standard",
     "standardPlaceholder": "Select standard...",
     "selectTabLabel": "Tab",
-    "selectTabPlaceholder": "Select a Tab",
+    "selectTabPlaceholder": "Type to Create a Tab",
     "newMeasurement": "Add Measurements",
     "EditMeasurementPointListModalTitle": "ADD MEASUREMENTS",
     "measurementPointModalTitle": "ADD QUESTION",

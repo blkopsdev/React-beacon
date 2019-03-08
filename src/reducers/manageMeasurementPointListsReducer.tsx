@@ -54,6 +54,9 @@ function manageMeasurementPointListData(
         [action.measurementPointList.id]: action.measurementPointList
       };
     case types.MANAGE_MEASUREMENT_POINT_LIST_UPDATE:
+      if (action.measurementPointList.temporary === true) {
+        return state;
+      }
       return {
         ...state,
         [action.measurementPointList.id]: action.measurementPointList

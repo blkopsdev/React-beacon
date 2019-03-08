@@ -35,7 +35,10 @@ interface IdispatchProps {
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
   toggleEditMeasurementPointModal: typeof toggleEditMeasurementPointModal;
   addGlobalMeasurementPointList: typeof addGlobalMeasurementPointList;
-  updateGlobalMeasurementPointList: typeof updateGlobalMeasurementPointList;
+  updateGlobalMeasurementPointList: (
+    m: ImeasurementPointList,
+    l: boolean
+  ) => Promise<void>;
   selectedTabID: string;
   selectedTab: ImeasurementPointListTab;
   setSelectedTabID: typeof setSelectedTabID;

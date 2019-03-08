@@ -14,6 +14,7 @@ import { constants } from 'src/constants/constants';
 import * as types from './actionTypes';
 // import * as moment from 'moment';
 import { filter, values } from 'lodash';
+import { initialMeasurementPointList } from 'src/reducers/initialState';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
@@ -147,6 +148,14 @@ export function updateGlobalMeasurementPointList(
           } else {
             dispatch(endAjaxCall());
             dispatch({ type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT_LISTS });
+            dispatch({
+              type: types.SELECT_MEASUREMENT_POINT_LIST,
+              measurementPointList: initialMeasurementPointList
+            });
+            dispatch({
+              type: types.MANAGE_MEASUREMENT_POINT_SET_SELECTED_TAB,
+              selectedTabID: ''
+            });
             toastr.success(
               'Success',
               'Updated measurement point list.',

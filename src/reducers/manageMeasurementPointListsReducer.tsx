@@ -111,6 +111,8 @@ function manageSelectedMeasurementPointList(
         ...state,
         measurementPointTabs: newTabsB
       };
+    case types.MANAGE_MEASUREMENT_POINT_LIST_UPDATE:
+      return action.measurementPointList;
     case types.USER_LOGOUT_SUCCESS:
       return initialMeasurementPointList;
     default:

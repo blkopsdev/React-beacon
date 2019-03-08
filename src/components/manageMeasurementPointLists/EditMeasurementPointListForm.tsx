@@ -23,13 +23,13 @@ import {
   ImeasurementPoint,
   Iuser,
   ImeasurementPointListTab,
-  IproductInfo
+  IproductInfo,
+  Ioption
 } from '../../models';
 import {
   toggleEditMeasurementPointListModal,
   toggleEditMeasurementPointModal,
   addGlobalMeasurementPointList,
-  updateGlobalMeasurementPointList,
   setSelectedTabID
 } from '../../actions/manageMeasurementPointListsActions';
 import EditMeasurementPointModal from './EditMeasurementPointModal';
@@ -49,7 +49,10 @@ interface Iprops extends React.Props<EditMeasurementPointListForm> {
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
   toggleEditMeasurementPointModal: typeof toggleEditMeasurementPointModal;
   addGlobalMeasurementPointList: typeof addGlobalMeasurementPointList;
-  updateGlobalMeasurementPointList: typeof updateGlobalMeasurementPointList;
+  updateGlobalMeasurementPointList: (
+    m: ImeasurementPointList,
+    l: boolean
+  ) => Promise<void>;
   selectedTabID: string;
   selectedTab: ImeasurementPointListTab;
   setSelectedTabID: typeof setSelectedTabID;
@@ -63,6 +66,7 @@ interface Istate {
 
 class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
   public measurementsForm: AbstractControl;
+  private subscription: any;
   constructor(props: Iprops) {
     super(props);
     this.state = {
@@ -87,7 +91,13 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       JSON.stringify(this.props.selectedTab)
     ) {
       console.log('selectedTab updated!!!!');
-      this.setState({ measurementPoints: this.parseMeasurementPoints() });
+      this.setState({
+        measurementPoints: this.parseMeasurementPoints(),
+        fieldConfig: FormUtil.translateForm(
+          this.buildFieldConfig(),
+          this.props.t
+        )
+      });
     }
 
     if (
@@ -96,6 +106,11 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     ) {
       console.log('selectedMeasurementPointList updated!!!!');
       this.setState({ measurementPoints: this.parseMeasurementPoints() });
+    }
+  }
+  componentWillUnmount() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
   buildFieldConfig = () => {
@@ -186,7 +201,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
           disabled
         }
       },
-      standard: {
+      standardID: {
         render: FormUtil.Select,
         meta: {
           options: standardOptions,
@@ -230,16 +245,20 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       measurementPoints: {}
     };
 
-    this.props.updateGlobalMeasurementPointList(
-      {
-        ...this.props.selectedMeasurementPointList,
-        measurementPointTabs: [
-          ...this.props.selectedMeasurementPointList.measurementPointTabs,
-          newTab
-        ]
-      },
-      false
-    );
+    this.props
+      .updateGlobalMeasurementPointList(
+        {
+          ...this.props.selectedMeasurementPointList,
+          measurementPointTabs: [
+            ...this.props.selectedMeasurementPointList.measurementPointTabs,
+            newTab
+          ]
+        },
+        false
+      )
+      .then(() => {
+        this.props.setSelectedTabID(newTab.id);
+      });
   };
   /*
   * Remove deleted measurementPoints and sort them
@@ -267,14 +286,25 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-
+    const { type, mainCategoryID, standardID } = this.measurementsForm.value;
     const mpl = {
       ...this.props.selectedMeasurementPointList,
-      mainCategoryID: this.measurementsForm.value.equipmentType.value,
-      standardID: this.measurementsForm.value.standard.value,
-      type: this.measurementsForm.value.type.value
+      mainCategoryID: mainCategoryID ? mainCategoryID.value : '',
+      standardID: standardID ? standardID.value : '',
+      type: type ? type.value : ''
     };
     this.props.updateGlobalMeasurementPointList(mpl, true);
+  };
+
+  subscribeToValueChanges = () => {
+    this.subscription = this.measurementsForm
+      .get('selectedTab')
+      .valueChanges.subscribe((value: Ioption | null) => {
+        // this.setState({measurementPoints: this.parseMeasurementPoints()})
+        if (value && value.value) {
+          this.props.setSelectedTabID(value.value);
+        }
+      });
   };
 
   setForm = (form: AbstractControl) => {
@@ -282,6 +312,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     this.measurementsForm.meta = {
       loading: this.props.loading
     };
+    this.subscribeToValueChanges();
   };
 
   /*

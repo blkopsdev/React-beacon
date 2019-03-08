@@ -339,7 +339,7 @@ export interface ImeasurementPoint {
   selectRememberBetweenDevice?: boolean;
   selectRememberBetweenInspection?: boolean;
   selectOptions?: ImeasurementPointSelectOption[];
-  isDeleted?: boolean;
+  isDeleted: boolean;
   customerID: string;
 }
 

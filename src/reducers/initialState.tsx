@@ -121,7 +121,8 @@ export const initialMeasurementPoint = {
   type: 1,
   label: '',
   order: 0,
-  customerID: ''
+  customerID: '',
+  isDeleted: false
 };
 
 const initialCustomer = {

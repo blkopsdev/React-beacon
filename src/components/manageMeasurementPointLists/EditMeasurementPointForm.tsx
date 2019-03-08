@@ -9,10 +9,9 @@ import {
   FormGenerator,
   FieldConfig,
   AbstractControl,
-  Observable,
   GroupProps
 } from 'react-reactive-form';
-import { forEach, find, map } from 'lodash';
+import { find, map } from 'lodash';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
@@ -22,7 +21,8 @@ import { FormUtil } from '../common/FormUtil';
 import {
   ImeasurementPointList,
   ImeasurementPoint,
-  ImeasurementPointSelectOption
+  ImeasurementPointSelectOption,
+  ImeasurementPointListTab
   // ImeasurementPointSelectOption
 } from '../../models';
 import {
@@ -33,12 +33,6 @@ import {
 import { constants } from 'src/constants/constants';
 // const uuidv4 = require('uuid/v4');
 
-interface IstateChanges extends Observable<any> {
-  next: () => void;
-}
-interface AbstractControlEdited extends AbstractControl {
-  stateChanges: IstateChanges;
-}
 interface IformSate {
   value: any;
   disabled: boolean;
@@ -53,7 +47,7 @@ const trueFalseOptions = [
   { label: 'No', value: false }
 ];
 
-const trueFalseOption = (value: boolean | null) => {
+const getTrueFalseOption = (value: boolean | null) => {
   if (value === true) {
     return { label: 'Yes', value: true };
   } else if (value === false) {
@@ -171,6 +165,7 @@ interface Iprops extends React.Props<EditMeasurementPointForm> {
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
   toggleEditMeasurementPointModal: typeof toggleEditMeasurementPointModal;
   addMeasurementPointToMeasurementPointList: typeof addMeasurementPointToMeasurementPointList;
+  selectedTab: ImeasurementPointListTab;
 }
 
 interface Istate {
@@ -272,7 +267,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
           isClearable: false
         },
         formState: {
-          value: trueFalseOption(selectRememberBetweenDevice),
+          value: getTrueFalseOption(selectRememberBetweenDevice),
           disabled
         }
       },
@@ -286,7 +281,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
           isClearable: false
         },
         formState: {
-          value: trueFalseOption(selectRememberBetweenInspection),
+          value: getTrueFalseOption(selectRememberBetweenInspection),
           disabled
         }
       },
@@ -333,9 +328,9 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
     // Field config to configure form
     const fieldConfigControls = {
       type: {
-        render: FormUtil.SelectWithoutValidation,
+        render: FormUtil.Select,
         meta: {
-          options: constants.measurementPointListTypeOptions,
+          options: constants.measurementPointTypeOptions,
           label: 'manageMeasurementPointLists:type',
           colWidth: 12,
           placeholder: 'manageMeasurementPointLists:typePlaceholder',
@@ -378,7 +373,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
           options: trueFalseOptions,
           isClearable: false
         },
-        formState: { value: trueFalseOption(allowNotes), disabled }
+        formState: { value: getTrueFalseOption(allowNotes), disabled }
       },
       helpText: {
         render: FormUtil.RichTextEditor,
@@ -407,93 +402,13 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
     });
   };
 
-  patchValues = () => {
-    // set values
-    forEach(this.state.measurementPoint, (value, key) => {
-      this.measurementsForm.patchValue({ [key]: value });
-    });
-
-    const { type, label } = this.state.measurementPoint;
-    this.measurementsForm.patchValue({
-      label
-    });
-    if (type < 5) {
-      const { guideText, allowNotes } = this.state.measurementPoint;
-      this.measurementsForm.patchValue({
-        type: find(
-          constants.measurementPointTypeOptions,
-          (tOpt: any) => tOpt.value === type
-        ),
-        guideText,
-        allowNotes: find(
-          trueFalseOptions,
-          (tOpt: any) => tOpt.value === allowNotes
-        )
-      });
-    }
-    if (type === constants.measurementPointTypes.MEASUREMENT_POINT_PASSFAIL) {
-      const { passFailDefault } = this.state.measurementPoint;
-      if (passFailDefault) {
-        this.measurementsForm.patchValue({
-          passFailDefault: find(
-            constants.measurementPointPassFailOptions,
-            (tOpt: any) => tOpt.value === passFailDefault
-          )
-        });
-      }
-    }
-    if (type === constants.measurementPointTypes.MEASUREMENT_POINT_NUMERIC) {
-      const { numericAllowDecimals } = this.state.measurementPoint;
-      if (typeof numericAllowDecimals !== undefined) {
-        console.log('patching', numericAllowDecimals);
-        this.measurementsForm.patchValue({
-          numericAllowDecimals: find(
-            trueFalseOptions,
-            (tOpt: any) => tOpt.value === numericAllowDecimals
-          )
-        });
-      }
-    }
-    if (type === constants.measurementPointTypes.MEASUREMENT_POINT_SELECT) {
-      const {
-        selectRememberBetweenDevice,
-        selectRememberBetweenInspection,
-        selectDefaultOptionID,
-        selectOptions
-      } = this.state.measurementPoint;
-      if (typeof selectRememberBetweenDevice !== undefined) {
-        this.measurementsForm.patchValue({
-          selectRememberBetweenDevice: find(
-            trueFalseOptions,
-            (tOpt: any) => tOpt.value === selectRememberBetweenDevice
-          )
-        });
-      }
-      if (typeof selectRememberBetweenInspection !== undefined) {
-        this.measurementsForm.patchValue({
-          selectRememberBetweenInspection: find(
-            trueFalseOptions,
-            (tOpt: any) => tOpt.value === selectRememberBetweenInspection
-          )
-        });
-      }
-      console.log('NEED TO PATCH THESE', selectDefaultOptionID, selectOptions);
-      if (typeof selectOptions !== undefined) {
-        // this.measurementsForm.se
-        const control = this.measurementsForm.get(
-          'selectDefaultOptionID'
-        ) as AbstractControlEdited;
-        console.log(control);
-      }
-    }
-  };
-
   handleSubmit = (
     e: React.MouseEvent<HTMLFormElement>,
     shouldApprove?: boolean
   ) => {
     e.preventDefault();
     if (this.measurementsForm.status === 'INVALID') {
+      console.log(this.measurementsForm);
       this.measurementsForm.markAsSubmitted();
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
@@ -570,7 +485,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
           : ''
       };
     }
-    const tabID = ''; // TODO fix this
+    const tabID = this.props.selectedTab.id; // TODO fix this
     console.log(newQ);
     this.props.addMeasurementPointToMeasurementPointList(
       this.props.selectedMeasurementPointList.id,
@@ -585,8 +500,6 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
     this.measurementsForm.meta = {
       loading: this.props.loading
     };
-    console.log('PATCHING VALUES');
-    // this.patchValues();
   };
 
   render() {

@@ -61,27 +61,27 @@ function manageMeasurementPointListData(
         ...state,
         [action.measurementPointList.id]: action.measurementPointList
       };
-    case types.MANAGE_MEASUREMENT_POINT_ADD:
-      const newTabs = state[action.listID].measurementPointTabs.map(tab => {
-        if (tab.id === action.tabID) {
-          return {
-            ...tab,
-            measurementPoints: {
-              ...tab.measurementPoints,
-              [action.measurementPoint.id]: action.measurementPoint
-            }
-          };
-        } else {
-          return tab;
-        }
-      });
-      return {
-        ...state,
-        [action.listID]: {
-          ...state[action.listID],
-          measurementPointTabs: newTabs
-        }
-      };
+    // case types.MANAGE_MEASUREMENT_POINT_ADD:
+    //   const newTabs = state[action.listID].measurementPointTabs.map(tab => {
+    //     if (tab.id === action.tabID) {
+    //       return {
+    //         ...tab,
+    //         measurementPoints: {
+    //           ...tab.measurementPoints,
+    //           [action.measurementPoint.id]: action.measurementPoint
+    //         }
+    //       };
+    //     } else {
+    //       return tab;
+    //     }
+    //   });
+    //   return {
+    //     ...state,
+    //     [action.listID]: {
+    //       ...state[action.listID],
+    //       measurementPointTabs: newTabs
+    //     }
+    //   };
     case types.USER_LOGOUT_SUCCESS:
       return {};
     default:

@@ -392,6 +392,42 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     });
   };
 
+  validInitialTab = () => {
+    if (this.props.selectedTab.id.length) {
+      return true;
+    } else {
+      toastr.warning(
+        'Warning',
+        'Must add a tab first.',
+        constants.toastrWarning
+      );
+      return false;
+    }
+  };
+  handleAddQuestion = () => {
+    if (!this.validInitialTab()) {
+      return;
+    }
+    this.setSelectedMeasurementPoint(
+      this.newMeasurementPoint(
+        constants.measurementPointTypes.MEASUREMENT_POINT_PASSFAIL
+      )
+    );
+  };
+  handleAddGroup = () => {
+    if (!this.validInitialTab()) {
+      return;
+    }
+    this.setSelectedMeasurementPoint(
+      this.newMeasurementPoint(constants.measurementPointTypes.GROUP)
+    );
+  };
+  handleAddProcedure = () => {
+    this.setSelectedMeasurementPoint(
+      this.newMeasurementPoint(constants.measurementPointTypes.PROCEDURE)
+    );
+  };
+
   canEditGlobal = () => {
     return constants.hasSecurityFunction(
       this.props.user,
@@ -433,13 +469,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
               bsStyle="link"
               type="button"
               className=""
-              onClick={() => {
-                this.setSelectedMeasurementPoint(
-                  this.newMeasurementPoint(
-                    constants.measurementPointTypes.GROUP
-                  )
-                );
-              }}
+              onClick={this.handleAddGroup}
             >
               Add Group
             </Button>
@@ -447,13 +477,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
               bsStyle="link"
               type="button"
               className=""
-              onClick={() => {
-                this.setSelectedMeasurementPoint(
-                  this.newMeasurementPoint(
-                    constants.measurementPointTypes.PROCEDURE
-                  )
-                );
-              }}
+              onClick={this.handleAddProcedure}
             >
               Add Procedure
             </Button>
@@ -461,13 +485,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
               bsStyle="link"
               type="button"
               className=""
-              onClick={() => {
-                this.setSelectedMeasurementPoint(
-                  this.newMeasurementPoint(
-                    constants.measurementPointTypes.MEASUREMENT_POINT_PASSFAIL
-                  )
-                );
-              }}
+              onClick={this.handleAddQuestion}
             >
               Add Question
             </Button>

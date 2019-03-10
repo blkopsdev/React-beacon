@@ -369,6 +369,7 @@ export interface ImanageMeasurementPointListsReducer {
   showEditMeasurementPointModal: boolean;
   tableFilters: ItableFiltersReducer;
   selectedTabID: string;
+  selectedMeasurementPoint: ImeasurementPoint;
 }
 
 export interface IinitialState {

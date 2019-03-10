@@ -14,7 +14,8 @@ import {
   toggleEditMeasurementPointModal,
   addGlobalMeasurementPointList,
   updateGlobalMeasurementPointList,
-  setSelectedTabID
+  setSelectedTabID,
+  updateMeasurementPoint
 } from '../../actions/manageMeasurementPointListsActions';
 import CommonModal from '../common/CommonModal';
 import EditMeasurementPointListForm from './EditMeasurementPointListForm';
@@ -42,6 +43,7 @@ interface IdispatchProps {
   selectedTabID: string;
   selectedTab: ImeasurementPointListTab;
   setSelectedTabID: typeof setSelectedTabID;
+  updateMeasurementPoint: typeof updateMeasurementPoint;
 }
 
 class EditMeasurementPointListModal extends React.Component<
@@ -94,6 +96,7 @@ export default connect(
     toggleEditMeasurementPointModal,
     addGlobalMeasurementPointList,
     updateGlobalMeasurementPointList,
-    setSelectedTabID
+    setSelectedTabID,
+    updateMeasurementPoint
   }
 )(EditMeasurementPointListModal);

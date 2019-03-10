@@ -30,7 +30,8 @@ import {
   toggleEditMeasurementPointListModal,
   toggleEditMeasurementPointModal,
   addGlobalMeasurementPointList,
-  setSelectedTabID
+  setSelectedTabID,
+  updateMeasurementPoint
 } from '../../actions/manageMeasurementPointListsActions';
 import EditMeasurementPointModal from './EditMeasurementPointModal';
 import { constants } from 'src/constants/constants';
@@ -56,10 +57,10 @@ interface Iprops extends React.Props<EditMeasurementPointListForm> {
   selectedTabID: string;
   selectedTab: ImeasurementPointListTab;
   setSelectedTabID: typeof setSelectedTabID;
+  updateMeasurementPoint: typeof updateMeasurementPoint;
 }
 
 interface Istate {
-  selectedMeasurementPoint: ImeasurementPoint;
   measurementPoints: ImeasurementPoint[];
   fieldConfig: FieldConfig;
 }
@@ -71,7 +72,6 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
   constructor(props: Iprops) {
     super(props);
     this.state = {
-      selectedMeasurementPoint: initialMeasurementPoint,
       measurementPoints: this.parseMeasurementPoints(),
       fieldConfig: FormUtil.translateForm(this.buildFieldConfig(), this.props.t)
     };
@@ -349,7 +349,10 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
   set a single measurement point
   */
   setSelectedMeasurementPoint = (measurementPoint: ImeasurementPoint) => {
-    this.setState({ selectedMeasurementPoint: measurementPoint });
+    this.props.updateMeasurementPoint(
+      measurementPoint,
+      this.props.selectedTabID
+    );
     this.props.toggleEditMeasurementPointModal();
   };
 
@@ -519,7 +522,6 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
           </Col>
         </form>
         <EditMeasurementPointModal
-          selectedMeasurementPoint={this.state.selectedMeasurementPoint}
           colorButton={this.props.colorButton}
           t={this.props.t}
         />

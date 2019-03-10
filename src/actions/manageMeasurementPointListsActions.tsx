@@ -67,17 +67,6 @@ export const setSelectedMeasurementPointList = (
   measurementPointList
 });
 
-export const addMeasurementPointToMeasurementPointList = (
-  listID: string,
-  tabID: string,
-  measurementPoint: ImeasurementPoint
-) => ({
-  type: types.MANAGE_MEASUREMENT_POINT_ADD,
-  listID,
-  tabID,
-  measurementPoint
-});
-
 /*
 * save (add) a new mpl
 */
@@ -224,6 +213,29 @@ export function updateCustomerMeasurementPointList(
       });
   };
 }
+
+/*
+* update the selected Measurement Point
+*/
+export const updateMeasurementPoint = (
+  measurementPoint: ImeasurementPoint,
+  selectedTabID: string
+) => ({
+  type: types.MANAGE_MEASUREMENT_POINT_UPDATE,
+  measurementPoint,
+  selectedTabID
+});
+
+export const saveMeasurementPointToMeasurementPointList = (
+  listID: string,
+  selectedTabID: string,
+  measurementPoint: ImeasurementPoint
+) => ({
+  type: types.MANAGE_MEASUREMENT_POINT_SAVE_TO_LIST,
+  listID,
+  selectedTabID,
+  measurementPoint
+});
 
 export const toggleEditMeasurementPointListModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT_LISTS

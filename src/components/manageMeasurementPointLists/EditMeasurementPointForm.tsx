@@ -22,13 +22,15 @@ import {
   ImeasurementPointList,
   ImeasurementPoint,
   ImeasurementPointSelectOption,
-  ImeasurementPointListTab
+  ImeasurementPointListTab,
+  Ioption
   // ImeasurementPointSelectOption
 } from '../../models';
 import {
   toggleEditMeasurementPointListModal,
   toggleEditMeasurementPointModal,
-  addMeasurementPointToMeasurementPointList
+  saveMeasurementPointToMeasurementPointList,
+  updateMeasurementPoint
 } from '../../actions/manageMeasurementPointListsActions';
 import { constants } from 'src/constants/constants';
 // const uuidv4 = require('uuid/v4');
@@ -164,25 +166,26 @@ interface Iprops extends React.Props<EditMeasurementPointForm> {
   i18n: I18n;
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
   toggleEditMeasurementPointModal: typeof toggleEditMeasurementPointModal;
-  addMeasurementPointToMeasurementPointList: typeof addMeasurementPointToMeasurementPointList;
+  saveMeasurementPointToMeasurementPointList: typeof saveMeasurementPointToMeasurementPointList;
   selectedTab: ImeasurementPointListTab;
+  updateMeasurementPoint: typeof updateMeasurementPoint;
 }
 
 interface Istate {
-  measurementPoint: ImeasurementPoint;
   fieldConfig: FieldConfig;
 }
 class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
   public measurementsForm: AbstractControl;
-  // public fieldConfig: FieldConfig;
+  private subscription: any;
+  private persistTimeout: any;
+
   constructor(props: Iprops) {
     super(props);
     this.state = {
       fieldConfig: FormUtil.translateForm(
         this.getFormConfig(this.props.selectedMeasurementPoint),
         this.props.t
-      ),
-      measurementPoint: this.props.selectedMeasurementPoint
+      )
     };
   }
 
@@ -195,7 +198,55 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
       this.props.toggleEditMeasurementPointModal();
     }
   }
+  componentWillUnmount() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+  /*
+  * Subscribe to only some of the changes
+  * "type" so that we can update the fieldConfig according to the type of measurement point
+  * do not persist values that depend on the type of measurement point
+  */
 
+  subscribeToValueChanges = () => {
+    const controls = ['type', 'label', 'guideText', 'allowNotes', 'helpText'];
+    controls.forEach((key: string) => {
+      this.subscription = this.measurementsForm
+        .get(key)
+        .valueChanges.subscribe((value: Ioption | null) => {
+          this.handleValueChange(key, value);
+        });
+    });
+  };
+
+  handleValueChange = (key: string, value: null | Ioption) => {
+    switch (key) {
+      case 'type':
+        if (value && value.value) {
+          this.setState({
+            fieldConfig: FormUtil.translateForm(
+              this.getFormConfig({
+                ...this.props.selectedMeasurementPoint,
+                type: parseInt(value.value, 10)
+              }),
+              this.props.t
+            )
+          });
+        }
+      default:
+        clearTimeout(this.persistTimeout);
+        this.persistTimeout = setTimeout(() => {
+          const newValue =
+            value !== null && typeof value === 'object' ? value.value : value;
+          this.props.updateMeasurementPoint(
+            { ...this.props.selectedMeasurementPoint, [key]: newValue },
+            this.props.selectedTab.id
+          );
+        }, 200);
+        break;
+    }
+  };
   /*
   * update which form controls based on the type of measurement point
   */
@@ -286,9 +337,9 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
         }
       },
       selectOptions: {
-        options: {
-          validators: [Validators.required]
-        },
+        // options: {
+        //   validators: [Validators.required]
+        // },
         render: InputListAbstract,
         meta: {
           label: 'manageMeasurementPointLists:selectOptions',
@@ -296,7 +347,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
           colWidth: 12,
           placeholder: 'manageMeasurementPointLists:selectOptionsPlaceholder',
           colorButton: 'info',
-          startOptions: map(selectOptions, mpo => {
+          selectOptions: map(selectOptions, mpo => {
             return {
               ...mpo,
               isDefault: selectDefaultOptionID === mpo.id,
@@ -304,8 +355,8 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
                 typeof mpo.isDeleted !== 'undefined' ? mpo.isDeleted : false
             };
           })
-        },
-        formState: { value: null, disabled }
+        }
+        // formState: { value: null, disabled }
       }
     } as { [key: string]: GroupProps };
   };
@@ -381,7 +432,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
           label: 'manageMeasurementPointLists:helpText',
           colWidth: 12,
           type: 'text',
-          initialContent: helpText
+          initialContent: helpText ? helpText : ''
         }
       }
     } as { [key: string]: GroupProps };
@@ -396,7 +447,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
 
     this.setState({
       fieldConfig: FormUtil.translateForm(
-        this.getFormConfig(this.state.measurementPoint),
+        this.getFormConfig(this.props.selectedMeasurementPoint),
         this.props.t
       )
     });
@@ -423,10 +474,10 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
       selectRememberBetweenInspection
     } = this.measurementsForm.value;
     let newQ = {
-      ...this.state.measurementPoint,
+      ...this.props.selectedMeasurementPoint,
       ...this.measurementsForm.value
     };
-    if (this.state.measurementPoint.type < 5) {
+    if (this.props.selectedMeasurementPoint.type < 5) {
       newQ = {
         ...newQ,
         allowNotes: allowNotes ? allowNotes.value : false,
@@ -434,7 +485,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
       };
     }
     if (
-      this.state.measurementPoint.type ===
+      this.props.selectedMeasurementPoint.type ===
       constants.measurementPointTypes.MEASUREMENT_POINT_PASSFAIL
     ) {
       newQ = {
@@ -443,7 +494,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
       };
     }
     if (
-      this.state.measurementPoint.type ===
+      this.props.selectedMeasurementPoint.type ===
       constants.measurementPointTypes.MEASUREMENT_POINT_NUMERIC
     ) {
       newQ = {
@@ -454,7 +505,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
       };
     }
     if (
-      this.state.measurementPoint.type ===
+      this.props.selectedMeasurementPoint.type ===
       constants.measurementPointTypes.MEASUREMENT_POINT_SELECT
     ) {
       // console.log(this.measurementsForm.value.selectOptions);
@@ -485,11 +536,11 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
           : ''
       };
     }
-    const tabID = this.props.selectedTab.id; // TODO fix this
-    console.log(newQ);
-    this.props.addMeasurementPointToMeasurementPointList(
+    const selectedTabID = this.props.selectedTab.id;
+    console.log('saving new MP', newQ, selectedTabID);
+    this.props.saveMeasurementPointToMeasurementPointList(
       this.props.selectedMeasurementPointList.id,
-      tabID,
+      selectedTabID,
       newQ
     );
     this.props.toggleEditMeasurementPointModal();
@@ -500,6 +551,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
     this.measurementsForm.meta = {
       loading: this.props.loading
     };
+    this.subscribeToValueChanges();
   };
 
   render() {

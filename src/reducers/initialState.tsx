@@ -270,7 +270,8 @@ export default {
     showEditMeasurementPointListModal: false,
     showEditMeasurementPointModal: false,
     tableFilters: initialTableFilters,
-    selectedTabID: ''
+    selectedTabID: '',
+    selectedMeasurementPoint: initialMeasurementPoint
   },
   customers: [],
   facilities: [],

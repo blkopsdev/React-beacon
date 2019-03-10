@@ -10,7 +10,7 @@ import {
   createTableFiltersWithName,
   modalToggleWithName
 } from './commonReducers';
-import initialState from './initialState';
+import initialState, { initialMeasurementPoint } from './initialState';
 import { initialMeasurementPointList } from './initialState';
 import * as types from '../actions/actionTypes';
 
@@ -96,24 +96,32 @@ function manageSelectedMeasurementPointList(
   switch (action.type) {
     case types.SELECT_MEASUREMENT_POINT_LIST:
       return action.measurementPointList;
-    case types.MANAGE_MEASUREMENT_POINT_ADD:
-      const newTabsB = state.measurementPointTabs.map(tab => {
-        if (tab.id === action.tabID) {
-          return {
-            ...tab,
-            measurementPoints: {
-              ...tab.measurementPoints,
-              [action.measurementPoint.id]: action.measurementPoint
-            }
-          };
-        } else {
-          return tab;
-        }
-      });
-      return {
-        ...state,
-        measurementPointTabs: newTabsB
-      };
+    case types.MANAGE_MEASUREMENT_POINT_SAVE_TO_LIST:
+      const selectedTab = state.measurementPointTabs.find(
+        tab => tab.id === action.selectedTabID
+      );
+      if (selectedTab) {
+        const newTabs = state.measurementPointTabs.map(tab => {
+          if (tab.id === selectedTab.id) {
+            return {
+              ...tab,
+              measurementPoints: {
+                ...tab.measurementPoints,
+                [action.measurementPoint.id]: action.measurementPoint
+              }
+            };
+          } else {
+            return tab;
+          }
+        });
+        return { ...state, measurementPointTabs: newTabs };
+      } else {
+        console.error(
+          'unable to update measurement point, missing tab' +
+            action.selectedTabID
+        );
+        return state;
+      }
     case types.MANAGE_MEASUREMENT_POINT_LIST_UPDATE:
       return action.measurementPointList;
     case types.USER_LOGOUT_SUCCESS:
@@ -139,12 +147,26 @@ function manageMeasurementPointListTotalPages(
       return state;
   }
 }
-const selectedTabIDReducer = (state: string, action: any): string => {
+const selectedTabIDReducer = (state: string = '', action: any): string => {
   switch (action.type) {
     case types.MANAGE_MEASUREMENT_POINT_SET_SELECTED_TAB:
       return action.selectedTabID;
     case types.USER_LOGOUT_SUCCESS:
       return '';
+    default:
+      return state;
+  }
+};
+
+const selectedMeasurementPointReducer = (
+  state: ImeasurementPoint = initialMeasurementPoint,
+  action: any
+): ImeasurementPoint => {
+  switch (action.type) {
+    case types.MANAGE_MEASUREMENT_POINT_UPDATE:
+      return action.measurementPoint;
+    case types.USER_LOGOUT_SUCCESS:
+      return initialMeasurementPoint;
     default:
       return state;
   }
@@ -159,6 +181,10 @@ export default function manageMeasurementPointLists(
     selectedTabID: selectedTabIDReducer(state.selectedTabID, action),
     selectedMeasurementPointList: manageSelectedMeasurementPointList(
       state.selectedMeasurementPointList,
+      action
+    ),
+    selectedMeasurementPoint: selectedMeasurementPointReducer(
+      state.selectedMeasurementPoint,
       action
     ),
     showEditMeasurementPointListModal: modalToggleWithName(

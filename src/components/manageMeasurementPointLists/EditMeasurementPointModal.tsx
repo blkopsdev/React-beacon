@@ -12,7 +12,8 @@ import {
 import {
   toggleEditMeasurementPointListModal,
   toggleEditMeasurementPointModal,
-  addMeasurementPointToMeasurementPointList
+  saveMeasurementPointToMeasurementPointList,
+  updateMeasurementPoint
 } from '../../actions/manageMeasurementPointListsActions';
 import CommonModal from '../common/CommonModal';
 import EditMeasurementPointForm from './EditMeasurementPointForm';
@@ -20,7 +21,6 @@ import { constants } from 'src/constants/constants';
 import { initialMeasurementPointTab } from 'src/reducers/initialState';
 
 interface Iprops {
-  selectedMeasurementPoint: ImeasurementPoint;
   colorButton: any;
   t: TranslationFunction;
 }
@@ -31,9 +31,11 @@ interface IdispatchProps {
   loading: boolean;
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
   toggleEditMeasurementPointModal: typeof toggleEditMeasurementPointModal;
-  addMeasurementPointToMeasurementPointList: typeof addMeasurementPointToMeasurementPointList;
+  saveMeasurementPointToMeasurementPointList: typeof saveMeasurementPointToMeasurementPointList;
   selectedMeasurementPointList: ImeasurementPointList;
   selectedTab: ImeasurementPointListTab;
+  updateMeasurementPoint: typeof updateMeasurementPoint;
+  selectedMeasurementPoint: ImeasurementPoint;
 }
 
 class EditMeasurementPointModal extends React.Component<
@@ -92,7 +94,9 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
       state.manageMeasurementPointLists.showEditMeasurementPointModal,
     selectedTab,
     selectedMeasurementPointList:
-      state.manageMeasurementPointLists.selectedMeasurementPointList
+      state.manageMeasurementPointLists.selectedMeasurementPointList,
+    selectedMeasurementPoint:
+      state.manageMeasurementPointLists.selectedMeasurementPoint
   };
 };
 
@@ -101,6 +105,7 @@ export default connect(
   {
     toggleEditMeasurementPointListModal,
     toggleEditMeasurementPointModal,
-    addMeasurementPointToMeasurementPointList
+    saveMeasurementPointToMeasurementPointList,
+    updateMeasurementPoint
   }
 )(EditMeasurementPointModal);

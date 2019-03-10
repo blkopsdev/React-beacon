@@ -20,7 +20,7 @@ interface Iprops {
 }
 
 interface Istate {
-  options: ImeasurementPointSelectOption[];
+  selectOptions: ImeasurementPointSelectOption[];
   value: string;
 }
 
@@ -28,7 +28,7 @@ class InputList extends React.Component<Iprops, Istate> {
   constructor(props: any) {
     super(props);
     console.log(this.props.meta.startOptions);
-    this.state = { options: this.props.meta.startOptions, value: '' };
+    this.state = { selectOptions: this.props.meta.selectOptions, value: '' };
     this.handleChange = this.handleChange.bind(this);
     this.addOption = this.addOption.bind(this);
     this.deleteOption = this.deleteOption.bind(this);
@@ -44,7 +44,7 @@ class InputList extends React.Component<Iprops, Istate> {
       value: this.state.value,
       isDeleted: false,
       isDefault:
-        this.state.options.filter(o => {
+        this.state.selectOptions.filter(o => {
           return o.isDeleted !== true;
         }).length === 0
           ? true
@@ -53,42 +53,46 @@ class InputList extends React.Component<Iprops, Istate> {
     // console.log('adding option', newOption);
     this.setState(
       {
-        options: [...this.state.options, newOption],
+        selectOptions: [...this.state.selectOptions, newOption],
         value: ''
       },
       () => {
-        this.props.onChange(this.state.options);
+        this.props.onChange(this.state.selectOptions);
       }
     );
   }
   deleteOption(mpo: ImeasurementPointSelectOption) {
     this.setState(
       {
-        options: this.state.options.map((o: ImeasurementPointSelectOption) => {
-          if (o.id === mpo.id) {
-            return { ...o, isDefault: false, isDeleted: true };
+        selectOptions: this.state.selectOptions.map(
+          (o: ImeasurementPointSelectOption) => {
+            if (o.id === mpo.id) {
+              return { ...o, isDefault: false, isDeleted: true };
+            }
+            return o;
           }
-          return o;
-        })
+        )
       },
       () => {
-        this.props.onChange(this.state.options);
+        this.props.onChange(this.state.selectOptions);
       }
     );
   }
   makeDefault(mpo: ImeasurementPointSelectOption) {
     this.setState(
       {
-        options: this.state.options.map((o: ImeasurementPointSelectOption) => {
-          if (o.id === mpo.id) {
-            return { ...o, isDefault: true };
-          } else {
-            return { ...o, isDefault: false };
+        selectOptions: this.state.selectOptions.map(
+          (o: ImeasurementPointSelectOption) => {
+            if (o.id === mpo.id) {
+              return { ...o, isDefault: true };
+            } else {
+              return { ...o, isDefault: false };
+            }
           }
-        })
+        )
       },
       () => {
-        this.props.onChange(this.state.options);
+        this.props.onChange(this.state.selectOptions);
       }
     );
   }
@@ -117,7 +121,7 @@ class InputList extends React.Component<Iprops, Istate> {
           </InputGroup>
           <ListGroup className="options-list">
             {map(
-              this.state.options,
+              this.state.selectOptions,
               (mp: ImeasurementPointSelectOption, index: number) => {
                 if (mp.isDeleted === true) {
                   return '';
@@ -131,8 +135,7 @@ class InputList extends React.Component<Iprops, Istate> {
                         }}
                       >
                         <FontAwesomeIcon icon={['far', 'times']}>
-                          {' '}
-                          Delete{' '}
+                          Delete
                         </FontAwesomeIcon>
                       </Button>
                     </span>

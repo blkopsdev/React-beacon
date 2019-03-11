@@ -29,6 +29,7 @@ import { initialMeasurementPointTab } from 'src/reducers/initialState';
 interface Iprops {
   colorButton: any;
   t: TranslationFunction;
+  customerID: string;
 }
 
 interface IdispatchProps {
@@ -41,8 +42,9 @@ interface IdispatchProps {
   toggleEditMeasurementPointModal: typeof toggleEditMeasurementPointModal;
   addGlobalMeasurementPointList: typeof addGlobalMeasurementPointList;
   updateGlobalMeasurementPointList: (
-    m: ImeasurementPointList,
-    l: boolean
+    mpl: ImeasurementPointList,
+    persistToAPI: boolean,
+    isCustomer: boolean
   ) => Promise<void>;
   selectedTabID: string;
   selectedTab: ImeasurementPointListTab;

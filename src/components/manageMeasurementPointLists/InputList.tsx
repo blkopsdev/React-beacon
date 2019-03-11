@@ -98,12 +98,14 @@ class InputList extends React.Component<Iprops, Istate> {
               placeholder={this.props.meta.placeholder}
               onChange={this.handleChange}
               style={{ zIndex: 0 }}
+              disabled={this.props.handler().disabled}
             />
             <InputGroup.Button>
               <Button
                 onClick={this.addOption}
                 bsStyle={this.props.meta.colorButton}
                 style={{ zIndex: 0 }}
+                disabled={this.props.handler().disabled}
               >
                 {this.props.meta.buttonLabel}
               </Button>
@@ -124,6 +126,7 @@ class InputList extends React.Component<Iprops, Istate> {
                           onClick={() => {
                             this.deleteOption(mp);
                           }}
+                          disabled={this.props.handler().disabled}
                         >
                           <FontAwesomeIcon icon={['far', 'times']}>
                             Delete
@@ -133,8 +136,12 @@ class InputList extends React.Component<Iprops, Istate> {
                       <ListGroupItem
                         className="options-list-item"
                         onClick={() => {
+                          if (this.props.handler().disabled) {
+                            return;
+                          }
                           this.makeDefault(mp);
                         }}
+                        disabled={this.props.handler().disabled}
                       >
                         {mp.isDefault === true && <h5>{mp.label} (Default)</h5>}
                         {mp.isDefault === false && <h5>{mp.label}</h5>}

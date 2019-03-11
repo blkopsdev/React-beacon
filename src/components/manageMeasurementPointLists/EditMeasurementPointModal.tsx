@@ -23,6 +23,7 @@ import { initialMeasurementPointTab } from 'src/reducers/initialState';
 interface Iprops {
   colorButton: any;
   t: TranslationFunction;
+  customerID: string;
 }
 
 interface IdispatchProps {

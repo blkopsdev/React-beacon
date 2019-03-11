@@ -82,7 +82,7 @@ export const MeasurementPointList = (props: Iprops) => {
                 props.setSelectedMeasurementPoint(mp);
               }}
             >
-              <h5>{mp.label}</h5>
+              <h5 className="list-label">{mp.label}</h5>
               {constants.measurementPointTypesInverse[mp.type]}
             </ListGroupItem>
           </div>

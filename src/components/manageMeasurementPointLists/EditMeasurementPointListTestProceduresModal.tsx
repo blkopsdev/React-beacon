@@ -23,6 +23,7 @@ import { EditMeasurementPointListTestProceduresForm } from './EditMeasurementPoi
 interface Iprops {
   colorButton: string;
   t: TranslationFunction;
+  customerID: string;
 }
 
 interface IdispatchProps {

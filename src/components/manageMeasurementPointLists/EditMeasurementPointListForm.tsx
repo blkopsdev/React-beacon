@@ -36,7 +36,6 @@ import {
   setSelectedMeasurementPointList,
   toggleEditMeasurementPointListTestProceduresModal
 } from '../../actions/manageMeasurementPointListsActions';
-import EditMeasurementPointModal from './EditMeasurementPointModal';
 import { constants } from 'src/constants/constants';
 import {
   initialMeasurementPoint,
@@ -58,8 +57,9 @@ interface Iprops extends React.Props<EditMeasurementPointListForm> {
   toggleEditMeasurementPointModal: typeof toggleEditMeasurementPointModal;
   addGlobalMeasurementPointList: typeof addGlobalMeasurementPointList;
   updateGlobalMeasurementPointList: (
-    m: ImeasurementPointList,
-    l: boolean
+    mpl: ImeasurementPointList,
+    persistToAPI: boolean,
+    isCustomer: boolean
   ) => Promise<void>;
   selectedTabID: string;
   selectedTab: ImeasurementPointListTab;
@@ -69,6 +69,7 @@ interface Iprops extends React.Props<EditMeasurementPointListForm> {
   toggleEditMeasurementPointTabModal: typeof toggleEditMeasurementPointTabModal;
   setSelectedMeasurementPointList: typeof setSelectedMeasurementPointList;
   toggleEditMeasurementPointListTestProceduresModal: typeof toggleEditMeasurementPointListTestProceduresModal;
+  customerID: string;
 }
 
 interface Istate {
@@ -151,7 +152,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     const tabOptions = FormUtil.convertToOptions(
       measurementPointTabs.filter(tab => tab.isDeleted !== true)
     );
-    const disabled = !this.canEditGlobal();
+    const disabled = this.props.customerID.length;
 
     let selectedType = null;
     let selectedMainCategory = null;
@@ -221,7 +222,9 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
         formState: { value: selectedStandard, disabled }
       },
       selectedTab: {
-        render: FormUtil.CreatableSelectWithButton,
+        render: this.props.customerID.length
+          ? FormUtil.Select
+          : FormUtil.CreatableSelectWithButton,
         meta: {
           options: tabOptions,
           label: 'manageMeasurementPointLists:selectTabLabel',
@@ -263,6 +266,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
             newTab
           ]
         },
+        false,
         false
       )
       .then(() => {
@@ -282,31 +286,6 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       return a.order - b.order;
     });
     return filteredMPs;
-  };
-
-  /*
-  * We will allways have a selectedMeasurmentPointList because either a temporary one was created, or we are editing one that we received from the API.
-  * we are only updating the mainCategory, standard, and type on this form.
-  */
-  handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (this.measurementsForm.status === 'INVALID') {
-      this.measurementsForm.markAsSubmitted();
-      toastr.error('Please check invalid inputs', '', constants.toastrError);
-      return;
-    }
-    const { type, mainCategoryID, standardID } = this.measurementsForm.value;
-    const mpl = {
-      ...this.props.selectedMeasurementPointList,
-      mainCategoryID: mainCategoryID ? mainCategoryID.value : '',
-      standardID: standardID ? standardID.value : '',
-      type: type ? type.value : ''
-    };
-    if (mpl.temporary !== true) {
-      this.props.updateGlobalMeasurementPointList(mpl, true);
-    } else {
-      this.props.addGlobalMeasurementPointList({ ...mpl, temporary: false });
-    }
   };
 
   subscribeToValueChanges = () => {
@@ -333,6 +312,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
         if (value && value.value) {
           this.props.updateGlobalMeasurementPointList(
             { ...this.props.selectedMeasurementPointList, [key]: value.value },
+            false,
             false
           );
         }
@@ -382,7 +362,8 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       ...initialMeasurementPoint,
       id: uuidv4(),
       type,
-      order: this.state.measurementPoints.length
+      order: this.state.measurementPoints.length,
+      customerID: this.props.customerID
     };
   };
 
@@ -412,6 +393,36 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       return false;
     }
   };
+
+  /*
+* We will allways have a selectedMeasurmentPointList because either a temporary one was created, or we are editing one that we received from the API.
+* we are only updating the mainCategory, standard, and type on this form.
+*/
+  handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (this.measurementsForm.status === 'INVALID') {
+      this.measurementsForm.markAsSubmitted();
+      toastr.error('Please check invalid inputs', '', constants.toastrError);
+      return;
+    }
+    const { type, mainCategoryID, standardID } = this.measurementsForm.value;
+    const mpl = {
+      ...this.props.selectedMeasurementPointList,
+      mainCategoryID: mainCategoryID ? mainCategoryID.value : '',
+      standardID: standardID ? standardID.value : '',
+      type: type ? type.value : ''
+    };
+    if (mpl.temporary !== true) {
+      this.props.updateGlobalMeasurementPointList(
+        mpl,
+        true,
+        this.props.customerID.length > 0
+      );
+    } else {
+      this.props.addGlobalMeasurementPointList({ ...mpl, temporary: false });
+    }
+  };
+
   handleAddQuestion = () => {
     if (!this.validInitialTab()) {
       return;
@@ -537,10 +548,6 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
             </Button>
           </Col>
         </form>
-        <EditMeasurementPointModal
-          colorButton={this.props.colorButton}
-          t={this.props.t}
-        />
       </div>
     );
   }

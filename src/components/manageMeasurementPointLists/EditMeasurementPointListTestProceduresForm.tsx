@@ -56,6 +56,7 @@ interface Iprops {
   selectedMeasurementPointList: ImeasurementPointList;
   t: TranslationFunction;
   updateGlobalMeasurementPointList: typeof updateGlobalMeasurementPointList;
+  customerID: string;
 }
 
 class EditMeasurementPointListTestProceduresFormClass extends React.Component<
@@ -67,7 +68,10 @@ class EditMeasurementPointListTestProceduresFormClass extends React.Component<
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(
-      fieldConfig(this.props.selectedMeasurementPointList, false),
+      fieldConfig(
+        this.props.selectedMeasurementPointList,
+        this.props.customerID.length > 0
+      ),
       this.props.t
     );
   }
@@ -93,6 +97,7 @@ class EditMeasurementPointListTestProceduresFormClass extends React.Component<
         ...this.props.selectedMeasurementPointList,
         testProcedures
       },
+      false,
       false
     );
     this.props.toggleEditMeasurementPointListTestProceduresModal();

@@ -123,7 +123,8 @@ const groupFieldConfig = (formState: IformSate) => {
         options: {
           validators: [
             Validators.required,
-            FormUtil.validators.requiredWithTrim
+            FormUtil.validators.requiredWithTrim,
+            Validators.maxLength(150)
           ]
         },
         render: FormUtil.TextInput,
@@ -151,6 +152,7 @@ interface Iprops extends React.Props<EditMeasurementPointForm> {
   saveMeasurementPointToMeasurementPointList: typeof saveMeasurementPointToMeasurementPointList;
   selectedTab: ImeasurementPointListTab;
   updateMeasurementPoint: typeof updateMeasurementPoint;
+  customerID: string;
 }
 
 interface Istate {
@@ -239,7 +241,8 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
       passFailDefault,
       numericMinValue = null,
       numericMaxValue = null,
-      numericAllowDecimals = null
+      numericAllowDecimals = null,
+      customerID
     } = measurementPoint;
 
     let selectedPassFailDefault = null;
@@ -251,7 +254,10 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
         ) || null;
     }
     const mpTypes = constants.measurementPointTypes;
-    const disabled = false;
+    const disabled =
+      this.props.customerID.length > 0 &&
+      (customerID === null ||
+        (customerID !== null && customerID !== this.props.customerID));
 
     if (type === mpTypes.GROUP) {
       return groupFieldConfig({ value: label, disabled });
@@ -398,7 +404,8 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
         options: {
           validators: [
             Validators.required,
-            FormUtil.validators.requiredWithTrim
+            FormUtil.validators.requiredWithTrim,
+            Validators.maxLength(150)
           ]
         },
         render: FormUtil.TextInput,
@@ -435,7 +442,8 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
           colWidth: 12,
           type: 'text',
           initialContent: helpText ? helpText : ''
-        }
+        },
+        formState: { value: helpText, disabled }
       }
     } as { [key: string]: GroupProps };
     const fieldConfig = {

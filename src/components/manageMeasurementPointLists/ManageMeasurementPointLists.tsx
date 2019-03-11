@@ -43,6 +43,7 @@ import { constants } from 'src/constants/constants';
 import { FieldConfig } from 'react-reactive-form';
 import { EditMeasurementPointListTabModal } from './EditMeasurementPointListTabModal';
 import { EditMeasurementPointListTestProceduresModal } from './EditMeasurementPointListTestProceduresModal';
+import EditMeasurementPointModal from './EditMeasurementPointModal';
 const uuidv4 = require('uuid/v4');
 
 interface Iprops extends RouteComponentProps<any> {
@@ -134,6 +135,7 @@ class ManageMeasurementPointList extends React.Component<
     };
   }
   componentWillMount() {
+    console.log('url', this.props.match.path === '/customermeasurements');
     this.setState({
       currentTile: constants.getTileByURL(this.props.location.pathname),
       columns: this.setColumns()
@@ -237,19 +239,21 @@ class ManageMeasurementPointList extends React.Component<
               >
                 <FontAwesomeIcon icon={['far', 'edit']}> Edit </FontAwesomeIcon>
               </Button>
-              <Button
-                bsStyle="link"
-                style={{ float: 'right', color: 'red' }}
-                onClick={() => {
-                  this.buttonInAction = true;
-                  this.deleteAction = true;
-                  this.handleDelete(row.original);
-                }}
-              >
-                <FontAwesomeIcon icon={['far', 'times']}>
-                  Delete
-                </FontAwesomeIcon>
-              </Button>
+              {this.isAdmin && (
+                <Button
+                  bsStyle="link"
+                  style={{ float: 'right', color: 'red' }}
+                  onClick={() => {
+                    this.buttonInAction = true;
+                    this.deleteAction = true;
+                    this.handleDelete(row.original);
+                  }}
+                >
+                  <FontAwesomeIcon icon={['far', 'times']}>
+                    Delete
+                  </FontAwesomeIcon>
+                </Button>
+              )}
             </div>
           )
         }
@@ -361,6 +365,18 @@ class ManageMeasurementPointList extends React.Component<
     });
     this.props.toggleEditMeasurementPointListModal();
   };
+  isAdmin = () =>
+    constants.hasSecurityFunction(
+      this.props.user,
+      constants.securityFunctions.ManageAllMeasurementPoints.id
+    );
+  getCustomerID = () => {
+    if (this.props.match.path === '/customermeasurements') {
+      return this.props.user.customerID;
+    } else {
+      return '';
+    }
+  };
 
   render() {
     if (this.props.mainCategoryOptions.length === 0) {
@@ -370,10 +386,7 @@ class ManageMeasurementPointList extends React.Component<
         </Col>
       );
     }
-    const isAdmin = constants.hasSecurityFunction(
-      this.props.user,
-      constants.securityFunctions.ManageAllMeasurementPoints.id
-    );
+
     const { t } = this.props;
     return (
       <div className="user-manage">
@@ -381,6 +394,11 @@ class ManageMeasurementPointList extends React.Component<
           title={t('bannerTitle')}
           img={this.state.currentTile.srcBanner}
           color={this.state.currentTile.color}
+          subtitle={
+            this.props.match.path === '/customermeasurements'
+              ? this.props.user.customer.name
+              : ''
+          }
         />
         <SearchTableForm
           fieldConfig={this.searchFieldConfig}
@@ -394,7 +412,7 @@ class ManageMeasurementPointList extends React.Component<
           onValueChanges={this.onSearchValueChanges}
           showSearchButton={false}
         />
-        {isAdmin && (
+        {this.isAdmin && (
           <Button
             className="table-add-button"
             bsStyle="link"
@@ -426,18 +444,28 @@ class ManageMeasurementPointList extends React.Component<
             constants.colors[`${this.state.currentTile.color}Button`]
           }
           t={this.props.t}
+          customerID={this.getCustomerID()}
         />
         <EditMeasurementPointListTabModal
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
           t={this.props.t}
+          customerID={this.getCustomerID()}
         />
         <EditMeasurementPointListTestProceduresModal
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
           t={this.props.t}
+          customerID={this.getCustomerID()}
+        />
+        <EditMeasurementPointModal
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+          t={this.props.t}
+          customerID={this.getCustomerID()}
         />
       </div>
     );

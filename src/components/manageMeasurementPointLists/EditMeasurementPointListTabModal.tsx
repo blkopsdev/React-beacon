@@ -23,6 +23,7 @@ import { EditMeasurementPointListTabForm } from './EditMeasurementPointListTabFo
 interface Iprops {
   colorButton: string;
   t: TranslationFunction;
+  customerID: string;
 }
 
 interface IdispatchProps {

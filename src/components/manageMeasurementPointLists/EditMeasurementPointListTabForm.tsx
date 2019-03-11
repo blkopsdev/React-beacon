@@ -27,7 +27,10 @@ import {
 
 // add the bootstrap form-control class to the react-select select component
 
-const fieldConfig = (selectedTab: ImeasurementPointListTab) => {
+const fieldConfig = (
+  selectedTab: ImeasurementPointListTab,
+  disabled: boolean
+) => {
   return {
     controls: {
       name: {
@@ -59,6 +62,7 @@ interface Iprops {
   selectedMeasurementPointList: ImeasurementPointList;
   updateMeasurementPointListTab: typeof updateMeasurementPointListTab;
   t: TranslationFunction;
+  customerID: string;
 }
 
 class EditMeasurementPointListTabFormClass extends React.Component<Iprops, {}> {
@@ -67,7 +71,7 @@ class EditMeasurementPointListTabFormClass extends React.Component<Iprops, {}> {
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(
-      fieldConfig(this.props.selectedTab),
+      fieldConfig(this.props.selectedTab, this.props.customerID.length > 0),
       this.props.t
     );
   }

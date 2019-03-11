@@ -138,7 +138,8 @@ export function updateMeasurementPointListTab(
 */
 export function updateGlobalMeasurementPointList(
   mpl: ImeasurementPointList,
-  persistToAPI: boolean
+  persistToAPI: boolean,
+  isCustomer: boolean
 ): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch({
@@ -153,8 +154,14 @@ export function updateGlobalMeasurementPointList(
         return { ...tab, measurementPoints: values(tab.measurementPoints) };
       });
       const listForAPI = { ...mpl, measurementPointTabs };
+
+      // Set the correct URL dependent on if this is a customer or not
+      let url = `${API.PUT.measurements.updateglobalmpl}/${mpl.id}`;
+      if (isCustomer) {
+        url = `${API.PUT.measurements.updatecustomermpl}/${mpl.id}`;
+      }
       return axios
-        .put(`${API.PUT.measurements.updateglobalmpl}/${mpl.id}`, listForAPI)
+        .put(url, listForAPI)
         .then(data => {
           if (!data.data) {
             throw undefined;

@@ -35,7 +35,9 @@ class RichTextEditor extends React.Component<Iprops, Istate> {
         editorState={this.state.editorState}
         onEditorStateChange={this.onChange}
         toolbar={{
-          options: ['inline', 'list']
+          options: ['inline', 'list'],
+          inline: { options: ['bold', 'italic', 'underline'] },
+          list: { options: ['unordered', 'ordered'] }
         }}
         readOnly={this.props.readOnly}
       />

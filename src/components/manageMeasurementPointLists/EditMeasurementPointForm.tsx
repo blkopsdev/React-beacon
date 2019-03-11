@@ -194,7 +194,13 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
   */
 
   subscribeToValueChanges = () => {
-    const controls = ['type', 'label', 'guideText', 'allowNotes', 'helpText'];
+    let controls = ['type', 'label', 'guideText', 'allowNotes', 'helpText'];
+    if (
+      this.props.selectedMeasurementPoint.type ===
+      constants.measurementPointTypes.GROUP
+    ) {
+      controls = [];
+    }
     controls.forEach((key: string) => {
       this.subscription = this.measurementsForm
         .get(key)

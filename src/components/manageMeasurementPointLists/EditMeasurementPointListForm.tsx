@@ -10,9 +10,8 @@ import {
   AbstractControl,
   FieldConfig,
   GroupProps
-  // Observable
 } from 'react-reactive-form';
-import { keys, filter } from 'lodash';
+import { filter } from 'lodash';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
@@ -188,17 +187,6 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
 
     // Field config to configure form
     const fieldConfigControls = {
-      type: {
-        render: FormUtil.Select,
-        meta: {
-          options: constants.measurementPointListTypeOptions,
-          label: 'manageMeasurementPointLists:type',
-          colWidth: 12,
-          placeholder: 'manageMeasurementPointLists:typePlaceholder'
-        },
-        options: { validators: [Validators.required] },
-        formState: { value: selectedType, disabled }
-      },
       mainCategoryID: {
         render: FormUtil.Select,
         meta: {
@@ -210,12 +198,23 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
         options: { validators: [Validators.required] },
         formState: { value: selectedMainCategory, disabled }
       },
+      type: {
+        render: FormUtil.Select,
+        meta: {
+          options: constants.measurementPointListTypeOptions,
+          label: 'manageMeasurementPointLists:type',
+          colWidth: 6,
+          placeholder: 'manageMeasurementPointLists:typePlaceholder'
+        },
+        options: { validators: [Validators.required] },
+        formState: { value: selectedType, disabled }
+      },
       standardID: {
         render: FormUtil.Select,
         meta: {
           options: standardOptions,
           label: 'manageMeasurementPointLists:standard',
-          colWidth: 12,
+          colWidth: 6,
           placeholder: 'manageMeasurementPointLists:standardPlaceholder'
         },
         options: { validators: [Validators.required] },
@@ -383,7 +382,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       ...initialMeasurementPoint,
       id: uuidv4(),
       type,
-      order: keys(this.props.selectedTab.measurementPoints).length
+      order: this.state.measurementPoints.length
     };
   };
 
@@ -508,15 +507,17 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
               </Button>
             </Col>
           </Row>
-          <Col xs={12} className="">
-            <MeasurementPointList
-              measurementPointList={this.state.measurementPoints}
-              setSelectedMeasurementPoint={this.setSelectedMeasurementPoint}
-              swapMeasurementPointOrder={this.swapMeasurementPointOrder}
-              deleteMeasurementPoint={this.deleteMeasurementPoint}
-              canEditGlobal={this.canEditGlobal()}
-            />
-          </Col>
+          <Row>
+            <Col xs={12} className="">
+              <MeasurementPointList
+                measurementPointList={this.state.measurementPoints}
+                setSelectedMeasurementPoint={this.setSelectedMeasurementPoint}
+                swapMeasurementPointOrder={this.swapMeasurementPointOrder}
+                deleteMeasurementPoint={this.deleteMeasurementPoint}
+                canEditGlobal={this.canEditGlobal()}
+              />
+            </Col>
+          </Row>
 
           <Col xs={12} className="form-buttons text-right">
             <Button

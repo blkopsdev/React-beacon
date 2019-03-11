@@ -82,11 +82,8 @@ export const MeasurementPointList = (props: Iprops) => {
                 props.setSelectedMeasurementPoint(mp);
               }}
             >
-              {mp.type === 6 && (
-                <p dangerouslySetInnerHTML={{ __html: mp.label }} />
-              )}
-              {mp.type !== 6 && <h5>{mp.label}</h5>}
-              {mp.type < 5 && constants.measurementPointTypesInverse[mp.type]}
+              <h5>{mp.label}</h5>
+              {constants.measurementPointTypesInverse[mp.type]}
             </ListGroupItem>
           </div>
         );

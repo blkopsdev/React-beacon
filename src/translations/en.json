@@ -262,7 +262,7 @@
     "newMeasurement": "Add Measurements",
     "EditMeasurementPointListModalTitle": "ADD MEASUREMENTS",
     "measurementPointModalTitle": "ADD QUESTION",
-    "ProcedureModalTitle": "ADD PROCEDURE",
+    "editProcedureButton": "edit procedure",
     "GroupModalTitle": "ADD GROUP",
     "measurementPointText": "QUESTION TEXT",
     "guideText": "GUIDE TEXT (Optional)",
@@ -290,7 +290,8 @@
     "selectRememberBetweenDevice": "Remember Between Devices?",
     "editTab": "Edit Tab",
     "measurementPointTabLabel": "Tab Name",
-    "editTestProcedures": "Test Procedures"
+    "editTestProcedures": "Edit Procedures",
+    "deleteMPLButton": "Delete"
   },
   "tiles": {
     "alerts": "Alerts",

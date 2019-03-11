@@ -278,7 +278,7 @@ class ManageMeasurementPointList extends React.Component<
         console.log('deleted', deletedItem);
       },
       onCancel: () => console.log('CANCEL: clicked'),
-      okText: this.props.t('deleteOk'),
+      okText: this.props.t('deleteMPLButton'),
       cancelText: this.props.t('common:cancel')
     };
     toastr.confirm(this.props.t('deleteConfirm'), toastrConfirmOptions);

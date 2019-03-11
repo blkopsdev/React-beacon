@@ -3,7 +3,7 @@
 * Edit measurement point lists
 */
 
-import { Col, Button } from 'react-bootstrap';
+import { Col, Button, Row } from 'react-bootstrap';
 import {
   Validators,
   FormGenerator,
@@ -233,6 +233,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
           buttonName: this.props.t('edit'),
           buttonAction: this.props.toggleEditMeasurementPointTabModal
         },
+        options: { validators: [Validators.required] },
         formState: { value: selectedTab, disabled: false }
       }
     } as { [key: string]: GroupProps };
@@ -472,34 +473,41 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
             onMount={this.setForm}
             fieldConfig={this.state.fieldConfig}
           />
-          <Col xs={12} className="" style={{ marginLeft: '-15px' }}>
-            <Button
-              bsStyle="link"
-              type="button"
-              className=""
-              onClick={this.handleAddGroup}
-            >
-              Add Group
-            </Button>
-            <Button
-              bsStyle="link"
-              type="button"
-              className=""
-              onClick={
-                this.props.toggleEditMeasurementPointListTestProceduresModal
-              }
-            >
-              Add Procedure
-            </Button>
-            <Button
-              bsStyle="link"
-              type="button"
-              className=""
-              onClick={this.handleAddQuestion}
-            >
-              Add Question
-            </Button>
-          </Col>
+          <Row>
+            <Col xs={12}>
+              <Button
+                bsStyle="link"
+                type="button"
+                className=""
+                onClick={
+                  this.props.toggleEditMeasurementPointListTestProceduresModal
+                }
+              >
+                {t('editProcedureButton')}
+              </Button>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12} className="">
+              <Button
+                bsStyle="link"
+                type="button"
+                className=""
+                onClick={this.handleAddGroup}
+              >
+                Add Group
+              </Button>
+
+              <Button
+                bsStyle="link"
+                type="button"
+                className=""
+                onClick={this.handleAddQuestion}
+              >
+                Add Question
+              </Button>
+            </Col>
+          </Row>
           <Col xs={12} className="">
             <MeasurementPointList
               measurementPointList={this.state.measurementPoints}

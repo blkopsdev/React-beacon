@@ -40,9 +40,7 @@ interface IformSate {
   disabled: boolean;
 }
 
-const InputListAbstract = ({ handler, meta }: AbstractControl) => (
-  <InputList meta={meta} onChange={handler().onChange} />
-);
+const InputListAbstract = (props: AbstractControl) => <InputList {...props} />;
 
 const trueFalseOptions = [
   { label: 'Yes', value: true },
@@ -303,9 +301,20 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
     const {
       selectRememberBetweenDevice = null,
       selectRememberBetweenInspection = null,
-      selectOptions = [],
+      selectOptions,
       selectDefaultOptionID = ''
     } = measurementPoint;
+    let selectOptionsDefault = null;
+    if (selectOptions) {
+      selectOptionsDefault = map(selectOptions, mpo => {
+        return {
+          ...mpo,
+          isDefault: selectDefaultOptionID === mpo.id,
+          isDeleted:
+            typeof mpo.isDeleted !== 'undefined' ? mpo.isDeleted : false
+        };
+      });
+    }
 
     return {
       selectRememberBetweenDevice: {
@@ -337,9 +346,27 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
         }
       },
       selectOptions: {
-        // options: {
-        //   validators: [Validators.required]
-        // },
+        options: {
+          validators: [
+            ({ value }: AbstractControl) => {
+              console.log('value', value);
+              if (
+                value &&
+                value.filter(
+                  (v: ImeasurementPointSelectOption) => v.isDeleted !== true
+                ).length
+              ) {
+                return null;
+              } else {
+                return {
+                  noValidSelectOptions: {
+                    message: 'Please add at least one select option.'
+                  }
+                };
+              }
+            }
+          ]
+        },
         render: InputListAbstract,
         meta: {
           label: 'manageMeasurementPointLists:selectOptions',
@@ -347,16 +374,9 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
           colWidth: 12,
           placeholder: 'manageMeasurementPointLists:selectOptionsPlaceholder',
           colorButton: 'info',
-          selectOptions: map(selectOptions, mpo => {
-            return {
-              ...mpo,
-              isDefault: selectDefaultOptionID === mpo.id,
-              isDeleted:
-                typeof mpo.isDeleted !== 'undefined' ? mpo.isDeleted : false
-            };
-          })
-        }
-        // formState: { value: null, disabled }
+          selectOptions: selectOptionsDefault
+        },
+        formState: { value: selectOptionsDefault, disabled }
       }
     } as { [key: string]: GroupProps };
   };
@@ -453,10 +473,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
     });
   };
 
-  handleSubmit = (
-    e: React.MouseEvent<HTMLFormElement>,
-    shouldApprove?: boolean
-  ) => {
+  handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (this.measurementsForm.status === 'INVALID') {
       console.log(this.measurementsForm);
@@ -473,74 +490,42 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
       selectRememberBetweenDevice,
       selectRememberBetweenInspection
     } = this.measurementsForm.value;
-    let newQ = {
-      ...this.props.selectedMeasurementPoint,
-      ...this.measurementsForm.value
-    };
-    if (this.props.selectedMeasurementPoint.type < 5) {
-      newQ = {
-        ...newQ,
-        allowNotes: allowNotes ? allowNotes.value : false,
-        type: type ? type.value : ''
-      };
-    }
-    if (
-      this.props.selectedMeasurementPoint.type ===
-      constants.measurementPointTypes.MEASUREMENT_POINT_PASSFAIL
-    ) {
-      newQ = {
-        ...newQ,
-        passFailDefault: passFailDefault ? passFailDefault.value : ''
-      };
-    }
-    if (
-      this.props.selectedMeasurementPoint.type ===
-      constants.measurementPointTypes.MEASUREMENT_POINT_NUMERIC
-    ) {
-      newQ = {
-        ...newQ,
-        numericAllowDecimals: numericAllowDecimals
-          ? numericAllowDecimals.value
-          : ''
-      };
-    }
-    if (
-      this.props.selectedMeasurementPoint.type ===
-      constants.measurementPointTypes.MEASUREMENT_POINT_SELECT
-    ) {
-      // console.log(this.measurementsForm.value.selectOptions);
-      // return;
-      const selectDefaultOption = selectOptions.filter(
+
+    let selectDefaultOptionID = '';
+    if (selectOptions && selectOptions.length) {
+      const defaultOption = selectOptions.find(
         (mpo: ImeasurementPointSelectOption) => {
           return mpo.isDefault === true;
         }
       );
-
-      newQ = {
-        ...newQ,
-        selectRememberBetweenDevice: selectRememberBetweenDevice
-          ? selectRememberBetweenDevice.value
-          : '',
-        selectRememberBetweenInspection: selectRememberBetweenInspection
-          ? selectRememberBetweenInspection.value
-          : '',
-        selectOptions: map(
-          selectOptions,
-          (mpo: ImeasurementPointSelectOption) => {
-            delete mpo.isDefault;
-            return mpo;
-          }
-        ),
-        selectDefaultOptionID: selectDefaultOption.length
-          ? selectDefaultOption[0].id
-          : ''
-      };
+      if (defaultOption) {
+        selectDefaultOptionID = defaultOption.id;
+      }
     }
-    const selectedTabID = this.props.selectedTab.id;
-    console.log('saving new MP', newQ, selectedTabID);
+
+    const newQ: ImeasurementPoint = {
+      ...this.props.selectedMeasurementPoint,
+      ...this.measurementsForm.value,
+      selectRememberBetweenDevice: selectRememberBetweenDevice
+        ? selectRememberBetweenDevice.value
+        : '',
+      selectRememberBetweenInspection: selectRememberBetweenInspection
+        ? selectRememberBetweenInspection.value
+        : '',
+      selectOptions: selectOptions && selectOptions.length ? selectOptions : [],
+      selectDefaultOptionID,
+      numericAllowDecimals: numericAllowDecimals
+        ? numericAllowDecimals.value
+        : false,
+      passFailDefault: passFailDefault ? passFailDefault.value : '',
+      allowNotes: allowNotes ? allowNotes.value : false,
+      type: type ? type.value : ''
+    };
+
+    console.log('saving new MP', newQ);
     this.props.saveMeasurementPointToMeasurementPointList(
       this.props.selectedMeasurementPointList.id,
-      selectedTabID,
+      this.props.selectedTab.id,
       newQ
     );
     this.props.toggleEditMeasurementPointModal();

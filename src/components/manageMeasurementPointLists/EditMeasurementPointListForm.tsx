@@ -31,7 +31,8 @@ import {
   toggleEditMeasurementPointModal,
   addGlobalMeasurementPointList,
   setSelectedTabID,
-  updateMeasurementPoint
+  updateMeasurementPoint,
+  saveMeasurementPointToMeasurementPointList
 } from '../../actions/manageMeasurementPointListsActions';
 import EditMeasurementPointModal from './EditMeasurementPointModal';
 import { constants } from 'src/constants/constants';
@@ -58,6 +59,7 @@ interface Iprops extends React.Props<EditMeasurementPointListForm> {
   selectedTab: ImeasurementPointListTab;
   setSelectedTabID: typeof setSelectedTabID;
   updateMeasurementPoint: typeof updateMeasurementPoint;
+  saveMeasurementPointToMeasurementPointList: typeof saveMeasurementPointToMeasurementPointList;
 }
 
 interface Istate {
@@ -363,6 +365,11 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
         //   this.props.selectedMeasurementPointList.id,
         //   measurementPoint.id
         // );
+        this.props.saveMeasurementPointToMeasurementPointList(
+          this.props.selectedMeasurementPointList.id,
+          this.props.selectedTabID,
+          { ...measurementPoint, isDeleted: true }
+        );
         console.log('deleted', measurementPoint);
       },
       onCancel: () => console.log('CANCEL: clicked'),

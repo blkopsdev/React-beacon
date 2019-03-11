@@ -264,7 +264,7 @@
     "measurementPointModalTitle": "ADD QUESTION",
     "ProcedureModalTitle": "ADD PROCEDURE",
     "GroupModalTitle": "ADD GROUP",
-    "questionText": "QUESTION TEXT",
+    "measurementPointText": "QUESTION TEXT",
     "guideText": "GUIDE TEXT (Optional)",
     "allowNotes": "ALLOW NOTES",
     "helpText": "HELP TEXT (Optional)",

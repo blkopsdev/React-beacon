@@ -15,7 +15,7 @@ interface Istate {
 }
 
 class RichTextEditor extends React.Component<Iprops, Istate> {
-  constructor(props: any) {
+  constructor(props: Iprops) {
     super(props);
     const editorState =
       typeof this.props.initialContent !== 'undefined'
@@ -25,7 +25,7 @@ class RichTextEditor extends React.Component<Iprops, Istate> {
         : EditorState.createEmpty();
     this.state = { editorState };
   }
-  onChange = (editorState: any) => {
+  onChange = (editorState: EditorState) => {
     this.setState({ editorState });
     this.props.onChange(stateToHTML(editorState.getCurrentContent()));
   };

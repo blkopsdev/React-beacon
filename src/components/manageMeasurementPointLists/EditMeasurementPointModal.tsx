@@ -50,12 +50,6 @@ class EditMeasurementPointModal extends React.Component<
     if (
       this.props.selectedMeasurementPoint.id.length &&
       this.props.selectedMeasurementPoint.type ===
-        constants.measurementPointTypes.PROCEDURE
-    ) {
-      return 'ProcedureModalTitle';
-    } else if (
-      this.props.selectedMeasurementPoint.id.length &&
-      this.props.selectedMeasurementPoint.type ===
         constants.measurementPointTypes.GROUP
     ) {
       return 'GroupModalTitle';

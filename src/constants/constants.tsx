@@ -56,16 +56,14 @@ const measurementPointTypes = {
   MEASUREMENT_POINT_TEXT: 2,
   MEASUREMENT_POINT_NUMERIC: 3,
   MEASUREMENT_POINT_SELECT: 4,
-  GROUP: 5,
-  PROCEDURE: 6
+  GROUP: 5
 };
 const measurementPointTypesInverse = {
   1: 'Pass/Fail',
   2: 'Text',
   3: 'Numeric',
   4: 'Select',
-  5: 'Group',
-  6: 'Procedure'
+  5: 'Group'
 };
 const measurementPointPassFailOptions = [
   { label: 'Pass', value: 1 },

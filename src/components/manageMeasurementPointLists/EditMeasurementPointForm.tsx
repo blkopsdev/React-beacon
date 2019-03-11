@@ -139,22 +139,6 @@ const groupFieldConfig = (formState: IformSate) => {
   };
 };
 
-const buildProcedureFieldConfig = (initialContent: any) => {
-  return {
-    controls: {
-      label: {
-        options: {},
-        render: FormUtil.RichTextEditor,
-        meta: {
-          label: 'manageMeasurementPointLists:procedureLabel',
-          colWidth: 12,
-          initialContent
-        }
-      }
-    }
-  };
-};
-
 interface Iprops extends React.Props<EditMeasurementPointForm> {
   selectedMeasurementPointList: ImeasurementPointList;
   selectedMeasurementPoint: ImeasurementPoint;
@@ -269,9 +253,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
     const mpTypes = constants.measurementPointTypes;
     const disabled = false;
 
-    if (type === mpTypes.PROCEDURE) {
-      return buildProcedureFieldConfig(label); // TODO remove procedure
-    } else if (type === mpTypes.GROUP) {
+    if (type === mpTypes.GROUP) {
       return groupFieldConfig({ value: label, disabled });
     } else {
       let extraConfig = {};

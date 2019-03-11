@@ -480,11 +480,16 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
     const {
       allowNotes,
       type,
+      label,
       passFailDefault,
       numericAllowDecimals,
       selectOptions,
       selectRememberBetweenDevice,
-      selectRememberBetweenInspection
+      selectRememberBetweenInspection,
+      guideText,
+      helpText,
+      numericMinValue,
+      numericMaxValue
     } = this.measurementsForm.value;
 
     let selectDefaultOptionID = '';
@@ -500,8 +505,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
     }
 
     const newQ: ImeasurementPoint = {
-      ...this.props.selectedMeasurementPoint,
-      ...this.measurementsForm.value,
+      ...this.props.selectedMeasurementPoint, // id, order, isDeleted, customerID
       selectRememberBetweenDevice: selectRememberBetweenDevice
         ? selectRememberBetweenDevice.value
         : '',
@@ -509,13 +513,18 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
         ? selectRememberBetweenInspection.value
         : '',
       selectOptions: selectOptions && selectOptions.length ? selectOptions : [],
-      selectDefaultOptionID,
       numericAllowDecimals: numericAllowDecimals
         ? numericAllowDecimals.value
         : false,
       passFailDefault: passFailDefault ? passFailDefault.value : '',
       allowNotes: allowNotes ? allowNotes.value : false,
-      type: type ? type.value : ''
+      type: type ? type.value : this.props.selectedMeasurementPoint.type,
+      selectDefaultOptionID,
+      label,
+      guideText,
+      helpText,
+      numericMinValue,
+      numericMaxValue
     };
 
     console.log('saving new MP', newQ);

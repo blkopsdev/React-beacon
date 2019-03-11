@@ -357,7 +357,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     toastr.confirm(this.props.t('deleteConfirmMP'), toastrConfirmOptions);
   };
 
-  newMeasurementPoint = (type: number): ImeasurementPoint => {
+  createNewMeasurementPoint = (type: number): ImeasurementPoint => {
     return {
       ...initialMeasurementPoint,
       id: uuidv4(),
@@ -428,7 +428,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       return;
     }
     this.setSelectedMeasurementPoint(
-      this.newMeasurementPoint(
+      this.createNewMeasurementPoint(
         constants.measurementPointTypes.MEASUREMENT_POINT_PASSFAIL
       )
     );
@@ -438,7 +438,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       return;
     }
     this.setSelectedMeasurementPoint(
-      this.newMeasurementPoint(constants.measurementPointTypes.GROUP)
+      this.createNewMeasurementPoint(constants.measurementPointTypes.GROUP)
     );
   };
   handleCancel = () => {

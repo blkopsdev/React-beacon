@@ -289,7 +289,8 @@
     "selectOptionsPlaceholder": "Start typing to create...",
     "selectRememberBetweenDevice": "Remember Between Devices?",
     "editTab": "Edit Tab",
-    "measurementPointTabLabel": "Tab Name"
+    "measurementPointTabLabel": "Tab Name",
+    "editTestProcedures": "Test Procedures"
   },
   "tiles": {
     "alerts": "Alerts",

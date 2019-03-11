@@ -1,5 +1,5 @@
 /*
-* Edit Management Point List Tab modal
+* Edit Management Point List Test Procedures Modal
 */
 
 import { TranslationFunction } from 'react-i18next';
@@ -14,11 +14,11 @@ import {
 
 import CommonModal from '../common/CommonModal';
 import {
-  toggleEditMeasurementPointTabModal,
-  updateMeasurementPointListTab
+  updateGlobalMeasurementPointList,
+  toggleEditMeasurementPointListTestProceduresModal
 } from 'src/actions/manageMeasurementPointListsActions';
 import { initialMeasurementPointTab } from 'src/reducers/initialState';
-import { EditMeasurementPointListTabForm } from './EditMeasurementPointListTabForm';
+import { EditMeasurementPointListTestProceduresForm } from './EditMeasurementPointListTestProceduresForm';
 
 interface Iprops {
   colorButton: string;
@@ -28,13 +28,13 @@ interface Iprops {
 interface IdispatchProps {
   showModal: boolean;
   loading: boolean;
-  toggleEditMeasurementPointTabModal: typeof toggleEditMeasurementPointTabModal;
+  toggleEditMeasurementPointListTestProceduresModal: typeof toggleEditMeasurementPointListTestProceduresModal;
   selectedTab: ImeasurementPointListTab;
   selectedMeasurementPointList: ImeasurementPointList;
-  updateMeasurementPointListTab: typeof updateMeasurementPointListTab;
+  updateGlobalMeasurementPointList: typeof updateGlobalMeasurementPointList;
 }
 
-class EditMeasurementPointListTabModalClass extends React.Component<
+class EditMeasurementPointListTestProceduresModalClass extends React.Component<
   Iprops & IdispatchProps,
   {}
 > {
@@ -47,9 +47,9 @@ class EditMeasurementPointListTabModalClass extends React.Component<
       <CommonModal
         modalVisible={this.props.showModal}
         className="edit-tab second-modal"
-        onHide={this.props.toggleEditMeasurementPointTabModal}
-        body={<EditMeasurementPointListTabForm {...this.props} />}
-        title={this.props.t('editTab')}
+        onHide={this.props.toggleEditMeasurementPointListTestProceduresModal}
+        body={<EditMeasurementPointListTestProceduresForm {...this.props} />}
+        title={this.props.t('editTestProcedures')}
         container={document.getElementById('two-pane-layout')}
       />
     );
@@ -65,17 +65,18 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
     showModal:
-      state.manageMeasurementPointLists.showEditMeasurementPointTabModal,
+      state.manageMeasurementPointLists
+        .showEditMeasurementPointListTestProceduresModal,
     selectedMeasurementPointList:
       state.manageMeasurementPointLists.selectedMeasurementPointList,
     selectedTab
   };
 };
 
-export const EditMeasurementPointListTabModal = connect(
+export const EditMeasurementPointListTestProceduresModal = connect(
   mapStateToProps,
   {
-    toggleEditMeasurementPointTabModal,
-    updateMeasurementPointListTab
+    toggleEditMeasurementPointListTestProceduresModal,
+    updateGlobalMeasurementPointList
   }
-)(EditMeasurementPointListTabModalClass);
+)(EditMeasurementPointListTestProceduresModalClass);

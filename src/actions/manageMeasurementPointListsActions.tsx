@@ -270,6 +270,9 @@ export const toggleEditMeasurementPointModal = () => ({
 export const toggleEditMeasurementPointTabModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT_TAB
 });
+export const toggleEditMeasurementPointListTestProceduresModal = () => ({
+  type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT_LIST_TEST_PROCEDURES
+});
 export const setTableFilter = (filters: ItableFiltersParams) => ({
   type: types.SET_TABLE_FILTER_MANAGE_MEASUREMENT_POINT_LISTS,
   filters

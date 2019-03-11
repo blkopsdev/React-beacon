@@ -11,7 +11,7 @@ interface Iprops {
 }
 
 interface Istate {
-  editorState: any;
+  editorState: EditorState;
 }
 
 class RichTextEditor extends React.Component<Iprops, Istate> {
@@ -37,6 +37,7 @@ class RichTextEditor extends React.Component<Iprops, Istate> {
         toolbar={{
           options: ['inline', 'list']
         }}
+        readOnly={this.props.readOnly}
       />
     );
   }

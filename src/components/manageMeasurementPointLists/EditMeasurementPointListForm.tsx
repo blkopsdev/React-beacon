@@ -34,7 +34,8 @@ import {
   updateMeasurementPoint,
   saveMeasurementPointToMeasurementPointList,
   toggleEditMeasurementPointTabModal,
-  setSelectedMeasurementPointList
+  setSelectedMeasurementPointList,
+  toggleEditMeasurementPointListTestProceduresModal
 } from '../../actions/manageMeasurementPointListsActions';
 import EditMeasurementPointModal from './EditMeasurementPointModal';
 import { constants } from 'src/constants/constants';
@@ -68,6 +69,7 @@ interface Iprops extends React.Props<EditMeasurementPointListForm> {
   saveMeasurementPointToMeasurementPointList: typeof saveMeasurementPointToMeasurementPointList;
   toggleEditMeasurementPointTabModal: typeof toggleEditMeasurementPointTabModal;
   setSelectedMeasurementPointList: typeof setSelectedMeasurementPointList;
+  toggleEditMeasurementPointListTestProceduresModal: typeof toggleEditMeasurementPointListTestProceduresModal;
 }
 
 interface Istate {
@@ -428,11 +430,6 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       this.newMeasurementPoint(constants.measurementPointTypes.GROUP)
     );
   };
-  handleAddProcedure = () => {
-    this.setSelectedMeasurementPoint(
-      this.newMeasurementPoint(constants.measurementPointTypes.PROCEDURE)
-    );
-  };
   handleCancel = () => {
     this.props.toggleEditMeasurementPointListModal();
     this.props.setSelectedTabID('');
@@ -488,7 +485,9 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
               bsStyle="link"
               type="button"
               className=""
-              onClick={this.handleAddProcedure}
+              onClick={
+                this.props.toggleEditMeasurementPointListTestProceduresModal
+              }
             >
               Add Procedure
             </Button>

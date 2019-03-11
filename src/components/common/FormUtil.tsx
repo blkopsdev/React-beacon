@@ -512,15 +512,7 @@ export const FormUtil = {
     const requiredLabel = meta.required === false ? ' - optional' : '';
     return (
       <Col xs={meta.colWidth}>
-        <FormGroup
-          validationState={FormUtil.getValidationState(
-            pristine,
-            errors,
-            submitted
-          )}
-          bsSize="sm"
-          style={meta.style}
-        >
+        <FormGroup bsSize="sm" style={meta.style}>
           <ControlLabel>
             {meta.label}
             <i className="required-label">{requiredLabel}</i>
@@ -528,7 +520,7 @@ export const FormUtil = {
           <RichTextEditor
             onChange={handler().onChange}
             initialContent={meta.initialContent}
-            readOnly={meta.readOnly}
+            readOnly={handler().disabled}
           />
           <FormControl.Feedback />
         </FormGroup>

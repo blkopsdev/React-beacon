@@ -369,6 +369,7 @@ export interface ImanageMeasurementPointListsReducer {
   showEditMeasurementPointListModal: boolean;
   showEditMeasurementPointModal: boolean;
   showEditMeasurementPointTabModal: boolean;
+  showEditMeasurementPointListTestProceduresModal: boolean;
   // selectedTab: ImeasurementPointListTab;
   tableFilters: ItableFiltersReducer;
   selectedTabID: string;

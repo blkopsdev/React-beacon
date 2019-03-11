@@ -229,6 +229,11 @@ export default function manageMeasurementPointLists(
       state.tableFilters,
       action,
       'MANAGE_MEASUREMENT_POINT_LISTS'
+    ),
+    showEditMeasurementPointListTestProceduresModal: modalToggleWithName(
+      state.showEditMeasurementPointListTestProceduresModal,
+      action,
+      'EDIT_MEASUREMENT_POINT_LIST_TEST_PROCEDURES'
     )
   };
 }

@@ -1,11 +1,10 @@
 /* 
-* Edit Measurement Point List Form
+* Edit Measurement Point List Test Procedures Form
 * 
 */
 
 import * as React from 'react';
 import {
-  Validators,
   FormGenerator,
   AbstractControl,
   FieldConfig,
@@ -18,32 +17,31 @@ import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction } from 'react-i18next';
 
 import { FormUtil } from '../common/FormUtil';
-import { ImeasurementPointListTab, ImeasurementPointList } from 'src/models';
+import { ImeasurementPointList } from 'src/models';
 import {
-  toggleEditMeasurementPointTabModal,
-  updateMeasurementPointListTab
+  toggleEditMeasurementPointListTestProceduresModal,
+  updateGlobalMeasurementPointList
 } from 'src/actions/manageMeasurementPointListsActions';
 // import { IqueueObject } from '../../models';
 
 // add the bootstrap form-control class to the react-select select component
 
-const fieldConfig = (selectedTab: ImeasurementPointListTab) => {
+const fieldConfig = (
+  measurementPointList: ImeasurementPointList,
+  disabled: boolean
+) => {
+  const { testProcedures } = measurementPointList;
+
   return {
     controls: {
-      name: {
-        options: {
-          validators: [
-            Validators.required,
-            FormUtil.validators.requiredWithTrim
-          ]
-        },
-        render: FormUtil.TextInput,
+      testProcedures: {
+        render: FormUtil.RichTextEditor,
         meta: {
-          label: 'measurementPointTabLabel',
+          label: 'manageMeasurementPointLists:procedureLabel',
           colWidth: 12,
-          name: 'measurement-point-tab'
+          initialContent: testProcedures
         },
-        formState: { value: selectedTab.name, disabled: false }
+        formState: { value: testProcedures, disabled }
       }
     } as {
       [key: string]: GroupProps;
@@ -52,22 +50,24 @@ const fieldConfig = (selectedTab: ImeasurementPointListTab) => {
 };
 
 interface Iprops {
-  toggleEditMeasurementPointTabModal: typeof toggleEditMeasurementPointTabModal;
+  toggleEditMeasurementPointListTestProceduresModal: typeof toggleEditMeasurementPointListTestProceduresModal;
   loading: boolean;
   colorButton: string;
-  selectedTab: ImeasurementPointListTab;
   selectedMeasurementPointList: ImeasurementPointList;
-  updateMeasurementPointListTab: typeof updateMeasurementPointListTab;
   t: TranslationFunction;
+  updateGlobalMeasurementPointList: typeof updateGlobalMeasurementPointList;
 }
 
-class EditMeasurementPointListTabFormClass extends React.Component<Iprops, {}> {
+class EditMeasurementPointListTestProceduresFormClass extends React.Component<
+  Iprops,
+  {}
+> {
   private userForm: AbstractControl;
   private fieldConfig: FieldConfig;
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(
-      fieldConfig(this.props.selectedTab),
+      fieldConfig(this.props.selectedMeasurementPointList, false),
       this.props.t
     );
   }
@@ -87,25 +87,15 @@ class EditMeasurementPointListTabFormClass extends React.Component<Iprops, {}> {
       return;
     }
     console.log(this.userForm.value);
-    const { name } = this.userForm.value;
-    this.props.updateMeasurementPointListTab({
-      ...this.props.selectedTab,
-      name
-    });
-  };
-  handleDelete = () => {
-    const toastrConfirmOptions = {
-      onOk: () => {
-        this.props.updateMeasurementPointListTab({
-          ...this.props.selectedTab,
-          isDeleted: true
-        });
+    const { testProcedures } = this.userForm.value;
+    this.props.updateGlobalMeasurementPointList(
+      {
+        ...this.props.selectedMeasurementPointList,
+        testProcedures
       },
-      onCancel: () => console.log('CANCEL: clicked'),
-      okText: this.props.t('deleteMeasurementPointTabOk'),
-      cancelText: this.props.t('common:cancel')
-    };
-    toastr.confirm(this.props.t('deleteConfirmMPLT'), toastrConfirmOptions);
+      false
+    );
+    this.props.toggleEditMeasurementPointListTestProceduresModal();
   };
   setForm = (form: AbstractControl) => {
     this.userForm = form;
@@ -125,17 +115,11 @@ class EditMeasurementPointListTabFormClass extends React.Component<Iprops, {}> {
             bsStyle="default"
             type="button"
             className="pull-left"
-            onClick={this.props.toggleEditMeasurementPointTabModal}
+            onClick={
+              this.props.toggleEditMeasurementPointListTestProceduresModal
+            }
           >
             {t('common:cancel')}
-          </Button>
-          <Button
-            bsStyle="warning"
-            type="button"
-            style={{ marginRight: '15px' }}
-            onClick={this.handleDelete}
-          >
-            {t('common:delete')}
           </Button>
           <Button
             bsStyle={this.props.colorButton}
@@ -149,6 +133,6 @@ class EditMeasurementPointListTabFormClass extends React.Component<Iprops, {}> {
     );
   }
 }
-export const EditMeasurementPointListTabForm = translate(
+export const EditMeasurementPointListTestProceduresForm = translate(
   'manageMeasurementPointLists'
-)(EditMeasurementPointListTabFormClass);
+)(EditMeasurementPointListTestProceduresFormClass);

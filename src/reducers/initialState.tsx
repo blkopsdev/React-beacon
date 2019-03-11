@@ -271,6 +271,7 @@ export default {
     showEditMeasurementPointListModal: false,
     showEditMeasurementPointModal: false,
     showEditMeasurementPointTabModal: false,
+    showEditMeasurementPointListTestProceduresModal: false,
     tableFilters: initialTableFilters,
     selectedTabID: '',
     selectedMeasurementPoint: initialMeasurementPoint

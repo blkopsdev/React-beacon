@@ -32,11 +32,17 @@ import {
   addGlobalMeasurementPointList,
   setSelectedTabID,
   updateMeasurementPoint,
-  saveMeasurementPointToMeasurementPointList
+  saveMeasurementPointToMeasurementPointList,
+  toggleEditMeasurementPointTabModal,
+  setSelectedMeasurementPointList
 } from '../../actions/manageMeasurementPointListsActions';
 import EditMeasurementPointModal from './EditMeasurementPointModal';
 import { constants } from 'src/constants/constants';
-import { initialMeasurementPoint } from 'src/reducers/initialState';
+import {
+  initialMeasurementPoint,
+  initialMeasurementPointTab,
+  initialMeasurementPointList
+} from 'src/reducers/initialState';
 import { MeasurementPointList } from './MeasurementPointList';
 const uuidv4 = require('uuid/v4');
 
@@ -60,6 +66,8 @@ interface Iprops extends React.Props<EditMeasurementPointListForm> {
   setSelectedTabID: typeof setSelectedTabID;
   updateMeasurementPoint: typeof updateMeasurementPoint;
   saveMeasurementPointToMeasurementPointList: typeof saveMeasurementPointToMeasurementPointList;
+  toggleEditMeasurementPointTabModal: typeof toggleEditMeasurementPointTabModal;
+  setSelectedMeasurementPointList: typeof setSelectedMeasurementPointList;
 }
 
 interface Istate {
@@ -139,7 +147,9 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       standardOptions
     } = productInfo;
 
-    const tabOptions = FormUtil.convertToOptions(measurementPointTabs);
+    const tabOptions = FormUtil.convertToOptions(
+      measurementPointTabs.filter(tab => tab.isDeleted !== true)
+    );
     const disabled = !this.canEditGlobal();
 
     let selectedType = null;
@@ -164,14 +174,14 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       selectedStandard = FormUtil.convertToSingleOption(standards[standardID]);
     }
 
-    const foundSelectedTab = FormUtil.convertToSingleOption(
-      measurementPointTabs.find(tab => tab.id === selectedTabID)
+    const foundSelectedTab = tabOptions.find(
+      tab => tab.value === selectedTabID
     );
     if (selectedTabID.length && foundSelectedTab) {
       selectedTab = foundSelectedTab;
     } else {
       // select the first one if none are selected
-      selectedTab = FormUtil.convertToSingleOption(measurementPointTabs[0]);
+      selectedTab = tabOptions[0];
     }
 
     // Field config to configure form
@@ -184,13 +194,8 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
           colWidth: 12,
           placeholder: 'manageMeasurementPointLists:typePlaceholder'
         },
-        options: {
-          validators: [Validators.required]
-        },
-        formState: {
-          value: selectedType,
-          disabled
-        }
+        options: { validators: [Validators.required] },
+        formState: { value: selectedType, disabled }
       },
       mainCategoryID: {
         render: FormUtil.Select,
@@ -200,13 +205,8 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
           colWidth: 12,
           placeholder: 'manageMeasurementPointLists:equipmentTypePlaceholder'
         },
-        options: {
-          validators: [Validators.required]
-        },
-        formState: {
-          value: selectedMainCategory,
-          disabled
-        }
+        options: { validators: [Validators.required] },
+        formState: { value: selectedMainCategory, disabled }
       },
       standardID: {
         render: FormUtil.Select,
@@ -216,20 +216,20 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
           colWidth: 12,
           placeholder: 'manageMeasurementPointLists:standardPlaceholder'
         },
-        options: {
-          validators: [Validators.required]
-        },
+        options: { validators: [Validators.required] },
         formState: { value: selectedStandard, disabled }
       },
       selectedTab: {
-        render: FormUtil.CreatableSelect,
+        render: FormUtil.CreatableSelectWithButton,
         meta: {
           options: tabOptions,
           label: 'manageMeasurementPointLists:selectTabLabel',
           colWidth: 12,
           placeholder: 'manageMeasurementPointLists:selectTabPlaceholder',
           isMulti: false,
-          handleCreate: this.handleCreateTab
+          handleCreate: this.handleCreateTab,
+          buttonName: this.props.t('edit'),
+          buttonAction: this.props.toggleEditMeasurementPointTabModal
         },
         formState: { value: selectedTab, disabled: false }
       }
@@ -245,11 +245,11 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
   */
   handleCreateTab = (name: string) => {
     const newTab: ImeasurementPointListTab = {
+      ...initialMeasurementPointTab,
       id: uuidv4(),
       name,
       order:
-        this.props.selectedMeasurementPointList.measurementPointTabs.length + 1,
-      measurementPoints: {}
+        this.props.selectedMeasurementPointList.measurementPointTabs.length + 1
     };
 
     this.props
@@ -361,10 +361,6 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
   deleteMeasurementPoint = (measurementPoint: ImeasurementPoint) => {
     const toastrConfirmOptions = {
       onOk: () => {
-        // this.props.deleteGlobalMeasurementPoint(
-        //   this.props.selectedMeasurementPointList.id,
-        //   measurementPoint.id
-        // );
         this.props.saveMeasurementPointToMeasurementPointList(
           this.props.selectedMeasurementPointList.id,
           this.props.selectedTabID,
@@ -436,6 +432,11 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     this.setSelectedMeasurementPoint(
       this.newMeasurementPoint(constants.measurementPointTypes.PROCEDURE)
     );
+  };
+  handleCancel = () => {
+    this.props.toggleEditMeasurementPointListModal();
+    this.props.setSelectedTabID('');
+    this.props.setSelectedMeasurementPointList(initialMeasurementPointList);
   };
 
   canEditGlobal = () => {
@@ -515,7 +516,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
               bsStyle="default"
               type="button"
               className="pull-left"
-              onClick={this.props.toggleEditMeasurementPointListModal}
+              onClick={this.handleCancel}
             >
               {t('cancel')}
             </Button>

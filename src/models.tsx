@@ -348,6 +348,7 @@ export interface ImeasurementPointListTab {
   name: string;
   order: number;
   measurementPoints: { [key: string]: ImeasurementPoint };
+  isDeleted: boolean;
 }
 
 export interface ImeasurementPointList {
@@ -367,6 +368,8 @@ export interface ImanageMeasurementPointListsReducer {
   selectedMeasurementPointList: ImeasurementPointList;
   showEditMeasurementPointListModal: boolean;
   showEditMeasurementPointModal: boolean;
+  showEditMeasurementPointTabModal: boolean;
+  // selectedTab: ImeasurementPointListTab;
   tableFilters: ItableFiltersReducer;
   selectedTabID: string;
   selectedMeasurementPoint: ImeasurementPoint;

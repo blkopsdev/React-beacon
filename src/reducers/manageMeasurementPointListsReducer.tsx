@@ -54,7 +54,7 @@ function manageMeasurementPointListData(
         [action.measurementPointList.id]: action.measurementPointList
       };
     case types.MANAGE_MEASUREMENT_POINT_LIST_UPDATE:
-      if (action.measurementPointList.temporary === true) {
+      if (action.persistToAPI === false) {
         return state;
       }
       return {
@@ -122,6 +122,29 @@ function manageSelectedMeasurementPointList(
         );
         return state;
       }
+    case types.MANAGE_MEASUREMENT_POINT_TAB_UPDATE:
+      const currentTab = state.measurementPointTabs.find(
+        tab => tab.id === action.tab.id
+      );
+      if (currentTab) {
+        const newTabs = state.measurementPointTabs.map(tab => {
+          if (tab.id === currentTab.id) {
+            return {
+              ...action.tab
+            };
+          } else {
+            return tab;
+          }
+        });
+        return { ...state, measurementPointTabs: newTabs };
+      } else {
+        console.error(
+          'unable to update measurement point list tab, missing tab' +
+            action.tab.id
+        );
+        return state;
+      }
+
     case types.MANAGE_MEASUREMENT_POINT_LIST_UPDATE:
       return action.measurementPointList;
     case types.USER_LOGOUT_SUCCESS:
@@ -196,6 +219,11 @@ export default function manageMeasurementPointLists(
       state.showEditMeasurementPointModal,
       action,
       'EDIT_MEASUREMENT_POINT'
+    ),
+    showEditMeasurementPointTabModal: modalToggleWithName(
+      state.showEditMeasurementPointTabModal,
+      action,
+      'EDIT_MEASUREMENT_POINT_TAB'
     ),
     tableFilters: createTableFiltersWithName(
       state.tableFilters,

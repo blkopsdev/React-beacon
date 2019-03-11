@@ -6,7 +6,8 @@ import {
   IinitialState,
   ItableFiltersParams,
   ImeasurementPoint,
-  ImeasurementPointList
+  ImeasurementPointList,
+  ImeasurementPointListTab
 } from '../models';
 import { beginAjaxCall, endAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
@@ -111,6 +112,28 @@ export function addGlobalMeasurementPointList(
 }
 
 /*
+* update a tab
+*/
+export function updateMeasurementPointListTab(
+  tab: ImeasurementPointListTab
+): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch({
+      type: types.MANAGE_MEASUREMENT_POINT_TAB_UPDATE,
+      tab
+    });
+    dispatch({
+      type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT_TAB
+    });
+    if (tab.isDeleted === true) {
+      dispatch({
+        type: types.MANAGE_MEASUREMENT_POINT_SET_SELECTED_TAB,
+        selectedTabID: ''
+      });
+    }
+  };
+}
+/*
 * update a mpl
 */
 export function updateGlobalMeasurementPointList(
@@ -120,7 +143,8 @@ export function updateGlobalMeasurementPointList(
   return (dispatch, getState) => {
     dispatch({
       type: types.MANAGE_MEASUREMENT_POINT_LIST_UPDATE,
-      measurementPointList: mpl
+      measurementPointList: mpl,
+      persistToAPI
     });
     if (persistToAPI) {
       dispatch(beginAjaxCall());
@@ -242,6 +266,9 @@ export const toggleEditMeasurementPointListModal = () => ({
 });
 export const toggleEditMeasurementPointModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT
+});
+export const toggleEditMeasurementPointTabModal = () => ({
+  type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT_TAB
 });
 export const setTableFilter = (filters: ItableFiltersParams) => ({
   type: types.SET_TABLE_FILTER_MANAGE_MEASUREMENT_POINT_LISTS,

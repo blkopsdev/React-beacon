@@ -7,7 +7,8 @@ import {
   ControlLabel,
   Button,
   ToggleButtonGroup,
-  ToggleButton
+  ToggleButton,
+  Row
 } from 'react-bootstrap';
 import {
   Validators,
@@ -317,6 +318,65 @@ export const FormUtil = {
             {...handler()}
           />
         </FormGroup>
+      </Col>
+    );
+  },
+  CreatableSelectWithButton: ({
+    handler,
+    touched,
+    meta,
+    pristine,
+    errors,
+    submitted,
+    value
+  }: AbstractControl) => {
+    const selectClassName = meta.isMulti
+      ? 'is-multi beacon-select'
+      : 'beacon-select';
+    const selectValidationClass = value && !pristine ? 'has-success' : '';
+    const requiredLabel = meta.required === false ? ' - optional' : '';
+    return (
+      <Col xs={meta.colWidth}>
+        <Row>
+          <Col xs={9}>
+            <FormGroup
+              validationState={FormUtil.getValidationState(
+                pristine,
+                errors,
+                submitted
+              )}
+              bsSize="sm"
+            >
+              <ControlLabel>
+                {meta.label}
+                <i className="required-label">{requiredLabel}</i>
+              </ControlLabel>
+              <CreatableSelect
+                options={meta.options}
+                className={`${selectClassName} ${selectValidationClass}`}
+                components={{ Control: ControlComponent }}
+                placeholder={meta.placeholder}
+                isMulti={meta.isMulti}
+                classNamePrefix="react-select"
+                onCreateOption={meta.handleCreate}
+                isClearable={
+                  typeof meta.isClearable !== 'undefined'
+                    ? meta.isClearable
+                    : false
+                }
+                name={meta.name || ''}
+                isDisabled={handler().disabled}
+                {...handler()}
+              />
+            </FormGroup>
+            <small>Create a new tab by typing.</small>
+          </Col>
+          <Col xs={3} style={{ paddingTop: '20px' }}>
+            <Button className="pull-right" onClick={meta.buttonAction}>
+              {meta.buttonName}
+            </Button>
+          </Col>
+        </Row>
       </Col>
     );
   },

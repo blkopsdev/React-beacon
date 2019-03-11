@@ -114,7 +114,8 @@ export const initialMeasurementPointTab = {
   id: '',
   name: 'Default Tab',
   measurementPoints: {},
-  order: 0
+  order: 0,
+  isDeleted: false
 };
 export const initialMeasurementPoint = {
   id: '',
@@ -269,6 +270,7 @@ export default {
     selectedMeasurementPointList: initialMeasurementPointList,
     showEditMeasurementPointListModal: false,
     showEditMeasurementPointModal: false,
+    showEditMeasurementPointTabModal: false,
     tableFilters: initialTableFilters,
     selectedTabID: '',
     selectedMeasurementPoint: initialMeasurementPoint

@@ -280,11 +280,16 @@
       "Are you sure you want to delete this measurement point?",
     "deleteListOk": "Delete This Measurement Point List?",
     "deleteMeasurementPointOk": "Delete This Measurement Point?",
+    "deleteMeasurementPointTabOk": "Delete Tab",
+    "deleteConfirmMPLT":
+      "Are you sure you want to delete this tab and all measurement points?",
     "selectDefaultOptionID": "Default Option",
     "selectRememberBetweenInspection": "Remember Between Inspections?",
     "selectOptions": "Create Select Options",
     "selectOptionsPlaceholder": "Start typing to create...",
-    "selectRememberBetweenDevice": "Remember Between Devices?"
+    "selectRememberBetweenDevice": "Remember Between Devices?",
+    "editTab": "Edit Tab",
+    "measurementPointTabLabel": "Tab Name"
   },
   "tiles": {
     "alerts": "Alerts",

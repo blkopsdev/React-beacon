@@ -42,6 +42,7 @@ import SearchTableForm from '../common/SearchTableForm';
 import { constants } from 'src/constants/constants';
 import { FieldConfig } from 'react-reactive-form';
 const uuidv4 = require('uuid/v4');
+import EditMeasurementPointListTabModal from './EditMeasurementPointListTabModal';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -420,6 +421,12 @@ class ManageMeasurementPointList extends React.Component<
           resizable={false}
         />
         <EditMeasurementPointListModal
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+          t={this.props.t}
+        />
+        <EditMeasurementPointListTabModal
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }

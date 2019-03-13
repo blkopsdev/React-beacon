@@ -104,17 +104,26 @@ export const initialLesson = {
 };
 export const initialMeasurementPointList = {
   id: '',
-  measurementPoints: {},
+  measurementPointTabs: [],
   mainCategoryID: '',
   standardID: '',
   type: 1,
-  customerID: ''
+  testProcedures: ''
+};
+export const initialMeasurementPointTab = {
+  id: '',
+  name: 'Default Tab',
+  measurementPoints: {},
+  order: 0,
+  isDeleted: false
 };
 export const initialMeasurementPoint = {
   id: '',
   type: 1,
   label: '',
-  order: 0
+  order: 0,
+  customerID: '',
+  isDeleted: false
 };
 
 const initialCustomer = {
@@ -255,13 +264,17 @@ export default {
     tableFilters: initialTableFilters,
     totalPages: 1
   },
-  manageMeasurementPointLists: {
+  manageMeasurementPointListsReducer: {
     totalPages: 1,
-    data: [],
+    data: {},
     selectedMeasurementPointList: initialMeasurementPointList,
     showEditMeasurementPointListModal: false,
     showEditMeasurementPointModal: false,
-    tableFilters: initialTableFilters
+    showEditMeasurementPointTabModal: false,
+    showEditMeasurementPointListTestProceduresModal: false,
+    tableFilters: initialTableFilters,
+    selectedTabID: '',
+    selectedMeasurementPoint: initialMeasurementPoint
   },
   customers: [],
   facilities: [],

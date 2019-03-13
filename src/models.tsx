@@ -313,6 +313,9 @@ export interface IproductInfo {
   systemSizeOptions: Ioption[];
 }
 
+/*
+* Measurement Points
+*/
 export interface ImeasurementPointSelectOption {
   id: string;
   value: string;
@@ -336,25 +339,41 @@ export interface ImeasurementPoint {
   selectRememberBetweenDevice?: boolean;
   selectRememberBetweenInspection?: boolean;
   selectOptions?: ImeasurementPointSelectOption[];
-  isDeleted?: boolean;
+  isDeleted: boolean;
+  customerID: string;
+}
+
+export interface ImeasurementPointListTab {
+  id: string;
+  name: string;
+  order: number;
+  measurementPoints: { [key: string]: ImeasurementPoint };
+  isDeleted: boolean;
 }
 
 export interface ImeasurementPointList {
   id: string;
-  measurementPoints: { [key: string]: ImeasurementPoint };
+  // measurementPointTabs: {[key: string]: ImeasurementPointListTab};
+  measurementPointTabs: ImeasurementPointListTab[];
   mainCategoryID: string;
+  testProcedures: string;
   standardID: string;
   type: number;
-  customerID?: string;
+  temporary?: boolean;
 }
 
 export interface ImanageMeasurementPointListsReducer {
-  data: ImeasurementPointList[];
+  data: { [key: string]: ImeasurementPointList };
   totalPages: number;
-  selectedMeasurementPointList?: ImeasurementPointList;
+  selectedMeasurementPointList: ImeasurementPointList;
   showEditMeasurementPointListModal: boolean;
   showEditMeasurementPointModal: boolean;
+  showEditMeasurementPointTabModal: boolean;
+  showEditMeasurementPointListTestProceduresModal: boolean;
+  // selectedTab: ImeasurementPointListTab;
   tableFilters: ItableFiltersReducer;
+  selectedTabID: string;
+  selectedMeasurementPoint: ImeasurementPoint;
 }
 
 export interface IinitialState {

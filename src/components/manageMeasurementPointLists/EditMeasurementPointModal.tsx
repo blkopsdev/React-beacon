@@ -6,22 +6,24 @@ import * as React from 'react';
 import {
   IinitialState,
   ImeasurementPointList,
-  ImeasurementPoint
+  ImeasurementPoint,
+  ImeasurementPointListTab
 } from '../../models';
 import {
   toggleEditMeasurementPointListModal,
   toggleEditMeasurementPointModal,
-  addQuestionToMeasurementPointList
+  saveMeasurementPointToMeasurementPointList,
+  updateMeasurementPoint
 } from '../../actions/manageMeasurementPointListsActions';
 import CommonModal from '../common/CommonModal';
 import EditMeasurementPointForm from './EditMeasurementPointForm';
 import { constants } from 'src/constants/constants';
+import { initialMeasurementPointTab } from 'src/reducers/initialState';
 
 interface Iprops {
-  selectedMeasurementPointList: ImeasurementPointList;
-  selectedMeasurementPoint: ImeasurementPoint;
   colorButton: any;
   t: TranslationFunction;
+  customerID: string;
 }
 
 interface IdispatchProps {
@@ -30,7 +32,11 @@ interface IdispatchProps {
   loading: boolean;
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
   toggleEditMeasurementPointModal: typeof toggleEditMeasurementPointModal;
-  addQuestionToMeasurementPointList: typeof addQuestionToMeasurementPointList;
+  saveMeasurementPointToMeasurementPointList: typeof saveMeasurementPointToMeasurementPointList;
+  selectedMeasurementPointList: ImeasurementPointList;
+  selectedTab: ImeasurementPointListTab;
+  updateMeasurementPoint: typeof updateMeasurementPoint;
+  selectedMeasurementPoint: ImeasurementPoint;
 }
 
 class EditMeasurementPointModal extends React.Component<
@@ -43,19 +49,13 @@ class EditMeasurementPointModal extends React.Component<
 
   getTitle() {
     if (
-      this.props.selectedMeasurementPoint &&
-      this.props.selectedMeasurementPoint.type ===
-        constants.measurementPointTypes.PROCEDURE
-    ) {
-      return 'ProcedureModalTitle';
-    } else if (
-      this.props.selectedMeasurementPoint &&
+      this.props.selectedMeasurementPoint.id.length &&
       this.props.selectedMeasurementPoint.type ===
         constants.measurementPointTypes.GROUP
     ) {
       return 'GroupModalTitle';
     } else {
-      return 'QuestionModalTitle';
+      return 'measurementPointModalTitle';
     }
   }
 
@@ -74,6 +74,11 @@ class EditMeasurementPointModal extends React.Component<
 }
 
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
+  const selectedTab =
+    state.manageMeasurementPointLists.selectedMeasurementPointList.measurementPointTabs.find(
+      tab => tab.id === state.manageMeasurementPointLists.selectedTabID
+    ) || initialMeasurementPointTab;
+
   return {
     user: state.user,
     // userManage: state.manageUser,
@@ -81,7 +86,12 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     showEditMeasurementPointListModal:
       state.manageMeasurementPointLists.showEditMeasurementPointListModal,
     showEditMeasurementPointModal:
-      state.manageMeasurementPointLists.showEditMeasurementPointModal
+      state.manageMeasurementPointLists.showEditMeasurementPointModal,
+    selectedTab,
+    selectedMeasurementPointList:
+      state.manageMeasurementPointLists.selectedMeasurementPointList,
+    selectedMeasurementPoint:
+      state.manageMeasurementPointLists.selectedMeasurementPoint
   };
 };
 
@@ -90,6 +100,7 @@ export default connect(
   {
     toggleEditMeasurementPointListModal,
     toggleEditMeasurementPointModal,
-    addQuestionToMeasurementPointList
+    saveMeasurementPointToMeasurementPointList,
+    updateMeasurementPoint
   }
 )(EditMeasurementPointModal);

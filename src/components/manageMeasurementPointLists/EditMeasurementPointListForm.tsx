@@ -3,110 +3,52 @@
 * Edit measurement point lists
 */
 
-import { Col, Button, ListGroup, ListGroupItem } from 'react-bootstrap';
+import { Col, Button, Row } from 'react-bootstrap';
 import {
   Validators,
   FormGenerator,
   AbstractControl,
-  FieldConfig
-  // Observable
+  FieldConfig,
+  GroupProps
 } from 'react-reactive-form';
-import { forEach, find, map, keys, keyBy } from 'lodash';
+import { filter } from 'lodash';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faSortAmountUp,
-  faSortAmountDown
-} from '@fortawesome/pro-regular-svg-icons';
 
 import { FormUtil } from '../common/FormUtil';
 import {
-  Ioption,
   ImeasurementPointList,
-  ImeasurementPoint
+  ImeasurementPoint,
+  Iuser,
+  ImeasurementPointListTab,
+  IproductInfo,
+  Ioption
 } from '../../models';
 import {
   toggleEditMeasurementPointListModal,
   toggleEditMeasurementPointModal,
   addGlobalMeasurementPointList,
-  updateGlobalMeasurementPointList,
-  addQuestionToMeasurementPointList,
-  deleteGlobalMeasurementPoint
+  setSelectedTabID,
+  updateMeasurementPoint,
+  saveMeasurementPointToMeasurementPointList,
+  toggleEditMeasurementPointTabModal,
+  setSelectedMeasurementPointList,
+  toggleEditMeasurementPointListTestProceduresModal
 } from '../../actions/manageMeasurementPointListsActions';
-import EditMeasurementPointModal from './EditMeasurementPointModal';
 import { constants } from 'src/constants/constants';
+import {
+  initialMeasurementPoint,
+  initialMeasurementPointTab,
+  initialMeasurementPointList
+} from 'src/reducers/initialState';
+import { MeasurementPointList } from './MeasurementPointList';
 const uuidv4 = require('uuid/v4');
 
-// passing in an object, but we need an array back
-// const securityOptions = [
-//   ...FormUtil.convertToOptions(constants.securityFunctions)
-// ];
-
-// interface IstateChanges extends Observable<any> {
-//   next: () => void;
-// }
-
-// interface AbstractControlEdited extends AbstractControl {
-//   stateChanges: IstateChanges;
-// }
-
-const buildFieldConfig = (
-  typeOptions: any[],
-  mainCategoryOptions: any[],
-  standardOptions: any[]
-) => {
-  // Field config to configure form
-  const fieldConfigControls = {
-    type: {
-      render: FormUtil.SelectWithoutValidation,
-      meta: {
-        options: typeOptions,
-        label: 'manageMeasurementPointLists:type',
-        colWidth: 12,
-        placeholder: 'manageMeasurementPointLists:typePlaceholder'
-      },
-      options: {
-        validators: [Validators.required]
-      }
-    },
-    equipmentType: {
-      render: FormUtil.SelectWithoutValidation,
-      meta: {
-        options: mainCategoryOptions,
-        label: 'manageMeasurementPointLists:equipmentType',
-        colWidth: 12,
-        placeholder: 'manageMeasurementPointLists:equipmentTypePlaceholder'
-      },
-      options: {
-        validators: [Validators.required]
-      }
-    },
-    standard: {
-      render: FormUtil.SelectWithoutValidation,
-      meta: {
-        options: standardOptions,
-        label: 'manageMeasurementPointLists:standard',
-        colWidth: 12,
-        placeholder: 'manageMeasurementPointLists:standardPlaceholder'
-      },
-      options: {
-        validators: [Validators.required]
-      }
-    }
-  };
-  const fieldConfig = {
-    controls: { ...fieldConfigControls }
-  };
-  return fieldConfig as FieldConfig;
-};
-
 interface Iprops extends React.Props<EditMeasurementPointListForm> {
+  user: Iuser;
   selectedMeasurementPointList: ImeasurementPointList;
-  measurementPointListTypeOptions: any[];
-  standardOptions: Ioption[];
-  mainCategoryOptions: Ioption[];
+  productInfo: IproductInfo;
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;
@@ -114,128 +56,269 @@ interface Iprops extends React.Props<EditMeasurementPointListForm> {
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
   toggleEditMeasurementPointModal: typeof toggleEditMeasurementPointModal;
   addGlobalMeasurementPointList: typeof addGlobalMeasurementPointList;
-  updateGlobalMeasurementPointList: typeof updateGlobalMeasurementPointList;
-  addQuestionToMeasurementPointList: typeof addQuestionToMeasurementPointList;
-  deleteGlobalMeasurementPoint: typeof deleteGlobalMeasurementPoint;
+  updateGlobalMeasurementPointList: (
+    mpl: ImeasurementPointList,
+    persistToAPI: boolean,
+    isCustomer: boolean
+  ) => Promise<void>;
+  selectedTabID: string;
+  selectedTab: ImeasurementPointListTab;
+  setSelectedTabID: typeof setSelectedTabID;
+  updateMeasurementPoint: typeof updateMeasurementPoint;
+  saveMeasurementPointToMeasurementPointList: typeof saveMeasurementPointToMeasurementPointList;
+  toggleEditMeasurementPointTabModal: typeof toggleEditMeasurementPointTabModal;
+  setSelectedMeasurementPointList: typeof setSelectedMeasurementPointList;
+  toggleEditMeasurementPointListTestProceduresModal: typeof toggleEditMeasurementPointListTestProceduresModal;
+  customerID: string;
 }
 
 interface Istate {
-  selectedMeasurementPoint: any;
-  questions: ImeasurementPoint[];
+  measurementPoints: ImeasurementPoint[];
+  fieldConfig: FieldConfig;
 }
 
 class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
   public measurementsForm: AbstractControl;
-  public fieldConfig: FieldConfig;
+  private subscription: any;
+  // private persistTimeout: any; // all inputs are selects so we don't care about a debounce
   constructor(props: Iprops) {
     super(props);
     this.state = {
-      selectedMeasurementPoint: null,
-      questions: this.parseQuestions()
+      measurementPoints: this.parseMeasurementPoints(),
+      fieldConfig: FormUtil.translateForm(this.buildFieldConfig(), this.props.t)
     };
-    this.fieldConfig = FormUtil.translateForm(
-      buildFieldConfig(
-        this.props.measurementPointListTypeOptions,
-        this.props.mainCategoryOptions,
-        this.props.standardOptions
-      ),
-      this.props.t
-    );
   }
-
-  componentDidMount() {
-    if (!this.props.selectedMeasurementPointList) {
-      console.error('missing measurement point list');
-      return;
+  componentWillMount() {
+    const { measurementPointTabs } = this.props.selectedMeasurementPointList;
+    if (measurementPointTabs.length) {
+      this.props.setSelectedTabID(measurementPointTabs[0].id);
+      this.setState({ measurementPoints: this.parseMeasurementPoints() });
     }
-    // set values
-    forEach(this.props.selectedMeasurementPointList, (value, key) => {
-      this.measurementsForm.patchValue({ [key]: value });
-    });
-
-    const {
-      type,
-      mainCategoryID,
-      standardID
-    } = this.props.selectedMeasurementPointList;
-    this.measurementsForm.patchValue({
-      type: find(
-        this.props.measurementPointListTypeOptions,
-        (tOpt: any) => tOpt.value === type
-      )
-    });
-    this.measurementsForm.patchValue({
-      equipmentType: find(
-        this.props.mainCategoryOptions,
-        (tOpt: any) => tOpt.value === mainCategoryID
-      )
-    });
-    this.measurementsForm.patchValue({
-      standard: find(
-        this.props.standardOptions,
-        (tOpt: any) => tOpt.value === standardID
-      )
-    });
   }
+
   componentDidUpdate(prevProps: Iprops) {
     if (!this.props.selectedMeasurementPointList) {
       console.error('missing selected measurement point');
       return;
+    }
+    if (
+      JSON.stringify(prevProps.selectedTab) !==
+      JSON.stringify(this.props.selectedTab)
+    ) {
+      console.log('selectedTab updated!!!!');
+      this.setState({
+        measurementPoints: this.parseMeasurementPoints(),
+        fieldConfig: FormUtil.translateForm(
+          this.buildFieldConfig(),
+          this.props.t
+        )
+      });
     }
 
     if (
       JSON.stringify(this.props.selectedMeasurementPointList) !==
       JSON.stringify(prevProps.selectedMeasurementPointList)
     ) {
-      console.log('update!!!!');
-      this.setState({ questions: this.parseQuestions() });
+      console.log('selectedMeasurementPointList updated!!!!');
+      this.setState({ measurementPoints: this.parseMeasurementPoints() });
     }
   }
+  componentWillUnmount() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+  }
+  buildFieldConfig = () => {
+    const {
+      selectedMeasurementPointList,
+      selectedTabID,
+      productInfo
+    } = this.props;
 
-  parseQuestions() {
-    const mps = map(
-      this.props.selectedMeasurementPointList.measurementPoints,
-      mp => {
-        return mp;
-      }
+    const {
+      measurementPointTabs,
+      type,
+      mainCategoryID,
+      standardID
+    } = selectedMeasurementPointList;
+
+    const {
+      mainCategories,
+      standards,
+      mainCategoryOptions,
+      standardOptions
+    } = productInfo;
+
+    const tabOptions = FormUtil.convertToOptions(
+      measurementPointTabs.filter(tab => tab.isDeleted !== true)
     );
-    mps.sort((a: ImeasurementPoint, b: ImeasurementPoint) => {
+    const disabled = this.props.customerID.length;
+
+    let selectedType = null;
+    let selectedMainCategory = null;
+    let selectedStandard = null;
+    let selectedTab = null;
+    if (type !== 0) {
+      selectedType = {
+        label:
+          constants.measurementPointListTypeEnum[
+            selectedMeasurementPointList.type
+          ],
+        value: selectedMeasurementPointList.type
+      };
+    }
+    if (mainCategoryID.length) {
+      selectedMainCategory = FormUtil.convertToSingleOption(
+        mainCategories[mainCategoryID]
+      );
+    }
+    if (standardID.length) {
+      selectedStandard = FormUtil.convertToSingleOption(standards[standardID]);
+    }
+
+    const foundSelectedTab = tabOptions.find(
+      tab => tab.value === selectedTabID
+    );
+    if (selectedTabID.length && foundSelectedTab) {
+      selectedTab = foundSelectedTab;
+    } else {
+      // select the first one if none are selected
+      selectedTab = tabOptions[0];
+    }
+
+    // Field config to configure form
+    const fieldConfigControls = {
+      mainCategoryID: {
+        render: FormUtil.Select,
+        meta: {
+          options: mainCategoryOptions,
+          label: 'manageMeasurementPointLists:equipmentType',
+          colWidth: 12,
+          placeholder: 'manageMeasurementPointLists:equipmentTypePlaceholder'
+        },
+        options: { validators: [Validators.required] },
+        formState: { value: selectedMainCategory, disabled }
+      },
+      type: {
+        render: FormUtil.Select,
+        meta: {
+          options: constants.measurementPointListTypeOptions,
+          label: 'manageMeasurementPointLists:type',
+          colWidth: 6,
+          placeholder: 'manageMeasurementPointLists:typePlaceholder'
+        },
+        options: { validators: [Validators.required] },
+        formState: { value: selectedType, disabled }
+      },
+      standardID: {
+        render: FormUtil.Select,
+        meta: {
+          options: standardOptions,
+          label: 'manageMeasurementPointLists:standard',
+          colWidth: 6,
+          placeholder: 'manageMeasurementPointLists:standardPlaceholder'
+        },
+        options: { validators: [Validators.required] },
+        formState: { value: selectedStandard, disabled }
+      },
+      selectedTab: {
+        render: this.props.customerID.length
+          ? FormUtil.Select
+          : FormUtil.CreatableSelectWithButton,
+        meta: {
+          options: tabOptions,
+          label: 'manageMeasurementPointLists:selectTabLabel',
+          colWidth: 12,
+          placeholder: 'manageMeasurementPointLists:selectTabPlaceholder',
+          isMulti: false,
+          handleCreate: this.handleCreateTab,
+          buttonName: this.props.t('edit'),
+          buttonAction: this.props.toggleEditMeasurementPointTabModal
+        },
+        options: { validators: [Validators.required] },
+        formState: { value: selectedTab, disabled: false }
+      }
+    } as { [key: string]: GroupProps };
+    const fieldConfig = {
+      controls: { ...fieldConfigControls }
+    };
+    return fieldConfig as FieldConfig;
+  };
+
+  /*
+  Handle creating a new tab
+  */
+  handleCreateTab = (name: string) => {
+    const newTab: ImeasurementPointListTab = {
+      ...initialMeasurementPointTab,
+      id: uuidv4(),
+      name,
+      order:
+        this.props.selectedMeasurementPointList.measurementPointTabs.length + 1
+    };
+
+    this.props
+      .updateGlobalMeasurementPointList(
+        {
+          ...this.props.selectedMeasurementPointList,
+          measurementPointTabs: [
+            ...this.props.selectedMeasurementPointList.measurementPointTabs,
+            newTab
+          ]
+        },
+        false,
+        false
+      )
+      .then(() => {
+        this.props.setSelectedTabID(newTab.id);
+      });
+  };
+  /*
+  * Remove deleted measurementPoints and sort them
+  */
+  parseMeasurementPoints = () => {
+    const filteredMPs = filter(
+      this.props.selectedTab.measurementPoints,
+      mp => mp.isDeleted === false
+    );
+
+    filteredMPs.sort((a: ImeasurementPoint, b: ImeasurementPoint) => {
       return a.order - b.order;
     });
-    return map(mps, (mp, index) => {
-      return { ...mp, order: index };
-    });
-  }
+    return filteredMPs;
+  };
 
-  handleSubmit = (
-    e: React.MouseEvent<HTMLFormElement>,
-    shouldApprove?: boolean
-  ) => {
-    e.preventDefault();
-    if (this.measurementsForm.status === 'INVALID') {
-      this.measurementsForm.markAsSubmitted();
-      toastr.error('Please check invalid inputs', '', constants.toastrError);
-      return;
+  subscribeToValueChanges = () => {
+    const controls = ['selectedTab', 'type', 'mainCategoryID', 'standardID'];
+    controls.forEach((key: string) => {
+      this.subscription = this.measurementsForm
+        .get(key)
+        .valueChanges.subscribe((value: Ioption | null) => {
+          this.handleValueChange(key, value);
+        });
+    });
+  };
+
+  handleValueChange = (key: string, value: null | Ioption) => {
+    // clearTimeout(this.persistTimeout);
+    // this.persistTimeout = setTimeout(() => {
+    switch (key) {
+      case 'selectedTab':
+        if (value && value.value) {
+          this.props.setSelectedTabID(value.value);
+        }
+        break;
+      default:
+        if (value && value.value) {
+          this.props.updateGlobalMeasurementPointList(
+            { ...this.props.selectedMeasurementPointList, [key]: value.value },
+            false,
+            false
+          );
+        }
+        break;
     }
-    const mpl = {
-      ...this.props.selectedMeasurementPointList,
-      mainCategoryID: this.measurementsForm.value.equipmentType.value,
-      standardID: this.measurementsForm.value.standard.value,
-      type: this.measurementsForm.value.type.value,
-      measurementPoints: keyBy(
-        this.state.questions,
-        (item: ImeasurementPoint) => item.id
-      )
-    };
-    if (mpl.id === '') {
-      mpl.id = uuidv4();
-      // add new mpl
-      this.props.addGlobalMeasurementPointList(mpl);
-    } else {
-      // update existing mpl
-      this.props.updateGlobalMeasurementPointList(mpl);
-    }
-    // console.log(mpl);
+    // }, 200);
   };
 
   setForm = (form: AbstractControl) => {
@@ -243,44 +326,49 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     this.measurementsForm.meta = {
       loading: this.props.loading
     };
+    this.subscribeToValueChanges();
   };
 
-  setSelectedQuestion(question: any) {
-    this.setState({ selectedMeasurementPoint: question });
+  /*
+  set a single measurement point
+  */
+  setSelectedMeasurementPoint = (measurementPoint: ImeasurementPoint) => {
+    this.props.updateMeasurementPoint(
+      measurementPoint,
+      this.props.selectedTabID
+    );
     this.props.toggleEditMeasurementPointModal();
-  }
+  };
 
-  deleteQuestion(question: any) {
+  deleteMeasurementPoint = (measurementPoint: ImeasurementPoint) => {
     const toastrConfirmOptions = {
       onOk: () => {
-        this.props.deleteGlobalMeasurementPoint(
+        this.props.saveMeasurementPointToMeasurementPointList(
           this.props.selectedMeasurementPointList.id,
-          question.id
+          this.props.selectedTabID,
+          { ...measurementPoint, isDeleted: true }
         );
-        console.log('deleted', question);
+        console.log('deleted', measurementPoint);
       },
       onCancel: () => console.log('CANCEL: clicked'),
-      okText: this.props.t('deleteQuestionOk'),
+      okText: this.props.t('deleteMeasurementPointOk'),
       cancelText: this.props.t('common:cancel')
     };
-    toastr.confirm(this.props.t('deleteConfirm'), toastrConfirmOptions);
-  }
+    toastr.confirm(this.props.t('deleteConfirmMP'), toastrConfirmOptions);
+  };
 
-  newQuestion(type: number) {
+  createNewMeasurementPoint = (type: number): ImeasurementPoint => {
     return {
+      ...initialMeasurementPoint,
       id: uuidv4(),
       type,
-      label: '',
-      order: keys(this.props.selectedMeasurementPointList.measurementPoints)
-        .length,
-      guideText: '',
-      allowNotes: true,
-      helpText: ''
+      order: this.state.measurementPoints.length,
+      customerID: this.props.customerID
     };
-  }
+  };
 
-  swapQuestionOrder(q1Index: number, q2Index: number) {
-    const mps = this.state.questions;
+  swapMeasurementPointOrder = (q1Index: number, q2Index: number) => {
+    const mps = this.state.measurementPoints;
     console.log('Swapping ', mps[q1Index].label, mps[q2Index].label);
     const tempOrder = mps[q1Index].order;
     mps[q1Index] = { ...mps[q1Index], order: mps[q2Index].order };
@@ -289,141 +377,165 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       return a.order - b.order;
     });
     this.setState({
-      questions: mps
+      measurementPoints: mps
     });
-  }
-
-  getQuestionList = () => {
-    const mps = this.state.questions;
-    return (
-      <ListGroup className="question-list">
-        {map(mps, (mp, index) => {
-          return (
-            <div className="question-list-item-container" key={mp.id}>
-              <span className="sort-controls">
-                <Button
-                  onClick={() => {
-                    this.setSelectedQuestion(mp);
-                  }}
-                >
-                  <FontAwesomeIcon icon={['far', 'edit']}>
-                    {' '}
-                    Edit{' '}
-                  </FontAwesomeIcon>
-                </Button>
-                <Button
-                  disabled={mp.order === 0}
-                  onClick={() => {
-                    // console.log('swap up', mp.label, mps[index - 1].label);
-                    this.swapQuestionOrder(index, index - 1);
-                  }}
-                >
-                  <FontAwesomeIcon icon={faSortAmountUp} fixedWidth size="2x" />
-                </Button>
-                <Button
-                  onClick={() => {
-                    this.deleteQuestion(mp);
-                  }}
-                >
-                  <FontAwesomeIcon icon={['far', 'times']}>
-                    {' '}
-                    Delete{' '}
-                  </FontAwesomeIcon>
-                </Button>
-                <Button
-                  disabled={mp.order === mps.length - 1}
-                  onClick={() => {
-                    // console.log('swap up', mp.label, mps[index + 1].label);
-                    this.swapQuestionOrder(index + 1, index);
-                  }}
-                >
-                  <FontAwesomeIcon
-                    icon={faSortAmountDown}
-                    fixedWidth
-                    size="2x"
-                  />
-                </Button>
-              </span>
-              <ListGroupItem
-                className="question-list-item"
-                onClick={() => {
-                  this.setSelectedQuestion(mp);
-                }}
-              >
-                {mp.type === 6 && (
-                  <p dangerouslySetInnerHTML={{ __html: mp.label }} />
-                )}
-                {mp.type !== 6 && <h5>{mp.label}</h5>}
-                {mp.type < 5 && constants.measurementPointTypesInverse[mp.type]}
-              </ListGroupItem>
-            </div>
-          );
-        })}
-      </ListGroup>
-    );
   };
 
+  validInitialTab = () => {
+    if (this.props.selectedTab.id.length) {
+      return true;
+    } else {
+      toastr.warning(
+        'Warning',
+        'Must add a tab first.',
+        constants.toastrWarning
+      );
+      return false;
+    }
+  };
+
+  /*
+* We will allways have a selectedMeasurmentPointList because either a temporary one was created, or we are editing one that we received from the API.
+* we are only updating the mainCategory, standard, and type on this form.
+*/
+  handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (this.measurementsForm.status === 'INVALID') {
+      this.measurementsForm.markAsSubmitted();
+      toastr.error('Please check invalid inputs', '', constants.toastrError);
+      return;
+    }
+    const { type, mainCategoryID, standardID } = this.measurementsForm.value;
+    const mpl = {
+      ...this.props.selectedMeasurementPointList,
+      mainCategoryID: mainCategoryID ? mainCategoryID.value : '',
+      standardID: standardID ? standardID.value : '',
+      type: type ? type.value : ''
+    };
+    if (mpl.temporary !== true) {
+      this.props.updateGlobalMeasurementPointList(
+        mpl,
+        true,
+        this.props.customerID.length > 0
+      );
+    } else {
+      this.props.addGlobalMeasurementPointList({ ...mpl, temporary: false });
+    }
+  };
+
+  handleAddQuestion = () => {
+    if (!this.validInitialTab()) {
+      return;
+    }
+    this.setSelectedMeasurementPoint(
+      this.createNewMeasurementPoint(
+        constants.measurementPointTypes.MEASUREMENT_POINT_PASSFAIL
+      )
+    );
+  };
+  handleAddGroup = () => {
+    if (!this.validInitialTab()) {
+      return;
+    }
+    this.setSelectedMeasurementPoint(
+      this.createNewMeasurementPoint(constants.measurementPointTypes.GROUP)
+    );
+  };
+  handleCancel = () => {
+    this.props.toggleEditMeasurementPointListModal();
+    this.props.setSelectedTabID('');
+    this.props.setSelectedMeasurementPointList(initialMeasurementPointList);
+  };
+
+  canEditGlobal = () => {
+    return constants.hasSecurityFunction(
+      this.props.user,
+      constants.securityFunctions.ManageAllMeasurementPoints.id
+    );
+  };
   render() {
     const { t } = this.props;
-    // const selectedCustomer = this.measurementsForm
-    //   ? this.measurementsForm.value.customerID
-    //   : undefined;
-
     const formClassName = `clearfix beacon-form ${this.props.colorButton}`;
+
+    // const isAdmin = constants.hasSecurityFunction(
+    //   this.props.user,
+    //   constants.securityFunctions.ManageAllMeasurementPoints.id
+    // );
+    // const adminMps = this.state.measurementPoints.filter(
+    //   (mps: ImeasurementPointQuestion) => {
+    //     return !mps.customerID && !mps.isDeleted;
+    //   }
+    // );
+    // const customerMps = this.state.measurementPoints.filter(
+    //   (mps: ImeasurementPointQuestion) => {
+    //     return (
+    //       typeof mps.customerID !== 'undefined' &&
+    //       mps.customerID === this.props.user.id &&
+    //       mps.isDeleted === false
+    //     );
+    //   }
+    // );
 
     return (
       <div>
         <form onSubmit={this.handleSubmit} className={formClassName}>
           <FormGenerator
             onMount={this.setForm}
-            fieldConfig={this.fieldConfig}
+            fieldConfig={this.state.fieldConfig}
           />
-          <Col xs={12} className="">
-            <Button
-              bsStyle="link"
-              className=""
-              onClick={() => {
-                this.setSelectedQuestion(
-                  this.newQuestion(constants.measurementPointTypes.GROUP)
-                );
-              }}
-            >
-              Add Group
-            </Button>
-            <Button
-              bsStyle="link"
-              className=""
-              onClick={() => {
-                this.setSelectedQuestion(
-                  this.newQuestion(constants.measurementPointTypes.PROCEDURE)
-                );
-              }}
-            >
-              Add Procedure
-            </Button>
-            <Button
-              bsStyle="link"
-              className=""
-              onClick={() => {
-                this.setSelectedQuestion(
-                  this.newQuestion(
-                    constants.measurementPointTypes.QUESTION_PASSFAIL
-                  )
-                );
-              }}
-            >
-              Add Question
-            </Button>
-          </Col>
-          <Col xs={12} className="">
-            {this.getQuestionList()}
-          </Col>
+          <Row>
+            <Col xs={12}>
+              <Button
+                bsStyle="link"
+                type="button"
+                className=""
+                onClick={
+                  this.props.toggleEditMeasurementPointListTestProceduresModal
+                }
+              >
+                {t('editProcedureButton')}
+              </Button>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12} className="">
+              <Button
+                bsStyle="link"
+                type="button"
+                className=""
+                onClick={this.handleAddGroup}
+              >
+                Add Group
+              </Button>
+
+              <Button
+                bsStyle="link"
+                type="button"
+                className=""
+                onClick={this.handleAddQuestion}
+              >
+                Add Question
+              </Button>
+            </Col>
+          </Row>
+          <Row>
+            <Col xs={12} className="">
+              <MeasurementPointList
+                measurementPointList={this.state.measurementPoints}
+                setSelectedMeasurementPoint={this.setSelectedMeasurementPoint}
+                swapMeasurementPointOrder={this.swapMeasurementPointOrder}
+                deleteMeasurementPoint={this.deleteMeasurementPoint}
+                canEditGlobal={this.canEditGlobal()}
+              />
+            </Col>
+          </Row>
+
           <Col xs={12} className="form-buttons text-right">
             <Button
               bsStyle="default"
               type="button"
               className="pull-left"
-              onClick={this.props.toggleEditMeasurementPointListModal}
+              onClick={this.handleCancel}
             >
               {t('cancel')}
             </Button>
@@ -436,12 +548,6 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
             </Button>
           </Col>
         </form>
-        <EditMeasurementPointModal
-          selectedMeasurementPointList={this.props.selectedMeasurementPointList}
-          selectedMeasurementPoint={this.state.selectedMeasurementPoint}
-          colorButton={this.props.colorButton}
-          t={this.props.t}
-        />
       </div>
     );
   }

@@ -7,7 +7,8 @@ import {
   ControlLabel,
   Button,
   ToggleButtonGroup,
-  ToggleButton
+  ToggleButton,
+  Row
 } from 'react-bootstrap';
 import {
   Validators,
@@ -61,11 +62,12 @@ export const FormUtil = {
     });
   },
   convertToSingleOption: (item: any): Ioption | null => {
-    if (item) {
+    if (item && item.id && item.id.length) {
+      const lastOption =
+        item.first && item.last ? item.first + ' ' + item.last : 'unknown';
       return {
         value: item.id,
-        // TODO: verify this will not explode
-        label: item.name || item.code || item.first + ' ' + item.last
+        label: item.name || item.code || item.label || lastOption
       };
     } else {
       return null;
@@ -319,6 +321,65 @@ export const FormUtil = {
       </Col>
     );
   },
+  CreatableSelectWithButton: ({
+    handler,
+    touched,
+    meta,
+    pristine,
+    errors,
+    submitted,
+    value
+  }: AbstractControl) => {
+    const selectClassName = meta.isMulti
+      ? 'is-multi beacon-select'
+      : 'beacon-select';
+    const selectValidationClass = value && !pristine ? 'has-success' : '';
+    const requiredLabel = meta.required === false ? ' - optional' : '';
+    return (
+      <Col xs={meta.colWidth}>
+        <Row>
+          <Col xs={9}>
+            <FormGroup
+              validationState={FormUtil.getValidationState(
+                pristine,
+                errors,
+                submitted
+              )}
+              bsSize="sm"
+            >
+              <ControlLabel>
+                {meta.label}
+                <i className="required-label">{requiredLabel}</i>
+              </ControlLabel>
+              <CreatableSelect
+                options={meta.options}
+                className={`${selectClassName} ${selectValidationClass}`}
+                components={{ Control: ControlComponent }}
+                placeholder={meta.placeholder}
+                isMulti={meta.isMulti}
+                classNamePrefix="react-select"
+                onCreateOption={meta.handleCreate}
+                isClearable={
+                  typeof meta.isClearable !== 'undefined'
+                    ? meta.isClearable
+                    : false
+                }
+                name={meta.name || ''}
+                isDisabled={handler().disabled}
+                {...handler()}
+              />
+            </FormGroup>
+            <small>Create a new tab by typing.</small>
+          </Col>
+          <Col xs={3} style={{ paddingTop: '20px' }}>
+            <Button className="pull-right" onClick={meta.buttonAction}>
+              {meta.buttonName}
+            </Button>
+          </Col>
+        </Row>
+      </Col>
+    );
+  },
   SelectWithoutValidation: ({ handler, meta }: AbstractControl) => {
     // console.log('rendering select', meta.options, value, defaultValue)
     const selectClassName = meta.isMulti
@@ -451,15 +512,7 @@ export const FormUtil = {
     const requiredLabel = meta.required === false ? ' - optional' : '';
     return (
       <Col xs={meta.colWidth}>
-        <FormGroup
-          validationState={FormUtil.getValidationState(
-            pristine,
-            errors,
-            submitted
-          )}
-          bsSize="sm"
-          style={meta.style}
-        >
+        <FormGroup bsSize="sm" style={meta.style}>
           <ControlLabel>
             {meta.label}
             <i className="required-label">{requiredLabel}</i>
@@ -467,7 +520,7 @@ export const FormUtil = {
           <RichTextEditor
             onChange={handler().onChange}
             initialContent={meta.initialContent}
-            readOnly={meta.readOnly}
+            readOnly={handler().disabled}
           />
           <FormControl.Feedback />
         </FormGroup>

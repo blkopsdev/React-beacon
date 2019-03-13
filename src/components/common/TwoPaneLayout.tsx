@@ -89,6 +89,11 @@ const TwoPaneLayout = (props: any) => {
               path="/measurements"
               component={ManageMeasurementPointList}
             />
+            <Route
+              exact
+              path="/customermeasurements"
+              component={ManageMeasurementPointList}
+            />
           </Switch>
         </Col>
       </Row>

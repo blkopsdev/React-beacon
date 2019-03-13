@@ -53,8 +53,7 @@ const API = {
       startQuiz: `${root}/training/startquiz`
     },
     measurements: {
-      addglobalmpl: `${root}/MeasurementPoint/AddGlobalMeasurementPointList`,
-      addcustomermpl: `${root}/MeasurementPoint/AddCustomerMeasurementPointList`
+      addglobalmpl: `${root}/MeasurementPoint/AddGlobalMeasurementPointList`
     }
   },
   PUT: {

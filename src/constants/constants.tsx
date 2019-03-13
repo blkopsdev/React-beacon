@@ -35,6 +35,16 @@ const measurementPointListTypeOptions = [
   { label: 'Annual', value: 1 },
   { label: 'Verification', value: 2 }
 ];
+const measurementPointListTypeEnum = {
+  1: 'Annual',
+  2: 'Verification'
+};
+const measurementPointTypeEnum = {
+  1: 'Pass/Fail',
+  2: 'Text',
+  3: 'Numeric',
+  4: 'Select'
+};
 const measurementPointTypeOptions = [
   { label: 'Pass/Fail', value: 1 },
   { label: 'Text', value: 2 },
@@ -42,20 +52,18 @@ const measurementPointTypeOptions = [
   { label: 'Select', value: 4 }
 ];
 const measurementPointTypes = {
-  QUESTION_PASSFAIL: 1,
-  QUESTION_TEXT: 2,
-  QUESTION_NUMERIC: 3,
-  QUESTION_SELECT: 4,
-  GROUP: 5,
-  PROCEDURE: 6
+  MEASUREMENT_POINT_PASSFAIL: 1,
+  MEASUREMENT_POINT_TEXT: 2,
+  MEASUREMENT_POINT_NUMERIC: 3,
+  MEASUREMENT_POINT_SELECT: 4,
+  GROUP: 5
 };
 const measurementPointTypesInverse = {
   1: 'Pass/Fail',
   2: 'Text',
   3: 'Numeric',
   4: 'Select',
-  5: 'Group',
-  6: 'Procedure'
+  5: 'Group'
 };
 const measurementPointPassFailOptions = [
   { label: 'Pass', value: 1 },
@@ -74,7 +82,7 @@ const icons = {
   payments: require('../images/icons/BM_Payments.png'),
   training: require('../images/icons/BM_Training.png'),
   locations: require('../images/icons/BM_ManageLocations.png'),
-  measurements: require('../images/icons/BM_ManageLocations.png')
+  measurements: require('../images/icons/BM_Measurement.png')
 };
 
 const securityFunctions = {
@@ -417,10 +425,21 @@ const tiles = [
     color: 'purple',
     width: 360,
     height: 400,
+    url: '/customermeasurements',
+    securityFunction: securityFunctions.ManageCustomerMeasurementPoints.id,
+    description: ''
+  },
+  {
+    icon: icons.measurements,
+    iconType: 'img',
+    title: 'manageMeasurementPointList',
+    src: require('src/images/beaconManageUsers.jpg'),
+    srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
+    color: 'purple',
+    width: 360,
+    height: 400,
     url: '/measurements',
-    securityFunction:
-      securityFunctions.ManageAllMeasurementPoints.id ||
-      securityFunctions.ManageCustomerMeasurementPoints.id,
+    securityFunction: securityFunctions.ManageAllMeasurementPoints.id,
     description: ''
   }
 ];
@@ -447,6 +466,8 @@ export const constants = {
   jobTypeOptions,
   jobTypesByID,
   icons,
+  measurementPointListTypeEnum,
+  measurementPointTypeEnum,
   measurementPointListTypeOptions,
   measurementPointTypeOptions,
   measurementPointTypes,

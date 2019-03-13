@@ -3,7 +3,7 @@
 */
 import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { keys } from 'lodash';
+import { filter, values } from 'lodash';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 import ReactTable, { SortingRule, FinalState, RowInfo } from 'react-table';
@@ -18,7 +18,8 @@ import {
   Itile,
   Ioption,
   ImeasurementPointList,
-  ImanageMeasurementPointListsReducer
+  ImanageMeasurementPointListsReducer,
+  Iuser
 } from '../../models';
 import { TableUtil } from '../common/TableUtil';
 import { closeAllModals } from '../../actions/commonActions';
@@ -31,8 +32,7 @@ import {
   toggleEditMeasurementPointListModal,
   toggleEditMeasurementPointModal,
   setTableFilter,
-  setSelectedMeasurementPointList,
-  deleteGlobalMeasurementPointList
+  setSelectedMeasurementPointList
 } from '../../actions/manageMeasurementPointListsActions';
 import { getProductInfo } from '../../actions/manageInventoryActions';
 import Banner from '../common/Banner';
@@ -41,6 +41,10 @@ import EditMeasurementPointListModal from './EditMeasurementPointListModal';
 import SearchTableForm from '../common/SearchTableForm';
 import { constants } from 'src/constants/constants';
 import { FieldConfig } from 'react-reactive-form';
+import { EditMeasurementPointListTabModal } from './EditMeasurementPointListTabModal';
+import { EditMeasurementPointListTestProceduresModal } from './EditMeasurementPointListTestProceduresModal';
+import EditMeasurementPointModal from './EditMeasurementPointModal';
+const uuidv4 = require('uuid/v4');
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -51,11 +55,11 @@ interface Iprops extends RouteComponentProps<any> {
 
 interface IdispatchProps {
   // Add your dispatcher properties here
+  user: Iuser;
   getAllMeasurementPointLists: typeof getAllMeasurementPointLists;
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
   toggleEditMeasurementPointModal: typeof toggleEditMeasurementPointModal;
   setSelectedMeasurementPointList: typeof setSelectedMeasurementPointList;
-  deleteGlobalMeasurementPointList: typeof deleteGlobalMeasurementPointList;
   getProductInfo: typeof getProductInfo;
   mainCategoryOptions: Ioption[];
   standardOptions: Ioption[];
@@ -131,6 +135,7 @@ class ManageMeasurementPointList extends React.Component<
     };
   }
   componentWillMount() {
+    console.log('url', this.props.match.path === '/customermeasurements');
     this.setState({
       currentTile: constants.getTileByURL(this.props.location.pathname),
       columns: this.setColumns()
@@ -205,11 +210,19 @@ class ManageMeasurementPointList extends React.Component<
           }
         },
         {
-          id: 'numQuestions',
-          Header: '# of Questions',
-          accessor: ({ measurementPoints }: ImeasurementPointList) => {
-            // console.log(keys(measurementPoints));
-            return measurementPoints ? keys(measurementPoints).length : 0;
+          id: 'numTests',
+          Header: '# of Tests',
+          accessor: ({ measurementPointTabs }: ImeasurementPointList) => {
+            let count = 0;
+            measurementPointTabs.forEach(tab => {
+              if (tab.measurementPoints.length) {
+                count += filter(
+                  tab.measurementPoints,
+                  mp => mp.isDeleted === false
+                ).length;
+              }
+            });
+            return count;
           }
         },
         {
@@ -226,20 +239,21 @@ class ManageMeasurementPointList extends React.Component<
               >
                 <FontAwesomeIcon icon={['far', 'edit']}> Edit </FontAwesomeIcon>
               </Button>
-              <Button
-                bsStyle="link"
-                style={{ float: 'right', color: 'red' }}
-                onClick={() => {
-                  this.buttonInAction = true;
-                  this.deleteAction = true;
-                  this.handleDelete(row.original);
-                }}
-              >
-                <FontAwesomeIcon icon={['far', 'times']}>
-                  {' '}
-                  Delete{' '}
-                </FontAwesomeIcon>
-              </Button>
+              {this.isAdmin && (
+                <Button
+                  bsStyle="link"
+                  style={{ float: 'right', color: 'red' }}
+                  onClick={() => {
+                    this.buttonInAction = true;
+                    this.deleteAction = true;
+                    this.handleDelete(row.original);
+                  }}
+                >
+                  <FontAwesomeIcon icon={['far', 'times']}>
+                    Delete
+                  </FontAwesomeIcon>
+                </Button>
+              )}
             </div>
           )
         }
@@ -264,11 +278,11 @@ class ManageMeasurementPointList extends React.Component<
         deletedItem = {
           ...deletedItem
         };
-        this.props.deleteGlobalMeasurementPointList(deletedItem.id);
+        // this.props.deleteGlobalMeasurementPointList(deletedItem.id); // TODO fix this
         console.log('deleted', deletedItem);
       },
       onCancel: () => console.log('CANCEL: clicked'),
-      okText: this.props.t('deleteListOk'),
+      okText: this.props.t('deleteMPLButton'),
       cancelText: this.props.t('common:cancel')
     };
     toastr.confirm(this.props.t('deleteConfirm'), toastrConfirmOptions);
@@ -342,6 +356,28 @@ class ManageMeasurementPointList extends React.Component<
     this.setState({ selectedRow: {} });
   };
 
+  handleNewMeasurementList = () => {
+    this.props.setSelectedMeasurementPointList({
+      ...initialMeasurementPointList,
+      id: uuidv4(),
+      measurementPointTabs: [],
+      temporary: true
+    });
+    this.props.toggleEditMeasurementPointListModal();
+  };
+  isAdmin = () =>
+    constants.hasSecurityFunction(
+      this.props.user,
+      constants.securityFunctions.ManageAllMeasurementPoints.id
+    );
+  getCustomerID = () => {
+    if (this.props.match.path === '/customermeasurements') {
+      return this.props.user.customerID;
+    } else {
+      return '';
+    }
+  };
+
   render() {
     if (this.props.mainCategoryOptions.length === 0) {
       return (
@@ -350,6 +386,7 @@ class ManageMeasurementPointList extends React.Component<
         </Col>
       );
     }
+
     const { t } = this.props;
     return (
       <div className="user-manage">
@@ -357,6 +394,11 @@ class ManageMeasurementPointList extends React.Component<
           title={t('bannerTitle')}
           img={this.state.currentTile.srcBanner}
           color={this.state.currentTile.color}
+          subtitle={
+            this.props.match.path === '/customermeasurements'
+              ? this.props.user.customer.name
+              : ''
+          }
         />
         <SearchTableForm
           fieldConfig={this.searchFieldConfig}
@@ -370,18 +412,15 @@ class ManageMeasurementPointList extends React.Component<
           onValueChanges={this.onSearchValueChanges}
           showSearchButton={false}
         />
-        <Button
-          className="table-add-button"
-          bsStyle="link"
-          onClick={() => {
-            this.props.setSelectedMeasurementPointList(
-              initialMeasurementPointList
-            );
-            this.props.toggleEditMeasurementPointListModal();
-          }}
-        >
-          {t('manageMeasurementPointLists:newMeasurement')}
-        </Button>
+        {this.isAdmin && (
+          <Button
+            className="table-add-button"
+            bsStyle="link"
+            onClick={this.handleNewMeasurementList}
+          >
+            {t('manageMeasurementPointLists:newMeasurement')}
+          </Button>
+        )}
         <ReactTable
           data={this.props.tableData}
           onSortedChange={this.onSortedChanged}
@@ -401,13 +440,32 @@ class ManageMeasurementPointList extends React.Component<
           resizable={false}
         />
         <EditMeasurementPointListModal
-          measurementPointListTypeOptions={
-            constants.measurementPointListTypeOptions
-          }
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
           t={this.props.t}
+          customerID={this.getCustomerID()}
+        />
+        <EditMeasurementPointListTabModal
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+          t={this.props.t}
+          customerID={this.getCustomerID()}
+        />
+        <EditMeasurementPointListTestProceduresModal
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+          t={this.props.t}
+          customerID={this.getCustomerID()}
+        />
+        <EditMeasurementPointModal
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+          t={this.props.t}
+          customerID={this.getCustomerID()}
         />
       </div>
     );
@@ -423,7 +481,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
       state.manageMeasurementPointLists.showEditMeasurementPointListModal,
     showEditMeasurementPointModal:
       state.manageMeasurementPointLists.showEditMeasurementPointModal,
-    tableData: state.manageMeasurementPointLists.data,
+    tableData: values(state.manageMeasurementPointLists.data),
     tableFilters: state.manageMeasurementPointLists.tableFilters,
     standardOptions: state.productInfo.standardOptions,
     mainCategoryOptions: state.productInfo.mainCategoryOptions
@@ -437,7 +495,6 @@ export default translate('manageMeasurementPointLists')(
       toggleEditMeasurementPointListModal,
       toggleEditMeasurementPointModal,
       setSelectedMeasurementPointList,
-      deleteGlobalMeasurementPointList,
       closeAllModals,
       setTableFilter,
       getProductInfo

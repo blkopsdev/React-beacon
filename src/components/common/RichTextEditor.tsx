@@ -11,11 +11,11 @@ interface Iprops {
 }
 
 interface Istate {
-  editorState: any;
+  editorState: EditorState;
 }
 
 class RichTextEditor extends React.Component<Iprops, Istate> {
-  constructor(props: any) {
+  constructor(props: Iprops) {
     super(props);
     const editorState =
       typeof this.props.initialContent !== 'undefined'
@@ -25,7 +25,7 @@ class RichTextEditor extends React.Component<Iprops, Istate> {
         : EditorState.createEmpty();
     this.state = { editorState };
   }
-  onChange = (editorState: any) => {
+  onChange = (editorState: EditorState) => {
     this.setState({ editorState });
     this.props.onChange(stateToHTML(editorState.getCurrentContent()));
   };
@@ -35,8 +35,11 @@ class RichTextEditor extends React.Component<Iprops, Istate> {
         editorState={this.state.editorState}
         onEditorStateChange={this.onChange}
         toolbar={{
-          options: ['inline', 'list']
+          options: ['inline', 'list'],
+          inline: { options: ['bold', 'italic', 'underline'] },
+          list: { options: ['unordered', 'ordered'] }
         }}
+        readOnly={this.props.readOnly}
       />
     );
   }

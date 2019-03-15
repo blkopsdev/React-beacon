@@ -103,10 +103,12 @@ export interface Ibrand extends IbaseDataObject {
 }
 export interface IproductType extends IbaseDataObject {
   code: string;
+  mainCategoryIDs: string[];
 }
 // export interface Ipower extends IbaseDataObject {}
 export interface IsystemSize extends IbaseDataObject {
   code: string;
+  mainCategoryIDs: string[];
 }
 
 export interface IinstallBase extends IbaseDataObject {

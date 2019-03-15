@@ -115,7 +115,8 @@ export const initialMeasurementPointTab = {
   name: 'Default Tab',
   measurementPoints: {},
   order: 0,
-  isDeleted: false
+  isDeleted: false,
+  customerID: ''
 };
 export const initialMeasurementPoint = {
   id: '',
@@ -124,6 +125,18 @@ export const initialMeasurementPoint = {
   order: 0,
   customerID: '',
   isDeleted: false
+};
+export const initialMeasurmentPointResult = {
+  id: '',
+  status: 0,
+  temporary: true,
+  createDate: '',
+  updateDate: '',
+  jobID: '',
+  notes: '',
+  installBaseID: '',
+  measurementPointListID: '',
+  measurementPointAnswers: []
 };
 
 const initialCustomer = {

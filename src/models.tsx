@@ -349,6 +349,7 @@ export interface ImeasurementPointListTab {
   order: number;
   measurementPoints: { [key: string]: ImeasurementPoint };
   isDeleted: boolean;
+  customerID: string;
 }
 
 export interface ImeasurementPointList {

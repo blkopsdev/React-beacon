@@ -161,7 +161,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     if (type !== 0) {
       selectedType = {
         label:
-          constants.measurementPointListTypeEnum[
+          constants.measurementPointListTypeLookup[
             selectedMeasurementPointList.type
           ],
         value: selectedMeasurementPointList.type

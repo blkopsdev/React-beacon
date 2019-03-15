@@ -75,40 +75,6 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
       this.props.t
     );
   }
-  // componentDidUpdate(prevProps: Iprops) {
-  // }
-
-  // componentDidMount() {
-  //   if (!this.props.selectedItem) {
-  //     console.log('adding a new user');
-  //   } else {
-  //     // set values
-  //     forEach(this.props.selectedItem, (value, key) => {
-  //       if (typeof value === 'string' && key.split('ID').length === 1) {
-  //         // it is a string and did Not find 'ID'
-  //         this.userForm.patchValue({ [key]: value });
-  //       } else if (value !== null) {
-  //         this.userForm.patchValue({
-  //           [key]: find(
-  //             this.props.productInfo[`${key.split('ID')[0]}Options`],
-  //             { value }
-  //           )
-  //         });
-  //         // special set for mainCategory
-  //         if (key === 'subcategory' && typeof value === 'object') {
-  //           const subcat = value as Isubcategory;
-  //           const { mainCategoryID } = subcat;
-  //           this.userForm.patchValue({
-  //             mainCategoryID: find(
-  //               this.props.productInfo[`mainCategoryOptions`],
-  //               { value: mainCategoryID }
-  //             )
-  //           });
-  //         }
-  //       }
-  //     });
-  //   }
-  // }
 
   componentWillUnmount() {
     if (this.subscription) {
@@ -166,7 +132,7 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
       : null;
     const selectedStandard = standardID
       ? productInfo.standards[standardID]
-      : null;
+      : productInfo.standards[constants.defaultProductStandardID];
     if (subcategoryID) {
       // TODO for now grabbing the first mainCategoryID.  when we actually support having multiple mainCategories related to a single subCategory, we will need to store the mainCategoryID on the product object
       const mainCategoryID =

@@ -73,7 +73,6 @@ export const FormUtil = {
       return null;
     }
   },
-
   getValidationState: (
     pristine: boolean,
     error: ValidationErrors,
@@ -89,7 +88,6 @@ export const FormUtil = {
       return null;
     }
   },
-
   Datetime: ({
     handler,
     touched,
@@ -119,8 +117,8 @@ export const FormUtil = {
             timeFormat={meta.showTime}
             isValidDate={meta.isValidDate}
             {...handler()}
-            // TODO figure out how to handle disabled
           />
+          // TODO figure out how to handle disabled
           <FormControl.Feedback />
         </Col>
       </FormGroup>
@@ -321,65 +319,6 @@ export const FormUtil = {
       </Col>
     );
   },
-  CreatableSelectWithButton: ({
-    handler,
-    touched,
-    meta,
-    pristine,
-    errors,
-    submitted,
-    value
-  }: AbstractControl) => {
-    const selectClassName = meta.isMulti
-      ? 'is-multi beacon-select'
-      : 'beacon-select';
-    const selectValidationClass = value && !pristine ? 'has-success' : '';
-    const requiredLabel = meta.required === false ? ' - optional' : '';
-    return (
-      <Col xs={meta.colWidth}>
-        <Row>
-          <Col xs={9}>
-            <FormGroup
-              validationState={FormUtil.getValidationState(
-                pristine,
-                errors,
-                submitted
-              )}
-              bsSize="sm"
-            >
-              <ControlLabel>
-                {meta.label}
-                <i className="required-label">{requiredLabel}</i>
-              </ControlLabel>
-              <CreatableSelect
-                options={meta.options}
-                className={`${selectClassName} ${selectValidationClass}`}
-                components={{ Control: ControlComponent }}
-                placeholder={meta.placeholder}
-                isMulti={meta.isMulti}
-                classNamePrefix="react-select"
-                onCreateOption={meta.handleCreate}
-                isClearable={
-                  typeof meta.isClearable !== 'undefined'
-                    ? meta.isClearable
-                    : false
-                }
-                name={meta.name || ''}
-                isDisabled={handler().disabled}
-                {...handler()}
-              />
-            </FormGroup>
-            <small>Create a new tab by typing.</small>
-          </Col>
-          <Col xs={3} style={{ paddingTop: '20px' }}>
-            <Button className="pull-right" onClick={meta.buttonAction}>
-              {meta.buttonName}
-            </Button>
-          </Col>
-        </Row>
-      </Col>
-    );
-  },
   SelectWithoutValidation: ({ handler, meta }: AbstractControl) => {
     // console.log('rendering select', meta.options, value, defaultValue)
     const selectClassName = meta.isMulti
@@ -501,6 +440,102 @@ export const FormUtil = {
       </Col>
     );
   },
+  translateForm: (config: FieldConfig, t: TranslationFunction) => {
+    const newControls = mapValues(config.controls, field => {
+      if (field.meta && field.meta.label) {
+        let newMeta = { ...field.meta, label: t(field.meta.label) };
+        if (field.meta.buttonName) {
+          newMeta = { ...newMeta, buttonName: t(field.meta.buttonName) };
+        }
+        if (field.meta.placeholder) {
+          newMeta = { ...newMeta, placeholder: t(field.meta.placeholder) };
+        }
+        // we need this to translate the options for the security functions
+        if (field.meta.options && field.meta.options.length) {
+          const newOptions = map(field.meta.options, option => ({
+            value: option.value,
+            label: t(option.label)
+          }));
+          newMeta = { ...newMeta, options: newOptions };
+        }
+        return { ...field, meta: newMeta };
+      }
+      return field;
+    });
+    return { controls: newControls };
+  },
+  TextLabel: ({ handler, meta }: any) => {
+    return (
+      <Col xs={meta.colWidth}>
+        <FormGroup bsSize="sm">
+          <ControlLabel>{meta.label}</ControlLabel>
+          <h5 className="queue-form-label">{handler().value}</h5>
+        </FormGroup>
+      </Col>
+    );
+  },
+  /*
+  * DESKTOP ONLY
+  */
+  CreatableSelectWithButton: ({
+    handler,
+    touched,
+    meta,
+    pristine,
+    errors,
+    submitted,
+    value
+  }: AbstractControl) => {
+    const selectClassName = meta.isMulti
+      ? 'is-multi beacon-select'
+      : 'beacon-select';
+    const selectValidationClass = value && !pristine ? 'has-success' : '';
+    const requiredLabel = meta.required === false ? ' - optional' : '';
+    return (
+      <Col xs={meta.colWidth}>
+        <Row>
+          <Col xs={9}>
+            <FormGroup
+              validationState={FormUtil.getValidationState(
+                pristine,
+                errors,
+                submitted
+              )}
+              bsSize="sm"
+            >
+              <ControlLabel>
+                {meta.label}
+                <i className="required-label">{requiredLabel}</i>
+              </ControlLabel>
+              <CreatableSelect
+                options={meta.options}
+                className={`${selectClassName} ${selectValidationClass}`}
+                components={{ Control: ControlComponent }}
+                placeholder={meta.placeholder}
+                isMulti={meta.isMulti}
+                classNamePrefix="react-select"
+                onCreateOption={meta.handleCreate}
+                isClearable={
+                  typeof meta.isClearable !== 'undefined'
+                    ? meta.isClearable
+                    : false
+                }
+                name={meta.name || ''}
+                isDisabled={handler().disabled}
+                {...handler()}
+              />
+            </FormGroup>
+            <small>Create a new tab by typing.</small>
+          </Col>
+          <Col xs={3} style={{ paddingTop: '20px' }}>
+            <Button className="pull-right" onClick={meta.buttonAction}>
+              {meta.buttonName}
+            </Button>
+          </Col>
+        </Row>
+      </Col>
+    );
+  },
   RichTextEditor: ({
     handler,
     touched,
@@ -523,49 +558,6 @@ export const FormUtil = {
             readOnly={handler().disabled}
           />
           <FormControl.Feedback />
-        </FormGroup>
-      </Col>
-    );
-  },
-  translateForm: (config: FieldConfig, t: TranslationFunction) => {
-    const newControls = mapValues(config.controls, field => {
-      if (field.meta && field.meta.label) {
-        let newMeta = {
-          ...field.meta,
-          label: t(field.meta.label)
-        };
-        if (field.meta.buttonName) {
-          newMeta = {
-            ...newMeta,
-            buttonName: t(field.meta.buttonName)
-          };
-        }
-        if (field.meta.placeholder) {
-          newMeta = {
-            ...newMeta,
-            placeholder: t(field.meta.placeholder)
-          };
-        }
-        // we need this to translate the options for the security functions
-        if (field.meta.options && field.meta.options.length) {
-          const newOptions = map(field.meta.options, option => ({
-            value: option.value,
-            label: t(option.label)
-          }));
-          newMeta = { ...newMeta, options: newOptions };
-        }
-        return { ...field, meta: newMeta };
-      }
-      return field;
-    });
-    return { controls: newControls };
-  },
-  TextLabel: ({ handler, meta }: any) => {
-    return (
-      <Col xs={meta.colWidth}>
-        <FormGroup bsSize="sm">
-          <ControlLabel>{meta.label}</ControlLabel>
-          <h5 className="queue-form-label">{handler().value}</h5>
         </FormGroup>
       </Col>
     );

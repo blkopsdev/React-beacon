@@ -335,7 +335,8 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           colWidth: 3,
           type: 'select',
           placeholder: 'mainCategoryPlaceholder',
-          defaultValue: this.props.tableFilters.mainCategory
+          defaultValue: this.props.tableFilters.mainCategory,
+          isClearable: true
         }
       },
       brand: {
@@ -346,7 +347,8 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           colWidth: 3,
           type: 'select',
           placeholder: 'manufacturerPlaceholder',
-          defaultValue: this.props.tableFilters.brand
+          defaultValue: this.props.tableFilters.brand,
+          isClearable: true
         }
       }
     };

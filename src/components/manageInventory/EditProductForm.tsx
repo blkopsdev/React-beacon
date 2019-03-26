@@ -101,14 +101,6 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
           );
         }
       });
-
-    // this.subscription = this.userForm
-    // .get('mainCategoryID')
-    // .valueChanges.subscribe((value: Ioption | null) => {
-    //   if (value !== null) {
-    //     this.filterSubcategories(value.value);
-    //   }
-    // });
   };
   buildFieldConfig = (productInfo: IproductInfo, disabled: boolean) => {
     const {

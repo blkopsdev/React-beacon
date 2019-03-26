@@ -34,10 +34,6 @@ interface AbstractControlEdited extends AbstractControl {
   stateChanges: IstateChanges;
 }
 
-// const checkIfStartDateBeforeEndDate = (startDate, endDate) => {
-
-// }
-
 const buildFieldConfig = (
   customerOptions: any[],
   facilityOptions: any[],
@@ -395,20 +391,23 @@ class EditJobForm extends React.Component<Iprops, {}> {
           jobTypeID: this.jobForm.value.jobTypeID.value,
           startDate: this.jobForm.value.startDate.format(),
           endDate: this.jobForm.value.endDate.format(),
-          status: this.props.selectedJob.status
+          status: this.props.selectedJob.status,
+          isDeleted: false
         },
         users
       );
     } else {
       this.props.createJob(
         {
+          id: '',
           customerID: this.jobForm.value.customerID.value,
           facilityID: this.jobForm.value.facilityID.value,
           assignedUserID: this.jobForm.value.assignedUserID.value,
           jobTypeID: this.jobForm.value.jobTypeID.value,
           startDate: this.jobForm.value.startDate.format(),
           endDate: this.jobForm.value.endDate.format(),
-          status: 'New'
+          status: 'New',
+          isDeleted: false
         },
         users
       );

@@ -1,5 +1,18 @@
 export const initialOption = { value: '', label: '' };
 export const initialTableFilters = { search: '', page: 1 };
+
+export const initialFacility = {
+  id: '',
+  name: '',
+  customerID: '',
+  address: '',
+  address2: '',
+  city: '',
+  state: '',
+  postalCode: '',
+  buildings: [],
+  isDeleted: false
+};
 const initialSubcategory = {
   mainCategoryID: '',
   id: '',
@@ -16,8 +29,10 @@ const initialSubcategory = {
     updateDate: '',
     creatorID: '',
     updaterID: ''
-  }
+  },
+  isDeleted: false
 };
+
 export const initialProduct = {
   id: '',
   name: '',
@@ -32,76 +47,41 @@ export const initialProduct = {
   systemSizeID: '',
   subcategory: initialSubcategory,
   installs: [],
-  quantity: 1
+  isDeleted: false
 };
-export const initialFacility = {
+export const initialInstallBase = {
   id: '',
-  name: '',
-  customerID: '',
-  address: '',
-  address2: '',
-  city: '',
-  state: '',
-  postalCode: '',
-  buildings: []
+  code: '',
+  productID: '',
+  product: initialProduct,
+  facilityID: '',
+  name: '', // not used
+  status: '',
+  isDeleted: false
 };
 
 export const initialLoc = {
   name: '',
   rooms: [],
-  floorID: ''
+  floorID: '',
+  isDeleted: false
 };
 export const initialBuilding = {
   name: '',
-  floors: []
+  floors: [],
+  isDeleted: false
 };
 export const initialFloor = {
   name: '',
-  locations: []
+  locations: [],
+  isDeleted: false
 };
 
 export const initialRoom = {
-  name: ''
+  name: '',
+  isDeleted: false
 };
-/*
-*  TRAINING initial state
-*/
 
-export const initialQuiz = {
-  id: '',
-  name: '',
-  imagePath: '',
-  isComplete: false,
-  videoPath: '',
-  instructions: '',
-  lessonID: '',
-  isTimed: false,
-  questions: [
-    {
-      id: '',
-      text: '',
-      type: '',
-      options: [],
-      correctAnswer: '',
-      correctText: '',
-      wrongText: '',
-      order: 0
-    }
-  ]
-};
-export const initialLesson = {
-  id: '',
-  name: '',
-  description: '',
-  courseID: '',
-  imagePath: '',
-  order: 0,
-  primaryVideoPath: '',
-  slideshowPath: '',
-  courseLessons: [],
-  cost: 0,
-  isProtected: false
-};
 export const initialMeasurementPointList = {
   id: '',
   measurementPointTabs: [],
@@ -141,12 +121,66 @@ export const initialMeasurmentPointResult = {
 
 const initialCustomer = {
   id: '',
-  name: ''
+  name: '',
+  isDeleted: false
+};
+// export const initialJob = {
+//   id: '',
+//   customerID: '',
+//   facilityID: '',
+//   assignedUserID: '',
+//   jobTypeID: '',
+//   startDate: '',
+//   endDate: '',
+//   status: '',
+//   customer: initialCustomer
+
+// }
+
+/* ********************   DESKTOP ONLY  ***************/
+/* 
+
+/*
+*  TRAINING initial state
+*/
+
+export const initialQuiz = {
+  id: '',
+  name: '',
+  imagePath: '',
+  isComplete: false,
+  videoPath: '',
+  instructions: '',
+  lessonID: '',
+  isTimed: false,
+  questions: [
+    {
+      id: '',
+      text: '',
+      type: '',
+      options: [],
+      correctAnswer: '',
+      correctText: '',
+      wrongText: '',
+      order: 0
+    }
+  ]
+};
+export const initialLesson = {
+  id: '',
+  name: '',
+  description: '',
+  courseID: '',
+  imagePath: '',
+  order: 0,
+  primaryVideoPath: '',
+  slideshowPath: '',
+  courseLessons: [],
+  cost: 0,
+  isProtected: false
 };
 
-/* 
-* initialState
-*/
+/* initialState */
 export default {
   ajaxCallsInProgress: 0,
   user: {
@@ -167,8 +201,8 @@ export default {
     facilities: [],
     customerID: '',
     hasTeamMembers: false,
-    appVersion: '',
-    customer: initialCustomer
+    customer: initialCustomer,
+    isActive: true
   },
   redirect: {
     redirectToReferrer: false,

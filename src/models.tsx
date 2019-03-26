@@ -1,34 +1,7 @@
 import { ThunkAction } from 'redux-thunk';
 import { SortingRule } from 'react-table';
 
-export interface ItableFiltersReducer {
-  search: string;
-  page: number;
-  company?: Ioption;
-  type?: Ioption;
-  startDate?: string;
-  endDate?: string;
-  facility?: Ioption;
-  customer?: Ioption;
-  mainCategory?: Ioption;
-  brand?: Ioption;
-  sorted?: SortingRule[];
-  standard?: Ioption;
-}
-export interface ItableFiltersParams {
-  search?: string;
-  page?: number;
-  company?: Ioption;
-  type?: Ioption;
-  startDate?: string;
-  endDate?: string;
-  facility?: Ioption;
-  customer?: Ioption;
-  mainCategory?: Ioption;
-  brand?: Ioption;
-  sorted?: SortingRule[];
-  standard?: Ioption;
-}
+/* ***** Common between Mobile and Desktop ****** */
 
 export interface Iuser {
   password: string;
@@ -56,59 +29,41 @@ export interface Iuser {
   customerID: string;
   facilities: Array<{ id: string }>;
   hasTeamMembers: boolean;
-  appVersion: string;
   manager?: any;
-  isActive?: boolean;
+  isActive: boolean;
   customer: Icustomer;
 }
-// export interface ImanageUserQueueReducer {
-//   [key: string]: Iuser;
-// }
-// export interface ImanageUserQueueReducer {
-//   [key: string]: Iuser;
-// }
-export interface IqueueObject {
-  id: string;
-  user: Iuser;
-}
 
-export interface ItempUser {
-  email: string;
-  first: string;
-  last: string;
-  position: string;
-  tempAddress: string;
-  tempAddress2: string;
-  tempCity: string;
-  tempState: string;
-  tempZip: string;
-}
 export interface IbaseDataObject {
   id: string;
   name: string;
-  createDate: string;
-  updateDate: string;
-  creatorID: string;
-  updaterID: string;
+  createDate?: string;
+  updateDate?: string;
+  creatorID?: string;
+  updaterID?: string;
 }
 // export interface ImainCategory extends IbaseDataObject {}
 export interface Isubcategory extends IbaseDataObject {
   mainCategoryID: string;
   mainCategory: IbaseDataObject;
   mainCategoryIDs: string[];
+  isDeleted: boolean;
 }
 // export interface Istandard extends IbaseDataObject {}
 export interface Ibrand extends IbaseDataObject {
   code: string;
+  isDeleted: boolean;
 }
 export interface IproductType extends IbaseDataObject {
   code: string;
   mainCategoryIDs: string[];
+  isDeleted: boolean;
 }
 // export interface Ipower extends IbaseDataObject {}
 export interface IsystemSize extends IbaseDataObject {
   code: string;
   mainCategoryIDs: string[];
+  isDeleted: boolean;
 }
 
 export interface IinstallBase extends IbaseDataObject {
@@ -116,19 +71,20 @@ export interface IinstallBase extends IbaseDataObject {
   productID: string;
   product: Iproduct;
   facilityID: string;
-  facility: Ifacility;
-  nickname: string;
-  remarks: string;
-  serialNumber: string;
-  rfid: string;
-  installDate: string;
-  prodDate: string;
-  buildingID: string;
-  floorID: string;
-  locationID: string;
-  roomID: string;
+  facility?: Ifacility;
+  nickname?: string;
+  remarks?: string;
+  serialNumber?: string;
+  rfid?: string;
+  installDate?: string;
+  prodDate?: string;
+  buildingID?: string;
+  floorID?: string;
+  locationID?: string;
+  roomID?: string;
   quantity?: number;
-  position: string;
+  position?: string;
+  isDeleted: boolean;
 }
 
 export interface Iproduct {
@@ -150,153 +106,37 @@ export interface Iproduct {
   // power: IbaseDataObject;
   // systemSize: IsystemSize;
   installs: IinstallBase[];
-  quantity: number;
+  isDeleted: boolean;
 }
-
-export interface IshoppingCartProduct {
-  name: string;
-  quantity: number;
-  id: string;
-  cost: number;
-}
-
-export interface IquoteItem {
-  productID: string;
-  quantity: number;
-}
-
-export interface ImanageUserQueueReducer {
-  data: IqueueObject[];
-  totalPages: number;
-  showEditQueueUserModal: boolean;
-  tableFilters: ItableFiltersReducer;
-}
-
-export interface ImanageUserReducer {
-  data: Iuser[];
-  totalPages: number;
-  showEditUserModal: boolean;
-  tableFilters: ItableFiltersReducer;
-}
-
+/*
+* Location Models
+*/
 export interface Ibuilding {
   id?: string;
   name: string;
   floors: Ifloor[];
   facilityID?: string;
+  isDeleted: boolean;
 }
 export interface Ifloor {
   id?: string;
   name: string;
   locations: Ilocation[];
   buildingID?: string;
+  isDeleted: boolean;
 }
 export interface Ilocation {
   id?: string;
   name: string;
   rooms: Iroom[];
   floorID: string;
+  isDeleted: boolean;
 }
 export interface Iroom {
   id?: string;
   name: string;
   locationID?: string;
-}
-
-export interface ImanageLocationReducer {
-  data: any[];
-  facility: IfacilityComplete;
-  totalPages: number;
-  showEditLocationModal: boolean;
-  tableFilters: ItableFiltersReducer;
-  selectedBuilding: Ibuilding;
-  selectedFloor: Ifloor;
-  selectedLocation: Ilocation;
-  selectedRoom: Iroom;
-}
-
-export interface IuserJob {
-  id: string;
-  userID: string;
-  jobID: string;
-  user: Iuser;
-}
-export interface Ijob {
-  id?: string;
-  customerID: string;
-  facilityID: string;
-  assignedUserID: string;
-  jobTypeID?: string;
-  userJobs?: IuserJob[];
-  startDate: string;
-  endDate: string;
-  status?: string;
-}
-export interface ImanageJobReducer {
-  data: Ijob[];
-  jobTypes: any[];
-  fseUsers: Iuser[];
-  totalPages: number;
-  showEditJobModal: boolean;
-  tableFilters: ItableFiltersReducer;
-}
-export interface ImanageTeamReducer {
-  data: Iuser[];
-  totalPages: number;
-  showEditTeamModal: boolean;
-  tableFilters: ItableFiltersReducer;
-}
-
-export interface IshoppingCart {
-  addedIDs: string[];
-  productsByID: { [key: string]: IshoppingCartProduct };
-}
-export interface ImanageInventoryReducer {
-  data: Iproduct[];
-  totalPages: number;
-  cart: IshoppingCart;
-  productInfo: IproductInfo;
-  showEditProductModal: boolean;
-  showEditInstallModal: boolean;
-  showShoppingCartModal: boolean;
-  showInstallContactModal: boolean;
-  showSearchNewProductsModal: boolean;
-  showImportInstall: boolean;
-  tableFilters: ItableFiltersReducer;
-  selectedProduct: Iproduct;
-  newProducts: { [key: string]: Iproduct };
-}
-
-export interface IproductQueueObject {
-  id: string;
-  productID: string;
-  createDate: string;
-  creatorID: string;
-  product: Iproduct;
-}
-export interface ImanageProductQueueReducer {
-  data: IproductQueueObject[];
-  totalPages: number;
-  showApproveProductModal: boolean;
-  tableFilters: ItableFiltersReducer;
-}
-
-export interface ImanageTrainingProgress {
-  userName: string;
-  courseName: string;
-  progress: string;
-  results: string;
-}
-
-export interface ImanageTrainingReducer {
-  data: ImanageTrainingProgress[];
-  totalPages: number;
-  tableFilters: ItableFiltersReducer;
-}
-
-export interface Iredirect {
-  redirectToReferrer: boolean;
-  pathname: string;
+  isDeleted: boolean;
 }
 export interface IproductInfo {
   brands: { [key: string]: Ibrand };
@@ -315,6 +155,61 @@ export interface IproductInfo {
   systemSizeOptions: Ioption[];
 }
 
+export interface IuserJob {
+  id: string;
+  userID: string;
+  jobID: string;
+  user: Iuser;
+}
+export interface Ijob {
+  id: string;
+  customerID: string;
+  facilityID: string;
+  assignedUserID: string;
+  jobTypeID: string;
+  userJobs?: IuserJob[];
+  startDate: string;
+  endDate: string;
+  status: string;
+  isDeleted: boolean;
+}
+
+export interface Itile {
+  icon: string | string[];
+  title: string;
+  src: string;
+  srcBanner: string;
+  color: string;
+  width: number;
+  height: number;
+  url: string;
+  securityFunction: string;
+  description: string;
+}
+
+export interface Icustomer {
+  id: string;
+  name: string;
+  vat?: string;
+  isDeleted: boolean;
+}
+export interface Ifacility {
+  id: string;
+  name: string;
+  customerID: string;
+  address: string;
+  address2: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  buildings: Ibuilding[];
+  isDeleted: boolean;
+}
+
+export interface Ioption {
+  value: string;
+  label: string;
+}
 /*
 * Measurement Points
 */
@@ -364,80 +259,24 @@ export interface ImeasurementPointList {
   type: number;
   temporary?: boolean;
 }
-
-export interface ImanageMeasurementPointListsReducer {
-  data: { [key: string]: ImeasurementPointList };
-  totalPages: number;
-  selectedMeasurementPointList: ImeasurementPointList;
-  showEditMeasurementPointListModal: boolean;
-  showEditMeasurementPointModal: boolean;
-  showEditMeasurementPointTabModal: boolean;
-  showEditMeasurementPointListTestProceduresModal: boolean;
-  // selectedTab: ImeasurementPointListTab;
-  tableFilters: ItableFiltersReducer;
-  selectedTabID: string;
-  selectedMeasurementPoint: ImeasurementPoint;
+export interface ImeasurementPointAnswer {
+  measurementPointID: string;
+  pass?: number;
+  numericValue?: number;
+  textValue?: string;
+  notes?: string;
 }
-
-export interface IinitialState {
-  user: Iuser;
-  ajaxCallsInProgress: number;
-  redirect: Iredirect;
-  manageUserQueue: ImanageUserQueueReducer;
-  manageUser: ImanageUserReducer;
-  manageJob: ImanageJobReducer;
-  manageTeam: ImanageTeamReducer;
-  manageInventory: ImanageInventoryReducer;
-  manageProductQueue: ImanageProductQueueReducer;
-  manageLocation: ImanageLocationReducer;
-  customers: Icustomer[];
-  facilities: Ifacility[];
-  showEditCustomerModal: boolean;
-  showEditFacilityModal: boolean;
-  showEditProfileModal: boolean;
-  showSecurityFunctionsModal: boolean;
-  training: ItrainingReducer;
-  manageTraining: ImanageTrainingReducer;
-  productInfo: IproductInfo;
-  manageMeasurementPointLists: ImanageMeasurementPointListsReducer;
-}
-
-export interface Itile {
-  icon: string | string[];
-  title: string;
-  src: string;
-  srcBanner: string;
-  color: string;
-  width: number;
-  height: number;
-  url: string;
-  securityFunction: string;
-  description: string;
-}
-
-export interface Icustomer {
+export interface ImeasurementPointResult {
   id: string;
-  name: string;
-  vat?: string;
-}
-export interface Ifacility {
-  id: string;
-  name: string;
-  customerID: string;
-  address: string;
-  address2: string;
-  city: string;
-  state: string;
-  postalCode: string;
-  buildings: Ibuilding[];
-}
-export interface IfacilityComplete extends Ifacility {
-  buildings: Ibuilding[];
-}
-
-export interface Ioption {
-  value: string;
-  label: string;
+  jobID: string;
+  status: number;
+  notes: string;
+  temporary?: boolean;
+  createDate: string;
+  updateDate: string;
+  measurementPointAnswers: ImeasurementPointAnswer[];
+  installBaseID: string;
+  measurementPointListID: string;
 }
 
 // these are copied from react-redux-toastr beacuse could not figure out any other way to make typescript happy
@@ -445,6 +284,8 @@ export type transitionInType = 'bounceIn' | 'bounceInDown' | 'fadeIn';
 export type transitionOutType = 'bounceOut' | 'bounceOutUp' | 'fadeOut';
 
 export type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
+
+/* **********   Desktop Only ***********/
 
 /* 
 * TRAINING MODELS
@@ -576,4 +417,192 @@ export interface ItrainingReducer {
   cart: IshoppingCart;
   showShoppingCartModal: boolean;
   purchasedTraining: string[];
+}
+
+export interface ItableFiltersReducer {
+  search: string;
+  page: number;
+  company?: Ioption;
+  type?: Ioption;
+  startDate?: string;
+  endDate?: string;
+  facility?: Ioption;
+  customer?: Ioption;
+  mainCategory?: Ioption;
+  brand?: Ioption;
+  sorted?: SortingRule[];
+  standard?: Ioption;
+}
+export interface ItableFiltersParams {
+  search?: string;
+  page?: number;
+  company?: Ioption;
+  type?: Ioption;
+  startDate?: string;
+  endDate?: string;
+  facility?: Ioption;
+  customer?: Ioption;
+  mainCategory?: Ioption;
+  brand?: Ioption;
+  sorted?: SortingRule[];
+  standard?: Ioption;
+}
+
+export interface IqueueObject {
+  id: string;
+  user: Iuser;
+}
+
+export interface ItempUser {
+  email: string;
+  first: string;
+  last: string;
+  position: string;
+  tempAddress: string;
+  tempAddress2: string;
+  tempCity: string;
+  tempState: string;
+  tempZip: string;
+}
+
+export interface IshoppingCartProduct {
+  name: string;
+  quantity: number;
+  id: string;
+  cost: number;
+}
+
+export interface IquoteItem {
+  productID: string;
+  quantity: number;
+}
+
+export interface ImanageUserQueueReducer {
+  data: IqueueObject[];
+  totalPages: number;
+  showEditQueueUserModal: boolean;
+  tableFilters: ItableFiltersReducer;
+}
+
+export interface ImanageUserReducer {
+  data: Iuser[];
+  totalPages: number;
+  showEditUserModal: boolean;
+  tableFilters: ItableFiltersReducer;
+}
+
+export interface ImanageLocationReducer {
+  data: any[];
+  facility: Ifacility;
+  totalPages: number;
+  showEditLocationModal: boolean;
+  tableFilters: ItableFiltersReducer;
+  selectedBuilding: Ibuilding;
+  selectedFloor: Ifloor;
+  selectedLocation: Ilocation;
+  selectedRoom: Iroom;
+}
+
+export interface ImanageJobReducer {
+  data: Ijob[];
+  jobTypes: any[];
+  fseUsers: Iuser[];
+  totalPages: number;
+  showEditJobModal: boolean;
+  tableFilters: ItableFiltersReducer;
+}
+export interface ImanageTeamReducer {
+  data: Iuser[];
+  totalPages: number;
+  showEditTeamModal: boolean;
+  tableFilters: ItableFiltersReducer;
+}
+
+export interface IshoppingCart {
+  addedIDs: string[];
+  productsByID: { [key: string]: IshoppingCartProduct };
+}
+export interface ImanageInventoryReducer {
+  data: Iproduct[];
+  totalPages: number;
+  cart: IshoppingCart;
+  productInfo: IproductInfo;
+  showEditProductModal: boolean;
+  showEditInstallModal: boolean;
+  showShoppingCartModal: boolean;
+  showInstallContactModal: boolean;
+  showSearchNewProductsModal: boolean;
+  showImportInstall: boolean;
+  tableFilters: ItableFiltersReducer;
+  selectedProduct: Iproduct;
+  newProducts: { [key: string]: Iproduct };
+}
+
+export interface IproductQueueObject {
+  id: string;
+  productID: string;
+  createDate: string;
+  creatorID: string;
+  product: Iproduct;
+}
+export interface ImanageProductQueueReducer {
+  data: IproductQueueObject[];
+  totalPages: number;
+  showApproveProductModal: boolean;
+  tableFilters: ItableFiltersReducer;
+}
+
+export interface ImanageTrainingProgress {
+  userName: string;
+  courseName: string;
+  progress: string;
+  results: string;
+}
+
+export interface ImanageTrainingReducer {
+  data: ImanageTrainingProgress[];
+  totalPages: number;
+  tableFilters: ItableFiltersReducer;
+}
+
+export interface Iredirect {
+  redirectToReferrer: boolean;
+  pathname: string;
+}
+
+export interface ImanageMeasurementPointListsReducer {
+  data: { [key: string]: ImeasurementPointList };
+  totalPages: number;
+  selectedMeasurementPointList: ImeasurementPointList;
+  showEditMeasurementPointListModal: boolean;
+  showEditMeasurementPointModal: boolean;
+  showEditMeasurementPointTabModal: boolean;
+  showEditMeasurementPointListTestProceduresModal: boolean;
+  // selectedTab: ImeasurementPointListTab;
+  tableFilters: ItableFiltersReducer;
+  selectedTabID: string;
+  selectedMeasurementPoint: ImeasurementPoint;
+}
+
+export interface IinitialState {
+  user: Iuser;
+  ajaxCallsInProgress: number;
+  redirect: Iredirect;
+  manageUserQueue: ImanageUserQueueReducer;
+  manageUser: ImanageUserReducer;
+  manageJob: ImanageJobReducer;
+  manageTeam: ImanageTeamReducer;
+  manageInventory: ImanageInventoryReducer;
+  manageProductQueue: ImanageProductQueueReducer;
+  manageLocation: ImanageLocationReducer;
+  customers: Icustomer[];
+  facilities: Ifacility[];
+  showEditCustomerModal: boolean;
+  showEditFacilityModal: boolean;
+  showEditProfileModal: boolean;
+  showSecurityFunctionsModal: boolean;
+  training: ItrainingReducer;
+  manageTraining: ImanageTrainingReducer;
+  productInfo: IproductInfo;
+  manageMeasurementPointLists: ImanageMeasurementPointListsReducer;
 }

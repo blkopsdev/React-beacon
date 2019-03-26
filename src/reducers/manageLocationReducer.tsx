@@ -6,7 +6,7 @@ import {
   Ifloor,
   Ilocation,
   Iroom,
-  IfacilityComplete
+  Ifacility
 } from '../models';
 import {
   createTableFiltersWithName,
@@ -22,9 +22,9 @@ import initialState, {
 import * as types from '../actions/actionTypes';
 
 function locationManageFacility(
-  state: IfacilityComplete = initialFacility,
+  state: Ifacility = initialFacility,
   action: any
-): IfacilityComplete {
+): Ifacility {
   switch (action.type) {
     case types.LOCATION_MANAGE_SUCCESS:
       return action.facility;

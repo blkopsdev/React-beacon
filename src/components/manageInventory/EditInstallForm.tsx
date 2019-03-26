@@ -32,7 +32,8 @@ import {
 import {
   saveInstall,
   toggleEditInstallModal,
-  updateInstall
+  updateInstall,
+  deleteInstall
 } from '../../actions/manageInventoryActions';
 import { saveAnyLocation } from '../../actions/manageLocationActions';
 import { constants } from 'src/constants/constants';
@@ -57,7 +58,7 @@ interface Iprops {
   tableFilters: ItableFiltersReducer;
   selectedProduct: Iproduct;
   facility: Ifacility;
-  deleteInstall: (id: string, prodID: string) => void;
+  deleteInstall: typeof deleteInstall;
   saveAnyLocation: typeof saveAnyLocation;
   user: Iuser;
 }

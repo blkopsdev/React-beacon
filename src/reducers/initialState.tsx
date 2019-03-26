@@ -47,7 +47,8 @@ export const initialProduct = {
   systemSizeID: '',
   subcategory: initialSubcategory,
   installs: [],
-  isDeleted: false
+  isDeleted: false,
+  quantity: 1
 };
 export const initialInstallBase = {
   id: '',

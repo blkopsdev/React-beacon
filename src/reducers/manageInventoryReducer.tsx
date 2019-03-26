@@ -1,4 +1,4 @@
-import { pickBy, map, filter, keyBy, find } from 'lodash';
+import { pickBy, map, keyBy, find, filter } from 'lodash';
 
 import { FormUtil } from '../components/common/FormUtil';
 import {
@@ -23,9 +23,14 @@ import * as types from '../actions/actionTypes';
 function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
   switch (action.type) {
     case types.GET_INVENTORY_SUCCESS:
-      return map(action.inventory, d => {
+      return map(action.inventory, (d: Iproduct) => {
+        const filteredInstalls = filter(
+          d.installs,
+          item => item.isDeleted === false
+        );
         return {
-          ...(pickBy(d, (property, key) => property !== null) as Iproduct)
+          ...(pickBy(d, (property, key) => property !== null) as Iproduct),
+          installs: filteredInstalls
         };
       });
     case types.PRODUCT_UPDATE_SUCCESS:
@@ -76,6 +81,22 @@ function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
         });
       }
       return state;
+    case types.INSTALL_DELETE_SUCCESS:
+      const oldProductE = find(state, o => o.id === action.productID);
+      if (oldProductE) {
+        const filteredInstalls = filter(
+          oldProductE.installs,
+          ins => ins.id !== action.installID
+        );
+        return map(state, pr => {
+          if (pr.id === action.productID) {
+            return { ...pr, installs: filteredInstalls };
+          } else {
+            return pr;
+          }
+        });
+      }
+      return state;
 
     /*
     * It is possible to add multiple installs at the same time.
@@ -93,22 +114,6 @@ function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
         return map(state, pr => {
           if (pr.id === action.productID) {
             return { ...pr, installs: newInstalls };
-          } else {
-            return pr;
-          }
-        });
-      }
-      return state;
-    case types.INSTALL_DELETE_SUCCESS:
-      const oldProductE = find(state, o => o.id === action.productID);
-      if (oldProductE) {
-        const filteredInstalls = filter(
-          oldProductE.installs,
-          ins => ins.id !== action.installID
-        );
-        return map(state, pr => {
-          if (pr.id === action.productID) {
-            return { ...pr, installs: filteredInstalls };
           } else {
             return pr;
           }

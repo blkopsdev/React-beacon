@@ -106,6 +106,7 @@ export interface Iproduct {
   // power: IbaseDataObject;
   // systemSize: IsystemSize;
   installs: IinstallBase[];
+  quantity: number;
   isDeleted: boolean;
 }
 /*

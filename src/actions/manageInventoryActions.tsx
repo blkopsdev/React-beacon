@@ -189,6 +189,7 @@ export function updateInstall(
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     dispatch({ type: types.TOGGLE_MODAL_EDIT_INSTALL });
+
     return axios
       .post(API.POST.inventory.updateinstall, install)
       .then(data => {

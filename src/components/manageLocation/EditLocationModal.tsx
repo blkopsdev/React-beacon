@@ -26,7 +26,7 @@ import EditLocationForm from './EditLocationForm';
 
 interface Iprops {
   selectedItem: any;
-  selectedType: string;
+  selectedType: 'Building' | 'Floor' | 'Location' | 'Room';
   colorButton: any;
   t: TranslationFunction;
 }

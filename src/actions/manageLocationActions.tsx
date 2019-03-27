@@ -10,7 +10,8 @@ import {
   Ibuilding,
   Ifloor,
   Ilocation,
-  Iroom
+  Iroom,
+  Ifacility
 } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
@@ -49,7 +50,7 @@ export function getLocationsFacility(facilityID: string): ThunkResult<void> {
 * save (add) a new building/floor/location/room
 */
 export function saveAnyLocation(
-  item: any,
+  item: Ilocation | Ibuilding | Ifloor | Iroom,
   lType: 'Building' | 'Floor' | 'Location' | 'Room',
   facilityID: string
 ): ThunkResult<void> {
@@ -95,7 +96,10 @@ export function saveAnyLocation(
 /*
 * update (edit) a building/floor/location/room
 */
-export function updateAnyLocation(item: any, lType: string): ThunkResult<void> {
+export function updateAnyLocation(
+  item: Ilocation | Ibuilding | Ifloor | Iroom,
+  lType: 'Building' | 'Floor' | 'Location' | 'Room'
+): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     let url: string;
@@ -138,7 +142,10 @@ export function updateAnyLocation(item: any, lType: string): ThunkResult<void> {
 /*
 * update (edit) a building/floor/location/room
 */
-export function deleteAnyLocation(item: any, lType: string): ThunkResult<void> {
+export function deleteAnyLocation(
+  item: Ilocation | Ibuilding | Ifloor | Iroom,
+  lType: 'Building' | 'Floor' | 'Location' | 'Room'
+): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     let url: string;
@@ -176,6 +183,11 @@ export function deleteAnyLocation(item: any, lType: string): ThunkResult<void> {
       });
   };
 }
+
+export const setSelectedFacility = (facility: Ifacility) => ({
+  type: types.SET_SELECTED_FACILITY,
+  facility
+});
 
 export const setSelectedBuilding = (building: Ibuilding): ThunkResult<void> => {
   return (dispatch, getState) => {

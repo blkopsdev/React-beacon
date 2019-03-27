@@ -62,23 +62,28 @@ export const initialInstallBase = {
 };
 
 export const initialLoc = {
+  id: '',
   name: '',
   rooms: [],
   floorID: '',
   isDeleted: false
 };
 export const initialBuilding = {
+  id: '',
   name: '',
   floors: [],
   isDeleted: false
 };
 export const initialFloor = {
+  id: '',
   name: '',
+  buildingID: '',
   locations: [],
   isDeleted: false
 };
 
 export const initialRoom = {
+  id: '',
   name: '',
   isDeleted: false
 };

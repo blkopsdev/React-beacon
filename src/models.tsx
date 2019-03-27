@@ -113,28 +113,28 @@ export interface Iproduct {
 * Location Models
 */
 export interface Ibuilding {
-  id?: string;
+  id: string;
   name: string;
   floors: Ifloor[];
   facilityID?: string;
   isDeleted: boolean;
 }
 export interface Ifloor {
-  id?: string;
+  id: string;
   name: string;
   locations: Ilocation[];
-  buildingID?: string;
+  buildingID: string;
   isDeleted: boolean;
 }
 export interface Ilocation {
-  id?: string;
+  id: string;
   name: string;
   rooms: Iroom[];
   floorID: string;
   isDeleted: boolean;
 }
 export interface Iroom {
-  id?: string;
+  id: string;
   name: string;
   locationID?: string;
   isDeleted: boolean;

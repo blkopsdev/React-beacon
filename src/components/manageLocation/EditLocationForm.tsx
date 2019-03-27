@@ -57,7 +57,7 @@ const buildFieldConfig = () => {
 interface Iprops {
   toggleEditLocationModal: typeof toggleEditLocationModal;
   selectedItem?: any;
-  selectedType: string;
+  selectedType: 'Building' | 'Floor' | 'Location' | 'Room';
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;

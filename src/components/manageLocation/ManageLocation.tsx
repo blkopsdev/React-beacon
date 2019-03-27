@@ -40,7 +40,8 @@ import {
   setSelectedBuilding,
   setSelectedFloor,
   setSelectedLocation,
-  setSelectedRoom
+  setSelectedRoom,
+  setSelectedFacility
 } from '../../actions/manageLocationActions';
 import Banner from '../common/Banner';
 import EditLocationModal from './EditLocationModal';
@@ -78,6 +79,7 @@ interface IdispatchProps {
   setSelectedFloor: typeof setSelectedFloor;
   setSelectedLocation: typeof setSelectedLocation;
   setSelectedRoom: typeof setSelectedRoom;
+  setSelectedFacility: typeof setSelectedFacility;
 }
 
 interface Istate {
@@ -325,11 +327,11 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
 
   // get location type
   getLocationType = () => {
-    if (this.props.selectedLocation.id) {
+    if (this.props.selectedLocation.id.length) {
       return 'Room';
-    } else if (this.props.selectedFloor.id) {
+    } else if (this.props.selectedFloor.id.length) {
       return 'Location';
-    } else if (this.props.selectedBuilding.id) {
+    } else if (this.props.selectedBuilding.id.length) {
       return 'Floor';
     } else {
       return 'Building';
@@ -342,12 +344,21 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
     e: React.MouseEvent<HTMLAnchorElement>
   ) => {
     e.preventDefault();
-    if (lType === 'Building') {
-      this.props.setSelectedBuilding(item);
-    } else if (lType === 'Floor') {
-      this.props.setSelectedFloor(item, this.props.facility.id);
-    } else if (lType === 'Location') {
-      this.props.setSelectedLocation(item, this.props.facility.id);
+    switch (lType) {
+      case 'Facility':
+        this.props.setSelectedFacility(this.props.facility);
+        break;
+      case 'Building':
+        this.props.setSelectedBuilding(item);
+        break;
+      case 'Floor':
+        this.props.setSelectedFloor(item, this.props.facility.id);
+        break;
+      case 'Location':
+        this.props.setSelectedLocation(item, this.props.facility.id);
+        break;
+      default:
+        break;
     }
   };
 
@@ -369,7 +380,7 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
   getBreadcrumbs = () => {
     return (
       <Breadcrumb>
-        {this.props.selectedBuilding.id ? (
+        {this.props.selectedBuilding.id.length > 0 ? (
           <BreadcrumbItem active>
             <a
               href="#"
@@ -384,7 +395,8 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
           ''
         )}
         {/* building crumbs */}
-        {this.getLocationType() === 'Floor' && this.props.selectedBuilding.id
+        {this.getLocationType() === 'Floor' &&
+        this.props.selectedBuilding.id.length > 0
           ? this.makeSandwhich(this.props.selectedBuilding.name)
           : this.props.selectedBuilding.id
             ? this.makeSandwhich(
@@ -394,7 +406,8 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
               )
             : ''}
         {/* Floor crumbs */}
-        {this.getLocationType() === 'Location' && this.props.selectedFloor.id
+        {this.getLocationType() === 'Location' &&
+        this.props.selectedFloor.id.length > 0
           ? this.makeSandwhich(this.props.selectedFloor.name)
           : this.props.selectedFloor.id
             ? this.makeSandwhich(
@@ -404,7 +417,8 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
               )
             : ''}
         {/* Location crumbs */}
-        {this.getLocationType() === 'Room' && this.props.selectedLocation.id
+        {this.getLocationType() === 'Room' &&
+        this.props.selectedLocation.id.length > 0
           ? this.makeSandwhich(this.props.selectedLocation.name)
           : this.props.selectedLocation.id
             ? this.makeSandwhich(
@@ -551,7 +565,8 @@ export default translate('manageLocation')(
       setSelectedBuilding,
       setSelectedFloor,
       setSelectedLocation,
-      setSelectedRoom
+      setSelectedRoom,
+      setSelectedFacility
     }
   )(ManageLocation)
 );

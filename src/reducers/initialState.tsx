@@ -130,18 +130,17 @@ const initialCustomer = {
   name: '',
   isDeleted: false
 };
-// export const initialJob = {
-//   id: '',
-//   customerID: '',
-//   facilityID: '',
-//   assignedUserID: '',
-//   jobTypeID: '',
-//   startDate: '',
-//   endDate: '',
-//   status: '',
-//   customer: initialCustomer
-
-// }
+export const initialJob = {
+  id: '',
+  customerID: '',
+  facilityID: '',
+  assignedUserID: '',
+  jobTypeID: '',
+  startDate: '',
+  endDate: '',
+  status: '',
+  customer: initialCustomer
+};
 
 /* ********************   DESKTOP ONLY  ***************/
 /* 

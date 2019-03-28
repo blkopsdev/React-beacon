@@ -22,7 +22,7 @@ import {
 } from '../../models';
 import { TableUtil } from '../common/TableUtil';
 import { closeAllModals, getCustomers } from '../../actions/commonActions';
-import { emptyTile } from '../../reducers/initialState';
+import { emptyTile, initialJob } from '../../reducers/initialState';
 import {
   getJobs,
   getJobTypes,
@@ -136,6 +136,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
     this.setState({
       currentTile: constants.getTileByURL(this.props.location.pathname)
     });
+    this.props.closeAllModals();
   }
   componentDidMount() {
     // refresh job types
@@ -338,7 +339,9 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
           resizable={false}
         />
         <EditJobModal
-          selectedJob={this.props.tableData[this.state.selectedRow]}
+          selectedJob={
+            this.props.tableData[this.state.selectedRow] || initialJob
+          }
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }

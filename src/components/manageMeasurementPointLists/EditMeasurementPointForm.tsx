@@ -384,7 +384,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
       helpText = '',
       type,
       guideText = null,
-      allowNotes = null,
+      allowNotes = true,
       label
     } = measurementPoint;
     const selectedType = type

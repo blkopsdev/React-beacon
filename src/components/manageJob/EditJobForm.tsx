@@ -9,7 +9,8 @@ import {
   FormGenerator,
   AbstractControl,
   FieldConfig,
-  GroupProps
+  GroupProps,
+  Observable
 } from 'react-reactive-form';
 import { find, filter } from 'lodash';
 import { toastr } from 'react-redux-toastr';
@@ -26,6 +27,14 @@ import {
 import { constants } from 'src/constants/constants';
 import * as moment from 'moment';
 import { getFacilitiesByCustomer } from 'src/actions/commonActions';
+
+interface IstateChanges extends Observable<any> {
+  next: () => void;
+}
+
+interface AbstractControlEdited extends AbstractControl {
+  stateChanges: IstateChanges;
+}
 
 interface Iprops extends React.Props<EditJobForm> {
   selectedJob: Ijob;
@@ -55,16 +64,31 @@ class EditJobForm extends React.Component<Iprops, Istate> {
     };
   }
   componentDidUpdate(prevProps: Iprops) {
+    // update the options on the specific control without re-building the form and resetting the values
+    // TODO we can remove this if we store the selectedJob in Redux.
     if (
       JSON.stringify(prevProps.facilityOptions) !==
       JSON.stringify(this.props.facilityOptions)
     ) {
-      const fieldConfig = FormUtil.translateForm(
-        this.buildFieldConfig(),
-        this.props.t
-      );
-      this.setState({ fieldConfig });
+      const facilitySelectControl = this.jobForm.get(
+        'facilityID'
+      ) as AbstractControlEdited;
+      facilitySelectControl.meta.options = this.props.facilityOptions;
+      facilitySelectControl.stateChanges.next();
+      if (this.props.selectedJob) {
+        const facilitiesArray = filter(
+          this.props.facilityOptions,
+          (fac: any) => {
+            return this.props.selectedJob.facilityID === fac.value;
+          }
+        );
+        this.jobForm.patchValue({ facilityID: facilitiesArray[0] });
+      } else {
+        this.jobForm.patchValue({ facilityID: null });
+      }
     }
+
+    // update the form which will clear out all values.  this is ok because this should happen before any answers are entered.
     if (
       JSON.stringify(prevProps.customerOptions) !==
       JSON.stringify(this.props.customerOptions)

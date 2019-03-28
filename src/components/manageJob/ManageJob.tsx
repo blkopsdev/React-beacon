@@ -65,6 +65,7 @@ interface IdispatchProps {
 interface Istate {
   selectedRow: any;
   currentTile: Itile;
+  searchFieldConfig: FieldConfig;
 }
 
 class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
@@ -75,7 +76,8 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
     super(props);
     this.state = {
       selectedRow: null,
-      currentTile: emptyTile
+      currentTile: emptyTile,
+      searchFieldConfig: this.buildSearchFieldConfig()
     };
     this.columns = TableUtil.translateHeaders(
       [
@@ -161,6 +163,13 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
     ) {
       this.props.getJobs();
     }
+    if (
+      JSON.stringify(prevProps.customers) !==
+      JSON.stringify(this.props.customers)
+    ) {
+      const searchFieldConfig = this.buildSearchFieldConfig();
+      this.setState({ searchFieldConfig });
+    }
   }
   componentWillUnmount() {
     this.props.closeAllModals();
@@ -197,7 +206,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
         startDate: {
           render: FormUtil.DatetimeWithoutValidation,
           meta: {
-            label: 'jobManage:dateRange',
+            label: 'jobManage:startDate',
             colWidth: 2,
             defaultValue: this.props.tableFilters.startDate,
             showTime: false
@@ -206,6 +215,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
         endDate: {
           render: FormUtil.DatetimeWithoutValidation,
           meta: {
+            label: 'jobManage:endDate',
             colWidth: 2,
             defaultValue: this.props.tableFilters.endDate,
             showTime: false
@@ -303,7 +313,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
           color={this.state.currentTile.color}
         />
         <SearchTableForm
-          fieldConfig={this.buildSearchFieldConfig()}
+          fieldConfig={this.state.searchFieldConfig}
           handleSubmit={this.props.getJobs}
           loading={this.props.loading}
           colorButton={

@@ -52,10 +52,10 @@ export function getProducts(
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
 
-    const pagingMode = 'paged';
+    const pagingType = 'paged';
     return axios
       .get(API.GET.inventory.products, {
-        params: { page, search, mainCategoryID, pagingMode }
+        params: { page, search, mainCategoryID, pagingType }
       })
       .then(data => {
         if (!data.data) {

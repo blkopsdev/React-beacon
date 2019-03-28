@@ -96,6 +96,7 @@ export const FormUtil = {
     errors,
     submitted
   }: AbstractControl) => {
+    // TODO figure out how to handle disabled
     const requiredLabel = meta.required === false ? ' - optional' : '';
     return (
       <FormGroup
@@ -118,7 +119,6 @@ export const FormUtil = {
             isValidDate={meta.isValidDate}
             {...handler()}
           />
-          // TODO figure out how to handle disabled
           <FormControl.Feedback />
         </Col>
       </FormGroup>

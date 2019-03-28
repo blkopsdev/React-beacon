@@ -8,6 +8,7 @@ import API from '../constants/apiEndpoints';
 import { constants } from 'src/constants/constants';
 import * as types from './actionTypes';
 import * as moment from 'moment';
+const uuidv4 = require('uuid/v4');
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
@@ -104,10 +105,25 @@ export function getFSEUsers(): ThunkResult<void> {
   };
 }
 
-export function updateJob(job: Ijob, users: string[]): ThunkResult<void> {
-  return dispatch => {
+export function updateJob(
+  selectedJob: Ijob,
+  formValues: any,
+  users: string[]
+): ThunkResult<void> {
+  return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     dispatch({ type: types.TOGGLE_MODAL_EDIT_JOB });
+    const job = {
+      id: selectedJob.id,
+      customerID: formValues.customerID.value,
+      facilityID: formValues.facilityID.value,
+      assignedUserID: formValues.assignedUserID.value,
+      jobTypeID: formValues.jobTypeID.value,
+      startDate: formValues.startDate.format(),
+      endDate: formValues.endDate.format(),
+      status: selectedJob.status,
+      isDeleted: false
+    };
     return axios
       .post(`${API.POST.job.update}`, { job, users })
       .then(data => {
@@ -134,9 +150,21 @@ export function updateJob(job: Ijob, users: string[]): ThunkResult<void> {
 /*
 * save (add) a new product
 */
-export function createJob(job: Ijob, users: string[]): ThunkResult<void> {
+export function createJob(formValues: any, users: string[]): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
+
+    const job: Ijob = {
+      id: uuidv4(),
+      customerID: formValues.customerID.value,
+      facilityID: formValues.facilityID.value,
+      assignedUserID: formValues.assignedUserID.value,
+      jobTypeID: formValues.jobTypeID.value,
+      startDate: formValues.startDate.format(),
+      endDate: formValues.endDate.format(),
+      status: 'New',
+      isDeleted: false
+    };
     return axios
       .post(API.POST.job.create, { job, users })
       .then(data => {

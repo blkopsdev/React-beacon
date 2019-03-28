@@ -382,35 +382,9 @@ class EditJobForm extends React.Component<Iprops, {}> {
       ? this.jobForm.value.users.map((u: any) => u.value)
       : [];
     if (this.props.selectedJob && this.props.selectedJob.id) {
-      this.props.updateJob(
-        {
-          id: this.props.selectedJob.id,
-          customerID: this.jobForm.value.customerID.value,
-          facilityID: this.jobForm.value.facilityID.value,
-          assignedUserID: this.jobForm.value.assignedUserID.value,
-          jobTypeID: this.jobForm.value.jobTypeID.value,
-          startDate: this.jobForm.value.startDate.format(),
-          endDate: this.jobForm.value.endDate.format(),
-          status: this.props.selectedJob.status,
-          isDeleted: false
-        },
-        users
-      );
+      this.props.updateJob(this.props.selectedJob, this.jobForm.value, users);
     } else {
-      this.props.createJob(
-        {
-          id: '',
-          customerID: this.jobForm.value.customerID.value,
-          facilityID: this.jobForm.value.facilityID.value,
-          assignedUserID: this.jobForm.value.assignedUserID.value,
-          jobTypeID: this.jobForm.value.jobTypeID.value,
-          startDate: this.jobForm.value.startDate.format(),
-          endDate: this.jobForm.value.endDate.format(),
-          status: 'New',
-          isDeleted: false
-        },
-        users
-      );
+      this.props.createJob(this.jobForm.value, users);
     }
   };
   setForm = (form: AbstractControl) => {

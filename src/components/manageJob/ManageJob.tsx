@@ -189,7 +189,8 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
             colWidth: 3,
             type: 'select',
             placeholder: 'companyPlaceholder',
-            defaultValue: this.props.tableFilters.company
+            defaultValue: this.props.tableFilters.company,
+            isClearable: true
           }
         },
         type: {
@@ -200,7 +201,8 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
             colWidth: 2,
             type: 'select',
             placeholder: 'typePlaceholder',
-            defaultValue: this.props.tableFilters.type
+            defaultValue: this.props.tableFilters.type,
+            isClearable: true
           }
         },
         startDate: {

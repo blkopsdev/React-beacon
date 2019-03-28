@@ -18,8 +18,8 @@ function jobManageData(
       const newJobs = map(action.jobs, (job: Ijob) => {
         return cleanJobObject(job);
       });
-      const keyedNewJobs = keyBy(newJobs, 'id');
-      return { ...state, ...keyedNewJobs };
+      return keyBy(newJobs, 'id');
+
     case types.JOB_ADD_SUCCESS:
       return { ...state, [action.job.id]: action.job };
     case types.JOB_UPDATE_SUCCESS:

@@ -271,6 +271,8 @@ function selectedBuildingReducer(
   switch (action.type) {
     case types.SET_SELECTED_BUILDING:
       return action.item ? action.item : initialBuilding;
+    case types.SET_SELECTED_FACILITY:
+      return initialBuilding;
     case types.USER_LOGOUT_SUCCESS:
       return initialBuilding;
     default:
@@ -286,6 +288,8 @@ function selectedFloorReducer(
     case types.SET_SELECTED_FLOOR:
       return action.item ? action.item : initialFloor;
     case types.SET_SELECTED_BUILDING:
+      return initialFloor;
+    case types.SET_SELECTED_FACILITY:
       return initialFloor;
     case types.USER_LOGOUT_SUCCESS:
       return initialFloor;
@@ -305,6 +309,8 @@ function selectedLocationReducer(
       return initialLoc;
     case types.SET_SELECTED_FLOOR:
       return initialLoc;
+    case types.SET_SELECTED_FACILITY:
+      return initialLoc;
     case types.USER_LOGOUT_SUCCESS:
       return initialLoc;
     default:
@@ -322,6 +328,8 @@ function selectedRoomReducer(state: Iroom = initialRoom, action: any): Iroom {
       return initialRoom;
     case types.SET_SELECTED_LOCATION:
       return initialRoom;
+    case types.SET_SELECTED_FACILITY:
+      return initialRoom;
     case types.USER_LOGOUT_SUCCESS:
       return initialRoom;
     default:
@@ -330,28 +338,52 @@ function selectedRoomReducer(state: Iroom = initialRoom, action: any): Iroom {
 }
 
 // This reducer manages the array of currently visible locations in the table
-function locationManageData(state: ImanageLocationReducer, action: any): any[] {
+// function locationManageData(state: ImanageLocationReducer, action: any): any[] {
+//   switch (action.type) {
+//     // case types.LOCATION_MANAGE_SUCCESS:
+//     //   return action.facility.buildings || [];
+//     case types.SET_SELECTED_FACILITY:
+//       return action.facility.buildings || [];
+//     case types.LOCATION_ADD_SUCCESS:
+//       return [...state.data, action.item];
+//     case types.LOCATION_UPDATE_SUCCESS:
+//       return [
+//         ...state.data.filter(val => {
+//           return val.id !== action.item.id;
+//         }),
+//         action.item
+//       ];
+//     case types.LOCATION_DELETE_SUCCESS:
+//       return [
+//         ...state.data.filter(val => {
+//           return val.id !== action.item.id;
+//         })
+//       ];
+//     case types.SET_SELECTED_BUILDING:
+//       if (!action.item.id) {
+//         return (state.facility && state.facility.buildings) || [];
+//       }
+//       return action.item.floors || [];
+//     case types.SET_SELECTED_FLOOR:
+//       return action.item.locations || [];
+//     case types.SET_SELECTED_LOCATION:
+//       return action.item.rooms || [];
+//     case types.USER_LOGOUT_SUCCESS:
+//       return [];
+//     default:
+//       return state.data;
+//   }
+// }
+function visibleLocationsReducer(
+  state: Array<Ibuilding | Ifloor | Ilocation | Iroom> = [],
+  action: any
+): Array<Ibuilding | Ifloor | Ilocation | Iroom> {
   switch (action.type) {
-    case types.LOCATION_MANAGE_SUCCESS:
+    case types.SET_SELECTED_FACILITY:
       return action.facility.buildings || [];
-    case types.LOCATION_ADD_SUCCESS:
-      return [...state.data, action.item];
-    case types.LOCATION_UPDATE_SUCCESS:
-      return [
-        ...state.data.filter(val => {
-          return val.id !== action.item.id;
-        }),
-        action.item
-      ];
-    case types.LOCATION_DELETE_SUCCESS:
-      return [
-        ...state.data.filter(val => {
-          return val.id !== action.item.id;
-        })
-      ];
     case types.SET_SELECTED_BUILDING:
       if (!action.item.id) {
-        return (state.facility && state.facility.buildings) || [];
+        return (action.facility && action.facility.buildings) || [];
       }
       return action.item.floors || [];
     case types.SET_SELECTED_FLOOR:
@@ -361,10 +393,9 @@ function locationManageData(state: ImanageLocationReducer, action: any): any[] {
     case types.USER_LOGOUT_SUCCESS:
       return [];
     default:
-      return state.data;
+      return state;
   }
 }
-
 function locationManageTotalPages(state: number = 1, action: any): number {
   switch (action.type) {
     case types.LOCATION_MANAGE_TOTAL_PAGES:
@@ -384,7 +415,7 @@ export default function locationManage(
   action: any
 ) {
   return {
-    data: locationManageData(state, action),
+    visibleLocations: visibleLocationsReducer(state.visibleLocations, action),
     facility: locationManageFacility(state.facility, action),
     totalPages: locationManageTotalPages(state.totalPages, action),
     selectedBuilding: selectedBuildingReducer(state.selectedBuilding, action),

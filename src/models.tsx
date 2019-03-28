@@ -493,7 +493,7 @@ export interface ImanageUserReducer {
 }
 
 export interface ImanageLocationReducer {
-  data: any[];
+  visibleLocations: Array<Ibuilding | Ifloor | Ilocation | Iroom>;
   facility: Ifacility;
   totalPages: number;
   showEditLocationModal: boolean;

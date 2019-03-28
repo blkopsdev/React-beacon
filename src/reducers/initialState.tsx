@@ -238,7 +238,7 @@ export default {
   manageLocation: {
     totalPages: 1,
     facility: initialFacility,
-    data: [],
+    visibleLocations: [],
     showEditLocationModal: false,
     tableFilters: initialTableFilters,
     selectedBuilding: initialBuilding,

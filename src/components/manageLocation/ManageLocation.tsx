@@ -29,7 +29,12 @@ import {
 import { TableUtil } from '../common/TableUtil';
 import { addToCart } from '../../actions/shoppingCartActions';
 import { closeAllModals } from '../../actions/commonActions';
-import { emptyTile, initialBuilding } from '../../reducers/initialState';
+import {
+  emptyTile,
+  initialBuilding,
+  initialFloor,
+  initialLoc
+} from '../../reducers/initialState';
 import {
   getLocationsFacility,
   saveAnyLocation,
@@ -86,9 +91,7 @@ interface Istate {
   selectedRow: any;
   currentTile: Itile;
   columns: any[];
-  data: any[];
   selectedItem: any;
-  deletedItem: any;
   searchFieldConfig: FieldConfig;
 }
 
@@ -104,9 +107,7 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
       selectedRow: {},
       currentTile: emptyTile,
       columns: [],
-      data: [],
       selectedItem: {},
-      deletedItem: {},
       searchFieldConfig: this.buildSearchControls()
     };
   }
@@ -117,8 +118,9 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
       currentTile: constants.getTileByURL(this.props.location.pathname)
     });
     this.setColumns();
-  }
-  componentDidMount() {
+    if (this.props.facility && !this.props.selectedBuilding.id.length) {
+      this.props.setSelectedFacility(this.props.facility);
+    }
     // make sure there is a facility set to the table search filters so that it can be used in the EditProductForm
     if (!this.props.tableFilters.facility) {
       const facility = this.props.tableFilters.facility
@@ -126,21 +128,20 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
         : this.props.facilityOptions[0];
       this.props.setTableFilter({ facility });
       this.props.getLocationsFacility(facility.value);
-    } else {
-      this.props.getLocationsFacility(this.props.tableFilters.facility.value);
     }
   }
+
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
     // automatically get facility every time a filter changes
     if (
       JSON.stringify(prevProps.tableFilters) !==
       JSON.stringify(this.props.tableFilters)
     ) {
-      const fac =
+      const facilityID =
         this.props.tableFilters.facility &&
         this.props.tableFilters.facility.value;
       this.props.getLocationsFacility(
-        fac || this.props.facilityOptions[0].value
+        facilityID || this.props.facilityOptions[0].value
       );
       this.setState({ searchFieldConfig: this.buildSearchControls() });
     }
@@ -150,11 +151,67 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
       const facility = this.props.facilityOptions[0];
       this.props.setTableFilter({ facility });
     }
+    if (
+      JSON.stringify(prevProps.facility) !== JSON.stringify(this.props.facility)
+    ) {
+      this.receiveUpdatedFacility();
+    }
+
+    if (prevProps.facility.id !== this.props.facility.id) {
+      this.props.setSelectedFacility(this.props.facility);
+    }
   }
 
   componentWillUnmount() {
     this.props.closeAllModals();
   }
+
+  receiveUpdatedFacility = () => {
+    const selectedBuilding = this.props.facility.buildings.find(
+      building => building.id === this.props.selectedBuilding.id
+    );
+
+    switch (this.getLocationType()) {
+      case 'Building':
+        // viewing a list of buildings
+        this.props.setSelectedFacility(this.props.facility);
+        break;
+      case 'Floor':
+        // viewing a list of floors so we need to set the building.
+        if (selectedBuilding) {
+          this.props.setSelectedBuilding(selectedBuilding);
+        }
+        break;
+      case 'Location':
+        if (selectedBuilding) {
+          const updatedFloor =
+            selectedBuilding.floors.find(
+              floor => floor.id === this.props.selectedFloor.id
+            ) || initialFloor;
+          this.props.setSelectedFloor(updatedFloor, this.props.facility.id);
+        }
+        break;
+      case 'Room':
+        if (selectedBuilding) {
+          const selectedFloor = selectedBuilding.floors.find(
+            floor => floor.id === this.props.selectedFloor.id
+          );
+          if (selectedFloor) {
+            const updatedLocation =
+              selectedFloor.locations.find(
+                location => location.id === this.props.selectedLocation.id
+              ) || initialLoc;
+            this.props.setSelectedLocation(
+              updatedLocation,
+              this.props.facility.id
+            );
+          }
+        }
+        break;
+      default:
+        break;
+    }
+  };
 
   handleEdit(selectedItem: any) {
     this.setState({ selectedItem });
@@ -385,7 +442,7 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
             <a
               href="#"
               onClick={(e: React.MouseEvent<HTMLAnchorElement>) =>
-                this.handleBCClick(initialBuilding, 'Building', e)
+                this.handleBCClick(initialBuilding, 'Facility', e)
               }
             >
               Buildings
@@ -541,7 +598,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     loading: state.ajaxCallsInProgress > 0,
     showEditLocationModal: state.manageLocation.showEditLocationModal,
     facilityOptions: FormUtil.convertToOptions(state.user.facilities),
-    tableData: state.manageLocation.data,
+    tableData: state.manageLocation.visibleLocations,
     facility: state.manageLocation.facility,
     tableFilters: state.manageLocation.tableFilters,
     selectedBuilding: state.manageLocation.selectedBuilding,

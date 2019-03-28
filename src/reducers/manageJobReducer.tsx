@@ -7,27 +7,25 @@ import {
 } from './commonReducers';
 import initialState from './initialState';
 import * as types from '../actions/actionTypes';
-import { unionBy } from 'lodash';
+import { keyBy } from 'lodash';
 
-function jobManageData(state: Ijob[] = [], action: any): Ijob[] {
+function jobManageData(
+  state: { [key: string]: Ijob } = {},
+  action: any
+): { [key: string]: Ijob } {
   switch (action.type) {
     case types.JOB_MANAGE_SUCCESS:
       const newJobs = map(action.jobs, (job: Ijob) => {
         return cleanJobObject(job);
       });
-      return unionBy(newJobs, state, 'id');
+      const keyedNewJobs = keyBy(newJobs, 'id');
+      return { ...state, ...keyedNewJobs };
     case types.JOB_ADD_SUCCESS:
-      return [...state, action.job];
+      return { ...state, [action.job.id]: action.job };
     case types.JOB_UPDATE_SUCCESS:
-      return map(state, (job: Ijob) => {
-        if (job.id === action.job.id) {
-          return cleanJobObject(job);
-        } else {
-          return job;
-        }
-      });
+      return { ...state, [action.job.id]: cleanJobObject(action.job) };
     case types.USER_LOGOUT_SUCCESS:
-      return [];
+      return {};
     default:
       return state;
   }

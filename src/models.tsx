@@ -505,7 +505,7 @@ export interface ImanageLocationReducer {
 }
 
 export interface ImanageJobReducer {
-  data: Ijob[];
+  data: { [key: string]: Ijob };
   jobTypes: any[];
   fseUsers: Iuser[];
   totalPages: number;

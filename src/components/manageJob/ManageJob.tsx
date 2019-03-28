@@ -35,6 +35,7 @@ import Banner from '../common/Banner';
 import EditJobModal from './EditJobModal';
 import SearchTableForm from '../common/SearchTableForm';
 import { constants } from 'src/constants/constants';
+import { values } from 'lodash';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -359,7 +360,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     customers: state.customers,
     loading: state.ajaxCallsInProgress > 0,
     showEditJobModal: state.manageJob.showEditJobModal,
-    tableData: state.manageJob.data,
+    tableData: values(state.manageJob.data),
     // jobTypes: FormUtil.convertToOptions(state.manageJob.jobTypes),
     fseUsers: state.manageJob.fseUsers,
     tableFilters: state.manageJob.tableFilters

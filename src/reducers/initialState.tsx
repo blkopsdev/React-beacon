@@ -229,7 +229,7 @@ export default {
   },
   manageJob: {
     totalPages: 1,
-    data: [],
+    data: {},
     jobTypes: [],
     fseUsers: [],
     showEditJobModal: false,

@@ -116,7 +116,7 @@ export interface Ibuilding {
   id: string;
   name: string;
   floors: Ifloor[];
-  facilityID?: string;
+  facilityID: string;
   isDeleted: boolean;
 }
 export interface Ifloor {
@@ -136,7 +136,7 @@ export interface Ilocation {
 export interface Iroom {
   id: string;
   name: string;
-  locationID?: string;
+  locationID: string;
   isDeleted: boolean;
 }
 export interface IproductInfo {

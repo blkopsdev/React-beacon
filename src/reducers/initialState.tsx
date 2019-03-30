@@ -72,6 +72,7 @@ export const initialBuilding = {
   id: '',
   name: '',
   floors: [],
+  facilityID: '',
   isDeleted: false
 };
 export const initialFloor = {
@@ -85,6 +86,7 @@ export const initialFloor = {
 export const initialRoom = {
   id: '',
   name: '',
+  locationID: '',
   isDeleted: false
 };
 

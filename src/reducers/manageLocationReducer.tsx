@@ -29,88 +29,96 @@ function locationManageFacility(
     case types.LOCATION_MANAGE_SUCCESS:
       return action.facility;
     case types.LOCATION_ADD_SUCCESS:
-      if (action.lType === 'Building' && state.buildings) {
+      const locationObject = action.locationObject as
+        | Ilocation
+        | Ibuilding
+        | Ifloor
+        | Iroom;
+
+      if ('facilityID' in locationObject && state.buildings) {
+        // BUILDING
         return {
           ...state,
-          buildings: [...state.buildings, action.item]
+          buildings: [...state.buildings, locationObject]
         };
-      } else if (action.lType === 'Floor' && state.buildings) {
+      } else if ('buildingID' in locationObject && state.buildings) {
+        // FLOOR
         const updatedBuildings = map(state.buildings, building => {
-          if (building.id === action.item.buildingID) {
-            return { ...building, floors: [...building.floors, action.item] };
+          if (building.id === locationObject.buildingID) {
+            return {
+              ...building,
+              floors: [...building.floors, locationObject]
+            };
           } else {
             return building;
           }
         });
         return { ...state, buildings: updatedBuildings };
-      } else if (action.lType === 'Location' && state.buildings) {
+      } else if ('floorID' in locationObject && state.buildings) {
+        // LOCATION
         const updatedBuildings = map(state.buildings, building => {
-          if (building.id === action.item.buildingID) {
-            const updatedFloors = map(building.floors, floor => {
-              if (floor.id === action.item.floorID) {
+          const updatedFloors = map(building.floors, floor => {
+            if (floor.id === locationObject.floorID) {
+              return {
+                ...floor,
+                locations: [...floor.locations, locationObject]
+              };
+            } else {
+              return floor;
+            }
+          });
+          return { ...building, floors: updatedFloors };
+        });
+        return { ...state, buildings: updatedBuildings };
+      } else if ('locationID' in locationObject && state.buildings) {
+        // ROOM
+        const updatedBuildings = map(state.buildings, building => {
+          const updatedFloors = map(building.floors, floor => {
+            const updatedLocations = map(floor.locations, location => {
+              if (location.id === locationObject.locationID) {
                 return {
-                  ...floor,
-                  locations: [...floor.locations, action.item]
+                  ...location,
+                  rooms: [...location.rooms, locationObject]
                 };
               } else {
-                return floor;
+                return location;
               }
             });
-            return { ...building, floors: updatedFloors };
-          } else {
-            return building;
-          }
-        });
-        return { ...state, buildings: updatedBuildings };
-      } else if (action.lType === 'Room' && state.buildings) {
-        const updatedBuildings = map(state.buildings, building => {
-          if (building.id === action.item.buildingID) {
-            const updatedFloors = map(building.floors, floor => {
-              if (floor.id === action.item.floorID) {
-                const updatedLocations = map(floor.locations, location => {
-                  if (location.id === action.item.locationID) {
-                    return {
-                      ...location,
-                      rooms: [...location.rooms, action.item]
-                    };
-                  } else {
-                    return location;
-                  }
-                });
-                return { ...floor, locations: updatedLocations };
-              } else {
-                return floor;
-              }
-            });
-            return { ...building, floors: updatedFloors };
-          } else {
-            return building;
-          }
+            return { ...floor, locations: updatedLocations };
+          });
+          return { ...building, floors: updatedFloors };
         });
         return { ...state, buildings: updatedBuildings };
       }
       return state;
 
     case types.LOCATION_UPDATE_SUCCESS:
-      if (action.lType === 'Building' && state.buildings) {
+      const locationObjectb = action.locationObject as
+        | Ilocation
+        | Ibuilding
+        | Ifloor
+        | Iroom;
+      if ('facilityID' in locationObjectb && state.buildings) {
+        // BUILDING
         return {
           ...state,
           buildings: map(state.buildings, building => {
-            if (building.id === action.item.id) {
-              return action.item;
+            if (building.id === locationObjectb.id) {
+              return locationObjectb;
             } else {
               return building;
             }
           })
         };
-      } else if (action.lType === 'Floor' && state.buildings) {
+      } else if ('buildingID' in locationObjectb && state.buildings) {
+        // FLOOR
         const updatedBuildings = map(state.buildings, building => {
-          if (building.id === action.item.buildingID) {
+          if (building.id === locationObjectb.buildingID) {
             return {
               ...building,
               floors: map(building.floors, floor => {
-                if (floor.id === action.item.id) {
-                  return action.item.id;
+                if (floor.id === locationObjectb.id) {
+                  return locationObjectb;
                 } else {
                   return floor;
                 }
@@ -121,83 +129,80 @@ function locationManageFacility(
           }
         });
         return { ...state, buildings: updatedBuildings };
-      } else if (action.lType === 'Location' && state.buildings) {
+      } else if ('floorID' in locationObjectb && state.buildings) {
+        // LOCATION
         const updatedBuildings = map(state.buildings, building => {
-          if (building.id === action.item.buildingID) {
-            const updatedFloors = map(building.floors, floor => {
-              if (floor.id === action.item.floorID) {
+          const updatedFloors = map(building.floors, floor => {
+            if (floor.id === locationObjectb.floorID) {
+              return {
+                ...floor,
+                locations: map(floor.locations, location => {
+                  if (location.id === locationObjectb.id) {
+                    return locationObjectb;
+                  } else {
+                    return location;
+                  }
+                })
+              };
+            } else {
+              return floor;
+            }
+          });
+          return { ...building, floors: updatedFloors };
+        });
+        return { ...state, buildings: updatedBuildings };
+      } else if ('locationID' in locationObjectb && state.buildings) {
+        // ROOM
+        const updatedBuildings = map(state.buildings, building => {
+          const updatedFloors = map(building.floors, floor => {
+            const updatedLocations = map(floor.locations, location => {
+              if (location.id === locationObjectb.locationID) {
                 return {
-                  ...floor,
-                  locations: map(floor.locations, location => {
-                    if (location.id === action.item.id) {
-                      return action.item;
+                  ...location,
+                  rooms: map(location.rooms, room => {
+                    if (room.id === locationObjectb.id) {
+                      return locationObjectb;
                     } else {
-                      return location;
+                      return room;
                     }
                   })
                 };
               } else {
-                return floor;
+                return location;
               }
             });
-            return { ...building, floors: updatedFloors };
-          } else {
-            return building;
-          }
-        });
-        return { ...state, buildings: updatedBuildings };
-      } else if (action.lType === 'Room' && state.buildings) {
-        const updatedBuildings = map(state.buildings, building => {
-          if (building.id === action.item.buildingID) {
-            const updatedFloors = map(building.floors, floor => {
-              if (floor.id === action.item.floorID) {
-                const updatedLocations = map(floor.locations, location => {
-                  if (location.id === action.item.locationID) {
-                    return {
-                      ...location,
-                      rooms: map(location.rooms, room => {
-                        if (room.id === action.item.id) {
-                          return action.item;
-                        } else {
-                          return room;
-                        }
-                      })
-                    };
-                  } else {
-                    return location;
-                  }
-                });
-                return { ...floor, locations: updatedLocations };
-              } else {
-                return floor;
-              }
-            });
-            return { ...building, floors: updatedFloors };
-          } else {
-            return building;
-          }
+            return { ...floor, locations: updatedLocations };
+          });
+          return { ...building, floors: updatedFloors };
         });
         return { ...state, buildings: updatedBuildings };
       }
       return state;
 
     case types.LOCATION_DELETE_SUCCESS:
-      if (action.lType === 'Building' && state.buildings) {
+      const locationObjectC = action.locationObject as
+        | Ilocation
+        | Ibuilding
+        | Ifloor
+        | Iroom;
+      if ('facilityID' in locationObjectC && state.buildings) {
+        // BUILDING
         return {
           ...state,
           buildings: [
             ...state.buildings.filter(val => {
-              return val.id !== action.item.id;
+              return val.id !== locationObjectC.id;
             })
           ]
         };
-      } else if (action.lType === 'Floor' && state.buildings) {
+      } else if ('buildingID' in locationObjectC && state.buildings) {
+        // FLOOR
         const updatedBuildings = map(state.buildings, building => {
-          if (building.id === action.item.buildingID) {
+          if (building.id === locationObjectC.buildingID) {
             return {
               ...building,
               floors: building.floors.filter(val => {
-                return val.id !== action.item.id;
+                return val.id !== locationObjectC.id;
               })
             };
           } else {
@@ -205,53 +210,43 @@ function locationManageFacility(
           }
         });
         return { ...state, buildings: updatedBuildings };
-      } else if (action.lType === 'Location' && state.buildings) {
+      } else if ('floorID' in locationObjectC && state.buildings) {
+        // LOCATION
         const updatedBuildings = map(state.buildings, building => {
-          if (building.id === action.item.buildingID) {
-            const updatedFloors = map(building.floors, floor => {
-              if (floor.id === action.item.floorID) {
+          const updatedFloors = map(building.floors, floor => {
+            if (floor.id === locationObjectC.floorID) {
+              return {
+                ...floor,
+                locations: floor.locations.filter(val => {
+                  return val.id !== locationObjectC.id;
+                })
+              };
+            } else {
+              return floor;
+            }
+          });
+          return { ...building, floors: updatedFloors };
+        });
+        return { ...state, buildings: updatedBuildings };
+      } else if ('locationID' in locationObjectC && state.buildings) {
+        // ROOM
+        const updatedBuildings = map(state.buildings, building => {
+          const updatedFloors = map(building.floors, floor => {
+            const updatedLocations = map(floor.locations, location => {
+              if (location.id === locationObjectC.locationID) {
                 return {
-                  ...floor,
-                  locations: floor.locations.filter(val => {
-                    return val.id !== action.item.id;
+                  ...location,
+                  rooms: location.rooms.filter(val => {
+                    return val.id !== locationObjectC.id;
                   })
                 };
               } else {
-                return floor;
+                return location;
               }
             });
-            return { ...building, floors: updatedFloors };
-          } else {
-            return building;
-          }
-        });
-        return { ...state, buildings: updatedBuildings };
-      } else if (action.lType === 'Room' && state.buildings) {
-        const updatedBuildings = map(state.buildings, building => {
-          if (building.id === action.item.buildingID) {
-            const updatedFloors = map(building.floors, floor => {
-              if (floor.id === action.item.floorID) {
-                const updatedLocations = map(floor.locations, location => {
-                  if (location.id === action.item.locationID) {
-                    return {
-                      ...location,
-                      rooms: location.rooms.filter(val => {
-                        return val.id !== action.item.id;
-                      })
-                    };
-                  } else {
-                    return location;
-                  }
-                });
-                return { ...floor, locations: updatedLocations };
-              } else {
-                return floor;
-              }
-            });
-            return { ...building, floors: updatedFloors };
-          } else {
-            return building;
-          }
+            return { ...floor, locations: updatedLocations };
+          });
+          return { ...building, floors: updatedFloors };
         });
         return { ...state, buildings: updatedBuildings };
       }

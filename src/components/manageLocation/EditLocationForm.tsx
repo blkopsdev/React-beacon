@@ -117,13 +117,10 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
     ) {
       newItem = {
         ...this.props.selectedItem,
-        ...newItem,
-        buildingID: this.props.selectedBuilding.id,
-        floorID: this.props.selectedFloor.id,
-        locationID: this.props.selectedLocation.id
+        ...newItem
       };
       // updating a location object
-      this.props.updateAnyLocation(newItem, this.props.selectedType);
+      this.props.updateAnyLocation(newItem);
     } else {
       // creating a new location
       // lets give it a uuid!
@@ -137,30 +134,27 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
           facilityID: this.props.facility.id,
           floors: []
         };
-        this.props.saveAnyLocation(newItem, 'Building', this.props.facility.id);
+        this.props.saveAnyLocation(newItem, this.props.facility.id);
       } else if (this.props.selectedType === 'Floor') {
         newItem = {
           ...newItem,
           buildingID: this.props.selectedBuilding.id,
           locations: []
         };
-        this.props.saveAnyLocation(newItem, 'Floor', this.props.facility.id);
+        this.props.saveAnyLocation(newItem, this.props.facility.id);
       } else if (this.props.selectedType === 'Location') {
         newItem = {
           ...newItem,
-          buildingID: this.props.selectedBuilding.id,
           floorID: this.props.selectedFloor.id,
           rooms: []
         };
-        this.props.saveAnyLocation(newItem, 'Location', this.props.facility.id);
+        this.props.saveAnyLocation(newItem, this.props.facility.id);
       } else {
         newItem = {
           ...newItem,
-          buildingID: this.props.selectedBuilding.id,
-          floorID: this.props.selectedFloor.id,
           locationID: this.props.selectedLocation.id
         };
-        this.props.saveAnyLocation(newItem, 'Room', this.props.facility.id);
+        this.props.saveAnyLocation(newItem, this.props.facility.id);
       }
     }
   };

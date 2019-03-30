@@ -111,7 +111,10 @@ const numericFieldConfig = (
         options: trueFalseOptions,
         isClearable: false
       },
-      formState: { value: selectedNumericAllowDecimals, disabled }
+      formState: {
+        value: getTrueFalseOption(selectedNumericAllowDecimals),
+        disabled
+      }
     }
   } as { [key: string]: GroupProps };
 };

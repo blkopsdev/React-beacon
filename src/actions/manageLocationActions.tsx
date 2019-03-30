@@ -50,24 +50,28 @@ export function getLocationsFacility(facilityID: string): ThunkResult<void> {
 * save (add) a new building/floor/location/room
 */
 export function saveAnyLocation(
-  item: Ilocation | Ibuilding | Ifloor | Iroom,
-  lType: 'Building' | 'Floor' | 'Location' | 'Room',
+  locationObject: Ilocation | Ibuilding | Ifloor | Iroom,
   facilityID: string
 ): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     let url: string;
-    if (lType === 'Building') {
+    let lType: string;
+    if ('facilityID' in locationObject) {
       url = API.POST.building;
-    } else if (lType === 'Floor') {
+      lType = 'Building';
+    } else if ('buildingID' in locationObject) {
       url = API.POST.floor;
-    } else if (lType === 'Location') {
+      lType = 'Floor';
+    } else if ('floorID' in locationObject) {
       url = API.POST.location;
+      lType = 'Location';
     } else {
       url = API.POST.room;
+      lType = 'Room';
     }
     return axios
-      .post(url, item)
+      .post(url, locationObject)
       .then(data => {
         if (!data.data) {
           throw undefined;
@@ -75,7 +79,7 @@ export function saveAnyLocation(
           dispatch({
             type: types.LOCATION_ADD_SUCCESS,
             lType,
-            item
+            locationObject
           });
           dispatch({ type: types.TOGGLE_MODAL_EDIT_LOCATION });
           toastr.success(
@@ -97,23 +101,27 @@ export function saveAnyLocation(
 * update (edit) a building/floor/location/room
 */
 export function updateAnyLocation(
-  item: Ilocation | Ibuilding | Ifloor | Iroom,
-  lType: 'Building' | 'Floor' | 'Location' | 'Room'
+  locationObject: Ilocation | Ibuilding | Ifloor | Iroom
 ): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     let url: string;
-    if (lType === 'Building') {
-      url = `${API.PUT.building}/${item.id}`;
-    } else if (lType === 'Floor') {
-      url = `${API.PUT.floor}/${item.id}`;
-    } else if (lType === 'Location') {
-      url = `${API.PUT.location}/${item.id}`;
+    let lType: string;
+    if ('facilityID' in locationObject) {
+      url = `${API.PUT.building}/${locationObject.id}`;
+      lType = 'Building';
+    } else if ('buildingID' in locationObject) {
+      url = `${API.PUT.floor}/${locationObject.id}`;
+      lType = 'Floor';
+    } else if ('floorID' in locationObject) {
+      url = `${API.PUT.location}/${locationObject.id}`;
+      lType = 'Location';
     } else {
-      url = `${API.PUT.room}/${item.id}`;
+      url = `${API.PUT.room}/${locationObject.id}`;
+      lType = 'Room';
     }
     return axios
-      .put(url, item)
+      .put(url, locationObject)
       .then(data => {
         if (data.status !== 200) {
           throw undefined;
@@ -121,7 +129,7 @@ export function updateAnyLocation(
           dispatch({
             type: types.LOCATION_UPDATE_SUCCESS,
             lType,
-            item
+            locationObject
           });
           dispatch({ type: types.TOGGLE_MODAL_EDIT_LOCATION });
           toastr.success(

@@ -368,11 +368,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       isDeleted: false
     };
     this.setState({ newItem: newBuilding, newType: 'buildingID' }, () => {
-      this.props.saveAnyLocation(
-        newBuilding,
-        'Building',
-        this.props.facility.id
-      );
+      this.props.saveAnyLocation(newBuilding, this.props.facility.id);
     });
   };
 
@@ -394,7 +390,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       isDeleted: false
     };
     this.setState({ newItem: newFloor, newType: 'floorID' }, () => {
-      this.props.saveAnyLocation(newFloor, 'Floor', this.props.facility.id);
+      this.props.saveAnyLocation(newFloor, this.props.facility.id);
     });
   };
   handleCreateLocation = (name: string) => {
@@ -410,17 +406,12 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
     const newLocation = {
       id: uuidv4(),
       name,
-      buildingID: buildingID.value,
       floorID: floorID.value,
       rooms: [],
       isDeleted: false
     };
     this.setState({ newItem: newLocation, newType: 'locationID' }, () => {
-      this.props.saveAnyLocation(
-        newLocation,
-        'Location',
-        this.props.facility.id
-      );
+      this.props.saveAnyLocation(newLocation, this.props.facility.id);
     });
   };
   handleCreateRoom = (name: string) => {
@@ -436,13 +427,11 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
     const newRoom = {
       id: uuidv4(),
       name,
-      buildingID: buildingID.value,
-      floorID: floorID.value,
       locationID: locationID.value,
       isDeleted: false
     };
     this.setState({ newItem: newRoom, newType: 'roomID' }, () => {
-      this.props.saveAnyLocation(newRoom, 'Room', this.props.facility.id);
+      this.props.saveAnyLocation(newRoom, this.props.facility.id);
     });
   };
 

@@ -11,7 +11,6 @@ import {
   Ibuilding,
   Ifloor,
   Ilocation,
-  Iroom,
   ItableFiltersReducer,
   Ifacility
 } from '../../models';
@@ -23,6 +22,11 @@ import {
 import { updateQueueProduct } from '../../actions/manageProductQueueActions';
 import CommonModal from '../common/CommonModal';
 import EditLocationForm from './EditLocationForm';
+import {
+  initialLoc,
+  initialFloor,
+  initialBuilding
+} from 'src/reducers/initialState';
 
 interface Iprops {
   selectedItem: any;
@@ -42,7 +46,6 @@ interface IdispatchProps {
   selectedBuilding: Ibuilding;
   selectedFloor: Ifloor;
   selectedLocation: Ilocation;
-  selectedRoom: Iroom;
 }
 
 class ManageInventoryModal extends React.Component<
@@ -77,16 +80,28 @@ class ManageInventoryModal extends React.Component<
 }
 
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
+  const facility = state.manageLocation.facility;
+  const selectedBuilding =
+    facility.buildings.find(
+      building => building.id === state.manageLocation.tableFilters.buildingID
+    ) || initialBuilding;
+  const selectedFloor =
+    selectedBuilding.floors.find(
+      floor => floor.id === state.manageLocation.tableFilters.floorID
+    ) || initialFloor;
+  const selectedLocation =
+    selectedFloor.locations.find(
+      location => location.id === state.manageLocation.tableFilters.locationID
+    ) || initialLoc;
   return {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
     showModal: state.manageLocation.showEditLocationModal,
     tableFilters: state.manageLocation.tableFilters,
     facility: state.manageLocation.facility,
-    selectedBuilding: state.manageLocation.selectedBuilding,
-    selectedFloor: state.manageLocation.selectedFloor,
-    selectedLocation: state.manageLocation.selectedLocation,
-    selectedRoom: state.manageLocation.selectedRoom
+    selectedBuilding,
+    selectedFloor,
+    selectedLocation
   };
 };
 

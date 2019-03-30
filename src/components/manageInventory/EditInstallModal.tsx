@@ -43,7 +43,7 @@ interface IdispatchProps {
   deleteInstall: typeof deleteInstall;
   tableFilters: ItableFiltersReducer;
   secondModal: boolean;
-  saveAnyLocation: typeof saveAnyLocation;
+  saveAnyLocation: any;
   user: Iuser;
 }
 

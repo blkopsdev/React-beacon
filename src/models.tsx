@@ -433,6 +433,10 @@ export interface ItableFiltersReducer {
   brand?: Ioption;
   sorted?: SortingRule[];
   standard?: Ioption;
+  facilityID?: string;
+  buildingID?: string;
+  floorID?: string;
+  locationID?: string;
 }
 export interface ItableFiltersParams {
   search?: string;
@@ -447,6 +451,10 @@ export interface ItableFiltersParams {
   brand?: Ioption;
   sorted?: SortingRule[];
   standard?: Ioption;
+  facilityID?: string;
+  buildingID?: string;
+  floorID?: string;
+  locationID?: string;
 }
 
 export interface IqueueObject {
@@ -498,10 +506,6 @@ export interface ImanageLocationReducer {
   totalPages: number;
   showEditLocationModal: boolean;
   tableFilters: ItableFiltersReducer;
-  selectedBuilding: Ibuilding;
-  selectedFloor: Ifloor;
-  selectedLocation: Ilocation;
-  selectedRoom: Iroom;
 }
 
 export interface ImanageJobReducer {

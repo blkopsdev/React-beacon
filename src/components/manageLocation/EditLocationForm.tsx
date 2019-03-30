@@ -21,7 +21,6 @@ import {
   ItableFiltersReducer,
   Ifloor,
   Ilocation,
-  Iroom,
   Ifacility
 } from '../../models';
 import {
@@ -30,8 +29,6 @@ import {
   toggleEditLocationModal
 } from '../../actions/manageLocationActions';
 import { constants } from 'src/constants/constants';
-
-const uuidv4 = require('uuid/v4');
 
 const buildFieldConfig = () => {
   const fieldConfigControls = {
@@ -69,7 +66,6 @@ interface Iprops {
   selectedBuilding: Ibuilding;
   selectedFloor: Ifloor;
   selectedLocation: Ilocation;
-  selectedRoom: Iroom;
 }
 
 class ManageLocationForm extends React.Component<Iprops, {}> {
@@ -94,10 +90,7 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
     }
   }
 
-  handleSubmit = (
-    e: React.MouseEvent<HTMLFormElement>,
-    shouldApprove: boolean = false
-  ) => {
+  handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (this.form.status === 'INVALID') {
       this.form.markAsSubmitted();
@@ -105,58 +98,23 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
       return;
     }
     console.log(this.form.value);
-
-    let newItem = {
-      ...this.form.value
-    };
-
+    const { name } = this.form.value;
     if (
       this.props.selectedItem &&
       this.props.selectedItem.id &&
       this.props.selectedItem.id.length
     ) {
-      newItem = {
+      const newItem = {
         ...this.props.selectedItem,
-        ...newItem
+        name
       };
       // updating a location object
       this.props.updateAnyLocation(newItem);
     } else {
       // creating a new location
-      // lets give it a uuid!
-      newItem = {
-        ...newItem,
-        id: uuidv4()
-      };
-      if (this.props.selectedType === 'Building') {
-        newItem = {
-          ...newItem,
-          facilityID: this.props.facility.id,
-          floors: []
-        };
-        this.props.saveAnyLocation(newItem, this.props.facility.id);
-      } else if (this.props.selectedType === 'Floor') {
-        newItem = {
-          ...newItem,
-          buildingID: this.props.selectedBuilding.id,
-          locations: []
-        };
-        this.props.saveAnyLocation(newItem, this.props.facility.id);
-      } else if (this.props.selectedType === 'Location') {
-        newItem = {
-          ...newItem,
-          floorID: this.props.selectedFloor.id,
-          rooms: []
-        };
-        this.props.saveAnyLocation(newItem, this.props.facility.id);
-      } else {
-        newItem = {
-          ...newItem,
-          locationID: this.props.selectedLocation.id
-        };
-        this.props.saveAnyLocation(newItem, this.props.facility.id);
-      }
+      this.props.saveAnyLocation(name, this.props.facility.id);
     }
+    this.props.toggleEditLocationModal();
   };
   setForm = (form: AbstractControl) => {
     this.form = form;

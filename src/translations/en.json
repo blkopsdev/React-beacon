@@ -181,8 +181,8 @@
     "uploadInstructions":
       "Please upload the file that contains the installations that you would like to import.  Please use the template below to make sure the data is in the correct format.",
     "contactMessageLabel": "comments / questions",
-    "contactButton": "contact beacon",
-    "installContactTitle": "Contact Beacon",
+    "contactButton": "request support",
+    "installContactTitle": "Request Support",
     "productInfoLabel": "Product Information",
     "locationLabel": "Where is this installation located?",
     "building": "Building",

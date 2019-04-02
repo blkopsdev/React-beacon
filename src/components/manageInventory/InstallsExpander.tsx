@@ -89,7 +89,7 @@ export const InstallationsExpander = (props: ExpanderProps) => {
         id: 'contact-button',
         Cell: (
           <span className="contact-button">
-            <FontAwesomeIcon icon="envelope" />
+            <FontAwesomeIcon icon="wrench" />
           </span>
         ),
         minWidth: 25

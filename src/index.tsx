@@ -33,7 +33,7 @@ import {
   faShoppingCart,
   faChevronDown,
   faChevronRight,
-  faEnvelope
+  faWrench
 } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { runWithAdal } from 'react-adal';
@@ -64,7 +64,7 @@ library.add(
   faShoppingCart,
   faChevronDown,
   faChevronRight,
-  faEnvelope,
+  faWrench,
   faListAlt,
   faPlus,
   faMinus,

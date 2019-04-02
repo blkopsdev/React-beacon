@@ -279,6 +279,12 @@ export interface ImeasurementPointResult {
   installBaseID: string;
   measurementPointListID: string;
 }
+export interface ImeasurmentPointResultsReducer {
+  measurementPointResultsByID: { [key: string]: ImeasurementPointResult };
+  selectedResult: ImeasurementPointResult;
+  previousResult: ImeasurementPointResult;
+  historicalResultID: string;
+}
 
 // these are copied from react-redux-toastr beacuse could not figure out any other way to make typescript happy
 export type transitionInType = 'bounceIn' | 'bounceInDown' | 'fadeIn';
@@ -610,4 +616,5 @@ export interface IinitialState {
   manageTraining: ImanageTrainingReducer;
   productInfo: IproductInfo;
   manageMeasurementPointLists: ImanageMeasurementPointListsReducer;
+  measurementPointResults: ImeasurmentPointResultsReducer;
 }

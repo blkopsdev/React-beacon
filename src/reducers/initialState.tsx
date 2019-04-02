@@ -318,7 +318,7 @@ export default {
     tableFilters: initialTableFilters,
     totalPages: 1
   },
-  manageMeasurementPointListsReducer: {
+  manageMeasurementPointLists: {
     totalPages: 1,
     data: {},
     selectedMeasurementPointList: initialMeasurementPointList,
@@ -329,6 +329,12 @@ export default {
     tableFilters: initialTableFilters,
     selectedTabID: '',
     selectedMeasurementPoint: initialMeasurementPoint
+  },
+  measurementPointResults: {
+    measurementPointResultsByID: {},
+    selectedResult: initialMeasurmentPointResult,
+    previousResult: initialMeasurmentPointResult,
+    historicalResultID: ''
   },
   customers: [],
   facilities: [],

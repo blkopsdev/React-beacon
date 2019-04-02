@@ -29,7 +29,7 @@ export function getAllMeasurementPointLists(): ThunkResult<void> {
       standard
     } = getState().manageMeasurementPointLists.tableFilters;
     return axios
-      .get(API.GET.measurements.getall, {
+      .get(API.GET.measurementPoint.getall, {
         params: {
           page,
           mainCategoryID: mainCategory && mainCategory.value,
@@ -44,7 +44,7 @@ export function getAllMeasurementPointLists(): ThunkResult<void> {
           // console.log(data.data);
           dispatch({
             type: types.MANAGE_MEASUREMENT_POINT_LISTS_SUCCESS,
-            measurements: data.data.result
+            measurementPointLists: data.data.result
           });
           dispatch({
             type: types.MANAGE_MEASUREMENT_POINT_LISTS_TOTAL_PAGES,
@@ -55,7 +55,7 @@ export function getAllMeasurementPointLists(): ThunkResult<void> {
       })
       .catch((error: any) => {
         dispatch({ type: types.MANAGE_MEASUREMENT_POINT_LISTS_FAILED });
-        constants.handleError(error, 'get measurements');
+        constants.handleError(error, 'get measurement point lists');
         console.error(error);
       });
   };
@@ -89,7 +89,7 @@ export function addGlobalMeasurementPointList(
     });
 
     return axios
-      .post(API.POST.measurements.addglobalmpl, listForAPI)
+      .post(API.POST.measurementPoint.addglobalmpl, listForAPI)
       .then(data => {
         if (!data.data) {
           throw undefined;
@@ -156,9 +156,9 @@ export function updateGlobalMeasurementPointList(
       const listForAPI = { ...mpl, measurementPointTabs };
 
       // Set the correct URL dependent on if this is a customer or not
-      let url = `${API.PUT.measurements.updateglobalmpl}/${mpl.id}`;
+      let url = `${API.PUT.measurementPoint.updateglobalmpl}/${mpl.id}`;
       if (isCustomer) {
-        url = `${API.PUT.measurements.updatecustomermpl}/${mpl.id}`;
+        url = `${API.PUT.measurementPoint.updatecustomermpl}/${mpl.id}`;
       }
       return axios
         .put(url, listForAPI)
@@ -223,7 +223,10 @@ export function updateCustomerMeasurementPointList(
     });
 
     return axios
-      .put(`${API.PUT.measurements.updatecustomermpl}/${mpl.id}`, listForAPI)
+      .put(
+        `${API.PUT.measurementPoint.updatecustomermpl}/${mpl.id}`,
+        listForAPI
+      )
       .then(data => {
         if (!data.data) {
           throw undefined;

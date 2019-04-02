@@ -25,7 +25,7 @@ function manageMeasurementPointListData(
   switch (action.type) {
     case types.MANAGE_MEASUREMENT_POINT_LISTS_SUCCESS:
       // return initialState.measurementPointLists.data;
-      const measurementPointLists = action.measurements.map(
+      const measurementPointLists = action.measurementPointLists.map(
         (measurementPointList: ImeasurementPointList) => {
           const measurementPointTabs = map(
             measurementPointList.measurementPointTabs,
@@ -195,7 +195,7 @@ const selectedMeasurementPointReducer = (
   }
 };
 export default function manageMeasurementPointLists(
-  state: ImanageMeasurementPointListsReducer = initialState.manageMeasurementPointListsReducer,
+  state: ImanageMeasurementPointListsReducer = initialState.manageMeasurementPointLists,
   action: any
 ) {
   return {

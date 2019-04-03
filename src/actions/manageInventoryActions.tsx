@@ -454,7 +454,7 @@ export const toggleMPResultModal = () => ({
 export const toggleMPResultHistory = () => ({
   type: types.TOGGLE_MODAL_MP_RESULT_HISTORY
 });
-export const toggleMPResultNOTES = () => ({
+export const toggleMPResultNotes = () => ({
   type: types.TOGGLE_MODAL_MP_RESULT_NOTES
 });
 export const toggleSearchNewProductsModal = () => ({

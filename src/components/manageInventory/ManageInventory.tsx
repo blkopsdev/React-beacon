@@ -33,7 +33,6 @@ import {
   IshoppingCart,
   Ifacility
 } from '../../models';
-import { InstallationsExpander } from './InstallsExpander';
 import { TableUtil } from '../common/TableUtil';
 import {
   addToCart,
@@ -66,11 +65,9 @@ import SearchTableForm from '../common/SearchTableForm';
 import { constants } from 'src/constants/constants';
 import SearchNewProductsModal from './SearchNewProductsModal';
 import { getTotal } from 'src/reducers/cartReducer';
-import { selectResult } from 'src/actions/measurementPointResultsActions';
 import { MPResultModal } from './MPResultModal';
-interface RowInfoInstallBase extends RowInfo {
-  value: IinstallBase;
-}
+import { InstallBasesExpanderContainer } from './InstallBasesExpanderContainer';
+
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
   t: TranslationFunction;
@@ -108,7 +105,6 @@ interface IdispatchProps {
   cart: IshoppingCart;
   requestQuote: typeof requestQuote;
   facility: Ifacility;
-  selectResult: typeof selectResult;
 }
 
 interface Istate {
@@ -386,18 +382,6 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     });
   };
 
-  handleSelectResult = (install: IinstallBase) => {
-    // grab the product by using the productID from installbase
-    const selectedProduct = find(this.props.tableData, {
-      id: install.productID
-    });
-    this.props.setSelectedProduct(selectedProduct);
-    // TODO test to make sure the contact modal has the selected product defined
-    this.setState({ selectedInstall: install }, () => {
-      this.props.toggleInstallContactModal();
-    });
-  };
-
   /*
   * Handle user clicking on a product row column
   * set the selected product to state and open the modal
@@ -431,61 +415,6 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           background: this.state.selectedRow[rowInfo.viewIndex]
             ? constants.colors[`${this.state.currentTile.color}Tr`]
             : ''
-        }
-      };
-    }
-  };
-
-  /*
-  * Handle user clicking on an install row column
-  * if there is no "id" to key off of for a specific button, then set the selected install to state and open the edit install modal
-  * Note: handleOriginal has been commented out.  if you need to receive the click on the row in getTrProps - then you need to add back handleOriginal()
-  * onClick: (
-          e: React.MouseEvent<HTMLFormElement>,
-          handleOriginal: () => void
-        )
-        if (handleOriginal) {
-            handleOriginal();
-          }
-  * 
-  */
-  expanderGetTdProps = (
-    state: FinalState,
-    rowInfo: RowInfoInstallBase,
-    column: Column,
-    instance: any
-  ) => {
-    if (column.id && column.id === 'contact-button') {
-      return {
-        onClick: () => {
-          this.contactAboutInstall(rowInfo.original);
-        }
-      };
-    } else if (column.id && column.id === 'select-result-button') {
-      return {
-        onClick: () => {
-          this.props.selectResult(rowInfo.original.id);
-        }
-      };
-    } else if (column.id && column.id === 'historical-results-button') {
-      return {
-        onClick: () => {
-          // this.props.selectHistoricalResult
-          console.log('selecting historical');
-        }
-      };
-    } else {
-      return {
-        onClick: (e: React.MouseEvent<HTMLFormElement>) => {
-          // grab the product by using the productID from installbase
-          const selectedProduct = find(this.props.tableData, {
-            id: rowInfo.original.productID
-          }) as Iproduct;
-          this.props.setSelectedProduct(selectedProduct);
-          this.setState({
-            selectedInstall: rowInfo.original
-          });
-          this.props.toggleEditInstallModal();
         }
       };
     }
@@ -562,6 +491,23 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     this.props.toggleEditInstallModal();
     this.props.setSelectedProduct(newProduct);
   };
+  handleInstallBaseSelect = (installBase: IinstallBase) => {
+    // grab the product by using the productID from installbase
+    const selectedProduct = find(this.props.tableData, {
+      id: installBase.productID
+    }) as Iproduct;
+    this.props.setSelectedProduct(selectedProduct);
+    this.setState({
+      selectedInstall: installBase
+    });
+    this.props.toggleEditInstallModal();
+  };
+  handleAddInstallBase = (product: any) => {
+    this.props.setSelectedProduct(product);
+    this.setState({ selectedInstall: {} }, () => {
+      this.props.toggleEditInstallModal();
+    });
+  };
   render() {
     console.log('rendering inventory table');
     if (this.props.productInfo.mainCategoryOptions.length === 0) {
@@ -626,7 +572,6 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         <ReactTable
           data={this.props.tableData}
           columns={this.state.columns}
-          // getTrProps={this.getTrProps}
           getTdProps={this.getTdProps}
           pageSize={this.props.tableData.length}
           manual // Forces table not to paginate or sort automatically, so we can handle it server-side
@@ -642,21 +587,16 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           multiSort={false}
           noDataText={t('common:noDataText')}
           SubComponent={(rowInfo: RowInfo) => (
-            <InstallationsExpander
+            <InstallBasesExpanderContainer
               {...rowInfo}
-              addToCart={this.props.addToCart}
               addInstallation={() => {
-                this.props.setSelectedProduct(rowInfo.original);
-                this.setState({ selectedInstall: {} }, () => {
-                  this.props.toggleEditInstallModal();
-                });
+                this.handleAddInstallBase(rowInfo.original);
               }}
               t={this.props.t}
               showAddInstallation={this.canEditInstalls()}
               showRequestQuote={this.canRequestQuote()}
-              facility={this.props.facility}
-              selectResult={this.props.selectResult}
-              getTdProps={this.expanderGetTdProps}
+              handleInstallBaseSelect={this.handleInstallBaseSelect}
+              contactAboutInstall={this.contactAboutInstall}
             />
           )}
           resizable={false}
@@ -764,8 +704,7 @@ export default translate('manageInventory')(
       toggleInstallContactModal,
       setSelectedProduct,
       toggleImportInstallModal,
-      requestQuote,
-      selectResult
+      requestQuote
     }
   )(ManageInventory)
 );

@@ -1,20 +1,23 @@
 import * as React from 'react';
-import { translate } from 'react-i18next';
+import { TranslationFunction } from 'react-i18next';
 
-import { ListGroup, ListGroupItem } from 'react-bootstrap';
+import { ListGroup, ListGroupItem, Col, Button } from 'react-bootstrap';
 import { ImeasurementPointResult } from 'src/models';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 interface Props {
   selectedItem: ImeasurementPointResult;
+  colorButton: string;
+  t: TranslationFunction;
+  toggleModal: () => void;
 }
 
-class MPResultListClass extends React.Component<Props, {}> {
+export class MPResultList extends React.Component<Props, {}> {
   constructor(props: Props) {
     super(props);
   }
 
   render() {
+    const { t } = this.props;
     return (
       <div>
         <ListGroup>
@@ -26,11 +29,16 @@ class MPResultListClass extends React.Component<Props, {}> {
             );
           })}
         </ListGroup>
+        <Col xs={12} className="form-buttons text-right">
+          <Button
+            bsStyle={this.props.colorButton}
+            type="button"
+            onClick={this.props.toggleModal}
+          >
+            {t('common:done')}
+          </Button>
+        </Col>
       </div>
     );
   }
 }
-
-export const MPResultList = translate('measurementPointResults')(
-  MPResultListClass
-);

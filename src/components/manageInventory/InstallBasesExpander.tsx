@@ -15,9 +15,10 @@ import { addToCart } from '../../actions/shoppingCartActions';
 import { Ifacility, IinstallBase } from 'src/models';
 import { TableUtil } from '../common/TableUtil';
 import { selectResult } from 'src/actions/measurementPointResultsActions';
+import { toggleMPResultModal } from 'src/actions/manageInventoryActions';
 
 interface RowInfoInstallBase extends RowInfo {
-  value: IinstallBase;
+  original: IinstallBase;
 }
 interface ExpanderProps extends RowInfo {
   addToCart: typeof addToCart;
@@ -27,20 +28,65 @@ interface ExpanderProps extends RowInfo {
   showRequestQuote: boolean;
   facility: Ifacility;
   selectResult: typeof selectResult;
-  getTdProps: (
-    state: FinalState,
-    rowInfo: RowInfoInstallBase,
-    column: Column,
-    instance: any
-  ) => object | undefined;
+  handleInstallBaseSelect: (i: IinstallBase) => void;
+  contactAboutInstall: (i: IinstallBase) => void;
+  toggleMPResultModal: typeof toggleMPResultModal;
 }
 
 /*
 * The Installations Expander
 */
-export const InstallationsExpander = (props: ExpanderProps) => {
+export const InstallBasesExpander = (props: ExpanderProps) => {
   // console.log(props.original, `${props.original.class.id}/${props.original.userID}`);
   // console.log(props);
+
+  /*
+  * Handle user clicking on an install row column
+  * if there is no "id" to key off of for a specific button, then set the selected install to state and open the edit install modal
+  * Note: handleOriginal has been commented out.  if you need to receive the click on the row in getTrProps - then you need to add back handleOriginal()
+  * onClick: (
+          e: React.MouseEvent<HTMLFormElement>,
+          handleOriginal: () => void
+        )
+        if (handleOriginal) {
+            handleOriginal();
+          }
+  * 
+  */
+  const getTdProps = (
+    state: FinalState,
+    rowInfo: RowInfoInstallBase,
+    column: Column,
+    instance: any
+  ) => {
+    if (column.id && column.id === 'contact-button') {
+      return {
+        onClick: () => {
+          props.contactAboutInstall(rowInfo.original);
+        }
+      };
+    } else if (column.id && column.id === 'select-result-button') {
+      return {
+        onClick: () => {
+          props.selectResult(rowInfo.original.id);
+          props.toggleMPResultModal();
+        }
+      };
+    } else if (column.id && column.id === 'historical-results-button') {
+      return {
+        onClick: () => {
+          // this.props.selectHistoricalResult
+          console.log('selecting historical');
+        }
+      };
+    } else {
+      return {
+        onClick: () => {
+          props.handleInstallBaseSelect(rowInfo.original);
+        }
+      };
+    }
+  };
 
   const ExpanderButtonBar = (eProps: RowRenderProps) => {
     return (
@@ -140,7 +186,7 @@ export const InstallationsExpander = (props: ExpanderProps) => {
         showPageSizeOptions={false}
         rowsText="installs"
         key={props.original.installs.length}
-        getTdProps={props.getTdProps}
+        getTdProps={getTdProps}
         noDataText="No installations found."
         resizable={false}
         showPagination={props.original.installs.length >= 10}

@@ -22,16 +22,17 @@ interface RowInfoInstallBase extends RowInfo {
 interface ExpanderProps extends RowInfo {
   addToCart: typeof addToCart;
   addInstallation: () => void;
-  contactAboutInstall: (install: any) => void;
   t: TranslationFunction;
-  getExpanderTrProps: (
-    state: FinalState,
-    rowInfo: RowInfoInstallBase
-  ) => object | undefined;
   showAddInstallation: boolean;
   showRequestQuote: boolean;
   facility: Ifacility;
   selectResult: typeof selectResult;
+  getTdProps: (
+    state: FinalState,
+    rowInfo: RowInfoInstallBase,
+    column: Column,
+    instance: any
+  ) => object | undefined;
 }
 
 /*
@@ -117,41 +118,6 @@ export const InstallationsExpander = (props: ExpanderProps) => {
     props.t
   ) as Column[];
 
-  const expanderHandleTdProps = (
-    state: FinalState,
-    rowInfo: RowInfoInstallBase,
-    column: Column,
-    instance: any
-  ) => {
-    if (column && column.id && column.id === 'contact-button') {
-      return {
-        onClick: (
-          e: React.MouseEvent<HTMLFormElement>,
-          handleOriginal: () => void
-        ) => {
-          props.contactAboutInstall(rowInfo.original);
-          if (handleOriginal) {
-            handleOriginal();
-          }
-        }
-      };
-    } else if (column && column.id && column.id === 'select-result-button') {
-      return {
-        onClick: (
-          e: React.MouseEvent<HTMLFormElement>,
-          handleOriginal: () => void
-        ) => {
-          props.selectResult(rowInfo.original.id);
-          if (handleOriginal) {
-            handleOriginal();
-          }
-        }
-      };
-    } else {
-      return {};
-    }
-  };
-
   // let installs : IinstallBase[] = [];
   // if (props.installs && props.installs){
   //     installs = props.installs;
@@ -174,10 +140,9 @@ export const InstallationsExpander = (props: ExpanderProps) => {
         showPageSizeOptions={false}
         rowsText="installs"
         key={props.original.installs.length}
-        getTdProps={expanderHandleTdProps}
+        getTdProps={props.getTdProps}
         noDataText="No installations found."
         resizable={false}
-        getTrProps={props.getExpanderTrProps}
         showPagination={props.original.installs.length >= 10}
       />
     </div>

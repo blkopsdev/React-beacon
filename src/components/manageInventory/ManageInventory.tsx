@@ -14,7 +14,8 @@ import ReactTable, {
   RowInfo,
   FinalState,
   RowRenderProps,
-  SortingRule
+  SortingRule,
+  Column
 } from 'react-table';
 
 import { FormUtil } from '../common/FormUtil';
@@ -67,7 +68,9 @@ import SearchNewProductsModal from './SearchNewProductsModal';
 import { getTotal } from 'src/reducers/cartReducer';
 import { selectResult } from 'src/actions/measurementPointResultsActions';
 import { MPResultModal } from './MPResultModal';
-
+interface RowInfoInstallBase extends RowInfo {
+  value: IinstallBase;
+}
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
   t: TranslationFunction;
@@ -118,7 +121,6 @@ interface Istate {
 
 class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
   public searchFieldConfigBanner: any;
-  public buttonInAction = false;
   private setTableFilterTimeout: any;
   constructor(props: Iprops & IdispatchProps) {
     super(props);
@@ -230,28 +232,14 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
 
   /*
   * indicate the toggle position and handle the click
-  * we set buttonInAction in order to prevent the the edit product modal opening when the row is clicked
   * TODO animate the arrow:
       transition: all .3s cubic-bezier(.175,.885,.32,1.275);
           transform: translate(-50%,-50%) rotate(-90deg);
               transform: translate(-50%,-50%) rotate(0);
   */
   expanderToggle = (props: RowRenderProps) => {
-    const handleToggle = () => {
-      this.buttonInAction = true;
-      this.setState(
-        {
-          selectedRow: {
-            [props.viewIndex || 0]: !this.state.selectedRow[
-              props.viewIndex || 0
-            ]
-          }
-        },
-        () => (this.buttonInAction = false)
-      );
-    };
     return (
-      <div onClick={handleToggle}>
+      <div>
         {props.isExpanded ? (
           <span>
             <FontAwesomeIcon icon="chevron-down" />
@@ -385,11 +373,8 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
 
   /*
   * Install Expander Row Click Handlers
-  * Clicks on a button in a row fire before the click event on the row.  To prevent the row click handler we set buttonInAction = true
   */
   contactAboutInstall = (install: IinstallBase) => {
-    this.buttonInAction = true;
-
     // grab the product by using the productID from installbase
     const selectedProduct = find(this.props.tableData, {
       id: install.productID
@@ -397,14 +382,11 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     this.props.setSelectedProduct(selectedProduct);
     // TODO test to make sure the contact modal has the selected product defined
     this.setState({ selectedInstall: install }, () => {
-      this.buttonInAction = false;
       this.props.toggleInstallContactModal();
     });
   };
 
   handleSelectResult = (install: IinstallBase) => {
-    this.buttonInAction = true;
-
     // grab the product by using the productID from installbase
     const selectedProduct = find(this.props.tableData, {
       id: install.productID
@@ -412,24 +394,38 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     this.props.setSelectedProduct(selectedProduct);
     // TODO test to make sure the contact modal has the selected product defined
     this.setState({ selectedInstall: install }, () => {
-      this.buttonInAction = false;
       this.props.toggleInstallContactModal();
     });
   };
 
   /*
-  * Handle user clicking on a product row
+  * Handle user clicking on a product row column
   * set the selected product to state and open the modal
   */
-  getTrProps = (state: FinalState, rowInfo: RowInfo) => {
+  getTdProps = (
+    state: FinalState,
+    rowInfo: RowInfo,
+    column: Column,
+    instance: any
+  ) => {
     // console.log("ROWINFO", rowInfo, state);
-    if (rowInfo) {
+    if (column.id && column.id === 'expander-toggle') {
+      return {
+        onClick: () => {
+          this.setState({
+            selectedRow: {
+              [rowInfo.viewIndex || 0]: !this.state.selectedRow[
+                rowInfo.viewIndex || 0
+              ]
+            }
+          });
+        }
+      };
+    } else {
       return {
         onClick: (e: React.MouseEvent<HTMLFormElement>) => {
-          if (!this.buttonInAction) {
-            this.props.setSelectedProduct(rowInfo.original);
-            this.props.toggleEditProductModal();
-          }
+          this.props.setSelectedProduct(rowInfo.original);
+          this.props.toggleEditProductModal();
         },
         style: {
           background: this.state.selectedRow[rowInfo.viewIndex]
@@ -437,35 +433,61 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
             : ''
         }
       };
-    } else {
-      return {};
     }
   };
 
   /*
-  * Handle user clicking on an install row
-  * set the selected install to state and open the modal
-  */
-  getExpanderTrProps = (state: FinalState, rowInfo: RowInfo) => {
-    // console.log("ROWINFO", rowInfo, state);
-    if (rowInfo) {
-      return {
-        onClick: (e: React.MouseEvent<HTMLFormElement>) => {
-          if (!this.buttonInAction) {
-            // grab the product by using the productID from installbase
-            const selectedProduct = find(this.props.tableData, {
-              id: rowInfo.original.productID
-            }) as Iproduct;
-            this.props.setSelectedProduct(selectedProduct);
-            this.setState({
-              selectedInstall: rowInfo.original
-            });
-            this.props.toggleEditInstallModal();
+  * Handle user clicking on an install row column
+  * if there is no "id" to key off of for a specific button, then set the selected install to state and open the edit install modal
+  * Note: handleOriginal has been commented out.  if you need to receive the click on the row in getTrProps - then you need to add back handleOriginal()
+  * onClick: (
+          e: React.MouseEvent<HTMLFormElement>,
+          handleOriginal: () => void
+        )
+        if (handleOriginal) {
+            handleOriginal();
           }
+  * 
+  */
+  expanderGetTdProps = (
+    state: FinalState,
+    rowInfo: RowInfoInstallBase,
+    column: Column,
+    instance: any
+  ) => {
+    if (column.id && column.id === 'contact-button') {
+      return {
+        onClick: () => {
+          this.contactAboutInstall(rowInfo.original);
+        }
+      };
+    } else if (column.id && column.id === 'select-result-button') {
+      return {
+        onClick: () => {
+          this.props.selectResult(rowInfo.original.id);
+        }
+      };
+    } else if (column.id && column.id === 'historical-results-button') {
+      return {
+        onClick: () => {
+          // this.props.selectHistoricalResult
+          console.log('selecting historical');
         }
       };
     } else {
-      return {};
+      return {
+        onClick: (e: React.MouseEvent<HTMLFormElement>) => {
+          // grab the product by using the productID from installbase
+          const selectedProduct = find(this.props.tableData, {
+            id: rowInfo.original.productID
+          }) as Iproduct;
+          this.props.setSelectedProduct(selectedProduct);
+          this.setState({
+            selectedInstall: rowInfo.original
+          });
+          this.props.toggleEditInstallModal();
+        }
+      };
     }
   };
 
@@ -604,7 +626,8 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         <ReactTable
           data={this.props.tableData}
           columns={this.state.columns}
-          getTrProps={this.getTrProps}
+          // getTrProps={this.getTrProps}
+          getTdProps={this.getTdProps}
           pageSize={this.props.tableData.length}
           manual // Forces table not to paginate or sort automatically, so we can handle it server-side
           pages={this.props.userManage.totalPages}
@@ -621,7 +644,6 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           SubComponent={(rowInfo: RowInfo) => (
             <InstallationsExpander
               {...rowInfo}
-              contactAboutInstall={this.contactAboutInstall}
               addToCart={this.props.addToCart}
               addInstallation={() => {
                 this.props.setSelectedProduct(rowInfo.original);
@@ -630,11 +652,11 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
                 });
               }}
               t={this.props.t}
-              getExpanderTrProps={this.getExpanderTrProps}
               showAddInstallation={this.canEditInstalls()}
               showRequestQuote={this.canRequestQuote()}
               facility={this.props.facility}
               selectResult={this.props.selectResult}
+              getTdProps={this.expanderGetTdProps}
             />
           )}
           resizable={false}

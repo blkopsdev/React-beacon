@@ -14,7 +14,11 @@ import { TranslationFunction } from 'react-i18next';
 import { addToCart } from '../../actions/shoppingCartActions';
 import { Ifacility, IinstallBase } from 'src/models';
 import { TableUtil } from '../common/TableUtil';
+import { selectResult } from 'src/actions/measurementPointResultsActions';
 
+interface RowInfoInstallBase extends RowInfo {
+  value: IinstallBase;
+}
 interface ExpanderProps extends RowInfo {
   addToCart: typeof addToCart;
   addInstallation: () => void;
@@ -22,11 +26,12 @@ interface ExpanderProps extends RowInfo {
   t: TranslationFunction;
   getExpanderTrProps: (
     state: FinalState,
-    rowInfo: RowInfo
+    rowInfo: RowInfoInstallBase
   ) => object | undefined;
   showAddInstallation: boolean;
   showRequestQuote: boolean;
   facility: Ifacility;
+  selectResult: typeof selectResult;
 }
 
 /*
@@ -93,6 +98,20 @@ export const InstallationsExpander = (props: ExpanderProps) => {
           </span>
         ),
         minWidth: 25
+      },
+      {
+        Header: '',
+        id: 'select-result-button',
+        Cell: <span className="select-result-button">Current Result</span>,
+        minWidth: 60
+      },
+      {
+        Header: '',
+        id: 'historical-results-button',
+        Cell: (
+          <span className="historical-results-button">Historical Results</span>
+        ),
+        minWidth: 60
       }
     ],
     props.t
@@ -100,7 +119,7 @@ export const InstallationsExpander = (props: ExpanderProps) => {
 
   const expanderHandleTdProps = (
     state: FinalState,
-    rowInfo: RowInfo,
+    rowInfo: RowInfoInstallBase,
     column: Column,
     instance: any
   ) => {
@@ -110,11 +129,19 @@ export const InstallationsExpander = (props: ExpanderProps) => {
           e: React.MouseEvent<HTMLFormElement>,
           handleOriginal: () => void
         ) => {
-          console.log(
-            'clicked contact support about install',
-            rowInfo.original.id
-          );
           props.contactAboutInstall(rowInfo.original);
+          if (handleOriginal) {
+            handleOriginal();
+          }
+        }
+      };
+    } else if (column && column.id && column.id === 'select-result-button') {
+      return {
+        onClick: (
+          e: React.MouseEvent<HTMLFormElement>,
+          handleOriginal: () => void
+        ) => {
+          props.selectResult(rowInfo.original.id);
           if (handleOriginal) {
             handleOriginal();
           }

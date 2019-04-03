@@ -28,7 +28,6 @@ import {
 } from '../../models';
 import {
   toggleEditMeasurementPointListModal,
-  toggleEditMeasurementPointModal,
   saveMeasurementPointToMeasurementPointList,
   updateMeasurementPoint
 } from '../../actions/manageMeasurementPointListsActions';
@@ -151,7 +150,7 @@ interface Iprops extends React.Props<EditMeasurementPointForm> {
   t: TranslationFunction;
   i18n: I18n;
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
-  toggleEditMeasurementPointModal: typeof toggleEditMeasurementPointModal;
+  toggleModal: () => void;
   saveMeasurementPointToMeasurementPointList: typeof saveMeasurementPointToMeasurementPointList;
   selectedTab: ImeasurementPointListTab;
   updateMeasurementPoint: typeof updateMeasurementPoint;
@@ -182,7 +181,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
       !this.props.selectedMeasurementPoint.id.length
     ) {
       console.error('missing measurementPoint List or MeasurementPoint');
-      this.props.toggleEditMeasurementPointModal();
+      this.props.toggleModal();
     }
   }
   componentWillUnmount() {
@@ -536,7 +535,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
       this.props.selectedTab.id,
       newQ
     );
-    this.props.toggleEditMeasurementPointModal();
+    this.props.toggleModal();
   };
 
   setForm = (form: AbstractControl) => {
@@ -564,7 +563,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
               bsStyle="default"
               type="button"
               className="pull-left"
-              onClick={this.props.toggleEditMeasurementPointModal}
+              onClick={this.props.toggleModal}
             >
               {t('cancel')}
             </Button>

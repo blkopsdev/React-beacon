@@ -40,7 +40,7 @@ interface IdispatchProps {
   loading: boolean;
   saveAnyLocation: typeof saveAnyLocation;
   updateAnyLocation: typeof updateAnyLocation;
-  toggleEditLocationModal: typeof toggleEditLocationModal;
+  toggleModal: () => void;
   tableFilters: ItableFiltersReducer;
   facility: Ifacility;
   selectedBuilding: Ibuilding;
@@ -70,7 +70,7 @@ class ManageInventoryModal extends React.Component<
       <CommonModal
         modalVisible={this.props.showModal}
         className={className}
-        onHide={this.props.toggleEditLocationModal}
+        onHide={this.props.toggleModal}
         body={<EditLocationForm {...this.props} />}
         title={modalTitle}
         container={document.getElementById('two-pane-layout')}
@@ -110,7 +110,7 @@ export default connect(
   {
     saveAnyLocation,
     updateAnyLocation,
-    toggleEditLocationModal,
+    toggleModal: toggleEditLocationModal,
     updateQueueProduct
   }
 )(ManageInventoryModal);

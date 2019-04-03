@@ -33,7 +33,7 @@ interface IdispatchProps {
   fseOptions: any[];
   updateJob: typeof updateJob;
   createJob: typeof createJob;
-  toggleEditJobModal: typeof toggleEditJobModal;
+  toggleModal: () => void;
   getFacilitiesByCustomer: (value: string) => Promise<void>;
 }
 
@@ -53,7 +53,7 @@ class EditManageJobModal extends React.Component<Iprops & IdispatchProps, {}> {
       <CommonModal
         modalVisible={this.props.showEditJobModal}
         className="job-edit"
-        onHide={this.props.toggleEditJobModal}
+        onHide={this.props.toggleModal}
         body={<EditJobForm {...this.props} />}
         title={modalTitle}
         container={document.getElementById('two-pane-layout')}
@@ -79,7 +79,7 @@ export default connect(
   {
     updateJob,
     createJob,
-    toggleEditJobModal,
+    toggleModal: toggleEditJobModal,
     getFacilitiesByCustomer
   }
 )(EditManageJobModal);

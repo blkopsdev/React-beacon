@@ -65,6 +65,8 @@ import SearchTableForm from '../common/SearchTableForm';
 import { constants } from 'src/constants/constants';
 import SearchNewProductsModal from './SearchNewProductsModal';
 import { getTotal } from 'src/reducers/cartReducer';
+import { selectResult } from 'src/actions/measurementPointResultsActions';
+import { MPResultModal } from './MPResultModal';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -103,6 +105,7 @@ interface IdispatchProps {
   cart: IshoppingCart;
   requestQuote: typeof requestQuote;
   facility: Ifacility;
+  selectResult: typeof selectResult;
 }
 
 interface Istate {
@@ -379,7 +382,27 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     }
     return searchFieldConfig;
   };
+
+  /*
+  * Install Expander Row Click Handlers
+  * Clicks on a button in a row fire before the click event on the row.  To prevent the row click handler we set buttonInAction = true
+  */
   contactAboutInstall = (install: IinstallBase) => {
+    this.buttonInAction = true;
+
+    // grab the product by using the productID from installbase
+    const selectedProduct = find(this.props.tableData, {
+      id: install.productID
+    });
+    this.props.setSelectedProduct(selectedProduct);
+    // TODO test to make sure the contact modal has the selected product defined
+    this.setState({ selectedInstall: install }, () => {
+      this.buttonInAction = false;
+      this.props.toggleInstallContactModal();
+    });
+  };
+
+  handleSelectResult = (install: IinstallBase) => {
     this.buttonInAction = true;
 
     // grab the product by using the productID from installbase
@@ -611,6 +634,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
               showAddInstallation={this.canEditInstalls()}
               showRequestQuote={this.canRequestQuote()}
               facility={this.props.facility}
+              selectResult={this.props.selectResult}
             />
           )}
           resizable={false}
@@ -666,6 +690,13 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           }
           t={this.props.t}
         />
+        <MPResultModal
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+          t={this.props.t}
+          secondModal={false}
+        />
       </div>
     );
   }
@@ -711,7 +742,8 @@ export default translate('manageInventory')(
       toggleInstallContactModal,
       setSelectedProduct,
       toggleImportInstallModal,
-      requestQuote
+      requestQuote,
+      selectResult
     }
   )(ManageInventory)
 );

@@ -191,7 +191,8 @@
     "room": "Room",
     "position": "Position",
     "mergeProduct": "Search for Existing Product",
-    "noProductsFound": "no products found"
+    "noProductsFound": "no products found",
+    "MeasurementPointResultModalTitle": "Result"
   },
   "manageProductQueue": {
     "bannerTitle": "New Product Queue",

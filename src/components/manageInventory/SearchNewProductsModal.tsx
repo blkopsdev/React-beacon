@@ -35,7 +35,7 @@ interface IdispatchProps {
   showModal: boolean;
   loading: boolean;
   toggleEditProductModal: typeof toggleEditProductModal;
-  toggleSearchNewProductsModal: typeof toggleSearchNewProductsModal;
+  toggleModal: () => void;
   productInfo: IproductInfo;
   tableFilters: ItableFiltersReducer;
   getProducts: typeof getProducts;
@@ -61,7 +61,7 @@ class SearchNewProductsModal extends React.Component<
       <CommonModal
         modalVisible={this.props.showModal}
         className={className}
-        onHide={this.props.toggleSearchNewProductsModal}
+        onHide={this.props.toggleModal}
         body={<SearchNewProductsForm {...this.props} />}
         title={this.props.t('searchNewProductModalTitle')}
         container={document.getElementById('two-pane-layout')}
@@ -88,7 +88,7 @@ export default connect(
     saveProduct,
     toggleEditProductModal,
     getProducts,
-    toggleSearchNewProductsModal,
+    toggleModal: toggleSearchNewProductsModal,
     resetNewProducts
   }
 )(SearchNewProductsModal);

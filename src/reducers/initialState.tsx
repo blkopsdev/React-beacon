@@ -260,6 +260,9 @@ export default {
     showInstallContactModal: false,
     showSearchNewProductsModal: false,
     showImportInstall: false,
+    showMPResultModal: false,
+    showMPResultHistoryModal: false,
+    showMPResultNotes: false,
     totalPages: 1,
     data: [],
     cart: {

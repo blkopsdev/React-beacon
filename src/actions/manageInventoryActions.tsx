@@ -448,6 +448,15 @@ export const toggleEditInstallModal = () => ({
 export const toggleInstallContactModal = () => ({
   type: types.TOGGLE_MODAL_INSTALL_CONTACT
 });
+export const toggleMPResultModal = () => ({
+  type: types.TOGGLE_MODAL_MP_RESULT
+});
+export const toggleMPResultHistory = () => ({
+  type: types.TOGGLE_MODAL_MP_RESULT_HISTORY
+});
+export const toggleMPResultNOTES = () => ({
+  type: types.TOGGLE_MODAL_MP_RESULT_NOTES
+});
 export const toggleSearchNewProductsModal = () => ({
   type: types.TOGGLE_MODAL_SEARCH_NEW_PRODUCTS
 });

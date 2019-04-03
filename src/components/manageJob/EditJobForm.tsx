@@ -19,11 +19,7 @@ import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
 import { Ioption, Ijob } from '../../models';
-import {
-  toggleEditJobModal,
-  updateJob,
-  createJob
-} from '../../actions/manageJobActions';
+import { updateJob, createJob } from '../../actions/manageJobActions';
 import { constants } from 'src/constants/constants';
 import * as moment from 'moment';
 import { getFacilitiesByCustomer } from 'src/actions/commonActions';
@@ -48,7 +44,7 @@ interface Iprops extends React.Props<EditJobForm> {
   fseOptions: Ioption[];
   updateJob: typeof updateJob;
   createJob: typeof createJob;
-  toggleEditJobModal: typeof toggleEditJobModal;
+  toggleModal: () => void;
 }
 interface Istate {
   fieldConfig: FieldConfig;
@@ -400,7 +396,7 @@ class EditJobForm extends React.Component<Iprops, Istate> {
             bsStyle="default"
             type="button"
             className="pull-left"
-            onClick={this.props.toggleEditJobModal}
+            onClick={this.props.toggleModal}
           >
             {t('cancel')}
           </Button>

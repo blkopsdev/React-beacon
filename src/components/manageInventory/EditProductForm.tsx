@@ -29,7 +29,6 @@ import {
 } from '../../models';
 import {
   saveProduct,
-  toggleEditProductModal,
   updateProduct,
   toggleSearchNewProductsModal
 } from '../../actions/manageInventoryActions';
@@ -44,7 +43,7 @@ interface AbstractControlEdited extends AbstractControl {
 }
 
 interface Iprops {
-  toggleEditProductModal: typeof toggleEditProductModal;
+  toggleModal: () => void;
   selectedItem: Iproduct;
   selectedQueueObject?: IproductQueueObject;
   loading: boolean;
@@ -488,7 +487,7 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
               bsStyle="default"
               type="button"
               className="pull-left"
-              onClick={this.props.toggleEditProductModal}
+              onClick={this.props.toggleModal}
             >
               {t('common:cancel')}
             </Button>

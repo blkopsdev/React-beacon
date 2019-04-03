@@ -4,8 +4,7 @@ import axios from 'axios';
 import {
   IinitialState,
   ImeasurementPointResult,
-  ImeasurementPoint,
-  ImeasurementPointList
+  ImeasurementPoint
 } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
@@ -81,9 +80,7 @@ export const selectResult = (installID: string): ThunkResult<void> => {
     } else {
       const previousResult = getPreviousResult(
         values(measurementPointResultsByID),
-        installID,
-        selectedMeasurementPointList,
-        measurementPointsByID
+        installID
       );
       if (previousResult.id.length) {
         updateMPresultHelper(previousResult, false, dispatch);
@@ -140,9 +137,7 @@ export const resetSelectedResult = () => ({
 */
 const getPreviousResult = (
   mpResults: ImeasurementPointResult[],
-  installID: string,
-  selectedMPL: ImeasurementPointList,
-  measurementPointsByID: { [key: string]: ImeasurementPoint }
+  installID: string
 ): ImeasurementPointResult => {
   if (mpResults) {
     const installResults = mpResults.filter(result => {

@@ -547,6 +547,9 @@ export interface ImanageInventoryReducer {
   tableFilters: ItableFiltersReducer;
   selectedProduct: Iproduct;
   newProducts: { [key: string]: Iproduct };
+  showMPResultModal: boolean;
+  showMPResultHistoryModal: boolean;
+  showMPResultNotes: boolean;
 }
 
 export interface IproductQueueObject {

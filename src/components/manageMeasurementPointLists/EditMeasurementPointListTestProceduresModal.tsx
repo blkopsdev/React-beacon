@@ -29,7 +29,7 @@ interface Iprops {
 interface IdispatchProps {
   showModal: boolean;
   loading: boolean;
-  toggleEditMeasurementPointListTestProceduresModal: typeof toggleEditMeasurementPointListTestProceduresModal;
+  toggleModal: () => void;
   selectedTab: ImeasurementPointListTab;
   selectedMeasurementPointList: ImeasurementPointList;
   updateGlobalMeasurementPointList: typeof updateGlobalMeasurementPointList;
@@ -48,7 +48,7 @@ class EditMeasurementPointListTestProceduresModalClass extends React.Component<
       <CommonModal
         modalVisible={this.props.showModal}
         className="edit-tab second-modal"
-        onHide={this.props.toggleEditMeasurementPointListTestProceduresModal}
+        onHide={this.props.toggleModal}
         body={<EditMeasurementPointListTestProceduresForm {...this.props} />}
         title={this.props.t('editTestProcedures')}
         container={document.getElementById('two-pane-layout')}
@@ -77,7 +77,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
 export const EditMeasurementPointListTestProceduresModal = connect(
   mapStateToProps,
   {
-    toggleEditMeasurementPointListTestProceduresModal,
+    toggleModal: toggleEditMeasurementPointListTestProceduresModal,
     updateGlobalMeasurementPointList
   }
 )(EditMeasurementPointListTestProceduresModalClass);

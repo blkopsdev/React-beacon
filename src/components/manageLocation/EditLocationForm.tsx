@@ -25,8 +25,7 @@ import {
 } from '../../models';
 import {
   saveAnyLocation,
-  updateAnyLocation,
-  toggleEditLocationModal
+  updateAnyLocation
 } from '../../actions/manageLocationActions';
 import { constants } from 'src/constants/constants';
 
@@ -52,7 +51,7 @@ const buildFieldConfig = () => {
 };
 
 interface Iprops {
-  toggleEditLocationModal: typeof toggleEditLocationModal;
+  toggleModal: () => void;
   selectedItem?: any;
   selectedType: 'Building' | 'Floor' | 'Location' | 'Room';
   loading: boolean;
@@ -114,7 +113,7 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
       // creating a new location
       this.props.saveAnyLocation(name, this.props.facility.id);
     }
-    this.props.toggleEditLocationModal();
+    this.props.toggleModal();
   };
   setForm = (form: AbstractControl) => {
     this.form = form;
@@ -172,7 +171,7 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
               bsStyle="default"
               type="button"
               className="pull-left"
-              onClick={this.props.toggleEditLocationModal}
+              onClick={this.props.toggleModal}
             >
               {t('common:cancel')}
             </Button>

@@ -31,7 +31,6 @@ import {
 } from '../../models';
 import {
   saveInstall,
-  toggleEditInstallModal,
   updateInstall,
   deleteInstall
 } from '../../actions/manageInventoryActions';
@@ -47,7 +46,7 @@ interface AbstractControlEdited extends AbstractControl {
 interface Iprops {
   updateInstall: typeof updateInstall;
   saveInstall: typeof saveInstall;
-  toggleEditInstallModal: typeof toggleEditInstallModal;
+  toggleModal: () => void;
   selectedItem: IinstallBase;
   loading: boolean;
   colorButton: string;
@@ -82,7 +81,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
         'Missing product, please try again or contact support.',
         constants.toastrError
       );
-      this.props.toggleEditInstallModal();
+      this.props.toggleModal();
     }
   }
 
@@ -594,7 +593,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
               bsStyle="default"
               type="button"
               className="pull-left"
-              onClick={this.props.toggleEditInstallModal}
+              onClick={this.props.toggleModal}
             >
               {t('common:cancel')}
             </Button>

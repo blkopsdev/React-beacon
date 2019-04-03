@@ -17,11 +17,10 @@ const measurementPointResultsByIDReducer = (
 ): { [key: string]: ImeasurementPointResult } => {
   switch (action.type) {
     case types.ADD_MEASUREMENT_POINT_RESULT:
-      return { ...state, [action.result.id]: action.result.id };
+      return { ...state, [action.result.id]: action.result };
     case types.UPDATE_MEASUREMENT_POINT_RESULT:
-      return { ...state, [action.result.id]: action.result.id };
-    case types.GET_MEASUREMENT_POINT_JOB_RESULTS_SUCCESS:
-      console.error('got mprs', action.results);
+      return { ...state, [action.result.id]: action.result };
+    case types.GET_MEASUREMENT_POINT_FACILITY_RESULTS_SUCCESS:
       const newResults = keyBy(action.results, 'id');
       return { ...state, ...newResults };
     case types.USER_LOGOUT_SUCCESS:

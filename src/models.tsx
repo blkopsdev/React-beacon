@@ -266,6 +266,7 @@ export interface ImeasurementPointAnswer {
   numericValue?: number;
   textValue?: string;
   notes?: string;
+  measurementPointSelectOptionID?: string;
 }
 export interface ImeasurementPointResult {
   id: string;
@@ -586,6 +587,7 @@ export interface Iredirect {
 
 export interface ImanageMeasurementPointListsReducer {
   data: { [key: string]: ImeasurementPointList };
+  measurementPointsByID: { [key: string]: ImeasurementPoint };
   totalPages: number;
   selectedMeasurementPointList: ImeasurementPointList;
   showEditMeasurementPointListModal: boolean;

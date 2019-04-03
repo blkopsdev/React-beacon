@@ -31,6 +31,7 @@ interface ExpanderProps extends RowInfo {
   handleInstallBaseSelect: (i: IinstallBase) => void;
   contactAboutInstall: (i: IinstallBase) => void;
   toggleMPResultModal: typeof toggleMPResultModal;
+  selectInstallBase: (i: IinstallBase) => void;
 }
 
 /*
@@ -70,6 +71,7 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
         onClick: () => {
           props.selectResult(rowInfo.original.id);
           props.toggleMPResultModal();
+          props.selectInstallBase(rowInfo.original); // TODO move this to redux
         }
       };
     } else if (column.id && column.id === 'historical-results-button') {

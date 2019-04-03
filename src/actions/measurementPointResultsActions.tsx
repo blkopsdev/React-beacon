@@ -16,33 +16,37 @@ import { values } from 'lodash';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
-export function getJobMeasurementPointResults(
-  jobID: string
+export function getFacilityMeasurementPointResults(
+  facilityID: string
 ): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
-    return getJobMeasurementPointResultsHelper(dispatch, getState, jobID);
+    return getFacilityMeasurementPointResultsHelper(
+      dispatch,
+      getState,
+      facilityID
+    );
   };
 }
 
-export const getJobMeasurementPointResultsHelper = (
+export const getFacilityMeasurementPointResultsHelper = (
   dispatch: any,
   getState: any,
-  jobID: string
+  facilityID: string
 ) => {
   return axios
-    .get(`${API.GET.measurementPoint.getJobResults}/${jobID}`, {
-      params: {
-        pagingType: 'none'
-      }
-    })
+    .get(
+      `${
+        API.GET.measurementPoint.getFacilityMeasurementPointListResults
+      }/${facilityID}`
+    )
     .then(data => {
       if (!data.data) {
         throw undefined;
       } else {
         // console.log(data.data);
         dispatch({
-          type: types.GET_MEASUREMENT_POINT_JOB_RESULTS_SUCCESS,
+          type: types.GET_MEASUREMENT_POINT_FACILITY_RESULTS_SUCCESS,
           results: data.data
         });
         return data;
@@ -50,7 +54,7 @@ export const getJobMeasurementPointResultsHelper = (
     })
     .catch((error: any) => {
       console.error('error getting measurement point results', error);
-      dispatch({ type: types.GET_MEASUREMENT_POINT_JOB_RESULTS_FAILED });
+      dispatch({ type: types.GET_MEASUREMENT_POINT_FACILITY_RESULTS_FAILED });
       constants.handleError(error, 'get inspection results');
     });
 };
@@ -86,6 +90,7 @@ export const selectResult = (installID: string): ThunkResult<void> => {
         updateMPresultHelper(previousResult, false, dispatch);
       } else {
         console.log('No results for this install base.');
+        updateMPresultHelper(initialMeasurmentPointResult, false, dispatch);
       }
     }
   };

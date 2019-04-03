@@ -129,7 +129,9 @@ const API = {
     },
     measurementPoint: {
       getall: `${root}/measurementpoint/GetAllMeasurementPointLists`,
-      getJobResults: `${root}/MeasurementPoint/GetJobMeasurementPointListResults`
+      getJobResults: `${root}/MeasurementPoint/GetJobMeasurementPointListResults`,
+      getFacilityMeasurementPointListResults: `${root}/MeasurementPoint/GetFacilityMeasurementPointListResults`,
+      getMeasurementPointList: `${root}/measurementpoint/getmeasurementpointlist`
     }
   }
 };

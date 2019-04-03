@@ -324,6 +324,7 @@ export default {
   manageMeasurementPointLists: {
     totalPages: 1,
     data: {},
+    measurementPointsByID: {},
     selectedMeasurementPointList: initialMeasurementPointList,
     showEditMeasurementPointListModal: false,
     showEditMeasurementPointModal: false,

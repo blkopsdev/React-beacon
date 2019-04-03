@@ -39,7 +39,7 @@ import {
   toggleShoppingCartModal
 } from '../../actions/shoppingCartActions';
 import { closeAllModals } from '../../actions/commonActions';
-import { emptyTile } from '../../reducers/initialState';
+import { emptyTile, initialInstallBase } from '../../reducers/initialState';
 import {
   getInventory,
   getProductInfo,
@@ -67,6 +67,7 @@ import SearchNewProductsModal from './SearchNewProductsModal';
 import { getTotal } from 'src/reducers/cartReducer';
 import { MPResultModal } from './MPResultModal';
 import { InstallBasesExpanderContainer } from './InstallBasesExpanderContainer';
+import { getFacilityMeasurementPointResults } from 'src/actions/measurementPointResultsActions';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -105,13 +106,14 @@ interface IdispatchProps {
   cart: IshoppingCart;
   requestQuote: typeof requestQuote;
   facility: Ifacility;
+  getFacilityMeasurementPointResults: typeof getFacilityMeasurementPointResults;
 }
 
 interface Istate {
   selectedRow: any;
   currentTile: Itile;
   columns: any[];
-  selectedInstall: any;
+  selectedInstall: IinstallBase;
   searchFieldConfig: FieldConfig;
 }
 
@@ -124,7 +126,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       selectedRow: {},
       currentTile: emptyTile,
       columns: [],
-      selectedInstall: {},
+      selectedInstall: initialInstallBase,
       searchFieldConfig: this.buildSearchControls()
     };
   }
@@ -146,8 +148,12 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         : this.props.facilityOptions[0];
       this.props.setTableFilter({ facility });
       this.props.getLocationsFacility(facility.value);
+      this.props.getFacilityMeasurementPointResults(facility.value);
     } else {
       this.props.getLocationsFacility(this.props.tableFilters.facility.value);
+      this.props.getFacilityMeasurementPointResults(
+        this.props.tableFilters.facility.value
+      );
     }
   }
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
@@ -163,7 +169,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       !this.props.showEditInstallModal
     ) {
       this.props.setSelectedProduct();
-      this.setState({ selectedInstall: {} });
+      this.setState({ selectedInstall: initialInstallBase });
     }
 
     // we only need to check the mainCategory options because both brands and mainCategory options are received in the same API response
@@ -491,25 +497,31 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     this.props.toggleEditInstallModal();
     this.props.setSelectedProduct(newProduct);
   };
+  selectInstallBase = (installBase: IinstallBase) => {
+    this.setState({
+      selectedInstall: installBase
+    });
+  };
   handleInstallBaseSelect = (installBase: IinstallBase) => {
     // grab the product by using the productID from installbase
     const selectedProduct = find(this.props.tableData, {
       id: installBase.productID
     }) as Iproduct;
     this.props.setSelectedProduct(selectedProduct);
-    this.setState({
-      selectedInstall: installBase
-    });
+    this.selectInstallBase(installBase);
     this.props.toggleEditInstallModal();
   };
   handleAddInstallBase = (product: any) => {
     this.props.setSelectedProduct(product);
-    this.setState({ selectedInstall: {} }, () => {
+    this.setState({ selectedInstall: initialInstallBase }, () => {
       this.props.toggleEditInstallModal();
     });
   };
   render() {
-    console.log('rendering inventory table');
+    console.log(
+      'rendering inventory table',
+      TableUtil.buildLocation(this.state.selectedInstall, this.props.facility)
+    );
     if (this.props.productInfo.mainCategoryOptions.length === 0) {
       return (
         <Col xs={12}>
@@ -597,6 +609,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
               showRequestQuote={this.canRequestQuote()}
               handleInstallBaseSelect={this.handleInstallBaseSelect}
               contactAboutInstall={this.contactAboutInstall}
+              selectInstallBase={this.selectInstallBase}
             />
           )}
           resizable={false}
@@ -658,6 +671,10 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           }
           t={this.props.t}
           secondModal={false}
+          locationString={TableUtil.buildLocation(
+            this.state.selectedInstall,
+            this.props.facility
+          )}
         />
       </div>
     );
@@ -704,7 +721,8 @@ export default translate('manageInventory')(
       toggleInstallContactModal,
       setSelectedProduct,
       toggleImportInstallModal,
-      requestQuote
+      requestQuote,
+      getFacilityMeasurementPointResults
     }
   )(ManageInventory)
 );

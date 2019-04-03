@@ -1,4 +1,4 @@
-import { keyBy, map } from 'lodash';
+import { keyBy, map, forEach } from 'lodash';
 
 import {
   ImanageMeasurementPointListsReducer,
@@ -27,15 +27,8 @@ function manageMeasurementPointListData(
       // return initialState.measurementPointLists.data;
       const measurementPointLists = action.measurementPointLists.map(
         (measurementPointList: ImeasurementPointList) => {
-          const measurementPointTabs = map(
-            measurementPointList.measurementPointTabs,
-            (tab: ImeasurementPointListTab) => {
-              const measurementPointsKeyed = keyBy(
-                tab.measurementPoints,
-                (item: ImeasurementPoint) => item.id
-              );
-              return { ...tab, measurementPoints: measurementPointsKeyed };
-            }
+          const measurementPointTabs = keyMeasurementPoints(
+            measurementPointList.measurementPointTabs
           );
 
           return { ...measurementPointList, measurementPointTabs };
@@ -44,10 +37,7 @@ function manageMeasurementPointListData(
       // const filteredList = measurementPointLists.filter(
       //   (list: ImeasurementPointList) => list.measurementPointTabs.length > 1
       // ); // TODO temporary workaround for duplicate lists
-      return keyBy(
-        measurementPointLists,
-        (mplK: ImeasurementPointList) => mplK.id
-      );
+      return keyBy(measurementPointLists, 'id');
     case types.MANAGE_MEASUREMENT_POINT_LIST_ADD:
       return {
         ...state,
@@ -82,12 +72,59 @@ function manageMeasurementPointListData(
     //       measurementPointTabs: newTabs
     //     }
     //   };
+    case types.MEASUREMENT_POINT_LIST_SUCCESS:
+      const tabs: ImeasurementPointListTab[] = action.list.measurementPointTabs;
+      return {
+        ...state,
+        [action.list.id]: {
+          ...action.list,
+          measurementPointTabs: keyMeasurementPoints(tabs)
+        }
+      };
     case types.USER_LOGOUT_SUCCESS:
       return {};
     default:
       return state;
   }
 }
+
+const measurementPointsByIDReducer = (
+  state: { [key: string]: ImeasurementPoint } = {},
+  action: any
+): { [key: string]: ImeasurementPoint } => {
+  switch (action.type) {
+    case types.MANAGE_MEASUREMENT_POINT_LISTS_SUCCESS:
+      // const measurmentPointLists = initialState.measurementPointLists.data;
+      const measurmentPointLists = action.allLists;
+      let measurementPoints = {};
+      forEach(measurmentPointLists, (list: ImeasurementPointList) => {
+        forEach(list.measurementPointTabs, (tab: ImeasurementPointListTab) => {
+          measurementPoints = {
+            ...measurementPoints,
+            ...keyBy(tab.measurementPoints, (mp: ImeasurementPoint) => mp.id)
+          };
+        });
+      });
+      return measurementPoints;
+    case types.MEASUREMENT_POINT_LIST_SUCCESS:
+      let measurementPointsB = {};
+      forEach(
+        action.list.measurementPointTabs,
+        (tab: ImeasurementPointListTab) => {
+          measurementPointsB = {
+            ...measurementPointsB,
+            ...keyBy(tab.measurementPoints, (mp: ImeasurementPoint) => mp.id)
+          };
+        }
+      );
+      // not using: {...state, ...measurmentPointsB} because we can simiply replace state for now because we always get new from ther server
+      return measurementPointsB;
+    case types.USER_LOGOUT_SUCCESS:
+      return {};
+    default:
+      return state;
+  }
+};
 
 function manageSelectedMeasurementPointList(
   state: ImeasurementPointList = initialMeasurementPointList,
@@ -200,6 +237,10 @@ export default function manageMeasurementPointLists(
 ) {
   return {
     data: manageMeasurementPointListData(state.data, action),
+    measurementPointsByID: measurementPointsByIDReducer(
+      state.measurementPointsByID,
+      action
+    ),
     totalPages: manageMeasurementPointListTotalPages(state.totalPages, action),
     selectedTabID: selectedTabIDReducer(state.selectedTabID, action),
     selectedMeasurementPointList: manageSelectedMeasurementPointList(
@@ -237,3 +278,15 @@ export default function manageMeasurementPointLists(
     )
   };
 }
+
+const keyMeasurementPoints = (
+  measurementPointTabs: ImeasurementPointListTab[]
+) => {
+  return map(measurementPointTabs, (tab: ImeasurementPointListTab) => {
+    const measurementPointsKeyed = keyBy(
+      tab.measurementPoints,
+      (item: ImeasurementPoint) => item.id
+    );
+    return { ...tab, measurementPoints: measurementPointsKeyed };
+  });
+};

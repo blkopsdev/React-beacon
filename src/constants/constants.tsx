@@ -36,7 +36,14 @@ const measurementPointListTypeOptions = [
   { label: 'Annual', value: measurementPointListTypeEnum.Annual },
   { label: 'Verification', value: measurementPointListTypeEnum.Verification }
 ];
-
+const measurementPointResultStatusTypes = {
+  0: 'resultStatusNotTested',
+  1: 'resultStatusIncomplete',
+  2: 'resultStatusFail',
+  3: 'resultStatusPass',
+  4: 'resultStatusCannotComplete',
+  5: 'resultStatusRepair'
+};
 /*
 New - No results have been saved for the job
 Started - Results are in the job
@@ -216,7 +223,8 @@ const colors = {
   purpleButton: 'info', // use the bootstrap info button color
   purpleTr: 'rgba(98,73,157,.2)',
   purpleBanner: 'rgba(98,73,157,.7)',
-  dark: '#060A33'
+  dark: '#060A33',
+  red: '#d00000'
 };
 const tiles = [
   {
@@ -486,6 +494,7 @@ export const constants = {
   measurementPointTypes,
   measurementPointTypesInverse,
   measurementPointPassFailOptions,
+  measurementPointResultStatusTypes,
   defaultProductStandardID: '740e2f29-6bfa-4316-98c1-f2b32637bf6e',
   hasSecurityFunction: (user: Iuser, securityFunction: string): boolean => {
     if (user.securityFunctions.indexOf(securityFunction) >= 0) {

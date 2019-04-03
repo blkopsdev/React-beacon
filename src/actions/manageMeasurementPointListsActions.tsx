@@ -271,6 +271,32 @@ export const saveMeasurementPointToMeasurementPointList = (
   measurementPoint
 });
 
+/*
+* Get a specific measurement point list
+*/
+export function getMeasurementPointList(MPlistID: string): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    return axios
+      .get(`${API.GET.measurementPoint.getMeasurementPointList}/${MPlistID}`)
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.MEASUREMENT_POINT_LIST_SUCCESS,
+            list: data.data
+          });
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.MEASUREMENT_POINT_LIST_FAILED });
+        constants.handleError(error, 'get a measurement point list');
+        console.error(error);
+      });
+  };
+}
+
 export const toggleEditMeasurementPointListModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT_LISTS
 });

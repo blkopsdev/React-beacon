@@ -12,7 +12,7 @@ import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TranslationFunction } from 'react-i18next';
 import { addToCart } from '../../actions/shoppingCartActions';
-import { Ifacility, IinstallBase } from 'src/models';
+import { Ifacility, IinstallBase, IinstallBaseWithStatus } from 'src/models';
 import { TableUtil } from '../common/TableUtil';
 import { selectResult } from 'src/actions/measurementPointResultsActions';
 import {
@@ -146,6 +146,16 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
         minWidth: 200
       },
       {
+        Header: 'status',
+        id: 'status',
+        accessor: ({ status }: IinstallBaseWithStatus) => (
+          <span className={`status ${status}`}>{`${props.t(
+            'manageMeasurementPointLists:' + status
+          )}`}</span>
+        ),
+        minWidth: 150
+      },
+      {
         Header: '',
         id: 'contact-button',
         Cell: (
@@ -174,7 +184,14 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
       {
         Header: '',
         id: 'historical-results-button',
-        Cell: <span className="historical-results-button">History</span>,
+        Cell: (
+          <span
+            className="historical-results-button"
+            style={{ color: constants.colors.green }}
+          >
+            History
+          </span>
+        ),
         minWidth: 60
       }
     ],

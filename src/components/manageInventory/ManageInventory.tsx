@@ -41,7 +41,7 @@ import {
 import { closeAllModals } from '../../actions/commonActions';
 import { emptyTile, initialInstallBase } from '../../reducers/initialState';
 import {
-  getInventory,
+  initInventory,
   getProductInfo,
   setTableFilter,
   toggleInstallContactModal,
@@ -67,7 +67,6 @@ import SearchNewProductsModal from './SearchNewProductsModal';
 import { getTotal } from 'src/reducers/cartReducer';
 import { MPResultModal } from './MPResultModal';
 import { InstallBasesExpanderContainer } from './InstallBasesExpanderContainer';
-import { getFacilityMeasurementPointResults } from 'src/actions/measurementPointResultsActions';
 import { MPResultListHistoryModal } from './MPResultListHistoryModal';
 
 interface Iprops extends RouteComponentProps<any> {
@@ -90,7 +89,7 @@ interface IdispatchProps {
   getProductInfo: typeof getProductInfo;
   getLocationsFacility: typeof getLocationsFacility;
   toggleSecurityFunctionsModal: () => void;
-  getInventory: typeof getInventory;
+  initInventory: typeof initInventory;
   customers: Icustomer[];
   closeAllModals: typeof closeAllModals;
   productInfo: IproductInfo;
@@ -107,7 +106,6 @@ interface IdispatchProps {
   cart: IshoppingCart;
   requestQuote: typeof requestQuote;
   facility: Ifacility;
-  getFacilityMeasurementPointResults: typeof getFacilityMeasurementPointResults;
 }
 
 interface Istate {
@@ -141,7 +139,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
   }
   componentDidMount() {
     this.props.getProductInfo();
-    this.props.getInventory();
+
     // make sure there is a facility set to the table search filters so that it can be used in the EditProductForm
     if (!this.props.tableFilters.facility) {
       const facility = this.props.tableFilters.facility
@@ -149,12 +147,10 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         : this.props.facilityOptions[0];
       this.props.setTableFilter({ facility });
       this.props.getLocationsFacility(facility.value);
-      this.props.getFacilityMeasurementPointResults(facility.value);
+      this.props.initInventory(facility.value);
     } else {
       this.props.getLocationsFacility(this.props.tableFilters.facility.value);
-      this.props.getFacilityMeasurementPointResults(
-        this.props.tableFilters.facility.value
-      );
+      this.props.initInventory(this.props.tableFilters.facility.value);
     }
   }
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
@@ -199,9 +195,16 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       JSON.stringify(prevProps.tableFilters) !==
       JSON.stringify(this.props.tableFilters)
     ) {
-      this.props.getInventory();
-      if (this.props.tableFilters.facility) {
-        this.props.getLocationsFacility(this.props.tableFilters.facility.value);
+      const { facility } = this.props.tableFilters;
+      if (facility) {
+        this.props.getLocationsFacility(facility.value);
+        this.props.initInventory(facility.value);
+        if (
+          prevProps.tableFilters.facility &&
+          facility.value !== prevProps.tableFilters.facility.value
+        ) {
+          this.setState({ selectedRow: {} });
+        }
       }
       this.setState({ searchFieldConfig: this.buildSearchControls() });
     }
@@ -541,7 +544,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         />
         <SearchTableForm
           fieldConfig={this.state.searchFieldConfig}
-          handleSubmit={this.props.getInventory}
+          handleSubmit={this.props.initInventory}
           loading={this.props.loading}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
@@ -721,7 +724,7 @@ export default translate('manageInventory')(
   connect(
     mapStateToProps,
     {
-      getInventory,
+      initInventory,
       toggleEditProductModal,
       toggleEditInstallModal,
       toggleShoppingCartModal,
@@ -734,8 +737,7 @@ export default translate('manageInventory')(
       toggleInstallContactModal,
       setSelectedProduct,
       toggleImportInstallModal,
-      requestQuote,
-      getFacilityMeasurementPointResults
+      requestQuote
     }
   )(ManageInventory)
 );

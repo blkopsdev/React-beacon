@@ -9,7 +9,10 @@ import { InstallBasesExpander } from './InstallBasesExpander';
 import { RowInfo } from 'react-table';
 import { addToCart } from 'src/actions/shoppingCartActions';
 import { selectResult } from 'src/actions/measurementPointResultsActions';
-import { toggleMPResultModal } from 'src/actions/manageInventoryActions';
+import {
+  toggleMPResultModal,
+  toggleMPResultHistory
+} from 'src/actions/manageInventoryActions';
 
 interface Iprops extends RowInfo {
   t: TranslationFunction;
@@ -32,6 +35,7 @@ export const InstallBasesExpanderContainer = connect(
   {
     addToCart,
     selectResult,
-    toggleMPResultModal
+    toggleMPResultModal,
+    toggleMPResultHistory
   }
 )(InstallBasesExpander);

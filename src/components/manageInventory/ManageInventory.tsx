@@ -68,6 +68,7 @@ import { getTotal } from 'src/reducers/cartReducer';
 import { MPResultModal } from './MPResultModal';
 import { InstallBasesExpanderContainer } from './InstallBasesExpanderContainer';
 import { getFacilityMeasurementPointResults } from 'src/actions/measurementPointResultsActions';
+import { MPResultListHistoryModal } from './MPResultListHistoryModal';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -675,6 +676,18 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
             this.state.selectedInstall,
             this.props.facility
           )}
+        />
+        <MPResultListHistoryModal
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+          t={this.props.t}
+          secondModal={false}
+          locationString={TableUtil.buildLocation(
+            this.state.selectedInstall,
+            this.props.facility
+          )}
+          selectedInstallBaseID={this.state.selectedInstall.id}
         />
       </div>
     );

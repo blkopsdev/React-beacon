@@ -6,7 +6,7 @@ import { TranslationFunction } from 'react-i18next';
 import * as React from 'react';
 
 import CommonModal from '../common/CommonModal';
-import { toggleMPResultModal } from 'src/actions/manageInventoryActions';
+import { toggleMPResultHistory } from 'src/actions/manageInventoryActions';
 import { connect } from 'react-redux';
 import { IinitialState, ImeasurementPointResult } from 'src/models';
 import { MPResultHistory } from './MPResultHistory';
@@ -18,12 +18,14 @@ interface Iprops {
   colorButton: any;
   secondModal: boolean;
   t: TranslationFunction;
+  locationString: string;
+  selectedInstallBaseID: string;
 }
 interface IdispatchProps {
   toggleModal: () => void;
   showModal: boolean;
   selectedItem: ImeasurementPointResult;
-  MPlistResults: ImeasurementPointResult[];
+  MPListResults: ImeasurementPointResult[];
   updateMeasurementPointResult: typeof updateMeasurementPointResult;
 }
 
@@ -38,9 +40,12 @@ const MPResultListHistoryModalClass = (props: Iprops & IdispatchProps) => {
       className={className}
       onHide={props.toggleModal}
       body={
-        <MPResultHistory {...props} installBaseID={props.selectedItem.id} />
+        <MPResultHistory
+          {...props}
+          installBaseID={props.selectedInstallBaseID}
+        />
       }
-      title={props.t('MeasurementPointResultModalTitle')}
+      title={props.t('MPresultHistoryModalTitle')}
       container={document.getElementById('two-pane-layout')}
     />
   );
@@ -59,18 +64,19 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   //     res => moment.utc(res.updateDate).unix(),
   //     'desc'
   //   );
+  const MPListResults = values(
+    state.measurementPointResults.measurementPointResultsByID
+  );
   return {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
     showModal: state.manageInventory.showMPResultHistoryModal,
     selectedItem: state.measurementPointResults.selectedResult,
-    MPListResults: values(
-      state.measurementPointResults.measurementPointResultsByID
-    )
+    MPListResults
   };
 };
 
 export const MPResultListHistoryModal = connect(
   mapStateToProps,
-  { toggleModal: toggleMPResultModal }
+  { toggleModal: toggleMPResultHistory, updateMeasurementPointResult }
 )(MPResultListHistoryModalClass);

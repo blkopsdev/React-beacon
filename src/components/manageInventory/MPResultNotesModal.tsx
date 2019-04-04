@@ -22,7 +22,7 @@ interface IdispatchProps {
   selectedItem: ImeasurementPointResult;
 }
 
-const MPResultListHistoryModalClass = (props: Iprops & IdispatchProps) => {
+const MPResultListNotesModalClass = (props: Iprops & IdispatchProps) => {
   const className = props.secondModal
     ? 'install-edit second-modal'
     : 'install-edit';
@@ -48,7 +48,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   };
 };
 
-export const MPResultListHistoryModal = connect(
+export const MPResultListNotesModal = connect(
   mapStateToProps,
   { toggleModal: toggleMPResultModal }
-)(MPResultListHistoryModalClass);
+)(MPResultListNotesModalClass);

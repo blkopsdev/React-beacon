@@ -15,7 +15,11 @@ import { addToCart } from '../../actions/shoppingCartActions';
 import { Ifacility, IinstallBase } from 'src/models';
 import { TableUtil } from '../common/TableUtil';
 import { selectResult } from 'src/actions/measurementPointResultsActions';
-import { toggleMPResultModal } from 'src/actions/manageInventoryActions';
+import {
+  toggleMPResultModal,
+  toggleMPResultHistory
+} from 'src/actions/manageInventoryActions';
+import { constants } from 'src/constants/constants';
 
 interface RowInfoInstallBase extends RowInfo {
   original: IinstallBase;
@@ -32,6 +36,7 @@ interface ExpanderProps extends RowInfo {
   contactAboutInstall: (i: IinstallBase) => void;
   toggleMPResultModal: typeof toggleMPResultModal;
   selectInstallBase: (i: IinstallBase) => void;
+  toggleMPResultHistory: typeof toggleMPResultHistory;
 }
 
 /*
@@ -79,6 +84,8 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
         onClick: () => {
           // this.props.selectHistoricalResult
           console.log('selecting historical');
+          props.selectInstallBase(rowInfo.original);
+          props.toggleMPResultHistory();
         }
       };
     } else {
@@ -143,7 +150,7 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
         id: 'contact-button',
         Cell: (
           <span className="contact-button">
-            <FontAwesomeIcon icon="wrench" />
+            <FontAwesomeIcon icon={['far', 'wrench']} />
           </span>
         ),
         minWidth: 25
@@ -151,15 +158,23 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
       {
         Header: '',
         id: 'select-result-button',
-        Cell: <span className="select-result-button">Current Result</span>,
-        minWidth: 60
+        Cell: ({ original }: { original: IinstallBase }) => {
+          console.log('cellprops', original); // TODO add status to the installbase
+          return (
+            <span
+              className="select-result-button"
+              style={{ color: constants.colors.green }}
+            >
+              <FontAwesomeIcon icon={['far', 'clipboard-list']} />
+            </span>
+          );
+        },
+        minWidth: 25
       },
       {
         Header: '',
         id: 'historical-results-button',
-        Cell: (
-          <span className="historical-results-button">Historical Results</span>
-        ),
+        Cell: <span className="historical-results-button">History</span>,
         minWidth: 60
       }
     ],

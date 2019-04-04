@@ -192,7 +192,8 @@
     "position": "Position",
     "mergeProduct": "Search for Existing Product",
     "noProductsFound": "no products found",
-    "MeasurementPointResultModalTitle": "Measurements"
+    "MeasurementPointResultModalTitle": "Measurements",
+    "MPresultHistoryModalTitle": "History"
   },
   "manageProductQueue": {
     "bannerTitle": "New Product Queue",
@@ -291,7 +292,13 @@
     "editTab": "Edit Tab",
     "measurementPointTabLabel": "Tab Name",
     "editTestProcedures": "Edit Procedures",
-    "deleteMPLButton": "Delete"
+    "deleteMPLButton": "Delete",
+    "resultStatusIncomplete": "Incomplete",
+    "resultStatusNotTested": "Not Tested",
+    "resultStatusPass": "Pass",
+    "resultStatusFail": "Fail",
+    "resultStatusCannotComplete": "Cannot Complete",
+    "resultStatusRepair": "Repair"
   },
   "tiles": {
     "alerts": "Alerts",

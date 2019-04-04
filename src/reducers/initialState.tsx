@@ -124,7 +124,8 @@ export const initialMeasurmentPointResult = {
   notes: '',
   installBaseID: '',
   measurementPointListID: '',
-  measurementPointAnswers: []
+  measurementPointAnswers: [],
+  compiledNotes: ''
 };
 
 const initialCustomer = {

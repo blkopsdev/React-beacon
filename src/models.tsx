@@ -282,6 +282,7 @@ export interface ImeasurementPointResult {
   measurementPointAnswers: ImeasurementPointAnswer[];
   installBaseID: string;
   measurementPointListID: string;
+  compiledNotes: string;
 }
 export interface ImeasurmentPointResultsReducer {
   measurementPointResultsByID: { [key: string]: ImeasurementPointResult };

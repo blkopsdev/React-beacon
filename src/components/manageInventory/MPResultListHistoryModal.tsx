@@ -6,7 +6,10 @@ import { TranslationFunction } from 'react-i18next';
 import * as React from 'react';
 
 import CommonModal from '../common/CommonModal';
-import { toggleMPResultHistory } from 'src/actions/manageInventoryActions';
+import {
+  toggleMPResultHistory,
+  toggleMPResultNotes
+} from 'src/actions/manageInventoryActions';
 import { connect } from 'react-redux';
 import { IinitialState, ImeasurementPointResult } from 'src/models';
 import { MPResultHistory } from './MPResultHistory';
@@ -27,6 +30,7 @@ interface IdispatchProps {
   selectedItem: ImeasurementPointResult;
   MPListResults: ImeasurementPointResult[];
   updateMeasurementPointResult: typeof updateMeasurementPointResult;
+  toggleMPResultNotes: () => void;
 }
 
 const MPResultListHistoryModalClass = (props: Iprops & IdispatchProps) => {
@@ -78,5 +82,9 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
 
 export const MPResultListHistoryModal = connect(
   mapStateToProps,
-  { toggleModal: toggleMPResultHistory, updateMeasurementPointResult }
+  {
+    toggleModal: toggleMPResultHistory,
+    updateMeasurementPointResult,
+    toggleMPResultNotes
+  }
 )(MPResultListHistoryModalClass);

@@ -6,7 +6,10 @@ import { TranslationFunction } from 'react-i18next';
 import * as React from 'react';
 
 import CommonModal from '../common/CommonModal';
-import { toggleMPResultModal } from 'src/actions/manageInventoryActions';
+import {
+  toggleMPResultModal,
+  toggleMPResultNotes
+} from 'src/actions/manageInventoryActions';
 import { connect } from 'react-redux';
 import { IinitialState, ImeasurementPointResult } from 'src/models';
 import { RichTextView } from '../common/RichTextView';
@@ -32,8 +35,13 @@ const MPResultListNotesModalClass = (props: Iprops & IdispatchProps) => {
       modalVisible={props.showModal}
       className={className}
       onHide={props.toggleModal}
-      body={<RichTextView {...props} HTMLcontent={props.selectedItem.notes} />}
-      title={props.t('MeasurementPointResultModalTitle')}
+      body={
+        <RichTextView
+          {...props}
+          HTMLcontent={props.selectedItem.compiledNotes}
+        />
+      }
+      title={props.t('MPResultNotesModalTitle')}
       container={document.getElementById('two-pane-layout')}
     />
   );
@@ -50,5 +58,5 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
 
 export const MPResultListNotesModal = connect(
   mapStateToProps,
-  { toggleModal: toggleMPResultModal }
+  { toggleModal: toggleMPResultNotes }
 )(MPResultListNotesModalClass);

@@ -19,6 +19,7 @@ interface Iprops {
   locationString: string;
   colorButton: any;
   toggleModal: () => void;
+  toggleMPResultNotes: () => void;
 }
 export const MPResultHistory = (props: Iprops) => {
   const { t } = props;
@@ -46,7 +47,10 @@ export const MPResultHistory = (props: Iprops) => {
             return (
               <ListGroupItem
                 key={result.id}
-                onClick={() => props.updateMeasurementPointResult(result, true)}
+                onClick={() => {
+                  props.updateMeasurementPointResult(result, true);
+                  props.toggleMPResultNotes();
+                }}
               >
                 <Row>
                   <Col md={4}>

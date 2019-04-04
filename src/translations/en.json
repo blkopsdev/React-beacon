@@ -193,7 +193,8 @@
     "mergeProduct": "Search for Existing Product",
     "noProductsFound": "no products found",
     "MeasurementPointResultModalTitle": "Measurements",
-    "MPresultHistoryModalTitle": "History"
+    "MPresultHistoryModalTitle": "History",
+    "MPResultNotesModalTitle": "Notes"
   },
   "manageProductQueue": {
     "bannerTitle": "New Product Queue",

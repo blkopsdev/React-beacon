@@ -224,7 +224,8 @@ const colors = {
   purpleTr: 'rgba(98,73,157,.2)',
   purpleBanner: 'rgba(98,73,157,.7)',
   dark: '#060A33',
-  red: '#d00000'
+  red: '#d00000',
+  greyText: `#AAAAAA`
 };
 const tiles = [
   {

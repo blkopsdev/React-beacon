@@ -22,7 +22,7 @@ import {
 import { constants } from 'src/constants/constants';
 
 interface RowInfoInstallBase extends RowInfo {
-  original: IinstallBase;
+  original: IinstallBaseWithStatus;
 }
 interface ExpanderProps extends RowInfo {
   addToCart: typeof addToCart;
@@ -65,6 +65,9 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
     column: Column,
     instance: any
   ) => {
+    const notTested =
+      rowInfo.original.status ===
+      constants.measurementPointResultStatusTypes[0];
     if (column.id && column.id === 'contact-button') {
       return {
         onClick: () => {
@@ -72,6 +75,9 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
         }
       };
     } else if (column.id && column.id === 'select-result-button') {
+      if (notTested) {
+        return {};
+      }
       return {
         onClick: () => {
           props.selectResult(rowInfo.original.id);
@@ -80,6 +86,9 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
         }
       };
     } else if (column.id && column.id === 'historical-results-button') {
+      if (notTested) {
+        return {};
+      }
       return {
         onClick: () => {
           // this.props.selectHistoricalResult
@@ -88,6 +97,8 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
           props.toggleMPResultHistory();
         }
       };
+    } else if (column.id && column.id === 'select-result-button-disabled') {
+      return {};
     } else {
       return {
         onClick: () => {
@@ -168,13 +179,14 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
       {
         Header: '',
         id: 'select-result-button',
-        Cell: ({ original }: { original: IinstallBase }) => {
-          console.log('cellprops', original); // TODO add status to the installbase
+        Cell: ({ original }: { original: IinstallBaseWithStatus }) => {
+          const notTested =
+            original.status === constants.measurementPointResultStatusTypes[0];
+          const color = notTested
+            ? constants.colors.greyText
+            : constants.colors.green;
           return (
-            <span
-              className="select-result-button"
-              style={{ color: constants.colors.green }}
-            >
+            <span className="select-result-button" style={{ color }}>
               <FontAwesomeIcon icon={['far', 'clipboard-list']} />
             </span>
           );
@@ -184,14 +196,18 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
       {
         Header: '',
         id: 'historical-results-button',
-        Cell: (
-          <span
-            className="historical-results-button"
-            style={{ color: constants.colors.green }}
-          >
-            History
-          </span>
-        ),
+        Cell: ({ original }: { original: IinstallBaseWithStatus }) => {
+          const notTested =
+            original.status === constants.measurementPointResultStatusTypes[0];
+          const color = notTested
+            ? constants.colors.greyText
+            : constants.colors.green;
+          return (
+            <span className="historical-results-button" style={{ color }}>
+              History
+            </span>
+          );
+        },
         minWidth: 60
       }
     ],

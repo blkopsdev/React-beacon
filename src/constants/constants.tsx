@@ -4,20 +4,46 @@ import { emptyTile } from '../reducers/initialState';
 import { toastr } from 'react-redux-toastr';
 import { adalReauth } from '../actions/userActions';
 
+const measurementPointListTypeEnum = {
+  Annual: 1,
+  Verification: 2
+};
+const measurementPointListTypeLookup = {
+  1: 'Annual',
+  2: 'Verification'
+};
 const jobTypeOptions = [
   { value: '80eedbac-ec22-45ef-9ac7-f2eb4be2db4c', label: 'Audit' },
   { value: '524235fd-4633-4b7a-9c13-c37fc39efe69', label: 'Inspection' },
-  { value: '9c7fde18-0b94-4af8-b4aa-913c40e5aed0', label: 'Validation' },
+  { value: '9c7fde18-0b94-4af8-b4aa-913c40e5aed0', label: 'Verification' },
   { value: 'ae78eaa3-89c2-490a-90c6-44e5cfa10b01', label: 'Repair' }
 ];
-
 const jobTypesByID = {
   '80eedbac-ec22-45ef-9ac7-f2eb4be2db4c': 'Audit',
   '524235fd-4633-4b7a-9c13-c37fc39efe69': 'Inspection',
-  '9c7fde18-0b94-4af8-b4aa-913c40e5aed0': 'Validation',
+  '9c7fde18-0b94-4af8-b4aa-913c40e5aed0': 'Verification',
   'ae78eaa3-89c2-490a-90c6-44e5cfa10b01': 'Repair'
 };
+const MPLTypebyJobTypesID = {
+  '80eedbac-ec22-45ef-9ac7-f2eb4be2db4c': 0,
+  '524235fd-4633-4b7a-9c13-c37fc39efe69': measurementPointListTypeEnum.Annual,
+  '9c7fde18-0b94-4af8-b4aa-913c40e5aed0':
+    measurementPointListTypeEnum.Verification,
+  'ae78eaa3-89c2-490a-90c6-44e5cfa10b01': measurementPointListTypeEnum.Annual
+};
 
+const measurementPointListTypeOptions = [
+  { label: 'Annual', value: measurementPointListTypeEnum.Annual },
+  { label: 'Verification', value: measurementPointListTypeEnum.Verification }
+];
+const measurementPointResultStatusTypes = {
+  0: 'resultStatusNotTested',
+  1: 'resultStatusIncomplete',
+  2: 'resultStatusFail',
+  3: 'resultStatusPass',
+  4: 'resultStatusCannotComplete',
+  5: 'resultStatusRepair'
+};
 /*
 New - No results have been saved for the job
 Started - Results are in the job
@@ -31,14 +57,6 @@ Reopened - Leader reopened the job after closing
 //   3: "reopened"
 // }
 
-const measurementPointListTypeOptions = [
-  { label: 'Annual', value: 1 },
-  { label: 'Verification', value: 2 }
-];
-const measurementPointListTypeEnum = {
-  1: 'Annual',
-  2: 'Verification'
-};
 const measurementPointTypeEnum = {
   1: 'Pass/Fail',
   2: 'Text',
@@ -205,7 +223,9 @@ const colors = {
   purpleButton: 'info', // use the bootstrap info button color
   purpleTr: 'rgba(98,73,157,.2)',
   purpleBanner: 'rgba(98,73,157,.7)',
-  dark: '#060A33'
+  dark: '#060A33',
+  red: '#d00000',
+  greyText: `#AAAAAA`
 };
 const tiles = [
   {
@@ -419,7 +439,7 @@ const tiles = [
   {
     icon: icons.measurements,
     iconType: 'img',
-    title: 'manageMeasurementPointList',
+    title: 'manageCustomerMeasurementPointList',
     src: require('src/images/beaconManageUsers.jpg'),
     srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
     color: 'purple',
@@ -467,12 +487,16 @@ export const constants = {
   jobTypesByID,
   icons,
   measurementPointListTypeEnum,
+  MPLTypebyJobTypesID,
+  measurementPointListTypeLookup,
   measurementPointTypeEnum,
   measurementPointListTypeOptions,
   measurementPointTypeOptions,
   measurementPointTypes,
   measurementPointTypesInverse,
   measurementPointPassFailOptions,
+  measurementPointResultStatusTypes,
+  defaultProductStandardID: '740e2f29-6bfa-4316-98c1-f2b32637bf6e',
   hasSecurityFunction: (user: Iuser, securityFunction: string): boolean => {
     if (user.securityFunctions.indexOf(securityFunction) >= 0) {
       return true;

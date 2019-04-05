@@ -38,12 +38,12 @@ interface IdispatchProps {
   facility: Ifacility;
   updateInstall: typeof updateInstall;
   saveInstall: typeof saveInstall;
-  toggleEditInstallModal: typeof toggleEditInstallModal;
+  toggleModal: () => void;
   productInfo: IproductInfo;
   deleteInstall: typeof deleteInstall;
   tableFilters: ItableFiltersReducer;
   secondModal: boolean;
-  saveAnyLocation: typeof saveAnyLocation;
+  saveAnyLocation: any;
   user: Iuser;
 }
 
@@ -67,7 +67,7 @@ class ManageInstallModal extends React.Component<Iprops & IdispatchProps, {}> {
       <CommonModal
         modalVisible={this.props.showModal}
         className={className}
-        onHide={this.props.toggleEditInstallModal}
+        onHide={this.props.toggleModal}
         body={<EditInstallForm {...this.props} />}
         title={modalTitle}
         container={document.getElementById('two-pane-layout')}
@@ -93,7 +93,7 @@ export default connect(
   {
     updateInstall,
     saveInstall,
-    toggleEditInstallModal,
+    toggleModal: toggleEditInstallModal,
     deleteInstall,
     saveAnyLocation
   }

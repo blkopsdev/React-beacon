@@ -1,5 +1,18 @@
 export const initialOption = { value: '', label: '' };
 export const initialTableFilters = { search: '', page: 1 };
+
+export const initialFacility = {
+  id: '',
+  name: '',
+  customerID: '',
+  address: '',
+  address2: '',
+  city: '',
+  state: '',
+  postalCode: '',
+  buildings: [],
+  isDeleted: false
+};
 const initialSubcategory = {
   mainCategoryID: '',
   id: '',
@@ -16,8 +29,10 @@ const initialSubcategory = {
     updateDate: '',
     creatorID: '',
     updaterID: ''
-  }
+  },
+  isDeleted: false
 };
+
 export const initialProduct = {
   id: '',
   name: '',
@@ -32,37 +47,108 @@ export const initialProduct = {
   systemSizeID: '',
   subcategory: initialSubcategory,
   installs: [],
+  isDeleted: false,
   quantity: 1
 };
-export const initialFacility = {
+export const initialInstallBase = {
   id: '',
-  name: '',
-  customerID: '',
-  address: '',
-  address2: '',
-  city: '',
-  state: '',
-  postalCode: '',
-  buildings: []
+  code: '',
+  productID: '',
+  product: initialProduct,
+  facilityID: '',
+  name: '', // not used
+  status: '',
+  isDeleted: false
 };
 
 export const initialLoc = {
+  id: '',
   name: '',
   rooms: [],
-  floorID: ''
+  floorID: '',
+  isDeleted: false
 };
 export const initialBuilding = {
+  id: '',
   name: '',
-  floors: []
+  floors: [],
+  facilityID: '',
+  isDeleted: false
 };
 export const initialFloor = {
+  id: '',
   name: '',
-  locations: []
+  buildingID: '',
+  locations: [],
+  isDeleted: false
 };
 
 export const initialRoom = {
-  name: ''
+  id: '',
+  name: '',
+  locationID: '',
+  isDeleted: false
 };
+export const initialMeasurementPointResultAnswer = {
+  measurementPointID: ''
+};
+export const initialMeasurementPointList = {
+  id: '',
+  measurementPointTabs: [],
+  mainCategoryID: '',
+  standardID: '',
+  type: 1,
+  testProcedures: ''
+};
+export const initialMeasurementPointTab = {
+  id: '',
+  name: 'Default Tab',
+  measurementPoints: {},
+  order: 0,
+  isDeleted: false,
+  customerID: ''
+};
+export const initialMeasurementPoint = {
+  id: '',
+  type: 1,
+  label: '',
+  order: 0,
+  customerID: '',
+  isDeleted: false
+};
+export const initialMeasurmentPointResult = {
+  id: '',
+  status: 0,
+  createDate: '',
+  updateDate: '',
+  jobID: '',
+  notes: '',
+  installBaseID: '',
+  measurementPointListID: '',
+  measurementPointAnswers: [],
+  compiledNotes: ''
+};
+
+const initialCustomer = {
+  id: '',
+  name: '',
+  isDeleted: false
+};
+export const initialJob = {
+  id: '',
+  customerID: '',
+  facilityID: '',
+  assignedUserID: '',
+  jobTypeID: '',
+  startDate: '',
+  endDate: '',
+  status: '',
+  customer: initialCustomer
+};
+
+/* ********************   DESKTOP ONLY  ***************/
+/* 
+
 /*
 *  TRAINING initial state
 */
@@ -102,38 +188,8 @@ export const initialLesson = {
   cost: 0,
   isProtected: false
 };
-export const initialMeasurementPointList = {
-  id: '',
-  measurementPointTabs: [],
-  mainCategoryID: '',
-  standardID: '',
-  type: 1,
-  testProcedures: ''
-};
-export const initialMeasurementPointTab = {
-  id: '',
-  name: 'Default Tab',
-  measurementPoints: {},
-  order: 0,
-  isDeleted: false
-};
-export const initialMeasurementPoint = {
-  id: '',
-  type: 1,
-  label: '',
-  order: 0,
-  customerID: '',
-  isDeleted: false
-};
 
-const initialCustomer = {
-  id: '',
-  name: ''
-};
-
-/* 
-* initialState
-*/
+/* initialState */
 export default {
   ajaxCallsInProgress: 0,
   user: {
@@ -154,8 +210,8 @@ export default {
     facilities: [],
     customerID: '',
     hasTeamMembers: false,
-    appVersion: '',
-    customer: initialCustomer
+    customer: initialCustomer,
+    isActive: true
   },
   redirect: {
     redirectToReferrer: false,
@@ -176,7 +232,7 @@ export default {
   },
   manageJob: {
     totalPages: 1,
-    data: [],
+    data: {},
     jobTypes: [],
     fseUsers: [],
     showEditJobModal: false,
@@ -185,7 +241,7 @@ export default {
   manageLocation: {
     totalPages: 1,
     facility: initialFacility,
-    data: [],
+    visibleLocations: [],
     showEditLocationModal: false,
     tableFilters: initialTableFilters,
     selectedBuilding: initialBuilding,
@@ -206,6 +262,9 @@ export default {
     showInstallContactModal: false,
     showSearchNewProductsModal: false,
     showImportInstall: false,
+    showMPResultModal: false,
+    showMPResultHistoryModal: false,
+    showMPResultNotes: false,
     totalPages: 1,
     data: [],
     cart: {
@@ -264,9 +323,10 @@ export default {
     tableFilters: initialTableFilters,
     totalPages: 1
   },
-  manageMeasurementPointListsReducer: {
+  manageMeasurementPointLists: {
     totalPages: 1,
     data: {},
+    measurementPointsByID: {},
     selectedMeasurementPointList: initialMeasurementPointList,
     showEditMeasurementPointListModal: false,
     showEditMeasurementPointModal: false,
@@ -275,6 +335,12 @@ export default {
     tableFilters: initialTableFilters,
     selectedTabID: '',
     selectedMeasurementPoint: initialMeasurementPoint
+  },
+  measurementPointResults: {
+    measurementPointResultsByID: {},
+    selectedResult: initialMeasurmentPointResult,
+    previousResult: initialMeasurmentPointResult,
+    historicalResultID: ''
   },
   customers: [],
   facilities: [],

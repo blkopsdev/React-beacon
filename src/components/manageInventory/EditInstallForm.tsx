@@ -31,12 +31,10 @@ import {
 } from '../../models';
 import {
   saveInstall,
-  toggleEditInstallModal,
-  updateInstall
+  updateInstall,
+  deleteInstall
 } from '../../actions/manageInventoryActions';
-import { saveAnyLocation } from '../../actions/manageLocationActions';
 import { constants } from 'src/constants/constants';
-const uuidv4 = require('uuid/v4');
 
 interface IstateChanges extends Observable<any> {
   next: () => void;
@@ -48,7 +46,7 @@ interface AbstractControlEdited extends AbstractControl {
 interface Iprops {
   updateInstall: typeof updateInstall;
   saveInstall: typeof saveInstall;
-  toggleEditInstallModal: typeof toggleEditInstallModal;
+  toggleModal: () => void;
   selectedItem: IinstallBase;
   loading: boolean;
   colorButton: string;
@@ -57,30 +55,23 @@ interface Iprops {
   tableFilters: ItableFiltersReducer;
   selectedProduct: Iproduct;
   facility: Ifacility;
-  deleteInstall: (id: string, prodID: string) => void;
-  saveAnyLocation: typeof saveAnyLocation;
+  deleteInstall: typeof deleteInstall;
+  saveAnyLocation: (name: string, facilityID: string) => { id: string };
   user: Iuser;
 }
 
 interface Istate {
-  newType: string;
-  newItem: any;
+  fieldConfig: FieldConfig;
 }
 
 class ManageInstallForm extends React.Component<Iprops, Istate> {
   public userForm: AbstractControl;
   private subscription: any;
-  private fieldConfig: FieldConfig;
   constructor(props: Iprops) {
     super(props);
     this.state = {
-      newType: '',
-      newItem: {}
+      fieldConfig: FormUtil.translateForm(this.buildFieldConfig(), this.props.t)
     };
-    this.fieldConfig = FormUtil.translateForm(
-      this.buildFieldConfig(),
-      this.props.t
-    );
   }
   componentDidMount() {
     if (!this.props.selectedProduct.id) {
@@ -90,35 +81,31 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
         'Missing product, please try again or contact support.',
         constants.toastrError
       );
-      this.props.toggleEditInstallModal();
+      this.props.toggleModal();
     }
   }
 
-  componentDidUpdate(prevProps: Iprops) {
-    if (
-      JSON.stringify(prevProps.facility) !== JSON.stringify(this.props.facility)
-    ) {
-      if (this.state.newType.length) {
-        const control = this.userForm.get(
-          this.state.newType
-        ) as AbstractControlEdited;
-        const newOption = {
-          value: this.state.newItem.id,
-          label: this.state.newItem.name
-        };
-        control.meta.options = [...control.meta.options, newOption];
-        control.stateChanges.next();
-        this.userForm.patchValue({ [this.state.newType]: newOption });
-        this.setState({ newType: '' });
-      }
-    }
-  }
   componentWillUnmount() {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
   }
-
+  updateLocationSelect = (
+    locationObjectType: string,
+    name: string,
+    id: string
+  ) => {
+    const control = this.userForm.get(
+      locationObjectType
+    ) as AbstractControlEdited;
+    const newOption = {
+      value: id,
+      label: name
+    };
+    control.meta.options = [...control.meta.options, newOption];
+    control.stateChanges.next();
+    this.userForm.patchValue({ [locationObjectType]: newOption });
+  };
   subscribeToValueChanges = () => {
     this.subscription = this.userForm
       .get('buildingID')
@@ -359,19 +346,11 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
   };
 
   handleCreateBuilding = (name: string) => {
-    const newBuilding = {
-      id: uuidv4(),
+    const locationObject = this.props.saveAnyLocation(
       name,
-      facilityID: this.props.facility.id,
-      floors: []
-    };
-    this.setState({ newItem: newBuilding, newType: 'buildingID' }, () => {
-      this.props.saveAnyLocation(
-        newBuilding,
-        'Building',
-        this.props.facility.id
-      );
-    });
+      this.props.facility.id
+    );
+    this.updateLocationSelect('buildingID', name, locationObject.id);
   };
 
   handleCreateFloor = (name: string) => {
@@ -384,15 +363,11 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       );
       return;
     }
-    const newFloor = {
-      id: uuidv4(),
+    const locationObject = this.props.saveAnyLocation(
       name,
-      buildingID: buildingID.value,
-      locations: []
-    };
-    this.setState({ newItem: newFloor, newType: 'floorID' }, () => {
-      this.props.saveAnyLocation(newFloor, 'Floor', this.props.facility.id);
-    });
+      this.props.facility.id
+    );
+    this.updateLocationSelect('floorID', name, locationObject.id);
   };
   handleCreateLocation = (name: string) => {
     const { buildingID, floorID } = this.userForm.value;
@@ -404,20 +379,11 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       );
       return;
     }
-    const newLocation = {
-      id: uuidv4(),
+    const locationObject = this.props.saveAnyLocation(
       name,
-      buildingID: buildingID.value,
-      floorID: floorID.value,
-      rooms: []
-    };
-    this.setState({ newItem: newLocation, newType: 'locationID' }, () => {
-      this.props.saveAnyLocation(
-        newLocation,
-        'Location',
-        this.props.facility.id
-      );
-    });
+      this.props.facility.id
+    );
+    this.updateLocationSelect('locationID', name, locationObject.id);
   };
   handleCreateRoom = (name: string) => {
     const { buildingID, floorID, locationID } = this.userForm.value;
@@ -429,16 +395,11 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       );
       return;
     }
-    const newRoom = {
-      id: uuidv4(),
+    const locationObject = this.props.saveAnyLocation(
       name,
-      buildingID: buildingID.value,
-      floorID: floorID.value,
-      locationID: locationID.value
-    };
-    this.setState({ newItem: newRoom, newType: 'roomID' }, () => {
-      this.props.saveAnyLocation(newRoom, 'Room', this.props.facility.id);
-    });
+      this.props.facility.id
+    );
+    this.updateLocationSelect('roomID', name, locationObject.id);
   };
 
   filterFloors = (value: Ioption | null) => {
@@ -625,14 +586,14 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
         <form onSubmit={this.handleSubmit} className="clearfix beacon-form">
           <FormGenerator
             onMount={this.setForm}
-            fieldConfig={this.fieldConfig}
+            fieldConfig={this.state.fieldConfig}
           />
           <Col xs={12} className="form-buttons text-right">
             <Button
               bsStyle="default"
               type="button"
               className="pull-left"
-              onClick={this.props.toggleEditInstallModal}
+              onClick={this.props.toggleModal}
             >
               {t('common:cancel')}
             </Button>

@@ -31,7 +31,7 @@ interface IdispatchProps {
   showEditMeasurementPointModal: boolean;
   loading: boolean;
   toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
-  toggleEditMeasurementPointModal: typeof toggleEditMeasurementPointModal;
+  toggleModal: () => void;
   saveMeasurementPointToMeasurementPointList: typeof saveMeasurementPointToMeasurementPointList;
   selectedMeasurementPointList: ImeasurementPointList;
   selectedTab: ImeasurementPointListTab;
@@ -64,7 +64,7 @@ class EditMeasurementPointModal extends React.Component<
       <CommonModal
         modalVisible={this.props.showEditMeasurementPointModal}
         className="measurements-edit second-modal"
-        onHide={this.props.toggleEditMeasurementPointModal}
+        onHide={this.props.toggleModal}
         body={<EditMeasurementPointForm {...this.props} />}
         title={this.props.t(this.getTitle())}
         container={document.getElementById('two-pane-layout')}
@@ -99,7 +99,7 @@ export default connect(
   mapStateToProps,
   {
     toggleEditMeasurementPointListModal,
-    toggleEditMeasurementPointModal,
+    toggleModal: toggleEditMeasurementPointModal,
     saveMeasurementPointToMeasurementPointList,
     updateMeasurementPoint
   }

@@ -1,3 +1,9 @@
+## Release 0.1.3 April 5th, 2019
+- view measurement point results
+- fixed issue with job paging
+- various bug fixes with measurement points
+- contact beacon changes
+
 ## Release 0.1.2 February 26th, 2019
  - updated course description
 

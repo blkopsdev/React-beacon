@@ -22,7 +22,7 @@ import {
 } from '../../models';
 import { TableUtil } from '../common/TableUtil';
 import { closeAllModals, getCustomers } from '../../actions/commonActions';
-import { emptyTile } from '../../reducers/initialState';
+import { emptyTile, initialJob } from '../../reducers/initialState';
 import {
   getJobs,
   getJobTypes,
@@ -35,6 +35,7 @@ import Banner from '../common/Banner';
 import EditJobModal from './EditJobModal';
 import SearchTableForm from '../common/SearchTableForm';
 import { constants } from 'src/constants/constants';
+import { values } from 'lodash';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -64,6 +65,7 @@ interface IdispatchProps {
 interface Istate {
   selectedRow: any;
   currentTile: Itile;
+  searchFieldConfig: FieldConfig;
 }
 
 class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
@@ -74,7 +76,8 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
     super(props);
     this.state = {
       selectedRow: null,
-      currentTile: emptyTile
+      currentTile: emptyTile,
+      searchFieldConfig: this.buildSearchFieldConfig()
     };
     this.columns = TableUtil.translateHeaders(
       [
@@ -135,6 +138,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
     this.setState({
       currentTile: constants.getTileByURL(this.props.location.pathname)
     });
+    this.props.closeAllModals();
   }
   componentDidMount() {
     // refresh job types
@@ -159,6 +163,13 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
     ) {
       this.props.getJobs();
     }
+    if (
+      JSON.stringify(prevProps.customers) !==
+      JSON.stringify(this.props.customers)
+    ) {
+      const searchFieldConfig = this.buildSearchFieldConfig();
+      this.setState({ searchFieldConfig });
+    }
   }
   componentWillUnmount() {
     this.props.closeAllModals();
@@ -178,7 +189,8 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
             colWidth: 3,
             type: 'select',
             placeholder: 'companyPlaceholder',
-            defaultValue: this.props.tableFilters.company
+            defaultValue: this.props.tableFilters.company,
+            isClearable: true
           }
         },
         type: {
@@ -189,13 +201,14 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
             colWidth: 2,
             type: 'select',
             placeholder: 'typePlaceholder',
-            defaultValue: this.props.tableFilters.type
+            defaultValue: this.props.tableFilters.type,
+            isClearable: true
           }
         },
         startDate: {
           render: FormUtil.DatetimeWithoutValidation,
           meta: {
-            label: 'jobManage:dateRange',
+            label: 'jobManage:startDate',
             colWidth: 2,
             defaultValue: this.props.tableFilters.startDate,
             showTime: false
@@ -204,6 +217,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
         endDate: {
           render: FormUtil.DatetimeWithoutValidation,
           meta: {
+            label: 'jobManage:endDate',
             colWidth: 2,
             defaultValue: this.props.tableFilters.endDate,
             showTime: false
@@ -301,7 +315,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
           color={this.state.currentTile.color}
         />
         <SearchTableForm
-          fieldConfig={this.buildSearchFieldConfig()}
+          fieldConfig={this.state.searchFieldConfig}
           handleSubmit={this.props.getJobs}
           loading={this.props.loading}
           colorButton={
@@ -337,7 +351,9 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
           resizable={false}
         />
         <EditJobModal
-          selectedJob={this.props.tableData[this.state.selectedRow]}
+          selectedJob={
+            this.props.tableData[this.state.selectedRow] || initialJob
+          }
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
@@ -359,7 +375,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     customers: state.customers,
     loading: state.ajaxCallsInProgress > 0,
     showEditJobModal: state.manageJob.showEditJobModal,
-    tableData: state.manageJob.data,
+    tableData: values(state.manageJob.data),
     // jobTypes: FormUtil.convertToOptions(state.manageJob.jobTypes),
     fseUsers: state.manageJob.fseUsers,
     tableFilters: state.manageJob.tableFilters

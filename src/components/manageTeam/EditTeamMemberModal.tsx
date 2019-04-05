@@ -16,7 +16,7 @@ import {
 } from '../../actions/manageTeamActions';
 import { getFacilitiesByCustomer } from '../../actions/commonActions';
 import CommonModal from '../common/CommonModal';
-import UserManageForm from './EditTeamMemberForm';
+import EditTeamMemberForm from './EditTeamMemberForm';
 
 interface Iprops {
   selectedUser: Iuser;
@@ -31,7 +31,7 @@ interface IdispatchProps {
   facilityOptions: any[];
   updateTeamUser: typeof updateTeamUser;
   saveTeamUser: typeof saveTeamUser;
-  toggleEditTeamUserModal: typeof toggleEditTeamUserModal;
+  toggleModal: () => void;
   getFacilitiesByCustomer: typeof getFacilitiesByCustomer;
   user: Iuser;
   deleteTeamUser: typeof deleteTeamUser;
@@ -53,8 +53,8 @@ class EditTeamMemberModal extends React.Component<Iprops & IdispatchProps, {}> {
       <CommonModal
         modalVisible={this.props.showEditUserModal}
         className="user-edit"
-        onHide={this.props.toggleEditTeamUserModal}
-        body={<UserManageForm {...this.props} />}
+        onHide={this.props.toggleModal}
+        body={<EditTeamMemberForm {...this.props} />}
         title={modalTitle}
         container={document.getElementById('two-pane-layout')}
       />
@@ -78,7 +78,7 @@ export default connect(
   {
     updateTeamUser,
     saveTeamUser,
-    toggleEditTeamUserModal,
+    toggleModal: toggleEditTeamUserModal,
     getFacilitiesByCustomer,
     deleteTeamUser
   }

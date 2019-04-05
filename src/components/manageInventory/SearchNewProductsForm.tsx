@@ -22,7 +22,6 @@ import {
   IproductQueueObject
 } from '../../models';
 import {
-  toggleSearchNewProductsModal,
   getProducts,
   toggleEditProductModal,
   resetNewProducts
@@ -30,7 +29,7 @@ import {
 import { constants } from 'src/constants/constants';
 
 interface Iprops {
-  toggleSearchNewProductsModal: typeof toggleSearchNewProductsModal;
+  toggleModal: () => void;
   toggleEditProductModal: typeof toggleEditProductModal;
   selectedItem?: Iproduct;
   loading: boolean;
@@ -268,7 +267,7 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
               bsStyle="default"
               type="button"
               className="pull-left"
-              onClick={this.props.toggleSearchNewProductsModal}
+              onClick={this.props.toggleModal}
             >
               {t('common:cancel')}
             </Button>

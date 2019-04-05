@@ -110,7 +110,6 @@
     "type": "Type",
     "typePlaceholder": "Select",
     "typeSearchPlaceholder": "Select",
-    "dateRange": "Date Range",
     "startDate": "Start Date",
     "endDate": "End Date",
     "newJob": "Add Job",
@@ -182,8 +181,8 @@
     "uploadInstructions":
       "Please upload the file that contains the installations that you would like to import.  Please use the template below to make sure the data is in the correct format.",
     "contactMessageLabel": "comments / questions",
-    "contactButton": "contact beacon",
-    "installContactTitle": "Contact Beacon",
+    "contactButton": "request support",
+    "installContactTitle": "Request Support",
     "productInfoLabel": "Product Information",
     "locationLabel": "Where is this installation located?",
     "building": "Building",
@@ -192,7 +191,10 @@
     "room": "Room",
     "position": "Position",
     "mergeProduct": "Search for Existing Product",
-    "noProductsFound": "no products found"
+    "noProductsFound": "no products found",
+    "MeasurementPointResultModalTitle": "Measurements",
+    "MPresultHistoryModalTitle": "History",
+    "MPResultNotesModalTitle": "Notes"
   },
   "manageProductQueue": {
     "bannerTitle": "New Product Queue",
@@ -291,7 +293,13 @@
     "editTab": "Edit Tab",
     "measurementPointTabLabel": "Tab Name",
     "editTestProcedures": "Edit Procedures",
-    "deleteMPLButton": "Delete"
+    "deleteMPLButton": "Delete",
+    "resultStatusIncomplete": "Incomplete",
+    "resultStatusNotTested": "Not Tested",
+    "resultStatusPass": "Pass",
+    "resultStatusFail": "Fail",
+    "resultStatusCannotComplete": "Cannot Complete",
+    "resultStatusRepair": "Repair"
   },
   "tiles": {
     "alerts": "Alerts",
@@ -309,7 +317,8 @@
     "groups": "My groups",
     "support": "Support",
     "manageAllTraining": "Training Progress",
-    "manageMeasurementPointList": "Measurements"
+    "manageMeasurementPointList": "Measurements",
+    "manageCustomerMeasurementPointList": "Customer Measurements"
   },
   "securityF": {
     "ManageUsers": "Manage Users",

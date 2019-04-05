@@ -24,6 +24,10 @@ export function modalToggleWithName(
     case `TOGGLE_MODAL_${modalName}`:
       // console.error('toggle modal')
       return !state;
+    case `SHOW_MODAL_${modalName}`:
+      return true;
+    case `HIDE_MODAL_${modalName}`:
+      return false;
     case types.CLOSE_ALL_MODALS:
       return false;
     default:

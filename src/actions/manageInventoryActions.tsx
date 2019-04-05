@@ -8,7 +8,8 @@ import {
   IinitialState,
   IinstallBase,
   Iproduct,
-  ItableFiltersParams
+  ItableFiltersParams,
+  ImeasurementPointResult
 } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
@@ -16,6 +17,8 @@ import { constants } from 'src/constants/constants';
 import * as types from './actionTypes';
 import { map, values } from 'lodash';
 const uuidv4 = require('uuid/v4');
+import * as moment from 'moment';
+import { getFacilityMeasurementPointResultsHelper } from './measurementPointResultsActions';
 
 // import {AxiosResponse} from 'axios';
 
@@ -52,10 +55,10 @@ export function getProducts(
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
 
-    const pagingMode = 'paged';
+    const pagingType = 'paged';
     return axios
       .get(API.GET.inventory.products, {
-        params: { page, search, mainCategoryID, pagingMode }
+        params: { page, search, mainCategoryID, pagingType }
       })
       .then(data => {
         if (!data.data) {
@@ -75,13 +78,22 @@ export function getProducts(
   };
 }
 
-export function getInventory(): ThunkResult<void> {
+/*
+* get measurement point results then get inventory and add the result status to the installBases
+*/
+export function initInventory(facilityID: string): ThunkResult<void> {
   return (dispatch, getState) => {
-    getInventoryHelper(dispatch, getState);
+    getFacilityMeasurementPointResultsHelper(
+      dispatch,
+      getState,
+      facilityID
+    ).then(() => getInventoryHelper(dispatch, getState));
   };
 }
-const getInventoryHelper = (dispatch: any, getState: any) => {
+
+const getInventoryHelper = (dispatch: any, getState: () => IinitialState) => {
   dispatch(beginAjaxCall());
+  const { measurementPointResultsByID } = getState().measurementPointResults;
   const {
     page,
     search,
@@ -102,9 +114,29 @@ const getInventoryHelper = (dispatch: any, getState: any) => {
       if (!data.data) {
         throw undefined;
       } else {
+        const rawInventory = data.data[1];
+        const inventoryWithStatus = rawInventory.map((product: Iproduct) => {
+          if (measurementPointResultsByID) {
+            const updatedInstallBases = updateInstallBaseStatus(
+              product.installs,
+              values(measurementPointResultsByID)
+            );
+            return { ...product, installs: updatedInstallBases };
+          } else {
+            // no results for this job, so just set everything to status 0
+            const updatedInstallBases = product.installs.map(installBase => {
+              return {
+                ...installBase,
+                status: constants.measurementPointResultStatusTypes[0]
+              };
+            });
+            return { ...product, installs: updatedInstallBases };
+          }
+        });
+
         dispatch({
           type: types.GET_INVENTORY_SUCCESS,
-          inventory: data.data[1]
+          inventory: inventoryWithStatus
         });
         dispatch({
           type: types.INVENTORY_TOTAL_PAGES,
@@ -189,6 +221,7 @@ export function updateInstall(
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     dispatch({ type: types.TOGGLE_MODAL_EDIT_INSTALL });
+
     return axios
       .post(API.POST.inventory.updateinstall, install)
       .then(data => {
@@ -447,6 +480,15 @@ export const toggleEditInstallModal = () => ({
 export const toggleInstallContactModal = () => ({
   type: types.TOGGLE_MODAL_INSTALL_CONTACT
 });
+export const toggleMPResultModal = () => ({
+  type: types.TOGGLE_MODAL_MP_RESULT
+});
+export const toggleMPResultHistory = () => ({
+  type: types.TOGGLE_MODAL_MP_RESULT_HISTORY
+});
+export const toggleMPResultNotes = () => ({
+  type: types.TOGGLE_MODAL_MP_RESULT_NOTES
+});
 export const toggleSearchNewProductsModal = () => ({
   type: types.TOGGLE_MODAL_SEARCH_NEW_PRODUCTS
 });
@@ -466,3 +508,42 @@ export const setSelectedProduct = (product?: Iproduct) => ({
 export const resetNewProducts = () => ({
   type: types.NEW_PRODUCTS_RESET
 });
+
+export const updateInstallBaseStatus = (
+  installBases: IinstallBase[],
+  jobResults: ImeasurementPointResult[]
+  // products?: { [key: string]: Iproduct }
+) => {
+  return installBases.map(installBase => {
+    const installResults = jobResults.filter(result => {
+      return (
+        result.installBaseID === installBase.id && result.temporary !== true
+      );
+    });
+    if (installResults && installResults.length) {
+      const mostRecentResult = installResults.reduce((previous, current) => {
+        if (
+          moment
+            .utc(previous.updateDate)
+            .isAfter(moment.utc(current.updateDate))
+        ) {
+          return previous;
+        } else {
+          return current;
+        }
+      });
+      return {
+        ...installBase,
+        status:
+          constants.measurementPointResultStatusTypes[mostRecentResult.status]
+        // product: products ? products[installBase.productID] : initialProduct
+      };
+    } else {
+      return {
+        ...installBase,
+        status: constants.measurementPointResultStatusTypes[0]
+        // product: products ? products[installBase.productID] : initialProduct
+      };
+    }
+  });
+};

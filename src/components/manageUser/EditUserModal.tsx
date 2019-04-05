@@ -30,12 +30,12 @@ interface Iprops {
 }
 
 interface IdispatchProps {
-  showEditUserModal: boolean;
+  showModal: boolean;
   loading: boolean;
   customerOptions: any[];
   facilityOptions: any[];
   updateUser: typeof updateUser;
-  toggleEditUserModal: typeof toggleEditUserModal;
+  toggleModal: () => void;
   getFacilitiesByCustomer: (value: string) => Promise<void>;
   toggleEditCustomerModal: typeof toggleEditCustomerModal;
   toggleEditFacilityModal: typeof toggleEditFacilityModal;
@@ -50,9 +50,9 @@ class EditManageUserModal extends React.Component<Iprops & IdispatchProps, {}> {
   render() {
     return (
       <CommonModal
-        modalVisible={this.props.showEditUserModal}
+        modalVisible={this.props.showModal}
         className="user-edit"
-        onHide={this.props.toggleEditUserModal}
+        onHide={this.props.toggleModal}
         body={<EditUserForm {...this.props} />}
         title={this.props.t('editUserModalTitle')}
         container={document.getElementById('two-pane-layout')}
@@ -68,7 +68,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     loading: state.ajaxCallsInProgress > 0,
     customerOptions: FormUtil.convertToOptions(state.customers),
     facilityOptions: FormUtil.convertToOptions(state.facilities),
-    showEditUserModal: state.manageUser.showEditUserModal,
+    showModal: state.manageUser.showEditUserModal,
     showEditCustomerModal: state.showEditCustomerModal,
     showEditFacilityModal: state.showEditFacilityModal
   };
@@ -78,7 +78,7 @@ export default connect(
   mapStateToProps,
   {
     updateUser,
-    toggleEditUserModal,
+    toggleModal: toggleEditUserModal,
     getFacilitiesByCustomer,
     toggleEditCustomerModal,
     toggleEditFacilityModal,

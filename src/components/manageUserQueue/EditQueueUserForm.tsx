@@ -27,10 +27,7 @@ import {
   toggleEditCustomerModal,
   toggleEditFacilityModal
 } from '../../actions/commonActions';
-import {
-  toggleEditQueueUserModal,
-  updateQueueUser
-} from '../../actions/manageUserQueueActions';
+import { updateQueueUser } from '../../actions/manageUserQueueActions';
 import EditFacilityModal from '../common/EditFacilityModal';
 import { constants } from 'src/constants/constants';
 
@@ -121,7 +118,7 @@ interface Iprops extends React.Props<UserQueueForm> {
   facilityOptions: any[];
   toggleEditCustomerModal: typeof toggleEditCustomerModal;
   toggleEditFacilityModal: typeof toggleEditFacilityModal;
-  toggleEditQueueUserModal: typeof toggleEditQueueUserModal;
+  toggleModal: () => void;
   updateQueueUser: typeof updateQueueUser;
   approveUser: (userQueueID: string) => void;
 }
@@ -331,7 +328,7 @@ class UserQueueForm extends React.Component<Iprops, {}> {
               bsStyle="default"
               type="button"
               className="pull-left"
-              onClick={this.props.toggleEditQueueUserModal}
+              onClick={this.props.toggleModal}
             >
               {t('common:cancel')}
             </Button>

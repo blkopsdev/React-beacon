@@ -145,3 +145,29 @@
 .public-DraftStyleDefault-orderedListItem {
   list-style-type: decimal;
 }
+
+.result-history, .manage-inventory {
+  .status {
+      text-transform: uppercase;
+      font-weight: 500;
+      text-align: right;
+
+      &.resultStatusFail {
+          color: @red;
+      }
+
+      &.resultStatusPass {
+          color: @green;
+      }
+
+      &.resultStatusIncomplete {
+          color: @darkGrey;
+      }
+      &.resultStatusNotTested {
+          color: @orange;
+      }
+      &.resultStatusCannotComplete {
+          color: @darkRed;
+      }
+  }
+}

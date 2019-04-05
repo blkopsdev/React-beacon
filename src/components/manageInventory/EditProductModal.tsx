@@ -36,7 +36,7 @@ interface IdispatchProps {
   loading: boolean;
   updateProduct: typeof updateProduct;
   saveProduct: typeof saveProduct;
-  toggleEditProductModal: typeof toggleEditProductModal;
+  toggleModal: () => void;
   productInfo: IproductInfo;
   tableFilters: ItableFiltersReducer;
   secondModal: boolean;
@@ -69,7 +69,7 @@ class ManageInventoryModal extends React.Component<
       <CommonModal
         modalVisible={this.props.showModal}
         className={className}
-        onHide={this.props.toggleEditProductModal}
+        onHide={this.props.toggleModal}
         body={<EditProductForm {...this.props} />}
         title={modalTitle}
         container={document.getElementById('two-pane-layout')}
@@ -93,7 +93,7 @@ export default connect(
   {
     updateProduct,
     saveProduct,
-    toggleEditProductModal,
+    toggleModal: toggleEditProductModal,
     updateQueueProduct,
     toggleSearchNewProductsModal
   }

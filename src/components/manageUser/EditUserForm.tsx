@@ -23,7 +23,6 @@ import {
   toggleEditFacilityModal
 } from '../../actions/commonActions';
 import {
-  toggleEditUserModal,
   updateUser,
   toggleSecurityFunctionsModal
 } from '../../actions/manageUserActions';
@@ -127,7 +126,7 @@ interface Iprops extends React.Props<EditUserForm> {
   getFacilitiesByCustomer: (value: string) => Promise<void>;
   facilityOptions: Ioption[];
   updateUser: typeof updateUser;
-  toggleEditUserModal: typeof toggleEditUserModal;
+  toggleModal: () => void;
   toggleEditCustomerModal: typeof toggleEditCustomerModal;
   toggleEditFacilityModal: typeof toggleEditFacilityModal;
   toggleSecurityFunctionsModal: typeof toggleSecurityFunctionsModal;
@@ -314,7 +313,7 @@ class EditUserForm extends React.Component<Iprops, {}> {
               bsStyle="default"
               type="button"
               className="pull-left"
-              onClick={this.props.toggleEditUserModal}
+              onClick={this.props.toggleModal}
             >
               {t('cancel')}
             </Button>

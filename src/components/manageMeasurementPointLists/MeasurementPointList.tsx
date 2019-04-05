@@ -2,10 +2,6 @@ import * as React from 'react';
 import { ImeasurementPoint } from 'src/models';
 import { ListGroup, Button, ListGroupItem } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import {
-  faSortAmountUp,
-  faSortAmountDown
-} from '@fortawesome/pro-regular-svg-icons';
 import { map } from 'lodash';
 import { constants } from 'src/constants/constants';
 /*
@@ -38,7 +34,7 @@ export const MeasurementPointList = (props: Iprops) => {
                   props.setSelectedMeasurementPoint(mp);
                 }}
               >
-                <FontAwesomeIcon icon={['far', 'edit']}>Edit</FontAwesomeIcon>
+                <FontAwesomeIcon icon={['far', 'edit']} />
               </Button>
               <Button
                 disabled={
@@ -49,7 +45,11 @@ export const MeasurementPointList = (props: Iprops) => {
                   props.swapMeasurementPointOrder(index, index - 1);
                 }}
               >
-                <FontAwesomeIcon icon={faSortAmountUp} fixedWidth size="2x" />
+                <FontAwesomeIcon
+                  icon={['far', 'sort-amount-up']}
+                  fixedWidth
+                  size="2x"
+                />
               </Button>
               <Button
                 type="button"
@@ -58,9 +58,7 @@ export const MeasurementPointList = (props: Iprops) => {
                   props.deleteMeasurementPoint(mp);
                 }}
               >
-                <FontAwesomeIcon icon={['far', 'times']}>
-                  Delete
-                </FontAwesomeIcon>
+                <FontAwesomeIcon icon={['far', 'times']} />
               </Button>
               <Button
                 type="button"
@@ -73,7 +71,11 @@ export const MeasurementPointList = (props: Iprops) => {
                   props.swapMeasurementPointOrder(index + 1, index);
                 }}
               >
-                <FontAwesomeIcon icon={faSortAmountDown} fixedWidth size="2x" />
+                <FontAwesomeIcon
+                  icon={['far', 'sort-amount-down']}
+                  fixedWidth
+                  size="2x"
+                />
               </Button>
             </span>
             <ListGroupItem

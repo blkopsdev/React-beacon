@@ -35,10 +35,10 @@ class Header extends React.Component<Iprops, Istate> {
   }
   handleMenuSelect = (eventKey: any) => {
     switch (eventKey) {
-      case '1':
+      case 1:
         this.props.toggleEditProfileModal();
         break;
-      case '2':
+      case 2:
         this.props.userLogout();
         break;
       default:
@@ -101,11 +101,11 @@ class Header extends React.Component<Iprops, Istate> {
               </Dropdown.Toggle>
               <div className="white-rectangle" />
               <Dropdown.Menu className={menuClass}>
-                <MenuItem eventKey="1">
+                <MenuItem eventKey={1}>
                   <FontAwesomeIcon icon="user" fixedWidth /> &nbsp;{' '}
                   {t('profile')}
                 </MenuItem>
-                <MenuItem eventKey="2">
+                <MenuItem eventKey={2}>
                   <FontAwesomeIcon icon={['far', 'sign-out']} fixedWidth />{' '}
                   &nbsp; {t('logout')}
                 </MenuItem>

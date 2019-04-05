@@ -12,13 +12,10 @@ import {
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 
-import {
-  importInstall,
-  toggleImportInstallModal
-} from '../../actions/manageInventoryActions';
+import { importInstall } from '../../actions/manageInventoryActions';
 
 interface Iprops {
-  toggleImportInstallModal: typeof toggleImportInstallModal;
+  toggleModal: () => void;
   importInstall: typeof importInstall;
   loading: boolean;
   colorButton: string;
@@ -101,7 +98,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
               bsStyle="link"
               type="button"
               className="pull-left left-side"
-              onClick={this.props.toggleImportInstallModal}
+              onClick={this.props.toggleModal}
             >
               {t('common:cancel')}
             </Button>

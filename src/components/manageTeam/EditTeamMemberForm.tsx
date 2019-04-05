@@ -21,7 +21,6 @@ import { Iuser } from '../../models';
 import {
   deleteTeamUser,
   saveTeamUser,
-  toggleEditTeamUserModal,
   updateTeamUser
 } from '../../actions/manageTeamActions';
 import { getFacilitiesByCustomer } from '../../actions/commonActions';
@@ -67,7 +66,7 @@ interface AbstractControlEdited extends AbstractControl {
 interface Iprops {
   updateTeamUser: typeof updateTeamUser;
   saveTeamUser: typeof saveTeamUser;
-  toggleEditTeamUserModal: typeof toggleEditTeamUserModal;
+  toggleModal: () => void;
   selectedUser?: Iuser;
   loading: boolean;
   colorButton: string;
@@ -225,7 +224,7 @@ class EditTeamMemberForm extends React.Component<Iprops, {}> {
             bsStyle="default"
             type="button"
             className="pull-left"
-            onClick={this.props.toggleEditTeamUserModal}
+            onClick={this.props.toggleModal}
           >
             {t('common:cancel')}
           </Button>

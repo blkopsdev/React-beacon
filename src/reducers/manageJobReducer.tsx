@@ -7,25 +7,25 @@ import {
 } from './commonReducers';
 import initialState from './initialState';
 import * as types from '../actions/actionTypes';
+import { keyBy } from 'lodash';
 
-function jobManageData(state: Ijob[] = [], action: any): Ijob[] {
+function jobManageData(
+  state: { [key: string]: Ijob } = {},
+  action: any
+): { [key: string]: Ijob } {
   switch (action.type) {
     case types.JOB_MANAGE_SUCCESS:
-      return action.jobs;
-    case types.JOB_ADD_SUCCESS:
-      return [...state, action.job];
-    case types.JOB_UPDATE_SUCCESS:
-      return map(state, (job: Ijob) => {
-        if (job.id === action.job.id) {
-          return {
-            ...pickBy(action.job, (property, key) => property !== null)
-          } as Ijob;
-        } else {
-          return job;
-        }
+      const newJobs = map(action.jobs, (job: Ijob) => {
+        return cleanJobObject(job);
       });
+      return keyBy(newJobs, 'id');
+
+    case types.JOB_ADD_SUCCESS:
+      return { ...state, [action.job.id]: action.job };
+    case types.JOB_UPDATE_SUCCESS:
+      return { ...state, [action.job.id]: cleanJobObject(action.job) };
     case types.USER_LOGOUT_SUCCESS:
-      return [];
+      return {};
     default:
       return state;
   }
@@ -88,3 +88,9 @@ export default function jobManage(
     )
   };
 }
+
+const cleanJobObject = (job: Ijob) => {
+  return {
+    ...pickBy(job, (property, key) => property !== null)
+  } as Ijob;
+};

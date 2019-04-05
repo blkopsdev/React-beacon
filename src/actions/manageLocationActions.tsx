@@ -10,13 +10,16 @@ import {
   Ibuilding,
   Ifloor,
   Ilocation,
-  Iroom
+  Iroom,
+  Ifacility
 } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
 import { constants } from 'src/constants/constants';
 import * as types from './actionTypes';
-import { find } from 'lodash';
+import { filter, find } from 'lodash';
+import { Dispatch } from 'react-redux';
+const uuidv4 = require('uuid/v4');
 
 // import {AxiosResponse} from 'axios';
 
@@ -33,7 +36,7 @@ export function getLocationsFacility(facilityID: string): ThunkResult<void> {
         } else {
           dispatch({
             type: types.LOCATION_MANAGE_SUCCESS,
-            facility: data.data
+            facility: cleanFacility(data.data)
           });
         }
       })
@@ -49,67 +52,124 @@ export function getLocationsFacility(facilityID: string): ThunkResult<void> {
 * save (add) a new building/floor/location/room
 */
 export function saveAnyLocation(
-  item: any,
-  lType: 'Building' | 'Floor' | 'Location' | 'Room',
+  name: string,
   facilityID: string
-): ThunkResult<void> {
+): ThunkResult<{ id: string }> {
   return (dispatch, getState) => {
-    dispatch(beginAjaxCall());
-    let url: string;
-    if (lType === 'Building') {
-      url = API.POST.building;
-    } else if (lType === 'Floor') {
-      url = API.POST.floor;
-    } else if (lType === 'Location') {
-      url = API.POST.location;
+    const {
+      buildingID,
+      floorID,
+      locationID
+    } = getState().manageLocation.tableFilters;
+    const newLocationObject = {
+      id: uuidv4(),
+      name,
+      isDeleted: false
+    };
+    if (locationID) {
+      saveAnyLocationObjectHelper(
+        dispatch,
+        getState,
+        { ...newLocationObject, locationID },
+        facilityID
+      );
+    } else if (floorID) {
+      saveAnyLocationObjectHelper(
+        dispatch,
+        getState,
+        { ...newLocationObject, floorID, rooms: [] },
+        facilityID
+      );
+    } else if (buildingID) {
+      saveAnyLocationObjectHelper(
+        dispatch,
+        getState,
+        { ...newLocationObject, buildingID, locations: [] },
+        facilityID
+      );
     } else {
-      url = API.POST.room;
+      saveAnyLocationObjectHelper(
+        dispatch,
+        getState,
+        { ...newLocationObject, facilityID, floors: [] },
+        facilityID
+      );
     }
-    return axios
-      .post(url, item)
-      .then(data => {
-        if (!data.data) {
-          throw undefined;
-        } else {
-          dispatch({
-            type: types.LOCATION_ADD_SUCCESS,
-            lType,
-            item
-          });
-          dispatch({ type: types.TOGGLE_MODAL_EDIT_LOCATION });
-          toastr.success(
-            'Success',
-            `Created new ${lType}.`,
-            constants.toastrSuccess
-          );
-        }
-      })
-      .catch((error: any) => {
-        dispatch({ type: types.LOCATION_ADD_FAILED });
-        constants.handleError(error, `save ${lType}`);
-        console.error(error);
-      });
+    return newLocationObject;
   };
 }
+const saveAnyLocationObjectHelper = (
+  dispatch: Dispatch,
+  getState: () => IinitialState,
+  locationObject: Ilocation | Ibuilding | Ifloor | Iroom,
+  facilityID: string
+) => {
+  dispatch(beginAjaxCall());
+  let url: string;
+  let lType: string;
+  if ('facilityID' in locationObject) {
+    url = API.POST.building;
+    lType = 'Building';
+  } else if ('buildingID' in locationObject) {
+    url = API.POST.floor;
+    lType = 'Floor';
+  } else if ('floorID' in locationObject) {
+    url = API.POST.location;
+    lType = 'Location';
+  } else {
+    url = API.POST.room;
+    lType = 'Room';
+  }
+  return axios
+    .post(url, locationObject)
+    .then(data => {
+      if (!data.data) {
+        throw undefined;
+      } else {
+        dispatch({
+          type: types.LOCATION_ADD_SUCCESS,
+          lType,
+          locationObject
+        });
+        toastr.success(
+          'Success',
+          `Created new ${lType}.`,
+          constants.toastrSuccess
+        );
+      }
+    })
+    .catch((error: any) => {
+      dispatch({ type: types.LOCATION_ADD_FAILED });
+      constants.handleError(error, `save ${lType}`);
+      console.error(error);
+    });
+};
 
 /*
 * update (edit) a building/floor/location/room
 */
-export function updateAnyLocation(item: any, lType: string): ThunkResult<void> {
+export function updateAnyLocation(
+  locationObject: Ilocation | Ibuilding | Ifloor | Iroom
+): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     let url: string;
-    if (lType === 'Building') {
-      url = `${API.PUT.building}/${item.id}`;
-    } else if (lType === 'Floor') {
-      url = `${API.PUT.floor}/${item.id}`;
-    } else if (lType === 'Location') {
-      url = `${API.PUT.location}/${item.id}`;
+    let lType: string;
+    if ('facilityID' in locationObject) {
+      url = `${API.PUT.building}/${locationObject.id}`;
+      lType = 'Building';
+    } else if ('buildingID' in locationObject) {
+      url = `${API.PUT.floor}/${locationObject.id}`;
+      lType = 'Floor';
+    } else if ('floorID' in locationObject) {
+      url = `${API.PUT.location}/${locationObject.id}`;
+      lType = 'Location';
     } else {
-      url = `${API.PUT.room}/${item.id}`;
+      url = `${API.PUT.room}/${locationObject.id}`;
+      lType = 'Room';
     }
     return axios
-      .put(url, item)
+      .put(url, locationObject)
       .then(data => {
         if (data.status !== 200) {
           throw undefined;
@@ -117,7 +177,7 @@ export function updateAnyLocation(item: any, lType: string): ThunkResult<void> {
           dispatch({
             type: types.LOCATION_UPDATE_SUCCESS,
             lType,
-            item
+            locationObject
           });
           dispatch({ type: types.TOGGLE_MODAL_EDIT_LOCATION });
           toastr.success(
@@ -138,18 +198,25 @@ export function updateAnyLocation(item: any, lType: string): ThunkResult<void> {
 /*
 * update (edit) a building/floor/location/room
 */
-export function deleteAnyLocation(item: any, lType: string): ThunkResult<void> {
+export function deleteAnyLocation(
+  locationObject: Ilocation | Ibuilding | Ifloor | Iroom
+): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     let url: string;
-    if (lType === 'Building') {
-      url = `${API.DELETE.building}/${item.id}`;
-    } else if (lType === 'Floor') {
-      url = `${API.DELETE.floor}/${item.id}`;
-    } else if (lType === 'Location') {
-      url = `${API.DELETE.location}/${item.id}`;
+    let lType: string;
+    if ('facilityID' in locationObject) {
+      url = `${API.DELETE.building}/${locationObject.id}`;
+      lType = 'Building';
+    } else if ('buildingID' in locationObject) {
+      url = `${API.DELETE.floor}/${locationObject.id}`;
+      lType = 'Floor';
+    } else if ('floorID' in locationObject) {
+      url = `${API.DELETE.location}/${locationObject.id}`;
+      lType = 'Location';
     } else {
-      url = `${API.DELETE.room}/${item.id}`;
+      url = `${API.DELETE.room}/${locationObject.id}`;
+      lType = 'Room';
     }
     return axios
       .delete(url)
@@ -160,7 +227,7 @@ export function deleteAnyLocation(item: any, lType: string): ThunkResult<void> {
           dispatch({
             type: types.LOCATION_DELETE_SUCCESS,
             lType,
-            item
+            locationObject
           });
           toastr.success(
             'Success',
@@ -177,81 +244,73 @@ export function deleteAnyLocation(item: any, lType: string): ThunkResult<void> {
   };
 }
 
-export const setSelectedBuilding = (building: Ibuilding): ThunkResult<void> => {
+export const filterLocations = (facilityID: string): ThunkResult<void> => {
   return (dispatch, getState) => {
-    let item = building;
-    const buildingID = building.id;
-
-    const { buildings } = getState().manageLocation.facility;
-    const buildingB = find(buildings, build => build.id === buildingID);
-    if (buildingB) {
-      item = buildingB;
-    }
-
-    dispatch({
-      type: types.SET_SELECTED_BUILDING,
-      item
-    });
-  };
-};
-
-export const setSelectedFloor = (
-  floor: Ifloor,
-  facilityID: string
-): ThunkResult<void> => {
-  return (dispatch, getState) => {
-    let item = floor;
-    const buildingID = getState().manageLocation.selectedBuilding.id;
-    const { buildings } = getState().manageLocation.facility;
-
-    const building = find(buildings, build => build.id === buildingID);
-    if (building && building.floors.length) {
-      const newFloor = find(building.floors, fl => fl.id === floor.id);
-      if (newFloor) {
-        item = newFloor;
-      }
-    }
-
-    dispatch({
-      type: types.SET_SELECTED_FLOOR,
-      item
-    });
-  };
-};
-
-export const setSelectedLocation = (
-  location: Ilocation,
-  facilityID: string
-): ThunkResult<void> => {
-  return (dispatch, getState) => {
-    let item = location;
-    const buildingID = getState().manageLocation.selectedBuilding.id;
-    const { buildings } = getState().manageLocation.facility;
-
-    const building = find(buildings, build => build.id === buildingID);
-    if (building && building.floors.length) {
-      const floor = find(building.floors, fl => fl.id === location.floorID);
-      if (floor && floor.locations.length) {
-        const newLocation = find(
-          floor.locations,
-          loc => loc.id === location.id
-        );
-        if (newLocation) {
-          item = newLocation;
+    const { tableFilters, facility } = getState().manageLocation;
+    const { buildingID, locationID, floorID } = tableFilters;
+    const { buildings } = facility;
+    let locations: Array<Ibuilding | Ifloor | Ilocation | Iroom> = [];
+    if (buildingID && floorID && locationID) {
+      // LOCATION
+      const building: Ibuilding | undefined = find(
+        buildings,
+        build => build.id === buildingID
+      );
+      if (building && building.floors.length) {
+        const newFloor = find(building.floors, fl => fl.id === floorID);
+        if (newFloor && newFloor.locations.length) {
+          const location = newFloor.locations.find(
+            item => item.id === locationID
+          );
+          if (location && location.rooms.length) {
+            locations = filterLocationsHelper(location.rooms, tableFilters);
+          }
         }
       }
+    } else if (buildingID && floorID) {
+      const building = find(buildings, build => build.id === buildingID);
+      if (building && building.floors.length) {
+        const newFloor = find(building.floors, fl => fl.id === floorID);
+        if (newFloor && newFloor.locations.length) {
+          locations = filterLocationsHelper(newFloor.locations, tableFilters);
+        }
+      }
+    } else if (buildingID) {
+      const building = find(buildings, build => build.id === buildingID);
+      if (building && building.floors.length) {
+        locations = filterLocationsHelper(building.floors, tableFilters);
+      }
+    } else {
+      locations = filterLocationsHelper(buildings, tableFilters);
     }
 
     dispatch({
-      type: types.SET_SELECTED_LOCATION,
-      item
+      type: types.SET_VISIBLE_LOCATIONS,
+      locations
     });
   };
 };
-export const setSelectedRoom = (item?: Iroom) => ({
-  type: types.SET_SELECTED_ROOM,
-  item
-});
+/*
+* receive an array of locationObjects and filter out based on the selected filters and deleted items
+*/
+const filterLocationsHelper = (
+  locations: Array<Ibuilding | Ifloor | Ilocation | Iroom>,
+  tableFilters: ItableFiltersParams
+) => {
+  // const {} = tableFilters;
+  return filter(locations, location => {
+    let shouldInclude = true;
+    if (location.isDeleted === true) {
+      shouldInclude = false;
+    }
+    return shouldInclude;
+  });
+};
+
+// export const setSelectedFacility = (facility: Ifacility) => ({
+//   type: types.SET_SELECTED_FACILITY,
+//   facility
+// });
 
 export const toggleEditLocationModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_LOCATION
@@ -261,3 +320,46 @@ export const setTableFilter = (filters: ItableFiltersParams) => ({
   type: types.SET_TABLE_FILTER_MANAGE_LOCATION,
   filters
 });
+
+const cleanFacility = (facility: Ifacility) => {
+  let buildings = facility.buildings;
+
+  if (buildings.length) {
+    buildings = buildings.filter(building => building.isDeleted === false);
+    if (buildings.length) {
+      buildings = buildings.map(building => {
+        const filteredFloors = building.floors.filter(
+          floor => floor.isDeleted === false
+        );
+        if (filteredFloors.length) {
+          const floors = filteredFloors.map(floor => {
+            const filteredLocations = floor.locations.filter(
+              location => location.isDeleted === false
+            );
+            if (filteredLocations.length) {
+              const locations = filteredLocations.map(location => {
+                if (location.rooms.length) {
+                  return {
+                    ...location,
+                    rooms: location.rooms.filter(
+                      room => room.isDeleted === false
+                    )
+                  };
+                } else {
+                  return location;
+                }
+              });
+              return { ...floor, locations };
+            } else {
+              return { ...floor, locations: filteredLocations };
+            }
+          });
+          return { ...building, floors };
+        } else {
+          return { ...building, floors: filteredFloors };
+        }
+      });
+    }
+  }
+  return { ...facility, buildings };
+};

@@ -24,12 +24,12 @@ interface Iprops {
 }
 
 interface IdispatchProps {
-  showEditProfileModal: boolean;
+  showModal: boolean;
   loading: boolean;
   customers: any[];
   facilityOptions: any[];
   updateUserProfile: typeof updateUserProfile;
-  toggleEditProfileModal: () => void;
+  toggleModal: () => void;
   getFacilitiesByCustomer: (value: string) => Promise<void>;
   user: Iuser;
 }
@@ -45,13 +45,13 @@ class EditManageUserModal extends React.Component<Iprops & IdispatchProps, {}> {
   render() {
     return (
       <CommonModal
-        modalVisible={this.props.showEditProfileModal}
+        modalVisible={this.props.showModal}
         className="user-edit"
-        onHide={this.props.toggleEditProfileModal}
+        onHide={this.props.toggleModal}
         body={
           <UserProfileForm
             handleSubmit={this.props.updateUserProfile}
-            handleCancel={this.props.toggleEditProfileModal}
+            handleCancel={this.props.toggleModal}
             loading={this.props.loading}
             colorButton={this.props.colorButton}
             customers={this.props.customers}
@@ -74,14 +74,14 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     loading: state.ajaxCallsInProgress > 0,
     customers: state.customers,
     facilityOptions: FormUtil.convertToOptions(state.facilities),
-    showEditProfileModal: state.showEditProfileModal
+    showModal: state.showEditProfileModal
   };
 };
 
 export default connect(
   mapStateToProps,
   {
-    toggleEditProfileModal,
+    toggleModal: toggleEditProfileModal,
     getFacilitiesByCustomer,
     updateUserProfile
   }

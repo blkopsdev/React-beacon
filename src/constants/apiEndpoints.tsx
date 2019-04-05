@@ -52,7 +52,7 @@ const API = {
       savequiz: `${root}/training/savequiz`,
       startQuiz: `${root}/training/startquiz`
     },
-    measurements: {
+    measurementPoint: {
       addglobalmpl: `${root}/MeasurementPoint/AddGlobalMeasurementPointList`
     }
   },
@@ -61,7 +61,7 @@ const API = {
     floor: `${root}/floor`,
     location: `${root}/location`,
     room: `${root}/room`,
-    measurements: {
+    measurementPoint: {
       updateglobalmpl: `${root}/MeasurementPoint/UpdateGlobalMeasurementPointList`,
       updatecustomermpl: `${root}/MeasurementPoint/UpdateCustomerMeasurementPointList`
     }
@@ -71,7 +71,7 @@ const API = {
     floor: `${root}/floor`,
     location: `${root}/location`,
     room: `${root}/room`,
-    measurements: {
+    measurementPoint: {
       deleteglobalmpl: `${root}/MeasurementPoint/deleteglobalmeasurementpointlist`,
       deletecustomermpl: `${root}/MeasurementPoint/deletecustomermeasurementpointlist`,
       deleteglobalmeasurementpoint: `${root}/MeasurementPoint/deleteglobalmeasurementpoint`,
@@ -127,8 +127,11 @@ const API = {
       getAdminProgress: `${root}/training/getadminprogress`,
       getQuizResults: `${root}/training/getquizresults`
     },
-    measurements: {
-      getall: `${root}/measurementpoint/GetAllMeasurementPointLists`
+    measurementPoint: {
+      getall: `${root}/measurementpoint/GetAllMeasurementPointLists`,
+      getJobResults: `${root}/MeasurementPoint/GetJobMeasurementPointListResults`,
+      getFacilityMeasurementPointListResults: `${root}/MeasurementPoint/GetFacilityMeasurementPointListResults`,
+      getMeasurementPointList: `${root}/measurementpoint/getmeasurementpointlist`
     }
   }
 };

@@ -29,7 +29,7 @@ interface Iprops {
 interface IdispatchProps {
   showEditCustomerModal: boolean;
   loading: boolean;
-  toggleEditCustomerModal: typeof toggleEditCustomerModal;
+  toggleModal: () => void;
   addCustomer: typeof addCustomer;
 }
 
@@ -43,11 +43,11 @@ class EditCustomerModal extends React.Component<Iprops & IdispatchProps, {}> {
       <CommonModal
         modalVisible={this.props.showEditCustomerModal}
         className="customer-edit second-modal"
-        onHide={this.props.toggleEditCustomerModal}
+        onHide={this.props.toggleModal}
         body={
           <EditCustomerForm
             handleSubmit={this.props.addCustomer}
-            handleCancel={this.props.toggleEditCustomerModal}
+            handleCancel={this.props.toggleModal}
             colorButton={this.props.colorButton}
             loading={this.props.loading}
           />
@@ -70,7 +70,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
 export default connect(
   mapStateToProps,
   {
-    toggleEditCustomerModal,
+    toggleModal: toggleEditCustomerModal,
     addCustomer
   }
 )(EditCustomerModal);

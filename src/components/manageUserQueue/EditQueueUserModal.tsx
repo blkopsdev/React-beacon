@@ -53,7 +53,7 @@ interface IdispatchProps {
   customerOptions: Ioption[];
   facilityOptions: Ioption[];
   updateQueueUser: typeof updateQueueUser;
-  toggleEditQueueUserModal: typeof toggleEditQueueUserModal;
+  toggleModal: () => void;
   getFacilitiesByCustomer: () => Promise<void>;
   toggleEditCustomerModal: typeof toggleEditCustomerModal;
   toggleEditFacilityModal: typeof toggleEditFacilityModal;
@@ -70,7 +70,7 @@ class EditQueueUserModal extends React.Component<Iprops & IdispatchProps, {}> {
       <CommonModal
         modalVisible={this.props.showEditQueueUserModal}
         className="user-edit"
-        onHide={this.props.toggleEditQueueUserModal}
+        onHide={this.props.toggleModal}
         body={<EditQueueUserForm {...this.props} />}
         title={this.props.t('newUserModalTitle')}
         container={document.getElementById('modal-one')}
@@ -97,7 +97,7 @@ export default connect(
   {
     updateQueueUser,
     getFacilitiesByCustomer,
-    toggleEditQueueUserModal,
+    toggleModal: toggleEditQueueUserModal,
     toggleEditCustomerModal,
     toggleEditFacilityModal,
     approveUser

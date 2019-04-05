@@ -29,7 +29,6 @@ import {
 } from '../../models';
 import {
   saveProduct,
-  toggleEditProductModal,
   updateProduct,
   toggleSearchNewProductsModal
 } from '../../actions/manageInventoryActions';
@@ -44,7 +43,7 @@ interface AbstractControlEdited extends AbstractControl {
 }
 
 interface Iprops {
-  toggleEditProductModal: typeof toggleEditProductModal;
+  toggleModal: () => void;
   selectedItem: Iproduct;
   selectedQueueObject?: IproductQueueObject;
   loading: boolean;
@@ -75,40 +74,6 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
       this.props.t
     );
   }
-  // componentDidUpdate(prevProps: Iprops) {
-  // }
-
-  // componentDidMount() {
-  //   if (!this.props.selectedItem) {
-  //     console.log('adding a new user');
-  //   } else {
-  //     // set values
-  //     forEach(this.props.selectedItem, (value, key) => {
-  //       if (typeof value === 'string' && key.split('ID').length === 1) {
-  //         // it is a string and did Not find 'ID'
-  //         this.userForm.patchValue({ [key]: value });
-  //       } else if (value !== null) {
-  //         this.userForm.patchValue({
-  //           [key]: find(
-  //             this.props.productInfo[`${key.split('ID')[0]}Options`],
-  //             { value }
-  //           )
-  //         });
-  //         // special set for mainCategory
-  //         if (key === 'subcategory' && typeof value === 'object') {
-  //           const subcat = value as Isubcategory;
-  //           const { mainCategoryID } = subcat;
-  //           this.userForm.patchValue({
-  //             mainCategoryID: find(
-  //               this.props.productInfo[`mainCategoryOptions`],
-  //               { value: mainCategoryID }
-  //             )
-  //           });
-  //         }
-  //       }
-  //     });
-  //   }
-  // }
 
   componentWillUnmount() {
     if (this.subscription) {
@@ -121,23 +86,20 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
       .get('mainCategoryID')
       .valueChanges.subscribe((value: Ioption | null) => {
         if (value !== null) {
-          this.filterSubcategories(value.value);
+          this.updateControlOptions(
+            this.filterSubcategories(value.value),
+            'subcategoryID'
+          );
+          this.updateControlOptions(
+            this.filterProductTypes(value.value),
+            'productTypeID'
+          );
+          this.updateControlOptions(
+            this.filterSystemSizes(value.value),
+            'systemSizeID'
+          );
         }
       });
-    // this.subscription = this.userForm
-    //   .get('floorID')
-    //   .valueChanges.subscribe((value: Ioption | null) => {
-    //     if (value !== null) {
-    //       this.filterLocations(value.value);
-    //     }
-    //   });
-    // this.subscription = this.userForm
-    //   .get('locationID')
-    //   .valueChanges.subscribe((value: Ioption | null) => {
-    //     if (value !== null) {
-    //       this.filterRooms(value.value);
-    //     }
-    //   });
   };
   buildFieldConfig = (productInfo: IproductInfo, disabled: boolean) => {
     const {
@@ -150,7 +112,9 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
       systemSizeID,
       standardID
     } = this.props.selectedItem;
-    let filteredSubcategories: Isubcategory[] = [];
+    let filteredSubcategoryOptions: Ioption[] = [];
+    let productTypeOptions = productInfo.productTypeOptions;
+    let systemSizeOptions = productInfo.systemSizeOptions;
     // let selectedSubcategoryID = null;
     let selectedMainCategory: any = null;
     const selectedBrand = brandID ? productInfo.brands[brandID] : null;
@@ -166,39 +130,26 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
       : null;
     const selectedStandard = standardID
       ? productInfo.standards[standardID]
-      : null;
+      : productInfo.standards[constants.defaultProductStandardID];
     if (subcategoryID) {
       // TODO for now grabbing the first mainCategoryID.  when we actually support having multiple mainCategories related to a single subCategory, we will need to store the mainCategoryID on the product object
       const mainCategoryID =
         productInfo.subcategories[subcategoryID].mainCategoryIDs[0];
       if (mainCategoryID) {
         selectedMainCategory = productInfo.mainCategories[mainCategoryID];
-        filteredSubcategories = filter(
-          productInfo.subcategories,
-          (sub: Isubcategory) => {
-            return sub.mainCategoryIDs.indexOf(mainCategoryID) !== -1;
-          }
+        filteredSubcategoryOptions = FormUtil.convertToOptions(
+          this.filterSubcategories(mainCategoryID)
+        );
+        productTypeOptions = FormUtil.convertToOptions(
+          this.filterProductTypes(mainCategoryID)
+        );
+        systemSizeOptions = FormUtil.convertToOptions(
+          this.filterSystemSizes(mainCategoryID)
         );
       }
     }
     const fieldConfigControls = {
-      // name: {
-      //   options: {
-      //     validators: [Validators.required, FormUtil.validators.requiredWithTrim]
-      //   },
-      //   render: FormUtil.TextInput,
-      //   meta: {
-      //     label: 'name',
-      //     colWidth: 12,
-      //     type: 'input',
-      //     name: 'product-name',
-      //     disabled
-      //   }
-      // },
       sku: {
-        // options: {
-        //   validators: [Validators.required, FormUtil.validators.requiredWithTrim]
-        // },
         render: FormUtil.TextInput,
         meta: {
           label: 'sku',
@@ -210,9 +161,6 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
         formState: { value: sku, disabled }
       },
       description: {
-        // options: {
-        //   validators: [Validators.required, FormUtil.validators.requiredWithTrim]
-        // },
         render: FormUtil.TextInput,
         meta: {
           label: 'description',
@@ -223,7 +171,6 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
         },
         formState: { value: description, disabled }
       },
-
       brandID: {
         render: FormUtil.Select,
         meta: {
@@ -263,9 +210,7 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
       subcategoryID: {
         render: FormUtil.Select,
         meta: {
-          options: selectedMainCategory
-            ? FormUtil.convertToOptions(filteredSubcategories)
-            : [],
+          options: selectedMainCategory ? filteredSubcategoryOptions : [],
           label: 'subcategory',
           colWidth: 12,
           placeholder: 'common:searchPlaceholder',
@@ -283,7 +228,7 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
       productTypeID: {
         render: FormUtil.Select,
         meta: {
-          options: productInfo.productTypeOptions,
+          options: productTypeOptions,
           label: 'productType',
           colWidth: 6,
           placeholder: 'common:searchPlaceholder',
@@ -314,10 +259,11 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
           disabled
         }
       },
+      // model
       systemSizeID: {
         render: FormUtil.Select,
         meta: {
-          options: productInfo.systemSizeOptions,
+          options: systemSizeOptions,
           label: 'systemSize',
           colWidth: 6,
           placeholder: 'common:searchPlaceholder',
@@ -355,22 +301,26 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
   };
 
   filterSubcategories = (mainCategoryID: string) => {
-    if (mainCategoryID) {
-      const filteredSubcategories = filter(
-        this.props.productInfo.subcategories,
-        (sub: Isubcategory) => {
-          return sub.mainCategoryID === mainCategoryID;
-        }
-      );
-      const subcategoryControl = this.userForm.get(
-        'subcategoryID'
-      ) as AbstractControlEdited;
-      subcategoryControl.meta.options = FormUtil.convertToOptions(
-        filteredSubcategories
-      );
-      subcategoryControl.stateChanges.next();
-      this.userForm.patchValue({ subcategoryID: null });
-    }
+    return filter(this.props.productInfo.subcategories, (sub: Isubcategory) => {
+      return sub.mainCategoryID === mainCategoryID;
+    });
+  };
+
+  filterProductTypes = (mainCategoryID: string) => {
+    return filter(this.props.productInfo.productTypes, type => {
+      return type.mainCategoryIDs.indexOf(mainCategoryID) !== -1;
+    });
+  };
+  filterSystemSizes = (mainCategoryID: string) => {
+    return filter(this.props.productInfo.systemSizes, systemSize => {
+      return systemSize.mainCategoryIDs.indexOf(mainCategoryID) !== -1;
+    });
+  };
+  updateControlOptions = (options: any[], controlKey: string) => {
+    const control = this.userForm.get(controlKey) as AbstractControlEdited;
+    control.meta.options = FormUtil.convertToOptions(options);
+    control.stateChanges.next();
+    this.userForm.patchValue({ [controlKey]: null });
   };
 
   /*
@@ -537,7 +487,7 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
               bsStyle="default"
               type="button"
               className="pull-left"
-              onClick={this.props.toggleEditProductModal}
+              onClick={this.props.toggleModal}
             >
               {t('common:cancel')}
             </Button>

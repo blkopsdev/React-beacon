@@ -18,10 +18,7 @@ import { translate, TranslationFunction } from 'react-i18next';
 
 import { FormUtil } from '../common/FormUtil';
 import { ImeasurementPointList } from 'src/models';
-import {
-  toggleEditMeasurementPointListTestProceduresModal,
-  updateGlobalMeasurementPointList
-} from 'src/actions/manageMeasurementPointListsActions';
+import { updateGlobalMeasurementPointList } from 'src/actions/manageMeasurementPointListsActions';
 // import { IqueueObject } from '../../models';
 
 // add the bootstrap form-control class to the react-select select component
@@ -50,7 +47,7 @@ const fieldConfig = (
 };
 
 interface Iprops {
-  toggleEditMeasurementPointListTestProceduresModal: typeof toggleEditMeasurementPointListTestProceduresModal;
+  toggleModal: () => void;
   loading: boolean;
   colorButton: string;
   selectedMeasurementPointList: ImeasurementPointList;
@@ -100,7 +97,7 @@ class EditMeasurementPointListTestProceduresFormClass extends React.Component<
       false,
       false
     );
-    this.props.toggleEditMeasurementPointListTestProceduresModal();
+    this.props.toggleModal();
   };
   setForm = (form: AbstractControl) => {
     this.userForm = form;
@@ -120,9 +117,7 @@ class EditMeasurementPointListTestProceduresFormClass extends React.Component<
             bsStyle="default"
             type="button"
             className="pull-left"
-            onClick={
-              this.props.toggleEditMeasurementPointListTestProceduresModal
-            }
+            onClick={this.props.toggleModal}
           >
             {t('common:cancel')}
           </Button>

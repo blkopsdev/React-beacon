@@ -26,7 +26,6 @@ import {
   Ioption
 } from '../../models';
 import {
-  toggleEditMeasurementPointListModal,
   toggleEditMeasurementPointModal,
   addGlobalMeasurementPointList,
   setSelectedTabID,
@@ -53,7 +52,7 @@ interface Iprops extends React.Props<EditMeasurementPointListForm> {
   colorButton: string;
   t: TranslationFunction;
   i18n: I18n;
-  toggleEditMeasurementPointListModal: typeof toggleEditMeasurementPointListModal;
+  toggleModal: () => void;
   toggleEditMeasurementPointModal: typeof toggleEditMeasurementPointModal;
   addGlobalMeasurementPointList: typeof addGlobalMeasurementPointList;
   updateGlobalMeasurementPointList: (
@@ -161,7 +160,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     if (type !== 0) {
       selectedType = {
         label:
-          constants.measurementPointListTypeEnum[
+          constants.measurementPointListTypeLookup[
             selectedMeasurementPointList.type
           ],
         value: selectedMeasurementPointList.type
@@ -442,7 +441,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     );
   };
   handleCancel = () => {
-    this.props.toggleEditMeasurementPointListModal();
+    this.props.toggleModal();
     this.props.setSelectedTabID('');
     this.props.setSelectedMeasurementPointList(initialMeasurementPointList);
   };

@@ -23,7 +23,7 @@ interface IdispatchProps {
   showModal: boolean;
   loading: boolean;
   importInstall: typeof importInstall;
-  toggleImportInstallModal: typeof toggleImportInstallModal;
+  toggleModal: () => void;
 }
 
 class ImportInstallModal extends React.Component<Iprops & IdispatchProps, {}> {
@@ -36,7 +36,7 @@ class ImportInstallModal extends React.Component<Iprops & IdispatchProps, {}> {
       <CommonModal
         modalVisible={this.props.showModal}
         className="user-edit"
-        onHide={this.props.toggleImportInstallModal}
+        onHide={this.props.toggleModal}
         body={<ImportInstallForm {...this.props} />}
         title={this.props.t('importInstallModalTitle')}
         container={document.getElementById('two-pane-layout')}
@@ -57,6 +57,6 @@ export default connect(
   mapStateToProps,
   {
     importInstall,
-    toggleImportInstallModal
+    toggleModal: toggleImportInstallModal
   }
 )(ImportInstallModal);

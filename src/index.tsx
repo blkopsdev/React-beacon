@@ -24,7 +24,9 @@ import {
   faClock,
   faEdit,
   faSortAmountUp,
-  faSortAmountDown
+  faSortAmountDown,
+  faClipboardList,
+  faWrench
 } from '@fortawesome/pro-regular-svg-icons';
 import {
   faUsers,
@@ -32,8 +34,7 @@ import {
   faUser,
   faShoppingCart,
   faChevronDown,
-  faChevronRight,
-  faEnvelope
+  faChevronRight
 } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { runWithAdal } from 'react-adal';
@@ -64,14 +65,15 @@ library.add(
   faShoppingCart,
   faChevronDown,
   faChevronRight,
-  faEnvelope,
+  faWrench,
   faListAlt,
   faPlus,
   faMinus,
   faClock,
   faEdit,
   faSortAmountUp,
-  faSortAmountDown
+  faSortAmountDown,
+  faClipboardList
 );
 
 import { authContext } from './actions/userActions';

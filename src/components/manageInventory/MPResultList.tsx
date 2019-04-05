@@ -27,10 +27,10 @@ const AnswerListItem = (
   t: TranslationFunction
 ) => {
   let AnswerElement = () => <div>no answer</div>;
-  if (mpAnswer.numericValue !== null) {
+  if (mpAnswer.numericValue !== undefined) {
     AnswerElement = () => <div>mpAnswer.numericValue</div>;
   }
-  if (mpAnswer.pass !== null) {
+  if (mpAnswer.pass !== undefined) {
     if (mpAnswer.pass === 1) {
       AnswerElement = () => (
         <div
@@ -53,12 +53,12 @@ const AnswerListItem = (
       );
     }
   }
-  if (mpAnswer.textValue !== null) {
+  if (mpAnswer.textValue !== undefined) {
     AnswerElement = () => <div>{mpAnswer.textValue}</div>;
   }
 
   if (
-    mpAnswer.measurementPointSelectOptionID !== null &&
+    mpAnswer.measurementPointSelectOptionID !== undefined &&
     measurementPoint.selectOptions
   ) {
     const { selectOptions } = measurementPoint;
@@ -101,7 +101,7 @@ export class MPResultList extends React.Component<Props, {}> {
   render() {
     const { t } = this.props;
     if (isEmpty(this.props.measurementPointsByID)) {
-      return <h4>Loading...</h4>;
+      return <h4 style={{ padding: '15px' }}>Loading...</h4>;
     }
     return (
       <div>

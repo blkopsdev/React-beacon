@@ -93,6 +93,15 @@ export const MPResultHistory = (props: Iprops) => {
       <div className="result-history">
         <h4>History</h4>
         <p>No Inspections for this Device.</p>
+        <Col xs={12} className="form-buttons text-right">
+          <Button
+            bsStyle={props.colorButton}
+            type="button"
+            onClick={props.toggleModal}
+          >
+            {t('common:done')}
+          </Button>
+        </Col>
       </div>
     );
   }

@@ -89,7 +89,9 @@ export const initialRoom = {
   locationID: '',
   isDeleted: false
 };
-
+export const initialMeasurementPointResultAnswer = {
+  measurementPointID: ''
+};
 export const initialMeasurementPointList = {
   id: '',
   measurementPointTabs: [],
@@ -117,7 +119,6 @@ export const initialMeasurementPoint = {
 export const initialMeasurmentPointResult = {
   id: '',
   status: 0,
-  temporary: true,
   createDate: '',
   updateDate: '',
   jobID: '',

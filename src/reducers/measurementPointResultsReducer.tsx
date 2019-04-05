@@ -7,9 +7,12 @@ import {
   ImeasurmentPointResultsReducer,
   ImeasurementPointResult
 } from 'src/models';
-import initialState, { initialMeasurmentPointResult } from './initialState';
+import initialState, {
+  initialMeasurmentPointResult,
+  initialMeasurementPointResultAnswer
+} from './initialState';
 import * as types from '../actions/actionTypes';
-import { keyBy } from 'lodash';
+import { keyBy, pickBy } from 'lodash';
 
 const measurementPointResultsByIDReducer = (
   state: { [key: string]: ImeasurementPointResult } = {},
@@ -17,11 +20,14 @@ const measurementPointResultsByIDReducer = (
 ): { [key: string]: ImeasurementPointResult } => {
   switch (action.type) {
     case types.ADD_MEASUREMENT_POINT_RESULT:
-      return { ...state, [action.result.id]: action.result };
+      return { ...state, [action.result.id]: cleanResult(action.result) };
     case types.UPDATE_MEASUREMENT_POINT_RESULT:
-      return { ...state, [action.result.id]: action.result };
+      return { ...state, [action.result.id]: cleanResult(action.result) };
     case types.GET_MEASUREMENT_POINT_FACILITY_RESULTS_SUCCESS:
-      const newResults = keyBy(action.results, 'id');
+      const newResults = keyBy(
+        action.results.map((res: ImeasurementPointResult) => cleanResult(res)),
+        'id'
+      );
       return { ...state, ...newResults };
     case types.USER_LOGOUT_SUCCESS:
       return {};
@@ -46,9 +52,9 @@ const selectedResultReducer = (
         // return state;
       }
       if (state.id === action.result.id) {
-        return { ...state, ...action.result };
+        return { ...state, ...cleanResult(action.result) };
       } else {
-        return action.result;
+        return cleanResult(action.result);
       }
     case types.RESET_MEASUREMENT_POINT_RESULT:
       return initialMeasurmentPointResult;
@@ -108,3 +114,19 @@ export default function measurementPointResultsReducer(
     previousResult: previousResultReducer(state.previousResult, action)
   };
 }
+
+const cleanResult = (
+  result: ImeasurementPointResult
+): ImeasurementPointResult => {
+  const cleanedAnswers = result.measurementPointAnswers.map(answer => {
+    return {
+      ...initialMeasurementPointResultAnswer,
+      ...pickBy(answer, (property, key) => property !== null)
+    };
+  });
+  return {
+    ...initialMeasurmentPointResult,
+    ...pickBy(result, (property, key) => property !== null),
+    measurementPointAnswers: cleanedAnswers
+  };
+};

@@ -6,7 +6,12 @@ import { connect } from 'react-redux';
 import { filter, values } from 'lodash';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
-import ReactTable, { SortingRule, FinalState, RowInfo } from 'react-table';
+import ReactTable, {
+  SortingRule,
+  FinalState,
+  RowInfo,
+  Column
+} from 'react-table';
 import { toastr } from 'react-redux-toastr';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button, Col } from 'react-bootstrap';
@@ -45,6 +50,10 @@ import { EditMeasurementPointListTabModal } from './EditMeasurementPointListTabM
 import { EditMeasurementPointListTestProceduresModal } from './EditMeasurementPointListTestProceduresModal';
 import EditMeasurementPointModal from './EditMeasurementPointModal';
 const uuidv4 = require('uuid/v4');
+
+interface RowInfoMPL extends RowInfo {
+  original: ImeasurementPointList;
+}
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -227,48 +236,38 @@ class ManageMeasurementPointList extends React.Component<
         },
         {
           Header: '',
+          id: 'edit',
+          minWidth: 25,
           Cell: row => (
             <div>
-              <Button
-                bsStyle="link"
-                style={{ float: 'right', marginRight: 11 }}
-                onClick={() => {
-                  this.buttonInAction = true;
-                  this.handleEdit(row);
-                }}
-              >
-                <FontAwesomeIcon icon={['far', 'edit']}> Edit </FontAwesomeIcon>
+              <Button bsStyle="link" style={{ float: 'right' }}>
+                <FontAwesomeIcon icon={['far', 'edit']} />
               </Button>
-              {this.isAdmin && (
-                <Button
-                  bsStyle="link"
-                  style={{ float: 'right', color: 'red' }}
-                  onClick={() => {
-                    this.buttonInAction = true;
-                    this.deleteAction = true;
-                    this.handleDelete(row.original);
-                  }}
-                >
-                  <FontAwesomeIcon icon={['far', 'times']}>
-                    Delete
-                  </FontAwesomeIcon>
-                </Button>
-              )}
             </div>
           )
+        },
+        {
+          Header: '',
+          id: 'delete',
+          minWidth: 25,
+          Cell: row => {
+            const color = this.isAdmin
+              ? constants.colors.red
+              : constants.colors.greyText;
+            return (
+              <Button bsStyle="link" style={{ float: 'right', color }}>
+                <FontAwesomeIcon icon={['far', 'times']} />
+              </Button>
+            );
+          }
         }
       ],
       this.props.t
     );
   };
 
-  handleEdit(rowInfo: RowInfo) {
-    this.props.setSelectedMeasurementPointList(
-      this.props.tableData[rowInfo.index]
-    );
-    this.setState({
-      selectedRow: rowInfo.index
-    });
+  handleEdit(MPList: ImeasurementPointList) {
+    this.props.setSelectedMeasurementPointList(MPList);
     this.props.toggleEditMeasurementPointListModal();
   }
 
@@ -279,7 +278,6 @@ class ManageMeasurementPointList extends React.Component<
           ...deletedItem
         };
         // this.props.deleteGlobalMeasurementPointList(deletedItem.id); // TODO fix this
-        console.log('deleted', deletedItem);
       },
       onCancel: () => console.log('CANCEL: clicked'),
       okText: this.props.t('deleteMPLButton'),
@@ -294,17 +292,8 @@ class ManageMeasurementPointList extends React.Component<
   * set the selected product to state and open the modal
   */
   getTrProps = (state: FinalState, rowInfo: RowInfo) => {
-    // console.log("ROWINFO", rowInfo);
     if (rowInfo) {
       return {
-        onClick: (e: React.MouseEvent<HTMLFormElement>) => {
-          if (!this.buttonInAction) {
-            this.handleEdit(rowInfo);
-          }
-
-          this.buttonInAction = false;
-          this.deleteAction = false;
-        },
         style: {
           background:
             rowInfo.index === this.state.selectedRow
@@ -354,6 +343,28 @@ class ManageMeasurementPointList extends React.Component<
   ) => {
     this.props.setTableFilter({ sorted: newSorted });
     this.setState({ selectedRow: {} });
+  };
+
+  getTdProps = (
+    fState: FinalState,
+    rowInfo: RowInfoMPL,
+    column: Column,
+    instance: any
+  ) => {
+    if (column.id && column.id === 'delete') {
+      return {
+        onClick: () => this.handleDelete(rowInfo.original)
+      };
+    } else {
+      return {
+        onClick: () => {
+          this.setState({
+            selectedRow: rowInfo.index
+          });
+          this.handleEdit(rowInfo.original);
+        }
+      };
+    }
   };
 
   handleNewMeasurementList = () => {
@@ -426,6 +437,7 @@ class ManageMeasurementPointList extends React.Component<
           onSortedChange={this.onSortedChanged}
           columns={this.state.columns}
           getTrProps={this.getTrProps}
+          getTdProps={this.getTdProps}
           pageSize={this.props.tableData.length}
           page={this.props.tableFilters.page - 1}
           manual // Forces table not to paginate or sort automatically, so we can handle it server-side

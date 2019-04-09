@@ -3,7 +3,7 @@
 */
 import { RouteComponentProps } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { filter, values } from 'lodash';
+import { filter, values, size } from 'lodash';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 import ReactTable, {
@@ -226,11 +226,10 @@ class ManageMeasurementPointList extends React.Component<
           accessor: ({ measurementPointTabs }: ImeasurementPointList) => {
             let count = 0;
             measurementPointTabs.forEach(tab => {
-              if (tab.measurementPoints.length) {
-                count += filter(
-                  tab.measurementPoints,
-                  mp => mp.isDeleted === false
-                ).length;
+              if (size(tab.measurementPoints)) {
+                count += size(
+                  filter(tab.measurementPoints, mp => mp.isDeleted === false)
+                );
               }
             });
             return count;

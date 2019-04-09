@@ -154,7 +154,7 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
         id: 'location',
         accessor: (install: IinstallBase) =>
           TableUtil.buildLocation(install, props.facility),
-        minWidth: 200
+        minWidth: 220
       },
       {
         Header: 'status',
@@ -164,7 +164,7 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
             'manageMeasurementPointLists:' + status
           )}`}</span>
         ),
-        minWidth: 150
+        minWidth: 100
       },
       {
         Header: '',

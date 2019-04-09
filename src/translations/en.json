@@ -91,7 +91,7 @@
     "name": "name",
     "email": "email",
     "company": "company",
-    "manager": "is manager?",
+    "manager": "manager",
     "login": "last login",
     "searchPlaceholder": "Search by First, Last, or Email",
     "customerPlaceholder": "Select Customer",

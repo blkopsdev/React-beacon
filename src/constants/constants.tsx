@@ -270,7 +270,7 @@ const tiles = [
     srcBanner: require('src/images/beaconTrainingHeader.jpg'),
     color: 'blue',
     width: 360,
-    height: 400,
+    height: 300,
     url: '/training',
     securityFunction: securityFunctions.ManageIndividualTraining.id,
     description: ''
@@ -283,7 +283,7 @@ const tiles = [
     srcBanner: require('src/images/beaconTrainingHeader.jpg'),
     color: 'orange',
     width: 360,
-    height: 400,
+    height: 300,
     url: '/manageTraining',
     securityFunction: securityFunctions.ManageAllTraining.id,
     description: ''
@@ -296,7 +296,7 @@ const tiles = [
     srcBanner: require('src/images/beaconQueueHeader.jpg'),
     color: 'orange',
     width: 360,
-    height: 400,
+    height: 300,
     url: '/queue',
     securityFunction: securityFunctions.ManageUsers.id,
     description: ''
@@ -309,7 +309,7 @@ const tiles = [
     srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
     color: 'purple',
     width: 360,
-    height: 400,
+    height: 300,
     url: '/users',
     securityFunction: securityFunctions.ManageUsers.id,
     description: ''
@@ -322,7 +322,7 @@ const tiles = [
     srcBanner: require('src/images/beaconManageJobsHeader.jpg'),
     color: 'orange',
     width: 360,
-    height: 400,
+    height: 300,
     url: '/managejobs',
     securityFunction: securityFunctions.ManageJobs.id,
     description: ''
@@ -335,7 +335,7 @@ const tiles = [
     srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
     color: 'green',
     width: 360,
-    height: 400,
+    height: 300,
     url: '/locations',
     securityFunction: securityFunctions.ManageLocations.id,
     description: ''
@@ -348,7 +348,7 @@ const tiles = [
     srcBanner: require('src/images/beaconManageTeamHeader.jpg'),
     color: 'blue',
     width: 360,
-    height: 400,
+    height: 300,
     url: '/team',
     securityFunction: securityFunctions.ManageTeamMembers.id,
     description: ''
@@ -374,7 +374,7 @@ const tiles = [
     srcBanner: require('src/images/beaconManageInventoryHeader.jpg'),
     color: 'green',
     width: 360,
-    height: 400,
+    height: 300,
     url: '/inventory',
     securityFunction: securityFunctions.ViewInventory.id,
     description: ''
@@ -387,7 +387,7 @@ const tiles = [
     srcBanner: require('src/images/beaconManageProductQueueHeader.jpg'),
     color: 'purple',
     width: 360,
-    height: 400,
+    height: 300,
     url: '/productqueue',
     securityFunction: securityFunctions.ManageProductQueue.id,
     description: ''
@@ -409,11 +409,11 @@ const tiles = [
     icon: 'icon-billing',
     iconType: 'fa',
     title: 'billing',
-    src: 'https://placekitten.com/360/400',
+    src: 'https://placekitten.com/360/300',
     srcBanner: '',
     color: 'orange',
     width: 359,
-    height: 400,
+    height: 300,
     url: '/billing',
     securityFunction: '',
     description: ''
@@ -450,9 +450,9 @@ const tiles = [
     title: 'manageCustomerMeasurementPointList',
     src: require('src/images/beaconManageUsers.jpg'),
     srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
-    color: 'purple',
+    color: 'green',
     width: 360,
-    height: 400,
+    height: 300,
     url: '/customermeasurements',
     securityFunction: securityFunctions.ManageCustomerMeasurementPoints.id,
     description: ''
@@ -465,7 +465,7 @@ const tiles = [
     srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
     color: 'purple',
     width: 360,
-    height: 400,
+    height: 300,
     url: '/measurements',
     securityFunction: securityFunctions.ManageAllMeasurementPoints.id,
     description: ''
@@ -478,7 +478,7 @@ const tiles = [
     srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
     color: 'purple',
     width: 360,
-    height: 400,
+    height: 300,
     url: '/reports',
     securityFunction: securityFunctions.ManageAllMeasurementPoints.id,
     description: ''

@@ -117,7 +117,8 @@ export const initialMeasurementPoint = {
   customerID: '',
   isDeleted: false,
   isRequired: true,
-  showInReport: true
+  showInReport: true,
+  allowNotes: true
 };
 export const initialMeasurmentPointResult = {
   id: '',

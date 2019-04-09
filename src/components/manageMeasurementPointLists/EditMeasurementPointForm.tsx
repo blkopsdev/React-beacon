@@ -556,7 +556,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
         ? numericAllowDecimals.value
         : false,
       passFailDefault: passFailDefault ? passFailDefault.value : '',
-      allowNotes: allowNotes ? allowNotes.value : false,
+      allowNotes: allowNotes ? allowNotes.value : true,
       type: type ? type.value : this.props.selectedMeasurementPoint.type,
       selectDefaultOptionID,
       label,

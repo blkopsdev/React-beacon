@@ -130,8 +130,8 @@
     "cancel": "Cancel",
     "facility": "Facility",
     "name": "Name",
-    "annualInspection": "Annual Inspection",
-    "verification": "Verification",
+    "annualInspection": "Annual Inspection Report",
+    "verification": "Job Comments / Deficiency Report",
     "coverLetter": "Cover Letter",
     "jobPlaceholder": "Search..."
   },

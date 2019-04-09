@@ -233,7 +233,7 @@ export interface ImeasurementPoint {
   showInReport: boolean;
   guideText?: string;
   helpText?: string;
-  allowNotes?: boolean;
+  allowNotes: boolean;
   passFailDefault?: number;
   numericMinValue?: number;
   numericMaxValue?: number;

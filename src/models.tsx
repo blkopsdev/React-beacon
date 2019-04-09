@@ -229,6 +229,8 @@ export interface ImeasurementPoint {
   type: number;
   label: string;
   order: number;
+  isRequired: boolean;
+  showInReport: boolean;
   guideText?: string;
   helpText?: string;
   allowNotes?: boolean;
@@ -284,7 +286,7 @@ export interface ImeasurementPointResult {
   measurementPointListID: string;
   compiledNotes: string;
 }
-export interface ImeasurmentPointResultsReducer {
+export interface ImeasurementPointResultsReducer {
   measurementPointResultsByID: { [key: string]: ImeasurementPointResult };
   selectedResult: ImeasurementPointResult;
   previousResult: ImeasurementPointResult;
@@ -645,6 +647,6 @@ export interface IinitialState {
   manageTraining: ImanageTrainingReducer;
   productInfo: IproductInfo;
   manageMeasurementPointLists: ImanageMeasurementPointListsReducer;
-  measurementPointResults: ImeasurmentPointResultsReducer;
+  measurementPointResults: ImeasurementPointResultsReducer;
   manageReport: ImanageReportReducer;
 }

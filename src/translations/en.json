@@ -313,7 +313,9 @@
     "resultStatusPass": "Pass",
     "resultStatusFail": "Fail",
     "resultStatusCannotComplete": "Cannot Complete",
-    "resultStatusRepair": "Repair"
+    "resultStatusRepair": "Repair",
+    "isRequired": "Is Required",
+    "showInReport": "Show In Report"
   },
   "tiles": {
     "alerts": "Alerts",

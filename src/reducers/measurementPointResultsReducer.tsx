@@ -4,7 +4,7 @@
 */
 
 import {
-  ImeasurmentPointResultsReducer,
+  ImeasurementPointResultsReducer,
   ImeasurementPointResult
 } from 'src/models';
 import initialState, {
@@ -98,9 +98,9 @@ const historicalResultIDReducer = (state: string = '', action: any): string => {
 };
 
 export default function measurementPointResultsReducer(
-  state: ImeasurmentPointResultsReducer = initialState.measurementPointResults,
+  state: ImeasurementPointResultsReducer = initialState.measurementPointResults,
   action: any
-): ImeasurmentPointResultsReducer {
+): ImeasurementPointResultsReducer {
   return {
     measurementPointResultsByID: measurementPointResultsByIDReducer(
       state.measurementPointResultsByID,

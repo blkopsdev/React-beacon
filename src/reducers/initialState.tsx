@@ -114,7 +114,9 @@ export const initialMeasurementPoint = {
   label: '',
   order: 0,
   customerID: '',
-  isDeleted: false
+  isDeleted: false,
+  isRequired: true,
+  showInReport: true
 };
 export const initialMeasurmentPointResult = {
   id: '',

@@ -169,6 +169,7 @@ runWithAdal(
                     component={TwoPaneLayout}
                   />
                   <PrivateRoute path="/managejobs" component={TwoPaneLayout} />
+                  <PrivateRoute path="/reports" component={TwoPaneLayout} />
                   <PrivateRoute path="/locations" component={TwoPaneLayout} />
                   <PrivateRoute path="/training" component={TwoPaneLayout} />
                   <PrivateRoute

@@ -54,6 +54,9 @@ const API = {
     },
     measurementPoint: {
       addglobalmpl: `${root}/MeasurementPoint/AddGlobalMeasurementPointList`
+    },
+    report: {
+      run: `${root}/report/run`
     }
   },
   PUT: {
@@ -132,6 +135,9 @@ const API = {
       getJobResults: `${root}/MeasurementPoint/GetJobMeasurementPointListResults`,
       getFacilityMeasurementPointListResults: `${root}/MeasurementPoint/GetFacilityMeasurementPointListResults`,
       getMeasurementPointList: `${root}/measurementpoint/getmeasurementpointlist`
+    },
+    report: {
+      defaults: `${root}/report/defaults`
     }
   }
 };

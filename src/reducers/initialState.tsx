@@ -129,6 +129,18 @@ export const initialMeasurmentPointResult = {
   compiledNotes: ''
 };
 
+export const initialDefaultReport = {
+  id: '',
+  reportType: 1,
+  defaultCoverLetter: 'testing cover letter'
+};
+export const initialReport = {
+  jobID: '123',
+  reportType: 1,
+  coverLetter: 'testing cover letter',
+  headerLogoPath: ''
+};
+
 const initialCustomer = {
   id: '',
   name: '',
@@ -236,6 +248,14 @@ export default {
     jobTypes: [],
     fseUsers: [],
     showEditJobModal: false,
+    tableFilters: initialTableFilters
+  },
+  manageReport: {
+    totalPages: 1,
+    defaultReportsByID: {},
+    selectedReport: initialReport,
+    selectedDefaultReportID: '',
+    showEditReportModal: false,
     tableFilters: initialTableFilters
   },
   manageLocation: {

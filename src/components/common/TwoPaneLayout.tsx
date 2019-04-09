@@ -18,6 +18,7 @@ import Training from '../training/Training';
 import ManageTraining from '../manageTraining/ManageTraining';
 import { constants } from 'src/constants/constants';
 import { IinitialState } from '../../models';
+import ManageReport from '../manageReport/ManageReport';
 
 import 'react-table/react-table.css';
 import ManageMeasurementPointList from '../manageMeasurementPointLists/ManageMeasurementPointLists';
@@ -78,6 +79,7 @@ const TwoPaneLayout = (props: any) => {
             <Route exact path="/inventory" component={ManageInventory} />
             <Route exact path="/productqueue" component={ManageProductQueue} />
             <Route exact path="/managejobs" component={ManageJob} />
+            <Route exact path="/reports" component={ManageReport} />
             <Route exact path="/locations" component={ManageLocation} />
             <Route
               path="/training/:courseID?/:lessonID?/:quizID?"

@@ -4,6 +4,26 @@ import { emptyTile } from '../reducers/initialState';
 import { toastr } from 'react-redux-toastr';
 import { adalReauth } from '../actions/userActions';
 
+const reportTypeEnum = {
+  annualInspection: 1,
+  verification: 2
+};
+const reportTypeEnumInverse = {
+  1: 'annualInspection',
+  2: 'verification'
+};
+
+const reportTypeOptions = [
+  {
+    value: reportTypeEnum.annualInspection,
+    label: reportTypeEnumInverse[reportTypeEnum.annualInspection]
+  },
+  {
+    value: reportTypeEnum.verification,
+    label: reportTypeEnumInverse[reportTypeEnum.verification]
+  }
+];
+
 const measurementPointListTypeEnum = {
   Annual: 1,
   Verification: 2
@@ -100,7 +120,8 @@ const icons = {
   payments: require('../images/icons/BM_Payments.png'),
   training: require('../images/icons/BM_Training.png'),
   locations: require('../images/icons/BM_ManageLocations.png'),
-  measurements: require('../images/icons/BM_Measurement.png')
+  measurements: require('../images/icons/BM_Measurement.png'),
+  manageReport: require('../images/icons/BM_Reports.png')
 };
 
 const securityFunctions = {
@@ -320,19 +341,6 @@ const tiles = [
     description: ''
   },
   {
-    icon: 'icon-reports',
-    iconType: 'fa',
-    title: 'reports',
-    src: 'https://placekitten.com/360/272',
-    srcBanner: '',
-    color: 'orange',
-    width: 360,
-    height: 272,
-    url: '/reports',
-    securityFunction: '',
-    description: ''
-  },
-  {
     icon: icons.manageTeam,
     iconType: 'img',
     title: 'manageTeam',
@@ -461,6 +469,19 @@ const tiles = [
     url: '/measurements',
     securityFunction: securityFunctions.ManageAllMeasurementPoints.id,
     description: ''
+  },
+  {
+    icon: icons.manageReport,
+    iconType: 'img',
+    title: 'manageReports',
+    src: require('src/images/beaconManageUsers.jpg'),
+    srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
+    color: 'purple',
+    width: 360,
+    height: 400,
+    url: '/reports',
+    securityFunction: securityFunctions.ManageAllMeasurementPoints.id,
+    description: ''
   }
 ];
 
@@ -496,6 +517,9 @@ export const constants = {
   measurementPointTypesInverse,
   measurementPointPassFailOptions,
   measurementPointResultStatusTypes,
+  reportTypeEnum,
+  reportTypeEnumInverse,
+  reportTypeOptions,
   defaultProductStandardID: '740e2f29-6bfa-4316-98c1-f2b32637bf6e',
   hasSecurityFunction: (user: Iuser, securityFunction: string): boolean => {
     if (user.securityFunctions.indexOf(securityFunction) >= 0) {

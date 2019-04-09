@@ -22,7 +22,8 @@
     "logout": "Logout",
     "delete": "Delete",
     "save": "Save",
-    "login": "Login"
+    "login": "Login",
+    "job": "Job"
   },
   "auth": {
     "loginButton": "Login with Azure",
@@ -120,6 +121,19 @@
     "status": "Status",
     "facility": "Facility",
     "startDateWarning": "You have selected a start date after the end date."
+  },
+  "reportManage": {
+    "bannerTitle": "Manage Reports",
+    "editModalTitle": "Edit Report",
+    "saveModalTitle": "New Report",
+    "save": "Run Report",
+    "cancel": "Cancel",
+    "facility": "Facility",
+    "name": "Name",
+    "annualInspection": "Annual Inspection",
+    "verification": "Verification",
+    "coverLetter": "Cover Letter",
+    "jobPlaceholder": "Search..."
   },
   "teamManage": {
     "newTeamMember": "New Team Member",
@@ -318,7 +332,8 @@
     "support": "Support",
     "manageAllTraining": "Training Progress",
     "manageMeasurementPointList": "Measurements",
-    "manageCustomerMeasurementPointList": "Customer Measurements"
+    "manageCustomerMeasurementPointList": "Customer Measurements",
+    "manageReports": "Reports"
   },
   "securityF": {
     "ManageUsers": "Manage Users",

@@ -45,5 +45,12 @@ export const migrations = {
       manageMeasurementPointLists: initialState.manageMeasurementPointLists,
       measurementPointResults: initialState.measurementPointResults
     };
+  },
+  14: state => {
+    const prevState = state as IinitialState;
+    return {
+      ...prevState,
+      manageReport: initialState.manageReport
+    };
   }
 } as MigrationManifest;

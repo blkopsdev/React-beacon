@@ -73,7 +73,7 @@ fd71f683-7423-4ba0-9ed3-fba0547be076 // cliend ID and Application ID for Native 
 ## Initial Setup
 
 `npm install`
-createa a .env.development.local file for local development
+create a .env.development.local file for local development
 
 ## Envirenment Variables
 Available environments: `development, test, production`

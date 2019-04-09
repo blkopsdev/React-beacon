@@ -28,7 +28,7 @@ const AnswerListItem = (
 ) => {
   let AnswerElement = () => <div>no answer</div>;
   if (mpAnswer.numericValue !== undefined) {
-    AnswerElement = () => <div>mpAnswer.numericValue</div>;
+    AnswerElement = () => <div>{mpAnswer.numericValue}</div>;
   }
   if (mpAnswer.pass !== undefined) {
     if (mpAnswer.pass === 1) {

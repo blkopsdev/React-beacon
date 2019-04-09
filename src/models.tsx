@@ -291,6 +291,18 @@ export interface ImeasurmentPointResultsReducer {
   historicalResultID: string;
 }
 
+export interface IdefaultReport {
+  id: string;
+  reportType: number;
+  defaultCoverLetter: string;
+}
+export interface Ireport {
+  jobID: string;
+  reportType: number;
+  coverLetter: string;
+  headerLogoPath: string;
+}
+
 // these are copied from react-redux-toastr beacuse could not figure out any other way to make typescript happy
 export type transitionInType = 'bounceIn' | 'bounceInDown' | 'fadeIn';
 export type transitionOutType = 'bounceOut' | 'bounceOutUp' | 'fadeOut';
@@ -527,6 +539,14 @@ export interface ImanageJobReducer {
   showEditJobModal: boolean;
   tableFilters: ItableFiltersReducer;
 }
+export interface ImanageReportReducer {
+  defaultReportsByID: { [key: string]: IdefaultReport };
+  totalPages: number;
+  showEditReportModal: boolean;
+  selectedReport: Ireport;
+  selectedDefaultReportID: string;
+  tableFilters: ItableFiltersReducer;
+}
 export interface ImanageTeamReducer {
   data: Iuser[];
   totalPages: number;
@@ -626,4 +646,5 @@ export interface IinitialState {
   productInfo: IproductInfo;
   manageMeasurementPointLists: ImanageMeasurementPointListsReducer;
   measurementPointResults: ImeasurmentPointResultsReducer;
+  manageReport: ImanageReportReducer;
 }

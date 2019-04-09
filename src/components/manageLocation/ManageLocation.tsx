@@ -244,7 +244,7 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
                   this.handleEdit(row.original);
                 }}
               >
-                <FontAwesomeIcon icon={['far', 'edit']}> Edit </FontAwesomeIcon>
+                <FontAwesomeIcon icon={['far', 'edit']} />
               </Button>
               <Button
                 bsStyle="link"
@@ -255,10 +255,7 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
                   this.handleDelete(row.original);
                 }}
               >
-                <FontAwesomeIcon icon={['far', 'times']}>
-                  {' '}
-                  Delete{' '}
-                </FontAwesomeIcon>
+                <FontAwesomeIcon icon={['far', 'times']} />
               </Button>
             </div>
           )

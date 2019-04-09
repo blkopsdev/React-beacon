@@ -1,4 +1,4 @@
-import { keyBy, map, forEach } from 'lodash';
+import { keyBy, map, forEach, omit } from 'lodash';
 
 import {
   ImanageMeasurementPointListsReducer,
@@ -81,6 +81,8 @@ function manageMeasurementPointListData(
           measurementPointTabs: keyMeasurementPoints(tabs)
         }
       };
+    case types.MANAGE_MEASUREMENT_POINT_LIST_DELETE_SUCCESS:
+      return omit(state, action.MPlistID);
     case types.USER_LOGOUT_SUCCESS:
       return {};
     default:

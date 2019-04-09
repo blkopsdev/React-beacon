@@ -37,7 +37,8 @@ import {
   toggleEditMeasurementPointListModal,
   toggleEditMeasurementPointModal,
   setTableFilter,
-  setSelectedMeasurementPointList
+  setSelectedMeasurementPointList,
+  deleteGlobalMeasurementPointList
 } from '../../actions/manageMeasurementPointListsActions';
 import { getProductInfo } from '../../actions/manageInventoryActions';
 import Banner from '../common/Banner';
@@ -81,6 +82,7 @@ interface IdispatchProps {
   setTableFilter: typeof setTableFilter;
   tableFilters: ItableFiltersReducer;
   tableData: ImeasurementPointList[];
+  deleteGlobalMeasurementPointList: typeof deleteGlobalMeasurementPointList;
 }
 
 interface Istate {
@@ -277,7 +279,7 @@ class ManageMeasurementPointList extends React.Component<
         deletedItem = {
           ...deletedItem
         };
-        // this.props.deleteGlobalMeasurementPointList(deletedItem.id); // TODO fix this
+        this.props.deleteGlobalMeasurementPointList(deletedItem.id);
       },
       onCancel: () => console.log('CANCEL: clicked'),
       okText: this.props.t('deleteMPLButton'),
@@ -509,7 +511,8 @@ export default translate('manageMeasurementPointLists')(
       setSelectedMeasurementPointList,
       closeAllModals,
       setTableFilter,
-      getProductInfo
+      getProductInfo,
+      deleteGlobalMeasurementPointList
     }
   )(ManageMeasurementPointList)
 );

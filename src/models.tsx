@@ -263,6 +263,7 @@ export interface ImeasurementPointList {
   testProcedures: string;
   standardID: string;
   type: number;
+  isDeleted: boolean;
   temporary?: boolean;
 }
 export interface ImeasurementPointAnswer {

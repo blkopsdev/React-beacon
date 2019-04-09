@@ -193,6 +193,35 @@ export function updateGlobalMeasurementPointList(
     }
   };
 }
+export function deleteGlobalMeasurementPointList(
+  MPlistID: string
+): ThunkResult<void> {
+  return (dispatch, getState) => {
+    const url = `${API.DELETE.measurementPoint.deleteglobalmpl}/${MPlistID}`;
+    return axios
+      .delete(url)
+      .then(data => {
+        if (data.status !== 200) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.MANAGE_MEASUREMENT_POINT_LIST_DELETE_SUCCESS,
+            MPlistID
+          });
+          toastr.success(
+            'Success',
+            'Deleted measurement point list.',
+            constants.toastrSuccess
+          );
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.MANAGE_MEASUREMENT_POINT_LIST_DELETE_FAILED });
+        constants.handleError(error, 'delete measurement point list');
+        console.error(error);
+      });
+  };
+}
 
 // CUSTOMER MP endpoints
 

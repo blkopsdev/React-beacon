@@ -525,7 +525,6 @@ export const FormUtil = {
                 {...handler()}
               />
             </FormGroup>
-            <small>Create a new tab by typing.</small>
           </Col>
           <Col xs={3} style={{ paddingTop: '20px' }}>
             <Button className="pull-right" onClick={meta.buttonAction}>

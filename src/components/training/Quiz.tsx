@@ -210,7 +210,7 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
   calculateTimeLeft = () => {
     const timeLeft = moment
       .utc(this.props.quiz.startTime)
-      .add(constants.timedQuizHours, 'm') // TODO set to minutes temporarily to help us test
+      .add(constants.timedQuizHours, 'h')
       .diff(moment(), 'minutes');
 
     this.setState({ timeLeft });

@@ -1,4 +1,7 @@
-## Release 0.1.3 April 5th, 2019
+## Release 0.1.3 April 9th 2019
+- fixed timed test timeout
+
+## Release 0.1.3 April 5th, 2019 - TEST Only
 - view measurement point results
 - fixed issue with job paging
 - various bug fixes with measurement points

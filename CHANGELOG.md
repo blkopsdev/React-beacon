@@ -1,3 +1,7 @@
+## Release 0.1.3 April 9th 2019
+- fixed timed test timeout
+
+
 ## Release 0.1.2 February 26th, 2019
  - updated course description
 

@@ -30,7 +30,7 @@ export function setCachedToken() {
   if (!cachedToken) {
     adalReauth();
   } else {
-    axios.defaults.headers.common['Authorization'] = 'Bearer ' + cachedToken;
+    axios.defaults.headers.common['Authorization'] = 'Bearer ' + cachedToken; // TODO remove this after refactoring to add adalFetch
   }
 }
 

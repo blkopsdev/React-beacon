@@ -321,10 +321,10 @@
     "alerts": "Alerts",
     "training": "Training",
     "userQueue": "New User Queue",
-    "userManage": "Manage Users",
-    "manageJobs": "Manage Jobs",
+    "userManage": "Users",
+    "manageJobs": "Jobs",
     "reports": "Reports",
-    "manageTeam": "Manage Team",
+    "manageTeam": "Team",
     "documents": "Documents & Legal",
     "inventory": "Inventory",
     "productqueue": "New Product Queue",
@@ -334,7 +334,7 @@
     "support": "Support",
     "manageAllTraining": "Training Progress",
     "manageMeasurementPointList": "Measurements",
-    "manageCustomerMeasurementPointList": "Customer Measurements",
+    "manageCustomerMeasurementPointList": "Customer MPs",
     "manageReports": "Reports"
   },
   "securityF": {

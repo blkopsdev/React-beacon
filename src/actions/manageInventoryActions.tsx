@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { ThunkAction } from 'redux-thunk';
 import { toastr } from 'react-redux-toastr';
-import axios from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import {
   IinitialState,
@@ -19,6 +19,8 @@ import { map, values } from 'lodash';
 const uuidv4 = require('uuid/v4');
 import * as moment from 'moment';
 import { getFacilityMeasurementPointResultsHelper } from './measurementPointResultsActions';
+import { adalFetch } from 'react-adal';
+import { authContext } from './userActions';
 
 // import {AxiosResponse} from 'axios';
 
@@ -27,9 +29,13 @@ type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 export function getProductInfo(): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
-    return axios
-      .get(API.GET.inventory.getproductinfo)
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'get'
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.GET.inventory.getproductinfo;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {
@@ -56,11 +62,14 @@ export function getProducts(
     dispatch(beginAjaxCall());
 
     const pagingType = 'paged';
-    return axios
-      .get(API.GET.inventory.products, {
-        params: { page, search, mainCategoryID, pagingType }
-      })
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'get',
+      params: { page, search, mainCategoryID, pagingType }
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.GET.inventory.products;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {
@@ -106,11 +115,15 @@ const getInventoryHelper = (dispatch: any, getState: () => IinitialState) => {
     : getState().user.facilities[0].id;
   const brandID = brand ? brand.value : '';
   const mainCategoryID = mainCategory ? mainCategory.value : '';
-  return axios
-    .get(API.GET.inventory.getinventory, {
-      params: { page, search, facilityID, brandID, mainCategoryID }
-    })
-    .then(data => {
+
+  const axiosOptions: AxiosRequestConfig = {
+    method: 'get',
+    params: { page, search, facilityID, brandID, mainCategoryID }
+  };
+  const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+  const url = API.GET.inventory.getinventory;
+  return adalFetch(authContext, resource, axios, url, axiosOptions)
+    .then((data: AxiosResponse<any>) => {
       if (!data.data) {
         throw undefined;
       } else {
@@ -159,9 +172,14 @@ export function updateProduct(
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     dispatch({ type: types.TOGGLE_MODAL_EDIT_PRODUCT });
-    return axios
-      .post(API.POST.inventory.updateproduct, product)
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'post',
+      data: product
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.POST.inventory.updateproduct;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {
@@ -187,9 +205,14 @@ export function updateProduct(
 export function saveProduct(product: Iproduct): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
-    return axios
-      .post(API.POST.inventory.addproduct, product)
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'post',
+      data: product
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.POST.inventory.addproduct;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {
@@ -221,10 +244,14 @@ export function updateInstall(
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     dispatch({ type: types.TOGGLE_MODAL_EDIT_INSTALL });
-
-    return axios
-      .post(API.POST.inventory.updateinstall, install)
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'post',
+      data: install
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.POST.inventory.updateinstall;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {
@@ -274,9 +301,14 @@ export function saveInstall(
     } else {
       newInstalls = { [newID]: { ...install, id: newID } };
     }
-    return axios
-      .post(API.POST.inventory.addinstall, values(newInstalls))
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'post',
+      data: values(newInstalls)
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.POST.inventory.addinstall;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {
@@ -304,9 +336,14 @@ export function deleteInstall(
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     dispatch({ type: types.TOGGLE_MODAL_EDIT_INSTALL });
-    return axios
-      .post(API.POST.inventory.deleteInstall, { id: installID })
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'post',
+      data: { id: installID }
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.POST.inventory.deleteInstall;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         dispatch({
           type: types.INSTALL_DELETE_SUCCESS,
           installID,
@@ -333,13 +370,18 @@ export function installContact(
     const facilityID = facility
       ? facility.value
       : getState().user.facilities[0].id;
-    return axios
-      .post(API.POST.inventory.installContact, {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'post',
+      data: {
         facilityID,
         installBaseID,
         message
-      })
-      .then(data => {
+      }
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.POST.inventory.installContact;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         dispatch({
           type: types.INSTALL_CONTACT_SUCCESS
         });
@@ -367,14 +409,18 @@ export function importInstall(file: any): ThunkResult<void> {
     const formData = new FormData();
     formData.append('file', file);
     formData.append('facilityID', facilityID);
-    const config = {
+
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'post',
+      data: formData,
       headers: {
         'content-type': 'multipart/form-data'
       }
     };
-    return axios
-      .post(API.POST.inventory.importInstall, formData, config)
-      .then(data => {
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.POST.inventory.importInstall;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         dispatch({
           type: types.IMPORT_INSTALL_SUCCESS
         });
@@ -426,9 +472,14 @@ export const requestQuote = ({
     );
     dispatch(beginAjaxCall());
     dispatch({ type: types.TOGGLE_MODAL_SHOPPING_CART_INVENTORY });
-    return axios
-      .post(API.POST.inventory.quote, { QuoteItems, facilityID, message })
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'post',
+      data: { QuoteItems, facilityID, message }
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.POST.inventory.quote;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         dispatch({
           type: types.CHECKOUT_INVENTORY_SUCCESS
         });
@@ -449,13 +500,15 @@ export function mergeProduct(
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     dispatch({ type: types.CLOSE_ALL_MODALS });
-    return axios
-      .post(
-        `${
-          API.POST.inventory.mergeProduct
-        }?sourceProductID=${sourceProductID}&targetProductID=${targetProductID}`
-      )
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'post'
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = `${
+      API.POST.inventory.mergeProduct
+    }?sourceProductID=${sourceProductID}&targetProductID=${targetProductID}`;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         dispatch({
           type: types.PRODUCT_MERGE_SUCCESS
         });

@@ -32,7 +32,7 @@
     "npm": "^6.3.0",
     "query-string": "^5.1.1",
     "react": "^16.5.2",
-    "react-adal": "git+https://github.com/jfbloom22/react-adal.git#master",
+    "react-adal": "^0.4.22",
     "react-bootstrap": "^0.32.1",
     "react-datetime": "^2.15.0",
     "react-dom": "^16.5.2",

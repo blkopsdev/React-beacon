@@ -45,15 +45,12 @@ export const MeasurementPointList = (props: Iprops) => {
                   props.swapMeasurementPointOrder(index, index - 1);
                 }}
               >
-                <FontAwesomeIcon
-                  icon={['far', 'sort-amount-up']}
-                  fixedWidth
-                  size="2x"
-                />
+                <FontAwesomeIcon icon={['far', 'sort-amount-up']} fixedWidth />
               </Button>
               <Button
                 type="button"
                 disabled={!props.canEditGlobal && !mp.customerID}
+                style={{ color: constants.colors.red }}
                 onClick={() => {
                   props.deleteMeasurementPoint(mp);
                 }}
@@ -74,7 +71,6 @@ export const MeasurementPointList = (props: Iprops) => {
                 <FontAwesomeIcon
                   icon={['far', 'sort-amount-down']}
                   fixedWidth
-                  size="2x"
                 />
               </Button>
             </span>

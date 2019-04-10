@@ -85,7 +85,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
           id: 'status',
           Header: 'status',
           accessor: 'status',
-          width: 70
+          width: 100
         },
         {
           Header: 'type',

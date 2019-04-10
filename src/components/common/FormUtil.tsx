@@ -97,7 +97,7 @@ export const FormUtil = {
     submitted
   }: AbstractControl) => {
     // TODO figure out how to handle disabled
-    const requiredLabel = meta.required === false ? ' - optional' : '';
+    const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
       <FormGroup
         validationState={FormUtil.getValidationState(
@@ -145,7 +145,7 @@ export const FormUtil = {
     errors,
     submitted
   }: AbstractControl) => {
-    const requiredLabel = meta.required === false ? ' - optional' : '';
+    const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
       <Col xs={meta.colWidth}>
         <FormGroup
@@ -184,7 +184,7 @@ export const FormUtil = {
     submitted,
     value
   }: AbstractControl) => {
-    const requiredLabel = meta.required === false ? ' - optional' : '';
+    const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
       <Col xs={meta.colWidth}>
         <FormGroup
@@ -239,7 +239,7 @@ export const FormUtil = {
       : 'beacon-select';
     const selectValidationClass = value && !pristine ? 'has-success' : '';
     // console.log('validator', errors);
-    const requiredLabel = meta.required === false ? ' - optional' : '';
+    const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
       <Col xs={meta.colWidth}>
         <FormGroup
@@ -285,7 +285,7 @@ export const FormUtil = {
       ? 'is-multi beacon-select'
       : 'beacon-select';
     const selectValidationClass = value && !pristine ? 'has-success' : '';
-    const requiredLabel = meta.required === false ? ' - optional' : '';
+    const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
       <Col xs={meta.colWidth}>
         <FormGroup
@@ -394,7 +394,7 @@ export const FormUtil = {
       ? 'is-multi beacon-select'
       : 'beacon-select';
     const selectValidationClass = value && !pristine ? 'has-success' : '';
-    const requiredLabel = meta.required === false ? ' - optional' : '';
+    const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
       <Col xs={meta.colWidth}>
         <FormGroup
@@ -490,7 +490,7 @@ export const FormUtil = {
       ? 'is-multi beacon-select'
       : 'beacon-select';
     const selectValidationClass = value && !pristine ? 'has-success' : '';
-    const requiredLabel = meta.required === false ? ' - optional' : '';
+    const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
       <Col xs={meta.colWidth}>
         <Row>
@@ -505,7 +505,10 @@ export const FormUtil = {
             >
               <ControlLabel>
                 {meta.label}
-                <i className="required-label">{requiredLabel}</i>
+                <i className="required-label">
+                  {requiredLabel}
+                  {meta.subLabel}
+                </i>
               </ControlLabel>
               <CreatableSelect
                 options={meta.options}
@@ -543,7 +546,7 @@ export const FormUtil = {
     errors,
     submitted
   }: AbstractControl) => {
-    const requiredLabel = meta.required === false ? ' - optional' : '';
+    const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
       <Col xs={meta.colWidth}>
         <FormGroup bsSize="sm" style={meta.style}>
@@ -569,7 +572,7 @@ export const FormUtil = {
     errors,
     submitted
   }: AbstractControl) => {
-    const requiredLabel = meta.required === false ? ' - optional' : '';
+    const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
       <Col xs={meta.colWidth}>
         <FormGroup
@@ -603,7 +606,7 @@ export const FormUtil = {
     errors,
     submitted
   }: AbstractControl) => {
-    const requiredLabel = meta.required === false ? ' - optional' : '';
+    const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
       <Col xs={meta.colWidth}>
         <FormGroup

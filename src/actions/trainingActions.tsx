@@ -386,19 +386,20 @@ const getPurchasedTrainingHelper = (dispatch: any, getState: any) => {
 export function startQuiz(quizID: string): ThunkResult<void> {
   return dispatch => {
     dispatch(beginAjaxCall());
-    return axios
-      .post(API.POST.training.startQuiz, { quizID })
-      .then(data => {
+    return axios.post(API.POST.training.startQuiz, { quizID }).then(
+      data => {
         dispatch({
           type: types.START_QUIZ_SUCCESS,
           startTime: data.data.startTime
         });
-      })
-      .catch(error => {
+      },
+      error => {
         console.error('Error starting timed quiz', error);
         dispatch({ type: types.START_QUIZ_FAILED });
         constants.handleError(error, 'start quiz');
-      });
+        throw error;
+      }
+    );
   };
 }
 

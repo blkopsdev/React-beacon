@@ -129,10 +129,26 @@ class EditTeamMemberForm extends React.Component<Iprops, {}> {
   }
 
   componentDidMount() {
+    // get the customer name
+    const { customer, customerID } = this.props.user;
+
+    if (customer) {
+      this.userForm.patchValue({ customerName: customer.name });
+    }
+    const customerControl = this.userForm.get(
+      'customerName'
+    ) as AbstractControlEdited;
+    customerControl.disable();
+    // if there is a customerID then get facilities
+    if (customerID.length) {
+      this.props.getFacilitiesByCustomer(customerID);
+    }
+
     if (!this.props.selectedUser) {
+      console.log('adding a new user');
       return;
     } else {
-      const { facilities, customer, customerID } = this.props.selectedUser;
+      const { facilities } = this.props.selectedUser;
 
       const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
         return find(facilities, { id: fac.value }) ? true : false;
@@ -142,19 +158,9 @@ class EditTeamMemberForm extends React.Component<Iprops, {}> {
       forEach(this.props.selectedUser, (value, key) => {
         this.userForm.patchValue({ [key]: value });
       });
+
       const emailControl = this.userForm.get('email') as AbstractControlEdited;
       emailControl.disable();
-      if (customer) {
-        this.userForm.patchValue({ customerName: customer.name });
-        const customerControl = this.userForm.get(
-          'customerName'
-        ) as AbstractControlEdited;
-        customerControl.disable();
-        // if there is a customerID then get facilities
-        if (customerID.length) {
-          this.props.getFacilitiesByCustomer(customerID);
-        }
-      }
     }
   }
 

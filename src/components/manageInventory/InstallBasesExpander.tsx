@@ -204,7 +204,7 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
             : constants.colors.green;
           return (
             <span className="historical-results-button" style={{ color }}>
-              History
+              <FontAwesomeIcon icon={['far', 'history']} />
             </span>
           );
         },

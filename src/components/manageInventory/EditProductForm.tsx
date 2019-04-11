@@ -333,11 +333,24 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
     powerID: Ioption,
     systemSizeID: Ioption
   ) => {
-    const category = mainCategoryID ? mainCategoryID.label : '';
-    const subcategory = subcategoryID ? `: ${subcategoryID.label}` : '';
-    const productType = productTypeID ? `: ${productTypeID.label}` : '';
-    const power = powerID ? `: ${powerID.label}` : '';
-    const systemSize = systemSizeID ? `: ${systemSizeID.label}` : '';
+    const category =
+      mainCategoryID && mainCategoryID.label !== 'N/A'
+        ? mainCategoryID.label
+        : '';
+    const subcategory =
+      subcategoryID && subcategoryID.label !== 'N/A'
+        ? `: ${subcategoryID.label}`
+        : '';
+    const productType =
+      productTypeID && productTypeID.label !== 'N/A'
+        ? `: ${productTypeID.label}`
+        : '';
+    const power =
+      powerID && powerID.label !== 'N/A' ? `: ${powerID.label}` : '';
+    const systemSize =
+      systemSizeID && systemSizeID.label !== 'N/A'
+        ? `: ${systemSizeID.label}`
+        : '';
     return `${category}${subcategory}${productType}${power}${systemSize}`;
   };
 

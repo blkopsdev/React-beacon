@@ -503,7 +503,7 @@ const tiles = [
     width: 270,
     height: 300,
     url: '/reports',
-    securityFunction: securityFunctions.ManageAllMeasurementPoints.id,
+    securityFunction: securityFunctions.ViewReports.id,
     description: ''
   }
 ];

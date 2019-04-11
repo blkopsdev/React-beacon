@@ -20,10 +20,8 @@ type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 export function getDefaultReports(): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
-    const { page } = getState().manageReport.tableFilters;
     const axiosOptions: AxiosRequestConfig = {
-      method: 'get',
-      params: { page }
+      method: 'get'
     };
     const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
     const url = API.GET.report.defaults;

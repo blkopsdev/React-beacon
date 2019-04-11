@@ -325,7 +325,11 @@ export const FormUtil = {
       ? 'is-multi beacon-select'
       : 'beacon-select';
     return (
-      <Col xs={meta.colWidth} className={meta.className || ''}>
+      <Col
+        md={meta.colWidth}
+        lg={meta.colWidthLG}
+        className={meta.className || ''}
+      >
         <FormGroup bsSize="sm">
           <ControlLabel>{meta.label}</ControlLabel>
           <Select

@@ -68,13 +68,16 @@ export function getAllJobs(): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     const pagingType = 'None';
-    return axios
-      .get(API.GET.job.getall, {
-        params: {
-          pagingType
-        }
-      })
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'get',
+      params: {
+        pagingType
+      }
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.GET.job.getall;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {

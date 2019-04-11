@@ -117,19 +117,20 @@ export function runReport(
           dispatch({
             type: types.REPORT_ADD_SUCCESS
           });
-          // const url = window.URL.createObjectURL(new File([data.data]));
           const url = window.URL.createObjectURL(
             new Blob([data.data], { type: 'application/pdf' })
           );
-          // window.open(url, '_blank')
+          // window.open(url, '_blank') // if opening in a new window is more important than custom filename
 
           const link = document.createElement('a');
           link.href = url;
-          console.log(
-            'request herder',
-            data.request.getResponseHeader('content-disposition')
+          const disposition = data.request.getResponseHeader(
+            'content-disposition'
           );
-          // link.setAttribute('download', 'file.pdf');
+          const matches = /"([^"]*)"/.exec(disposition);
+          const filename =
+            matches != null && matches[1] ? matches[1] : 'file.pdf';
+          link.setAttribute('download', filename);
           link.setAttribute('target', '_blank');
           document.body.appendChild(link);
           link.click();

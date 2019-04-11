@@ -12,6 +12,9 @@ const uuidv4 = require('uuid/v4');
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
+/*
+* this is used for paging and filtering the jobs on the manage Jobs view
+*/
 export function getJobs(): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
@@ -48,6 +51,40 @@ export function getJobs(): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.JOB_MANAGE_FAILED });
         constants.handleError(error, 'get jobs');
+        console.error(error);
+      });
+  };
+}
+
+/*
+* getallJobs is used to populate the job select on the manageReports view
+*/
+export function getAllJobs(): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    const pagingType = 'None';
+    return axios
+      .get(API.GET.job.getall, {
+        params: {
+          pagingType
+        }
+      })
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          console.log(data.data);
+          dispatch({ type: types.JOB_MANAGE_SUCCESS, jobs: data.data.result });
+          dispatch({
+            type: types.JOB_MANAGE_TOTAL_PAGES,
+            pages: data.data.pages
+          });
+          return data;
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.JOB_MANAGE_FAILED });
+        constants.handleError(error, 'get all jobs');
         console.error(error);
       });
   };

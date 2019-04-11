@@ -24,7 +24,7 @@ import {
 import { TableUtil } from '../common/TableUtil';
 import { closeAllModals } from '../../actions/commonActions';
 import { emptyTile } from '../../reducers/initialState';
-import { setTableFilter } from '../../actions/manageJobActions';
+import { setTableFilter, getAllJobs } from '../../actions/manageJobActions';
 import Banner from '../common/Banner';
 import { constants } from 'src/constants/constants';
 import {
@@ -60,6 +60,7 @@ interface IdispatchProps {
   tableData: Ireport[];
   fseUsers: Iuser[];
   initComplete: boolean;
+  getAllJobs: typeof getAllJobs;
 }
 
 interface Istate {
@@ -97,6 +98,7 @@ class ManageReport extends React.Component<Iprops & IdispatchProps, Istate> {
     });
     this.props.closeAllModals();
     this.props.getDefaultReports();
+    this.props.getAllJobs();
   }
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
     if (
@@ -240,7 +242,8 @@ export default translate('reportManage')(
       closeAllModals,
       setTableFilter,
       setSelectedReport,
-      setSelectedDefaultReport
+      setSelectedDefaultReport,
+      getAllJobs
     }
   )(ManageReport)
 );

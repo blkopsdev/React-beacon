@@ -222,7 +222,8 @@ class ManageMeasurementPointList extends React.Component<
         },
         {
           id: 'numTests',
-          Header: '# of Tests',
+          Header: 'Tests',
+          width: 60,
           accessor: ({ measurementPointTabs }: ImeasurementPointList) => {
             let count = 0;
             measurementPointTabs.forEach(tab => {

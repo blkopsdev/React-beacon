@@ -355,7 +355,8 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       meta: {
         label: 'common:facility',
         options: this.props.facilityOptions,
-        colWidth: 5,
+        colWidth: 7,
+        colWidthLG: 5,
         type: 'select',
         placeholder: 'facilityPlaceholder',
         className: 'banner-input',

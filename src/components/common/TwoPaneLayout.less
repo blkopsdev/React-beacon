@@ -4,8 +4,8 @@
   .side-menu {
     padding-top: 30px;
     height: calc(~"100vh - " @headerHeight);
-    overflow-x: scroll;
-    overflow-y: hidden;
+    overflow-x: hidden;
+    overflow-y: scroll;
     background-color: @textBlue;
     .svg-inline--fa{
       margin-right: 15px;
@@ -59,20 +59,32 @@
     min-height: 80vh;
     height: calc(100vh - 84px);
   }
-  @media (min-width: 768px) and (max-width: 991px) {
+  // @media (min-width: 768px) and (max-width: 991px) {
+  //   .col-fixed {
+  //     width: 320px;
+  //   }
+  //   .col-fluid {
+  //     width: calc(100% - 320px);
+  //   }
+  // }
+  @media (max-width: 1199px) {
     .col-fixed {
-      width: 320px;
+      width: 55px;
+      .menu-text{
+        display: none;
+      }
     }
     .col-fluid {
-      width: calc(100% - 320px);
+      width: calc(100% - 55px);
     }
-  }
-  @media (min-width: 992px) and (max-width: 1199px) {
-    .col-fixed {
-      width: 320px;
+    .slide-modal .modal-dialog{
+      margin-left: 55px;
     }
-    .col-fluid {
-      width: calc(100% - 320px);
+    .slide-modal.second-modal{
+      margin-left: 55px;
+      modal-dialog{
+        margin-left: 399px;
+      }
     }
   }
   @media (min-width: 1200px) {

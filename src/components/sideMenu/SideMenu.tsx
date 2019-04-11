@@ -18,7 +18,7 @@ const Item = (props: any) => {
         {iconType === 'img' && (
           <img src={icon} width={25} height={25} style={{ marginRight: 15 }} />
         )}
-        <span>{props.t(title)}</span>
+        <span className="menu-text">{props.t(title)}</span>
       </ListGroupItem>
     </LinkContainer>
   );
@@ -34,7 +34,7 @@ const MenuItems = ({ user, t }: any) => (
           height={25}
           style={{ marginRight: 15 }}
         />
-        Dashboard
+        <span className="menu-text">{t('Dashboard')}</span>
       </ListGroupItem>
     </LinkContainer>
     {map(constants.tiles, tile => {

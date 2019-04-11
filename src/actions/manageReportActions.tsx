@@ -134,7 +134,7 @@ export function runReport(
           const filename =
             matches != null && matches[1] ? matches[1] : 'file.pdf';
           link.setAttribute('download', filename);
-          link.setAttribute('target', '_blank');
+          link.setAttribute('target', '_blank'); // theoretically this will open the PDF in another tab, but it is automatically downloading for me
           document.body.appendChild(link);
           link.click();
 

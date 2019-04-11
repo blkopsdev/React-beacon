@@ -1,6 +1,6 @@
 {
   "name": "state-core-care-web",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "engines": {
     "node": "8.11.1",
     "npm": "6.4.1"
@@ -53,6 +53,7 @@
     "redux-persist": "^5.10.0",
     "redux-thunk": "^2.3.0",
     "remote-redux-devtools": "^0.5.16",
+    "trackjs": "^3.3.0",
     "uuid": "^3.3.2"
   },
   "lint-staged": {

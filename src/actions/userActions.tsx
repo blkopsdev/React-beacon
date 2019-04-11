@@ -11,6 +11,7 @@ import { ThunkAction } from 'redux-thunk';
 import * as localForage from 'localforage';
 import { adalFetch } from 'react-adal';
 import { Dispatch } from 'react-redux';
+import { TrackJS } from 'trackjs';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
@@ -81,6 +82,7 @@ export function userLogin(): ThunkResult<void> {
           throw undefined;
         } else {
           dispatch({ type: types.USER_LOGIN_SUCCESS, user: data.data });
+          TrackJS.configure({ userId: data.data.email });
           return data;
         }
       },

@@ -58,7 +58,10 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
     return (
       <div>
         <Col xs={12}>
-          <form method="get" action={require('../../images/importest.csv')}>
+          <form
+            method="get"
+            action={require('../../images/MMG Import Template.xlsx')}
+          >
             <p>{t('uploadInstructions')}</p>
             <Button
               bsStyle="link"

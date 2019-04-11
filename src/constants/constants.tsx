@@ -2,7 +2,7 @@ import { transitionInType, transitionOutType, Iuser, Itile } from '../models';
 import { find } from 'lodash';
 import { emptyTile } from '../reducers/initialState';
 import { toastr } from 'react-redux-toastr';
-import { adalReauth } from '../actions/userActions';
+// import { adalReauth } from '../actions/userActions';
 
 const reportTypeEnum = {
   annualInspection: 1,
@@ -578,11 +578,13 @@ export const constants = {
       msg = 'Please connect to the internet.';
     }
     if (error && error.response && error.response.status === 401) {
-      console.warn('catching unauthorized, re-authenticating');
-      setTimeout(() => {
-        adalReauth();
-      }, 1000);
-      return; // don't show an error
+      console.error(
+        'catching unauthorized, we should not get here now that we are using adalFetch'
+      );
+      // setTimeout(() => {
+      //   adalReauth();
+      // }, 1000);
+      // return; // don't show an error
     }
     toastr.error('Error', msg, constants.toastrError);
   },

@@ -26,14 +26,20 @@ import {
 import { getFacilitiesByCustomer } from '../../actions/commonActions';
 import { constants } from 'src/constants/constants';
 
-const buildFieldConfig = (facilityOptions: any[]) => {
+const buildFieldConfig = (facilityOptions: any[], selectedUser: any = {}) => {
+  const { customer = null, facilities = null } = selectedUser;
+  const companyName = customer ? customer.name : '';
+  const selectedFacilities = facilities
+    ? FormUtil.convertToOptions(facilities)
+    : null;
   const fieldConfigControls = {
-    customer: {
+    customerName: {
       options: {
         validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
-      meta: { label: 'company', colWidth: 12, type: 'text', name: 'customer' }
+      meta: { label: 'company', colWidth: 12, type: 'text', name: 'customer' },
+      formState: { value: companyName, disabled: true }
     },
     facilities: {
       render: FormUtil.Select,
@@ -47,7 +53,8 @@ const buildFieldConfig = (facilityOptions: any[]) => {
       },
       options: {
         validators: Validators.required
-      }
+      },
+      formState: { value: selectedFacilities, disabled: false }
     }
   };
   return {
@@ -85,7 +92,7 @@ class EditTeamMemberForm extends React.Component<Iprops, {}> {
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(
-      buildFieldConfig(this.props.facilityOptions),
+      buildFieldConfig(this.props.facilityOptions, this.props.selectedUser),
       this.props.t
     );
   }
@@ -122,26 +129,10 @@ class EditTeamMemberForm extends React.Component<Iprops, {}> {
   }
 
   componentDidMount() {
-    // get the customer name
-    const { customer, customerID } = this.props.user;
-
-    if (customer) {
-      this.userForm.patchValue({ customer: customer.name });
-    }
-    const customerControl = this.userForm.get(
-      'customer'
-    ) as AbstractControlEdited;
-    customerControl.disable();
-    // if there is a customerID then get facilities
-    if (customerID.length) {
-      this.props.getFacilitiesByCustomer(customerID);
-    }
-
     if (!this.props.selectedUser) {
-      console.log('adding a new user');
       return;
     } else {
-      const { facilities } = this.props.selectedUser;
+      const { facilities, customer, customerID } = this.props.selectedUser;
 
       const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
         return find(facilities, { id: fac.value }) ? true : false;
@@ -151,9 +142,19 @@ class EditTeamMemberForm extends React.Component<Iprops, {}> {
       forEach(this.props.selectedUser, (value, key) => {
         this.userForm.patchValue({ [key]: value });
       });
-
       const emailControl = this.userForm.get('email') as AbstractControlEdited;
       emailControl.disable();
+      if (customer) {
+        this.userForm.patchValue({ customerName: customer.name });
+        const customerControl = this.userForm.get(
+          'customerName'
+        ) as AbstractControlEdited;
+        customerControl.disable();
+        // if there is a customerID then get facilities
+        if (customerID.length) {
+          this.props.getFacilitiesByCustomer(customerID);
+        }
+      }
     }
   }
 

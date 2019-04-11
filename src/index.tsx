@@ -44,7 +44,6 @@ import * as ReactDOM from 'react-dom';
 import ReduxToastr from 'react-redux-toastr';
 import axios from 'axios';
 
-import { setCachedToken } from './actions/userActions';
 import Login from './components/auth/Login';
 import configureStore from './store/configureStore';
 import registerServiceWorker from './registerServiceWorker';
@@ -137,8 +136,6 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
   let authenticated = false;
   authenticated = user.isAuthenticated && user.id.length > 0;
   if (authenticated) {
-    // if authenticated, set the Azure token to the HTTP headers
-    setCachedToken();
     TrackJS.configure({
       userId: user.email,
       version: process.env.REACT_APP_VERSION

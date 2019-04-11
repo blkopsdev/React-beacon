@@ -72,36 +72,24 @@ export function userLogin(): ThunkResult<void> {
     const token = authContext.getCachedToken(authContext.config.clientId);
     axios.defaults.headers.common['Authorization'] = 'Bearer ' + token;
     dispatch({ type: types.AAD_LOGIN, token });
-    return axios
-      .post(API.POST.user.login)
-      .then(data => {
+    return axios.post(API.POST.user.login).then(
+      data => {
         if (!data.data) {
           throw undefined;
         } else {
           dispatch({ type: types.USER_LOGIN_SUCCESS, user: data.data });
           return data;
         }
-      })
-      .catch((error: any) => {
+      },
+      (error: any) => {
         console.error('failed to login', error);
         dispatch({ type: types.USER_LOGIN_FAILED });
-
+        userLogoutHelper(dispatch);
         // to avoid getting stuck, go ahead and log the user out after a longer pause
-        dispatch({ type: types.USER_LOGOUT_SUCCESS });
-        dispatch({ type: 'Offline/RESET_STATE' }); // reset the redux-offline outbox
-        dispatch({ type: '@ReduxToastr/toastr/CLEAN_TOASTR' }); // reset the toastr
-
-        setTimeout(() => {
-          localForage.removeItem('state-core-care-web').then(() => {
-            authContext.logOut();
-          });
-        }, 500);
-
-        if (error && error.response && error.response.status === 401) {
-          return;
-        }
         constants.handleError(error, 'login');
-      });
+        throw error;
+      }
+    );
   };
 }
 export function adalLogin(): ThunkResult<void> {

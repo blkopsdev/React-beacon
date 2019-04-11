@@ -117,10 +117,20 @@ export function runReport(
           dispatch({
             type: types.REPORT_ADD_SUCCESS
           });
-          const url = window.URL.createObjectURL(new Blob([data.data]));
+          // const url = window.URL.createObjectURL(new File([data.data]));
+          const url = window.URL.createObjectURL(
+            new Blob([data.data], { type: 'application/pdf' })
+          );
+          // window.open(url, '_blank')
+
           const link = document.createElement('a');
           link.href = url;
-          link.setAttribute('download', 'file.pdf');
+          console.log(
+            'request herder',
+            data.request.getResponseHeader('content-disposition')
+          );
+          // link.setAttribute('download', 'file.pdf');
+          link.setAttribute('target', '_blank');
           document.body.appendChild(link);
           link.click();
 

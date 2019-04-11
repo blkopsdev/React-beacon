@@ -23,7 +23,8 @@
     "delete": "Delete",
     "save": "Save",
     "login": "Login",
-    "job": "Job"
+    "job": "Job",
+    "confirm": "Confirm"
   },
   "auth": {
     "loginButton": "Login with Azure",
@@ -61,7 +62,9 @@
     "editProfileModalTitle": "My Profile",
     "delete account": "Delete Account",
     "userAccountDeleteConfirm":
-      "This will delete your information from our systems and cannot be undone."
+      "This will delete your information from our systems and cannot be undone.",
+    "userAccountDeleteSecondConfirm":
+      "This action will prevent you from logging into the system and all your data will be lost. Are you sure you want to continue?"
   },
   "userQueue": {
     "bannerTitle": "New User Queue",

@@ -41,20 +41,21 @@ export function approveUser(userQueueID: string): any {
   };
 }
 function handleApproveUser(userQueueID: string, dispatch: any) {
-  return axios
-    .post(API.POST.user.approve, { id: userQueueID })
-    .then(data => {
+  return axios.post(API.POST.user.approve, { id: userQueueID }).then(
+    data => {
       if (!data.data) {
         throw undefined;
       } else {
         dispatch({ type: types.USER_APPROVE_SUCCESS, userQueueID });
         return data;
       }
-    })
-    .catch((error: any) => {
+    },
+    (error: any) => {
       dispatch({ type: types.USER_APPROVE_FAILED });
       constants.handleError(error, 'approve user');
-    });
+      throw error;
+    }
+  );
 }
 
 // export function anotherThunkAction(): ThunkResult<Promise<boolean>> {
@@ -65,20 +66,21 @@ function handleApproveUser(userQueueID: string, dispatch: any) {
 export function rejectUser(userQueueID: string) {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());
-    return axios
-      .post(API.POST.user.reject, { id: userQueueID })
-      .then(data => {
+    return axios.post(API.POST.user.reject, { id: userQueueID }).then(
+      data => {
         if (!data.data) {
           throw undefined;
         } else {
           dispatch({ type: types.USER_REJECT_SUCCESS, userQueueID });
           return data;
         }
-      })
-      .catch((error: any) => {
+      },
+      (error: any) => {
         dispatch({ type: types.USER_REJECT_FAILED });
         constants.handleError(error, 'reject user');
-      });
+        throw error;
+      }
+    );
   };
 }
 export function updateQueueUser(

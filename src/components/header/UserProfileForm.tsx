@@ -161,7 +161,7 @@ class UserProfileForm extends React.Component<Iprops, {}> {
   handleDelete = () => {
     const toastrConfirmOptions = {
       onOk: () => {
-        this.props.deleteUserAccount();
+        this.handleDeleteSecondConfirmation();
       },
       onCancel: () => console.log('CANCEL: clicked'),
       okText: this.props.t('delete account'),
@@ -169,6 +169,20 @@ class UserProfileForm extends React.Component<Iprops, {}> {
     };
     toastr.confirm(
       this.props.t('userAccountDeleteConfirm'),
+      toastrConfirmOptions
+    );
+  };
+  handleDeleteSecondConfirmation = () => {
+    const toastrConfirmOptions = {
+      onOk: () => {
+        this.props.deleteUserAccount();
+      },
+      onCancel: () => console.log('CANCEL: clicked'),
+      okText: this.props.t('common:confirm'),
+      cancelText: this.props.t('common:cancel')
+    };
+    toastr.confirm(
+      this.props.t('userAccountDeleteSecondConfirm'),
       toastrConfirmOptions
     );
   };

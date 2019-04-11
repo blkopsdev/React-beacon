@@ -214,17 +214,37 @@ const securityFunctions = {
   ManageAllTraining: {
     id: '25961E0B-AFB4-4864-BF4C-A341A22553C6',
     name: 'securityF:ManageAllTraining',
-    description: "Allows the user to view all user's training progress"
+    description: "Allows the user to view all user's training progress."
   },
   ManageAllMeasurementPoints: {
     id: 'BE9173D7-B8AA-4065-973F-7B39A2226221',
     name: 'securityF:ManageAllMeasurementPoints',
-    description: 'Allows the user to manage global measurement points'
+    description: 'Allows the user to manage global measurement points.'
   },
   ManageCustomerMeasurementPoints: {
     id: '4EA1668B-220A-4FFB-865B-EB271EF6FF0E',
     name: 'securityF:ManageCustomerMeasurementPoints',
-    description: 'Allows the user to manage global measurement points'
+    description: 'Allows the user to manage global measurement points.'
+  },
+  ManageBrands: {
+    id: '6701ED68-A98C-4F62-BB4D-02219E88804B',
+    name: 'securityF:ManageBrands',
+    description: 'Allows the user to manage global brands.'
+  },
+  ViewReports: {
+    id: 'FF7FAA1C-DF33-4237-98DA-2A8279250619',
+    name: 'securityF:ViewReports',
+    description: 'Allows the user view reports.'
+  },
+  RunAnnualInspectionReport: {
+    id: 'CE7D1DA7-A98E-4A0D-B779-D40DB0B4BE4C',
+    name: 'securityF:RunAnnualInspectionReport',
+    description: 'Allows the user to run Annual Inspection Reports.'
+  },
+  RunJobCommentsReport: {
+    id: 'EC63D1C2-00C6-4D75-A0B7-1A4BFEBA338B',
+    name: 'securityF:RunJobCommentsReport',
+    description: 'Allows the user to run Job Comments Reports.'
   }
 };
 

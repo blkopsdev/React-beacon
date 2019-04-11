@@ -9,11 +9,12 @@ import { connect } from 'react-redux';
 import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
-import { IinitialState, Iuser } from '../../models';
+import { IinitialState, Iuser, Ioption } from '../../models';
 import { getFacilitiesByCustomer } from '../../actions/commonActions';
 import {
   toggleEditProfileModal,
-  updateUserProfile
+  updateUserProfile,
+  deleteUserAccount
 } from '../../actions/userActions';
 import CommonModal from '../common/CommonModal';
 import UserProfileForm from './UserProfileForm';
@@ -27,11 +28,12 @@ interface IdispatchProps {
   showModal: boolean;
   loading: boolean;
   customers: any[];
-  facilityOptions: any[];
+  facilityOptions: Ioption[];
   updateUserProfile: typeof updateUserProfile;
   toggleModal: () => void;
   getFacilitiesByCustomer: (value: string) => Promise<void>;
   user: Iuser;
+  deleteUserAccount: typeof deleteUserAccount;
 }
 
 class EditManageUserModal extends React.Component<Iprops & IdispatchProps, {}> {
@@ -48,19 +50,7 @@ class EditManageUserModal extends React.Component<Iprops & IdispatchProps, {}> {
         modalVisible={this.props.showModal}
         className="user-edit"
         onHide={this.props.toggleModal}
-        body={
-          <UserProfileForm
-            handleSubmit={this.props.updateUserProfile}
-            handleCancel={this.props.toggleModal}
-            loading={this.props.loading}
-            colorButton={this.props.colorButton}
-            customers={this.props.customers}
-            facilities={this.props.facilityOptions}
-            facilityOptions={this.props.facilityOptions}
-            user={this.props.user}
-            getFacilitiesByCustomer={this.props.getFacilitiesByCustomer}
-          />
-        }
+        body={<UserProfileForm {...this.props} />}
         title={this.props.t('user:editProfileModalTitle')}
         container={document.getElementById('two-pane-layout')}
       />
@@ -83,6 +73,7 @@ export default connect(
   {
     toggleModal: toggleEditProfileModal,
     getFacilitiesByCustomer,
-    updateUserProfile
+    updateUserProfile,
+    deleteUserAccount
   }
 )(EditManageUserModal);

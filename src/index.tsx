@@ -26,7 +26,8 @@ import {
   faSortAmountUp,
   faSortAmountDown,
   faClipboardList,
-  faWrench
+  faWrench,
+  faHistory
 } from '@fortawesome/pro-regular-svg-icons';
 import {
   faUsers,
@@ -73,7 +74,8 @@ library.add(
   faEdit,
   faSortAmountUp,
   faSortAmountDown,
-  faClipboardList
+  faClipboardList,
+  faHistory
 );
 
 import { authContext } from './actions/userActions';

@@ -1,14 +1,14 @@
 import { ThunkAction } from 'redux-thunk';
 import { toastr } from 'react-redux-toastr';
-import axios from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { IinitialState, ItableFiltersParams, Iuser } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
 import { constants } from 'src/constants/constants';
 import * as types from './actionTypes';
-
-// import {AxiosResponse} from 'axios';
+import { adalFetch } from 'react-adal';
+import { authContext } from './userActions';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
@@ -16,9 +16,14 @@ export function getUserManage(): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     const { page, search } = getState().manageTeam.tableFilters;
-    return axios
-      .get(API.GET.user.getteamsearch, { params: { page, search } })
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'get',
+      params: { page, search }
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.GET.user.getteamsearch;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {
@@ -42,9 +47,14 @@ export function updateTeamUser(user: Iuser): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     dispatch({ type: types.TOGGLE_MODAL_EDIT_TEAM });
-    return axios
-      .post(API.POST.user.updateteam, user)
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'post',
+      data: user
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.POST.user.updateteam;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {
@@ -71,9 +81,14 @@ export function updateTeamUser(user: Iuser): ThunkResult<void> {
 export function saveTeamUser(user: Iuser): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
-    return axios
-      .post(API.POST.user.saveteam, user)
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'post',
+      data: user
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.POST.user.saveteam;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {
@@ -105,9 +120,14 @@ export function deleteTeamUser(memberID: string): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     dispatch({ type: types.TOGGLE_MODAL_EDIT_TEAM });
-    return axios
-      .post(API.POST.user.deleteTeamMember, { ID: memberID })
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'post',
+      data: { ID: memberID }
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.POST.user.deleteTeamMember;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         dispatch({
           type: types.TEAM_DELETE_SUCCESS,
           memberID

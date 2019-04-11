@@ -1,14 +1,14 @@
 import { ThunkAction } from 'redux-thunk';
 // import { toastr } from 'react-redux-toastr';
-import axios from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { IinitialState, ItableFiltersParams, Iuser } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
 import { constants } from 'src/constants/constants';
 import * as types from './actionTypes';
-
-// import {AxiosResponse} from 'axios';
+import { adalFetch } from 'react-adal';
+import { authContext } from './userActions';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
@@ -16,9 +16,14 @@ export function getUserQueue(): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     const { page, search } = getState().manageUserQueue.tableFilters;
-    return axios
-      .get(API.GET.user.getuserqueue, { params: { page, search } })
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'get',
+      params: { page, search }
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.GET.user.getuserqueue;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {
@@ -41,20 +46,27 @@ export function approveUser(userQueueID: string): any {
   };
 }
 function handleApproveUser(userQueueID: string, dispatch: any) {
-  return axios
-    .post(API.POST.user.approve, { id: userQueueID })
-    .then(data => {
+  const axiosOptions: AxiosRequestConfig = {
+    method: 'post',
+    data: { id: userQueueID }
+  };
+  const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+  const url = API.POST.user.approve;
+  return adalFetch(authContext, resource, axios, url, axiosOptions).then(
+    (data: AxiosResponse<any>) => {
       if (!data.data) {
         throw undefined;
       } else {
         dispatch({ type: types.USER_APPROVE_SUCCESS, userQueueID });
         return data;
       }
-    })
-    .catch((error: any) => {
+    },
+    (error: any) => {
       dispatch({ type: types.USER_APPROVE_FAILED });
       constants.handleError(error, 'approve user');
-    });
+      throw error;
+    }
+  );
 }
 
 // export function anotherThunkAction(): ThunkResult<Promise<boolean>> {
@@ -65,20 +77,27 @@ function handleApproveUser(userQueueID: string, dispatch: any) {
 export function rejectUser(userQueueID: string) {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());
-    return axios
-      .post(API.POST.user.reject, { id: userQueueID })
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'post',
+      data: { id: userQueueID }
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.POST.user.reject;
+    return adalFetch(authContext, resource, axios, url, axiosOptions).then(
+      (data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {
           dispatch({ type: types.USER_REJECT_SUCCESS, userQueueID });
           return data;
         }
-      })
-      .catch((error: any) => {
+      },
+      (error: any) => {
         dispatch({ type: types.USER_REJECT_FAILED });
         constants.handleError(error, 'reject user');
-      });
+        throw error;
+      }
+    );
   };
 }
 export function updateQueueUser(
@@ -89,9 +108,14 @@ export function updateQueueUser(
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     dispatch({ type: types.TOGGLE_MODAL_EDIT_QUEUE_USER });
-    return axios
-      .post(API.POST.user.update, user)
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'post',
+      data: user
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.POST.user.update;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {

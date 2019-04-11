@@ -22,7 +22,7 @@ import {
 import { FormUtil } from '../common/FormUtil';
 import { constants } from 'src/constants/constants';
 import { initialDefaultReport } from 'src/reducers/initialState';
-import { map, orderBy } from 'lodash';
+import { map, orderBy, filter } from 'lodash';
 import * as moment from 'moment';
 import { EditReportForm } from './ManageReportForm';
 
@@ -72,7 +72,14 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   const selectedDefaultReport =
     state.manageReport.defaultReportsByID[selectedDefaultReportID] ||
     initialDefaultReport;
-  const jobOptions = prepJobsForOptions(state.manageJob.data);
+  const facilityID = state.manageReport.tableFilters.facility
+    ? state.manageReport.tableFilters.facility.value
+    : state.user.facilities[0].id;
+  const filteredJobs = filter(
+    state.manageJob.data,
+    job => job.facilityID === facilityID
+  );
+  const jobOptions = prepJobsForOptions(filteredJobs);
   return {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
@@ -92,7 +99,7 @@ export default connect(
   }
 )(EditManageJobModal);
 
-const prepJobsForOptions = (jobs: { [key: string]: Ijob }) => {
+const prepJobsForOptions = (jobs: Ijob[]) => {
   const jobsWithName = map(jobs, job => {
     const startDate = moment.utc(job.startDate).format('MM/DD/YYYY');
     const jobType = constants.jobTypesByID[job.jobTypeID];

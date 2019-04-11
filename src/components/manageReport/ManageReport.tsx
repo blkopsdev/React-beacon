@@ -19,22 +19,27 @@ import {
   Itile,
   Iuser,
   Ireport,
-  IdefaultReport
+  IdefaultReport,
+  Ioption
 } from '../../models';
 import { TableUtil } from '../common/TableUtil';
 import { closeAllModals } from '../../actions/commonActions';
 import { emptyTile } from '../../reducers/initialState';
-import { setTableFilter } from '../../actions/manageJobActions';
+import { getAllJobs } from '../../actions/manageJobActions';
 import Banner from '../common/Banner';
 import { constants } from 'src/constants/constants';
 import {
   toggleEditReportModal,
   getDefaultReports,
   setSelectedReport,
-  setSelectedDefaultReport
+  setSelectedDefaultReport,
+  setTableFilter
 } from 'src/actions/manageReportActions';
 import { values } from 'lodash';
 import ManageReportModal from './ManageReportModal';
+import { FieldConfig } from 'react-reactive-form';
+import { FormUtil } from '../common/FormUtil';
+import SearchTableForm from '../common/SearchTableForm';
 
 interface RowInfoReport extends RowInfo {
   original: IdefaultReport;
@@ -60,12 +65,14 @@ interface IdispatchProps {
   tableData: Ireport[];
   fseUsers: Iuser[];
   initComplete: boolean;
+  getAllJobs: typeof getAllJobs;
+  facilityOptions: Ioption[];
 }
 
 interface Istate {
   selectedRow: any;
   currentTile: Itile;
-  //   searchFieldConfig: FieldConfig;
+  searchFieldConfig: FieldConfig;
 }
 
 class ManageReport extends React.Component<Iprops & IdispatchProps, Istate> {
@@ -74,8 +81,8 @@ class ManageReport extends React.Component<Iprops & IdispatchProps, Istate> {
     super(props);
     this.state = {
       selectedRow: null,
-      currentTile: emptyTile
-      //   searchFieldConfig: this.buildSearchFieldConfig()
+      currentTile: emptyTile,
+      searchFieldConfig: this.buildSearchFieldConfig()
     };
     this.columns = TableUtil.translateHeaders(
       [
@@ -97,6 +104,7 @@ class ManageReport extends React.Component<Iprops & IdispatchProps, Istate> {
     });
     this.props.closeAllModals();
     this.props.getDefaultReports();
+    this.props.getAllJobs();
   }
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
     if (
@@ -106,6 +114,36 @@ class ManageReport extends React.Component<Iprops & IdispatchProps, Istate> {
       this.setState({ selectedRow: null });
     }
   }
+
+  buildSearchFieldConfig = (): FieldConfig => {
+    const mainSearchControls = {};
+    // only add the facility control if there is more than 1
+    const facility = {
+      render: FormUtil.SelectWithoutValidationLeftLabel,
+      meta: {
+        label: 'common:facility',
+        options: this.props.facilityOptions,
+        colWidth: 5,
+        type: 'select',
+        placeholder: 'facilityPlaceholder',
+        className: 'banner-input',
+        isClearable: false,
+        defaultValue: this.props.tableFilters.facility
+          ? this.props.tableFilters.facility
+          : this.props.facilityOptions[0]
+      }
+    };
+
+    let searchFieldConfig = {
+      controls: { ...mainSearchControls }
+    } as FieldConfig;
+    if (this.props.facilityOptions.length > 1) {
+      searchFieldConfig = {
+        controls: { ...mainSearchControls, facility }
+      } as FieldConfig;
+    }
+    return searchFieldConfig;
+  };
 
   /*
   * (reusable)
@@ -192,6 +230,20 @@ class ManageReport extends React.Component<Iprops & IdispatchProps, Istate> {
           img={this.state.currentTile.srcBanner}
           color={this.state.currentTile.color}
         />
+        <SearchTableForm
+          fieldConfig={this.state.searchFieldConfig}
+          handleSubmit={() => {
+            console.log('submitted report filter');
+          }}
+          loading={this.props.loading}
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+          subscribeValueChanges={true}
+          onValueChanges={this.onSearchValueChanges}
+          t={this.props.t}
+          showSearchButton={false}
+        />
         <ReactTable
           data={this.props.tableData}
           onSortedChange={this.onSortedChanged}
@@ -228,6 +280,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     showEditReportModal: state.manageReport.showEditReportModal,
     tableFilters: state.manageReport.tableFilters,
     facilities: state.facilities,
+    facilityOptions: FormUtil.convertToOptions(state.user.facilities),
     tableData: values(state.manageReport.defaultReportsByID)
   };
 };
@@ -240,7 +293,8 @@ export default translate('reportManage')(
       closeAllModals,
       setTableFilter,
       setSelectedReport,
-      setSelectedDefaultReport
+      setSelectedDefaultReport,
+      getAllJobs
     }
   )(ManageReport)
 );

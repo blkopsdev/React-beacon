@@ -81,7 +81,8 @@ const API = {
       deletecustomermeasurementpoint: `${root}/MeasurementPoint/deleteglobalmeasurementpoint`,
       deleteglobalmeasurementpointselectoption: `${root}/MeasurementPoint/deleteglobalmeasurementpointselectoption`,
       deletecustomermeasurementpointselectoption: `${root}/MeasurementPoint/deletecustomermeasurementpointselectoption`
-    }
+    },
+    user: `${root}/user/deleteaccount`
   },
   GET: {
     building: {

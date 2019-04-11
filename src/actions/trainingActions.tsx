@@ -13,9 +13,11 @@ import {
   GFQuizItem,
   GFCourse
 } from 'src/models';
-import axios from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { find, forEach } from 'lodash';
 import { toastr } from 'react-redux-toastr';
+import { adalFetch } from 'react-adal';
+import { authContext } from './userActions';
 
 export function loadCourses(user: Iuser): ThunkResult<void> {
   return dispatch => {
@@ -175,16 +177,20 @@ export function saveQuizResults(
       QuizID: quiz.id,
       Score: score
     };
-
-    return axios
-      .post(`${API.POST.training.savequiz}`, body)
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'post',
+      data: body
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.POST.training.savequiz;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         dispatch({
           type: types.SAVE_QUIZ_SUCCESS,
           progress: data.data
         });
       })
-      .catch(error => {
+      .catch((error: any) => {
         console.error('Error saving quiz', error);
         dispatch({ type: types.SAVE_QUIZ_FAILED });
         constants.handleError(error, 'save quiz');
@@ -196,15 +202,19 @@ export function saveQuizResults(
 export function getAllLessonProgress(): ThunkResult<void> {
   return dispatch => {
     dispatch(beginAjaxCall());
-    return axios
-      .get(`${API.GET.training.getalllessonprogress}`)
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'get'
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.GET.training.getalllessonprogress;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         dispatch({
           type: types.GET_ALL_LESSON_PROGRESS_SUCCESS,
           progress: data.data
         });
       })
-      .catch(error => {
+      .catch((error: any) => {
         console.error('Error getting lesson progress', error);
         dispatch({ type: types.GET_ALL_LESSON_PROGRESS_FAILED });
         constants.handleError(error, 'get all lesson progress');
@@ -216,15 +226,19 @@ export function getAllLessonProgress(): ThunkResult<void> {
 export function getProgressByLesson(lessonId: string): ThunkResult<void> {
   return dispatch => {
     dispatch(beginAjaxCall());
-    return axios
-      .get(`${API.GET.training.getprogressbylesson}/${lessonId}`)
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'get'
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = `${API.GET.training.getprogressbylesson}/${lessonId}`;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         dispatch({
           type: types.GET_LESSON_PROGRESS_SUCCESS,
           progress: data
         });
       })
-      .catch(error => {
+      .catch((error: any) => {
         console.error('Error getting lesson progress', error);
         dispatch({ type: types.GET_LESSON_PROGRESS_FAILED });
         constants.handleError(error, 'get lesson progress');
@@ -238,15 +252,20 @@ export function saveLessonProgress(
 ): ThunkResult<void> {
   return dispatch => {
     dispatch(beginAjaxCall());
-    return axios
-      .post(`${API.POST.training.savelessonprogress}`, progress)
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'post',
+      data: progress
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.POST.training.savelessonprogress;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         dispatch({
           type: types.SAVE_LESSON_PROGRESS_SUCCESS,
           progress: { id: data.data, ...progress }
         });
       })
-      .catch(error => {
+      .catch((error: any) => {
         console.error('Error saving lesson progress', error);
         dispatch({ type: types.SAVE_LESSON_PROGRESS_FAILED });
         constants.handleError(error, 'save lesson progress');
@@ -339,18 +358,23 @@ export const trainingCheckout = (
     const products = getState().training.cart.addedIDs;
     dispatch(beginAjaxCall());
     dispatch({ type: types.CLOSE_ALL_MODALS });
-    return axios
-      .post(API.POST.training.trainingCheckout, {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'post',
+      data: {
         PurchasedTraining: products,
         UTATransactionNumber: parseInt(transactionNumber, 10)
-      })
-      .then(data => {
+      }
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.POST.training.trainingCheckout;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         dispatch({
           type: types.CHECKOUT_TRAINING_SUCCESS
         });
         getPurchasedTrainingHelper(dispatch, getState);
       })
-      .catch(error => {
+      .catch((error: any) => {
         console.error('Error checking out', error);
         dispatch({ type: types.CHECKOUT_TRAINING_FAILED });
         constants.handleError(error, 'purchasing training');
@@ -366,16 +390,20 @@ export const getPurchasedTraining = (): ThunkResult<void> => {
 };
 
 const getPurchasedTrainingHelper = (dispatch: any, getState: any) => {
-  return axios
-    .get(API.GET.training.getPurchasedTraining)
-    .then(data => {
+  const axiosOptions: AxiosRequestConfig = {
+    method: 'get'
+  };
+  const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+  const url = API.GET.training.getPurchasedTraining;
+  return adalFetch(authContext, resource, axios, url, axiosOptions)
+    .then((data: AxiosResponse<any>) => {
       dispatch({
         type: types.GET_PURCHASED_TRAINING_SUCCESS,
         products: data.data
       });
       // toastr.success("Success", "requested quote", constants.toastrSuccess);
     })
-    .catch(error => {
+    .catch((error: any) => {
       console.error('Error getting purchased training', error);
       dispatch({ type: types.GET_PURCHASED_TRAINING_FAILED });
       constants.handleError(error, 'get purchased training');
@@ -386,14 +414,20 @@ const getPurchasedTrainingHelper = (dispatch: any, getState: any) => {
 export function startQuiz(quizID: string): ThunkResult<void> {
   return dispatch => {
     dispatch(beginAjaxCall());
-    return axios.post(API.POST.training.startQuiz, { quizID }).then(
-      data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'post',
+      data: { quizID }
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.POST.training.startQuiz;
+    return adalFetch(authContext, resource, axios, url, axiosOptions).then(
+      (data: AxiosResponse<any>) => {
         dispatch({
           type: types.START_QUIZ_SUCCESS,
           startTime: data.data.startTime
         });
       },
-      error => {
+      (error: any) => {
         console.error('Error starting timed quiz', error);
         dispatch({ type: types.START_QUIZ_FAILED });
         constants.handleError(error, 'start quiz');
@@ -409,15 +443,19 @@ export function startQuiz(quizID: string): ThunkResult<void> {
 export function getQuizResults(): ThunkResult<void> {
   return dispatch => {
     dispatch(beginAjaxCall());
-    return axios
-      .get(API.GET.training.getQuizResults)
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'get'
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.GET.training.getQuizResults;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         dispatch({
           type: types.GET_QUIZ_RESULTS_SUCCESS,
           results: data.data
         });
       })
-      .catch(error => {
+      .catch((error: any) => {
         console.error('Error getting quiz result', error);
         dispatch({ type: types.GET_QUIZ_RESULTS_FAILED });
         constants.handleError(error, 'get quiz results');

@@ -32,7 +32,7 @@ const API = {
       deleteInstall: `${root}/inventory/delete`,
       installContact: `${root}/inventory/contact`,
       approveproduct: `${root}/inventory/approve`,
-      importInstall: `${root}/inventory/import`,
+      importInstall: `${root}/inventory/excelimport`,
       mergeProduct: `${root}/inventory/mergeproduct`
     },
     user: {
@@ -81,7 +81,8 @@ const API = {
       deletecustomermeasurementpoint: `${root}/MeasurementPoint/deleteglobalmeasurementpoint`,
       deleteglobalmeasurementpointselectoption: `${root}/MeasurementPoint/deleteglobalmeasurementpointselectoption`,
       deletecustomermeasurementpointselectoption: `${root}/MeasurementPoint/deletecustomermeasurementpointselectoption`
-    }
+    },
+    user: `${root}/user/deleteaccount`
   },
   GET: {
     building: {

@@ -85,7 +85,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
           id: 'status',
           Header: 'status',
           accessor: 'status',
-          width: 70
+          width: 100
         },
         {
           Header: 'type',
@@ -179,6 +179,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
   * build the config here so that we have time to get customers before rendering the search controls.
   */
   buildSearchFieldConfig = (): FieldConfig => {
+    const { startDate, endDate, type, company } = this.props.tableFilters;
     return {
       controls: {
         company: {
@@ -189,7 +190,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
             colWidth: 3,
             type: 'select',
             placeholder: 'companyPlaceholder',
-            defaultValue: this.props.tableFilters.company,
+            defaultValue: company,
             isClearable: true
           }
         },
@@ -201,7 +202,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
             colWidth: 2,
             type: 'select',
             placeholder: 'typePlaceholder',
-            defaultValue: this.props.tableFilters.type,
+            defaultValue: type,
             isClearable: true
           }
         },
@@ -210,7 +211,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
           meta: {
             label: 'jobManage:startDate',
             colWidth: 2,
-            defaultValue: this.props.tableFilters.startDate,
+            defaultValue: startDate ? startDate : '',
             showTime: false
           }
         },
@@ -219,7 +220,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
           meta: {
             label: 'jobManage:endDate',
             colWidth: 2,
-            defaultValue: this.props.tableFilters.endDate,
+            defaultValue: endDate ? endDate : '',
             showTime: false
           }
         }

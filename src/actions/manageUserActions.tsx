@@ -1,16 +1,15 @@
 import { ThunkAction } from 'redux-thunk';
 import { toastr } from 'react-redux-toastr';
-import axios from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { IinitialState, ItableFiltersParams, Iuser } from '../models';
-import { authContext } from './userActions';
 import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
 import { constants } from 'src/constants/constants';
 import * as types from './actionTypes';
 import * as localForage from 'localforage';
-
-// import {AxiosResponse} from 'axios';
+import { adalFetch } from 'react-adal';
+import { authContext } from './userActions';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
@@ -19,9 +18,14 @@ export function getUserManage(): ThunkResult<void> {
     dispatch(beginAjaxCall());
     const { page, search, customer } = getState().manageUser.tableFilters;
     const customerID = customer ? customer.value : '';
-    return axios
-      .get(API.GET.user.getusersearch, { params: { page, search, customerID } })
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'get',
+      params: { page, search, customerID }
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.GET.user.getusersearch;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {
@@ -66,9 +70,14 @@ export function updateUser(user: Iuser): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     dispatch({ type: types.TOGGLE_MODAL_EDIT_USER });
-    return axios
-      .post(API.POST.user.update, user)
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'post',
+      data: user
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.POST.user.update;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {

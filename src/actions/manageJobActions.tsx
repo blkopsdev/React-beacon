@@ -1,6 +1,6 @@
 import { ThunkAction } from 'redux-thunk';
 import { toastr } from 'react-redux-toastr';
-import axios from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { IinitialState, ItableFiltersParams, Ijob } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
@@ -9,9 +9,14 @@ import { constants } from 'src/constants/constants';
 import * as types from './actionTypes';
 import * as moment from 'moment';
 const uuidv4 = require('uuid/v4');
+import { adalFetch } from 'react-adal';
+import { authContext } from './userActions';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
+/*
+* this is used for paging and filtering the jobs on the manage Jobs view
+*/
 export function getJobs(): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
@@ -22,17 +27,20 @@ export function getJobs(): ThunkResult<void> {
       startDate,
       endDate
     } = getState().manageJob.tableFilters;
-    return axios
-      .get(API.GET.job.getall, {
-        params: {
-          page,
-          customerID: company && company.value,
-          jobTypeID: type && type.value,
-          startDate: startDate ? moment.utc(startDate).toISOString() : '',
-          endDate: endDate ? moment.utc(endDate).toISOString() : ''
-        }
-      })
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'get',
+      params: {
+        page,
+        customerID: company && company.value,
+        jobTypeID: type && type.value,
+        startDate: startDate ? moment.utc(startDate).toISOString() : '',
+        endDate: endDate ? moment.utc(endDate).toISOString() : ''
+      }
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.GET.job.getall;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {
@@ -53,14 +61,51 @@ export function getJobs(): ThunkResult<void> {
   };
 }
 
+/*
+* getallJobs is used to populate the job select on the manageReports view
+*/
+export function getAllJobs(): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    const pagingType = 'None';
+    return axios
+      .get(API.GET.job.getall, {
+        params: {
+          pagingType
+        }
+      })
+      .then(data => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          console.log(data.data);
+          dispatch({ type: types.JOB_MANAGE_SUCCESS, jobs: data.data.result });
+          dispatch({
+            type: types.JOB_MANAGE_TOTAL_PAGES,
+            pages: data.data.pages
+          });
+          return data;
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.JOB_MANAGE_FAILED });
+        constants.handleError(error, 'get all jobs');
+        console.error(error);
+      });
+  };
+}
+
 export function getJobTypes(): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
-    return axios
-      .get(API.GET.jobtype.getall, {
-        params: {}
-      })
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'get',
+      params: {}
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.GET.jobtype.getall;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {
@@ -82,11 +127,15 @@ export function getJobTypes(): ThunkResult<void> {
 export function getFSEUsers(): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
-    return axios
-      .get(API.GET.user.getfseusers, {
-        params: {}
-      })
-      .then(data => {
+
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'get',
+      params: {}
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.GET.user.getfseusers;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {
@@ -124,9 +173,14 @@ export function updateJob(
       status: selectedJob.status,
       isDeleted: false
     };
-    return axios
-      .post(`${API.POST.job.update}`, { job, users })
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'post',
+      data: { job, users }
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.POST.job.update;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {
@@ -165,9 +219,14 @@ export function createJob(formValues: any, users: string[]): ThunkResult<void> {
       status: 'New',
       isDeleted: false
     };
-    return axios
-      .post(API.POST.job.create, { job, users })
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'post',
+      data: { job, users }
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.POST.job.create;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {

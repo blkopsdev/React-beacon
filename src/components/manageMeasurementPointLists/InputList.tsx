@@ -30,11 +30,6 @@ interface Istate {
 class InputList extends React.Component<Iprops, Istate> {
   constructor(props: any) {
     super(props);
-    console.log(this.props.meta.startOptions);
-    this.handleChange = this.handleChange.bind(this);
-    this.addOption = this.addOption.bind(this);
-    this.deleteOption = this.deleteOption.bind(this);
-    this.makeDefault = this.makeDefault.bind(this);
     this.state = {
       value: ''
     };
@@ -55,6 +50,7 @@ class InputList extends React.Component<Iprops, Istate> {
     } else {
       this.props.handler().onChange([newOption]);
     }
+    this.setState({ value: '' });
   };
   deleteOption = (mpo: ImeasurementPointSelectOption) => {
     const newSelectOptions = this.props
@@ -128,9 +124,7 @@ class InputList extends React.Component<Iprops, Istate> {
                           }}
                           disabled={this.props.handler().disabled}
                         >
-                          <FontAwesomeIcon icon={['far', 'times']}>
-                            Delete
-                          </FontAwesomeIcon>
+                          <FontAwesomeIcon icon={['far', 'times']} />
                         </Button>
                       </span>
                       <ListGroupItem

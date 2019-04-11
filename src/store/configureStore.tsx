@@ -18,6 +18,7 @@ import { migrations } from './migrations';
 import { constants } from 'src/constants/constants';
 import rootReducer from '../reducers';
 import hardSet from 'redux-persist/lib/stateReconciler/hardSet';
+import TrackJSLogger from './TrackJSLogger';
 
 const effect = (
   {
@@ -116,7 +117,8 @@ export default function configureStore() {
       compose(
         applyMiddleware(
           thunk as ThunkMiddleware<IinitialState, any>,
-          offlineMiddleware as Middleware<any, any, any>
+          offlineMiddleware as Middleware<any, any, any>,
+          TrackJSLogger
         ),
         offlineEnhanceStore
       )

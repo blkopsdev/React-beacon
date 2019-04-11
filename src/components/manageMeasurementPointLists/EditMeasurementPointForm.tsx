@@ -141,6 +141,20 @@ const groupFieldConfig = (formState: IformSate) => {
     } as { [key: string]: GroupProps }
   };
 };
+const isRequiredConfig = (formState: IformSate) => {
+  return {
+    isRequired: {
+      render: FormUtil.SelectWithoutValidation,
+      meta: {
+        label: 'manageMeasurementPointLists:isRequired',
+        colWidth: 12,
+        options: trueFalseOptions,
+        isClearable: false
+      },
+      formState
+    }
+  };
+};
 
 interface Iprops extends React.Props<EditMeasurementPointForm> {
   selectedMeasurementPointList: ImeasurementPointList;
@@ -250,7 +264,8 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
       numericMinValue = null,
       numericMaxValue = null,
       numericAllowDecimals = null,
-      customerID
+      customerID,
+      isRequired = true
     } = measurementPoint;
 
     let selectedPassFailDefault = null;
@@ -285,6 +300,16 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
         );
       } else if (type === mpTypes.MEASUREMENT_POINT_SELECT) {
         extraConfig = this.selectFieldConfig(measurementPoint, disabled);
+      }
+      if (type !== mpTypes.MEASUREMENT_POINT_PASSFAIL) {
+        // if this is not a pass fail then add the isRequired select
+        extraConfig = {
+          ...extraConfig,
+          ...isRequiredConfig({
+            value: getTrueFalseOption(isRequired),
+            disabled
+          })
+        };
       }
       return this.buildFieldConfig(measurementPoint, extraConfig, disabled);
     }
@@ -387,11 +412,13 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
       type,
       guideText = null,
       allowNotes = true,
-      label
+      label,
+      showInReport = true
     } = measurementPoint;
     const selectedType = type
       ? { label: constants.measurementPointTypeEnum[type], value: type }
       : null;
+
     // Field config to configure form
     const fieldConfigControls = {
       type: {
@@ -442,6 +469,16 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
           isClearable: false
         },
         formState: { value: getTrueFalseOption(allowNotes), disabled }
+      },
+      showInReport: {
+        render: FormUtil.SelectWithoutValidation,
+        meta: {
+          label: 'manageMeasurementPointLists:showInReport',
+          colWidth: 12,
+          options: trueFalseOptions,
+          isClearable: false
+        },
+        formState: { value: getTrueFalseOption(showInReport), disabled }
       },
       helpText: {
         render: FormUtil.RichTextEditor,
@@ -519,7 +556,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
         ? numericAllowDecimals.value
         : false,
       passFailDefault: passFailDefault ? passFailDefault.value : '',
-      allowNotes: allowNotes ? allowNotes.value : false,
+      allowNotes: allowNotes ? allowNotes.value : true,
       type: type ? type.value : this.props.selectedMeasurementPoint.type,
       selectDefaultOptionID,
       label,

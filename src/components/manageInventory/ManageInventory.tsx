@@ -133,14 +133,13 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
   componentWillMount() {
     // since the install modal depends on a selected product in state, we need to make sure and start off with the modals closed
     this.props.closeAllModals();
+    this.props.getProductInfo();
     this.setState({
       currentTile: constants.getTileByURL(this.props.location.pathname)
     });
     this.setColumns();
   }
   componentDidMount() {
-    this.props.getProductInfo();
-
     // make sure there is a facility set to the table search filters so that it can be used in the EditProductForm
     if (!this.props.tableFilters.facility) {
       const facility = this.props.tableFilters.facility
@@ -356,7 +355,8 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       meta: {
         label: 'common:facility',
         options: this.props.facilityOptions,
-        colWidth: 5,
+        colWidth: 7,
+        colWidthLG: 5,
         type: 'select',
         placeholder: 'facilityPlaceholder',
         className: 'banner-input',

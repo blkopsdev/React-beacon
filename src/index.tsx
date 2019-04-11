@@ -26,7 +26,8 @@ import {
   faSortAmountUp,
   faSortAmountDown,
   faClipboardList,
-  faWrench
+  faWrench,
+  faHistory
 } from '@fortawesome/pro-regular-svg-icons';
 import {
   faUsers,
@@ -50,6 +51,7 @@ import registerServiceWorker from './registerServiceWorker';
 import { LinkContainer } from 'react-router-bootstrap';
 import { Button } from 'react-bootstrap';
 import { PersistGate } from 'redux-persist/integration/react';
+import { TrackJS } from 'trackjs';
 
 library.add(
   faCog,
@@ -73,7 +75,8 @@ library.add(
   faEdit,
   faSortAmountUp,
   faSortAmountDown,
-  faClipboardList
+  faClipboardList,
+  faHistory
 );
 
 import { authContext } from './actions/userActions';
@@ -97,6 +100,16 @@ const { store, persistor } = configureStore();
 
 // set Axios default header for accepting JSON
 axios.defaults.headers.common['Accept'] = 'application/json';
+
+// Trackjs
+
+TrackJS.install({
+  token: '7acefdd92da44ad595db60cb7c09af8c',
+  application: 'mymedgas',
+  version: process.env.REACT_APP_VERSION,
+  enabled: !(window.location.host.indexOf('localhost') >= 0)
+  // for more configuration options, see https://docs.trackjs.com
+});
 
 // set the window name for UTA transaction window
 window.name = 'MyMedGas';
@@ -126,6 +139,10 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
   if (authenticated) {
     // if authenticated, set the Azure token to the HTTP headers
     setCachedToken();
+    TrackJS.configure({
+      userId: user.email,
+      version: process.env.REACT_APP_VERSION
+    });
   }
   return (
     <Route

@@ -229,9 +229,11 @@ export interface ImeasurementPoint {
   type: number;
   label: string;
   order: number;
+  isRequired: boolean;
+  showInReport: boolean;
   guideText?: string;
   helpText?: string;
-  allowNotes?: boolean;
+  allowNotes: boolean;
   passFailDefault?: number;
   numericMinValue?: number;
   numericMaxValue?: number;
@@ -261,6 +263,7 @@ export interface ImeasurementPointList {
   testProcedures: string;
   standardID: string;
   type: number;
+  isDeleted: boolean;
   temporary?: boolean;
 }
 export interface ImeasurementPointAnswer {
@@ -284,7 +287,7 @@ export interface ImeasurementPointResult {
   measurementPointListID: string;
   compiledNotes: string;
 }
-export interface ImeasurmentPointResultsReducer {
+export interface ImeasurementPointResultsReducer {
   measurementPointResultsByID: { [key: string]: ImeasurementPointResult };
   selectedResult: ImeasurementPointResult;
   previousResult: ImeasurementPointResult;
@@ -645,6 +648,6 @@ export interface IinitialState {
   manageTraining: ImanageTrainingReducer;
   productInfo: IproductInfo;
   manageMeasurementPointLists: ImanageMeasurementPointListsReducer;
-  measurementPointResults: ImeasurmentPointResultsReducer;
+  measurementPointResults: ImeasurementPointResultsReducer;
   manageReport: ImanageReportReducer;
 }

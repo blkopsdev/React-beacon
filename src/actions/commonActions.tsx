@@ -1,11 +1,13 @@
 import { toastr } from 'react-redux-toastr';
-import axios from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { Ifacility, ThunkResult } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
 import { constants } from 'src/constants/constants';
 import * as types from './actionTypes';
 import API from '../constants/apiEndpoints';
+import { adalFetch } from 'react-adal';
+import { authContext } from './userActions';
 
 export const closeAllModals = () => ({
   type: types.CLOSE_ALL_MODALS
@@ -20,9 +22,14 @@ export const toggleEditFacilityModal = () => ({
 export function getFacilitiesByCustomer(customerID: string) {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());
-    return axios
-      .get(API.GET.facility.getbycustomer, { params: { customerID } })
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'get',
+      params: { customerID }
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.GET.facility.getbycustomer;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {
@@ -43,9 +50,13 @@ export function getFacilitiesByCustomer(customerID: string) {
 export function getCustomers() {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());
-    return axios
-      .get(API.GET.customer.getall)
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'get'
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.GET.customer.getall;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {
@@ -71,9 +82,14 @@ export function addCustomer({
 }): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
-    return axios
-      .post(API.POST.customer.add, { name, vat })
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'post',
+      data: { name, vat }
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.POST.customer.add;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {
@@ -96,9 +112,14 @@ export function addCustomer({
 export function addFacility(facility: Ifacility): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
-    return axios
-      .post(API.POST.facility.add, facility)
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'post',
+      data: facility
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.POST.facility.add;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {

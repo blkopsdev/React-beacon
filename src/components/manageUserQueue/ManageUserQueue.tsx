@@ -91,7 +91,8 @@ class ManageUserQueue extends React.Component<Iprops & IdispatchProps, Istate> {
         },
         {
           Header: 'email',
-          accessor: 'user.email'
+          accessor: 'user.email',
+          minWidth: 190
         },
         {
           id: 'company',

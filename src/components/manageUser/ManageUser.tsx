@@ -166,7 +166,8 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
         },
         {
           Header: 'email',
-          accessor: 'email'
+          accessor: 'email',
+          minWidth: 190
         },
         {
           id: 'company',
@@ -189,7 +190,8 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
           accessor: ({ hasTeamMembers }: Iuser) => {
             return hasTeamMembers ? 'Yes' : 'No';
           },
-          id: 'manager'
+          id: 'manager',
+          width: 100
         },
         {
           Header: 'login',

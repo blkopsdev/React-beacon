@@ -23,7 +23,8 @@
     "delete": "Delete",
     "save": "Save",
     "login": "Login",
-    "job": "Job"
+    "job": "Job",
+    "confirm": "Confirm"
   },
   "auth": {
     "loginButton": "Login with Azure",
@@ -58,7 +59,12 @@
     "***-***-****": "***-***-****",
     "country": "Country",
     "active": "Is Active?",
-    "editProfileModalTitle": "My Profile"
+    "editProfileModalTitle": "My Profile",
+    "delete account": "Delete Account",
+    "userAccountDeleteConfirm":
+      "This will delete your information from our systems and cannot be undone.",
+    "userAccountDeleteSecondConfirm":
+      "This action will prevent you from logging into the system and all your data will be lost. Are you sure you want to continue?"
   },
   "userQueue": {
     "bannerTitle": "New User Queue",
@@ -91,10 +97,10 @@
     "name": "name",
     "email": "email",
     "company": "company",
-    "manager": "is manager?",
+    "manager": "manager",
     "login": "last login",
     "searchPlaceholder": "Search by First, Last, or Email",
-    "customerPlaceholder": "Select Customer",
+    "customerPlaceholder": "Search...",
     "customerSearchPlaceholder": "Search...",
     "facilitySearchPlaceholder": "Search...",
     "securitySearchPlaceholder": "Search...",
@@ -130,8 +136,8 @@
     "cancel": "Cancel",
     "facility": "Facility",
     "name": "Name",
-    "annualInspection": "Annual Inspection",
-    "verification": "Verification",
+    "annualInspection": "Annual Inspection Report",
+    "verification": "Job Comments / Deficiency Report",
     "coverLetter": "Cover Letter",
     "jobPlaceholder": "Search..."
   },
@@ -268,11 +274,11 @@
   "manageMeasurementPointLists": {
     "bannerTitle": "Measurement Points",
     "type": "Type",
-    "typePlaceholder": "Select type...",
+    "typePlaceholder": "Search...",
     "equipmentType": "Category",
-    "equipmentTypePlaceholder": "Select Category...",
+    "equipmentTypePlaceholder": "Search...",
     "standard": "Standard",
-    "standardPlaceholder": "Select standard...",
+    "standardPlaceholder": "Search...",
     "selectTabLabel": "Tab",
     "selectTabPlaceholder": "Type to Create a Tab",
     "newMeasurement": "Add Measurements",
@@ -313,16 +319,18 @@
     "resultStatusPass": "Pass",
     "resultStatusFail": "Fail",
     "resultStatusCannotComplete": "Cannot Complete",
-    "resultStatusRepair": "Repair"
+    "resultStatusRepair": "Repair",
+    "isRequired": "Is Required",
+    "showInReport": "Show In Report"
   },
   "tiles": {
     "alerts": "Alerts",
     "training": "Training",
     "userQueue": "New User Queue",
-    "userManage": "Manage Users",
-    "manageJobs": "Manage Jobs",
+    "userManage": "Users",
+    "manageJobs": "Jobs",
     "reports": "Reports",
-    "manageTeam": "Manage Team",
+    "manageTeam": "Team",
     "documents": "Documents & Legal",
     "inventory": "Inventory",
     "productqueue": "New Product Queue",
@@ -332,7 +340,7 @@
     "support": "Support",
     "manageAllTraining": "Training Progress",
     "manageMeasurementPointList": "Measurements",
-    "manageCustomerMeasurementPointList": "Customer Measurements",
+    "manageCustomerMeasurementPointList": "Customer MPs",
     "manageReports": "Reports"
   },
   "securityF": {

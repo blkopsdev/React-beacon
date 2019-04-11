@@ -2,7 +2,7 @@
 
 import { ThunkAction } from 'redux-thunk';
 import { toastr } from 'react-redux-toastr';
-import axios from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import {
   IinitialState,
@@ -20,17 +20,21 @@ import * as types from './actionTypes';
 import { filter, find } from 'lodash';
 import { Dispatch } from 'react-redux';
 const uuidv4 = require('uuid/v4');
-
-// import {AxiosResponse} from 'axios';
+import { adalFetch } from 'react-adal';
+import { authContext } from './userActions';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
 export function getLocationsFacility(facilityID: string): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
-    return axios
-      .get(`${API.GET.facility.getbyid}/${facilityID}`)
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'get'
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = `${API.GET.facility.getbyid}/${facilityID}`;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {
@@ -120,9 +124,13 @@ const saveAnyLocationObjectHelper = (
     url = API.POST.room;
     lType = 'Room';
   }
-  return axios
-    .post(url, locationObject)
-    .then(data => {
+  const axiosOptions: AxiosRequestConfig = {
+    method: 'post',
+    data: locationObject
+  };
+  const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+  return adalFetch(authContext, resource, axios, url, axiosOptions)
+    .then((data: AxiosResponse<any>) => {
       if (!data.data) {
         throw undefined;
       } else {
@@ -168,9 +176,13 @@ export function updateAnyLocation(
       url = `${API.PUT.room}/${locationObject.id}`;
       lType = 'Room';
     }
-    return axios
-      .put(url, locationObject)
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'put',
+      data: locationObject
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (data.status !== 200) {
           throw undefined;
         } else {
@@ -218,9 +230,12 @@ export function deleteAnyLocation(
       url = `${API.DELETE.room}/${locationObject.id}`;
       lType = 'Room';
     }
-    return axios
-      .delete(url)
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'delete'
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (data.status !== 200) {
           throw undefined;
         } else {

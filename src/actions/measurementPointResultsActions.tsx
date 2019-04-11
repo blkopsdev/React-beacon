@@ -1,5 +1,5 @@
 import { ThunkAction } from 'redux-thunk';
-import axios from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import {
   IinitialState,
@@ -13,6 +13,8 @@ import * as types from './actionTypes';
 import * as moment from 'moment';
 import { initialMeasurmentPointResult } from 'src/reducers/initialState';
 import { values } from 'lodash';
+import { adalFetch } from 'react-adal';
+import { authContext } from './userActions';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
@@ -34,13 +36,15 @@ export const getFacilityMeasurementPointResultsHelper = (
   getState: any,
   facilityID: string
 ) => {
-  return axios
-    .get(
-      `${
-        API.GET.measurementPoint.getFacilityMeasurementPointListResults
-      }/${facilityID}`
-    )
-    .then(data => {
+  const axiosOptions: AxiosRequestConfig = {
+    method: 'get'
+  };
+  const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+  const url = `${
+    API.GET.measurementPoint.getFacilityMeasurementPointListResults
+  }/${facilityID}`;
+  return adalFetch(authContext, resource, axios, url, axiosOptions)
+    .then((data: AxiosResponse<any>) => {
       if (!data.data) {
         throw undefined;
       } else {
@@ -134,10 +138,10 @@ export const resetSelectedResult = () => ({
 */
 
 /*
-* 1) try to find a previous result for this install 
+* 1) try to find a previous result for this install
 * 2) try to find a previous result for this type of measurement point list (clean the answers)
 * If we find one, return it
-* Then set it to the selectedResult 
+* Then set it to the selectedResult
 *  - if it is temporary then do Not create a new ID or remove any answers
 */
 const getPreviousResult = (

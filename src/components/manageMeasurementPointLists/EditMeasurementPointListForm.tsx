@@ -227,6 +227,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
         meta: {
           options: tabOptions,
           label: 'manageMeasurementPointLists:selectTabLabel',
+          subLabel: this.props.t(' - Type to Create a Tab'),
           colWidth: 12,
           placeholder: 'manageMeasurementPointLists:selectTabPlaceholder',
           isMulti: false,

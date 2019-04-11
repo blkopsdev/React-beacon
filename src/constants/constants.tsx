@@ -2,7 +2,7 @@ import { transitionInType, transitionOutType, Iuser, Itile } from '../models';
 import { find } from 'lodash';
 import { emptyTile } from '../reducers/initialState';
 import { toastr } from 'react-redux-toastr';
-import { adalReauth } from '../actions/userActions';
+// import { adalReauth } from '../actions/userActions';
 
 const reportTypeEnum = {
   annualInspection: 1,
@@ -118,7 +118,8 @@ const icons = {
   productQueue: require('../images/icons/BM_NewProductQueue.png'),
   userQueue: require('../images/icons/BM_NewUserQueue.png'),
   payments: require('../images/icons/BM_Payments.png'),
-  training: require('../images/icons/BM_Training.png'),
+  training: require('../images/icons/BM_ManageTraining.png'),
+  manageAllTraining: require('../images/icons/BM_ManageAllTraining.png'),
   locations: require('../images/icons/BM_ManageLocations.png'),
   measurements: require('../images/icons/BM_Measurement.png'),
   manageReport: require('../images/icons/BM_Reports.png')
@@ -213,17 +214,37 @@ const securityFunctions = {
   ManageAllTraining: {
     id: '25961E0B-AFB4-4864-BF4C-A341A22553C6',
     name: 'securityF:ManageAllTraining',
-    description: "Allows the user to view all user's training progress"
+    description: "Allows the user to view all user's training progress."
   },
   ManageAllMeasurementPoints: {
     id: 'BE9173D7-B8AA-4065-973F-7B39A2226221',
     name: 'securityF:ManageAllMeasurementPoints',
-    description: 'Allows the user to manage global measurement points'
+    description: 'Allows the user to manage global measurement points.'
   },
   ManageCustomerMeasurementPoints: {
     id: '4EA1668B-220A-4FFB-865B-EB271EF6FF0E',
     name: 'securityF:ManageCustomerMeasurementPoints',
-    description: 'Allows the user to manage global measurement points'
+    description: 'Allows the user to manage global measurement points.'
+  },
+  ManageBrands: {
+    id: '6701ED68-A98C-4F62-BB4D-02219E88804B',
+    name: 'securityF:ManageBrands',
+    description: 'Allows the user to manage global brands.'
+  },
+  ViewReports: {
+    id: 'FF7FAA1C-DF33-4237-98DA-2A8279250619',
+    name: 'securityF:ViewReports',
+    description: 'Allows the user view reports.'
+  },
+  RunAnnualInspectionReport: {
+    id: 'CE7D1DA7-A98E-4A0D-B779-D40DB0B4BE4C',
+    name: 'securityF:RunAnnualInspectionReport',
+    description: 'Allows the user to run Annual Inspection Reports.'
+  },
+  RunJobCommentsReport: {
+    id: 'EC63D1C2-00C6-4D75-A0B7-1A4BFEBA338B',
+    name: 'securityF:RunJobCommentsReport',
+    description: 'Allows the user to run Job Comments Reports.'
   }
 };
 
@@ -256,7 +277,7 @@ const tiles = [
     src: 'https://placekitten.com/360/136',
     srcBanner: '',
     color: 'dark',
-    width: 360,
+    width: 270,
     height: 136,
     url: '/alerts',
     securityFunction: '',
@@ -269,101 +290,23 @@ const tiles = [
     src: require('src/images/beaconTraining.jpg'),
     srcBanner: require('src/images/beaconTrainingHeader.jpg'),
     color: 'blue',
-    width: 360,
-    height: 400,
+    width: 270,
+    height: 300,
     url: '/training',
     securityFunction: securityFunctions.ManageIndividualTraining.id,
     description: ''
   },
   {
-    icon: icons.training,
+    icon: icons.manageAllTraining,
     iconType: 'img',
     title: 'manageAllTraining',
-    src: require('src/images/beaconTraining.jpg'),
-    srcBanner: require('src/images/beaconTrainingHeader.jpg'),
+    src: require('src/images/trainingProgressTile.jpg'),
+    srcBanner: require('src/images/trainingProgressHeader.jpg'),
     color: 'orange',
-    width: 360,
-    height: 400,
+    width: 270,
+    height: 300,
     url: '/manageTraining',
     securityFunction: securityFunctions.ManageAllTraining.id,
-    description: ''
-  },
-  {
-    icon: icons.userQueue,
-    iconType: 'img',
-    title: 'userQueue',
-    src: require('src/images/beaconQueue.jpg'),
-    srcBanner: require('src/images/beaconQueueHeader.jpg'),
-    color: 'orange',
-    width: 360,
-    height: 400,
-    url: '/queue',
-    securityFunction: securityFunctions.ManageUsers.id,
-    description: ''
-  },
-  {
-    icon: icons.manageUsers,
-    iconType: 'img',
-    title: 'userManage',
-    src: require('src/images/beaconManageUsers.jpg'),
-    srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
-    color: 'purple',
-    width: 360,
-    height: 400,
-    url: '/users',
-    securityFunction: securityFunctions.ManageUsers.id,
-    description: ''
-  },
-  {
-    icon: icons.manageJobs,
-    iconType: 'img',
-    title: 'manageJobs',
-    src: require('src/images/beaconManageJobs.jpg'),
-    srcBanner: require('src/images/beaconManageJobsHeader.jpg'),
-    color: 'orange',
-    width: 360,
-    height: 400,
-    url: '/managejobs',
-    securityFunction: securityFunctions.ManageJobs.id,
-    description: ''
-  },
-  {
-    icon: icons.locations,
-    iconType: 'img',
-    title: 'locations',
-    src: require('src/images/beaconManageUsers.jpg'),
-    srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
-    color: 'green',
-    width: 360,
-    height: 400,
-    url: '/locations',
-    securityFunction: securityFunctions.ManageLocations.id,
-    description: ''
-  },
-  {
-    icon: icons.manageTeam,
-    iconType: 'img',
-    title: 'manageTeam',
-    src: require('src/images/beaconManageTeam.jpg'),
-    srcBanner: require('src/images/beaconManageTeamHeader.jpg'),
-    color: 'blue',
-    width: 360,
-    height: 400,
-    url: '/team',
-    securityFunction: securityFunctions.ManageTeamMembers.id,
-    description: ''
-  },
-  {
-    icon: 'icon-docs',
-    iconType: 'fa',
-    title: 'documents',
-    src: 'https://placekitten.com/360/272',
-    srcBanner: '',
-    color: 'purple',
-    width: 360,
-    height: 272,
-    url: '/docs',
-    securityFunction: '',
     description: ''
   },
   {
@@ -373,12 +316,92 @@ const tiles = [
     src: require('src/images/beaconManageInventory.jpg'),
     srcBanner: require('src/images/beaconManageInventoryHeader.jpg'),
     color: 'green',
-    width: 360,
-    height: 400,
+    width: 270,
+    height: 300,
     url: '/inventory',
     securityFunction: securityFunctions.ViewInventory.id,
     description: ''
   },
+  {
+    icon: icons.manageUsers,
+    iconType: 'img',
+    title: 'userManage',
+    src: require('src/images/beaconManageUsers.jpg'),
+    srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
+    color: 'purple',
+    width: 270,
+    height: 300,
+    url: '/users',
+    securityFunction: securityFunctions.ManageUsers.id,
+    description: ''
+  },
+  {
+    icon: icons.userQueue,
+    iconType: 'img',
+    title: 'userQueue',
+    src: require('src/images/beaconQueue.jpg'),
+    srcBanner: require('src/images/beaconQueueHeader.jpg'),
+    color: 'orange',
+    width: 270,
+    height: 300,
+    url: '/queue',
+    securityFunction: securityFunctions.ManageUsers.id,
+    description: ''
+  },
+  {
+    icon: icons.manageTeam,
+    iconType: 'img',
+    title: 'manageTeam',
+    src: require('src/images/beaconManageTeam.jpg'),
+    srcBanner: require('src/images/beaconManageTeamHeader.jpg'),
+    color: 'blue',
+    width: 270,
+    height: 300,
+    url: '/team',
+    securityFunction: securityFunctions.ManageTeamMembers.id,
+    description: ''
+  },
+  {
+    icon: icons.locations,
+    iconType: 'img',
+    title: 'locations',
+    src: require('src/images/LocationTile.jpg'),
+    srcBanner: require('src/images/locationHeader.jpg'),
+    color: 'green',
+    width: 270,
+    height: 300,
+    url: '/locations',
+    securityFunction: securityFunctions.ManageLocations.id,
+    description: ''
+  },
+  {
+    icon: icons.manageJobs,
+    iconType: 'img',
+    title: 'manageJobs',
+    src: require('src/images/beaconManageJobs.jpg'),
+    srcBanner: require('src/images/beaconManageJobsHeader.jpg'),
+    color: 'orange',
+    width: 270,
+    height: 300,
+    url: '/managejobs',
+    securityFunction: securityFunctions.ManageJobs.id,
+    description: ''
+  },
+
+  {
+    icon: 'icon-docs',
+    iconType: 'fa',
+    title: 'documents',
+    src: 'https://placekitten.com/270/272',
+    srcBanner: '',
+    color: 'purple',
+    width: 270,
+    height: 272,
+    url: '/docs',
+    securityFunction: '',
+    description: ''
+  },
+
   {
     icon: icons.productQueue,
     iconType: 'img',
@@ -386,8 +409,8 @@ const tiles = [
     src: require('src/images/beaconManageProductQueue.jpg'),
     srcBanner: require('src/images/beaconManageProductQueueHeader.jpg'),
     color: 'purple',
-    width: 360,
-    height: 400,
+    width: 270,
+    height: 300,
     url: '/productqueue',
     securityFunction: securityFunctions.ManageProductQueue.id,
     description: ''
@@ -396,10 +419,10 @@ const tiles = [
     icon: 'icon-admin',
     iconType: 'fa',
     title: 'administration',
-    src: 'https://placekitten.com/360/272',
+    src: 'https://placekitten.com/270/272',
     srcBanner: '',
     color: 'purple',
-    width: 360,
+    width: 270,
     height: 272,
     url: '/admin',
     securityFunction: '',
@@ -409,11 +432,11 @@ const tiles = [
     icon: 'icon-billing',
     iconType: 'fa',
     title: 'billing',
-    src: 'https://placekitten.com/360/400',
+    src: 'https://placekitten.com/270/300',
     srcBanner: '',
     color: 'orange',
     width: 359,
-    height: 400,
+    height: 300,
     url: '/billing',
     securityFunction: '',
     description: ''
@@ -422,10 +445,10 @@ const tiles = [
     icon: 'icon-groups',
     iconType: 'fa',
     title: 'groups',
-    src: 'https://placekitten.com/360/272',
+    src: 'https://placekitten.com/270/272',
     srcBanner: '',
     color: 'dark',
-    width: 360,
+    width: 270,
     height: 272,
     url: '/groups',
     securityFunction: '',
@@ -435,7 +458,7 @@ const tiles = [
     icon: 'icon-support',
     iconType: 'fa',
     title: 'support',
-    src: 'https://placekitten.com/360/136',
+    src: 'https://placekitten.com/270/136',
     srcBanner: '',
     color: 'dark',
     width: 359,
@@ -448,11 +471,11 @@ const tiles = [
     icon: icons.measurements,
     iconType: 'img',
     title: 'manageCustomerMeasurementPointList',
-    src: require('src/images/beaconManageUsers.jpg'),
+    src: require('src/images/measurementTile.jpg'),
     srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
-    color: 'purple',
-    width: 360,
-    height: 400,
+    color: 'green',
+    width: 270,
+    height: 300,
     url: '/customermeasurements',
     securityFunction: securityFunctions.ManageCustomerMeasurementPoints.id,
     description: ''
@@ -461,11 +484,11 @@ const tiles = [
     icon: icons.measurements,
     iconType: 'img',
     title: 'manageMeasurementPointList',
-    src: require('src/images/beaconManageUsers.jpg'),
+    src: require('src/images/measurementTile.jpg'),
     srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
     color: 'purple',
-    width: 360,
-    height: 400,
+    width: 270,
+    height: 300,
     url: '/measurements',
     securityFunction: securityFunctions.ManageAllMeasurementPoints.id,
     description: ''
@@ -474,13 +497,13 @@ const tiles = [
     icon: icons.manageReport,
     iconType: 'img',
     title: 'manageReports',
-    src: require('src/images/beaconManageUsers.jpg'),
+    src: require('src/images/reportTile.jpg'),
     srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
-    color: 'purple',
-    width: 360,
-    height: 400,
+    color: 'orange',
+    width: 270,
+    height: 300,
     url: '/reports',
-    securityFunction: securityFunctions.ManageAllMeasurementPoints.id,
+    securityFunction: securityFunctions.ViewReports.id,
     description: ''
   }
 ];
@@ -555,14 +578,16 @@ export const constants = {
       msg = 'Please connect to the internet.';
     }
     if (error && error.response && error.response.status === 401) {
-      console.warn('catching unauthorized, re-authenticating');
-      setTimeout(() => {
-        adalReauth();
-      }, 1000);
-      return; // don't show an error
+      console.error(
+        'catching unauthorized, we should not get here now that we are using adalFetch'
+      );
+      // setTimeout(() => {
+      //   adalReauth();
+      // }, 1000);
+      // return; // don't show an error
     }
     toastr.error('Error', msg, constants.toastrError);
   },
   tableSearchDebounceTime: 300,
-  timedQuizHours: 7
+  timedQuizHours: 2
 };

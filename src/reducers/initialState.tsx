@@ -98,7 +98,8 @@ export const initialMeasurementPointList = {
   mainCategoryID: '',
   standardID: '',
   type: 1,
-  testProcedures: ''
+  testProcedures: '',
+  isDeleted: false
 };
 export const initialMeasurementPointTab = {
   id: '',
@@ -114,7 +115,10 @@ export const initialMeasurementPoint = {
   label: '',
   order: 0,
   customerID: '',
-  isDeleted: false
+  isDeleted: false,
+  isRequired: true,
+  showInReport: true,
+  allowNotes: true
 };
 export const initialMeasurmentPointResult = {
   id: '',

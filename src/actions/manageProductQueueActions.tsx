@@ -1,13 +1,13 @@
 import { ThunkAction } from 'redux-thunk';
-import axios from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { IinitialState, Iproduct, ItableFiltersParams } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
 import { constants } from 'src/constants/constants';
 import * as types from './actionTypes';
-
-// import {AxiosResponse} from 'axios';
+import { adalFetch } from 'react-adal';
+import { authContext } from './userActions';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
@@ -15,11 +15,14 @@ export function getProductQueue(): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     const { page, search } = getState().manageProductQueue.tableFilters;
-    return axios
-      .get(API.GET.inventory.getproductqueue, {
-        params: { page, search }
-      })
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'get',
+      params: { page, search }
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.GET.inventory.getproductqueue;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {
@@ -43,9 +46,14 @@ export function getProductQueue(): ThunkResult<void> {
 }
 
 export function approveProduct(productQueueID: string, dispatch: any) {
-  return axios
-    .post(API.POST.inventory.approveproduct, { id: productQueueID })
-    .then(data => {
+  const axiosOptions: AxiosRequestConfig = {
+    method: 'post',
+    data: { id: productQueueID }
+  };
+  const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+  const url = API.POST.inventory.approveproduct;
+  return adalFetch(authContext, resource, axios, url, axiosOptions)
+    .then((data: AxiosResponse<any>) => {
       if (!data.data) {
         throw undefined;
       } else {
@@ -70,9 +78,14 @@ export function updateQueueProduct(
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     dispatch({ type: types.TOGGLE_MODAL_EDIT_PRODUCT });
-    return axios
-      .post(API.POST.inventory.updateproduct, product)
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'post',
+      data: product
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.POST.inventory.updateproduct;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {

@@ -1,6 +1,6 @@
 import { ThunkAction } from 'redux-thunk';
 import { toastr } from 'react-redux-toastr';
-import axios, { AxiosRequestConfig } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import {
   IinitialState,
@@ -12,6 +12,8 @@ import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
 import { constants } from 'src/constants/constants';
 import * as types from './actionTypes';
+import { adalFetch } from 'react-adal';
+import { authContext } from './userActions';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
@@ -19,13 +21,14 @@ export function getDefaultReports(): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     const { page } = getState().manageReport.tableFilters;
-    return axios
-      .get(API.GET.report.defaults, {
-        params: {
-          page
-        }
-      })
-      .then(data => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'get',
+      params: { page }
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.GET.report.defaults;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {
@@ -104,22 +107,24 @@ export function runReport(
         headerLogoPath: ''
       }
     };
-    const config: AxiosRequestConfig = {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'post',
+      data: requestData,
       headers: { Accept: 'application/pdf' },
       responseType: 'blob'
     };
-    return axios
-      .post(API.POST.report.run, requestData, config)
-      .then(data => {
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.POST.report.run;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
         } else {
           dispatch({
             type: types.REPORT_ADD_SUCCESS
           });
-          const url = window.URL.createObjectURL(new Blob([data.data]));
           const link = document.createElement('a');
-          link.href = url;
+          link.href = window.URL.createObjectURL(new Blob([data.data]));
           link.setAttribute('download', 'file.pdf');
           document.body.appendChild(link);
           link.click();

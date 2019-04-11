@@ -1,7 +1,7 @@
-import axios from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import * as types from './actionTypes';
 import API from '../constants/apiEndpoints';
-import { beginAjaxCall } from './ajaxStatusActions';
+import { beginAjaxCall, endAjaxCall } from './ajaxStatusActions';
 import { toastr } from 'react-redux-toastr';
 import { constants } from 'src/constants/constants';
 import * as AuthenticationContext from 'adal-angular';
@@ -9,6 +9,9 @@ import * as AuthenticationContext from 'adal-angular';
 import { ItempUser, Iuser, IinitialState } from '../models';
 import { ThunkAction } from 'redux-thunk';
 import * as localForage from 'localforage';
+import { adalFetch } from 'react-adal';
+import { Dispatch } from 'react-redux';
+
 // import {AxiosResponse} from 'axios';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
@@ -144,17 +147,20 @@ export const adalReauth = () => {
 
 export function userLogout(): ThunkResult<void> {
   return (dispatch, getState) => {
-    dispatch({ type: types.USER_LOGOUT_SUCCESS });
-    dispatch({ type: 'Offline/RESET_STATE' }); // reset the redux-offline outbox
-    dispatch({ type: '@ReduxToastr/toastr/CLEAN_TOASTR' }); // reset the toastr
-
-    setTimeout(() => {
-      localForage.removeItem('state-core-care-web').then(() => {
-        authContext.logOut();
-      });
-    }, 500);
+    userLogoutHelper(dispatch);
   };
 }
+const userLogoutHelper = (dispatch: Dispatch) => {
+  dispatch({ type: types.USER_LOGOUT_SUCCESS });
+  dispatch({ type: 'Offline/RESET_STATE' }); // reset the redux-offline outbox
+  dispatch({ type: '@ReduxToastr/toastr/CLEAN_TOASTR' }); // reset the toastr
+
+  setTimeout(() => {
+    localForage.removeItem('state-core-care-web').then(() => {
+      authContext.logOut();
+    });
+  }, 500);
+};
 
 export function signUpDirect(tempUser: ItempUser): ThunkResult<void> {
   return (dispatch, getState) => {
@@ -204,6 +210,31 @@ export function updateUserProfile(user: Iuser): ThunkResult<void> {
       .catch((error: any) => {
         dispatch({ type: types.USER_UPDATE_PROFILE_FAILED });
         constants.handleError(error, 'update profile');
+        console.error(error);
+      });
+  };
+}
+
+export function deleteUserAccount(): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    dispatch({ type: types.TOGGLE_MODAL_EDIT_PROFILE });
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'delete'
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.DELETE.user;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
+        if (data.status !== 200) {
+          throw undefined;
+        } else {
+          userLogoutHelper(dispatch);
+        }
+      })
+      .catch((error: any) => {
+        dispatch(endAjaxCall());
+        constants.handleError(error, 'delete profile');
         console.error(error);
       });
   };

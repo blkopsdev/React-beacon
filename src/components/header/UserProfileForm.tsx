@@ -15,10 +15,11 @@ import { Col, Button } from 'react-bootstrap';
 import { constants } from 'src/constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
-import { Iuser, Icustomer } from '../../models';
+import { Iuser, Icustomer, Ioption } from '../../models';
 import { forEach, find, differenceBy, filter, map } from 'lodash';
 
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
+import { deleteUserAccount, updateUserProfile } from 'src/actions/userActions';
 
 interface IstateChanges extends Observable<any> {
   next: () => void;
@@ -59,18 +60,18 @@ const buildFieldConfig = (facilityOptions: any[]) => {
   return fieldConfig as FieldConfig;
 };
 
-interface Iprops extends React.Props<UserProfileForm> {
-  handleSubmit: any;
-  handleCancel: any;
+interface Iprops {
+  updateUserProfile: typeof updateUserProfile;
+  toggleModal: () => void;
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;
   i18n: I18n;
   customers: Icustomer[];
-  facilities: any;
   user: Iuser;
-  facilityOptions: any[];
+  facilityOptions: Ioption[];
   getFacilitiesByCustomer: (value: string) => void;
+  deleteUserAccount: typeof deleteUserAccount;
 }
 
 class UserProfileForm extends React.Component<Iprops, {}> {
@@ -150,13 +151,28 @@ class UserProfileForm extends React.Component<Iprops, {}> {
         return { id: option.value };
       }
     );
-    this.props.handleSubmit({
+    this.props.updateUserProfile({
       ...this.props.user,
       ...this.userForm.value,
       facilities: facilitiesArray,
       email: this.props.user.email // have to add back the email because disabling the input removes it
     });
   };
+  handleDelete = () => {
+    const toastrConfirmOptions = {
+      onOk: () => {
+        this.props.deleteUserAccount();
+      },
+      onCancel: () => console.log('CANCEL: clicked'),
+      okText: this.props.t('delete account'),
+      cancelText: this.props.t('common:cancel')
+    };
+    toastr.confirm(
+      this.props.t('userAccountDeleteConfirm'),
+      toastrConfirmOptions
+    );
+  };
+
   setForm = (form: AbstractControl) => {
     this.userForm = form;
     this.userForm.meta = {
@@ -177,9 +193,19 @@ class UserProfileForm extends React.Component<Iprops, {}> {
             bsStyle="default"
             type="button"
             className="pull-left"
-            onClick={this.props.handleCancel}
+            onClick={this.props.toggleModal}
           >
             {t('common:cancel')}
+          </Button>
+          <Button
+            bsStyle="danger"
+            style={{ marginRight: '15px' }}
+            type="button"
+            className=""
+            disabled={this.props.loading}
+            onClick={this.handleDelete}
+          >
+            {t('user:delete account')}
           </Button>
           <Button
             bsStyle={this.props.colorButton}

@@ -58,7 +58,10 @@
     "***-***-****": "***-***-****",
     "country": "Country",
     "active": "Is Active?",
-    "editProfileModalTitle": "My Profile"
+    "editProfileModalTitle": "My Profile",
+    "delete account": "Delete Account",
+    "userAccountDeleteConfirm":
+      "This will delete your information from our systems and cannot be undone."
   },
   "userQueue": {
     "bannerTitle": "New User Queue",

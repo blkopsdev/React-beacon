@@ -26,14 +26,20 @@ import {
 import { getFacilitiesByCustomer } from '../../actions/commonActions';
 import { constants } from 'src/constants/constants';
 
-const buildFieldConfig = (facilityOptions: any[]) => {
+const buildFieldConfig = (facilityOptions: any[], selectedUser: any = {}) => {
+  const { customer = null, facilities = null } = selectedUser;
+  const companyName = customer ? customer.name : '';
+  const selectedFacilities = facilities
+    ? FormUtil.convertToOptions(facilities)
+    : null;
   const fieldConfigControls = {
-    customer: {
+    customerName: {
       options: {
         validators: [Validators.required, FormUtil.validators.requiredWithTrim]
       },
       render: FormUtil.TextInput,
-      meta: { label: 'company', colWidth: 12, type: 'text', name: 'customer' }
+      meta: { label: 'company', colWidth: 12, type: 'text', name: 'customer' },
+      formState: { value: companyName, disabled: true }
     },
     facilities: {
       render: FormUtil.Select,
@@ -47,7 +53,8 @@ const buildFieldConfig = (facilityOptions: any[]) => {
       },
       options: {
         validators: Validators.required
-      }
+      },
+      formState: { value: selectedFacilities, disabled: false }
     }
   };
   return {
@@ -85,7 +92,7 @@ class EditTeamMemberForm extends React.Component<Iprops, {}> {
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(
-      buildFieldConfig(this.props.facilityOptions),
+      buildFieldConfig(this.props.facilityOptions, this.props.selectedUser),
       this.props.t
     );
   }
@@ -126,10 +133,10 @@ class EditTeamMemberForm extends React.Component<Iprops, {}> {
     const { customer, customerID } = this.props.user;
 
     if (customer) {
-      this.userForm.patchValue({ customer: customer.name });
+      this.userForm.patchValue({ customerName: customer.name });
     }
     const customerControl = this.userForm.get(
-      'customer'
+      'customerName'
     ) as AbstractControlEdited;
     customerControl.disable();
     // if there is a customerID then get facilities

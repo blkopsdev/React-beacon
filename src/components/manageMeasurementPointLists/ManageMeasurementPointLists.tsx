@@ -117,7 +117,8 @@ class ManageMeasurementPointList extends React.Component<
             colWidth: 3,
             type: 'select',
             placeholder: 'typePlaceholder',
-            defaultValue: this.props.tableFilters.type
+            defaultValue: this.props.tableFilters.type,
+            isClearable: true
           }
         },
         equipmentType: {
@@ -128,7 +129,8 @@ class ManageMeasurementPointList extends React.Component<
             colWidth: 3,
             type: 'select',
             placeholder: 'equipmentTypePlaceholder',
-            defaultValue: this.props.tableFilters.mainCategory
+            defaultValue: this.props.tableFilters.mainCategory,
+            isClearable: true
           }
         },
         standard: {
@@ -139,7 +141,8 @@ class ManageMeasurementPointList extends React.Component<
             colWidth: 3,
             type: 'select',
             placeholder: 'standardPlaceholder',
-            defaultValue: this.props.tableFilters.standard
+            defaultValue: this.props.tableFilters.standard,
+            isClearable: true
           }
         }
       }

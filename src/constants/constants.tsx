@@ -2,7 +2,7 @@ import { transitionInType, transitionOutType, Iuser, Itile } from '../models';
 import { find } from 'lodash';
 import { emptyTile } from '../reducers/initialState';
 import { toastr } from 'react-redux-toastr';
-// import { adalReauth } from '../actions/userActions';
+import { adalReauth } from '../actions/userActions';
 
 const reportTypeEnum = {
   annualInspection: 1,
@@ -576,6 +576,13 @@ export const constants = {
     }
     if (!navigator.onLine) {
       msg = 'Please connect to the internet.';
+    }
+    if (error && error.msg && error.msg === 'login required') {
+      // adalFetch is catching that login is required
+      console.warn('attempting to catch expired session and login again');
+      // TODO figure out how to re-run the request?  if it is a get, it will likely re-run after refreshing and logging in again.  if it is a post or a put then...
+      adalReauth();
+      return;
     }
     if (error && error.response && error.response.status === 401) {
       console.error(

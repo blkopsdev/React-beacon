@@ -78,7 +78,7 @@ library.add(
   faHistory
 );
 
-import { authContext } from './actions/userActions';
+import { authContext, setCachedToken } from './actions/userActions';
 import Dashboard from './components/dashboard/Dashboard';
 import Header from './components/header/Header';
 import SignUpDirect from './components/auth/SignUpDirect';
@@ -136,6 +136,7 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
   let authenticated = false;
   authenticated = user.isAuthenticated && user.id.length > 0;
   if (authenticated) {
+    setCachedToken();
     TrackJS.configure({
       userId: user.email,
       version: process.env.REACT_APP_VERSION

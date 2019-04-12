@@ -12,6 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ButtonToolbar, Dropdown, MenuItem } from 'react-bootstrap';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import EditProfileModal from './EditProfileModal';
+import { constants } from 'src/constants/constants';
 
 interface Iprops {
   user: Iuser;
@@ -109,6 +110,14 @@ class Header extends React.Component<Iprops, Istate> {
                   <FontAwesomeIcon icon={['far', 'sign-out']} fixedWidth />{' '}
                   &nbsp; {t('logout')}
                 </MenuItem>
+                <small
+                  style={{
+                    color: constants.colors.greyText,
+                    padding: '5px 5px 5px 22px'
+                  }}
+                >
+                  v: {process.env.REACT_APP_VERSION}
+                </small>
               </Dropdown.Menu>
             </Dropdown>
           </ButtonToolbar>

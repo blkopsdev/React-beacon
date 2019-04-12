@@ -1,20 +1,18 @@
 import * as types from './actionTypes';
-import courseAPI from '../trainingAPI/courseAPI';
 import API from '../constants/apiEndpoints';
 import { beginAjaxCall } from './ajaxStatusActions';
 import { constants } from 'src/constants/constants';
 import {
   Iuser,
   GFLesson,
-  GFLessons,
   LessonProgress,
   ThunkResult,
   IshoppingCartProduct,
   GFQuizItem,
   GFCourse
 } from 'src/models';
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
-import { find, forEach } from 'lodash';
+import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import { find, forEach, sortBy } from 'lodash';
 import { toastr } from 'react-redux-toastr';
 import { adalFetch } from 'react-adal';
 import { authContext } from './userActions';
@@ -22,11 +20,19 @@ import { authContext } from './userActions';
 export function loadCourses(user: Iuser): ThunkResult<void> {
   return dispatch => {
     dispatch(beginAjaxCall());
-    return courseAPI
-      .getAll(user)
-      .then((rawCourses: any) => {
+
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'get'
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.GET.trainingCurriculum.allCourses;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((response: AxiosResponse<any>) => {
+        if (response.status !== 200) {
+          throw response;
+        }
         // temporary hack to support On-Site and Webinar courses
-        const courses = rawCourses.map((course: GFCourse) => {
+        const courses = response.data.map((course: GFCourse) => {
           const foundOnSite = course.name.search('On-Site');
           const foundWebinar = course.name.search('Webinar');
 
@@ -39,7 +45,7 @@ export function loadCourses(user: Iuser): ThunkResult<void> {
         dispatch({ type: types.LOAD_COURSES_SUCCESS, courses });
         return courses;
       })
-      .catch(error => {
+      .catch((error: AxiosError) => {
         console.error('error loading courses', error);
         dispatch({ type: types.LOAD_COURSES_FAILED, error });
         const message = 'load courses';
@@ -64,13 +70,25 @@ export function getLessonsByCourseID(
 ): ThunkResult<void> {
   return dispatch => {
     dispatch(beginAjaxCall());
-    return courseAPI
-      .getLessonsByCourseID(courseID, user)
-      .then((lessons: GFLesson[]) => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'get'
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = `${
+      API.GET.trainingCurriculum.lessonByCourseID
+    }?courseID=${courseID}`;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((response: AxiosResponse<any>) => {
+        if (response.status !== 200) {
+          throw response;
+        }
+        const lessons = sortBy(response.data, (el: GFLesson) => {
+          return el.courseLessons[0].order;
+        });
         dispatch({ type: types.LOAD_LESSONS_SUCCESS, lessons });
         return lessons;
       })
-      .catch(error => {
+      .catch((error: AxiosError) => {
         dispatch({ type: types.LOAD_LESSONS_FAILED, error });
         constants.handleError({ response: error }, 'load lessons');
         console.error('Error getting a course by ID', error);
@@ -81,13 +99,20 @@ export function getLessonsByCourseID(
 export function getAllLessons(user: Iuser): ThunkResult<void> {
   return dispatch => {
     dispatch(beginAjaxCall());
-    return courseAPI
-      .getAllLessons(user)
-      .then((lessons: GFLessons) => {
-        dispatch({ type: types.LOAD_LESSONS_SUCCESS, lessons });
-        return lessons;
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'get'
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.GET.trainingCurriculum.allLessons;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((response: AxiosResponse<any>) => {
+        if (response.status !== 200) {
+          throw response;
+        }
+        dispatch({ type: types.LOAD_LESSONS_SUCCESS, lessons: response.data });
+        return response.data;
       })
-      .catch(error => {
+      .catch((error: AxiosError) => {
         dispatch({ type: types.LOAD_LESSONS_FAILED, error });
         constants.handleError({ response: error }, 'load lessons');
         console.error('Error getting all lessons', error);
@@ -111,13 +136,20 @@ export function setQuiz(quiz: GFQuizItem): ThunkResult<void> {
 export function getAllQuizzes(user: Iuser): ThunkResult<void> {
   return dispatch => {
     dispatch(beginAjaxCall());
-    return courseAPI
-      .getAllQuizzes(user)
-      .then(quizzes => {
-        dispatch({ type: types.LOAD_QUIZZES_SUCCESS, quizzes });
-        return quizzes;
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'get'
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.GET.trainingCurriculum.allQuizzes;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((response: AxiosResponse<any>) => {
+        if (response.status !== 200) {
+          throw response;
+        }
+        dispatch({ type: types.LOAD_QUIZZES_SUCCESS, quizzes: response.data });
+        return response.data;
       })
-      .catch(error => {
+      .catch((error: AxiosError) => {
         console.error('Error when trying to get all quizzes', error);
         dispatch({ type: types.LOAD_QUIZZES_FAILED, error });
         constants.handleError({ response: error }, 'loading all quizzes');
@@ -134,13 +166,42 @@ export function getQuizzesByLessonID(
 ): ThunkResult<void> {
   return dispatch => {
     dispatch(beginAjaxCall());
-    return courseAPI
-      .getQuizzesByLessonID(lessonID, user)
-      .then(quizzes => {
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'get'
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = `${
+      API.GET.trainingCurriculum.quizzesByLessonID
+    }?lessonID=${lessonID}`;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((response: AxiosResponse<any>) => {
+        if (response.status !== 200) {
+          throw response;
+        }
+        const parsedQuizzes = response.data.map((quiz: GFQuizItem) => {
+          const parsedQuestions = quiz.questions.map((question: any) => {
+            if (question.options) {
+              const parsedOptions = question.options
+                .split('*||*')
+                .map((option: any) => {
+                  return JSON.parse(option);
+                });
+              return { ...question, options: parsedOptions };
+            } else {
+              return question;
+            }
+          });
+          return { ...quiz, questions: parsedQuestions };
+        });
+
+        const quizzes = sortBy(parsedQuizzes, (el: any) => {
+          return el.order;
+        });
+
         dispatch({ type: types.LOAD_QUIZZES_SUCCESS, quizzes });
         return quizzes;
       })
-      .catch(error => {
+      .catch((error: AxiosError) => {
         console.error('Error when trying to get all quizzes', error);
         dispatch({ type: types.LOAD_QUIZZES_FAILED, error });
         constants.handleError({ response: error }, 'loading all quizzes');

@@ -1,4 +1,5 @@
 const root = process.env.REACT_APP_SERVER_DOMAIN;
+const trainingRoot = process.env.REACT_APP_SERVER_DOMAIN_TRAINING;
 console.log(
   `ENV: ${process.env.NODE_ENV} SERVER_DOMAIN: ${root}/ Version: ${
     process.env.REACT_APP_VERSION
@@ -130,6 +131,13 @@ const API = {
       getPurchasedTraining: `${root}/training/getpurchasedtraining`,
       getAdminProgress: `${root}/training/getadminprogress`,
       getQuizResults: `${root}/training/getquizresults`
+    },
+    trainingCurriculum: {
+      allCourses: `${trainingRoot}/course/getall`,
+      allLessons: `${trainingRoot}/lesson/getall`,
+      lessonByCourseID: `${trainingRoot}/lesson/getbycourse`,
+      quizzesByLessonID: `${trainingRoot}/quiz/getall`,
+      allQuizzes: `${trainingRoot}/quiz/getentirelist`
     },
     measurementPoint: {
       getall: `${root}/measurementpoint/GetAllMeasurementPointLists`,

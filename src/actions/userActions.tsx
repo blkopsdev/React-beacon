@@ -158,14 +158,9 @@ const userLogoutHelper = (dispatch: Dispatch) => {
 export function signUpDirect(tempUser: ItempUser): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
-    const axiosOptions: AxiosRequestConfig = {
-      method: 'post',
-      data: tempUser
-    };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
-    const url = API.POST.user.signup;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
-      .then((data: AxiosResponse<any>) => {
+    return axios
+      .post(API.POST.user.signup, tempUser)
+      .then(data => {
         if (!data.data) {
           throw undefined;
         } else {

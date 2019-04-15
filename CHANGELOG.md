@@ -1,3 +1,7 @@
+## 0.1.7 April 15h 2019
+- fixed an issue with ADAL refresh tokens
+- fixed an issue with registering new users
+
 ## Release 0.1.3 April 9th 2019
 - fixed timed test timeout
 

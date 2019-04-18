@@ -1,3 +1,9 @@
+
+## 0.1.8 April 18th 2019
+- fixed another issue with ADAL refresh tokens
+- polish for the inventory screen
+- fixed issue with isRequired and shouldIncludeInReport when creating measurement points
+
 ## 0.1.7 April 15h 2019
 - fixed an issue with ADAL refresh tokens
 - fixed an issue with registering new users

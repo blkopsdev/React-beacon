@@ -170,7 +170,7 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
         Header: '',
         id: 'contact-button',
         Cell: (
-          <span className="contact-button">
+          <span className="contact-button" title={props.t('Request Service')}>
             <FontAwesomeIcon icon={['far', 'wrench']} />
           </span>
         ),
@@ -186,7 +186,11 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
             ? constants.colors.greyText
             : constants.colors.green;
           return (
-            <span className="select-result-button" style={{ color }}>
+            <span
+              className="select-result-button"
+              style={{ color }}
+              title={props.t('Current Status')}
+            >
               <FontAwesomeIcon icon={['far', 'clipboard-list']} />
             </span>
           );
@@ -203,12 +207,16 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
             ? constants.colors.greyText
             : constants.colors.green;
           return (
-            <span className="historical-results-button" style={{ color }}>
+            <span
+              className="historical-results-button"
+              style={{ color }}
+              title={props.t('History')}
+            >
               <FontAwesomeIcon icon={['far', 'history']} />
             </span>
           );
         },
-        minWidth: 60
+        minWidth: 25
       }
     ],
     props.t

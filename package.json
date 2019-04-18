@@ -1,6 +1,6 @@
 {
   "name": "state-core-care-web",
-  "version": "0.1.7",
+  "version": "0.1.8",
   "engines": {
     "node": "8.11.1",
     "npm": "6.4.1"

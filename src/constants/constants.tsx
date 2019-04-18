@@ -577,7 +577,13 @@ export const constants = {
     if (!navigator.onLine) {
       msg = 'Please connect to the internet.';
     }
-    if (error && error.msg && error.msg === 'login_required') {
+    if (
+      error &&
+      error.msg &&
+      (error.msg === 'login_required' ||
+        error.msg === 'login required' ||
+        error.msg === 'interaction_required')
+    ) {
       // adalFetch is catching that login is required
       console.warn('attempting to catch expired session and login again');
       // TODO figure out how to re-run the request?  if it is a get, it will likely re-run after refreshing and logging in again.  if it is a post or a put then...

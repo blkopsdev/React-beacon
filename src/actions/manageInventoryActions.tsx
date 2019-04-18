@@ -408,6 +408,8 @@ export function importInstall(file: any): ThunkResult<void> {
       : getState().user.facilities[0].id;
     const formData = new FormData();
     formData.append('file', file);
+    formData.append('name', 'file');
+    // formData.append('filename', 'testfilename.xlsx');
     formData.append('facilityID', facilityID);
 
     const axiosOptions: AxiosRequestConfig = {

@@ -113,7 +113,6 @@ const updateMPresultHelper = (
   historicalResult: boolean,
   dispatch: any
 ) => {
-  console.error('updating result');
   dispatch({
     type: types.UPDATE_MEASUREMENT_POINT_RESULT,
     result

@@ -528,7 +528,9 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
       guideText,
       helpText,
       numericMinValue,
-      numericMaxValue
+      numericMaxValue,
+      isRequired,
+      showInReport
     } = this.measurementsForm.value;
 
     let selectDefaultOptionID = '';
@@ -558,6 +560,8 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
       passFailDefault: passFailDefault ? passFailDefault.value : '',
       allowNotes: allowNotes ? allowNotes.value : true,
       type: type ? type.value : this.props.selectedMeasurementPoint.type,
+      isRequired: isRequired ? isRequired.value : true,
+      showInReport: showInReport ? showInReport.value : true,
       selectDefaultOptionID,
       label,
       guideText,

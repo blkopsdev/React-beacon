@@ -197,7 +197,7 @@ class EditUserForm extends React.Component<Iprops, {}> {
   }
   componentDidUpdate(prevProps: Iprops) {
     if (!this.props.selectedUser) {
-      console.error('missing selected User');
+      // console.error('missing selected User');
       return;
     }
     if (

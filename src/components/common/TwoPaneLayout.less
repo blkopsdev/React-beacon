@@ -5,7 +5,7 @@
     padding-top: 30px;
     height: calc(~"100vh - " @headerHeight);
     overflow-x: hidden;
-    overflow-y: scroll;
+    overflow-y: hidden;
     background-color: @textBlue;
     .svg-inline--fa{
       margin-right: 15px;
@@ -38,6 +38,7 @@
       }
     }
   }
+
 
   .col-fixed {
     z-index: 1060;
@@ -93,6 +94,11 @@
     }
     .col-fluid {
       width: calc(100% - 320px);
+    }
+  }
+  @media only screen and (max-height: 630px) {
+    .side-menu{
+      overflow-y: scroll;
     }
   }
 

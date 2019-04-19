@@ -1,3 +1,6 @@
+## 0.1.9 April 19th 2019
+- fixed an issue with the import template
+- fixed an issue creating locations while editing an install
 
 ## 0.1.8 April 18th 2019
 - fixed another issue with ADAL refresh tokens

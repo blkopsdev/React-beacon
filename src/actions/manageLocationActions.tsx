@@ -54,17 +54,28 @@ export function getLocationsFacility(facilityID: string): ThunkResult<void> {
 
 /*
 * save (add) a new building/floor/location/room
+* installBaseLocations is defined when saving locations from the editInstallForm
 */
 export function saveAnyLocation(
   name: string,
-  facilityID: string
+  facilityID: string,
+  installBaseLocations?: {
+    buildingID?: string;
+    floorID?: string;
+    locationID?: string;
+  }
 ): ThunkResult<{ id: string }> {
   return (dispatch, getState) => {
-    const {
+    let {
       buildingID,
       floorID,
       locationID
     } = getState().manageLocation.tableFilters;
+    if (installBaseLocations) {
+      buildingID = installBaseLocations.buildingID;
+      floorID = installBaseLocations.floorID;
+      locationID = installBaseLocations.locationID;
+    }
     const newLocationObject = {
       id: uuidv4(),
       name,

@@ -56,7 +56,15 @@ interface Iprops {
   selectedProduct: Iproduct;
   facility: Ifacility;
   deleteInstall: typeof deleteInstall;
-  saveAnyLocation: (name: string, facilityID: string) => { id: string };
+  saveAnyLocation: (
+    name: string,
+    facilityID: string,
+    installBaseLocations: {
+      buildingID?: string;
+      floorID?: string;
+      locationID?: string;
+    }
+  ) => { id: string };
   user: Iuser;
 }
 
@@ -348,7 +356,8 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
   handleCreateBuilding = (name: string) => {
     const locationObject = this.props.saveAnyLocation(
       name,
-      this.props.facility.id
+      this.props.facility.id,
+      {}
     );
     this.updateLocationSelect('buildingID', name, locationObject.id);
   };
@@ -365,7 +374,8 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
     }
     const locationObject = this.props.saveAnyLocation(
       name,
-      this.props.facility.id
+      this.props.facility.id,
+      { buildingID: buildingID.value }
     );
     this.updateLocationSelect('floorID', name, locationObject.id);
   };
@@ -381,7 +391,8 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
     }
     const locationObject = this.props.saveAnyLocation(
       name,
-      this.props.facility.id
+      this.props.facility.id,
+      { buildingID: buildingID.value, floorID: floorID.value }
     );
     this.updateLocationSelect('locationID', name, locationObject.id);
   };
@@ -397,7 +408,12 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
     }
     const locationObject = this.props.saveAnyLocation(
       name,
-      this.props.facility.id
+      this.props.facility.id,
+      {
+        buildingID: buildingID.value,
+        floorID: floorID.value,
+        locationID: locationID.value
+      }
     );
     this.updateLocationSelect('roomID', name, locationObject.id);
   };

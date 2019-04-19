@@ -268,8 +268,14 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
       [
         {
           Header: 'manufacturer',
-          accessor: ({ brandID }: Iproduct) => {
-            return this.props.productInfo.brands[brandID].name;
+          accessor: (product: Iproduct) => {
+            const brandName = product.brandID
+              ? this.props.productInfo.brands[product.brandID].name
+              : '';
+            if (brandName === '') {
+              console.error('missing brand', product);
+            }
+            return brandName;
           },
           id: 'manufacturer',
           minWidth: 170

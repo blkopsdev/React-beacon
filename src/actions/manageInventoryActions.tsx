@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { ThunkAction } from 'redux-thunk';
 import { toastr } from 'react-redux-toastr';
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
 import {
   IinitialState,
@@ -391,7 +391,7 @@ export function installContact(
           constants.toastrSuccess
         );
       })
-      .catch((error: any) => {
+      .catch((error: AxiosError) => {
         dispatch({ type: types.INSTALL_CONTACT_FAILED });
         constants.handleError(error, 'contact support');
         console.error(error);

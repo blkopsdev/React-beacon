@@ -173,7 +173,13 @@ class ManageProductQueue extends React.Component<
         {
           Header: 'manufacturer',
           accessor: ({ product }: IproductQueueObject) => {
-            return this.props.productInfo.brands[product.brandID].name;
+            const brandName = product.brandID
+              ? this.props.productInfo.brands[product.brandID].name
+              : '';
+            if (brandName === '') {
+              console.error('missing brand', product);
+            }
+            return brandName;
           },
           id: 'manufacturer'
         },

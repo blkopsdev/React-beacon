@@ -249,10 +249,11 @@ export default {
   manageJob: {
     totalPages: 1,
     data: {},
-    jobTypes: [],
     fseUsers: [],
     showEditJobModal: false,
-    tableFilters: initialTableFilters
+    tableFilters: initialTableFilters,
+    jobFormValues: {},
+    selectedJobID: ''
   },
   manageReport: {
     totalPages: 1,

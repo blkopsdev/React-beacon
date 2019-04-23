@@ -1,7 +1,5 @@
 /*
-* The HeaderMenu only displays if we have an authenticated user.
-* It is responsible for displaying the welcome message and the dropdown menu for logged in users
-* spinner is from : http://tobiasahlin.com/spinkit/
+* Edit Job Modal and Redux Connector
 */
 
 import { TranslationFunction } from 'react-i18next';
@@ -14,18 +12,22 @@ import { getFacilitiesByCustomer } from '../../actions/commonActions';
 import {
   updateJob,
   createJob,
-  toggleEditJobModal
+  toggleEditJobModal,
+  updateJobFormValue,
+  setJobFormValues,
+  clearSelectedJobID
 } from '../../actions/manageJobActions';
 import CommonModal from '../common/CommonModal';
 import EditJobForm from './EditJobForm';
+import { initialJob } from 'src/reducers/initialState';
 
 interface Iprops {
-  selectedJob: Ijob;
   colorButton: any;
   t: TranslationFunction;
 }
 
 interface IdispatchProps {
+  selectedJob: Ijob;
   showEditJobModal: boolean;
   loading: boolean;
   customerOptions: any[];
@@ -35,6 +37,10 @@ interface IdispatchProps {
   createJob: typeof createJob;
   toggleModal: () => void;
   getFacilitiesByCustomer: (value: string) => Promise<void>;
+  updateFormValue: (formValue: { [key: string]: any }) => void;
+  setFormValues: (formValues: { [key: string]: any }) => void;
+  formValues: { [key: string]: any };
+  clearSelectedID: () => void;
 }
 
 class EditManageJobModal extends React.Component<Iprops & IdispatchProps, {}> {
@@ -63,6 +69,8 @@ class EditManageJobModal extends React.Component<Iprops & IdispatchProps, {}> {
 }
 
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
+  const selectedJob =
+    state.manageJob.data[state.manageJob.selectedJobID] || initialJob;
   return {
     user: state.user,
     jobManage: state.manageJob,
@@ -70,7 +78,9 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     customerOptions: FormUtil.convertToOptions(state.customers),
     facilityOptions: FormUtil.convertToOptions(state.facilities),
     fseOptions: FormUtil.convertToOptions(state.manageJob.fseUsers),
-    showEditJobModal: state.manageJob.showEditJobModal
+    showEditJobModal: state.manageJob.showEditJobModal,
+    formValues: state.manageJob.jobFormValues,
+    selectedJob
   };
 };
 
@@ -80,6 +90,9 @@ export default connect(
     updateJob,
     createJob,
     toggleModal: toggleEditJobModal,
-    getFacilitiesByCustomer
+    getFacilitiesByCustomer,
+    updateFormValue: updateJobFormValue,
+    setFormValues: setJobFormValues,
+    clearSelectedID: clearSelectedJobID
   }
 )(EditManageJobModal);

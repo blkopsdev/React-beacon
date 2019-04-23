@@ -1,16 +1,14 @@
 /* 
 * EditJobForm 
-* Edit existing users
 */
 
 import { Col, Button } from 'react-bootstrap';
 import {
   Validators,
   FormGenerator,
-  AbstractControl,
   FieldConfig,
   GroupProps,
-  Observable
+  FormGroup
 } from 'react-reactive-form';
 import { find, filter } from 'lodash';
 import { toastr } from 'react-redux-toastr';
@@ -23,14 +21,6 @@ import { updateJob, createJob } from '../../actions/manageJobActions';
 import { constants } from 'src/constants/constants';
 import * as moment from 'moment';
 import { getFacilitiesByCustomer } from 'src/actions/commonActions';
-
-interface IstateChanges extends Observable<any> {
-  next: () => void;
-}
-
-interface AbstractControlEdited extends AbstractControl {
-  stateChanges: IstateChanges;
-}
 
 interface Iprops extends React.Props<EditJobForm> {
   selectedJob: Ijob;
@@ -45,60 +35,49 @@ interface Iprops extends React.Props<EditJobForm> {
   updateJob: typeof updateJob;
   createJob: typeof createJob;
   toggleModal: () => void;
+  updateFormValue: (formValue: { [key: string]: any }) => void;
+  setFormValues: (formValues: { [key: string]: any }) => void;
+  formValues: { [key: string]: any };
+  clearSelectedID: () => void;
 }
 interface Istate {
   fieldConfig: FieldConfig;
 }
 
 class EditJobForm extends React.Component<Iprops, Istate> {
-  public jobForm: AbstractControl;
+  private formGroup: FormGroup;
   private subscription: any;
+  private debounce: any;
   constructor(props: Iprops) {
     super(props);
     this.state = {
-      fieldConfig: FormUtil.translateForm(this.buildFieldConfig(), this.props.t)
+      fieldConfig: this.buildFieldConfig()
     };
   }
   componentDidUpdate(prevProps: Iprops) {
-    // update the options on the specific control without re-building the form and resetting the values
-    // TODO we can remove this if we store the selectedJob in Redux.
     if (
       JSON.stringify(prevProps.facilityOptions) !==
       JSON.stringify(this.props.facilityOptions)
     ) {
-      const facilitySelectControl = this.jobForm.get(
-        'facilityID'
-      ) as AbstractControlEdited;
-      facilitySelectControl.meta.options = this.props.facilityOptions;
-      facilitySelectControl.stateChanges.next();
-      if (this.props.selectedJob) {
-        const facilitiesArray = filter(
-          this.props.facilityOptions,
-          (fac: any) => {
-            return this.props.selectedJob.facilityID === fac.value;
-          }
-        );
-        this.jobForm.patchValue({ facilityID: facilitiesArray[0] });
-      } else {
-        this.jobForm.patchValue({ facilityID: null });
-      }
+      this.setState({ fieldConfig: this.buildFieldConfig() });
     }
-
-    // update the form which will clear out all values.  this is ok because this should happen before any answers are entered.
     if (
       JSON.stringify(prevProps.customerOptions) !==
       JSON.stringify(this.props.customerOptions)
     ) {
-      const fieldConfig = FormUtil.translateForm(
-        this.buildFieldConfig(),
-        this.props.t
-      );
-      this.setState({ fieldConfig });
+      this.setState({ fieldConfig: this.buildFieldConfig() });
     }
   }
   componentWillMount() {
     if (this.props.selectedJob.customerID.length) {
       this.props.getFacilitiesByCustomer(this.props.selectedJob.customerID);
+    }
+    if (this.props.selectedJob.id.length) {
+      if (this.props.formValues.id !== this.props.selectedJob.id) {
+        this.props.setFormValues({ id: this.props.selectedJob.id });
+      }
+    } else {
+      this.props.setFormValues({});
     }
   }
 
@@ -106,12 +85,18 @@ class EditJobForm extends React.Component<Iprops, Istate> {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+    this.props.clearSelectedID();
   }
 
   buildFieldConfig = () => {
-    const { customerOptions, facilityOptions, fseOptions } = this.props;
-    const disabled = false;
     const {
+      customerOptions,
+      facilityOptions,
+      fseOptions,
+      formValues
+    } = this.props;
+    const disabled = false;
+    let {
       customerID,
       facilityID,
       jobTypeID,
@@ -121,8 +106,28 @@ class EditJobForm extends React.Component<Iprops, Istate> {
       userJobs
     } = this.props.selectedJob;
 
+    customerID = formValues.customerID
+      ? formValues.customerID.value
+      : customerID;
+    facilityID = formValues.facilityID
+      ? formValues.facilityID.value
+      : facilityID;
+    jobTypeID = formValues.jobTypeID ? formValues.jobTypeID.value : jobTypeID;
+    startDate = formValues.startDate ? formValues.startDate : startDate;
+    endDate = formValues.endDate ? formValues.endDate : endDate;
+    assignedUserID = formValues.assignedUserID
+      ? formValues.assignedUserID.value
+      : assignedUserID;
+    userJobs = formValues.users ? formValues.users : userJobs;
+
     const selectedUsers = filter(this.props.fseOptions, (fac: any) => {
-      return find(userJobs, { userID: fac.value }) ? true : false;
+      return find(userJobs, (user: any) => {
+        if (user.userID === fac.value || user.value === fac.value) {
+          return true;
+        } else {
+          return false;
+        }
+      });
     });
     const selectedCustomer =
       this.props.customerOptions.find(
@@ -184,9 +189,9 @@ class EditJobForm extends React.Component<Iprops, Istate> {
         render: FormUtil.Select,
         meta: {
           options: constants.jobTypeOptions,
-          label: 'jobManage:type',
+          label: 'type',
           colWidth: 12,
-          placeholder: 'jobManage:typeSearchPlaceholder',
+          placeholder: 'typeSearchPlaceholder',
           name: 'job-type'
         },
         options: {
@@ -200,7 +205,7 @@ class EditJobForm extends React.Component<Iprops, Istate> {
       startDate: {
         render: FormUtil.Datetime,
         meta: {
-          label: 'jobManage:startDate',
+          label: 'startDate',
           colWidth: 12,
           showTime: false,
           name: 'start-date',
@@ -222,7 +227,7 @@ class EditJobForm extends React.Component<Iprops, Istate> {
       endDate: {
         render: FormUtil.Datetime,
         meta: {
-          label: 'jobManage:endDate',
+          label: 'endDate',
           colWidth: 12,
           showTime: false,
           name: 'end-date',
@@ -242,9 +247,9 @@ class EditJobForm extends React.Component<Iprops, Istate> {
         render: FormUtil.Select,
         meta: {
           options: fseOptions,
-          label: 'jobManage:fseLead',
+          label: 'fseLead',
           colWidth: 12,
-          placeholder: 'jobManage:typeSearchPlaceholder',
+          placeholder: 'typeSearchPlaceholder',
           name: 'assigned-lead-user'
         },
         options: {
@@ -259,9 +264,9 @@ class EditJobForm extends React.Component<Iprops, Istate> {
         render: FormUtil.Select,
         meta: {
           options: fseOptions,
-          label: 'jobManage:fseMembers',
+          label: 'fseMembers',
           colWidth: 12,
-          placeholder: 'jobManage:typeSearchPlaceholder',
+          placeholder: 'typeSearchPlaceholder',
           isMulti: true,
           name: 'assigned-user',
           required: false
@@ -275,26 +280,62 @@ class EditJobForm extends React.Component<Iprops, Istate> {
     const fieldConfig = {
       controls: { ...fieldConfigControls }
     };
-    return fieldConfig as FieldConfig;
+    return FormUtil.translateForm(fieldConfig, this.props.t);
   };
-  subscribeDateChanges = () => {
-    this.subscription = this.jobForm
-      .get('startDate')
-      .valueChanges.subscribe((value: any) => {
-        this.checkIfStartDateBeforeEndDate({ startDate: value });
-      });
-    this.subscription = this.jobForm
-      .get('endDate')
-      .valueChanges.subscribe((value: any) => {
-        this.checkIfStartDateBeforeEndDate({ endDate: value });
-      });
-    this.subscription = this.jobForm
-      .get('customerID')
-      .valueChanges.subscribe((value: any) => {
+
+  /*
+  * (reusable)
+  * subscribe to the formGroup changes
+  */
+  subscribeToChanges = () => {
+    for (const key in this.formGroup.controls) {
+      if (this.formGroup.controls.hasOwnProperty(key)) {
+        this.subscription = this.formGroup
+          .get(key)
+          .valueChanges.subscribe((value: any) => {
+            this.onValueChanges(value, key);
+          });
+      }
+    }
+  };
+
+  /*
+  * (reusable)
+  * set the table filters to redux on each value change
+  */
+  onValueChanges = (value: any, key: string) => {
+    switch (key) {
+      case 'startDate':
+        clearTimeout(this.debounce);
+        this.debounce = setTimeout(() => {
+          const startDateMoment = moment.isMoment(value)
+            ? value
+            : moment(value);
+          this.props.updateFormValue({
+            startDate: startDateMoment.toISOString()
+          });
+          this.checkIfStartDateBeforeEndDate({ startDate: value });
+        }, 500);
+        break;
+      case 'endDate':
+        clearTimeout(this.debounce);
+        this.debounce = setTimeout(() => {
+          const endDateMoment = moment.isMoment(value) ? value : moment(value);
+          this.props.updateFormValue({
+            startDate: endDateMoment.toISOString()
+          });
+          this.checkIfStartDateBeforeEndDate({ endDate: value });
+        }, 500);
+        break;
+      case 'customerID':
         if (value && value.value) {
           this.props.getFacilitiesByCustomer(value.value);
         }
-      });
+        break;
+      default:
+        this.props.updateFormValue({ [key]: value });
+        break;
+    }
   };
 
   /*
@@ -304,13 +345,13 @@ class EditJobForm extends React.Component<Iprops, Istate> {
   checkIfStartDateBeforeEndDate = ({ startDate, endDate }: any) => {
     console.log('checking start end date', startDate);
     if (startDate && moment.isMoment(startDate)) {
-      if (startDate.isAfter(this.jobForm.value.endDate)) {
+      if (startDate.isAfter(this.formGroup.value.endDate)) {
         toastr.warning(
           this.props.t('startDateWarning'),
           '',
           constants.toastrError
         );
-        const startDateControl = this.jobForm.get('startDate');
+        const startDateControl = this.formGroup.get('startDate');
         startDateControl.setErrors({ beforeStart: true });
       } else if (startDate.isBefore(moment(), 'day')) {
         toastr.warning(
@@ -318,20 +359,20 @@ class EditJobForm extends React.Component<Iprops, Istate> {
           '',
           constants.toastrError
         );
-        const startDateControl = this.jobForm.get('startDate');
+        const startDateControl = this.formGroup.get('startDate');
         startDateControl.setErrors({ beforeStart: true });
       } else {
-        const startDateControl = this.jobForm.get('startDate');
+        const startDateControl = this.formGroup.get('startDate');
         startDateControl.setErrors(null);
       }
     } else if (endDate && moment.isMoment(endDate)) {
-      if (this.jobForm.value.startDate.isAfter(endDate)) {
+      if (this.formGroup.value.startDate.isAfter(endDate)) {
         toastr.warning(
           this.props.t('startDateWarning'),
           '',
           constants.toastrError
         );
-        const endDateControl = this.jobForm.get('endDate');
+        const endDateControl = this.formGroup.get('endDate');
         endDateControl.setErrors({ beforeStart: true });
       } else if (endDate.isBefore(moment(), 'day')) {
         toastr.warning(
@@ -339,10 +380,10 @@ class EditJobForm extends React.Component<Iprops, Istate> {
           '',
           constants.toastrError
         );
-        const endDateControl = this.jobForm.get('endDate');
+        const endDateControl = this.formGroup.get('endDate');
         endDateControl.setErrors({ beforeStart: true });
       } else {
-        const endDateControl = this.jobForm.get('endDate');
+        const endDateControl = this.formGroup.get('endDate');
         endDateControl.setErrors(null);
       }
     } else {
@@ -350,32 +391,26 @@ class EditJobForm extends React.Component<Iprops, Istate> {
     }
   };
 
-  handleSubmit = (
-    e: React.MouseEvent<HTMLFormElement>,
-    shouldApprove?: boolean
-  ) => {
+  handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (this.jobForm.status === 'INVALID') {
-      this.jobForm.markAsSubmitted();
+    if (this.formGroup.status === 'INVALID') {
+      this.formGroup.markAsSubmitted();
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-    console.log(this.jobForm.value);
-    const users = this.jobForm.value.users
-      ? this.jobForm.value.users.map((u: any) => u.value)
-      : [];
-    if (this.props.selectedJob && this.props.selectedJob.id) {
-      this.props.updateJob(this.props.selectedJob, this.jobForm.value, users);
+    console.log(this.formGroup.value);
+    if (this.props.selectedJob.id.length) {
+      this.props.updateJob(this.props.selectedJob, this.formGroup.value);
     } else {
-      this.props.createJob(this.jobForm.value, users);
+      this.props.createJob(this.formGroup.value);
     }
   };
-  setForm = (form: AbstractControl) => {
-    this.jobForm = form;
-    this.jobForm.meta = {
+  setForm = (form: FormGroup) => {
+    this.formGroup = form;
+    this.formGroup.meta = {
       loading: this.props.loading
     };
-    this.subscribeDateChanges();
+    this.subscribeToChanges();
   };
 
   render() {
@@ -396,7 +431,10 @@ class EditJobForm extends React.Component<Iprops, Istate> {
             bsStyle="default"
             type="button"
             className="pull-left"
-            onClick={this.props.toggleModal}
+            onClick={() => {
+              this.props.toggleModal();
+              this.props.setFormValues({});
+            }}
           >
             {t('cancel')}
           </Button>

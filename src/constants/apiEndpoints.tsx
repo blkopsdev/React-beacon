@@ -97,9 +97,6 @@ const API = {
       getall: `${root}/job/getall`,
       getassigned: `${root}/job/getassigned`
     },
-    jobtype: {
-      getall: `${root}/jobtype/getall`
-    },
     facility: {
       getbyid: `${root}/facility`,
       getbycustomer: `${root}/facility/getbycustomer`

@@ -3,7 +3,9 @@ import { pickBy, map } from 'lodash';
 import { Ijob, ImanageJobReducer, Iuser } from '../models';
 import {
   createTableFiltersWithName,
-  modalToggleWithName
+  modalToggleWithName,
+  createFormValuesWithName,
+  createSelectedIDWithName
 } from './commonReducers';
 import initialState from './initialState';
 import * as types from '../actions/actionTypes';
@@ -45,17 +47,6 @@ function jobManageTotalPages(state: number = 1, action: any): number {
   }
 }
 
-function jobTypes(state: any[] = [], action: any): any[] {
-  switch (action.type) {
-    case types.GET_JOBTYPES_SUCCESS:
-      return action.jobTypes;
-    case types.USER_LOGOUT_SUCCESS:
-      return [];
-    default:
-      return state;
-  }
-}
-
 function fseUsers(state: Iuser[] = [], action: any): Iuser[] {
   switch (action.type) {
     case types.GET_FSE_SUCCESS:
@@ -73,9 +64,18 @@ export default function jobManage(
 ) {
   return {
     data: jobManageData(state.data, action),
-    jobTypes: jobTypes(state.jobTypes, action),
     fseUsers: fseUsers(state.fseUsers, action),
     totalPages: jobManageTotalPages(state.totalPages, action),
+    jobFormValues: createFormValuesWithName(
+      state.jobFormValues,
+      action,
+      'MANAGE_JOB'
+    ),
+    selectedJobID: createSelectedIDWithName(
+      state.selectedJobID,
+      action,
+      'JOB_MANAGE_JOB'
+    ),
     showEditJobModal: modalToggleWithName(
       state.showEditJobModal,
       action,

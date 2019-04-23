@@ -98,35 +98,6 @@ export function getAllJobs(): ThunkResult<void> {
   };
 }
 
-export function getJobTypes(): ThunkResult<void> {
-  return (dispatch, getState) => {
-    dispatch(beginAjaxCall());
-    const axiosOptions: AxiosRequestConfig = {
-      method: 'get',
-      params: {}
-    };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
-    const url = API.GET.jobtype.getall;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
-      .then((data: AxiosResponse<any>) => {
-        if (!data.data) {
-          throw undefined;
-        } else {
-          dispatch({
-            type: types.GET_JOBTYPES_SUCCESS,
-            jobTypes: data.data.result
-          });
-          return data;
-        }
-      })
-      .catch((error: any) => {
-        dispatch({ type: types.GET_JOBTYPES_FAILED });
-        constants.handleError(error, 'get jobtypes');
-        console.error(error);
-      });
-  };
-}
-
 export function getFSEUsers(): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
@@ -159,12 +130,14 @@ export function getFSEUsers(): ThunkResult<void> {
 
 export function updateJob(
   selectedJob: Ijob,
-  formValues: any,
-  users: string[]
+  formValues: any
 ): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     dispatch({ type: types.TOGGLE_MODAL_EDIT_JOB });
+    const users = formValues.users
+      ? formValues.users.map((u: any) => u.value)
+      : [];
     const job = {
       id: selectedJob.id,
       customerID: formValues.customerID.value,
@@ -207,9 +180,12 @@ export function updateJob(
 /*
 * save (add) a new product
 */
-export function createJob(formValues: any, users: string[]): ThunkResult<void> {
+export function createJob(formValues: any): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
+    const users = formValues.users
+      ? formValues.users.map((u: any) => u.value)
+      : [];
 
     const job: Ijob = {
       id: uuidv4(),
@@ -252,6 +228,23 @@ export function createJob(formValues: any, users: string[]): ThunkResult<void> {
       });
   };
 }
+
+export const updateJobFormValue = (formValue: any) => ({
+  type: types.UPDATE_FORM_VALUES_MANAGE_JOB,
+  formValue
+});
+export const setJobFormValues = (formValues: any) => ({
+  type: types.SET_FORM_VALUES_MANAGE_JOB,
+  formValues
+});
+
+export const setSelectedJobID = (id: string) => ({
+  type: types.SET_SELECTED_JOB_MANAGE_JOB,
+  id
+});
+export const clearSelectedJobID = () => ({
+  type: types.CLEAR_SELECTED_JOB_MANAGE_JOB
+});
 
 export const toggleEditJobModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_JOB

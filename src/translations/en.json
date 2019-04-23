@@ -126,7 +126,8 @@
     "cancel": "Cancel",
     "status": "Status",
     "facility": "Facility",
-    "startDateWarning": "You have selected a start date after the end date."
+    "startDateWarning": "You have selected a start date after the end date.",
+    "pastDateWarning": "You have selected a start date that is in the past."
   },
   "reportManage": {
     "bannerTitle": "Manage Reports",

@@ -536,11 +536,12 @@ export interface ImanageLocationReducer {
 
 export interface ImanageJobReducer {
   data: { [key: string]: Ijob };
-  jobTypes: any[];
   fseUsers: Iuser[];
   totalPages: number;
   showEditJobModal: boolean;
   tableFilters: ItableFiltersReducer;
+  jobFormValues: { [key: string]: any };
+  selectedJobID: string;
 }
 export interface ImanageReportReducer {
   defaultReportsByID: { [key: string]: IdefaultReport };

@@ -1,5 +1,5 @@
 /*
-* The New User Manage
+* Manage Job
 */
 import { Button, Col } from 'react-bootstrap';
 import { FieldConfig } from 'react-reactive-form';
@@ -22,20 +22,25 @@ import {
 } from '../../models';
 import { TableUtil } from '../common/TableUtil';
 import { closeAllModals, getCustomers } from '../../actions/commonActions';
-import { emptyTile, initialJob } from '../../reducers/initialState';
+import { emptyTile } from '../../reducers/initialState';
 import {
   getJobs,
-  getJobTypes,
   getFSEUsers,
   setTableFilter,
   toggleEditJobModal,
-  updateJob
+  updateJob,
+  setSelectedJobID,
+  clearSelectedJobID
 } from '../../actions/manageJobActions';
 import Banner from '../common/Banner';
 import EditJobModal from './EditJobModal';
 import SearchTableForm from '../common/SearchTableForm';
 import { constants } from 'src/constants/constants';
-import { values } from 'lodash';
+import { orderBy } from 'lodash';
+
+interface RowInfoJob extends RowInfo {
+  original: Ijob;
+}
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -47,7 +52,6 @@ interface IdispatchProps {
   // Add your dispatcher properties here
   toggleEditJobModal: typeof toggleEditJobModal;
   getJobs: typeof getJobs;
-  getJobTypes: typeof getJobTypes;
   getFSEUsers: typeof getFSEUsers;
   customers: Icustomer[];
   closeAllModals: typeof closeAllModals;
@@ -60,10 +64,12 @@ interface IdispatchProps {
   jobTypes: any[];
   fseUsers: Iuser[];
   loading: boolean;
+  setSelectedJobID: typeof setSelectedJobID;
+  clearSelectedJobID: typeof clearSelectedJobID;
 }
 
 interface Istate {
-  selectedRow: any;
+  selectedRow: number | null;
   currentTile: Itile;
   searchFieldConfig: FieldConfig;
 }
@@ -71,6 +77,7 @@ interface Istate {
 class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
   public columns: any[];
   public buttonInAction = false;
+  private debounce: any;
   // private setTableFilterTimeout: any;
   constructor(props: Iprops & IdispatchProps) {
     super(props);
@@ -138,15 +145,10 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
     this.setState({
       currentTile: constants.getTileByURL(this.props.location.pathname)
     });
-    this.props.closeAllModals();
   }
   componentDidMount() {
-    // refresh job types
-    this.props.getJobTypes();
     this.props.getFSEUsers();
-    // refresh the jobManage every time the component mounts
     this.props.getJobs();
-    // refresh the list of customers every time the component mounts
     this.props.getCustomers();
   }
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
@@ -170,9 +172,6 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
       const searchFieldConfig = this.buildSearchFieldConfig();
       this.setState({ searchFieldConfig });
     }
-  }
-  componentWillUnmount() {
-    this.props.closeAllModals();
   }
 
   /*
@@ -233,7 +232,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
   * Handle user clicking on a product row
   * set the selected product to state and open the modal
   */
-  getTrProps = (state: FinalState, rowInfo: RowInfo) => {
+  getTrProps = (state: FinalState, rowInfo: RowInfoJob) => {
     // console.log("ROWINFO", rowInfo);
     if (rowInfo) {
       return {
@@ -242,6 +241,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
             this.setState({
               selectedRow: rowInfo.index
             });
+            this.props.setSelectedJobID(rowInfo.original.id);
             this.props.toggleEditJobModal();
           }
         },
@@ -269,22 +269,18 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
   * set the table filters to redux on each value change
   */
   onSearchValueChanges = (value: any, key: string) => {
-    switch (key) {
-      case 'company':
-        this.props.setTableFilter({ company: value, page: 1 });
-        break;
-      case 'type':
-        this.props.setTableFilter({ type: value, page: 1 });
-        break;
-      case 'startDate':
-        this.props.setTableFilter({ startDate: value, page: 1 });
-        break;
-      case 'endDate':
-        this.props.setTableFilter({ endDate: value, page: 1 });
-        break;
-      default:
-        break;
-    }
+    clearTimeout(this.debounce);
+    this.debounce = setTimeout(() => {
+      this.props.setTableFilter({ [key]: value, page: 1 });
+    }, 500);
+    // no need for a switch on this one
+    // switch (key) {
+    //   case 'company':
+    //   this.props.setTableFilter({ company: value, page: 1 });
+    //     break;
+    //   default:
+    //     break;
+    // }
   };
   /*
   * (reusable)
@@ -296,7 +292,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
     shiftKey: boolean
   ) => {
     this.props.setTableFilter({ sorted: newSorted });
-    this.setState({ selectedRow: {} });
+    this.setState({ selectedRow: null });
   };
 
   render() {
@@ -352,9 +348,6 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
           resizable={false}
         />
         <EditJobModal
-          selectedJob={
-            this.props.tableData[this.state.selectedRow] || initialJob
-          }
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
@@ -365,19 +358,19 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
   }
 }
 
-/*
-* AddCustomerModal will connect to redux, impliment CommonModal, as well as AddCustomerForm
-*/
-
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
+  const tableData = orderBy(
+    state.manageJob.data,
+    res => moment.utc(res.startDate).unix(),
+    'desc'
+  );
   return {
     user: state.user,
     jobManage: state.manageJob,
     customers: state.customers,
     loading: state.ajaxCallsInProgress > 0,
     showEditJobModal: state.manageJob.showEditJobModal,
-    tableData: values(state.manageJob.data),
-    // jobTypes: FormUtil.convertToOptions(state.manageJob.jobTypes),
+    tableData,
     fseUsers: state.manageJob.fseUsers,
     tableFilters: state.manageJob.tableFilters
   };
@@ -387,13 +380,14 @@ export default translate('jobManage')(
     mapStateToProps,
     {
       getJobs,
-      getJobTypes,
       getFSEUsers,
       updateJob,
       toggleEditJobModal,
       closeAllModals,
       getCustomers,
-      setTableFilter
+      setTableFilter,
+      setSelectedJobID,
+      clearSelectedJobID
     }
   )(ManageJob)
 );

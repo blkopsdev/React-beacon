@@ -206,7 +206,6 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           this.setState({ selectedRow: {} });
         }
       }
-      this.setState({ searchFieldConfig: this.buildSearchControls() });
     }
     if (
       prevProps.facilityOptions.length !== this.props.facilityOptions.length

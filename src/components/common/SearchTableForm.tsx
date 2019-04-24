@@ -47,7 +47,10 @@ export default class SearchTableForm extends React.Component<Iprops, Istate> {
     this.handleUpdatedFieldConfig();
   }
   componentDidUpdate(prevProps: Iprops) {
-    if (prevProps.fieldConfig !== this.props.fieldConfig) {
+    if (
+      JSON.stringify(prevProps.fieldConfig) !==
+      JSON.stringify(this.props.fieldConfig)
+    ) {
       console.log('search field config changed', this.props.fieldConfig);
       this.setState(
         {

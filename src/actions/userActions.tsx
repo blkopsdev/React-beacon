@@ -120,6 +120,7 @@ export function adalLogin(): ThunkResult<void> {
 
 /*
 * reauthenticate in the background if possible
+* April 24th - this can likely be removed now that we are doing login() right from the error hanndling function in constants.tsx
 */
 export const adalReauth = () => {
   const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;

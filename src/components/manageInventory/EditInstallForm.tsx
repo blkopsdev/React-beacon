@@ -537,7 +537,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
         quantity: quantity ? parseInt(quantity, 10) : 1
       };
 
-      if (this.props.selectedItem && this.props.selectedItem.id) {
+      if (this.props.selectedItem.id.length) {
         newItem = { ...newItem, id: this.props.selectedItem.id };
         this.props.updateInstall(newItem, this.props.selectedProduct.id);
       } else {
@@ -594,7 +594,7 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
     const { t } = this.props;
 
     const deleteButtonStyle =
-      this.props.selectedItem.id === undefined
+      this.props.selectedItem.id.length === 0
         ? { marginRight: '15px', display: 'none' }
         : { marginRight: '15px' };
     return (

@@ -2,7 +2,8 @@
 - fixed an issue with delete button showing whil adding an install
 - added remember select to all measurement point types
 - improved adalAuth token expiration error handling
-- 
+- fixed issue with inventory search
+- product search now includes the description
 
 ## 0.1.9 April 19th 2019
 - fixed an issue with the import template

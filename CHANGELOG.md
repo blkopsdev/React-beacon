@@ -1,3 +1,9 @@
+
+
+
+## 0.1.11 A April 25 2019
+- fixed an issue with the facility select on manage inventory
+
 ## MMG Desktop Release 0.1.10 April 24 2019
 - fixed an issue with delete button showing while adding an install
 - added remember select to all measurement point types

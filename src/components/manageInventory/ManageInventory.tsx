@@ -54,7 +54,7 @@ import {
 } from '../../actions/manageInventoryActions';
 import ShoppingCartForm from '../shoppingCart/ShoppingCartForm';
 
-import { getLocationsFacility } from '../../actions/manageLocationActions';
+import { getFacility } from '../../actions/manageLocationActions';
 import Banner from '../common/Banner';
 import EditInstallModal from './EditInstallModal';
 import EditProductModal from './EditProductModal';
@@ -88,7 +88,7 @@ interface IdispatchProps {
   toggleSearchNewProductsModal: typeof toggleSearchNewProductsModal;
   toggleImportInstallModal: typeof toggleImportInstallModal;
   getProductInfo: typeof getProductInfo;
-  getLocationsFacility: typeof getLocationsFacility;
+  getFacility: typeof getFacility;
   toggleSecurityFunctionsModal: () => void;
   initInventory: typeof initInventory;
   customers: Icustomer[];
@@ -146,10 +146,10 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
         ? this.props.tableFilters.facility
         : this.props.facilityOptions[0];
       this.props.setTableFilter({ facility });
-      this.props.getLocationsFacility(facility.value);
+      this.props.getFacility(facility.value);
       this.props.initInventory(facility.value);
     } else {
-      this.props.getLocationsFacility(this.props.tableFilters.facility.value);
+      this.props.getFacility(this.props.tableFilters.facility.value);
       this.props.initInventory(this.props.tableFilters.facility.value);
     }
   }
@@ -197,7 +197,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
     ) {
       const { facility } = this.props.tableFilters;
       if (facility) {
-        this.props.getLocationsFacility(facility.value);
+        this.props.getFacility(facility.value);
         this.props.initInventory(facility.value);
         if (
           prevProps.tableFilters.facility &&
@@ -744,7 +744,7 @@ export default translate('manageInventory')(
       toggleSearchNewProductsModal,
       closeAllModals,
       getProductInfo,
-      getLocationsFacility,
+      getFacility,
       addToCart,
       setTableFilter,
       toggleInstallContactModal,

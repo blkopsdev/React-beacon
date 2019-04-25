@@ -25,7 +25,7 @@ import { authContext } from './userActions';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
-export function getLocationsFacility(facilityID: string): ThunkResult<void> {
+export function getFacility(facilityID: string): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     const axiosOptions: AxiosRequestConfig = {

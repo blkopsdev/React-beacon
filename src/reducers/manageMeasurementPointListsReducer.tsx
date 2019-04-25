@@ -30,13 +30,9 @@ function manageMeasurementPointListData(
           const measurementPointTabs = keyMeasurementPoints(
             measurementPointList.measurementPointTabs
           );
-
           return { ...measurementPointList, measurementPointTabs };
         }
       );
-      // const filteredList = measurementPointLists.filter(
-      //   (list: ImeasurementPointList) => list.measurementPointTabs.length > 1
-      // ); // TODO temporary workaround for duplicate lists
       return keyBy(measurementPointLists, 'id');
     case types.MANAGE_MEASUREMENT_POINT_LIST_ADD:
       return {

@@ -36,7 +36,7 @@ import {
   initialLoc
 } from '../../reducers/initialState';
 import {
-  getLocationsFacility,
+  getFacility,
   saveAnyLocation,
   updateAnyLocation,
   deleteAnyLocation,
@@ -61,7 +61,7 @@ interface Iprops extends RouteComponentProps<any> {
 interface IdispatchProps {
   // Add your dispatcher properties here
   toggleEditLocationModal: typeof toggleEditLocationModal;
-  getLocationsFacility: typeof getLocationsFacility;
+  getFacility: typeof getFacility;
   saveAnyLocation: typeof saveAnyLocation;
   updateAnyLocation: typeof updateAnyLocation;
   deleteAnyLocation: typeof deleteAnyLocation;
@@ -127,7 +127,7 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
         locationID: undefined,
         floorID: undefined
       });
-      this.props.getLocationsFacility(facilityID);
+      this.props.getFacility(facilityID);
     } else if (this.props.tableFilters.facilityID) {
       this.props.filterLocations(this.props.tableFilters.facilityID);
     }
@@ -146,7 +146,7 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
     ) {
       const facilityID = this.props.tableFilters.facilityID;
       if (facilityID) {
-        this.props.getLocationsFacility(facilityID);
+        this.props.getFacility(facilityID);
       }
       // this.setState({ searchFieldConfig: this.buildSearchControls() });
       // this.props.filterLocations(this.props.facility.id);
@@ -267,9 +267,10 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
   };
 
   buildSearchControls = (): FieldConfig => {
-    const selectedFacilityOption = this.props.facility.id.length
-      ? { value: this.props.facility.id, label: this.props.facility.name }
-      : this.props.facilityOptions[0];
+    const selectedFacilityOption =
+      this.props.facilityOptions.find(
+        option => option.value === this.props.tableFilters.facilityID
+      ) || this.props.facilityOptions[0];
     const mainSearchControls = {
       // search: {
       //   render: FormUtil.TextInputWithoutValidation,
@@ -528,7 +529,7 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
         />
         <SearchTableForm
           fieldConfig={this.state.searchFieldConfig}
-          handleSubmit={this.props.getLocationsFacility}
+          handleSubmit={this.props.getFacility}
           loading={this.props.loading}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
@@ -618,7 +619,7 @@ export default translate('manageLocation')(
   connect(
     mapStateToProps,
     {
-      getLocationsFacility,
+      getFacility,
       saveAnyLocation,
       updateAnyLocation,
       deleteAnyLocation,

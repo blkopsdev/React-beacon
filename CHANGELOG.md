@@ -1,13 +1,16 @@
-## 0.1.10 April 24 2019
-- fixed an issue with delete button showing whil adding an install
+## MMG Desktop Release 0.1.10 April 24 2019
+- fixed an issue with delete button showing while adding an install
 - added remember select to all measurement point types
 - improved adalAuth token expiration error handling
 - fixed issue with inventory search
 - product search now includes the description
+- added tooltips to the manage inventory history buttons
+- scroll on sidebar menu only shows when needed
 
 ## 0.1.9 April 19th 2019
 - fixed an issue with the import template
 - fixed an issue creating locations while editing an install
+- added version# to header menu
 
 ## 0.1.8 April 18th 2019
 - fixed another issue with ADAL refresh tokens

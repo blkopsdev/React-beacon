@@ -566,14 +566,12 @@ export const resetNewProducts = () => ({
 
 export const updateInstallBaseStatus = (
   installBases: IinstallBase[],
-  jobResults: ImeasurementPointResult[]
+  MPResults: ImeasurementPointResult[]
   // products?: { [key: string]: Iproduct }
 ) => {
   return installBases.map(installBase => {
-    const installResults = jobResults.filter(result => {
-      return (
-        result.installBaseID === installBase.id && result.temporary !== true
-      );
+    const installResults = MPResults.filter(result => {
+      return result.installBaseID === installBase.id;
     });
     if (installResults && installResults.length) {
       const mostRecentResult = installResults.reduce((previous, current) => {

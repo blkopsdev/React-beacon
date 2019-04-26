@@ -1,3 +1,7 @@
+/*
+* Measurement Point Result List - list the answers from the most recent result
+*/
+
 import * as React from 'react';
 import { TranslationFunction } from 'react-i18next';
 
@@ -31,7 +35,7 @@ const AnswerListItem = (
     AnswerElement = () => <div>{mpAnswer.numericValue}</div>;
   }
   if (mpAnswer.pass !== undefined) {
-    if (mpAnswer.pass === 1) {
+    if (mpAnswer.pass === constants.measurementPointPassFailTypes.fail) {
       AnswerElement = () => (
         <div
           style={{ textTransform: 'uppercase', color: constants.colors.red }}
@@ -39,7 +43,7 @@ const AnswerListItem = (
           {t('fail')}
         </div>
       );
-    } else if (mpAnswer.pass === 2) {
+    } else if (mpAnswer.pass === constants.measurementPointPassFailTypes.pass) {
       AnswerElement = () => (
         <div
           style={{ textTransform: 'uppercase', color: constants.colors.green }}

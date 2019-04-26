@@ -4,7 +4,8 @@ import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import {
   IinitialState,
   ImeasurementPointResult,
-  ImeasurementPoint
+  ImeasurementPoint,
+  ImeasurementPointList
 } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
@@ -88,7 +89,8 @@ export const selectResult = (installID: string): ThunkResult<void> => {
     } else {
       const previousResult = getPreviousResult(
         values(measurementPointResultsByID),
-        installID
+        installID,
+        selectedMeasurementPointList
       );
       if (previousResult.id.length) {
         updateMPresultHelper(previousResult, false, dispatch);
@@ -137,45 +139,69 @@ export const resetSelectedResult = () => ({
 */
 
 /*
-* 1) try to find a previous result for this install
+* 1) try to find a previous result for this install 
 * 2) try to find a previous result for this type of measurement point list (clean the answers)
 * If we find one, return it
-* Then set it to the selectedResult
+* Then set it to the selectedResult 
 *  - if it is temporary then do Not create a new ID or remove any answers
 */
 const getPreviousResult = (
   mpResults: ImeasurementPointResult[],
-  installID: string
+  installID: string,
+  selectedMPL: ImeasurementPointList
 ): ImeasurementPointResult => {
-  if (mpResults) {
-    const installResults = mpResults.filter(result => {
-      return (
-        result.installBaseID === installID &&
-        result.measurementPointAnswers.length
-      );
-    });
+  if (mpResults.length) {
+    let previousResult: ImeasurementPointResult = initialMeasurmentPointResult;
+    const installResults = getInstallResults(mpResults, false, installID);
     if (installResults && installResults.length) {
-      console.log('we have install results with answers', installID);
-      const mostRecentResult = installResults.reduce((previous, current) => {
-        if (
-          moment
-            .utc(previous.updateDate)
-            .isAfter(moment.utc(current.updateDate))
-        ) {
-          return previous;
-        } else {
-          return current;
-        }
-      });
-
-      console.log('most recent result for this install: ', mostRecentResult);
-      return mostRecentResult;
+      previousResult = getMostRecentResult(installResults);
     } else {
-      console.log('did not find any previous results');
-      return initialMeasurmentPointResult;
+      const MPLresults = getMeasurementPointListResults(mpResults, selectedMPL);
+      previousResult = getMostRecentResult(MPLresults);
     }
+    return previousResult;
   } else {
     console.log('did not find any previous results');
     return initialMeasurmentPointResult;
   }
+};
+
+/*
+* when no results for the specific install, try to find results for the same measurementPointList
+*/
+const getMeasurementPointListResults = (
+  results: ImeasurementPointResult[],
+  selectedMPL: ImeasurementPointList
+) => {
+  return results.filter(result => {
+    return (
+      result.measurementPointListID === selectedMPL.id && !result.temporary
+    );
+  });
+};
+
+const getInstallResults = (
+  results: ImeasurementPointResult[],
+  includeTemporary: boolean,
+  installID: string
+) => {
+  const filteredResults = results.filter(result => {
+    return result.installBaseID === installID;
+  });
+  if (!includeTemporary) {
+    return filteredResults.filter(result => result.temporary !== true);
+  }
+  return filteredResults;
+};
+
+const getMostRecentResult = (results: ImeasurementPointResult[]) => {
+  return results.reduce((previous, current) => {
+    if (
+      moment.utc(previous.updateDate).isAfter(moment.utc(current.updateDate))
+    ) {
+      return previous;
+    } else {
+      return current;
+    }
+  });
 };

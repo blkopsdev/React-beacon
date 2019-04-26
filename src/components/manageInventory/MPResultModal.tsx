@@ -1,5 +1,5 @@
 /*
-* Measurement Point Result List Modal
+* Measurement Point Result Modal - list the answers for the most recent result
 */
 
 import { TranslationFunction } from 'react-i18next';

@@ -103,6 +103,12 @@ const measurementPointTypesInverse = {
   4: 'Select',
   5: 'Group'
 };
+const measurementPointPassFailTypes = {
+  pass: 1,
+  fail: 2,
+  notApplicable: 3
+};
+
 const measurementPointPassFailOptions = [
   { label: 'Pass', value: 1 },
   { label: 'Fail', value: 2 },
@@ -540,6 +546,7 @@ export const constants = {
   measurementPointTypesInverse,
   measurementPointPassFailOptions,
   measurementPointResultStatusTypes,
+  measurementPointPassFailTypes,
   reportTypeEnum,
   reportTypeEnumInverse,
   reportTypeOptions,

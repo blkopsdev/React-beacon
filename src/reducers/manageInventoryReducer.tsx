@@ -63,10 +63,7 @@ function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
       if (oldProduct) {
         const newInstalls = map(oldProduct.installs, install => {
           if (install.id === action.install.id) {
-            return pickBy(
-              action.install,
-              (property, key) => property !== null
-            ) as IinstallBase;
+            return { ...install, ...action.install };
           } else {
             return install;
           }

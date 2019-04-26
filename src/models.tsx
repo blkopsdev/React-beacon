@@ -538,7 +538,7 @@ export interface ImanageBrandReducer {
   brandList: { [key: string]: Ibrand };
   totalPages: number;
   showEditBrandModal: boolean;
-  // tableFilters: ItableFiltersReducer;
+  tableFilters: ItableFiltersReducer;
 }
 
 export interface ImanageJobReducer {

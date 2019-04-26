@@ -276,7 +276,9 @@ export default {
   },
   manageBrand: {
     totalPages: 1,
-    brandList: []
+    brandList: [],
+    showEditBrandModal: false,
+    tableFilters: initialTableFilters
   },
   manageTeam: {
     totalPages: 1,

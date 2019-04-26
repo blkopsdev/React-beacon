@@ -14,7 +14,7 @@ import {
   Iroom,
   Itile
 } from '../../models';
-import { getBrands } from '../../actions/manageBrandActions';
+import {getBrands, toggleEditBrandModal} from '../../actions/manageBrandActions';
 import { TableUtil } from '../common/TableUtil';
 import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -37,6 +37,7 @@ interface IdispatchProps {
   totalPages: number;
   showEditBrandModal: boolean;
   getBrands: any;
+  toggleEditBrandModal: typeof toggleEditBrandModal;
 }
 
 interface Istate {
@@ -75,7 +76,8 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
 
   handleEdit(selectedItem: any) {
     this.setState({ selectedItem });
-    // console.log("EDIT:", item);
+    this.props.toggleEditBrandModal()
+    console.log("EDIT:", selectedItem);
   }
 
   handleDelete(deletedItem: any) {
@@ -205,7 +207,7 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
         />
 
         <ReactTable
-          data={brandList.result}
+          data={brandList}
           columns={this.state.columns}
           getTrProps={this.getTrProps}
           // pageSize={this.props.tableData.length}
@@ -228,7 +230,7 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
 
         <EditBrandModal
           selectedItem={this.state.selectedItem}
-          selectedType={'Location'}
+          selectedType={'Brand'}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
@@ -254,6 +256,6 @@ const mapStateToProps = (state: IinitialState) => {
 export default translate('manageBrand')(
   connect(
     mapStateToProps,
-    { getBrands }
+    { getBrands, toggleEditBrandModal }
   )(ManageBrand)
 );

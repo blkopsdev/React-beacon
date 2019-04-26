@@ -23,11 +23,12 @@ import {
   // Ilocation,
   // Ifacility
 } from '../../models';
-// import {
-//     saveAnyLocation,
-//     updateAnyLocation
-// } from '../../actions/manageLocationActions';
+import {
+    saveBrand,
+    updateBrand
+} from '../../actions/manageBrands';
 import { constants } from 'src/constants/constants';
+// import {saveBrand, updateBrand} from "../../actions/manageBrandActions";
 
 const buildFieldConfig = () => {
   const fieldConfigControls = {
@@ -53,14 +54,14 @@ const buildFieldConfig = () => {
 interface Iprops {
   toggleModal: () => void;
   selectedItem?: any;
-  selectedType: 'Building' | 'Floor' | 'Location' | 'Room';
+  selectedType: 'Brand';
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;
   i18n: I18n;
   tableFilters: ItableFiltersReducer;
-  // saveAnyLocation: typeof saveAnyLocation;
-  // updateAnyLocation: typeof updateAnyLocation;
+  saveBrand: typeof saveBrand;
+  updateBrand: typeof updateBrand;
   // facility: Ifacility;
   // selectedBuilding: Ibuilding;
   // selectedFloor: Ifloor;
@@ -97,21 +98,21 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
       return;
     }
     console.log(this.form.value);
-    // const { name } = this.form.value;
+    const { name } = this.form.value;
     if (
       this.props.selectedItem &&
       this.props.selectedItem.id &&
       this.props.selectedItem.id.length
     ) {
-      // const newItem = {
-      //     ...this.props.selectedItem,
-      //     name
-      // };
+      const newItem = {
+          ...this.props.selectedItem,
+          name
+      };
       // updating a location object
-      // this.props.updateAnyLocation(newItem);
+      this.props.updateBrand(newItem);
     } else {
       // creating a new location
-      // this.props.saveAnyLocation(name, this.props.facility.id);
+      this.props.saveBrand(name);
     }
     this.props.toggleModal();
   };

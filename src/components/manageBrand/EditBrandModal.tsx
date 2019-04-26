@@ -7,25 +7,21 @@ import { connect } from 'react-redux';
 import * as React from 'react';
 
 import {
-  IinitialState
+  IinitialState, ItableFiltersReducer
   // Ibuilding,
   // Ifloor,
   // Ilocation,
   // ItableFiltersReducer,
   // Ifacility
 } from '../../models';
-import {
-  saveAnyLocation,
-  updateAnyLocation,
-  toggleEditLocationModal
-} from '../../actions/manageLocationActions';
 import { updateQueueProduct } from '../../actions/manageProductQueueActions';
 import CommonModal from '../common/CommonModal';
 import EditBrandForm from './EditBrandForm';
+import {saveBrand, updateBrand, toggleEditBrandModal} from "../../actions/manageBrandActions";
 
 interface Iprops {
   selectedItem: any;
-  selectedType: 'Building' | 'Floor' | 'Location' | 'Room';
+  selectedType: 'Brand';
   colorButton: any;
   t: TranslationFunction;
 }
@@ -33,10 +29,10 @@ interface Iprops {
 interface IdispatchProps {
   showModal: boolean;
   loading: boolean;
-  // saveAnyLocation: typeof saveAnyLocation;
-  // updateAnyLocation: typeof updateAnyLocation;
+  saveBrand: typeof saveBrand;
+  updateBrand: typeof updateBrand;
   toggleModal: () => void;
-  // tableFilters: ItableFiltersReducer;
+  tableFilters: ItableFiltersReducer;
   // facility: Ifacility;
   // selectedBuilding: Ibuilding;
   // selectedFloor: Ifloor;
@@ -55,10 +51,10 @@ class ManageInventoryModal extends React.Component<
     let modalTitle;
     if (this.props.selectedItem && this.props.selectedItem.id) {
       modalTitle = this.props.t(
-        `manageLocation:edit${this.props.selectedType}`
+        `manageBrand:edit${this.props.selectedType}`
       );
     } else {
-      modalTitle = this.props.t(`manageLocation:new${this.props.selectedType}`);
+      modalTitle = this.props.t(`manageBrand:new${this.props.selectedType}`);
     }
     const className = 'user-edit';
     return (
@@ -78,8 +74,8 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
-    showModal: state.manageBrand.showEditBrandModal
-    // tableFilters: state.manageBrand.,
+    showModal: state.manageBrand.showEditBrandModal,
+    tableFilters: state.manageBrand.tableFilters,
     // facility: state.manageLocation.facility,
     // selectedBuilding,
     // selectedFloor,
@@ -90,9 +86,9 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
 export default connect(
   mapStateToProps,
   {
-    saveAnyLocation,
-    updateAnyLocation,
-    toggleModal: toggleEditLocationModal,
+    saveBrand,
+    updateBrand,
+    toggleModal: toggleEditBrandModal,
     updateQueueProduct
   }
 )(ManageInventoryModal);

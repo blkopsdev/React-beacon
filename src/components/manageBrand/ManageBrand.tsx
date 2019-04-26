@@ -6,12 +6,21 @@ import { RouteComponentProps } from 'react-router';
 import { TranslationFunction } from 'i18next';
 import { constants } from '../../constants/constants';
 import { connect } from 'react-redux';
-import { IinitialState, Itile } from '../../models';
+import {
+  Ibuilding,
+  Ifloor,
+  IinitialState,
+  Ilocation,
+  Iroom,
+  Itile
+} from '../../models';
 import { getBrands } from '../../actions/manageBrandActions';
 import { TableUtil } from '../common/TableUtil';
 import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toastr } from 'react-redux-toastr';
+import ReactTable, { FinalState, RowInfo } from 'react-table';
+import EditBrandModal from './EditBrandModal';
 // import manageBrandReducer from "../../reducers/manageBrandReducer";
 // import {FieldConfig} from "react-reactive-form";
 
@@ -133,6 +142,57 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
     this.setState({ columns });
   };
 
+  /*
+* Handle user clicking on a location row
+* set the selected location to state and open the modal
+*/
+  getTrProps = (state: FinalState, rowInfo: RowInfo) => {
+    if (rowInfo) {
+      return {
+        onClick: (e: React.MouseEvent<HTMLFormElement>) => {
+          const locationObject = rowInfo.original as
+            | Ilocation
+            | Ibuilding
+            | Ifloor
+            | Iroom;
+          if (this.buttonInAction && this.deleteAction === false) {
+            // this.props.toggleEditBrandModal();
+          } else if (this.deleteAction === false) {
+            if ('facilityID' in locationObject) {
+              // BUILDING
+              // this.props.setTableFilter({
+              //   facilityID: this.props.facility.id,
+              //   buildingID: locationObject.id,
+              //   locationID: undefined,
+              //   floorID: undefined
+              // });
+            } else if ('buildingID' in locationObject) {
+              // FLOOR
+              // this.props.setTableFilter({
+              //   locationID: undefined,
+              //   floorID: locationObject.id
+              // });
+            } else if ('floorID' in locationObject) {
+              // LOCATION
+              // this.props.setTableFilter({ locationID: locationObject.id });
+            } else {
+              // ROOM - we don't do anthything when they select a room...
+            }
+          }
+          this.buttonInAction = false;
+          this.deleteAction = false;
+        },
+        style: {
+          background: this.state.selectedRow[rowInfo.viewIndex]
+            ? constants.colors[`${this.state.currentTile.color}Tr`]
+            : ''
+        }
+      };
+    } else {
+      return {};
+    }
+  };
+
   render() {
     const { t, brandList } = this.props;
 
@@ -143,10 +203,41 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
           img={this.state.currentTile.srcBanner}
           color={this.state.currentTile.color}
         />
-        {brandList &&
-          brandList.result.map((brand: any) => (
-            <h3 key={brand.id}>{brand.name}</h3>
-          ))}
+
+        <ReactTable
+          data={brandList.result}
+          columns={this.state.columns}
+          getTrProps={this.getTrProps}
+          // pageSize={this.props.tableData.length}
+          // manual
+          // pages={this.props.userManage.totalPages}
+          // page={this.props.tableFilters.page - 1}
+          // showPageSizeOptions={false}
+          defaultPageSize={10}
+          className={`beacon-table -highlight ${this.state.currentTile.color}`}
+          previousText={t('common:previous')}
+          nextText={t('common:next')}
+          // onPageChange={this.onPageChange}
+          // onSortedChange={this.onSortedChanged}
+          sortable={true}
+          multiSort={false}
+          noDataText={t('common:noDataText')}
+          resizable={false}
+          expanded={this.state.selectedRow}
+        />
+
+        <EditBrandModal
+          selectedItem={this.state.selectedItem}
+          selectedType={'Location'}
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+          t={this.props.t}
+        />
+        {/*{brandList &&*/}
+        {/*  brandList.result.map((brand: any) => (*/}
+        {/*    <h3 key={brand.id}>{brand.name}</h3>*/}
+        {/*  ))}*/}
       </div>
     );
   }
@@ -155,12 +246,11 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
 const mapStateToProps = (state: IinitialState) => {
   return {
     brandList: state.manageBrand.brandList,
-    totalPages: state.manageBrand.brandList,
-    showEditBrandModal: state.manageBrand.brandList
+    totalPages: state.manageBrand.totalPages,
+    showEditBrandModal: state.manageBrand.showEditBrandModal
   };
 };
 
-// @ts-ignore
 export default translate('manageBrand')(
   connect(
     mapStateToProps,

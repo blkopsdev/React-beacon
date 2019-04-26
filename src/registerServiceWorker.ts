@@ -73,7 +73,7 @@ function registerValidSW(swUrl: string) {
                 // the fresh content will have been added to the cache.
                 // It's the perfect time to display a 'New content is
                 // available; please refresh.' message in your web app.
-                toastr.warning("Update Available", "Please wait while we update.", constants.toastrWarning);
+                toastr.warning("Installing Update", "Please wait...", constants.toastrWarning);
                 setTimeout(() => {
                   location.reload();
                 }, 5000);

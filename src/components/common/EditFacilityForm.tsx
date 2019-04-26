@@ -12,7 +12,7 @@ import {
   FieldConfig
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
-// import { forEach, find } from "lodash";
+import { orderBy } from 'lodash';
 import { constants } from 'src/constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction } from 'react-i18next';
@@ -84,7 +84,7 @@ const fieldConfig = {
       },
       render: FormUtil.Select,
       meta: {
-        options: constants.countries,
+        options: orderBy(constants.countries, 'label'),
         label: 'user:country',
         colWidth: 12,
         placeholder: 'userQueue:countrySearchPlaceholder',

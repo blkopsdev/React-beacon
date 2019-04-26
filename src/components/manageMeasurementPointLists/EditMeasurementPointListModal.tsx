@@ -19,7 +19,8 @@ import {
   saveMeasurementPointToMeasurementPointList,
   toggleEditMeasurementPointTabModal,
   setSelectedMeasurementPointList,
-  toggleEditMeasurementPointListTestProceduresModal
+  toggleEditMeasurementPointListTestProceduresModal,
+  updateMeasurementPointListTab
 } from '../../actions/manageMeasurementPointListsActions';
 import CommonModal from '../common/CommonModal';
 import EditMeasurementPointListForm from './EditMeasurementPointListForm';
@@ -54,6 +55,7 @@ interface IdispatchProps {
   toggleEditMeasurementPointTabModal: typeof toggleEditMeasurementPointTabModal;
   setSelectedMeasurementPointList: typeof setSelectedMeasurementPointList;
   toggleEditMeasurementPointListTestProceduresModal: typeof toggleEditMeasurementPointListTestProceduresModal;
+  updateMeasurementPointListTab: typeof updateMeasurementPointListTab;
 }
 
 class EditMeasurementPointListModal extends React.Component<
@@ -111,6 +113,7 @@ export default connect(
     saveMeasurementPointToMeasurementPointList,
     toggleEditMeasurementPointTabModal,
     setSelectedMeasurementPointList,
-    toggleEditMeasurementPointListTestProceduresModal
+    toggleEditMeasurementPointListTestProceduresModal,
+    updateMeasurementPointListTab
   }
 )(EditMeasurementPointListModal);

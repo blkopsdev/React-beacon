@@ -11,7 +11,7 @@ import {
   FieldConfig
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
-import { forEach } from 'lodash';
+import { forEach, orderBy } from 'lodash';
 import { constants } from 'src/constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
@@ -73,7 +73,7 @@ const fieldConfigControls = {
     },
     render: FormUtil.Select,
     meta: {
-      options: constants.countries,
+      options: orderBy(constants.countries, 'label'),
       label: 'user:country',
       colWidth: 12,
       placeholder: 'userQueue:countrySearchPlaceholder',

@@ -19,10 +19,7 @@ import { translate, TranslationFunction } from 'react-i18next';
 
 import { FormUtil } from '../common/FormUtil';
 import { ImeasurementPointListTab, ImeasurementPointList } from 'src/models';
-import {
-  toggleEditMeasurementPointTabModal,
-  updateMeasurementPointListTab
-} from 'src/actions/manageMeasurementPointListsActions';
+import { updateMeasurementPointListTab } from 'src/actions/manageMeasurementPointListsActions';
 // import { IqueueObject } from '../../models';
 
 // add the bootstrap form-control class to the react-select select component
@@ -55,7 +52,7 @@ const fieldConfig = (
 };
 
 interface Iprops {
-  toggleEditMeasurementPointTabModal: typeof toggleEditMeasurementPointTabModal;
+  toggleModal: () => void;
   loading: boolean;
   colorButton: string;
   selectedTab: ImeasurementPointListTab;
@@ -96,6 +93,7 @@ class EditMeasurementPointListTabFormClass extends React.Component<Iprops, {}> {
       ...this.props.selectedTab,
       name
     });
+    this.props.toggleModal();
   };
   handleDelete = () => {
     const toastrConfirmOptions = {
@@ -104,6 +102,7 @@ class EditMeasurementPointListTabFormClass extends React.Component<Iprops, {}> {
           ...this.props.selectedTab,
           isDeleted: true
         });
+        this.props.toggleModal();
       },
       onCancel: () => console.log('CANCEL: clicked'),
       okText: this.props.t('deleteMeasurementPointTabOk'),
@@ -129,7 +128,7 @@ class EditMeasurementPointListTabFormClass extends React.Component<Iprops, {}> {
             bsStyle="default"
             type="button"
             className="pull-left"
-            onClick={this.props.toggleEditMeasurementPointTabModal}
+            onClick={this.props.toggleModal}
           >
             {t('common:cancel')}
           </Button>

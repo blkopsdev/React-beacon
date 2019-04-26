@@ -28,7 +28,7 @@ const fieldConfig = (
   disabled: boolean
 ) => {
   const { testProcedures } = measurementPointList;
-
+  const initialContent = testProcedures ? testProcedures : '';
   return {
     controls: {
       testProcedures: {
@@ -36,9 +36,9 @@ const fieldConfig = (
         meta: {
           label: 'manageMeasurementPointLists:procedureLabel',
           colWidth: 12,
-          initialContent: testProcedures
+          initialContent
         },
-        formState: { value: testProcedures, disabled }
+        formState: { value: initialContent, disabled }
       }
     } as {
       [key: string]: GroupProps;

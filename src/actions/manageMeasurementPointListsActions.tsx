@@ -131,9 +131,6 @@ export function updateMeasurementPointListTab(
       type: types.MANAGE_MEASUREMENT_POINT_TAB_UPDATE,
       tab
     });
-    dispatch({
-      type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT_TAB
-    });
     if (tab.isDeleted === true) {
       dispatch({
         type: types.MANAGE_MEASUREMENT_POINT_SET_SELECTED_TAB,

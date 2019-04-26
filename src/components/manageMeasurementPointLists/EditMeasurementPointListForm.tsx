@@ -11,7 +11,7 @@ import {
   FieldConfig,
   GroupProps
 } from 'react-reactive-form';
-import { filter } from 'lodash';
+import { filter, keyBy } from 'lodash';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
@@ -33,7 +33,8 @@ import {
   saveMeasurementPointToMeasurementPointList,
   toggleEditMeasurementPointTabModal,
   setSelectedMeasurementPointList,
-  toggleEditMeasurementPointListTestProceduresModal
+  toggleEditMeasurementPointListTestProceduresModal,
+  updateMeasurementPointListTab
 } from '../../actions/manageMeasurementPointListsActions';
 import { constants } from 'src/constants/constants';
 import {
@@ -69,6 +70,7 @@ interface Iprops extends React.Props<EditMeasurementPointListForm> {
   setSelectedMeasurementPointList: typeof setSelectedMeasurementPointList;
   toggleEditMeasurementPointListTestProceduresModal: typeof toggleEditMeasurementPointListTestProceduresModal;
   customerID: string;
+  updateMeasurementPointListTab: typeof updateMeasurementPointListTab;
 }
 
 interface Istate {
@@ -376,6 +378,11 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     mps.sort((a: ImeasurementPoint, b: ImeasurementPoint) => {
       return a.order - b.order;
     });
+    this.props.updateMeasurementPointListTab({
+      ...this.props.selectedTab,
+      measurementPoints: keyBy(mps, 'id')
+    });
+    // set state here just to make it faster (might not be any faster in production)
     this.setState({
       measurementPoints: mps
     });

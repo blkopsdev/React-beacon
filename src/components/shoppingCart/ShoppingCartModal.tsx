@@ -39,7 +39,7 @@ interface IdispatchProps {
   decreaseFromCart: typeof decreaseFromCart;
   deleteFromCart: typeof deleteFromCart;
   checkout?: typeof requestQuote;
-  toggleModal: () => void;
+  toggleShoppingCartModal: typeof toggleShoppingCartModal;
   cart: IshoppingCart;
   tableFilters: ItableFiltersReducer;
   title: string;
@@ -59,7 +59,7 @@ class EditQuoteModal extends React.Component<Iprops & IdispatchProps, {}> {
       <CommonModal
         modalVisible={this.props.showModal}
         className="user-edit"
-        onHide={this.props.toggleModal}
+        onHide={() => this.props.toggleShoppingCartModal(this.props.cartName)}
         body={<this.props.ShoppingCartForm {...this.props} />}
         title={this.props.title}
         container={document.getElementById('two-pane-layout')}
@@ -87,7 +87,7 @@ export default connect(
     addToCart,
     decreaseFromCart,
     deleteFromCart,
-    toggleModal: toggleShoppingCartModal,
+    toggleShoppingCartModal,
     updateQuantityCart
   }
 )(EditQuoteModal);

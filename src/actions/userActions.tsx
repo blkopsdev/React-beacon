@@ -159,21 +159,22 @@ const userLogoutHelper = (dispatch: Dispatch) => {
 export function signUpDirect(tempUser: ItempUser): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
-    return axios
-      .post(API.POST.user.signup, tempUser)
-      .then(data => {
+    return axios.post(API.POST.user.signup, tempUser).then(
+      data => {
         if (!data.data) {
           throw undefined;
         } else {
           dispatch({ type: types.USER_SIGNUP_SUCCESS, user: data.data });
           return data;
         }
-      })
-      .catch((error: any) => {
+      },
+      (error: any) => {
         dispatch({ type: types.USER_SIGNUP_FAILED });
         constants.handleError(error, 'sign up');
         console.error(error);
-      });
+        Promise.reject(error);
+      }
+    );
   };
 }
 

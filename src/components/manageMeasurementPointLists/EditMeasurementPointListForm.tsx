@@ -273,7 +273,8 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       )
       .then(() => {
         this.props.setSelectedTabID(newTab.id);
-      });
+      })
+      .catch((error: any) => console.error(error));
   };
   /*
   * Remove deleted measurementPoints and sort them
@@ -312,11 +313,16 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
         break;
       default:
         if (value && value.value) {
-          this.props.updateGlobalMeasurementPointList(
-            { ...this.props.selectedMeasurementPointList, [key]: value.value },
-            false,
-            false
-          );
+          this.props
+            .updateGlobalMeasurementPointList(
+              {
+                ...this.props.selectedMeasurementPointList,
+                [key]: value.value
+              },
+              false,
+              false
+            )
+            .catch((error: any) => console.error(error));
         }
         break;
     }
@@ -420,11 +426,13 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       type: type ? type.value : ''
     };
     if (mpl.temporary !== true) {
-      this.props.updateGlobalMeasurementPointList(
-        mpl,
-        true,
-        this.props.customerID.length > 0
-      );
+      this.props
+        .updateGlobalMeasurementPointList(
+          mpl,
+          true,
+          this.props.customerID.length > 0
+        )
+        .catch((error: any) => console.error(error));
     } else {
       this.props.addGlobalMeasurementPointList({ ...mpl, temporary: false });
     }

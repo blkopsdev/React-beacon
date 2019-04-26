@@ -45,10 +45,13 @@ class SignUpWithMS extends React.Component<Iprops, any> {
   }
 
   login = () => {
-    this.props.setLoginRedirect().then(() => {
-      console.log('start adal login');
-      this.props.adalLogin();
-    });
+    this.props
+      .setLoginRedirect()
+      .then(() => {
+        console.log('start adal login');
+        this.props.adalLogin();
+      })
+      .catch((error: any) => console.error(error));
   };
   render() {
     let showSignUpForm: boolean = false;

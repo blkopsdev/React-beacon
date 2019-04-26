@@ -171,7 +171,6 @@ export function signUpDirect(tempUser: ItempUser): ThunkResult<void> {
       (error: any) => {
         dispatch({ type: types.USER_SIGNUP_FAILED });
         constants.handleError(error, 'sign up');
-        console.error(error);
         Promise.reject(error);
       }
     );

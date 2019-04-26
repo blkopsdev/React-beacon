@@ -28,6 +28,8 @@ export function getFacilityMeasurementPointResults(
       dispatch,
       getState,
       facilityID
+    ).catch((error: any) =>
+      console.error('error getting measurement point results', error)
     );
   };
 }
@@ -44,8 +46,8 @@ export const getFacilityMeasurementPointResultsHelper = (
   const url = `${
     API.GET.measurementPoint.getFacilityMeasurementPointListResults
   }/${facilityID}`;
-  return adalFetch(authContext, resource, axios, url, axiosOptions)
-    .then((data: AxiosResponse<any>) => {
+  return adalFetch(authContext, resource, axios, url, axiosOptions).then(
+    (data: AxiosResponse<any>) => {
       if (!data.data) {
         throw undefined;
       } else {
@@ -56,12 +58,13 @@ export const getFacilityMeasurementPointResultsHelper = (
         });
         return data;
       }
-    })
-    .catch((error: any) => {
-      console.error('error getting measurement point results', error);
+    },
+    (error: any) => {
       dispatch({ type: types.GET_MEASUREMENT_POINT_FACILITY_RESULTS_FAILED });
       constants.handleError(error, 'get inspection results');
-    });
+      Promise.reject(error);
+    }
+  );
 };
 
 /*

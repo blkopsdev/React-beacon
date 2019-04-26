@@ -11,17 +11,12 @@ import {
   GroupProps
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
-// import { forEach, find } from "lodash";
 import { constants } from 'src/constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction } from 'react-i18next';
 
 import { FormUtil } from '../common/FormUtil';
 import { ImeasurementPointList } from 'src/models';
-import { updateGlobalMeasurementPointList } from 'src/actions/manageMeasurementPointListsActions';
-// import { IqueueObject } from '../../models';
-
-// add the bootstrap form-control class to the react-select select component
 
 const fieldConfig = (
   measurementPointList: ImeasurementPointList,
@@ -52,7 +47,11 @@ interface Iprops {
   colorButton: string;
   selectedMeasurementPointList: ImeasurementPointList;
   t: TranslationFunction;
-  updateGlobalMeasurementPointList: typeof updateGlobalMeasurementPointList;
+  updateGlobalMeasurementPointList: (
+    mpl: ImeasurementPointList,
+    persistToAPI: boolean,
+    isCustomer: boolean
+  ) => Promise<void>;
   customerID: string;
 }
 
@@ -89,14 +88,16 @@ class EditMeasurementPointListTestProceduresFormClass extends React.Component<
     }
     console.log(this.userForm.value);
     const { testProcedures } = this.userForm.value;
-    this.props.updateGlobalMeasurementPointList(
-      {
-        ...this.props.selectedMeasurementPointList,
-        testProcedures
-      },
-      false,
-      false
-    );
+    this.props
+      .updateGlobalMeasurementPointList(
+        {
+          ...this.props.selectedMeasurementPointList,
+          testProcedures
+        },
+        false,
+        false
+      )
+      .catch((error: any) => console.error(error));
     this.props.toggleModal();
   };
   setForm = (form: AbstractControl) => {

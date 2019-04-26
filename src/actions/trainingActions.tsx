@@ -428,18 +428,18 @@ export const trainingCheckout = (
     };
     const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
     const url = API.POST.training.trainingCheckout;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
-      .then((data: AxiosResponse<any>) => {
+    return adalFetch(authContext, resource, axios, url, axiosOptions).then(
+      (data: AxiosResponse<any>) => {
         dispatch({
           type: types.CHECKOUT_TRAINING_SUCCESS
         });
         getPurchasedTrainingHelper(dispatch, getState);
-      })
-      .catch((error: any) => {
-        console.error('Error checking out', error);
+      },
+      (error: any) => {
         dispatch({ type: types.CHECKOUT_TRAINING_FAILED });
         constants.handleError(error, 'purchasing training');
-      });
+      }
+    );
   };
 };
 

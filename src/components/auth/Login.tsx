@@ -95,10 +95,13 @@ class Login extends React.Component<Iprops, Istate> {
   }
 
   login = () => {
-    this.props.setLoginRedirect().then(() => {
-      console.log('start adal login');
-      this.props.adalLogin();
-    });
+    this.props
+      .setLoginRedirect()
+      .then(() => {
+        console.log('start adal login');
+        this.props.adalLogin();
+      })
+      .catch((error: any) => console.error(error));
   };
   render() {
     const { t } = this.props;

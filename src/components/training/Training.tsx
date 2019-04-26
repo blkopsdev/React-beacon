@@ -126,9 +126,12 @@ class Courses extends React.Component<Props, State> {
 
     // if we receive a transation number, that means we were recently redirected from a UTA transaction.  Now we need to actually checkout.
     if (query && query.transactionNumber && query.transactionNumber.length) {
-      this.props.trainingCheckout(query.transactionNumber).then(() => {
-        this.props.history.replace('/training');
-      });
+      this.props
+        .trainingCheckout(query.transactionNumber)
+        .then(() => {
+          this.props.history.replace('/training');
+        })
+        .catch((error: any) => console.error(error));
     }
 
     // }

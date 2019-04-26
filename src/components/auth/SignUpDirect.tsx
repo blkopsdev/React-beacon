@@ -11,11 +11,7 @@ import {
   userLogout,
   signUpDirect
 } from '../../actions/userActions';
-import {
-  setLoginRedirect,
-  removeLoginRedirect,
-  setRedirectPathname
-} from '../../actions/redirectToReferrerAction';
+import { removeLoginRedirect } from '../../actions/redirectToReferrerAction';
 import { Col, Grid, Row, Button } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
@@ -26,9 +22,8 @@ interface Iprops extends RouteComponentProps<{}> {
   userLogin?: any;
   adalLogin?: any;
   userLogout?: any;
-  setLoginRedirect?: any;
   setRedirectPathname?: any;
-  removeLoginRedirect?: any;
+  removeLoginRedirect: () => Promise<void>;
   user: Iuser;
   redirect: Iredirect;
   signUpDirect: any;
@@ -75,14 +70,19 @@ class SignUpDirect extends React.Component<Iprops, Istate> {
     this.setState({ redirectToLogin: true });
   };
   handleSubmit = (newUser: ItempUser) => {
-    return this.props.signUpDirect(newUser).then(() => {
-      this.setState({ showSignupSuccess: true });
-    });
+    return this.props
+      .signUpDirect(newUser)
+      .then(() => {
+        this.setState({ showSignupSuccess: true });
+      })
+      .catch((error: any) => console.error(error));
   };
   render() {
     const { t } = this.props;
     if (this.props.user.isAuthenticated) {
-      this.props.removeLoginRedirect();
+      this.props
+        .removeLoginRedirect()
+        .catch((error: any) => console.error(error));
       return <Redirect to={'/dashboard'} />;
     }
     if (this.state.redirectToLogin) {
@@ -134,9 +134,7 @@ export default translate('auth')(
       userLogin,
       adalLogin,
       userLogout,
-      setLoginRedirect,
       removeLoginRedirect,
-      setRedirectPathname,
       signUpDirect
     }
   )(SignUpDirect)

@@ -171,8 +171,8 @@ export function updateGlobalMeasurementPointList(
         data: listForAPI
       };
       const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
-      return adalFetch(authContext, resource, axios, url, axiosOptions)
-        .then((data: AxiosResponse<any>) => {
+      return adalFetch(authContext, resource, axios, url, axiosOptions).then(
+        (data: AxiosResponse<any>) => {
           if (!data.data) {
             throw undefined;
           } else {
@@ -192,12 +192,13 @@ export function updateGlobalMeasurementPointList(
               constants.toastrSuccess
             );
           }
-        })
-        .catch((error: any) => {
+        },
+        (error: any) => {
           dispatch({ type: types.MANAGE_MEASUREMENT_POINT_LIST_UPDATE_FAILED });
           constants.handleError(error, 'update measurement point list');
-          console.error(error);
-        });
+          Promise.reject(error);
+        }
+      );
     } else {
       return Promise.resolve(true);
     }

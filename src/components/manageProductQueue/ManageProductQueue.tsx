@@ -289,7 +289,8 @@ class ManageProductQueue extends React.Component<
             .mergeProduct(this.state.selectedQueueObject.product.id, product.id)
             .then(() => {
               this.props.getProductQueue();
-            });
+            })
+            .catch((error: any) => console.error(error));
         }
       }
     );

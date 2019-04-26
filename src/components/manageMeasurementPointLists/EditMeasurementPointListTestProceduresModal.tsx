@@ -32,7 +32,11 @@ interface IdispatchProps {
   toggleModal: () => void;
   selectedTab: ImeasurementPointListTab;
   selectedMeasurementPointList: ImeasurementPointList;
-  updateGlobalMeasurementPointList: typeof updateGlobalMeasurementPointList;
+  updateGlobalMeasurementPointList: (
+    mpl: ImeasurementPointList,
+    persistToAPI: boolean,
+    isCustomer: boolean
+  ) => Promise<void>;
 }
 
 class EditMeasurementPointListTestProceduresModalClass extends React.Component<

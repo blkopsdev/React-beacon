@@ -92,11 +92,11 @@ export function getProducts(
 */
 export function initInventory(facilityID: string): ThunkResult<void> {
   return (dispatch, getState) => {
-    getFacilityMeasurementPointResultsHelper(
-      dispatch,
-      getState,
-      facilityID
-    ).then(() => getInventoryHelper(dispatch, getState));
+    getFacilityMeasurementPointResultsHelper(dispatch, getState, facilityID)
+      .then(() => getInventoryHelper(dispatch, getState))
+      .catch((error: any) =>
+        console.error('error getting measurement point results', error)
+      );
   };
 }
 
@@ -509,18 +509,19 @@ export function mergeProduct(
     const url = `${
       API.POST.inventory.mergeProduct
     }?sourceProductID=${sourceProductID}&targetProductID=${targetProductID}`;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
-      .then((data: AxiosResponse<any>) => {
+    return adalFetch(authContext, resource, axios, url, axiosOptions).then(
+      (data: AxiosResponse<any>) => {
         dispatch({
           type: types.PRODUCT_MERGE_SUCCESS
         });
         toastr.success('Success', 'merged product', constants.toastrSuccess);
-      })
-      .catch((error: any) => {
+      },
+      (error: any) => {
         dispatch({ type: types.PRODUCT_MERGE_FAILED });
         constants.handleError(error, 'merge product');
-        console.error(error);
-      });
+        Promise.reject(error);
+      }
+    );
   };
 }
 

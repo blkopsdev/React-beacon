@@ -19,7 +19,7 @@ import manageTraining from './manageTrainingReducer';
 import manageMeasurementPointLists from './manageMeasurementPointListsReducer';
 import measurementPointResults from './measurementPointResultsReducer';
 import { manageReportReducer } from './manageReportReducer';
-import manageBrand from './manageBrandReducer';
+import brandManage from './manageBrandReducer';
 
 const rootReducer = combineReducers({
   ajaxCallsInProgress,
@@ -31,7 +31,7 @@ const rootReducer = combineReducers({
   manageJob,
   manageTeam,
   manageLocation,
-  manageBrand,
+  manageBrand: brandManage,
   customers,
   facilities,
   manageInventory,

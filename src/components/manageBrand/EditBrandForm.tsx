@@ -23,10 +23,7 @@ import {
   // Ilocation,
   // Ifacility
 } from '../../models';
-import {
-    saveBrand,
-    updateBrand
-} from '../../actions/manageBrands';
+import { saveBrand, updateBrand } from '../../actions/manageBrands';
 import { constants } from 'src/constants/constants';
 // import {saveBrand, updateBrand} from "../../actions/manageBrandActions";
 
@@ -42,7 +39,7 @@ const buildFieldConfig = () => {
         colWidth: 12,
         type: 'input',
         autoFocus: true,
-        name: 'location-name'
+        name: 'brand-name'
       }
     }
   };
@@ -105,8 +102,8 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
       this.props.selectedItem.id.length
     ) {
       const newItem = {
-          ...this.props.selectedItem,
-          name
+        ...this.props.selectedItem,
+        name
       };
       // updating a location object
       this.props.updateBrand(newItem);
@@ -189,4 +186,4 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
     );
   }
 }
-export default translate('manageLocation')(ManageLocationForm);
+export default translate('manageBrand')(ManageLocationForm);

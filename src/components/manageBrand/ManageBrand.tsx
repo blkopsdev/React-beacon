@@ -6,21 +6,20 @@ import { RouteComponentProps } from 'react-router';
 import { TranslationFunction } from 'i18next';
 import { constants } from '../../constants/constants';
 import { connect } from 'react-redux';
+import { IinitialState, ItableFiltersReducer, Itile } from '../../models';
 import {
-  Ibuilding,
-  Ifloor,
-  IinitialState,
-  Ilocation,
-  Iroom,
-  Itile
-} from '../../models';
-import {getBrands, toggleEditBrandModal} from '../../actions/manageBrandActions';
+  deleteBrand,
+  getBrands,
+  setTableFilter,
+  toggleEditBrandModal
+} from '../../actions/manageBrandActions';
 import { TableUtil } from '../common/TableUtil';
 import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toastr } from 'react-redux-toastr';
 import ReactTable, { FinalState, RowInfo } from 'react-table';
 import EditBrandModal from './EditBrandModal';
+// import './ManageBrand.less';
 // import manageBrandReducer from "../../reducers/manageBrandReducer";
 // import {FieldConfig} from "react-reactive-form";
 
@@ -38,6 +37,9 @@ interface IdispatchProps {
   showEditBrandModal: boolean;
   getBrands: any;
   toggleEditBrandModal: typeof toggleEditBrandModal;
+  deleteBrand: typeof deleteBrand;
+  setTableFilter: typeof setTableFilter;
+  tableFilters: ItableFiltersReducer;
 }
 
 interface Istate {
@@ -74,22 +76,40 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
     this.props.getBrands();
   }
 
+  componentDidUpdate(prevProps: Iprops & IdispatchProps) {
+    if (
+      prevProps.showEditBrandModal !== this.props.showEditBrandModal &&
+      !this.props.showEditBrandModal
+    ) {
+      this.setState({ selectedRow: null });
+    }
+    // automatically get inventory every time a fitler changes
+    if (
+      JSON.stringify(prevProps.tableFilters) !==
+      JSON.stringify(this.props.tableFilters)
+    ) {
+      console.log(
+        'user manage filters changed',
+        prevProps.tableFilters,
+        this.props.tableFilters
+      );
+      this.props.getBrands();
+    }
+  }
+
   handleEdit(selectedItem: any) {
     this.setState({ selectedItem });
-    this.props.toggleEditBrandModal()
-    console.log("EDIT:", selectedItem);
+    this.props.toggleEditBrandModal();
+    console.log('EDIT:', selectedItem);
   }
 
   handleDelete(deletedItem: any) {
     const toastrConfirmOptions = {
       onOk: () => {
-        // deletedItem = {
-        //     ...deletedItem,
-        //     buildingID: this.props.selectedBuilding.id,
-        //     floorID: this.props.selectedFloor.id,
-        //     locationID: this.props.selectedLocation.id
-        // };
-        // this.props.deleteAnyLocation(deletedItem);
+        deletedItem = {
+          ...deletedItem
+        };
+        this.props.deleteBrand(deletedItem);
         console.log('deleted', deletedItem);
       },
       onCancel: () => console.log('CANCEL: clicked'),
@@ -99,6 +119,10 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
     toastr.confirm(this.props.t('deleteConfirm'), toastrConfirmOptions);
   }
 
+  onPageChange = (page: number) => {
+    const newPage = page + 1;
+    this.props.setTableFilter({ page: newPage });
+  };
   /*
   * Set Columns sets columns to state
   */
@@ -152,35 +176,6 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
     if (rowInfo) {
       return {
         onClick: (e: React.MouseEvent<HTMLFormElement>) => {
-          const locationObject = rowInfo.original as
-            | Ilocation
-            | Ibuilding
-            | Ifloor
-            | Iroom;
-          if (this.buttonInAction && this.deleteAction === false) {
-            // this.props.toggleEditBrandModal();
-          } else if (this.deleteAction === false) {
-            if ('facilityID' in locationObject) {
-              // BUILDING
-              // this.props.setTableFilter({
-              //   facilityID: this.props.facility.id,
-              //   buildingID: locationObject.id,
-              //   locationID: undefined,
-              //   floorID: undefined
-              // });
-            } else if ('buildingID' in locationObject) {
-              // FLOOR
-              // this.props.setTableFilter({
-              //   locationID: undefined,
-              //   floorID: locationObject.id
-              // });
-            } else if ('floorID' in locationObject) {
-              // LOCATION
-              // this.props.setTableFilter({ locationID: locationObject.id });
-            } else {
-              // ROOM - we don't do anthything when they select a room...
-            }
-          }
           this.buttonInAction = false;
           this.deleteAction = false;
         },
@@ -196,8 +191,8 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
   };
 
   render() {
-    const { t, brandList } = this.props;
-
+    const { t, brandList = [], totalPages } = this.props;
+    console.log('brandList', brandList);
     return (
       <div className="manage-brand">
         <Banner
@@ -205,21 +200,33 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
           img={this.state.currentTile.srcBanner}
           color={this.state.currentTile.color}
         />
-
+        <div className="add-btn-wrapper">
+          <Button
+            className="table-add-button"
+            bsStyle="link"
+            onClick={() => {
+              this.setState({ selectedItem: {} }, () => {
+                this.props.toggleEditBrandModal();
+              });
+            }}
+          >
+            {t(`manageBrand:newBrand`)}
+          </Button>
+        </div>
         <ReactTable
           data={brandList}
           columns={this.state.columns}
-          getTrProps={this.getTrProps}
-          // pageSize={this.props.tableData.length}
-          // manual
-          // pages={this.props.userManage.totalPages}
-          // page={this.props.tableFilters.page - 1}
-          // showPageSizeOptions={false}
+          // getTrProps={this.getTrProps}
+          pageSize={brandList.length}
+          manual
+          pages={totalPages}
+          page={this.props.tableFilters.page - 1}
+          showPageSizeOptions={false}
           defaultPageSize={10}
           className={`beacon-table -highlight ${this.state.currentTile.color}`}
           previousText={t('common:previous')}
           nextText={t('common:next')}
-          // onPageChange={this.onPageChange}
+          onPageChange={this.onPageChange}
           // onSortedChange={this.onSortedChanged}
           sortable={true}
           multiSort={false}
@@ -249,13 +256,14 @@ const mapStateToProps = (state: IinitialState) => {
   return {
     brandList: state.manageBrand.brandList,
     totalPages: state.manageBrand.totalPages,
-    showEditBrandModal: state.manageBrand.showEditBrandModal
+    showEditBrandModal: state.manageBrand.showEditBrandModal,
+    tableFilters: state.manageBrand.tableFilters
   };
 };
 
 export default translate('manageBrand')(
   connect(
     mapStateToProps,
-    { getBrands, toggleEditBrandModal }
+    { getBrands, toggleEditBrandModal, deleteBrand, setTableFilter }
   )(ManageBrand)
 );

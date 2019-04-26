@@ -535,7 +535,7 @@ export interface ImanageLocationReducer {
 }
 
 export interface ImanageBrandReducer {
-  brandList: { [key: string]: Ibrand };
+  brandList: Ibrand[];
   totalPages: number;
   showEditBrandModal: boolean;
   tableFilters: ItableFiltersReducer;

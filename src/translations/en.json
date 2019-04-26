@@ -264,6 +264,15 @@
     "deleteOk": "Delete Location",
     "deleteConfirm": "Are you sure?"
   },
+  "manageBrand": {
+    "bannerTitle": "Manage Brands",
+    "newBrand": "Add Brand",
+    "editBrand": "Edit Brand",
+    "searchPlaceholder": "Search...",
+    "saveApprove": "Save & Approve",
+    "deleteOk": "Delete Location",
+    "deleteConfirm": "Are you sure?"
+  },
   "manageTraining": {
     "bannerTitle": "Training Progress",
     "searchPlaceholder": "Search by first, last, or email",

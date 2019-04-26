@@ -122,7 +122,8 @@ const icons = {
   manageAllTraining: require('../images/icons/BM_ManageAllTraining.png'),
   locations: require('../images/icons/BM_ManageLocations.png'),
   measurements: require('../images/icons/BM_Measurement.png'),
-  manageReport: require('../images/icons/BM_Reports.png')
+  manageReport: require('../images/icons/BM_Reports.png'),
+  brands: require('../images/icons/BM_Inventory.png')
 };
 
 const securityFunctions = {
@@ -504,6 +505,19 @@ const tiles = [
     height: 300,
     url: '/reports',
     securityFunction: securityFunctions.ViewReports.id,
+    description: ''
+  },
+  {
+    icon: icons.inventory,
+    iconType: 'img',
+    title: 'brands',
+    src: require('src/images/beaconManageInventory.jpg'),
+    srcBanner: require('src/images/beaconManageInventoryHeader.jpg'),
+    color: 'green',
+    width: 270,
+    height: 300,
+    url: '/brands',
+    securityFunction: securityFunctions.ViewInventory.id,
     description: ''
   }
 ];

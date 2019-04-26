@@ -58,6 +58,9 @@ const API = {
     },
     report: {
       run: `${root}/report/run`
+    },
+    brand: {
+      add: `${root}/brand`
     }
   },
   PUT: {
@@ -68,6 +71,9 @@ const API = {
     measurementPoint: {
       updateglobalmpl: `${root}/MeasurementPoint/UpdateGlobalMeasurementPointList`,
       updatecustomermpl: `${root}/MeasurementPoint/UpdateCustomerMeasurementPointList`
+    },
+    brand: {
+      update: `${root}/brand`
     }
   },
   DELETE: {
@@ -83,7 +89,10 @@ const API = {
       deleteglobalmeasurementpointselectoption: `${root}/MeasurementPoint/deleteglobalmeasurementpointselectoption`,
       deletecustomermeasurementpointselectoption: `${root}/MeasurementPoint/deletecustomermeasurementpointselectoption`
     },
-    user: `${root}/user/deleteaccount`
+    user: `${root}/user/deleteaccount`,
+    brand: {
+      remove: `${root}/brand`
+    }
   },
   GET: {
     building: {
@@ -144,6 +153,10 @@ const API = {
     },
     report: {
       defaults: `${root}/report/defaults`
+    },
+    brand: {
+      getall: `${root}/brand/getall`,
+      getsingle: `${root}/brand`
     }
   }
 };

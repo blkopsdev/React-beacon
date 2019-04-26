@@ -534,6 +534,13 @@ export interface ImanageLocationReducer {
   tableFilters: ItableFiltersReducer;
 }
 
+export interface ImanageBrandReducer {
+  brandList: { [key: string]: Ibrand };
+  totalPages: number;
+  showEditBrandModal: boolean;
+  // tableFilters: ItableFiltersReducer;
+}
+
 export interface ImanageJobReducer {
   data: { [key: string]: Ijob };
   fseUsers: Iuser[];
@@ -651,4 +658,5 @@ export interface IinitialState {
   manageMeasurementPointLists: ImanageMeasurementPointListsReducer;
   measurementPointResults: ImeasurementPointResultsReducer;
   manageReport: ImanageReportReducer;
+  manageBrand: ImanageBrandReducer;
 }

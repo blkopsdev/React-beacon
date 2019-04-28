@@ -284,6 +284,8 @@ export function productInfo(
         subcategoryOptions,
         systemSizeOptions
       };
+    case types.UPDATE_PRODUCT_INFO_SUCCESS:
+      return { ...state, ...action.payload };
     case types.USER_LOGOUT_SUCCESS:
       return initialState.manageInventory.productInfo;
     default:

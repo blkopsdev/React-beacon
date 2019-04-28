@@ -7,6 +7,7 @@ import * as types from './actionTypes';
 import { constants } from '../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { ItableFiltersParams } from '../models';
+import { FormUtil } from '../components/common/FormUtil';
 
 export function getBrands() {
   return (dispatch: any, getState: any) => {
@@ -53,11 +54,32 @@ export function saveBrand(brand: any) {
         if (data.status !== 200) {
           throw undefined;
         } else {
+          const newBrand = { name: brand, id: data.data };
           dispatch({
             type: types.ADD_BRAND_SUCCESS,
-            payload: { name: brand, id: data.data }
+            payload: newBrand
           });
-          dispatch({ type: types.TOGGLE_MODAL_EDIT_BRAND });
+          const inventoryProductInfo = getState().manageInventory.productInfo;
+          // Check if brands are loaded in inventory
+          if (
+            inventoryProductInfo.brandOptions &&
+            !!inventoryProductInfo.brandOptions.length
+          ) {
+            const brands = {
+              [newBrand.id]: newBrand,
+              ...inventoryProductInfo.brands
+            };
+            const brandOptions = [
+              FormUtil.convertToSingleOption(newBrand),
+              ...inventoryProductInfo.brandOptions
+            ];
+            // Add new brand in inventory brand list
+            dispatch({
+              type: types.UPDATE_PRODUCT_INFO_SUCCESS,
+              payload: { brands, brandOptions }
+            });
+          }
+          // dispatch({ type: types.TOGGLE_MODAL_EDIT_BRAND });
           toastr.success('Success', `Created Brand.`, constants.toastrSuccess);
         }
       })
@@ -87,7 +109,31 @@ export function updateBrand(brand: any) {
             type: types.EDIT_BRAND_SUCCESS,
             payload: brand
           });
-          dispatch({ type: types.TOGGLE_MODAL_EDIT_BRAND });
+          const inventoryProductInfo = getState().manageInventory.productInfo;
+          // Check if brands are loaded in inventory
+          if (
+            inventoryProductInfo.brandOptions &&
+            !!inventoryProductInfo.brandOptions.length
+          ) {
+            const brands = {
+              ...inventoryProductInfo.brands,
+              [brand.id]: brand
+            };
+            const brandOptions = inventoryProductInfo.brandOptions.map(
+              (b: any) => {
+                if (b.value === brand.id) {
+                  return { ...b, label: brand.name };
+                }
+                return b;
+              }
+            );
+            // Update brand in inventory brand list
+            dispatch({
+              type: types.UPDATE_PRODUCT_INFO_SUCCESS,
+              payload: { brands, brandOptions }
+            });
+          }
+          // dispatch({ type: types.TOGGLE_MODAL_EDIT_BRAND });
           toastr.success('Success', `Updated Brand.`, constants.toastrSuccess);
         }
       })
@@ -116,6 +162,25 @@ export function deleteBrand(brand: any) {
             type: types.REMOVE_BRAND_SUCCESS,
             payload: brand
           });
+          const inventoryProductInfo = getState().manageInventory.productInfo;
+          // Check if brands are loaded in inventory
+          if (
+            inventoryProductInfo.brandOptions &&
+            !!inventoryProductInfo.brandOptions.length
+          ) {
+            const brands = { ...inventoryProductInfo.brands };
+            if (brands.hasOwnProperty([brand.id])) {
+              delete brands[brand.id];
+            }
+            const brandOptions = inventoryProductInfo.brandOptions.filter(
+              (b: any) => b.value !== brand.id
+            );
+            // Update brand in inventory brand list
+            dispatch({
+              type: types.UPDATE_PRODUCT_INFO_SUCCESS,
+              payload: { brands, brandOptions }
+            });
+          }
           // dispatch({type: types.TOGGLE_MODAL_EDIT_BRAND});
           toastr.success('Success', `Deleted Brand.`, constants.toastrSuccess);
         }

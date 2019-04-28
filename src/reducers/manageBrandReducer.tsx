@@ -48,7 +48,6 @@ export default function brandManage(
   state: ImanageBrandReducer = initialState.manageBrand,
   action: any
 ) {
-  console.log(action);
   return {
     brandList: manageBrandReducer(state.brandList, action),
     totalPages: brandManageTotalPages(state.totalPages, action),

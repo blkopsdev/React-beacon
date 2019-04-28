@@ -1,5 +1,6 @@
 import Banner from '../common/Banner';
 import * as React from 'react';
+import { FieldConfig } from 'react-reactive-form';
 import { I18n, translate } from 'react-i18next';
 import { emptyTile } from '../../reducers/initialState';
 import { RouteComponentProps } from 'react-router';
@@ -14,6 +15,8 @@ import {
   toggleEditBrandModal
 } from '../../actions/manageBrandActions';
 import { TableUtil } from '../common/TableUtil';
+import { FormUtil } from '../common/FormUtil';
+import SearchTableForm from '../common/SearchTableForm';
 import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toastr } from 'react-redux-toastr';
@@ -47,7 +50,7 @@ interface Istate {
   currentTile: Itile;
   columns: any[];
   selectedItem: any;
-  searchFieldConfig: any;
+  searchFieldConfig: FieldConfig;
 }
 
 class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
@@ -62,7 +65,7 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
       currentTile: emptyTile,
       columns: [],
       selectedItem: {},
-      searchFieldConfig: {}
+      searchFieldConfig: this.buildSearchControls()
     };
   }
   componentWillMount(): void {
@@ -96,6 +99,37 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
       this.props.getBrands();
     }
   }
+
+  buildSearchControls = (): FieldConfig => {
+    const mainSearchControls = {
+      search: {
+        render: FormUtil.TextInputWithoutValidation,
+        meta: {
+          label: 'common:Brand',
+          colWidth: 3,
+          type: 'text',
+          placeholder: 'Search by text',
+          defaultValue: this.props.tableFilters.brand,
+          isClearable: true
+        }
+      }
+    };
+
+    const searchFieldConfig = {
+      controls: { ...mainSearchControls }
+    } as FieldConfig;
+    return searchFieldConfig;
+  };
+
+  onSearchValueChanges = (value: any, key: string) => {
+    switch (key) {
+      case 'search':
+        this.props.setTableFilter({ search: value, page: 1 });
+        break;
+      default:
+        break;
+    }
+  };
 
   handleEdit(selectedItem: any) {
     this.setState({ selectedItem });
@@ -200,7 +234,19 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
           img={this.state.currentTile.srcBanner}
           color={this.state.currentTile.color}
         />
-        <div className="add-btn-wrapper">
+        <SearchTableForm
+          fieldConfig={this.state.searchFieldConfig}
+          handleSubmit={this.props.getBrands}
+          loading={this.props.loading}
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+          subscribeValueChanges={true}
+          onValueChanges={this.onSearchValueChanges}
+          t={this.props.t}
+          showSearchButton={false}
+        />
+        <div>
           <Button
             className="table-add-button"
             bsStyle="link"

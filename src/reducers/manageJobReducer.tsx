@@ -7,7 +7,7 @@ import {
   createFormValuesWithName,
   createSelectedIDWithName
 } from './commonReducers';
-import initialState from './initialState';
+import initialState, { initialJob } from './initialState';
 import * as types from '../actions/actionTypes';
 import { keyBy } from 'lodash';
 
@@ -91,6 +91,7 @@ export default function jobManage(
 
 const cleanJobObject = (job: Ijob) => {
   return {
+    ...initialJob,
     ...pickBy(job, (property, key) => property !== null)
   } as Ijob;
 };

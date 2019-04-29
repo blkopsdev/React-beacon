@@ -565,7 +565,7 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
           nextText={t('common:next')}
           // onPageChange={this.onPageChange}
           // onSortedChange={this.onSortedChanged}
-          sortable={true}
+          sortable={false}
           multiSort={false}
           noDataText={t('common:noDataText')}
           resizable={false}

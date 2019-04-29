@@ -52,5 +52,12 @@ export const migrations = {
       ...prevState,
       manageReport: initialState.manageReport
     };
+  },
+  20: state => {
+    const prevState = state as IinitialState;
+    return {
+      ...prevState,
+      manageBrand: initialState.manageBrand
+    };
   }
 } as MigrationManifest;

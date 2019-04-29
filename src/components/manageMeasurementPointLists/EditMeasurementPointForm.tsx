@@ -69,9 +69,7 @@ const buildMainMeasurementPointControls = (
     guideText = null,
     allowNotes = true,
     label,
-    showInReport = true,
-    selectRememberBetweenDevice = null,
-    selectRememberBetweenInspection = null
+    showInReport = true
   } = measurementPoint;
   const selectedType = type
     ? { label: constants.measurementPointTypeEnum[type], value: type }
@@ -138,34 +136,7 @@ const buildMainMeasurementPointControls = (
       },
       formState: { value: getTrueFalseOption(showInReport), disabled }
     },
-    selectRememberBetweenDevice: {
-      options: { validators: [Validators.required] },
-      render: FormUtil.Select,
-      meta: {
-        label: 'manageMeasurementPointLists:selectRememberBetweenDevice',
-        colWidth: 12,
-        options: trueFalseOptions,
-        isClearable: false
-      },
-      formState: {
-        value: getTrueFalseOption(selectRememberBetweenDevice),
-        disabled
-      }
-    },
-    selectRememberBetweenInspection: {
-      options: { validators: [Validators.required] },
-      render: FormUtil.Select,
-      meta: {
-        label: 'manageMeasurementPointLists:selectRememberBetweenInspection',
-        colWidth: 12,
-        options: trueFalseOptions,
-        isClearable: false
-      },
-      formState: {
-        value: getTrueFalseOption(selectRememberBetweenInspection),
-        disabled
-      }
-    },
+
     helpText: {
       render: FormUtil.RichTextEditor,
       meta: {
@@ -241,8 +212,44 @@ const buildNumericControl = (
   } as { [key: string]: GroupProps };
 };
 
-const buildIsRequiredControl = (formState: IformSate) => {
+const buildCommonNonPassFailControls = (
+  measurementPoint: ImeasurementPoint,
+  disabled: boolean
+): { [key: string]: GroupProps } => {
+  const {
+    selectRememberBetweenDevice = null,
+    selectRememberBetweenInspection = null,
+    isRequired = true
+  } = measurementPoint;
   return {
+    selectRememberBetweenDevice: {
+      options: { validators: [Validators.required] },
+      render: FormUtil.Select,
+      meta: {
+        label: 'manageMeasurementPointLists:selectRememberBetweenDevice',
+        colWidth: 12,
+        options: trueFalseOptions,
+        isClearable: false
+      },
+      formState: {
+        value: getTrueFalseOption(selectRememberBetweenDevice),
+        disabled
+      }
+    },
+    selectRememberBetweenInspection: {
+      options: { validators: [Validators.required] },
+      render: FormUtil.Select,
+      meta: {
+        label: 'manageMeasurementPointLists:selectRememberBetweenInspection',
+        colWidth: 12,
+        options: trueFalseOptions,
+        isClearable: false
+      },
+      formState: {
+        value: getTrueFalseOption(selectRememberBetweenInspection),
+        disabled
+      }
+    },
     isRequired: {
       render: FormUtil.SelectWithoutValidation,
       meta: {
@@ -251,10 +258,11 @@ const buildIsRequiredControl = (formState: IformSate) => {
         options: trueFalseOptions,
         isClearable: false
       },
-      formState
+      formState: { value: getTrueFalseOption(isRequired), disabled }
     }
   };
 };
+
 const buildGroupFieldConfig = (formState: IformSate) => {
   return {
     controls: {
@@ -387,8 +395,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
       numericMinValue = null,
       numericMaxValue = null,
       numericAllowDecimals = null,
-      customerID,
-      isRequired = true
+      customerID
     } = measurementPoint;
 
     let selectedPassFailDefault = null;
@@ -428,10 +435,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
         // if this is not a pass fail then add the isRequired select
         extraControls = {
           ...extraControls,
-          ...buildIsRequiredControl({
-            value: getTrueFalseOption(isRequired),
-            disabled
-          })
+          ...buildCommonNonPassFailControls(measurementPoint, disabled)
         };
       }
       const mainControls = buildMainMeasurementPointControls(

@@ -467,6 +467,7 @@ export interface ItableFiltersReducer {
 export interface ItableFiltersParams {
   search?: string;
   page?: number;
+  name?: string;
   company?: Ioption;
   type?: Ioption;
   startDate?: string;

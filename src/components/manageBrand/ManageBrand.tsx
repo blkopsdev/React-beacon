@@ -102,7 +102,7 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
 
   buildSearchControls = (): FieldConfig => {
     const mainSearchControls = {
-      search: {
+      name: {
         render: FormUtil.TextInputWithoutValidation,
         meta: {
           label: 'common:Brand',
@@ -123,8 +123,8 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
 
   onSearchValueChanges = (value: any, key: string) => {
     switch (key) {
-      case 'search':
-        this.props.setTableFilter({ search: value, page: 1 });
+      case 'name':
+        this.props.setTableFilter({ name: value, page: 1 });
         break;
       default:
         break;

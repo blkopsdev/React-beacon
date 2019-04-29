@@ -12,10 +12,10 @@ import { FormUtil } from '../components/common/FormUtil';
 export function getBrands() {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());
-    const { page, search } = getState().manageBrand.tableFilters;
+    const { page, name } = getState().manageBrand.tableFilters;
     const axiosOptions: AxiosRequestConfig = {
       method: 'get',
-      params: { page, search }
+      params: { page, name }
     };
     const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
     const url = API.GET.brand.getall;

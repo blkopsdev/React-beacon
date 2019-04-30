@@ -160,7 +160,9 @@ const getPreviousResult = (
       previousResult = getMostRecentResult(installResults);
     } else {
       const MPLresults = getMeasurementPointListResults(mpResults, selectedMPL);
-      previousResult = getMostRecentResult(MPLresults);
+      if (MPLresults.length) {
+        previousResult = getMostRecentResult(MPLresults);
+      }
     }
     return previousResult;
   } else {

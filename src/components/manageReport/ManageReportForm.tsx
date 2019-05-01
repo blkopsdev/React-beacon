@@ -63,7 +63,7 @@ export class EditReportForm extends React.Component<Iprops, Istate> {
       .defaultCoverLetter;
 
     // Field config to configure form
-    const fieldConfigControls = {
+    const jobSelectControl = {
       jobID: {
         render: FormUtil.Select,
         meta: {
@@ -80,7 +80,9 @@ export class EditReportForm extends React.Component<Iprops, Istate> {
           value: jobID,
           disabled
         }
-      },
+      }
+    } as { [key: string]: GroupProps };
+    const coverLetterControl = {
       coverLetter: {
         render: FormUtil.RichTextEditor,
         meta: {
@@ -99,10 +101,14 @@ export class EditReportForm extends React.Component<Iprops, Istate> {
         }
       }
     } as { [key: string]: GroupProps };
-    const fieldConfig = {
-      controls: { ...fieldConfigControls }
-    };
-    return fieldConfig as FieldConfig;
+    if (
+      this.props.selectedDefaultReport.reportType ===
+      constants.reportTypeEnum.jobNotes
+    ) {
+      return { controls: { ...jobSelectControl } };
+    } else {
+      return { controls: { ...jobSelectControl, ...coverLetterControl } };
+    }
   };
 
   subscribeToValueChanges = () => {

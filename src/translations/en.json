@@ -138,7 +138,7 @@
     "facility": "Facility",
     "name": "Name",
     "annualInspection": "Annual Inspection Report",
-    "verification": "Job Comments / Deficiency Report",
+    "jobNotes": "Job Comments / Deficiency Report",
     "coverLetter": "Cover Letter",
     "jobPlaceholder": "Search..."
   },

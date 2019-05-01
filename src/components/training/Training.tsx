@@ -17,7 +17,6 @@ import {
   loadCourses,
   setLesson,
   getAllLessons,
-  getAllQuizzes,
   getAllLessonProgress,
   trainingCheckout,
   addCourseToCart,
@@ -54,6 +53,7 @@ import { closeAllModals } from 'src/actions/commonActions';
 import Quiz from './Quiz';
 import { TrainingCourse } from './TrainingCourse';
 import { toastr } from 'react-redux-toastr';
+import { getAllQuizzes } from 'src/actions/trainingQuizActions';
 
 interface RouterParams {
   courseID: string;

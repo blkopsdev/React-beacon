@@ -15,9 +15,6 @@ import {
 import {
   getLessonsByCourseID,
   setLesson,
-  // getQuizzesByLessonID,
-  setQuiz,
-  saveQuizResults,
   startQuiz
 } from '../../actions/trainingActions';
 // import Badge from '../course/Badge'
@@ -35,6 +32,7 @@ import * as moment from 'moment';
 import { toastr } from 'react-redux-toastr';
 import { constants } from 'src/constants/constants';
 import { LinkContainer } from 'react-router-bootstrap';
+import { setQuiz, saveQuizResult } from 'src/actions/trainingQuizActions';
 
 const TimeLeftBanner = ({ timeLeft }: { timeLeft?: number }) => {
   if (!timeLeft) {
@@ -68,7 +66,7 @@ interface IdispatchProps {
   // getQuizzesByLessonID: typeof getQuizzesByLessonID;
   setLesson: typeof setLesson;
   setQuiz: typeof setQuiz;
-  saveQuizResults: typeof saveQuizResults;
+  saveQuizResult: any;
   loading: boolean;
   startQuiz: (id: string) => Promise<void>;
 }
@@ -311,18 +309,7 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
     }
   };
 
-  // showBadge(badge: GFBadge) {
-  // const toastrOptions = {
-  //   ...constants.toastrSuccessBadge,
-  //   component: <Badge badge={badge} />,
-  //   className: 'toast-badge'
-  // }
-  // toastr.success('', '', toastrOptions)
-  // }
-
   handleChange = (option: any) => {
-    // this.setState({ [e.target.name]: e.target.value });
-    // it was set to option.option.trim();
     if (option.name === 'textAnswer') {
       this.setState({ textAnswer: option.option, selectedAnswer: option });
     } else {
@@ -366,11 +353,12 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
     if (this.goingToNextQuestion) {
       return;
     }
+    this.goingToNextQuestion = true;
+
     if (this.props.quiz.questions.length === this.state.questionIndex + 1) {
       this.finishQuiz();
       return;
     }
-    this.goingToNextQuestion = true;
     setTimeout(() => {
       const newIndex = this.state.questionIndex + 1;
       this.goingToNextQuestion = false;
@@ -394,14 +382,13 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
   */
   checkAnswer = (e: any) => {
     e.preventDefault();
-
-    setTimeout(() => {
-      this.quizLoading = false;
-    }, 200);
     if (this.quizLoading) {
       return;
     }
     this.quizLoading = true;
+    setTimeout(() => {
+      this.quizLoading = false;
+    }, 200);
 
     if (this.state.checkingAnswer) {
       this.nextQuestion();
@@ -460,14 +447,15 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
       quiz = this.saveQuizAnswer();
     }
 
-    this.props.saveQuizResults(quiz, this.props.user);
-    this.setState({
-      selectedAnswer: {},
-      checkingAnswer: false,
-      quizComplete: true,
-      textAnswer: '',
-      currentQuiz: quiz,
-      questionIndex: 0
+    this.props.saveQuizResult().then(() => {
+      this.setState({
+        selectedAnswer: {},
+        checkingAnswer: false,
+        quizComplete: true,
+        textAnswer: '',
+        currentQuiz: quiz,
+        questionIndex: 0
+      });
     });
     // mixpanel.track("Finished Practice Exercise", {
     //   quizID: this.props.quiz.id,
@@ -475,7 +463,7 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
     // });
   };
 
-  printScore = () => {
+  calculateScore = () => {
     let numCorrect = 0;
     const tot = this.state.currentQuiz.questions.length;
     forEach(this.state.currentQuiz.questions, q => {
@@ -483,7 +471,12 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
         numCorrect++;
       }
     });
-    const score = (numCorrect / tot) * 100;
+    return { score: (numCorrect / tot) * 100, numCorrect, tot };
+  };
+
+  printScore = () => {
+    const { score, numCorrect, tot } = this.calculateScore();
+
     let grade;
     let message;
     if (score >= 80 && score <= 100) {
@@ -496,7 +489,7 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
       grade = 'b';
     } else if (score >= 0 && score <= 59) {
       message =
-        "It looks like you're still learning the material - don't give up.  Review the lesson one more time.";
+        "It looks like you're still learning the material - don't give up.  Review the lesson one more time, and then make sure to see your teacher for some help.";
       grade = 'c';
     }
     return (
@@ -707,7 +700,7 @@ export default connect(
     getLessonsByCourseID,
     setLesson,
     setQuiz,
-    saveQuizResults,
+    saveQuizResult,
     startQuiz
   }
 )(Quiz);

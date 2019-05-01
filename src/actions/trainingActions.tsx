@@ -8,11 +8,10 @@ import {
   LessonProgress,
   ThunkResult,
   IshoppingCartProduct,
-  GFQuizItem,
   GFCourse
 } from 'src/models';
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
-import { find, forEach, sortBy } from 'lodash';
+import { find, sortBy } from 'lodash';
 import { toastr } from 'react-redux-toastr';
 import { adalFetch } from 'react-adal';
 import { authContext } from './userActions';
@@ -116,145 +115,6 @@ export function getAllLessons(user: Iuser): ThunkResult<void> {
         dispatch({ type: types.LOAD_LESSONS_FAILED, error });
         constants.handleError({ response: error }, 'load lessons');
         console.error('Error getting all lessons', error);
-      });
-  };
-}
-
-export function getQuizSuccess(quiz: GFQuizItem) {
-  return { type: types.LOAD_QUIZ, quiz };
-}
-
-export function setQuiz(quiz: GFQuizItem): ThunkResult<void> {
-  return dispatch => {
-    dispatch(getQuizSuccess(quiz));
-  };
-}
-
-/*
-* Complete list of quizzes without the questions
-*/
-export function getAllQuizzes(user: Iuser): ThunkResult<void> {
-  return dispatch => {
-    dispatch(beginAjaxCall());
-    const axiosOptions: AxiosRequestConfig = {
-      method: 'get'
-    };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
-    const url = API.GET.trainingCurriculum.allQuizzes;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
-      .then((response: AxiosResponse<any>) => {
-        if (response.status !== 200) {
-          throw response;
-        }
-        dispatch({ type: types.LOAD_QUIZZES_SUCCESS, quizzes: response.data });
-        return response.data;
-      })
-      .catch((error: AxiosError) => {
-        console.error('Error when trying to get all quizzes', error);
-        dispatch({ type: types.LOAD_QUIZZES_FAILED, error });
-        constants.handleError({ response: error }, 'loading all quizzes');
-      });
-  };
-}
-
-/*
-* Quizzes with the questions for a particular lesson
-*/
-export function getQuizzesByLessonID(
-  lessonID: string,
-  user: Iuser
-): ThunkResult<void> {
-  return dispatch => {
-    dispatch(beginAjaxCall());
-    const axiosOptions: AxiosRequestConfig = {
-      method: 'get'
-    };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
-    const url = `${
-      API.GET.trainingCurriculum.quizzesByLessonID
-    }?lessonID=${lessonID}`;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
-      .then((response: AxiosResponse<any>) => {
-        if (response.status !== 200) {
-          throw response;
-        }
-        const parsedQuizzes = response.data.map((quiz: GFQuizItem) => {
-          const parsedQuestions = quiz.questions.map((question: any) => {
-            if (question.options) {
-              const parsedOptions = question.options
-                .split('*||*')
-                .map((option: any) => {
-                  return JSON.parse(option);
-                });
-              return { ...question, options: parsedOptions };
-            } else {
-              return question;
-            }
-          });
-          return { ...quiz, questions: parsedQuestions };
-        });
-
-        const quizzes = sortBy(parsedQuizzes, (el: any) => {
-          return el.order;
-        });
-
-        dispatch({ type: types.LOAD_QUIZZES_SUCCESS, quizzes });
-        return quizzes;
-      })
-      .catch((error: AxiosError) => {
-        console.error('Error when trying to get all quizzes', error);
-        dispatch({ type: types.LOAD_QUIZZES_FAILED, error });
-        constants.handleError({ response: error }, 'loading all quizzes');
-      });
-  };
-}
-
-/*
-    Save quiz results
-  */
-export function saveQuizResults(
-  quiz: GFQuizItem,
-  user: Iuser
-): ThunkResult<void> {
-  return dispatch => {
-    dispatch(beginAjaxCall());
-
-    // grind quiz results into the sausage that David's api is expecting
-    const answers: any[] = [];
-    let numCorrect: number = 0;
-    forEach(quiz.questions, q => {
-      if (q && q.userAnswer && q.userAnswer.isAnswer) {
-        numCorrect++;
-      }
-      answers.push({
-        QuestionID: q.id,
-        Answer: q.userAnswer.option,
-        IsCorrect: q.userAnswer.isAnswer
-      });
-    });
-    const score = ((numCorrect / quiz.questions.length) * 100).toFixed(0);
-    const body = {
-      Answers: answers,
-      QuizID: quiz.id,
-      Score: score
-    };
-    const axiosOptions: AxiosRequestConfig = {
-      method: 'post',
-      data: body
-    };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
-    const url = API.POST.training.savequiz;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
-      .then((data: AxiosResponse<any>) => {
-        dispatch({
-          type: types.SAVE_QUIZ_SUCCESS,
-          progress: data.data
-        });
-      })
-      .catch((error: any) => {
-        console.error('Error saving quiz', error);
-        dispatch({ type: types.SAVE_QUIZ_FAILED });
-        constants.handleError(error, 'save quiz');
       });
   };
 }

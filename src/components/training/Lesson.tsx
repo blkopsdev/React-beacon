@@ -3,12 +3,7 @@ import { connect } from 'react-redux';
 import { filter, isEmpty } from 'lodash';
 import { GFQuizItem, GFLesson, GFCourse, LessonProgress } from '../../models';
 
-import {
-  setLesson,
-  saveLessonProgress,
-  setQuiz,
-  getQuizzesByLessonID
-} from '../../actions/trainingActions';
+import { setLesson, saveLessonProgress } from '../../actions/trainingActions';
 
 import {
   ListGroup,
@@ -26,6 +21,7 @@ import Player from '@vimeo/player';
 import * as moment from 'moment';
 import { toastr } from 'react-redux-toastr';
 import { constants } from 'src/constants/constants';
+import { setQuiz, getQuizzesByLessonID } from 'src/actions/trainingQuizActions';
 
 interface RouterParams {
   courseID: string;
@@ -122,11 +118,7 @@ class Lesson extends React.Component<Props, State> {
     if (
       JSON.stringify(prevProps.quizzes) !== JSON.stringify(this.props.quizzes)
     ) {
-      // this.loadQuizzes();
-      const lessonQuizzes = filter(this.props.quizzes, {
-        lessonID: this.props.match.params.lessonID
-      });
-      this.setState({ lessonQuizzes } as State);
+      this.filterVisibleQuizzes();
     }
     if (
       JSON.stringify(prevProps.lessons) !== JSON.stringify(this.props.lessons)
@@ -257,11 +249,24 @@ class Lesson extends React.Component<Props, State> {
     }
   };
 
+  /*
+  * Get the quizzes with the questions
+  */
   loadQuizzes = () => {
     this.props.getQuizzesByLessonID(
       this.props.match.params.lessonID,
       this.props.user
     );
+    if (this.props.quizzes.length) {
+      this.filterVisibleQuizzes();
+    }
+  };
+
+  filterVisibleQuizzes = () => {
+    const lessonQuizzes = filter(this.props.quizzes, {
+      lessonID: this.props.match.params.lessonID
+    });
+    this.setState({ lessonQuizzes });
   };
 
   handleChange = (e: any) => {

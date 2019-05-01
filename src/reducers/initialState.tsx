@@ -274,6 +274,12 @@ export default {
     selectedLocation: initialLoc,
     selectedRoom: initialRoom
   },
+  manageBrand: {
+    totalPages: 1,
+    brandList: [],
+    showEditBrandModal: false,
+    tableFilters: initialTableFilters
+  },
   manageTeam: {
     totalPages: 1,
     data: [],

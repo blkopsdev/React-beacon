@@ -467,6 +467,7 @@ export interface ItableFiltersReducer {
 export interface ItableFiltersParams {
   search?: string;
   page?: number;
+  name?: string;
   company?: Ioption;
   type?: Ioption;
   startDate?: string;
@@ -531,6 +532,13 @@ export interface ImanageLocationReducer {
   facility: Ifacility;
   totalPages: number;
   showEditLocationModal: boolean;
+  tableFilters: ItableFiltersReducer;
+}
+
+export interface ImanageBrandReducer {
+  brandList: Ibrand[];
+  totalPages: number;
+  showEditBrandModal: boolean;
   tableFilters: ItableFiltersReducer;
 }
 
@@ -651,4 +659,5 @@ export interface IinitialState {
   manageMeasurementPointLists: ImanageMeasurementPointListsReducer;
   measurementPointResults: ImeasurementPointResultsReducer;
   manageReport: ImanageReportReducer;
+  manageBrand: ImanageBrandReducer;
 }

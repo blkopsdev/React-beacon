@@ -603,7 +603,8 @@ export const constants = {
       error.msg &&
       (error.msg === 'login_required' ||
         error.msg === 'login required' ||
-        error.msg === 'interaction_required')
+        error.msg === 'interaction_required' ||
+        error.msg === 'Token Renewal Failed')
     ) {
       // adalFetch is catching that login is required
       console.warn('attempting to catch expired session and login again');

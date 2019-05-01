@@ -18,7 +18,6 @@ import { TableUtil } from '../common/TableUtil';
 import { FormUtil } from '../common/FormUtil';
 import SearchTableForm from '../common/SearchTableForm';
 import { Button } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { toastr } from 'react-redux-toastr';
 import ReactTable, { FinalState, RowInfo } from 'react-table';
 import EditBrandModal from './EditBrandModal';
@@ -167,34 +166,6 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
           Header: 'name',
           accessor: 'name',
           minWidth: 300
-        },
-        {
-          Header: '',
-          Cell: row => (
-            <div>
-              <Button
-                bsStyle="link"
-                style={{ float: 'right', marginRight: 11 }}
-                onClick={() => {
-                  this.buttonInAction = true;
-                  this.handleEdit(row.original);
-                }}
-              >
-                <FontAwesomeIcon icon={['far', 'edit']} />
-              </Button>
-              <Button
-                bsStyle="link"
-                style={{ float: 'right', color: 'red' }}
-                onClick={() => {
-                  this.buttonInAction = true;
-                  this.deleteAction = true;
-                  this.handleDelete(row.original);
-                }}
-              >
-                <FontAwesomeIcon icon={['far', 'times']} />
-              </Button>
-            </div>
-          )
         }
       ],
       this.props.t
@@ -212,12 +183,13 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
         onClick: (e: React.MouseEvent<HTMLFormElement>) => {
           this.buttonInAction = false;
           this.deleteAction = false;
-        },
-        style: {
-          background: this.state.selectedRow[rowInfo.viewIndex]
-            ? constants.colors[`${this.state.currentTile.color}Tr`]
-            : ''
+          this.handleEdit(rowInfo.original);
         }
+        // style: {
+        //   background: this.state.selectedRow[rowInfo.viewIndex]
+        //     ? constants.colors[`${this.state.currentTile.color}Tr`]
+        //     : ''
+        // }
       };
     } else {
       return {};
@@ -262,7 +234,7 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
         <ReactTable
           data={brandList}
           columns={this.state.columns}
-          // getTrProps={this.getTrProps}
+          getTrProps={this.getTrProps}
           pageSize={brandList.length}
           manual
           pages={totalPages}

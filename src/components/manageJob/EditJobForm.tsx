@@ -54,6 +54,19 @@ class EditJobForm extends React.Component<Iprops, Istate> {
       fieldConfig: this.buildFieldConfig()
     };
   }
+  componentWillMount() {
+    if (this.props.selectedJob.customerID.length) {
+      this.props.getFacilitiesByCustomer(this.props.selectedJob.customerID);
+    }
+    if (this.props.selectedJob.id.length) {
+      if (this.props.formValues.id !== this.props.selectedJob.id) {
+        this.props.setFormValues({ id: this.props.selectedJob.id });
+      }
+    } else {
+      this.props.setFormValues({});
+    }
+  }
+
   componentDidUpdate(prevProps: Iprops) {
     if (
       JSON.stringify(prevProps.facilityOptions) !==
@@ -68,19 +81,6 @@ class EditJobForm extends React.Component<Iprops, Istate> {
       this.setState({ fieldConfig: this.buildFieldConfig() });
     }
   }
-  componentWillMount() {
-    if (this.props.selectedJob.customerID.length) {
-      this.props.getFacilitiesByCustomer(this.props.selectedJob.customerID);
-    }
-    if (this.props.selectedJob.id.length) {
-      if (this.props.formValues.id !== this.props.selectedJob.id) {
-        this.props.setFormValues({ id: this.props.selectedJob.id });
-      }
-    } else {
-      this.props.setFormValues({});
-    }
-  }
-
   componentWillUnmount() {
     if (this.subscription) {
       this.subscription.unsubscribe();
@@ -328,6 +328,7 @@ class EditJobForm extends React.Component<Iprops, Istate> {
         }, 500);
         break;
       case 'customerID':
+        this.props.updateFormValue({ [key]: value });
         if (value && value.value) {
           this.props.getFacilitiesByCustomer(value.value);
         }

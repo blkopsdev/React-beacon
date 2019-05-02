@@ -101,7 +101,10 @@ export default connect(
 
 const prepJobsForOptions = (jobs: Ijob[]) => {
   const jobsWithName = map(jobs, job => {
-    const startDate = moment.utc(job.startDate).format('MM/DD/YYYY');
+    const startDate = moment
+      .utc(job.startDate)
+      .local()
+      .format('MM/DD/YYYY');
     const jobType = constants.jobTypesByID[job.jobTypeID];
     const name = `${startDate} ${jobType}`;
     return { ...job, name };

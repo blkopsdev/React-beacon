@@ -102,7 +102,10 @@ class ManageUserQueue extends React.Component<Iprops & IdispatchProps, Istate> {
         {
           Header: 'created',
           accessor: ({ user }: { user: Iuser }) => {
-            return moment.utc(user.createDate).format('MM/DD/YYYY hh:mm a');
+            return moment
+              .utc(user.createDate)
+              .local()
+              .format('MM/DD/YYYY hh:mm a');
           },
           id: 'created'
         },

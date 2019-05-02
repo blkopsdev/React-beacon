@@ -123,7 +123,10 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
           Header: 'start date',
           accessor: ({ startDate }: Ijob) => {
             return startDate
-              ? moment.utc(startDate).format('MM/DD/YYYY')
+              ? moment
+                  .utc(startDate)
+                  .local()
+                  .format('MM/DD/YYYY')
               : 'n/a';
           },
           id: 'startDate',
@@ -132,7 +135,12 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
         {
           Header: 'end date',
           accessor: ({ endDate }: Ijob) => {
-            return endDate ? moment.utc(endDate).format('MM/DD/YYYY') : 'n/a';
+            return endDate
+              ? moment
+                  .utc(endDate)
+                  .local()
+                  .format('MM/DD/YYYY')
+              : 'n/a';
           },
           id: 'endDate',
           width: 110

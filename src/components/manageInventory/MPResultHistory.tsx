@@ -54,7 +54,10 @@ export const MPResultHistory = (props: Iprops) => {
               >
                 <Row>
                   <Col md={4}>
-                    {moment.utc(result.createDate).format('MM/DD/YYYY hh:mm a')}
+                    {moment
+                      .utc(result.createDate)
+                      .local()
+                      .format('MM/DD/YYYY hh:mm a')}
                   </Col>
                   <Col md={4} className="notes-column truncate">
                     {result.notes}

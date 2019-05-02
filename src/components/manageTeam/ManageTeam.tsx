@@ -97,7 +97,10 @@ class TeamManage extends React.Component<Iprops & IdispatchProps, Istate> {
           Header: 'common:login',
           accessor: ({ lastLoginDate }: Iuser) => {
             return lastLoginDate
-              ? moment.utc(lastLoginDate).format('MM/DD/YYYY hh:mm a')
+              ? moment
+                  .utc(lastLoginDate)
+                  .local()
+                  .format('MM/DD/YYYY hh:mm a')
               : 'n/a';
           },
           id: 'login'

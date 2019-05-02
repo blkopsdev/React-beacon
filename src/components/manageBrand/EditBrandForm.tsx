@@ -16,15 +16,10 @@ import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
-import {
-  // Ibuilding,
-  ItableFiltersReducer
-  // Ifloor,
-  // Ilocation,
-  // Ifacility
-} from '../../models';
+import { ItableFiltersReducer } from '../../models';
 import { saveBrand, updateBrand } from '../../actions/manageBrands';
 import { constants } from 'src/constants/constants';
+import { clearSelectedBrandID } from '../../actions/manageBrandActions';
 // import {saveBrand, updateBrand} from "../../actions/manageBrandActions";
 
 const buildFieldConfig = () => {
@@ -50,8 +45,7 @@ const buildFieldConfig = () => {
 
 interface Iprops {
   toggleModal: () => void;
-  selectedItem?: any;
-  selectedType: 'Brand';
+  selectedBrand?: any;
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;
@@ -59,10 +53,7 @@ interface Iprops {
   tableFilters: ItableFiltersReducer;
   saveBrand: typeof saveBrand;
   updateBrand: typeof updateBrand;
-  // facility: Ifacility;
-  // selectedBuilding: Ibuilding;
-  // selectedFloor: Ifloor;
-  // selectedLocation: Ilocation;
+  clearSelectedID: typeof clearSelectedBrandID;
 }
 
 class ManageLocationForm extends React.Component<Iprops, {}> {
@@ -74,17 +65,21 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
   }
 
   componentDidMount() {
-    if (!this.props.selectedItem) {
-      console.log(`adding a new ${this.props.selectedType}`);
+    if (!this.props.selectedBrand) {
+      console.log(`adding a new Brand`);
     } else {
       // set values
-      forEach(this.props.selectedItem, (value, key) => {
+      forEach(this.props.selectedBrand, (value, key) => {
         if (typeof value === 'string' && key.split('ID').length === 1) {
           // it is a string and did Not find 'ID'
           this.form.patchValue({ [key]: value });
         }
       });
     }
+  }
+
+  componentWillUnmount() {
+    this.props.clearSelectedID();
   }
 
   handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
@@ -97,12 +92,12 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
     console.log(this.form.value);
     const { name } = this.form.value;
     if (
-      this.props.selectedItem &&
-      this.props.selectedItem.id &&
-      this.props.selectedItem.id.length
+      this.props.selectedBrand &&
+      this.props.selectedBrand.id &&
+      this.props.selectedBrand.id.length
     ) {
       const newItem = {
-        ...this.props.selectedItem,
+        ...this.props.selectedBrand,
         name
       };
       // updating a location object
@@ -120,35 +115,6 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
       loading: this.props.loading
     };
   };
-
-  // get breadcrumb path
-  // getBreadcrumbs = () => {
-  //     return (
-  //         <Breadcrumb>
-  //             {this.props.selectedBuilding.id ? (
-  //                 <BreadcrumbItem active>
-  //                     {this.props.selectedBuilding.name}
-  //                 </BreadcrumbItem>
-  //             ) : (
-  //                 ''
-  //             )}
-  //             {this.props.selectedFloor.id ? (
-  //                 <BreadcrumbItem active>
-  //                     {this.props.selectedFloor.name}
-  //                 </BreadcrumbItem>
-  //             ) : (
-  //                 ''
-  //             )}
-  //             {this.props.selectedLocation.id ? (
-  //                 <BreadcrumbItem active>
-  //                     {this.props.selectedLocation.name}
-  //                 </BreadcrumbItem>
-  //             ) : (
-  //                 ''
-  //             )}
-  //         </Breadcrumb>
-  //     );
-  // };
 
   render() {
     const { t } = this.props;

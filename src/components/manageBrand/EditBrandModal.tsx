@@ -6,22 +6,19 @@ import { TranslationFunction } from 'react-i18next';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import {
-  IinitialState, ItableFiltersReducer
-  // Ibuilding,
-  // Ifloor,
-  // Ilocation,
-  // ItableFiltersReducer,
-  // Ifacility
-} from '../../models';
+import { Ibrand, IinitialState, ItableFiltersReducer } from '../../models';
 import { updateQueueProduct } from '../../actions/manageProductQueueActions';
 import CommonModal from '../common/CommonModal';
 import EditBrandForm from './EditBrandForm';
-import {saveBrand, updateBrand, toggleEditBrandModal} from "../../actions/manageBrandActions";
+import {
+  saveBrand,
+  updateBrand,
+  toggleEditBrandModal,
+  clearSelectedBrandID
+} from '../../actions/manageBrandActions';
+import { initialBrand } from '../../reducers/initialState';
 
 interface Iprops {
-  selectedItem: any;
-  selectedType: 'Brand';
   colorButton: any;
   t: TranslationFunction;
 }
@@ -33,10 +30,8 @@ interface IdispatchProps {
   updateBrand: typeof updateBrand;
   toggleModal: () => void;
   tableFilters: ItableFiltersReducer;
-  // facility: Ifacility;
-  // selectedBuilding: Ibuilding;
-  // selectedFloor: Ifloor;
-  // selectedLocation: Ilocation;
+  selectedBrand: Ibrand;
+  clearSelectedID: typeof clearSelectedBrandID;
 }
 
 class ManageInventoryModal extends React.Component<
@@ -49,12 +44,10 @@ class ManageInventoryModal extends React.Component<
 
   render() {
     let modalTitle;
-    if (this.props.selectedItem && this.props.selectedItem.id) {
-      modalTitle = this.props.t(
-        `manageBrand:edit${this.props.selectedType}`
-      );
+    if (this.props.selectedBrand && this.props.selectedBrand.id) {
+      modalTitle = this.props.t(`manageBrand:editBrand`);
     } else {
-      modalTitle = this.props.t(`manageBrand:new${this.props.selectedType}`);
+      modalTitle = this.props.t(`manageBrand:newBrand`);
     }
     const className = 'user-edit';
     return (
@@ -71,15 +64,15 @@ class ManageInventoryModal extends React.Component<
 }
 
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
+  const selectedBrand =
+    state.manageBrand.data[state.manageBrand.selectedBrandID] || initialBrand;
   return {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
     showModal: state.manageBrand.showEditBrandModal,
     tableFilters: state.manageBrand.tableFilters,
-    // facility: state.manageLocation.facility,
-    // selectedBuilding,
-    // selectedFloor,
-    // selectedLocation
+    selectedBrandID: state.manageBrand.selectedBrandID,
+    selectedBrand
   };
 };
 
@@ -89,6 +82,7 @@ export default connect(
     saveBrand,
     updateBrand,
     toggleModal: toggleEditBrandModal,
-    updateQueueProduct
+    updateQueueProduct,
+    clearSelectedID: clearSelectedBrandID
   }
 )(ManageInventoryModal);

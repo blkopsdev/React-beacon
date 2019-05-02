@@ -193,6 +193,15 @@ export function deleteBrand(brand: any) {
   };
 }
 
+export const setSelectedBrandID = (id: string) => ({
+  type: types.SET_SELECTED_BRAND_ID,
+  id
+});
+
+export const clearSelectedBrandID = () => ({
+  type: types.CLEAR_SELECTED_BRAND_ID
+});
+
 export const toggleEditBrandModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_BRAND
 });

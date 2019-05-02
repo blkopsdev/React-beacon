@@ -61,7 +61,7 @@ interface IdispatchProps {
   courses: GFCourse[];
   lesson: GFLesson;
   lessons: GFLesson[];
-  quizzes: GFQuizItem[];
+  quizzes: { [key: string]: GFQuizItem };
   getLessonsByCourseID: typeof getLessonsByCourseID;
   // getQuizzesByLessonID: typeof getQuizzesByLessonID;
   setLesson: typeof setLesson;

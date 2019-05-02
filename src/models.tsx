@@ -178,6 +178,11 @@ export interface Ijob {
   isDeleted: boolean;
 }
 
+export interface IBrand {
+  id: string;
+  name: string;
+}
+
 export interface Itile {
   icon: string | string[];
   title: string;
@@ -536,10 +541,11 @@ export interface ImanageLocationReducer {
 }
 
 export interface ImanageBrandReducer {
-  brandList: Ibrand[];
+  data: { [key: string]: Ibrand };
   totalPages: number;
   showEditBrandModal: boolean;
   tableFilters: ItableFiltersReducer;
+  selectedBrandID: string;
 }
 
 export interface ImanageJobReducer {

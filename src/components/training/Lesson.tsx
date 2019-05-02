@@ -35,7 +35,7 @@ interface Props extends RouteComponentProps<RouterParams> {
   lesson: GFLesson;
   lessons: GFLesson[];
   quiz: GFQuizItem;
-  quizzes: GFQuizItem[];
+  quizzes: { [key: string]: GFQuizItem };
   setLesson: typeof setLesson;
   saveLessonProgress: typeof saveLessonProgress;
   setQuiz: typeof setQuiz;
@@ -79,6 +79,9 @@ class Lesson extends React.Component<Props, State> {
   componentWillMount() {
     // process the quizzes immediately
     this.loadQuizzes();
+    if (!isEmpty(this.props.quizzes)) {
+      this.filterVisibleQuizzes();
+    }
   }
 
   componentDidMount() {
@@ -257,9 +260,6 @@ class Lesson extends React.Component<Props, State> {
       this.props.match.params.lessonID,
       this.props.user
     );
-    if (this.props.quizzes.length) {
-      this.filterVisibleQuizzes();
-    }
   };
 
   filterVisibleQuizzes = () => {

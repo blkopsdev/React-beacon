@@ -162,6 +162,15 @@ export const initialJob = {
   customer: initialCustomer
 };
 
+export const initialBrand = {
+  id: '',
+  name: '',
+  createDate: '',
+  updateDate: '',
+  creatorID: '',
+  updaterID: ''
+};
+
 /* ********************   DESKTOP ONLY  ***************/
 /* 
 
@@ -255,6 +264,13 @@ export default {
     jobFormValues: {},
     selectedJobID: ''
   },
+  manageBrand: {
+    totalPages: 1,
+    data: {},
+    showEditBrandModal: false,
+    tableFilters: initialTableFilters,
+    selectedBrandID: ''
+  },
   manageReport: {
     totalPages: 1,
     defaultReportsByID: {},
@@ -274,12 +290,7 @@ export default {
     selectedLocation: initialLoc,
     selectedRoom: initialRoom
   },
-  manageBrand: {
-    totalPages: 1,
-    brandList: [],
-    showEditBrandModal: false,
-    tableFilters: initialTableFilters
-  },
+
   manageTeam: {
     totalPages: 1,
     data: [],

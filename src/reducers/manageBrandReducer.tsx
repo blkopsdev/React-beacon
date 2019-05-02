@@ -2,29 +2,30 @@ import initialState from './initialState';
 import * as types from '../actions/actionTypes';
 import { Ibrand, ImanageBrandReducer } from '../models';
 import {
+  createSelectedIDWithName,
   createTableFiltersWithName,
   modalToggleWithName
 } from './commonReducers';
+import { pickBy, map, keyBy } from 'lodash';
 
-export function manageBrandReducer(state: Ibrand[], action: any) {
+export function manageBrandReducer(
+  state: { [key: string]: Ibrand } = {},
+  action: any
+) {
   switch (action.type) {
     case types.LOAD_BRANDS_SUCCESS:
-      return action.payload.result;
-    case types.ADD_BRAND_SUCCESS:
-      const list = [...state];
-      list.push(action.payload);
-
-      return list;
-    case types.EDIT_BRAND_SUCCESS:
-      return state.map((brand: any) => {
-        if (brand.id === action.payload.id) {
-          return action.payload;
-        } else {
-          return brand;
-        }
+      const newBrands = map(action.payload.result, (brand: Ibrand) => {
+        return cleanBrandObject(brand);
       });
+      return keyBy(newBrands, 'id');
+    case types.ADD_BRAND_SUCCESS:
+      return { ...state, [action.payload.id]: action.payload };
+    case types.EDIT_BRAND_SUCCESS:
+      return { ...state, [action.payload.id]: action.payload };
     case types.REMOVE_BRAND_SUCCESS:
-      return state.filter((brand: any) => brand.id !== action.payload.id);
+      const data = { ...state };
+      delete data[action.payload.id];
+      return data;
     default:
       return state;
   }
@@ -49,8 +50,13 @@ export default function brandManage(
   action: any
 ) {
   return {
-    brandList: manageBrandReducer(state.brandList, action),
+    data: manageBrandReducer(state.data, action),
     totalPages: brandManageTotalPages(state.totalPages, action),
+    selectedBrandID: createSelectedIDWithName(
+      state.selectedBrandID,
+      action,
+      'BRAND_ID'
+    ),
     showEditBrandModal: modalToggleWithName(
       state.showEditBrandModal,
       action,
@@ -63,3 +69,9 @@ export default function brandManage(
     )
   };
 }
+
+const cleanBrandObject = (brand: Ibrand) => {
+  return {
+    ...pickBy(brand, property => property !== null)
+  } as Ibrand;
+};

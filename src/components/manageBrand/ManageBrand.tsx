@@ -7,10 +7,18 @@ import { RouteComponentProps } from 'react-router';
 import { TranslationFunction } from 'i18next';
 import { constants } from '../../constants/constants';
 import { connect } from 'react-redux';
-import { IinitialState, ItableFiltersReducer, Itile } from '../../models';
 import {
+  IinitialState,
+  ItableFiltersReducer,
+  Itile,
+  IBrand,
+  Ibrand
+} from '../../models';
+import {
+  clearSelectedBrandID,
   deleteBrand,
   getBrands,
+  setSelectedBrandID,
   setTableFilter,
   toggleEditBrandModal
 } from '../../actions/manageBrandActions';
@@ -18,23 +26,24 @@ import { TableUtil } from '../common/TableUtil';
 import { FormUtil } from '../common/FormUtil';
 import SearchTableForm from '../common/SearchTableForm';
 import { Button } from 'react-bootstrap';
-import { toastr } from 'react-redux-toastr';
 import ReactTable, { FinalState, RowInfo } from 'react-table';
 import EditBrandModal from './EditBrandModal';
-// import './ManageBrand.less';
-// import manageBrandReducer from "../../reducers/manageBrandReducer";
-// import {FieldConfig} from "react-reactive-form";
+import * as moment from 'moment';
+import { orderBy } from 'lodash';
+
+interface RowInfoBrand extends RowInfo {
+  original: IBrand;
+}
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
   t: TranslationFunction;
   i18n: I18n;
-  showEditBrandModal: boolean;
-  loading: boolean;
+  // loading: boolean;
 }
 
 interface IdispatchProps {
-  brandList: any;
+  tableData: Ibrand[];
   totalPages: number;
   showEditBrandModal: boolean;
   getBrands: any;
@@ -42,28 +51,25 @@ interface IdispatchProps {
   deleteBrand: typeof deleteBrand;
   setTableFilter: typeof setTableFilter;
   tableFilters: ItableFiltersReducer;
+  loading: boolean;
+  setSelectedBrandID: typeof setSelectedBrandID;
+  clearSelectedBrandID: typeof clearSelectedBrandID;
 }
 
 interface Istate {
   selectedRow: any;
   currentTile: Itile;
   columns: any[];
-  selectedItem: any;
   searchFieldConfig: FieldConfig;
 }
 
 class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
-  public searchFieldConfigBanner: any;
-  public buttonInAction = false;
-  public deleteAction = false;
-  // private setTableFilterTimeout: any;
   constructor(props: Iprops & IdispatchProps) {
     super(props);
     this.state = {
       selectedRow: {},
       currentTile: emptyTile,
       columns: [],
-      selectedItem: {},
       searchFieldConfig: this.buildSearchControls()
     };
   }
@@ -130,26 +136,10 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
     }
   };
 
-  handleEdit(selectedItem: any) {
-    this.setState({ selectedItem });
+  handleEdit(row: any) {
+    this.setState({ selectedRow: row.index });
     this.props.toggleEditBrandModal();
-    console.log('EDIT:', selectedItem);
-  }
-
-  handleDelete(deletedItem: any) {
-    const toastrConfirmOptions = {
-      onOk: () => {
-        deletedItem = {
-          ...deletedItem
-        };
-        this.props.deleteBrand(deletedItem);
-        console.log('deleted', deletedItem);
-      },
-      onCancel: () => console.log('CANCEL: clicked'),
-      okText: this.props.t('deleteOk'),
-      cancelText: this.props.t('common:cancel')
-    };
-    toastr.confirm(this.props.t('deleteConfirm'), toastrConfirmOptions);
+    this.props.setSelectedBrandID(row.original.id);
   }
 
   onPageChange = (page: number) => {
@@ -177,19 +167,18 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
 * Handle user clicking on a location row
 * set the selected location to state and open the modal
 */
-  getTrProps = (state: FinalState, rowInfo: RowInfo) => {
+  getTrProps = (state: FinalState, rowInfo: RowInfoBrand) => {
     if (rowInfo) {
       return {
         onClick: (e: React.MouseEvent<HTMLFormElement>) => {
-          this.buttonInAction = false;
-          this.deleteAction = false;
-          this.handleEdit(rowInfo.original);
+          this.handleEdit(rowInfo);
+        },
+        style: {
+          background:
+            rowInfo.index === this.state.selectedRow
+              ? constants.colors[`${this.state.currentTile.color}Tr`]
+              : ''
         }
-        // style: {
-        //   background: this.state.selectedRow[rowInfo.viewIndex]
-        //     ? constants.colors[`${this.state.currentTile.color}Tr`]
-        //     : ''
-        // }
       };
     } else {
       return {};
@@ -197,8 +186,7 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
   };
 
   render() {
-    const { t, brandList = [], totalPages } = this.props;
-    console.log('brandList', brandList);
+    const { t, tableData = [], totalPages } = this.props;
     return (
       <div className="manage-brand">
         <Banner
@@ -223,7 +211,7 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
             className="table-add-button"
             bsStyle="link"
             onClick={() => {
-              this.setState({ selectedItem: {} }, () => {
+              this.setState({ selectedRow: null }, () => {
                 this.props.toggleEditBrandModal();
               });
             }}
@@ -232,10 +220,10 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
           </Button>
         </div>
         <ReactTable
-          data={brandList}
+          data={tableData}
           columns={this.state.columns}
           getTrProps={this.getTrProps}
-          pageSize={brandList.length}
+          pageSize={tableData.length}
           manual
           pages={totalPages}
           page={this.props.tableFilters.page - 1}
@@ -254,25 +242,24 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
         />
 
         <EditBrandModal
-          selectedItem={this.state.selectedItem}
-          selectedType={'Brand'}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
           t={this.props.t}
         />
-        {/*{brandList &&*/}
-        {/*  brandList.result.map((brand: any) => (*/}
-        {/*    <h3 key={brand.id}>{brand.name}</h3>*/}
-        {/*  ))}*/}
       </div>
     );
   }
 }
 
 const mapStateToProps = (state: IinitialState) => {
+  const tableData = orderBy(
+    state.manageBrand.data,
+    res => moment.utc(res.createDate).unix(),
+    'desc'
+  );
   return {
-    brandList: state.manageBrand.brandList,
+    tableData,
     totalPages: state.manageBrand.totalPages,
     showEditBrandModal: state.manageBrand.showEditBrandModal,
     tableFilters: state.manageBrand.tableFilters
@@ -282,6 +269,13 @@ const mapStateToProps = (state: IinitialState) => {
 export default translate('manageBrand')(
   connect(
     mapStateToProps,
-    { getBrands, toggleEditBrandModal, deleteBrand, setTableFilter }
+    {
+      getBrands,
+      toggleEditBrandModal,
+      deleteBrand,
+      setTableFilter,
+      setSelectedBrandID,
+      clearSelectedBrandID
+    }
   )(ManageBrand)
 );

@@ -1,6 +1,5 @@
 /*
-* Manage Location Form
-* Edit location items
+* Manage Brand Form
 */
 
 import { Col, Button } from 'react-bootstrap';
@@ -56,7 +55,7 @@ interface Iprops {
   clearSelectedID: typeof clearSelectedBrandID;
 }
 
-class ManageLocationForm extends React.Component<Iprops, {}> {
+class ManageBrandForm extends React.Component<Iprops, {}> {
   public form: AbstractControl;
   public fieldConfig: FieldConfig;
   constructor(props: Iprops) {
@@ -100,10 +99,10 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
         ...this.props.selectedBrand,
         name
       };
-      // updating a location object
+      // updating a brand object
       this.props.updateBrand(newItem);
     } else {
-      // creating a new location
+      // creating a new brand
       this.props.saveBrand(name);
     }
     this.props.toggleModal();
@@ -152,4 +151,4 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
     );
   }
 }
-export default translate('manageBrand')(ManageLocationForm);
+export default translate('manageBrand')(ManageBrandForm);

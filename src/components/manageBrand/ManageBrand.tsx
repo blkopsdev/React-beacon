@@ -228,17 +228,15 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
           pages={totalPages}
           page={this.props.tableFilters.page - 1}
           showPageSizeOptions={false}
-          defaultPageSize={10}
           className={`beacon-table -highlight ${this.state.currentTile.color}`}
           previousText={t('common:previous')}
           nextText={t('common:next')}
           onPageChange={this.onPageChange}
           // onSortedChange={this.onSortedChanged}
-          sortable={true}
+          sortable={false}
           multiSort={false}
           noDataText={t('common:noDataText')}
           resizable={false}
-          expanded={this.state.selectedRow}
         />
 
         <EditBrandModal

@@ -61,6 +61,14 @@ export const FormUtil = {
       };
     });
   },
+  convertIndexedObjectToOptions: (items: any): Ioption[] => {
+    return map(items, (item: any, key) => {
+      return {
+        value: key,
+        label: item
+      };
+    });
+  },
   convertToSingleOption: (item: any): Ioption | null => {
     if (item && item.id && item.id.length) {
       const lastOption =

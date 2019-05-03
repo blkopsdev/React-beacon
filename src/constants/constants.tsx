@@ -64,6 +64,15 @@ const measurementPointResultStatusTypes = {
   4: 'resultStatusCannotComplete',
   5: 'resultStatusRepair'
 };
+
+const measurementPointResultStatusTypesEnum = {
+  resultStatusNotTested: 0,
+  resultStatusIncomplete: 1,
+  resultStatusFail: 2,
+  resultStatusPass: 3,
+  resultStatusCannotComplete: 4,
+  resultStatusRepair: 5
+};
 /*
 New - No results have been saved for the job
 Started - Results are in the job
@@ -560,6 +569,7 @@ export const constants = {
   measurementPointTypesInverse,
   measurementPointPassFailOptions,
   measurementPointResultStatusTypes,
+  measurementPointResultStatusTypesEnum,
   measurementPointPassFailTypes,
   reportTypeEnum,
   reportTypeEnumInverse,

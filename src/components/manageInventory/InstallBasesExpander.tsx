@@ -86,9 +86,6 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
         }
       };
     } else if (column.id && column.id === 'historical-results-button') {
-      if (notTested) {
-        return {};
-      }
       return {
         onClick: () => {
           // this.props.selectHistoricalResult
@@ -201,15 +198,10 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
         Header: '',
         id: 'historical-results-button',
         Cell: ({ original }: { original: IinstallBaseWithStatus }) => {
-          const notTested =
-            original.status === constants.measurementPointResultStatusTypes[0];
-          const color = notTested
-            ? constants.colors.greyText
-            : constants.colors.green;
           return (
             <span
               className="historical-results-button"
-              style={{ color }}
+              style={{ color: constants.colors.green }}
               title={props.t('History')}
             >
               <FontAwesomeIcon icon={['far', 'history']} />

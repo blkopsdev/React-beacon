@@ -97,15 +97,25 @@ export class MPResultList extends React.Component<Props, {}> {
     super(props);
   }
   componentWillMount() {
+    if (this.props.selectedItem.manualStatusOverride === true) {
+      return; //  do not get mplist
+    }
     this.props.getMeasurementPointList(
       this.props.selectedItem.measurementPointListID
     );
   }
 
   render() {
-    const { t } = this.props;
+    const { t, selectedItem } = this.props;
+    if (selectedItem.manualStatusOverride === true) {
+      return (
+        <h4 style={{ padding: '15px' }}>
+          {t('No measurement points.  Device status was manually added.')}
+        </h4>
+      );
+    }
     if (isEmpty(this.props.measurementPointsByID)) {
-      return <h4 style={{ padding: '15px' }}>Loading...</h4>;
+      return <h4 style={{ padding: '15px' }}>{t('Loading...')}</h4>;
     }
     return (
       <div>

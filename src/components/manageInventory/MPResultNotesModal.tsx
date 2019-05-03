@@ -51,7 +51,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
-    showModal: state.manageInventory.showMPResultNotes,
+    showModal: state.manageInventory.showMPResultNotesModal,
     selectedItem: state.measurementPointResults.selectedResult
   };
 };

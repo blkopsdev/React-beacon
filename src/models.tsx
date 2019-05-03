@@ -291,6 +291,7 @@ export interface ImeasurementPointResult {
   installBaseID: string;
   measurementPointListID: string;
   compiledNotes: string;
+  manualStatusOverride: boolean;
 }
 export interface ImeasurementPointResultsReducer {
   measurementPointResultsByID: { [key: string]: ImeasurementPointResult };
@@ -586,13 +587,14 @@ export interface ImanageInventoryReducer {
   showShoppingCartModal: boolean;
   showInstallContactModal: boolean;
   showSearchNewProductsModal: boolean;
-  showImportInstall: boolean;
+  showImportInstallModal: boolean;
   tableFilters: ItableFiltersReducer;
   selectedProduct: Iproduct;
   newProducts: { [key: string]: Iproduct };
   showMPResultModal: boolean;
   showMPResultHistoryModal: boolean;
-  showMPResultNotes: boolean;
+  showMPResultNotesModal: boolean;
+  showMPResultAddModal: boolean;
 }
 
 export interface IproductQueueObject {

@@ -215,7 +215,16 @@
     "noProductsFound": "no products found",
     "MeasurementPointResultModalTitle": "Measurements",
     "MPresultHistoryModalTitle": "History",
-    "MPResultNotesModalTitle": "Notes"
+    "MPResultNotesModalTitle": "Notes",
+    "MPResultAddModalTitle": "Add Status",
+    "addResult": "Add Status",
+    "resultStatusIncomplete": "Incomplete",
+    "resultStatusNotTested": "Not Tested",
+    "resultStatusPass": "Pass",
+    "resultStatusFail": "Fail",
+    "resultStatusCannotComplete": "Cannot Complete",
+    "resultStatusRepair": "Repair",
+    "statusPlaceholder": "Search..."
   },
   "manageProductQueue": {
     "bannerTitle": "New Product Queue",

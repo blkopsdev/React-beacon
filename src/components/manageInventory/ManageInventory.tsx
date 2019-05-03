@@ -69,6 +69,7 @@ import { MPResultModal } from './MPResultModal';
 import { InstallBasesExpanderContainer } from './InstallBasesExpanderContainer';
 import { MPResultListHistoryModal } from './MPResultListHistoryModal';
 import { MPResultListNotesModal } from './MPResultNotesModal';
+import { MPResultAddModal } from './MPResultAddModal';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -703,6 +704,14 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
             constants.colors[`${this.state.currentTile.color}Button`]
           }
           t={this.props.t}
+          secondModal={true}
+        />
+        <MPResultAddModal
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+          t={this.props.t}
+          selectedInstallBaseID={this.state.selectedInstall.id}
           secondModal={true}
         />
       </div>

@@ -49,7 +49,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
-    showModal: state.manageInventory.showImportInstall
+    showModal: state.manageInventory.showImportInstallModal
   };
 };
 

@@ -210,8 +210,8 @@ export default function ManageInventory(
       action,
       'INSTALL_CONTACT'
     ),
-    showImportInstall: modalToggleWithName(
-      state.showImportInstall,
+    showImportInstallModal: modalToggleWithName(
+      state.showImportInstallModal,
       action,
       'IMPORT_INSTALL'
     ),
@@ -225,10 +225,15 @@ export default function ManageInventory(
       action,
       'MP_RESULT_HISTORY'
     ),
-    showMPResultNotes: modalToggleWithName(
-      state.showMPResultNotes,
+    showMPResultNotesModal: modalToggleWithName(
+      state.showMPResultNotesModal,
       action,
       'MP_RESULT_NOTES'
+    ),
+    showMPResultAddModal: modalToggleWithName(
+      state.showMPResultAddModal,
+      action,
+      'MP_RESULT_ADD'
     ),
     tableFilters: createTableFiltersWithName(
       state.tableFilters,

@@ -542,6 +542,9 @@ export const toggleMPResultModal = () => ({
 export const toggleMPResultHistory = () => ({
   type: types.TOGGLE_MODAL_MP_RESULT_HISTORY
 });
+export const toggleMPResultAddModal = () => ({
+  type: types.TOGGLE_MODAL_MP_RESULT_ADD
+});
 export const toggleMPResultNotes = () => ({
   type: types.TOGGLE_MODAL_MP_RESULT_NOTES
 });

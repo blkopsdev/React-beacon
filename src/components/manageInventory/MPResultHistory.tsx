@@ -20,6 +20,7 @@ interface Iprops {
   colorButton: any;
   toggleModal: () => void;
   toggleMPResultNotes: () => void;
+  toggleMPResultAddModal: () => void;
 }
 export const MPResultHistory = (props: Iprops) => {
   const { t } = props;
@@ -82,6 +83,13 @@ export const MPResultHistory = (props: Iprops) => {
         </ListGroup>
         <Col xs={12} className="form-buttons text-right">
           <Button
+            bsStyle="link"
+            type="button"
+            onClick={props.toggleMPResultAddModal}
+          >
+            {t('addResult')}
+          </Button>
+          <Button
             bsStyle={props.colorButton}
             type="button"
             onClick={props.toggleModal}
@@ -94,9 +102,17 @@ export const MPResultHistory = (props: Iprops) => {
   } else {
     return (
       <div className="result-history">
-        <h4>History</h4>
-        <p>No Inspections for this Device.</p>
+        <Col md={12}>
+          <h4>{t('No inspections for this device.')}</h4>
+        </Col>
         <Col xs={12} className="form-buttons text-right">
+          <Button
+            bsStyle="link"
+            type="button"
+            onClick={props.toggleMPResultAddModal}
+          >
+            {t('addResult')}
+          </Button>
           <Button
             bsStyle={props.colorButton}
             type="button"

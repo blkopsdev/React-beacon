@@ -201,6 +201,7 @@ export interface Icustomer {
   name: string;
   vat?: string;
   isDeleted: boolean;
+  createDate?: string;
 }
 export interface Ifacility {
   id: string;
@@ -548,6 +549,14 @@ export interface ImanageBrandReducer {
   selectedBrandID: string;
 }
 
+export interface ImanageCustomerAndFacilityReducer {
+  data: { [key: string]: Icustomer };
+  totalPages: number;
+  showEditCustomerAndFacilityModal: boolean;
+  tableFilters: ItableFiltersReducer;
+  selectedCustomerAndFacilityID: string;
+}
+
 export interface ImanageJobReducer {
   data: { [key: string]: Ijob };
   fseUsers: Iuser[];
@@ -666,4 +675,5 @@ export interface IinitialState {
   measurementPointResults: ImeasurementPointResultsReducer;
   manageReport: ImanageReportReducer;
   manageBrand: ImanageBrandReducer;
+  customerAndFacilityManage: ImanageCustomerAndFacilityReducer;
 }

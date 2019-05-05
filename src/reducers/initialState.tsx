@@ -271,6 +271,13 @@ export default {
     tableFilters: initialTableFilters,
     selectedBrandID: ''
   },
+  manageCustomerAndFacility: {
+    totalPages: 1,
+    data: {},
+    showEditCustomerAndFacilityModal: false,
+    tableFilters: initialTableFilters,
+    selectedCustomerAndFacilityID: ''
+  },
   manageReport: {
     totalPages: 1,
     defaultReportsByID: {},

@@ -23,6 +23,7 @@ import ManageReport from '../manageReport/ManageReport';
 import 'react-table/react-table.css';
 import ManageMeasurementPointList from '../manageMeasurementPointLists/ManageMeasurementPointLists';
 import ManageBrand from '../manageBrand/ManageBrand';
+import ManageCustomerAndFacility from "../manageCustomerAndFacility/ManageCustomerAndFacility";
 
 // const testme = () => {
 //   return <h3>Your test is a success</h3>;
@@ -83,6 +84,7 @@ const TwoPaneLayout = (props: any) => {
             <Route exact path="/reports" component={ManageReport} />
             <Route exact path="/locations" component={ManageLocation} />
             <Route exact path="/brands" component={ManageBrand} />
+            <Route exact path="/customer-and-facility" component={ManageCustomerAndFacility} />
             <Route
               path="/training/:courseID?/:lessonID?/:quizID?"
               component={Training}

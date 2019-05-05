@@ -129,13 +129,6 @@ const ManageFacility = (props: ExpanderProps) => {
         accessor: 'rfid',
         minWidth: 100
       },
-      // {
-      //     Header: 'Location',
-      //     id: 'location',
-      //     accessor: (install: IinstallBase) =>
-      //         TableUtil.buildLocation(install, props.facility),
-      //     minWidth: 220
-      // },
       {
         Header: 'status',
         id: 'status',

@@ -15,6 +15,20 @@ export function manageCustomerAndFacilityReducer(
   switch (action.type) {
     case types.GET_CUSTOMERS_AND_FACILITY_SUCCESS:
       const newCustomer = map(action.payload, (customer: Icustomer) => {
+        customer['facilities'] = [
+          {
+            id: '1',
+            name: 'faciliti name',
+            customerID: customer.id,
+            address: '',
+            address2: '',
+            city: '',
+            state: '',
+            postalCode: '',
+            buildings: [],
+            isDeleted: false
+          }
+        ];
         return cleanObject(customer);
       });
       return keyBy(newCustomer, 'id');

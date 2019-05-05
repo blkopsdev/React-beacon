@@ -11,33 +11,29 @@ import {
   IinitialState,
   ItableFiltersReducer,
   Itile,
-  IBrand,
-  Ibrand
+  Ibrand,
+  Icustomer
 } from '../../models';
-import {
-  clearSelectedBrandID,
-  deleteBrand,
-  getBrands,
-  setSelectedBrandID,
-  setTableFilter,
-  toggleEditBrandModal
-} from '../../actions/manageBrandActions';
 import { TableUtil } from '../common/TableUtil';
 import { FormUtil } from '../common/FormUtil';
 import SearchTableForm from '../common/SearchTableForm';
 import { Button } from 'react-bootstrap';
-import ReactTable, { FinalState, RowInfo } from 'react-table';
+import ReactTable, { FinalState, RowInfo, RowRenderProps } from 'react-table';
 // import EditBrandModal from './EditBrandModal';
 import * as moment from 'moment';
 import { orderBy } from 'lodash';
 import {
+  setTableFilter,
   getCustomers,
+  setSelectedCustomerAndFacilityID,
+  clearSelectedCustomerAndFacilityID,
   toggleEditCustomerAndFacilityModal
 } from '../../actions/manageCustomerAndFacilityActions';
 import ManageFacility from './ManageFacility';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
-interface RowInfoBrand extends RowInfo {
-  original: IBrand;
+interface RowInfoCustomer extends RowInfo {
+  original: Icustomer;
 }
 
 interface Iprops extends RouteComponentProps<any> {
@@ -51,15 +47,13 @@ interface IdispatchProps {
   tableData: Ibrand[];
   totalPages: number;
   showEditCustomerAndFacilityModal: boolean;
-  getBrands: any;
   getCustomers: typeof getCustomers;
   toggleEditCustomerAndFacilityModal: typeof toggleEditCustomerAndFacilityModal;
-  deleteBrand: typeof deleteBrand;
   setTableFilter: typeof setTableFilter;
   tableFilters: ItableFiltersReducer;
   loading: boolean;
-  setSelectedBrandID: typeof setSelectedBrandID;
-  clearSelectedBrandID: typeof clearSelectedBrandID;
+  setSelectedCustomerAndFacilityID: typeof setSelectedCustomerAndFacilityID;
+  clearSelectedCustomerAndFacilityID: typeof clearSelectedCustomerAndFacilityID;
 }
 
 interface Istate {
@@ -111,9 +105,25 @@ class ManageCustomerAndFacility extends React.Component<
         prevProps.tableFilters,
         this.props.tableFilters
       );
-      this.props.getBrands();
+      this.props.getCustomers();
     }
   }
+
+  expanderToggle = (props: RowRenderProps) => {
+    return (
+      <div>
+        {props.isExpanded ? (
+          <span>
+            <FontAwesomeIcon icon="chevron-down" />
+          </span>
+        ) : (
+          <span>
+            <FontAwesomeIcon icon="chevron-right" />
+          </span>
+        )}
+      </div>
+    );
+  };
 
   buildSearchControls = (): FieldConfig => {
     const mainSearchControls = {
@@ -148,8 +158,8 @@ class ManageCustomerAndFacility extends React.Component<
 
   handleEdit(row: any) {
     this.setState({ selectedRow: row.index });
-    this.props.toggleEditCustomerAndFacilityModal();
-    this.props.setSelectedBrandID(row.original.id);
+    // this.props.toggleEditCustomerAndFacilityModal();
+    this.props.setSelectedCustomerAndFacilityID(row.original.id);
   }
 
   onPageChange = (page: number) => {
@@ -166,6 +176,16 @@ class ManageCustomerAndFacility extends React.Component<
           Header: 'name',
           accessor: 'name',
           minWidth: 300
+        },
+        {
+          id: 'expander-toggle',
+          expander: true,
+          Expander: this.expanderToggle,
+          style: {
+            cursor: 'pointer',
+            textAlign: 'center',
+            userSelect: 'none'
+          }
         }
       ],
       this.props.t
@@ -177,22 +197,18 @@ class ManageCustomerAndFacility extends React.Component<
   * Handle user clicking on a location row
   * set the selected location to state and open the modal
   */
-  getTrProps = (state: FinalState, rowInfo: RowInfoBrand) => {
-    if (rowInfo) {
-      return {
-        onClick: (e: React.MouseEvent<HTMLFormElement>) => {
-          this.handleEdit(rowInfo);
-        },
-        style: {
-          background:
-            rowInfo.index === this.state.selectedRow
-              ? constants.colors[`${this.state.currentTile.color}Tr`]
-              : ''
-        }
-      };
-    } else {
-      return {};
-    }
+  getTrProps = (state: FinalState, rowInfo: RowInfoCustomer) => {
+    return {
+      onClick: () => {
+        this.setState({
+          selectedRow: {
+            [rowInfo.viewIndex || 0]: !this.state.selectedRow[
+              rowInfo.viewIndex || 0
+            ]
+          }
+        });
+      }
+    };
   };
 
   render() {
@@ -206,7 +222,7 @@ class ManageCustomerAndFacility extends React.Component<
         />
         <SearchTableForm
           fieldConfig={this.state.searchFieldConfig}
-          handleSubmit={this.props.getBrands}
+          handleSubmit={this.props.getCustomers}
           loading={this.props.loading}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
@@ -284,12 +300,9 @@ export default translate('customerAndFacilityManage')(
     mapStateToProps,
     {
       getCustomers,
-      getBrands,
-      toggleEditBrandModal,
-      deleteBrand,
       setTableFilter,
-      setSelectedBrandID,
-      clearSelectedBrandID
+      setSelectedCustomerAndFacilityID,
+      clearSelectedCustomerAndFacilityID
     }
   )(ManageCustomerAndFacility)
 );

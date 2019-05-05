@@ -148,12 +148,12 @@ export function updateBrand(brand: any) {
   };
 }
 
-export const setSelectedBrandID = (id: string) => ({
+export const setSelectedCustomerAndFacilityID = (id: string) => ({
   type: types.SET_SELECTED_CUSTOMER_AND_FACILITY_ID,
   id
 });
 
-export const clearSelectedBrandID = () => ({
+export const clearSelectedCustomerAndFacilityID = () => ({
   type: types.CLEAR_SELECTED_CUSTOMER_AND_FACILITY_ID
 });
 

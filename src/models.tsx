@@ -202,6 +202,7 @@ export interface Icustomer {
   vat?: string;
   isDeleted: boolean;
   createDate?: string;
+  facilities?: Ifacility[];
 }
 export interface Ifacility {
   id: string;

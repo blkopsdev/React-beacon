@@ -34,6 +34,7 @@ import {
   getCustomers,
   toggleEditCustomerAndFacilityModal
 } from '../../actions/manageCustomerAndFacilityActions';
+import ManageFacility from './ManageFacility';
 
 interface RowInfoBrand extends RowInfo {
   original: IBrand;
@@ -246,6 +247,10 @@ class ManageCustomerAndFacility extends React.Component<
           multiSort={false}
           noDataText={t('common:noDataText')}
           resizable={false}
+          SubComponent={(rowInfo: RowInfo) => (
+            <ManageFacility {...rowInfo} t={this.props.t} />
+          )}
+          expanded={this.state.selectedRow}
         />
 
         {/*<EditBrandModal*/}

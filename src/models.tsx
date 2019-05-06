@@ -556,6 +556,7 @@ export interface ImanageCustomerAndFacilityReducer {
   showEditCustomerAndFacilityModal: boolean;
   tableFilters: ItableFiltersReducer;
   selectedCustomerID: string;
+  selectedFacilityID: string;
 }
 
 export interface ImanageJobReducer {

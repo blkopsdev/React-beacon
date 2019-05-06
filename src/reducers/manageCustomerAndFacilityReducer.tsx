@@ -6,7 +6,8 @@ import {
   createTableFiltersWithName,
   modalToggleWithName
 } from './commonReducers';
-import { pickBy, map, keyBy, filter } from 'lodash';
+import { pickBy, map, keyBy, filter, find } from 'lodash';
+import { FACILITY_UPDATE_SUCCESS } from '../actions/actionTypes';
 
 export function manageCustomerAndFacilityReducer(
   state: { [key: string]: Icustomer } = {},
@@ -18,7 +19,7 @@ export function manageCustomerAndFacilityReducer(
         customer['facilities'] = [
           {
             id: '1',
-            name: 'faciliti name',
+            name: 'facility name',
             customerID: customer.id,
             address: '',
             address2: '',
@@ -38,7 +39,47 @@ export function manageCustomerAndFacilityReducer(
         action.customer,
         (property, key) => property !== null
       );
-      return [...customersFiltered, updatedCustomer] as Icustomer[];
+      return [
+        ...customersFiltered,
+        {
+          ...updatedCustomer,
+          facilities: [
+            {
+              id: '1',
+              name: 'faciliti name',
+              customerID: action.customerID,
+              address: '',
+              address2: '',
+              city: '',
+              state: '',
+              postalCode: '',
+              buildings: [],
+              isDeleted: false
+            }
+          ]
+        }
+      ] as Icustomer[];
+    case FACILITY_UPDATE_SUCCESS:
+      const item: any = {
+        ...find(state, c => c.id === action.facility.customerID)
+      };
+      const items = { ...state };
+      try {
+        const facilities = filter(
+          item.facilities,
+          c => c.id !== action.facilityID
+        );
+        const updatedFacility = pickBy(
+          action.facility,
+          (property, key) => property !== null
+        );
+        item['facilities'] = [...facilities, updatedFacility];
+        items[item.id] = item;
+      } catch (e) {
+        console.log(e);
+      }
+
+      return items;
     default:
       return state;
   }
@@ -69,6 +110,11 @@ export default function customerAndFacilityManage(
       state.selectedCustomerID,
       action,
       'CUSTOMER_AND_FACILITY_ID'
+    ),
+    selectedFacilityID: createSelectedIDWithName(
+      state.selectedFacilityID,
+      action,
+      'FACILITY_ID'
     ),
     showEditBrandModal: modalToggleWithName(
       state.showEditCustomerAndFacilityModal,

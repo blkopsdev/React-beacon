@@ -2,7 +2,7 @@ import Banner from '../common/Banner';
 import * as React from 'react';
 import { FieldConfig } from 'react-reactive-form';
 import { I18n, translate } from 'react-i18next';
-import { emptyTile } from '../../reducers/initialState';
+import { emptyTile, initialCustomer } from '../../reducers/initialState';
 import { RouteComponentProps } from 'react-router';
 import { TranslationFunction } from 'i18next';
 import { constants } from '../../constants/constants';
@@ -27,12 +27,17 @@ import {
   setTableFilter,
   getCustomers,
   setSelectedCustomerAndFacilityID,
-  clearSelectedCustomerAndFacilityID
+  clearSelectedCustomerAndFacilityID,
+  setSelectedFacilityID
 } from '../../actions/manageCustomerAndFacilityActions';
 import ManageFacility from './ManageFacility';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import EditCustomerModal from './EditCustomerModal';
-import { toggleEditCustomerModal } from '../../actions/commonActions';
+import {
+  toggleEditCustomerModal,
+  toggleEditFacilityModal
+} from '../../actions/commonActions';
+import EditFacilityModal from './EditFacilityModal';
 
 interface RowInfoCustomer extends RowInfo {
   original: Icustomer;
@@ -56,6 +61,9 @@ interface IdispatchProps {
   loading: boolean;
   setSelectedCustomerAndFacilityID: typeof setSelectedCustomerAndFacilityID;
   clearSelectedCustomerAndFacilityID: typeof clearSelectedCustomerAndFacilityID;
+  setSelectedFacilityID: typeof setSelectedFacilityID;
+  toggleEditFacilityModal: typeof toggleEditFacilityModal;
+  selectedCustomer: Icustomer;
 }
 
 interface Istate {
@@ -78,6 +86,7 @@ class ManageCustomerAndFacility extends React.Component<
       searchFieldConfig: this.buildSearchControls()
     };
   }
+
   componentWillMount(): void {
     this.setState({
       currentTile: constants.getTileByURL(this.props.location.pathname)
@@ -164,6 +173,11 @@ class ManageCustomerAndFacility extends React.Component<
   //   // this.props.setSelectedCustomerAndFacilityID(row.original.id);
   // }
 
+  addFacility = (row: any) => {
+    // console.log(row);
+    this.props.toggleEditFacilityModal();
+  };
+
   onPageChange = (page: number) => {
     const newPage = page + 1;
     this.props.setTableFilter({ page: newPage });
@@ -207,38 +221,20 @@ class ManageCustomerAndFacility extends React.Component<
   * Handle user clicking on a location row
   * set the selected location to state and open the modal
   */
-  getTrProps = (
-    state: FinalState,
-    rowInfo: RowInfoCustomer,
-    column: any,
-    instance: any
-  ) => {
+  getTrProps = (state: FinalState, rowInfo: RowInfoCustomer) => {
     // console.log("ROWINFO", rowInfo, state, column);
-    if (column && column.id === 'expander-toggle') {
-      return {
-        onClick: () => {
-          this.setState({
-            selectedRow: {
-              [rowInfo.viewIndex || 0]: !this.state.selectedRow[
-                rowInfo.viewIndex || 0
-              ]
-            }
-          });
-        }
-      };
-    } else {
-      return {
-        onClick: (e: React.MouseEvent<HTMLFormElement>) => {
-          // this.handleEdit(rowInfo);
-        },
-        style: {
-          background:
-            rowInfo.index === this.state.selectedRow
-              ? constants.colors[`${this.state.currentTile.color}Tr`]
-              : ''
-        }
-      };
-    }
+    return {
+      onClick: () => {
+        this.props.setSelectedCustomerAndFacilityID(rowInfo.original.id);
+        this.setState({
+          selectedRow: {
+            [rowInfo.viewIndex || 0]: !this.state.selectedRow[
+              rowInfo.viewIndex || 0
+            ]
+          }
+        });
+      }
+    };
   };
 
   render() {
@@ -292,7 +288,12 @@ class ManageCustomerAndFacility extends React.Component<
           noDataText={t('common:noDataText')}
           resizable={false}
           SubComponent={(rowInfo: RowInfo) => (
-            <ManageFacility {...rowInfo} t={this.props.t} />
+            <ManageFacility
+              {...rowInfo}
+              addFacility={this.addFacility}
+              showAddFacility={true}
+              t={this.props.t}
+            />
           )}
           expanded={this.state.selectedRow}
         />
@@ -309,6 +310,13 @@ class ManageCustomerAndFacility extends React.Component<
             constants.colors[`${this.state.currentTile.color}Button`]
           }
         />
+        <EditFacilityModal
+          selectedCustomer={this.props.selectedCustomer}
+          t={this.props.t}
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+        />
       </div>
     );
   }
@@ -320,12 +328,18 @@ const mapStateToProps = (state: IinitialState) => {
     res => moment.utc(res.createDate).unix(),
     'desc'
   );
+  const selectedCustomer =
+    state.customerAndFacilityManage.data[
+      state.customerAndFacilityManage.selectedCustomerID
+    ] || initialCustomer;
+
   return {
     tableData,
     totalPages: state.customerAndFacilityManage.totalPages,
     showEditCustomerAndFacilityModal:
       state.customerAndFacilityManage.showEditCustomerAndFacilityModal,
-    tableFilters: state.customerAndFacilityManage.tableFilters
+    tableFilters: state.customerAndFacilityManage.tableFilters,
+    selectedCustomer
   };
 };
 
@@ -337,7 +351,9 @@ export default translate('manageCustomerAndFacility')(
       toggleEditCustomerModal,
       setTableFilter,
       setSelectedCustomerAndFacilityID,
-      clearSelectedCustomerAndFacilityID
+      clearSelectedCustomerAndFacilityID,
+      setSelectedFacilityID,
+      toggleEditFacilityModal
     }
   )(ManageCustomerAndFacility)
 );

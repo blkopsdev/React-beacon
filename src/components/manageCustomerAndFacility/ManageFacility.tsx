@@ -6,108 +6,39 @@ import ReactTable, {
   // FinalState
 } from 'react-table';
 // import { Button } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TranslationFunction } from 'react-i18next';
-import {
-  // Ifacility,
-  // IinstallBase,
-  IinstallBaseWithStatus
-} from 'src/models';
-import { TableUtil } from '../common/TableUtil';
-// import { selectResult } from 'src/actions/measurementPointResultsActions';
 // import {
-//     toggleMPResultModal,
-//     toggleMPResultHistory
-// } from 'src/actions/manageInventoryActions';
-import { constants } from 'src/constants/constants';
-
-// interface RowInfoInstallBase extends RowInfo {
-//     original: IinstallBaseWithStatus;
-// }
+//   // Ifacility,
+//   // IinstallBase,
+//   IinstallBaseWithStatus
+// } from 'src/models';
+import { TableUtil } from '../common/TableUtil';
+import { Button } from 'react-bootstrap';
+// import * as moment from 'moment';
+// import {orderBy} from 'lodash';
+// import {Ifacility} from "../../models";
 interface ExpanderProps extends RowInfo {
   t: TranslationFunction;
-  // facility: Ifacility;
-  // selectResult: typeof selectResult;
-  // handleInstallBaseSelect: (i: IinstallBase) => void;
-  // contactAboutInstall: (i: IinstallBase) => void;
-  // toggleMPResultModal: typeof toggleMPResultModal;
-  // selectInstallBase: (i: IinstallBase) => void;
-  // toggleMPResultHistory: typeof toggleMPResultHistory;
+  showAddFacility: boolean;
+  addFacility: any;
 }
 
 /*
-* The Installations Expander
+* The Facilities Expander
 */
 const ManageFacility = (props: ExpanderProps) => {
-  // const getTdProps = (
-  //     state: FinalState,
-  //     rowInfo: RowInfoInstallBase,
-  //     column: Column,
-  //     instance: any
-  // ) => {
-  // const notTested =
-  //     rowInfo.original.status ===
-  //     constants.measurementPointResultStatusTypes[0];
-  // if (column.id && column.id === 'contact-button') {
-  //     return {
-  //         onClick: () => {
-  //             props.contactAboutInstall(rowInfo.original);
-  //         }
-  //     };
-  // } else if (column.id && column.id === 'select-result-button') {
-  //     if (notTested) {
-  //         return {};
-  //     }
-  //     return {
-  //         onClick: () => {
-  //             props.selectResult(rowInfo.original.id);
-  //             props.toggleMPResultModal();
-  //             props.selectInstallBase(rowInfo.original); // TODO move this to redux
-  //         }
-  //     };
-  // } else if (column.id && column.id === 'historical-results-button') {
-  //     if (notTested) {
-  //         return {};
-  //     }
-  //     return {
-  //         onClick: () => {
-  //             // this.props.selectHistoricalResult
-  //             console.log('selecting historical');
-  //             props.selectInstallBase(rowInfo.original);
-  //             props.toggleMPResultHistory();
-  //         }
-  //     };
-  // } else if (column.id && column.id === 'select-result-button-disabled') {
-  //     return {};
-  // } else {
-  //     return {
-  //         onClick: () => {
-  //             props.handleInstallBaseSelect(rowInfo.original);
-  //         }
-  //     };
-  // }
-  // };
-
   const ExpanderButtonBar = (eProps: RowRenderProps) => {
     return (
       <span
         className="expander-button-bar text-right"
         style={{ position: 'absolute', top: 0, left: 0, width: '100%' }}
       >
-        {/*{props.showRequestQuote && (*/}
-        {/*    <Button*/}
-        {/*        bsStyle="link"*/}
-        {/*        onClick={() => props.addToCart(props.original, 'INVENTORY')}*/}
-        {/*    >*/}
-        {/*        {props.t('addToQuote')}*/}
-        {/*    </Button>*/}
-        {/*)}*/}
-
-        {/*        {props.showAddInstallation && (*/}
-        {/*            <Button bsStyle="link" onClick={props.addInstallation}>*/}
-        {/*                {props.t('addInstallation')}*/}
-        {/*            </Button>*/}
-        {/*        )}*/}
+        {props.showAddFacility && (
+          <Button bsStyle="link" onClick={props.addFacility}>
+            {props.t('addFacility')}
+          </Button>
+        )}
       </span>
     );
   };
@@ -120,76 +51,34 @@ const ManageFacility = (props: ExpanderProps) => {
         id: 'indent-column-button-bar'
       },
       {
-        Header: 'serialNumber',
-        accessor: 'serialNumber',
+        Header: 'name',
+        accessor: 'name',
         minWidth: 100
       },
       {
-        Header: 'RFID',
-        accessor: 'rfid',
+        Header: 'address',
+        accessor: 'address',
         minWidth: 100
       },
       {
-        Header: 'status',
-        id: 'status',
-        accessor: ({ status }: IinstallBaseWithStatus) => (
-          <span className={`status ${status}`}>{`${props.t(
-            'manageMeasurementPointLists:' + status
-          )}`}</span>
-        ),
+        Header: 'address2',
+        accessor: 'address2',
         minWidth: 100
       },
       {
-        Header: '',
-        id: 'contact-button',
-        Cell: (
-          <span className="contact-button" title={props.t('Request Service')}>
-            <FontAwesomeIcon icon={['far', 'wrench']} />
-          </span>
-        ),
-        minWidth: 25
+        Header: 'city',
+        accessor: 'city',
+        minWidth: 100
       },
       {
-        Header: '',
-        id: 'select-result-button',
-        Cell: ({ original }: { original: IinstallBaseWithStatus }) => {
-          const notTested =
-            original.status === constants.measurementPointResultStatusTypes[0];
-          const color = notTested
-            ? constants.colors.greyText
-            : constants.colors.green;
-          return (
-            <span
-              className="select-result-button"
-              style={{ color }}
-              title={props.t('Current Status')}
-            >
-              <FontAwesomeIcon icon={['far', 'clipboard-list']} />
-            </span>
-          );
-        },
-        minWidth: 25
+        Header: 'state',
+        accessor: 'state',
+        minWidth: 100
       },
       {
-        Header: '',
-        id: 'historical-results-button',
-        Cell: ({ original }: { original: IinstallBaseWithStatus }) => {
-          const notTested =
-            original.status === constants.measurementPointResultStatusTypes[0];
-          const color = notTested
-            ? constants.colors.greyText
-            : constants.colors.green;
-          return (
-            <span
-              className="historical-results-button"
-              style={{ color }}
-              title={props.t('History')}
-            >
-              <FontAwesomeIcon icon={['far', 'history']} />
-            </span>
-          );
-        },
-        minWidth: 25
+        Header: 'postalCode',
+        accessor: 'postalCode',
+        minWidth: 100
       }
     ],
     props.t

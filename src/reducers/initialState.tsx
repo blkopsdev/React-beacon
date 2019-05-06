@@ -277,7 +277,8 @@ export default {
     data: {},
     showEditCustomerAndFacilityModal: false,
     tableFilters: initialTableFilters,
-    selectedCustomerID: ''
+    selectedCustomerID: '',
+    selectedFacilityID: ''
   },
   manageReport: {
     totalPages: 1,

@@ -8,18 +8,18 @@ import { TranslationFunction } from 'react-i18next';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import { IinitialState } from '../../models';
+import { Icustomer, IinitialState } from '../../models';
 import {
   addFacility,
   toggleEditFacilityModal
 } from '../../actions/commonActions';
 import CommonModal from '../common/CommonModal';
-import EditFacilityForm from '../common/EditFacilityForm';
+import EditFacilityForm from './EditFacilityForm';
 
 interface Iprops {
   colorButton: any;
   t: TranslationFunction;
-  selectedCustomer: { value: string; label: string };
+  selectedCustomer: Icustomer;
 }
 
 interface IdispatchProps {
@@ -36,7 +36,7 @@ class EditFacilityModal extends React.Component<Iprops & IdispatchProps, {}> {
 
   render() {
     const selectedCustomerLabel = this.props.selectedCustomer
-      ? this.props.selectedCustomer.label
+      ? this.props.selectedCustomer.name
       : '';
     return (
       <CommonModal

@@ -157,6 +157,15 @@ export const clearSelectedCustomerAndFacilityID = () => ({
   type: types.CLEAR_SELECTED_CUSTOMER_AND_FACILITY_ID
 });
 
+export const setSelectedFacilityID = (id: string) => ({
+  type: types.SET_SELECTED_FACILITY_ID,
+  id
+});
+
+export const clearSelectedFacilityID = () => ({
+  type: types.CLEAR_SELECTED_FACILITY_ID
+});
+
 export const toggleEditCustomerAndFacilityModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_CUSTOMER_AND_FACILITY
 });

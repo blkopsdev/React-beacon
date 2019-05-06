@@ -1,7 +1,7 @@
-/* 
-* Edit Customer Form 
+/*
+* Edit Customer Form
 * Add and Edit facilities
-* 
+*
 */
 
 import * as React from 'react';
@@ -18,7 +18,7 @@ import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction } from 'react-i18next';
 
 import { FormUtil } from '../common/FormUtil';
-import { Ioption } from 'src/models';
+import { Icustomer, Ioption } from 'src/models';
 // import { IqueueObject } from '../../models';
 
 // add the bootstrap form-control class to the react-select select component
@@ -100,7 +100,7 @@ interface Iprops {
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;
-  selectedCustomer: { value: string; label: string };
+  selectedCustomer: Icustomer;
 }
 
 class EditFacilityForm extends React.Component<Iprops, {}> {
@@ -165,7 +165,7 @@ class EditFacilityForm extends React.Component<Iprops, {}> {
     const newFacility = {
       ...this.userForm.value,
       countryID: this.userForm.value.countryID.value,
-      customerID: this.props.selectedCustomer.value
+      customerID: this.props.selectedCustomer.id
     };
     this.props.handleSubmit(newFacility);
   };

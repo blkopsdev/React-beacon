@@ -12,7 +12,8 @@ import {
   ItableFiltersReducer,
   Itile,
   Ibrand,
-  Icustomer
+  Icustomer,
+  Ifacility
 } from '../../models';
 import { TableUtil } from '../common/TableUtil';
 import { FormUtil } from '../common/FormUtil';
@@ -26,11 +27,12 @@ import {
   setTableFilter,
   getCustomers,
   setSelectedCustomerAndFacilityID,
-  clearSelectedCustomerAndFacilityID,
-  toggleEditCustomerAndFacilityModal
+  clearSelectedCustomerAndFacilityID
 } from '../../actions/manageCustomerAndFacilityActions';
 import ManageFacility from './ManageFacility';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import EditCustomerModal from './EditCustomerModal';
+import { toggleEditCustomerModal } from '../../actions/commonActions';
 
 interface RowInfoCustomer extends RowInfo {
   original: Icustomer;
@@ -48,7 +50,7 @@ interface IdispatchProps {
   totalPages: number;
   showEditCustomerAndFacilityModal: boolean;
   getCustomers: typeof getCustomers;
-  toggleEditCustomerAndFacilityModal: typeof toggleEditCustomerAndFacilityModal;
+  toggleEditCustomerModal: typeof toggleEditCustomerModal;
   setTableFilter: typeof setTableFilter;
   tableFilters: ItableFiltersReducer;
   loading: boolean;
@@ -89,9 +91,9 @@ class ManageCustomerAndFacility extends React.Component<
 
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
     if (
-      prevProps.showEditCustomerAndFacilityModal !==
-        this.props.showEditCustomerAndFacilityModal &&
-      !this.props.showEditCustomerAndFacilityModal
+      prevProps.toggleEditCustomerModal !==
+        this.props.toggleEditCustomerModal &&
+      !this.props.toggleEditCustomerModal
     ) {
       this.setState({ selectedRow: null });
     }
@@ -130,11 +132,11 @@ class ManageCustomerAndFacility extends React.Component<
       name: {
         render: FormUtil.TextInputWithoutValidation,
         meta: {
-          label: 'common:Brand',
+          label: 'common:Customer',
           colWidth: 3,
           type: 'text',
           placeholder: 'Search by text',
-          defaultValue: this.props.tableFilters.brand,
+          defaultValue: this.props.tableFilters.customer,
           isClearable: true
         }
       }
@@ -156,11 +158,11 @@ class ManageCustomerAndFacility extends React.Component<
     }
   };
 
-  handleEdit(row: any) {
-    this.setState({ selectedRow: row.index });
-    // this.props.toggleEditCustomerAndFacilityModal();
-    this.props.setSelectedCustomerAndFacilityID(row.original.id);
-  }
+  // handleEdit(row: any) {
+  //   this.setState({ selectedRow: row.index });
+  //   this.props.toggleEditCustomerModal();
+  //   // this.props.setSelectedCustomerAndFacilityID(row.original.id);
+  // }
 
   onPageChange = (page: number) => {
     const newPage = page + 1;
@@ -176,6 +178,14 @@ class ManageCustomerAndFacility extends React.Component<
           Header: 'name',
           accessor: 'name',
           minWidth: 300
+        },
+        {
+          Header: 'qty',
+          id: 'quantity',
+          minWidth: 50,
+          accessor: ({ facilities }: { facilities: Ifacility[] }) => {
+            return facilities.length; // using this rather than data.quantity because when we add new installs, we don't want to update the quantity on the product
+          }
         },
         {
           id: 'expander-toggle',
@@ -197,24 +207,44 @@ class ManageCustomerAndFacility extends React.Component<
   * Handle user clicking on a location row
   * set the selected location to state and open the modal
   */
-  getTrProps = (state: FinalState, rowInfo: RowInfoCustomer) => {
-    return {
-      onClick: () => {
-        this.setState({
-          selectedRow: {
-            [rowInfo.viewIndex || 0]: !this.state.selectedRow[
-              rowInfo.viewIndex || 0
-            ]
-          }
-        });
-      }
-    };
+  getTrProps = (
+    state: FinalState,
+    rowInfo: RowInfoCustomer,
+    column: any,
+    instance: any
+  ) => {
+    // console.log("ROWINFO", rowInfo, state, column);
+    if (column && column.id === 'expander-toggle') {
+      return {
+        onClick: () => {
+          this.setState({
+            selectedRow: {
+              [rowInfo.viewIndex || 0]: !this.state.selectedRow[
+                rowInfo.viewIndex || 0
+              ]
+            }
+          });
+        }
+      };
+    } else {
+      return {
+        onClick: (e: React.MouseEvent<HTMLFormElement>) => {
+          // this.handleEdit(rowInfo);
+        },
+        style: {
+          background:
+            rowInfo.index === this.state.selectedRow
+              ? constants.colors[`${this.state.currentTile.color}Tr`]
+              : ''
+        }
+      };
+    }
   };
 
   render() {
     const { t, tableData = [], totalPages } = this.props;
     return (
-      <div className="manage-brand">
+      <div className="manage-customer-and-facility">
         <Banner
           title={t('bannerTitle')}
           img={this.state.currentTile.srcBanner}
@@ -237,12 +267,10 @@ class ManageCustomerAndFacility extends React.Component<
             className="table-add-button"
             bsStyle="link"
             onClick={() => {
-              this.setState({ selectedRow: null }, () => {
-                this.props.toggleEditCustomerAndFacilityModal();
-              });
+              this.props.toggleEditCustomerModal();
             }}
           >
-            {t(`manageBrand:newBrand`)}
+            {t(`manageCustomerAndFacility:newCustomer`)}
           </Button>
         </div>
         <ReactTable
@@ -275,6 +303,12 @@ class ManageCustomerAndFacility extends React.Component<
         {/*    }*/}
         {/*    t={this.props.t}*/}
         {/*/>*/}
+        <EditCustomerModal
+          t={this.props.t}
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+        />
       </div>
     );
   }
@@ -295,11 +329,12 @@ const mapStateToProps = (state: IinitialState) => {
   };
 };
 
-export default translate('customerAndFacilityManage')(
+export default translate('manageCustomerAndFacility')(
   connect(
     mapStateToProps,
     {
       getCustomers,
+      toggleEditCustomerModal,
       setTableFilter,
       setSelectedCustomerAndFacilityID,
       clearSelectedCustomerAndFacilityID

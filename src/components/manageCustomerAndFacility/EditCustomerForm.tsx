@@ -1,0 +1,137 @@
+/* 
+* Edit Customer Form 
+* Add and Edit customers
+* 
+*/
+
+import * as React from 'react';
+import {
+  Validators,
+  FormGenerator,
+  AbstractControl,
+  FieldConfig
+} from 'react-reactive-form';
+import { Col, Button } from 'react-bootstrap';
+// import { forEach, find } from "lodash";
+import { constants } from 'src/constants/constants';
+import { toastr } from 'react-redux-toastr';
+import { translate, TranslationFunction } from 'react-i18next';
+
+import { FormUtil } from '../common/FormUtil';
+import { forEach } from 'lodash';
+import { clearSelectedCustomerAndFacilityID } from '../../actions/manageCustomerAndFacilityActions';
+// import { IqueueObject } from '../../models';
+
+// add the bootstrap form-control class to the react-select select component
+const buildFieldConfig = () => {
+  const fieldConfigControls = {
+    name: {
+      options: {
+        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
+      },
+      render: FormUtil.TextInput,
+      meta: {
+        label: 'customerNameLabel',
+        colWidth: 12,
+        type: 'input',
+        autoFocus: true,
+        name: 'customer-name'
+      }
+    },
+    vat: {
+      render: FormUtil.TextInput,
+      meta: {
+        label: 'customerVatLabel',
+        colWidth: 12,
+        name: 'customer-vat',
+        required: false
+      }
+    }
+  };
+  return {
+    controls: { ...fieldConfigControls }
+  };
+};
+
+interface Iprops {
+  handleSubmit: any;
+  handleCancel: any;
+  loading: boolean;
+  colorButton: string;
+  t: TranslationFunction;
+  showEditCustomerModal: any;
+  selectedCustomer: any;
+  clearSelectedCustomerAndFacilityID: typeof clearSelectedCustomerAndFacilityID;
+}
+
+class EditCustomerForm extends React.Component<Iprops, {}> {
+  private userForm: AbstractControl;
+  private fieldConfig: FieldConfig;
+  constructor(props: Iprops) {
+    super(props);
+    this.fieldConfig = FormUtil.translateForm(buildFieldConfig(), this.props.t);
+  }
+  componentDidMount() {
+    console.log(this.props.selectedCustomer);
+    if (!this.props.selectedCustomer) {
+      console.log(`adding a new Customer`);
+    } else {
+      // set values
+      forEach(this.props.selectedCustomer, (value, key) => {
+        if (typeof value === 'string' && key.split('ID').length === 1) {
+          // it is a string and did Not find 'ID'
+          this.userForm.patchValue({ [key]: value });
+        }
+      });
+    }
+  }
+
+  componentWillUnmount() {
+    this.props.clearSelectedCustomerAndFacilityID();
+  }
+
+  handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
+    e.preventDefault();
+    if (this.userForm.status === 'INVALID') {
+      this.userForm.markAsSubmitted();
+      toastr.error('Please check invalid inputs', '', constants.toastrError);
+      return;
+    }
+    console.log(this.userForm.value);
+    this.props.handleSubmit(this.userForm.value);
+  };
+  setForm = (form: AbstractControl) => {
+    this.userForm = form;
+    this.userForm.meta = {
+      loading: this.props.loading
+    };
+  };
+
+  render() {
+    const { t } = this.props;
+
+    return (
+      <form onSubmit={this.handleSubmit} className="clearfix beacon-form">
+        <FormGenerator onMount={this.setForm} fieldConfig={this.fieldConfig} />
+        <Col xs={12} className="form-buttons text-right">
+          <Button
+            bsStyle="default"
+            type="button"
+            className="pull-left"
+            onClick={this.props.handleCancel}
+          >
+            {t('common:cancel')}
+          </Button>
+          <Button
+            bsStyle={this.props.colorButton}
+            type="submit"
+            disabled={this.props.loading}
+          >
+            {t('save')}
+          </Button>
+        </Col>
+      </form>
+    );
+  }
+}
+export default translate('common')(EditCustomerForm);

@@ -145,10 +145,11 @@ export const initialReport = {
   headerLogoPath: ''
 };
 
-const initialCustomer = {
+export const initialCustomer = {
   id: '',
   name: '',
-  isDeleted: false
+  isDeleted: false,
+  facilities: []
 };
 export const initialJob = {
   id: '',
@@ -276,7 +277,7 @@ export default {
     data: {},
     showEditCustomerAndFacilityModal: false,
     tableFilters: initialTableFilters,
-    selectedCustomerAndFacilityID: ''
+    selectedCustomerID: ''
   },
   manageReport: {
     totalPages: 1,

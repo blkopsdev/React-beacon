@@ -6,7 +6,7 @@ import {
   createTableFiltersWithName,
   modalToggleWithName
 } from './commonReducers';
-import { pickBy, map, keyBy } from 'lodash';
+import { pickBy, map, keyBy, filter } from 'lodash';
 
 export function manageCustomerAndFacilityReducer(
   state: { [key: string]: Icustomer } = {},
@@ -32,10 +32,13 @@ export function manageCustomerAndFacilityReducer(
         return cleanObject(customer);
       });
       return keyBy(newCustomer, 'id');
-    case types.ADD_CUSTOMERS_AND_FACILITY_SUCCESS:
-      return { ...state, [action.payload.id]: action.payload };
-    case types.EDIT_CUSTOMERS_AND_FACILITY_SUCCESS:
-      return { ...state, [action.payload.id]: action.payload };
+    case types.CUSTOMER_UPDATE_SUCCESS:
+      const customersFiltered = filter(state, c => c.id !== action.customerID);
+      const updatedCustomer = pickBy(
+        action.customer,
+        (property, key) => property !== null
+      );
+      return [...customersFiltered, updatedCustomer] as Icustomer[];
     default:
       return state;
   }
@@ -63,7 +66,7 @@ export default function customerAndFacilityManage(
     data: manageCustomerAndFacilityReducer(state.data, action),
     totalPages: manageTotalPages(state.totalPages, action),
     selectedCustomerID: createSelectedIDWithName(
-      state.selectedCustomerAndFacilityID,
+      state.selectedCustomerID,
       action,
       'CUSTOMER_AND_FACILITY_ID'
     ),

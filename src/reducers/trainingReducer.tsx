@@ -1,6 +1,6 @@
 import * as types from '../actions/actionTypes';
 import initialState, { initialLesson, initialQuiz } from './initialState';
-import { keyBy, mapValues, find } from 'lodash';
+import { keyBy, mapValues, find, map } from 'lodash';
 import {
   GFLesson,
   GFLessons,
@@ -72,11 +72,24 @@ function quizzesReducer(
   action: any
 ): { [key: string]: GFQuizItem } {
   switch (action.type) {
+    /*
+    * When loading all quizzes, the objects do not have instructions or questions.  If we already have them, do not erase them.
+    */
     case types.LOAD_QUIZZES_SUCCESS:
-      return Object.assign(
-        {},
-        state,
-        keyBy(action.quizzes, (quiz: GFQuizItem) => quiz.id)
+      return keyBy(
+        map(action.quizzes, quiz => {
+          const existingQuiz = state[quiz.id];
+          if (existingQuiz) {
+            return {
+              ...quiz,
+              questions: existingQuiz.questions,
+              instructions: existingQuiz.instructions
+            };
+          } else {
+            return quiz;
+          }
+        }),
+        'id'
       );
     case types.LOAD_QUIZZES_BY_LESSON_SUCCESS:
       return Object.assign(

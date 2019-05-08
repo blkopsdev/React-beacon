@@ -14,6 +14,7 @@ import {
 import { getMeasurementPointList } from 'src/actions/manageMeasurementPointListsActions';
 import { isEmpty } from 'lodash';
 import { constants } from 'src/constants/constants';
+import { initialMeasurementPoint } from 'src/reducers/initialState';
 
 interface Props {
   selectedItem: ImeasurementPointResult;
@@ -109,13 +110,37 @@ export class MPResultList extends React.Component<Props, {}> {
     const { t, selectedItem } = this.props;
     if (selectedItem.manualStatusOverride === true) {
       return (
-        <h4 style={{ padding: '15px' }}>
-          {t('No measurement points.  Device status was manually added.')}
-        </h4>
+        <div>
+          <h4 style={{ padding: '15px' }}>
+            {t('No measurement points.  Device status was manually added.')}
+          </h4>
+          <Col xs={12} className="form-buttons text-right">
+            <Button
+              bsStyle={this.props.colorButton}
+              type="button"
+              onClick={this.props.toggleModal}
+            >
+              {t('common:done')}
+            </Button>
+          </Col>
+        </div>
       );
     }
     if (isEmpty(this.props.measurementPointsByID)) {
-      return <h4 style={{ padding: '15px' }}>{t('Loading...')}</h4>;
+      return (
+        <div>
+          <h4 style={{ padding: '15px' }}>{t('Loading...')}</h4>
+          <Col xs={12} className="form-buttons text-right">
+            <Button
+              bsStyle={this.props.colorButton}
+              type="button"
+              onClick={this.props.toggleModal}
+            >
+              {t('common:done')}
+            </Button>
+          </Col>
+        </div>
+      );
     }
     return (
       <div>
@@ -124,9 +149,9 @@ export class MPResultList extends React.Component<Props, {}> {
         </h5>
         <ListGroup>
           {this.props.selectedItem.measurementPointAnswers.map(mpAnswer => {
-            const measurementPoint = this.props.measurementPointsByID[
-              mpAnswer.measurementPointID
-            ];
+            const measurementPoint =
+              this.props.measurementPointsByID[mpAnswer.measurementPointID] ||
+              initialMeasurementPoint;
             return AnswerListItem(mpAnswer, measurementPoint, t);
           })}
         </ListGroup>

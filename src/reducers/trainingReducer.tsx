@@ -1,6 +1,6 @@
 import * as types from '../actions/actionTypes';
 import initialState, { initialLesson, initialQuiz } from './initialState';
-import { keyBy, mapValues, find, map } from 'lodash';
+import { keyBy, mapValues, find, map, pickBy } from 'lodash';
 import {
   GFLesson,
   GFLessons,
@@ -81,21 +81,22 @@ function quizzesReducer(
           const existingQuiz = state[quiz.id];
           if (existingQuiz) {
             return {
-              ...quiz,
+              ...cleanQuizObject(quiz),
               questions: existingQuiz.questions,
               instructions: existingQuiz.instructions
             };
           } else {
-            return quiz;
+            return cleanQuizObject(quiz);
           }
         }),
         'id'
       );
+
     case types.LOAD_QUIZZES_BY_LESSON_SUCCESS:
       return Object.assign(
         {},
         state,
-        keyBy(action.quizzes, (quiz: GFQuizItem) => quiz.id)
+        keyBy(map(action.quizzes, quiz => cleanQuizObject(quiz)), 'id')
       );
     // TODO commented out because we are assuming a single quiz for a lesson and showing tht score on the Lesson
     // case types.GET_QUIZ_RESULTS_SUCCESS:
@@ -192,3 +193,9 @@ export const getTotal = (state: ItrainingReducer) =>
     (total, id) => total + getQuantity(state.cart, id),
     0
   );
+const cleanQuizObject = (quiz: GFQuizItem) => {
+  return {
+    ...initialQuiz,
+    ...pickBy(quiz, (property, key) => property !== null)
+  };
+};

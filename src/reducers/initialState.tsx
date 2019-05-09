@@ -275,6 +275,8 @@ export default {
   manageCustomerAndFacility: {
     totalPages: 1,
     data: {},
+    customerFormValues: {},
+    facilityFormValues: {},
     showEditCustomerAndFacilityModal: false,
     tableFilters: initialTableFilters,
     selectedCustomerID: '',

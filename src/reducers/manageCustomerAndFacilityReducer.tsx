@@ -2,6 +2,7 @@ import initialState from './initialState';
 import * as types from '../actions/actionTypes';
 import { Icustomer, ImanageCustomerAndFacilityReducer } from '../models';
 import {
+  createFormValuesWithName,
   createSelectedIDWithName,
   createTableFiltersWithName,
   modalToggleWithName
@@ -15,7 +16,7 @@ export function manageCustomerAndFacilityReducer(
 ) {
   switch (action.type) {
     case types.GET_CUSTOMERS_AND_FACILITY_SUCCESS:
-      const newCustomer = map(action.payload, (customer: Icustomer) => {
+      const newCustomer = map(action.payload.result, (customer: Icustomer) => {
         customer['facilities'] = [
           {
             id: '1',
@@ -106,6 +107,16 @@ export default function customerAndFacilityManage(
   return {
     data: manageCustomerAndFacilityReducer(state.data, action),
     totalPages: manageTotalPages(state.totalPages, action),
+    customerFormValues: createFormValuesWithName(
+      state.customerFormValues,
+      action,
+      'MANAGE_CUSTOMER'
+    ),
+    facilityFormValues: createFormValuesWithName(
+      state.facilityFormValues,
+      action,
+      'MANAGE_CUSTOMER'
+    ),
     selectedCustomerID: createSelectedIDWithName(
       state.selectedCustomerID,
       action,

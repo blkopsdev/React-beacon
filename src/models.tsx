@@ -553,6 +553,8 @@ export interface ImanageBrandReducer {
 export interface ImanageCustomerAndFacilityReducer {
   data: { [key: string]: Icustomer };
   totalPages: number;
+  customerFormValues: { [key: string]: any };
+  facilityFormValues: { [key: string]: any };
   showEditCustomerAndFacilityModal: boolean;
   tableFilters: ItableFiltersReducer;
   selectedCustomerID: string;

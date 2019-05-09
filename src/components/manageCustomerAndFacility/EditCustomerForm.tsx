@@ -8,8 +8,9 @@ import * as React from 'react';
 import {
   Validators,
   FormGenerator,
-  AbstractControl,
-  FieldConfig
+  // AbstractControl,
+  FieldConfig,
+  FormGroup
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
 // import { forEach, find } from "lodash";
@@ -18,8 +19,9 @@ import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction } from 'react-i18next';
 
 import { FormUtil } from '../common/FormUtil';
-import { forEach } from 'lodash';
+// import { forEach } from 'lodash';
 import { clearSelectedCustomerAndFacilityID } from '../../actions/manageCustomerAndFacilityActions';
+// import * as moment from "../manageJob/EditJobForm";
 // import { IqueueObject } from '../../models';
 
 // add the bootstrap form-control class to the react-select select component
@@ -62,49 +64,73 @@ interface Iprops {
   showEditCustomerModal: any;
   selectedCustomer: any;
   clearSelectedCustomerAndFacilityID: typeof clearSelectedCustomerAndFacilityID;
+  updateFormValue: (formValue: { [key: string]: any }) => void;
+  setFormValues: (formValues: { [key: string]: any }) => void;
+  formValues: { [key: string]: any };
 }
 
 class EditCustomerForm extends React.Component<Iprops, {}> {
-  private userForm: AbstractControl;
+  private formGroup: FormGroup;
   private fieldConfig: FieldConfig;
+  private subscription: any;
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(buildFieldConfig(), this.props.t);
   }
   componentDidMount() {
-    console.log(this.props.selectedCustomer);
     if (!this.props.selectedCustomer) {
       console.log(`adding a new Customer`);
-    } else {
-      // set values
-      forEach(this.props.selectedCustomer, (value, key) => {
-        if (typeof value === 'string' && key.split('ID').length === 1) {
-          // it is a string and did Not find 'ID'
-          this.userForm.patchValue({ [key]: value });
-        }
-      });
     }
   }
 
   componentWillUnmount() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
     this.props.clearSelectedCustomerAndFacilityID();
   }
 
+  /*
+  * (reusable)
+  * subscribe to the formGroup changes
+  */
+  subscribeToChanges = () => {
+    for (const key in this.formGroup.controls) {
+      if (this.formGroup.controls.hasOwnProperty(key)) {
+        this.subscription = this.formGroup
+          .get(key)
+          .valueChanges.subscribe((value: any) => {
+            this.onValueChanges(value, key);
+          });
+      }
+    }
+  };
+
+  /*
+* (reusable)
+* set the table filters to redux on each value change
+*/
+  onValueChanges = (value: any, key: string) => {
+    this.props.updateFormValue({ [key]: value });
+  };
+
   handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (this.userForm.status === 'INVALID') {
-      this.userForm.markAsSubmitted();
+    if (this.formGroup.status === 'INVALID') {
+      this.formGroup.markAsSubmitted();
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-    console.log(this.userForm.value);
-    this.props.handleSubmit(this.userForm.value);
+    console.log(this.formGroup.value);
+    this.props.handleSubmit(this.formGroup.value);
   };
-  setForm = (form: AbstractControl) => {
-    this.userForm = form;
-    this.userForm.meta = {
+
+  setForm = (form: FormGroup) => {
+    this.formGroup = form;
+    this.formGroup.meta = {
       loading: this.props.loading
     };
+    this.subscribeToChanges();
   };
 
   render() {

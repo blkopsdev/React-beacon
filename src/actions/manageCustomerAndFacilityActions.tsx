@@ -148,6 +148,24 @@ export function updateBrand(brand: any) {
   };
 }
 
+export const updateCustomerFormValue = (formValue: any) => ({
+  type: types.UPDATE_FORM_VALUES_MANAGE_CUSTOMER,
+  formValue
+});
+export const setCustomerFormValues = (formValues: any) => ({
+  type: types.SET_FORM_VALUES_MANAGE_CUSTOMER,
+  formValues
+});
+
+export const updateFacilityFormValue = (formValue: any) => ({
+  type: types.UPDATE_FORM_VALUES_MANAGE_FACILITY,
+  formValue
+});
+export const setFacilityFormValues = (formValues: any) => ({
+  type: types.SET_FORM_VALUES_MANAGE_FACILITY,
+  formValues
+});
+
 export const setSelectedCustomerAndFacilityID = (id: string) => ({
   type: types.SET_SELECTED_CUSTOMER_AND_FACILITY_ID,
   id

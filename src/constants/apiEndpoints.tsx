@@ -100,7 +100,8 @@ const API = {
     },
 
     customer: {
-      getall: `${root}/customer/getall`
+      getall: `${root}/customer/getall`,
+      search: `${root}/customer/search`
     },
     job: {
       getall: `${root}/job/getall`,

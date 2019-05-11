@@ -18,7 +18,7 @@ export function getCustomers() {
       params: { page, name }
     };
     const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
-    const url = API.GET.customer.getall;
+    const url = API.GET.customer.search;
     return adalFetch(authContext, resource, axios, url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {

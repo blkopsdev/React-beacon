@@ -17,20 +17,6 @@ export function manageCustomerAndFacilityReducer(
   switch (action.type) {
     case types.GET_CUSTOMERS_AND_FACILITY_SUCCESS:
       const newCustomer = map(action.payload.result, (customer: Icustomer) => {
-        customer['facilities'] = [
-          {
-            id: '1',
-            name: 'facility name',
-            customerID: customer.id,
-            address: '',
-            address2: '',
-            city: '',
-            state: '',
-            postalCode: '',
-            buildings: [],
-            isDeleted: false
-          }
-        ];
         return cleanObject(customer);
       });
       return keyBy(newCustomer, 'id');
@@ -43,21 +29,7 @@ export function manageCustomerAndFacilityReducer(
       return [
         ...customersFiltered,
         {
-          ...updatedCustomer,
-          facilities: [
-            {
-              id: '1',
-              name: 'faciliti name',
-              customerID: action.customerID,
-              address: '',
-              address2: '',
-              city: '',
-              state: '',
-              postalCode: '',
-              buildings: [],
-              isDeleted: false
-            }
-          ]
+          ...updatedCustomer
         }
       ] as Icustomer[];
     case FACILITY_UPDATE_SUCCESS:

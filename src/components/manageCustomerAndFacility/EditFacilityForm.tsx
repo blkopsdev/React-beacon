@@ -164,7 +164,6 @@ class EditFacilityForm extends React.Component<Iprops, {}> {
   }
 
   onCountryChanges = (value: any) => {
-    console.log(value);
     const stateFormControl = this.formGroup.get('state');
     if (value.value === `ABC5D95C-129F-4837-988C-0BF4AE1F3B67`) {
       stateFormControl.enable();

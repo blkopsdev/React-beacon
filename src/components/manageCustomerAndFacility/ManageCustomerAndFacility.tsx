@@ -298,12 +298,6 @@ class ManageCustomerAndFacility extends React.Component<
           expanded={this.state.selectedRow}
         />
 
-        {/*<EditBrandModal*/}
-        {/*    colorButton={*/}
-        {/*        constants.colors[`${this.state.currentTile.color}Button`]*/}
-        {/*    }*/}
-        {/*    t={this.props.t}*/}
-        {/*/>*/}
         <EditCustomerModal
           t={this.props.t}
           colorButton={

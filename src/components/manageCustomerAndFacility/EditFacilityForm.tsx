@@ -8,8 +8,8 @@ import * as React from 'react';
 import {
   Validators,
   FormGenerator,
-  AbstractControl,
-  FieldConfig
+  FieldConfig,
+  FormGroup
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
 import { orderBy } from 'lodash';
@@ -18,7 +18,7 @@ import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction } from 'react-i18next';
 
 import { FormUtil } from '../common/FormUtil';
-import { Icustomer, Ioption } from 'src/models';
+import { Icustomer } from 'src/models';
 // import { IqueueObject } from '../../models';
 
 // add the bootstrap form-control class to the react-select select component
@@ -101,10 +101,13 @@ interface Iprops {
   colorButton: string;
   t: TranslationFunction;
   selectedCustomer: Icustomer;
+  updateFormValue: (formValue: { [key: string]: any }) => void;
+  setFormValues: (formValues: { [key: string]: any }) => void;
+  formValues: { [key: string]: any };
 }
 
 class EditFacilityForm extends React.Component<Iprops, {}> {
-  private userForm: AbstractControl;
+  private formGroup: FormGroup;
   private fieldConfig: FieldConfig;
   private subscription: any;
   constructor(props: Iprops) {
@@ -116,31 +119,54 @@ class EditFacilityForm extends React.Component<Iprops, {}> {
   // }
 
   componentDidMount() {
-    if (!this.userForm) {
+    if (!this.formGroup) {
       return;
     }
-    this.subscription = this.userForm
-      .get('countryID')
-      .valueChanges.subscribe((value: Ioption) => {
-        this.onCountryChanges(value.value);
-      });
-
-    this.userForm.patchValue({
+    this.formGroup.patchValue({
       countryID: {
         value: 'ABC5D95C-129F-4837-988C-0BF4AE1F3B67',
         label: 'United States of America'
       }
     });
   }
+
+  /*
+  * (reusable)
+  * subscribe to the formGroup changes
+  */
+  subscribeToChanges = () => {
+    for (const key in this.formGroup.controls) {
+      if (this.formGroup.controls.hasOwnProperty(key)) {
+        this.subscription = this.formGroup
+          .get(key)
+          .valueChanges.subscribe((value: any) => {
+            this.onValueChanges(value, key);
+          });
+      }
+    }
+  };
+
+  /*
+* (reusable)
+* set the table filters to redux on each value change
+*/
+  onValueChanges = (value: any, key: string) => {
+    this.props.updateFormValue({ [key]: value });
+    if (key === 'countryID') {
+      this.onCountryChanges(value);
+    }
+  };
+
   componentWillUnmount() {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
   }
 
-  onCountryChanges = (value: string) => {
-    const stateFormControl = this.userForm.get('state');
-    if (value === `ABC5D95C-129F-4837-988C-0BF4AE1F3B67`) {
+  onCountryChanges = (value: any) => {
+    console.log(value);
+    const stateFormControl = this.formGroup.get('state');
+    if (value.value === `ABC5D95C-129F-4837-988C-0BF4AE1F3B67`) {
       stateFormControl.enable();
       stateFormControl.setValidators([
         Validators.required,
@@ -156,24 +182,26 @@ class EditFacilityForm extends React.Component<Iprops, {}> {
 
   handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (this.userForm.status === 'INVALID') {
-      this.userForm.markAsSubmitted();
+    if (this.formGroup.status === 'INVALID') {
+      this.formGroup.markAsSubmitted();
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-    console.log(this.userForm.value);
+    // console.log(this.formGroup.value);
     const newFacility = {
-      ...this.userForm.value,
-      countryID: this.userForm.value.countryID.value,
+      ...this.formGroup.value,
+      countryID: this.formGroup.value.countryID.value,
       customerID: this.props.selectedCustomer.id
     };
     this.props.handleSubmit(newFacility);
   };
-  setForm = (form: AbstractControl) => {
-    this.userForm = form;
-    this.userForm.meta = {
+
+  setForm = (form: FormGroup) => {
+    this.formGroup = form;
+    this.formGroup.meta = {
       loading: this.props.loading
     };
+    this.subscribeToChanges();
   };
 
   render() {

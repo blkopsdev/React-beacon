@@ -87,7 +87,7 @@ export default function customerAndFacilityManage(
     facilityFormValues: createFormValuesWithName(
       state.facilityFormValues,
       action,
-      'MANAGE_CUSTOMER'
+      'MANAGE_FACILITY'
     ),
     selectedCustomerID: createSelectedIDWithName(
       state.selectedCustomerID,

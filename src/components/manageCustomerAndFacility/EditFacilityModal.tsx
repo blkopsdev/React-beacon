@@ -15,6 +15,10 @@ import {
 } from '../../actions/commonActions';
 import CommonModal from '../common/CommonModal';
 import EditFacilityForm from './EditFacilityForm';
+import {
+  setFacilityFormValues,
+  updateFacilityFormValue
+} from '../../actions/manageCustomerAndFacilityActions';
 
 interface Iprops {
   colorButton: any;
@@ -27,6 +31,9 @@ interface IdispatchProps {
   loading: boolean;
   toggleModal: () => void;
   addFacility: typeof addFacility;
+  updateFormValue: typeof updateFacilityFormValue;
+  setFormValues: typeof setFacilityFormValues;
+  formValues: { [key: string]: any };
 }
 
 class EditFacilityModal extends React.Component<Iprops & IdispatchProps, {}> {
@@ -45,6 +52,9 @@ class EditFacilityModal extends React.Component<Iprops & IdispatchProps, {}> {
         onHide={this.props.toggleModal}
         body={
           <EditFacilityForm
+            updateFormValue={this.props.updateFormValue}
+            setFormValues={this.props.setFormValues}
+            formValues={this.props.formValues}
             handleSubmit={this.props.addFacility}
             handleCancel={this.props.toggleModal}
             colorButton={this.props.colorButton}
@@ -65,7 +75,8 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
-    showEditFacilityModal: state.showEditFacilityModal
+    showEditFacilityModal: state.showEditFacilityModal,
+    formValues: state.customerAndFacilityManage.facilityFormValues
   };
 };
 
@@ -73,6 +84,8 @@ export default connect(
   mapStateToProps,
   {
     toggleModal: toggleEditFacilityModal,
-    addFacility
+    addFacility,
+    updateFormValue: updateFacilityFormValue,
+    setFormValues: setFacilityFormValues
   }
 )(EditFacilityModal);

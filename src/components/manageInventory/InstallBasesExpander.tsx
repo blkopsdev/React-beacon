@@ -20,6 +20,7 @@ import {
   toggleMPResultHistory
 } from 'src/actions/manageInventoryActions';
 import { constants } from 'src/constants/constants';
+import { orderBy } from 'lodash';
 
 interface RowInfoInstallBase extends RowInfo {
   original: IinstallBaseWithStatus;
@@ -46,6 +47,18 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
   // console.log(props.original, `${props.original.class.id}/${props.original.userID}`);
   // console.log(props);
 
+  const installBasesWithLocationString = props.original.installs.map(
+    (install: IinstallBase) => {
+      return {
+        ...install,
+        locationString: TableUtil.buildLocation(install, props.facility)
+      };
+    }
+  );
+  const sortedInstallBases = orderBy(
+    installBasesWithLocationString,
+    'installString'
+  );
   /*
   * Handle user clicking on an install row column
   * if there is no "id" to key off of for a specific button, then set the selected install to state and open the edit install modal
@@ -149,8 +162,7 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
       {
         Header: 'Location',
         id: 'location',
-        accessor: (install: IinstallBase) =>
-          TableUtil.buildLocation(install, props.facility),
+        accessor: 'locationString',
         minWidth: 220
       },
       {
@@ -229,7 +241,7 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
     <div>
       <ReactTable
         className={'attempts-expander'}
-        data={props.original.installs}
+        data={sortedInstallBases}
         sortable={false}
         columns={expanderColumns}
         minRows={0}

@@ -273,6 +273,13 @@
     "deleteOk": "Delete Brand",
     "deleteConfirm": "Are you sure?"
   },
+  "manageCustomerAndFacility": {
+    "bannerTitle": "Manage Customer and Facility",
+    "newCustomer": "Add Customer",
+    "newFAcility": "Add Facility",
+    "searchPlaceholder": "Search...",
+    "saveApprove": "Save & Approve"
+  },
   "manageTraining": {
     "bannerTitle": "Training Progress",
     "searchPlaceholder": "Search by first, last, or email",

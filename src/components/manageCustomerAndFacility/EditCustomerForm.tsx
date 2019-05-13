@@ -20,7 +20,7 @@ import { translate, TranslationFunction } from 'react-i18next';
 
 import { FormUtil } from '../common/FormUtil';
 // import { forEach } from 'lodash';
-import { clearSelectedCustomerAndFacilityID } from '../../actions/manageCustomerAndFacilityActions';
+import { clearSelectedCustomerID } from '../../actions/manageCustomerAndFacilityActions';
 // import * as moment from "../manageJob/EditJobForm";
 // import { IqueueObject } from '../../models';
 
@@ -63,7 +63,7 @@ interface Iprops {
   t: TranslationFunction;
   showEditCustomerModal: any;
   selectedCustomer: any;
-  clearSelectedCustomerAndFacilityID: typeof clearSelectedCustomerAndFacilityID;
+  clearSelectedCustomerID: typeof clearSelectedCustomerID;
   updateFormValue: (formValue: { [key: string]: any }) => void;
   setFormValues: (formValues: { [key: string]: any }) => void;
   formValues: { [key: string]: any };
@@ -87,7 +87,7 @@ class EditCustomerForm extends React.Component<Iprops, {}> {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
-    this.props.clearSelectedCustomerAndFacilityID();
+    this.props.clearSelectedCustomerID();
   }
 
   /*

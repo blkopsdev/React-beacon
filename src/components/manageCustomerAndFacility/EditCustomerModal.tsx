@@ -20,7 +20,7 @@ import CommonModal from '../common/CommonModal';
 import EditCustomerForm from './EditCustomerForm';
 import { initialCustomer } from '../../reducers/initialState';
 import {
-  clearSelectedCustomerAndFacilityID,
+  clearSelectedCustomerID,
   setCustomerFormValues,
   updateCustomerFormValue
 } from '../../actions/manageCustomerAndFacilityActions';
@@ -38,7 +38,7 @@ interface IdispatchProps {
   toggleModal: () => void;
   addCustomer: typeof addCustomer;
   selectedCustomer: any;
-  clearSelectedCustomerAndFacilityID: typeof clearSelectedCustomerAndFacilityID;
+  clearSelectedCustomerID: typeof clearSelectedCustomerID;
   updateFormValue: typeof updateCustomerFormValue;
   setFormValues: typeof setCustomerFormValues;
   formValues: { [key: string]: any };
@@ -90,7 +90,7 @@ export default connect(
   {
     toggleModal: toggleEditCustomerModal,
     addCustomer,
-    clearSelectedCustomerAndFacilityID,
+    clearSelectedCustomerID,
     updateFormValue: updateCustomerFormValue,
     setFormValues: setCustomerFormValues
   }

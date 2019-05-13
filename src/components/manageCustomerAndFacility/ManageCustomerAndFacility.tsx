@@ -20,14 +20,13 @@ import { FormUtil } from '../common/FormUtil';
 import SearchTableForm from '../common/SearchTableForm';
 import { Button } from 'react-bootstrap';
 import ReactTable, { FinalState, RowInfo, RowRenderProps } from 'react-table';
-// import EditBrandModal from './EditBrandModal';
 import * as moment from 'moment';
 import { orderBy } from 'lodash';
 import {
   setTableFilter,
   getCustomers,
-  setSelectedCustomerAndFacilityID,
-  clearSelectedCustomerAndFacilityID,
+  setSelectedCustomerID,
+  clearSelectedCustomerID,
   setSelectedFacilityID
 } from '../../actions/manageCustomerAndFacilityActions';
 import ManageFacility from './ManageFacility';
@@ -59,8 +58,8 @@ interface IdispatchProps {
   setTableFilter: typeof setTableFilter;
   tableFilters: ItableFiltersReducer;
   loading: boolean;
-  setSelectedCustomerAndFacilityID: typeof setSelectedCustomerAndFacilityID;
-  clearSelectedCustomerAndFacilityID: typeof clearSelectedCustomerAndFacilityID;
+  setSelectedCustomerID: typeof setSelectedCustomerID;
+  clearSelectedCustomerID: typeof clearSelectedCustomerID;
   setSelectedFacilityID: typeof setSelectedFacilityID;
   toggleEditFacilityModal: typeof toggleEditFacilityModal;
   selectedCustomer: Icustomer;
@@ -225,7 +224,7 @@ class ManageCustomerAndFacility extends React.Component<
     // console.log("ROWINFO", rowInfo, state, column);
     return {
       onClick: () => {
-        this.props.setSelectedCustomerAndFacilityID(rowInfo.original.id);
+        this.props.setSelectedCustomerID(rowInfo.original.id);
         this.setState({
           selectedRow: {
             [rowInfo.viewIndex || 0]: !this.state.selectedRow[
@@ -344,8 +343,8 @@ export default translate('manageCustomerAndFacility')(
       getCustomers,
       toggleEditCustomerModal,
       setTableFilter,
-      setSelectedCustomerAndFacilityID,
-      clearSelectedCustomerAndFacilityID,
+      setSelectedCustomerID,
+      clearSelectedCustomerID,
       setSelectedFacilityID,
       toggleEditFacilityModal
     }

@@ -4,8 +4,7 @@ import { Icustomer, ImanageCustomerAndFacilityReducer } from '../models';
 import {
   createFormValuesWithName,
   createSelectedIDWithName,
-  createTableFiltersWithName,
-  modalToggleWithName
+  createTableFiltersWithName
 } from './commonReducers';
 import { pickBy, map, keyBy, filter, find } from 'lodash';
 import { FACILITY_UPDATE_SUCCESS } from '../actions/actionTypes';
@@ -92,17 +91,12 @@ export default function customerAndFacilityManage(
     selectedCustomerID: createSelectedIDWithName(
       state.selectedCustomerID,
       action,
-      'CUSTOMER_AND_FACILITY_ID'
+      'CUSTOMER_ID'
     ),
     selectedFacilityID: createSelectedIDWithName(
       state.selectedFacilityID,
       action,
       'FACILITY_ID'
-    ),
-    showEditBrandModal: modalToggleWithName(
-      state.showEditCustomerAndFacilityModal,
-      action,
-      'EDIT_CUSTOMER_AND_FACILITY'
     ),
     tableFilters: createTableFiltersWithName(
       state.tableFilters,

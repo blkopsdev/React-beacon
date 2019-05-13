@@ -3,21 +3,11 @@ import ReactTable, {
   RowRenderProps,
   RowInfo,
   Column
-  // FinalState
 } from 'react-table';
-// import { Button } from 'react-bootstrap';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TranslationFunction } from 'react-i18next';
-// import {
-//   // Ifacility,
-//   // IinstallBase,
-//   IinstallBaseWithStatus
-// } from 'src/models';
+
 import { TableUtil } from '../common/TableUtil';
 import { Button } from 'react-bootstrap';
-// import * as moment from 'moment';
-// import {orderBy} from 'lodash';
-// import {Ifacility} from "../../models";
 interface ExpanderProps extends RowInfo {
   t: TranslationFunction;
   showAddFacility: boolean;
@@ -36,7 +26,7 @@ const ManageFacility = (props: ExpanderProps) => {
       >
         {props.showAddFacility && (
           <Button bsStyle="link" onClick={props.addFacility}>
-            {props.t('addFacility')}
+            {props.t('newFacility')}
           </Button>
         )}
       </span>

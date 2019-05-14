@@ -85,6 +85,7 @@ export interface IinstallBase extends IbaseDataObject {
   quantity?: number;
   position?: string;
   isDeleted: boolean;
+  importedLocation?: string;
 }
 export interface IinstallBaseWithStatus extends IinstallBase {
   status: string;

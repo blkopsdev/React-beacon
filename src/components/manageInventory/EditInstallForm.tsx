@@ -144,7 +144,8 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       locationID,
       roomID,
       id,
-      position
+      position,
+      importedLocation
     } = this.props.selectedItem;
     const shouldRequireQuantity =
       disabled === false && this.props.selectedItem && id ? false : true;
@@ -258,6 +259,19 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       locLabel: {
         render: FormUtil.TextLabel,
         meta: { label: 'locationLabel', colWidth: 12, name: 'location-label' }
+      },
+      $field_3: {
+        render: () => (
+          <Col
+            xs={12}
+            style={{ display: `${importedLocation ? 'block' : 'none'}` }}
+          >
+            <FormGroup bsSize="sm">
+              <ControlLabel>{this.props.t('imported location')}</ControlLabel>
+              <h5 className="queue-form-label">{importedLocation}</h5>
+            </FormGroup>
+          </Col>
+        )
       },
       buildingID: {
         render: FormUtil.CreatableSelect,

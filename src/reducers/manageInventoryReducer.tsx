@@ -17,27 +17,20 @@ import {
   modalToggleWithName
 } from './commonReducers';
 import { cartReducerWithName } from './cartReducer';
-import initialState, { initialProduct } from './initialState';
+import initialState, {
+  initialProduct,
+  initialInstallBase
+} from './initialState';
 import * as types from '../actions/actionTypes';
 
 function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
   switch (action.type) {
     case types.GET_INVENTORY_SUCCESS:
       return map(action.inventory, (d: Iproduct) => {
-        const filteredInstalls = filter(
-          d.installs,
-          item => item.isDeleted === false
-        );
-        return {
-          ...(pickBy(d, (property, key) => property !== null) as Iproduct),
-          installs: filteredInstalls
-        };
+        return cleanAndFilterProductObject(d);
       });
     case types.PRODUCT_UPDATE_SUCCESS:
-      const updatedProduct = pickBy(
-        action.product,
-        (property, key) => property !== null
-      );
+      const updatedProduct = cleanAndFilterProductObject(action.product);
 
       return map(state, pr => {
         if (pr.id === updatedProduct.id) {
@@ -101,12 +94,9 @@ function dataReducer(state: Iproduct[] = [], action: any): Iproduct[] {
     case types.INSTALL_ADD_SUCCESS:
       const oldProductB = find(state, o => o.id === action.productID);
       if (oldProductB) {
-        const installsToAdd = map(action.installs, install => {
-          return pickBy(install, (property, key) => property !== null);
-        });
         const newInstalls = [
           ...oldProductB.installs,
-          ...installsToAdd
+          ...cleanInstallBaseObjects(action.installs)
         ] as IinstallBase[];
         return map(state, pr => {
           if (pr.id === action.productID) {
@@ -294,3 +284,26 @@ export function productInfo(
       return state;
   }
 }
+
+/*
+* ensure the product at least has the expected attributes, ignore any null attributes, and filter out deleted installs
+*/
+const cleanAndFilterProductObject = (product: Iproduct) => {
+  const filteredInstalls = filter(
+    product.installs,
+    item => item.isDeleted === false
+  );
+  const installs = cleanInstallBaseObjects(filteredInstalls);
+  return {
+    ...initialProduct,
+    ...(pickBy(product, (property, key) => property !== null) as Iproduct),
+    installs
+  };
+};
+
+const cleanInstallBaseObjects = (installs: IinstallBase[]) => {
+  return installs.map((install: IinstallBase) => ({
+    ...initialInstallBase,
+    ...(pickBy(install, property => property !== null) as IinstallBase)
+  }));
+};

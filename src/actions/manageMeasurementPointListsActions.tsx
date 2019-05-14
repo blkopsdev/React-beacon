@@ -88,10 +88,6 @@ export function addGlobalMeasurementPointList(
     });
     const listForAPI = { ...mpl, measurementPointTabs };
 
-    dispatch({
-      type: types.MANAGE_MEASUREMENT_POINT_LIST_ADD,
-      measurementPointList: mpl
-    });
     const axiosOptions: AxiosRequestConfig = {
       method: 'post',
       data: listForAPI
@@ -104,6 +100,10 @@ export function addGlobalMeasurementPointList(
           throw undefined;
         } else {
           dispatch(endAjaxCall());
+          dispatch({
+            type: types.MANAGE_MEASUREMENT_POINT_LIST_ADD,
+            measurementPointList: mpl
+          });
           dispatch({ type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT_LISTS });
           toastr.success(
             'Success',

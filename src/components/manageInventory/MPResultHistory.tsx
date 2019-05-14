@@ -82,13 +82,13 @@ export const MPResultHistory = (props: Iprops) => {
           })}
         </ListGroup>
         <Col xs={12} className="form-buttons text-right">
-          <Button
+          {/* <Button
             bsStyle="link"
             type="button"
             onClick={props.toggleMPResultAddModal}
           >
             {t('addResult')}
-          </Button>
+          </Button> */}
           <Button
             bsStyle={props.colorButton}
             type="button"
@@ -106,13 +106,14 @@ export const MPResultHistory = (props: Iprops) => {
           <h4>{t('No inspections for this device.')}</h4>
         </Col>
         <Col xs={12} className="form-buttons text-right">
+          {/* commented out for PHase II deployment
           <Button
             bsStyle="link"
             type="button"
             onClick={props.toggleMPResultAddModal}
           >
             {t('addResult')}
-          </Button>
+          </Button> */}
           <Button
             bsStyle={props.colorButton}
             type="button"

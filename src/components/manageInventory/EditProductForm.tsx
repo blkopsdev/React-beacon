@@ -111,7 +111,8 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
       productTypeID,
       powerID,
       systemSizeID,
-      standardID
+      standardID,
+      id
     } = this.props.selectedItem;
     let filteredSubcategoryOptions: Ioption[] = [];
     let productTypeOptions = productInfo.productTypeOptions;
@@ -129,9 +130,13 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
     const selectedSystemSize = systemSizeID
       ? productInfo.systemSizes[systemSizeID]
       : null;
+    // default to a standard when creating a new product
+    const defaultStandard = id.length
+      ? null
+      : productInfo.standards[constants.defaultProductStandardID];
     const selectedStandard = standardID
       ? productInfo.standards[standardID]
-      : productInfo.standards[constants.defaultProductStandardID];
+      : defaultStandard;
     if (subcategoryID) {
       // TODO for now grabbing the first mainCategoryID.  when we actually support having multiple mainCategories related to a single subCategory, we will need to store the mainCategoryID on the product object
       const mainCategoryID =

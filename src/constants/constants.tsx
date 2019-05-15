@@ -242,7 +242,7 @@ const securityFunctions = {
   },
   ManageAlerts: {
     id: '6701ED68-A98C-4F62-BB4D-02219E88804B',
-    name: 'securityF:ManageAlerts',
+    name: 'securityF:ManageBrands', // TODO change security function name
     description: 'Allows the user to manage global alerts.'
   },
   ViewReports: {
@@ -285,16 +285,16 @@ const colors = {
 };
 const tiles = [
   {
-    icon: 'icon-alerts',
-    iconType: 'fa',
+    icon: icons.alerts,
+    iconType: 'img',
     title: 'alerts',
-    src: 'https://placekitten.com/360/136',
-    srcBanner: '',
+    src: require('src/images/beaconTraining.jpg'),
+    srcBanner: require('src/images/beaconTrainingHeader.jpg'),
     color: 'dark',
     width: 270,
     height: 136,
     url: '/alerts',
-    securityFunction: '',
+    securityFunction: securityFunctions.ManageAlerts.id,
     description: ''
   },
   {
@@ -543,19 +543,6 @@ const tiles = [
     width: 270,
     height: 300,
     url: '/customer-and-facility',
-    securityFunction: securityFunctions.ViewInventory.id,
-    description: ''
-  },
-  {
-    icon: icons.inventory,
-    iconType: 'img',
-    title: 'alerts',
-    src: require('src/images/beaconManageInventory.jpg'),
-    srcBanner: require('src/images/beaconManageInventoryHeader.jpg'),
-    color: 'green',
-    width: 270,
-    height: 300,
-    url: '/alerts',
     securityFunction: securityFunctions.ViewInventory.id,
     description: ''
   }

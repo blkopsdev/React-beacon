@@ -476,6 +476,7 @@ export interface ItableFiltersReducer {
   customer?: Ioption;
   mainCategory?: Ioption;
   brand?: Ioption;
+  title?: Ioption;
   sorted?: SortingRule[];
   standard?: Ioption;
   facilityID?: string;
@@ -560,6 +561,15 @@ export interface ImanageBrandReducer {
   showEditBrandModal: boolean;
   tableFilters: ItableFiltersReducer;
   selectedBrandID: string;
+}
+
+export interface ImanageAlertReducer {
+  data: { [key: string]: IAlert };
+  totalPages: number;
+  showEditAlertModal: boolean;
+  tableFilters: ItableFiltersReducer;
+  selectedAlertID: string;
+  alertFormValues: { [key: string]: any };
 }
 
 export interface ImanageCustomerAndFacilityReducer {
@@ -692,4 +702,5 @@ export interface IinitialState {
   manageReport: ImanageReportReducer;
   manageBrand: ImanageBrandReducer;
   customerAndFacilityManage: ImanageCustomerAndFacilityReducer;
+  manageAlert: ImanageAlertReducer;
 }

@@ -61,6 +61,10 @@ const API = {
     },
     brand: {
       add: `${root}/brand`
+    },
+    alert: {
+      create: `${root}/alert`,
+      markAsRead: `${root}/alert/{alertId}/viewed`
     }
   },
   PUT: {
@@ -74,6 +78,9 @@ const API = {
     },
     brand: {
       update: `${root}/brand`
+    },
+    alert: {
+      update: `${root}/alert/{alertId}`
     }
   },
   DELETE: {
@@ -92,6 +99,9 @@ const API = {
     user: `${root}/user/deleteaccount`,
     brand: {
       remove: `${root}/brand`
+    },
+    alert: {
+      delete: `${root}/alert/{alertId}`
     }
   },
   GET: {
@@ -158,6 +168,10 @@ const API = {
     brand: {
       getall: `${root}/brand/getall`,
       getsingle: `${root}/brand`
+    },
+    alert: {
+      single: `${root}/alert/{alertId}`,
+      all: `${root}/alert/user`
     }
   }
 };

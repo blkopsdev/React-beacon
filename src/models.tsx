@@ -183,6 +183,18 @@ export interface IBrand {
   name: string;
 }
 
+export interface IAlert {
+  id: string;
+  title: string;
+  text: string;
+  imageUrl: string;
+  expirationDate: string;
+  createDate: string;
+  updateDate: string;
+  creatorID: string;
+  updaterID: string;
+}
+
 export interface Itile {
   icon: string | string[];
   title: string;

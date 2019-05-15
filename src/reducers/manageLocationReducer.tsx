@@ -7,8 +7,7 @@ import {
 } from '../models';
 import {
   createTableFiltersWithName,
-  modalToggleWithName,
-  createSelectedIDWithName
+  modalToggleWithName
 } from './commonReducers';
 import initialState from './initialState';
 import * as types from '../actions/actionTypes';
@@ -46,11 +45,6 @@ export default function locationManage(
 ) {
   return {
     visibleLocations: visibleLocationsReducer(state.visibleLocations, action),
-    selectedFacilityID: createSelectedIDWithName(
-      state.selectedFacilityID,
-      action,
-      'FACILITY_MANAGE_LOCATION'
-    ),
     totalPages: locationManageTotalPages(state.totalPages, action),
     showEditLocationModal: modalToggleWithName(
       state.showEditLocationModal,

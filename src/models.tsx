@@ -540,7 +540,6 @@ export interface ImanageLocationReducer {
   totalPages: number;
   showEditLocationModal: boolean;
   tableFilters: ItableFiltersReducer;
-  selectedFacilityID: string;
 }
 
 export interface ImanageBrandReducer {

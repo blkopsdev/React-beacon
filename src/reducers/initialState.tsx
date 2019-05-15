@@ -298,8 +298,7 @@ export default {
     tableFilters: initialTableFilters,
     selectedBuilding: initialBuilding,
     selectedFloor: initialFloor,
-    selectedRoom: initialRoom,
-    selectedFacilityID: ''
+    selectedRoom: initialRoom
   },
 
   manageTeam: {

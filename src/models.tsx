@@ -540,6 +540,7 @@ export interface ImanageLocationReducer {
   totalPages: number;
   showEditLocationModal: boolean;
   tableFilters: ItableFiltersReducer;
+  selectedFacilityID: string;
 }
 
 export interface ImanageBrandReducer {
@@ -667,7 +668,7 @@ export interface IinitialState {
   manageProductQueue: ImanageProductQueueReducer;
   manageLocation: ImanageLocationReducer;
   customers: Icustomer[];
-  facilities: Ifacility[];
+  facilities: { [key: string]: Ifacility };
   showEditCustomerModal: boolean;
   showEditFacilityModal: boolean;
   showEditProfileModal: boolean;

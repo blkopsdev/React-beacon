@@ -35,7 +35,7 @@ const getCustomerOptions = (customers: Icustomer[]) => {
   });
 };
 
-const getFacilitityOptions = (facilities: Ifacility[]) => {
+const getFacilitityOptions = (facilities: { [key: string]: Ifacility }) => {
   return map(facilities, (facility: Ifacility) => {
     return { value: facility.id, label: facility.name };
   });

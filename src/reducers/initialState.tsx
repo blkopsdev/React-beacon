@@ -298,8 +298,8 @@ export default {
     tableFilters: initialTableFilters,
     selectedBuilding: initialBuilding,
     selectedFloor: initialFloor,
-    selectedLocation: initialLoc,
-    selectedRoom: initialRoom
+    selectedRoom: initialRoom,
+    selectedFacilityID: ''
   },
 
   manageTeam: {
@@ -396,11 +396,9 @@ export default {
     historicalResultID: ''
   },
   customers: [],
-  facilities: [],
-
+  facilities: {},
   showEditCustomerModal: false,
   showEditFacilityModal: false,
-
   showEditProfileModal: false,
   showSecurityFunctionsModal: false
 };

@@ -10,8 +10,7 @@ import {
   Ibuilding,
   Ifloor,
   Ilocation,
-  Iroom,
-  Ifacility
+  Iroom
 } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
@@ -22,6 +21,7 @@ import { Dispatch } from 'react-redux';
 const uuidv4 = require('uuid/v4');
 import { adalFetch } from 'react-adal';
 import { authContext } from './userActions';
+import { initialFacility } from 'src/reducers/initialState';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
@@ -40,7 +40,7 @@ export function getFacility(facilityID: string): ThunkResult<void> {
         } else {
           dispatch({
             type: types.LOCATION_MANAGE_SUCCESS,
-            facility: cleanFacility(data.data)
+            facility: data.data
           });
         }
       })
@@ -148,7 +148,8 @@ const saveAnyLocationObjectHelper = (
         dispatch({
           type: types.LOCATION_ADD_SUCCESS,
           lType,
-          locationObject
+          locationObject,
+          facilityID
         });
         toastr.success(
           'Success',
@@ -168,7 +169,8 @@ const saveAnyLocationObjectHelper = (
 * update (edit) a building/floor/location/room
 */
 export function updateAnyLocation(
-  locationObject: Ilocation | Ibuilding | Ifloor | Iroom
+  locationObject: Ilocation | Ibuilding | Ifloor | Iroom,
+  facilityID: string
 ): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
@@ -200,9 +202,10 @@ export function updateAnyLocation(
           dispatch({
             type: types.LOCATION_UPDATE_SUCCESS,
             lType,
-            locationObject
+            locationObject,
+            facilityID
           });
-          dispatch({ type: types.TOGGLE_MODAL_EDIT_LOCATION });
+
           toastr.success(
             'Success',
             `Updated ${lType}.`,
@@ -222,7 +225,8 @@ export function updateAnyLocation(
 * update (edit) a building/floor/location/room
 */
 export function deleteAnyLocation(
-  locationObject: Ilocation | Ibuilding | Ifloor | Iroom
+  locationObject: Ilocation | Ibuilding | Ifloor | Iroom,
+  facilityID: string
 ): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
@@ -253,7 +257,8 @@ export function deleteAnyLocation(
           dispatch({
             type: types.LOCATION_DELETE_SUCCESS,
             lType,
-            locationObject
+            locationObject,
+            facilityID
           });
           toastr.success(
             'Success',
@@ -272,9 +277,9 @@ export function deleteAnyLocation(
 
 export const filterLocations = (facilityID: string): ThunkResult<void> => {
   return (dispatch, getState) => {
-    const { tableFilters, facility } = getState().manageLocation;
+    const { tableFilters } = getState().manageLocation;
     const { buildingID, locationID, floorID } = tableFilters;
-    const { buildings } = facility;
+    const { buildings } = getState().facilities[facilityID] || initialFacility;
     let locations: Array<Ibuilding | Ifloor | Ilocation | Iroom> = [];
     if (buildingID && floorID && locationID) {
       // LOCATION
@@ -346,46 +351,3 @@ export const setTableFilter = (filters: ItableFiltersParams) => ({
   type: types.SET_TABLE_FILTER_MANAGE_LOCATION,
   filters
 });
-
-const cleanFacility = (facility: Ifacility) => {
-  let buildings = facility.buildings;
-
-  if (buildings.length) {
-    buildings = buildings.filter(building => building.isDeleted === false);
-    if (buildings.length) {
-      buildings = buildings.map(building => {
-        const filteredFloors = building.floors.filter(
-          floor => floor.isDeleted === false
-        );
-        if (filteredFloors.length) {
-          const floors = filteredFloors.map(floor => {
-            const filteredLocations = floor.locations.filter(
-              location => location.isDeleted === false
-            );
-            if (filteredLocations.length) {
-              const locations = filteredLocations.map(location => {
-                if (location.rooms.length) {
-                  return {
-                    ...location,
-                    rooms: location.rooms.filter(
-                      room => room.isDeleted === false
-                    )
-                  };
-                } else {
-                  return location;
-                }
-              });
-              return { ...floor, locations };
-            } else {
-              return { ...floor, locations: filteredLocations };
-            }
-          });
-          return { ...building, floors };
-        } else {
-          return { ...building, floors: filteredFloors };
-        }
-      });
-    }
-  }
-  return { ...facility, buildings };
-};

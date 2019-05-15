@@ -57,7 +57,7 @@ export function createFormValuesWithName(
 ): { [key: string]: any } {
   switch (action.type) {
     case `SET_FORM_VALUES_${tableName}`:
-      return action.formValues;
+      return { ...action.formValues };
     case `UPDATE_FORM_VALUES_${tableName}`:
       return { ...state, ...action.formValue };
     case types.USER_LOGOUT_SUCCESS:

@@ -283,6 +283,12 @@ const colors = {
   red: '#d00000',
   greyText: `#AAAAAA`
 };
+
+const alertTypes = [
+  { value: 'alert', label: 'Alert' },
+  { value: 'informational', label: 'Informational' }
+];
+
 const tiles = [
   {
     icon: icons.alerts,
@@ -564,6 +570,7 @@ export const constants = {
     transitionOut: 'bounceOutUp' as transitionOutType,
     timeOut: 3000
   },
+  alertTypes,
   colors,
   securityFunctions,
   tiles,

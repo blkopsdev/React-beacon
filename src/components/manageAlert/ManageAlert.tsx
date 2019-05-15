@@ -127,8 +127,8 @@ class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
 
   onSearchValueChanges = (value: any, key: string) => {
     switch (key) {
-      case 'name':
-        this.props.setTableFilter({ name: value, page: 1 });
+      case 'title':
+        this.props.setTableFilter({ title: value, page: 1 });
         break;
       default:
         break;
@@ -152,8 +152,13 @@ class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
     const columns = TableUtil.translateHeaders(
       [
         {
-          Header: 'name',
-          accessor: 'name',
+          Header: 'title',
+          accessor: 'title',
+          minWidth: 300
+        },
+        {
+          Header: 'type',
+          accessor: 'type',
           minWidth: 300
         }
       ],

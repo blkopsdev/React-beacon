@@ -175,6 +175,61 @@ export const FormUtil = {
       </Col>
     );
   },
+  FileInput: ({
+    handler,
+    touched,
+    meta,
+    pristine,
+    errors,
+    submitted,
+    value
+  }: AbstractControl) => {
+    const requiredLabel = meta.required === false ? ' - Optional' : '';
+
+    return (
+      <Col xs={meta.colWidth}>
+        <FormGroup
+          validationState={FormUtil.getValidationState(
+            pristine,
+            errors,
+            submitted
+          )}
+          bsSize="sm"
+          style={meta.style}
+        >
+          <ControlLabel htmlFor="fileUpload" style={{ cursor: 'pointer' }}>
+            <span className="btn btn-default">
+              {meta.label}
+              <i className="required-label">{requiredLabel}</i>
+            </span>
+            <FormControl
+              id={'fileUpload'}
+              placeholder={meta.placeholder}
+              componentClass={meta.componentClass}
+              type={meta.type || 'file'}
+              rows={meta.rows}
+              autoFocus={meta.autoFocus}
+              name={meta.name || ''}
+              {...handler()}
+              onChange={(e: any) => {
+                const fileInput = e.target;
+                let fileName = '';
+                if (!!fileInput.files.length) {
+                  meta.onChange(fileInput.files[0]);
+                  fileName = fileInput.files[0].name;
+                }
+                e.target.filename = fileName;
+                console.log(fileName);
+                handler().onChange(e);
+              }}
+              style={{ display: 'none' }}
+            />
+          </ControlLabel>
+        </FormGroup>
+        {meta.fileName && <span>{meta.fileName}</span>}
+      </Col>
+    );
+  },
   Toggle: ({
     handler,
     touched,

@@ -187,6 +187,7 @@ export interface IAlert {
   id: string;
   title: string;
   text: string;
+  type?: string;
   imageUrl: string;
   expirationDate: string;
   createDate: string;
@@ -496,6 +497,7 @@ export interface ItableFiltersParams {
   customer?: Ioption;
   mainCategory?: Ioption;
   brand?: Ioption;
+  title?: Ioption;
   sorted?: SortingRule[];
   standard?: Ioption;
   facilityID?: string;

@@ -15,7 +15,7 @@ export function manageAlertReducer(
 ) {
   switch (action.type) {
     case types.LOAD_ALERTS_SUCCESS:
-      const newAlerts = map(action.payload.result, (alert: IAlert) => {
+      const newAlerts = map(action.payload, (alert: IAlert) => {
         return cleanAlertObject(alert);
       });
       return keyBy(newAlerts, 'id');

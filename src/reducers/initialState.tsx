@@ -176,6 +176,7 @@ export const initialAlert = {
   id: '',
   title: '',
   text: '',
+  type: '',
   imageUrl: '',
   expirationDate: '',
   createDate: '',

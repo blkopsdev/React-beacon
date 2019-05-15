@@ -39,12 +39,15 @@ export function getAlerts() {
   };
 }
 
-export function saveAlert(alert: IAlert) {
+export function saveAlert(alert: FormData) {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());
     const axiosOptions: AxiosRequestConfig = {
       method: 'post',
-      data: alert
+      data: alert,
+      headers: {
+        'content-type': 'multipart/form-data'
+      }
     };
     const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
     const url = API.POST.alert.create;
@@ -69,15 +72,20 @@ export function saveAlert(alert: IAlert) {
   };
 }
 
-export function updateAlert(alert: IAlert) {
+export function updateAlert(alert: FormData) {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());
     const axiosOptions: AxiosRequestConfig = {
       method: 'put',
-      data: alert
+      data: alert,
+      headers: {
+        'content-type': 'multipart/form-data'
+      }
     };
     const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
-    const url = API.PUT.alert.update.replace('{alertId}', alert.id);
+    const id = alert.get('id') as string;
+    const url = API.PUT.alert.update.replace('{alertId}', id);
+    
     return adalFetch(authContext, resource, axios, url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (data.status !== 200) {

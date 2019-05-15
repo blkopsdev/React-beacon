@@ -131,6 +131,7 @@ const icons = {
   manageReport: require('../images/icons/BM_Reports.png'),
   brands: require('../images/icons/BM_Inventory.png'),
   customerAndFacility: require('../images/icons/BM_Inventory.png'),
+  alerts: require('../images/icons/BM_Inventory.png')
 };
 
 const securityFunctions = {
@@ -238,6 +239,11 @@ const securityFunctions = {
     id: '6701ED68-A98C-4F62-BB4D-02219E88804B',
     name: 'securityF:ManageBrands',
     description: 'Allows the user to manage global brands.'
+  },
+  ManageAlerts: {
+    id: '6701ED68-A98C-4F62-BB4D-02219E88804B',
+    name: 'securityF:ManageAlerts',
+    description: 'Allows the user to manage global alerts.'
   },
   ViewReports: {
     id: 'FF7FAA1C-DF33-4237-98DA-2A8279250619',
@@ -537,6 +543,19 @@ const tiles = [
     width: 270,
     height: 300,
     url: '/customer-and-facility',
+    securityFunction: securityFunctions.ViewInventory.id,
+    description: ''
+  },
+  {
+    icon: icons.inventory,
+    iconType: 'img',
+    title: 'alerts',
+    src: require('src/images/beaconManageInventory.jpg'),
+    srcBanner: require('src/images/beaconManageInventoryHeader.jpg'),
+    color: 'green',
+    width: 270,
+    height: 300,
+    url: '/alerts',
     securityFunction: securityFunctions.ViewInventory.id,
     description: ''
   }

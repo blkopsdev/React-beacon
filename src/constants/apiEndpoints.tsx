@@ -171,7 +171,7 @@ const API = {
     },
     alert: {
       single: `${root}/alert/{alertId}`,
-      all: `${root}/alert/user`
+      all: `${root}/alert/getall`
     }
   }
 };

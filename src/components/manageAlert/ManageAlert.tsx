@@ -96,7 +96,7 @@ class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
       JSON.stringify(this.props.tableFilters)
     ) {
       console.log(
-        'user manage filters changed',
+        'alert manage filters changed',
         prevProps.tableFilters,
         this.props.tableFilters
       );
@@ -112,7 +112,7 @@ class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
           label: 'common:Alert',
           colWidth: 3,
           type: 'text',
-          placeholder: 'Search by text',
+          placeholder: 'Search by title',
           defaultValue: this.props.tableFilters.title,
           isClearable: true
         }
@@ -127,7 +127,7 @@ class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
 
   onSearchValueChanges = (value: any, key: string) => {
     switch (key) {
-      case 'title':
+      case 'name':
         this.props.setTableFilter({ title: value, page: 1 });
         break;
       default:

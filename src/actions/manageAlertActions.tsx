@@ -23,7 +23,10 @@ export function getAlerts() {
         if (!data.data) {
           throw undefined;
         } else {
-          dispatch({ type: types.LOAD_ALERTS_SUCCESS, payload: data.data });
+          dispatch({
+            type: types.LOAD_ALERTS_SUCCESS,
+            payload: data.data.result
+          });
           dispatch({
             type: types.ALERT_MANAGE_TOTAL_PAGES,
             pages: data.data.pages
@@ -39,15 +42,17 @@ export function getAlerts() {
   };
 }
 
-export function saveAlert(alert: FormData) {
+export function saveAlert(alert: any) {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());
+    let headers = {};
+    if (alert instanceof FormData) {
+      headers = { 'content-type': 'multipart/form-data' };
+    }
     const axiosOptions: AxiosRequestConfig = {
       method: 'post',
       data: alert,
-      headers: {
-        'content-type': 'multipart/form-data'
-      }
+      headers
     };
     const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
     const url = API.POST.alert.create;
@@ -75,12 +80,14 @@ export function saveAlert(alert: FormData) {
 export function updateAlert(alert: FormData) {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());
+    let headers = {};
+    if (alert instanceof FormData) {
+      headers = { 'content-type': 'multipart/form-data' };
+    }
     const axiosOptions: AxiosRequestConfig = {
       method: 'put',
       data: alert,
-      headers: {
-        'content-type': 'multipart/form-data'
-      }
+      headers
     };
     const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
     const id = alert.get('id') as string;

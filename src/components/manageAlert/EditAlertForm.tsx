@@ -59,7 +59,7 @@ class EditAlertForm extends React.Component<Iprops, State> {
     };
   }
   componentDidMount() {
-    if (!this.props.selectedAlert) {
+    if (!this.props.selectedAlert.id) {
       console.log(`adding a new Alert`);
     } else {
       this.props.setFormValues(this.props.selectedAlert);
@@ -83,6 +83,7 @@ class EditAlertForm extends React.Component<Iprops, State> {
       this.subscription.unsubscribe();
     }
     this.props.clearSelectedAlertID();
+    this.props.setFormValues({});
   }
 
   buildFieldConfig = (onFileChange: any) => {
@@ -95,9 +96,8 @@ class EditAlertForm extends React.Component<Iprops, State> {
     title = formValues.title ? formValues.title : title;
     text = formValues.text ? formValues.text : text;
     imageUrl = fileName ? fileName : imageUrl;
-    const selectedType =
-      constants.alertTypes.find(t => t.value === type) || null;
-      
+    const selectedType = constants.alertTypes.find(t => t.value === type) || {};
+
     const fieldConfigControls = {
       title: {
         options: {
@@ -137,19 +137,6 @@ class EditAlertForm extends React.Component<Iprops, State> {
           required: false,
           initialContent: text
         }
-      },
-      file: {
-        render: FormUtil.FileInput,
-        meta: {
-          type: 'file',
-          label: 'alertFileLabel',
-          colWidth: 12,
-          name: 'alert-file',
-          required: false,
-          onChange: onFileChange,
-          fileName: fileName || imageUrl
-        }
-        //   formState: fileName || imageUrl || ''
       }
     };
     return FormUtil.translateForm(
@@ -195,26 +182,36 @@ class EditAlertForm extends React.Component<Iprops, State> {
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-    const formData = this.props.formValues;
+    let formData = {
+      ...this.formGroup.value,
+      type: this.formGroup.value.type.value
+    };
     if (this.state.file) {
       formData['file'] = this.state.file;
     }
-    if (!this.props.selectedAlert) {
-      this.props.handleSubmit(this.toFormData(formData));
+
+    if (!this.props.selectedAlert.id) {
+      if (formData.file) {
+        formData = this.toFormData(formData);
+      }
+      this.props.handleSubmit(formData);
     } else {
       formData['id'] = this.props.selectedAlert.id;
+      if (formData.file) {
+        formData = this.toFormData(formData);
+      }
       this.props.handleEdit(this.toFormData(formData));
     }
   };
 
   toFormData<T>(formValue: T) {
-    const formData = new FormData();
-    for (const key of Object.keys(formValue)) {
+    const data = new FormData();
+    Object.keys(formValue).map(key => {
       const value = formValue[key];
-      formData.append(key, typeof value === 'object' ? value.value : value);
-    }
+      data.append(key, value.value ? value.value : value);
+    });
 
-    return formData;
+    return data;
   }
 
   setForm = (form: FormGroup) => {

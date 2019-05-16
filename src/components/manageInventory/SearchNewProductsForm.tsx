@@ -42,6 +42,7 @@ interface Iprops {
   resetNewProducts: typeof resetNewProducts;
   handleProductSelect: (product: Iproduct) => void;
   selectedQueueObject?: IproductQueueObject;
+  isApproved?: boolean;
 }
 
 class SearchNewProductsForm extends React.Component<Iprops, {}> {
@@ -149,7 +150,7 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
     const { mainCategoryID, search } = this.userForm.value;
     const mainCategoryUUID = mainCategoryID ? mainCategoryID.value : '';
 
-    this.props.getProducts(1, search, mainCategoryUUID);
+    this.props.getProducts(1, search, mainCategoryUUID, this.props.isApproved);
   };
   setForm = (form: AbstractControl) => {
     this.userForm = form;

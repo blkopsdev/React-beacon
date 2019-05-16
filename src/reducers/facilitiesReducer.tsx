@@ -12,9 +12,9 @@ import * as types from '../actions/actionTypes';
 import { initialFacility } from './initialState';
 
 export default function facilitiesReducer(
-  state: { [key: string]: Ifacility | IfacilityWithoutBuildings } = {},
+  state: { [key: string]: Ifacility } = {},
   action: any
-): { [key: string]: Ifacility | IfacilityWithoutBuildings } {
+): { [key: string]: Ifacility } {
   switch (action.type) {
     case types.GET_FACILITIES_SUCCESS:
       const newFacilities = map(action.facilities, facility => {
@@ -28,16 +28,24 @@ export default function facilitiesReducer(
       /*
       loop over the customers and update the facilities in state
       */
-      let newFacilitiesByID: { [key: string]: IfacilityWithoutBuildings } = {};
+      let newFacilitiesWithoutBuildings: IfacilityWithoutBuildings[] = [];
       action.payload.forEach(
         (customer: { facilities: IfacilityWithoutBuildings[] }) => {
           customer.facilities.forEach(facility => {
-            newFacilitiesByID = {
-              ...newFacilitiesByID,
-              [facility.id]: cleanFacilityWithoutBuildings(facility)
-            };
+            newFacilitiesWithoutBuildings = [
+              ...newFacilitiesWithoutBuildings,
+              cleanFacilityWithoutBuildings(facility)
+            ];
           });
         }
+      );
+      // add the buildings from state or an empty array
+      const newFacilitiesByID = keyBy(
+        map(newFacilitiesWithoutBuildings, newFacility => ({
+          ...newFacility,
+          buildings: state[newFacility.id].buildings || []
+        })),
+        'id'
       );
       return { ...state, ...newFacilitiesByID };
 
@@ -413,7 +421,7 @@ const cleanFacilityWithoutBuildings = (facility: IfacilityWithoutBuildings) => {
 export const cleanFacility = (facility: Ifacility = initialFacility) => {
   let buildings = facility.buildings;
 
-  if (buildings.length) {
+  if (buildings && buildings.length) {
     buildings = buildings.filter(building => building.isDeleted === false);
     if (buildings.length) {
       buildings = buildings.map(building => {

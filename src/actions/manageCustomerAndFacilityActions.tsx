@@ -24,7 +24,7 @@ export function getCustomers() {
         } else {
           dispatch({
             type: types.GET_CUSTOMERS_AND_FACILITY_SUCCESS,
-            payload: data.data
+            payload: data.data.result
           });
           dispatch({
             type: types.CUSTOMERS_AND_FACILITY_TOTAL_PAGES,

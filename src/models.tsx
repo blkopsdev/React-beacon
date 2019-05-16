@@ -204,7 +204,7 @@ export interface Icustomer {
   createDate?: string;
   facilities?: Ifacility[];
 }
-export interface Ifacility {
+export interface IfacilityWithoutBuildings {
   id: string;
   name: string;
   customerID: string;
@@ -213,8 +213,10 @@ export interface Ifacility {
   city: string;
   state: string;
   postalCode: string;
-  buildings: Ibuilding[];
   isDeleted: boolean;
+}
+export interface Ifacility extends IfacilityWithoutBuildings {
+  buildings: Ibuilding[];
 }
 
 export interface Ioption {
@@ -667,7 +669,7 @@ export interface IinitialState {
   manageProductQueue: ImanageProductQueueReducer;
   manageLocation: ImanageLocationReducer;
   customers: Icustomer[];
-  facilities: { [key: string]: Ifacility };
+  facilities: { [key: string]: Ifacility | IfacilityWithoutBuildings };
   showEditCustomerModal: boolean;
   showEditFacilityModal: boolean;
   showEditProfileModal: boolean;

@@ -1,13 +1,20 @@
 import { pickBy, map, keyBy } from 'lodash';
 
-import { Ifacility, Ilocation, Ibuilding, Ifloor, Iroom } from '../models';
+import {
+  Ifacility,
+  Ilocation,
+  Ibuilding,
+  Ifloor,
+  Iroom,
+  IfacilityWithoutBuildings
+} from '../models';
 import * as types from '../actions/actionTypes';
 import { initialFacility } from './initialState';
 
 export default function facilitiesReducer(
-  state: { [key: string]: Ifacility } = {},
+  state: { [key: string]: Ifacility | IfacilityWithoutBuildings } = {},
   action: any
-): { [key: string]: Ifacility } {
+): { [key: string]: Ifacility | IfacilityWithoutBuildings } {
   switch (action.type) {
     case types.GET_FACILITIES_SUCCESS:
       const newFacilities = map(action.facilities, facility => {
@@ -17,6 +24,23 @@ export default function facilitiesReducer(
         };
       }) as Ifacility[];
       return { ...state, ...keyBy(newFacilities, 'id') };
+    case types.GET_CUSTOMERS_AND_FACILITY_SUCCESS:
+      /*
+      loop over the customers and update the facilities in state
+      */
+      let newFacilitiesByID: { [key: string]: IfacilityWithoutBuildings } = {};
+      action.payload.forEach(
+        (customer: { facilities: IfacilityWithoutBuildings[] }) => {
+          customer.facilities.forEach(facility => {
+            newFacilitiesByID = {
+              ...newFacilitiesByID,
+              [facility.id]: cleanFacilityWithoutBuildings(facility)
+            };
+          });
+        }
+      );
+      return { ...state, ...newFacilitiesByID };
+
     case types.FACILITY_UPDATE_SUCCESS:
       return { ...state, [action.facility.id]: action.facility }; // TODO only update specific attributes
     case types.LOCATION_MANAGE_SUCCESS:
@@ -377,6 +401,15 @@ export default function facilitiesReducer(
   }
 }
 
+const cleanFacilityWithoutBuildings = (facility: IfacilityWithoutBuildings) => {
+  const { buildings, ...initialFacilityWithoutBuildings } = initialFacility;
+
+  return {
+    ...initialFacilityWithoutBuildings,
+    ...pickBy(facility, (property, key) => property !== null)
+  };
+};
+
 export const cleanFacility = (facility: Ifacility = initialFacility) => {
   let buildings = facility.buildings;
 
@@ -417,5 +450,9 @@ export const cleanFacility = (facility: Ifacility = initialFacility) => {
       });
     }
   }
-  return { ...initialFacility, ...facility, buildings };
+  return {
+    ...initialFacility,
+    ...pickBy(facility, (property, key) => property !== null),
+    buildings
+  };
 };

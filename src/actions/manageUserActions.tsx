@@ -108,3 +108,12 @@ export const setTableFilter = (filters: ItableFiltersParams) => ({
   type: types.SET_TABLE_FILTER_MANAGE_USER,
   filters
 });
+
+export const setEditUserFormValues = (formValues: { [key: string]: any }) => ({
+  type: types.SET_FORM_VALUES_MANAGE_USER,
+  formValues
+});
+export const updateEditUserFormValue = (formValue: { [key: string]: any }) => ({
+  type: types.UPDATE_FORM_VALUES_MANAGE_JOB,
+  formValue
+});

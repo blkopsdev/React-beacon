@@ -9,7 +9,7 @@ import { connect } from 'react-redux';
 import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
-import { IinitialState, Iuser } from '../../models';
+import { IinitialState, Iuser, Ifacility } from '../../models';
 import {
   getFacilitiesByCustomer,
   toggleEditCustomerModal,
@@ -18,10 +18,13 @@ import {
 import {
   updateUser,
   toggleEditUserModal,
-  toggleSecurityFunctionsModal
+  toggleSecurityFunctionsModal,
+  setEditUserFormValues,
+  updateEditUserFormValue
 } from '../../actions/manageUserActions';
 import CommonModal from '../common/CommonModal';
 import EditUserForm from './EditUserForm';
+import { filter } from 'lodash';
 
 interface Iprops {
   selectedUser: Iuser;
@@ -40,6 +43,9 @@ interface IdispatchProps {
   toggleEditCustomerModal: typeof toggleEditCustomerModal;
   toggleEditFacilityModal: typeof toggleEditFacilityModal;
   toggleSecurityFunctionsModal: typeof toggleSecurityFunctionsModal;
+  updateFormValue: (formValue: { [key: string]: any }) => void;
+  setFormValues: (formValues: { [key: string]: any }) => void;
+  formValues: { [key: string]: any };
 }
 
 class EditManageUserModal extends React.Component<Iprops & IdispatchProps, {}> {
@@ -62,15 +68,23 @@ class EditManageUserModal extends React.Component<Iprops & IdispatchProps, {}> {
 }
 
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
+  const customerID =
+    state.manageUser.editUserFormValues.customerID ||
+    ownProps.selectedUser.customerID;
+  const filteredFacilities = filter(
+    state.facilities,
+    (facility: Ifacility) => facility.customerID === customerID
+  );
   return {
     user: state.user,
     userManage: state.manageUser,
     loading: state.ajaxCallsInProgress > 0,
     customerOptions: FormUtil.convertToOptions(state.customers),
-    facilityOptions: FormUtil.convertToOptions(state.facilities),
+    facilityOptions: FormUtil.convertToOptions(filteredFacilities),
     showModal: state.manageUser.showEditUserModal,
     showEditCustomerModal: state.showEditCustomerModal,
-    showEditFacilityModal: state.showEditFacilityModal
+    showEditFacilityModal: state.showEditFacilityModal,
+    formValues: state.manageUser.editUserFormValues
   };
 };
 
@@ -82,6 +96,8 @@ export default connect(
     getFacilitiesByCustomer,
     toggleEditCustomerModal,
     toggleEditFacilityModal,
-    toggleSecurityFunctionsModal
+    toggleSecurityFunctionsModal,
+    setFormValues: setEditUserFormValues,
+    updateFormValue: updateEditUserFormValue
   }
 )(EditManageUserModal);

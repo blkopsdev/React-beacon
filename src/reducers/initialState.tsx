@@ -248,12 +248,14 @@ export default {
     totalPages: 1,
     data: [],
     showEditQueueUserModal: false,
+    editUserFormValues: {},
     tableFilters: initialTableFilters
   },
   manageUser: {
     totalPages: 1,
     data: [],
     showEditUserModal: false,
+    editUserFormValues: {},
     tableFilters: initialTableFilters
   },
   manageJob: {

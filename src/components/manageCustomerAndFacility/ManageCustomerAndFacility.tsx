@@ -143,7 +143,7 @@ class ManageCustomerAndFacility extends React.Component<
 
   buildSearchControls = (): FieldConfig => {
     const mainSearchControls = {
-      name: {
+      search: {
         render: FormUtil.TextInputWithoutValidation,
         meta: {
           label: 'common:Customer',
@@ -164,8 +164,8 @@ class ManageCustomerAndFacility extends React.Component<
 
   onSearchValueChanges = (value: any, key: string) => {
     switch (key) {
-      case 'name':
-        this.props.setTableFilter({ name: value, page: 0 }); // TODO add a debounce like in manageJob.tsx
+      case 'search':
+        this.props.setTableFilter({ search: value, page: 0 }); // TODO add a debounce like in manageJob.tsx
         break;
       default:
         break;

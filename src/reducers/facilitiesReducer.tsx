@@ -43,7 +43,9 @@ export default function facilitiesReducer(
       const newFacilitiesByID = keyBy(
         map(newFacilitiesWithoutBuildings, newFacility => ({
           ...newFacility,
-          buildings: state[newFacility.id].buildings || []
+          buildings: state[newFacility.id]
+            ? state[newFacility.id].buildings
+            : []
         })),
         'id'
       );

@@ -1,9 +1,5 @@
 import * as React from 'react';
-import ReactTable, {
-  RowRenderProps,
-  RowInfo,
-  Column
-} from 'react-table';
+import ReactTable, { RowRenderProps, RowInfo, Column } from 'react-table';
 import { TranslationFunction } from 'react-i18next';
 
 import { TableUtil } from '../common/TableUtil';
@@ -77,17 +73,21 @@ const ManageFacility = (props: ExpanderProps) => {
     <div>
       <ReactTable
         className={'attempts-expander'}
-        data={props.original.facilities}
+        data={props.original.facilities ? props.original.facilities : []}
         sortable={false}
         columns={expanderColumns}
         minRows={0}
         showPageSizeOptions={false}
         rowsText="facilities"
-        key={props.original.facilities.length}
+        key={props.original.facilities ? props.original.facilities.length : 0}
         // getTdProps={getTdProps}
         noDataText="No installations found."
         resizable={false}
-        showPagination={props.original.facilities.length >= 10}
+        showPagination={
+          props.original.facilities
+            ? props.original.facilities.length >= 10
+            : false
+        }
       />
     </div>
   );

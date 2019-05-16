@@ -275,6 +275,7 @@ export default {
   manageCustomerAndFacility: {
     totalPages: 1,
     data: {},
+    visibleCustomers: [],
     customerFormValues: {},
     facilityFormValues: {},
     showEditCustomerAndFacilityModal: false,
@@ -394,7 +395,7 @@ export default {
     previousResult: initialMeasurmentPointResult,
     historicalResultID: ''
   },
-  customers: [],
+  customers: {},
   facilities: {},
   showEditCustomerModal: false,
   showEditFacilityModal: false,

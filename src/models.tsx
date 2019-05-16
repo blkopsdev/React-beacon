@@ -473,6 +473,7 @@ export interface ItableFiltersReducer {
   buildingID?: string;
   floorID?: string;
   locationID?: string;
+  rows?: number;
 }
 export interface ItableFiltersParams {
   search?: string;
@@ -492,6 +493,7 @@ export interface ItableFiltersParams {
   buildingID?: string;
   floorID?: string;
   locationID?: string;
+  rows?: number;
 }
 
 export interface IqueueObject {
@@ -556,6 +558,7 @@ export interface ImanageBrandReducer {
 export interface ImanageCustomerAndFacilityReducer {
   data: { [key: string]: Icustomer };
   totalPages: number;
+  visibleCustomers: Icustomer[];
   customerFormValues: { [key: string]: any };
   facilityFormValues: { [key: string]: any };
   showEditCustomerAndFacilityModal: boolean;
@@ -669,7 +672,7 @@ export interface IinitialState {
   manageInventory: ImanageInventoryReducer;
   manageProductQueue: ImanageProductQueueReducer;
   manageLocation: ImanageLocationReducer;
-  customers: Icustomer[];
+  customers: { [key: string]: Icustomer };
   facilities: { [key: string]: Ifacility };
   showEditCustomerModal: boolean;
   showEditFacilityModal: boolean;

@@ -9,10 +9,10 @@ import {
   IfacilityWithoutBuildings
 } from '../models';
 import * as types from '../actions/actionTypes';
-import { initialFacility } from './initialState';
+import initialState, { initialFacility } from './initialState';
 
 export default function facilitiesReducer(
-  state: { [key: string]: Ifacility } = {},
+  state: { [key: string]: Ifacility } = initialState.facilities,
   action: any
 ): { [key: string]: Ifacility } {
   switch (action.type) {
@@ -402,7 +402,7 @@ export default function facilitiesReducer(
       return state;
 
     case types.USER_LOGOUT_SUCCESS:
-      return {};
+      return initialState.facilities;
 
     default:
       return state;

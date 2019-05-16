@@ -51,7 +51,8 @@ export function getCustomers() {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());
     const axiosOptions: AxiosRequestConfig = {
-      method: 'get'
+      method: 'get',
+      params: { pagingType: 'none' }
     };
     const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
     const url = API.GET.customer.getall;
@@ -60,7 +61,10 @@ export function getCustomers() {
         if (!data.data) {
           throw undefined;
         } else {
-          dispatch({ type: types.GET_CUSTOMERS_SUCCESS, customers: data.data });
+          dispatch({
+            type: types.GET_CUSTOMERS_SUCCESS,
+            customers: data.data.result
+          });
           // dispatch({ type: types.USER_QUEUE_TOTAL_PAGES, pages: data.data[0] });
           return data;
         }

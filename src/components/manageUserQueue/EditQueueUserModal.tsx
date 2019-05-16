@@ -29,7 +29,7 @@ import {
 import CommonModal from '../common/CommonModal';
 import EditQueueUserForm from './EditQueueUserForm';
 
-const getCustomerOptions = (customers: Icustomer[]) => {
+const getCustomerOptions = (customers: { [key: string]: Icustomer }) => {
   return map(customers, (cust: Icustomer) => {
     return { value: cust.id, label: cust.name };
   });

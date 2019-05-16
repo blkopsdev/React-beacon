@@ -130,7 +130,7 @@ const icons = {
   measurements: require('../images/icons/BM_Measurement.png'),
   manageReport: require('../images/icons/BM_Reports.png'),
   brands: require('../images/icons/BM_Inventory.png'),
-  customerAndFacility: require('../images/icons/BM_Inventory.png'),
+  customerAndFacility: require('../images/icons/BM_Inventory.png')
 };
 
 const securityFunctions = {
@@ -639,5 +639,9 @@ export const constants = {
     toastr.error('Error', msg, constants.toastrError);
   },
   tableSearchDebounceTime: 300,
-  timedQuizHours: 2
+  timedQuizHours: 2,
+  searchProductPageCount: 80, // max items to show inside the product search modal
+  searchProductRecentProductLimit: 30,
+  tablePageSizeDefault: 25,
+  tablePageSizeOptions: [10, 25, 50, 100]
 };

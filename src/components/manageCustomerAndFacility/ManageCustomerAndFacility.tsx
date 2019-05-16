@@ -12,22 +12,21 @@ import {
   ItableFiltersReducer,
   Itile,
   Ibrand,
-  Icustomer,
-  Ifacility
+  Icustomer
 } from '../../models';
 import { TableUtil } from '../common/TableUtil';
 import { FormUtil } from '../common/FormUtil';
 import SearchTableForm from '../common/SearchTableForm';
 import { Button } from 'react-bootstrap';
 import ReactTable, { FinalState, RowInfo, RowRenderProps } from 'react-table';
-import * as moment from 'moment';
-import { orderBy } from 'lodash';
+
 import {
   setTableFilter,
   getCustomers,
   setSelectedCustomerID,
   clearSelectedCustomerID,
-  setSelectedFacilityID
+  setSelectedFacilityID,
+  filterVisibleCustomers
 } from '../../actions/manageCustomerAndFacilityActions';
 import ManageFacility from './ManageFacility';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -63,6 +62,8 @@ interface IdispatchProps {
   setSelectedFacilityID: typeof setSelectedFacilityID;
   toggleEditFacilityModal: typeof toggleEditFacilityModal;
   selectedCustomer: Icustomer;
+  filterVisibleCustomers: typeof filterVisibleCustomers;
+  customers: { [key: string]: Icustomer };
 }
 
 interface Istate {
@@ -91,10 +92,8 @@ class ManageCustomerAndFacility extends React.Component<
       currentTile: constants.getTileByURL(this.props.location.pathname)
     });
     this.setColumns();
-  }
-
-  componentDidMount(): void {
     this.props.getCustomers();
+    this.props.filterVisibleCustomers();
   }
 
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
@@ -116,6 +115,13 @@ class ManageCustomerAndFacility extends React.Component<
         this.props.tableFilters
       );
       this.props.getCustomers();
+      this.props.filterVisibleCustomers();
+    }
+    if (
+      JSON.stringify(this.props.customers) !==
+      JSON.stringify(prevProps.customers)
+    ) {
+      this.props.filterVisibleCustomers();
     }
   }
 
@@ -159,7 +165,7 @@ class ManageCustomerAndFacility extends React.Component<
   onSearchValueChanges = (value: any, key: string) => {
     switch (key) {
       case 'name':
-        this.props.setTableFilter({ name: value, page: 1 });
+        this.props.setTableFilter({ name: value, page: 0 }); // TODO add a debounce like in manageJob.tsx
         break;
       default:
         break;
@@ -176,11 +182,6 @@ class ManageCustomerAndFacility extends React.Component<
     // console.log(row);
     this.props.toggleEditFacilityModal();
   };
-
-  onPageChange = (page: number) => {
-    const newPage = page + 1;
-    this.props.setTableFilter({ page: newPage });
-  };
   /*
     * Set Columns sets columns to state
     */
@@ -196,8 +197,8 @@ class ManageCustomerAndFacility extends React.Component<
           Header: 'qty',
           id: 'quantity',
           minWidth: 50,
-          accessor: ({ facilities }: { facilities: Ifacility[] }) => {
-            return facilities.length; // using this rather than data.quantity because when we add new installs, we don't want to update the quantity on the product
+          accessor: ({ facilities }: Icustomer) => {
+            return facilities ? facilities.length : 0;
           }
         },
         {
@@ -214,6 +215,13 @@ class ManageCustomerAndFacility extends React.Component<
       this.props.t
     );
     this.setState({ columns });
+  };
+
+  onPageChange = (page: number) => {
+    this.props.setTableFilter({ page });
+  };
+  onPageSizeChange = (rows: number) => {
+    this.props.setTableFilter({ rows, page: 0 });
   };
 
   /*
@@ -237,7 +245,7 @@ class ManageCustomerAndFacility extends React.Component<
   };
 
   render() {
-    const { t, tableData = [], totalPages } = this.props;
+    const { t, tableData = [] } = this.props;
     return (
       <div className="manage-customer-and-facility">
         <Banner
@@ -272,11 +280,12 @@ class ManageCustomerAndFacility extends React.Component<
           data={tableData}
           columns={this.state.columns}
           getTrProps={this.getTrProps}
-          pageSize={tableData.length}
-          manual
-          pages={totalPages}
-          page={this.props.tableFilters.page - 1}
-          showPageSizeOptions={false}
+          defaultPageSize={
+            this.props.tableFilters.rows || constants.tablePageSizeDefault
+          }
+          onPageSizeChange={this.onPageSizeChange}
+          showPageSizeOptions={true}
+          pageSizeOptions={constants.tablePageSizeOptions}
           className={`beacon-table -highlight ${this.state.currentTile.color}`}
           previousText={t('common:previous')}
           nextText={t('common:next')}
@@ -316,11 +325,7 @@ class ManageCustomerAndFacility extends React.Component<
 }
 
 const mapStateToProps = (state: IinitialState) => {
-  const tableData = orderBy(
-    state.customerAndFacilityManage.data,
-    res => moment.utc(res.createDate).unix(),
-    'desc'
-  );
+  const tableData = state.customerAndFacilityManage.visibleCustomers;
   const selectedCustomer =
     state.customerAndFacilityManage.data[
       state.customerAndFacilityManage.selectedCustomerID
@@ -332,7 +337,8 @@ const mapStateToProps = (state: IinitialState) => {
     showEditCustomerAndFacilityModal:
       state.customerAndFacilityManage.showEditCustomerAndFacilityModal,
     tableFilters: state.customerAndFacilityManage.tableFilters,
-    selectedCustomer
+    selectedCustomer,
+    customers: state.customers
   };
 };
 
@@ -346,7 +352,8 @@ export default translate('manageCustomerAndFacility')(
       setSelectedCustomerID,
       clearSelectedCustomerID,
       setSelectedFacilityID,
-      toggleEditFacilityModal
+      toggleEditFacilityModal,
+      filterVisibleCustomers
     }
   )(ManageCustomerAndFacility)
 );

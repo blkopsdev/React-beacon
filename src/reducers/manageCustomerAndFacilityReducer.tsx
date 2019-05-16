@@ -57,6 +57,20 @@ export function manageCustomerAndFacilityReducer(
   }
 }
 
+function visibleCustomersReducer(
+  state: Icustomer[] = initialState.manageCustomerAndFacility.visibleCustomers,
+  action: any
+): Icustomer[] {
+  switch (action.type) {
+    case types.FILTER_VISIBLE_CUSTOMERS:
+      return action.visibleCustomers;
+    case types.USER_LOGOUT_SUCCESS:
+      return initialState.manageCustomerAndFacility.visibleCustomers;
+    default:
+      return state;
+  }
+}
+
 function manageTotalPages(state: number = 1, action: any): number {
   switch (action.type) {
     case types.CUSTOMERS_AND_FACILITY_TOTAL_PAGES:
@@ -78,6 +92,7 @@ export default function customerAndFacilityManage(
   return {
     data: manageCustomerAndFacilityReducer(state.data, action),
     totalPages: manageTotalPages(state.totalPages, action),
+    visibleCustomers: visibleCustomersReducer(state.visibleCustomers, action),
     customerFormValues: createFormValuesWithName(
       state.customerFormValues,
       action,

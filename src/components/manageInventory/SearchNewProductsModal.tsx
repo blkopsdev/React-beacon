@@ -29,6 +29,7 @@ interface Iprops {
   selectedQueueObject?: IproductQueueObject;
   colorButton: any;
   t: TranslationFunction;
+  isApproved?: boolean;
 }
 
 interface IdispatchProps {

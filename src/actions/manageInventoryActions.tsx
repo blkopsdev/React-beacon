@@ -57,15 +57,25 @@ export function getProductInfo(): ThunkResult<void> {
 export function getProducts(
   page: number,
   search: string,
-  mainCategoryID: string
+  mainCategoryID: string,
+  isApproved?: boolean
 ): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
-
     const pagingType = 'paged';
+    let params: {
+      page: number;
+      search: string;
+      mainCategoryID: string;
+      pagingType: string;
+      isApproved?: boolean;
+    } = { page, search, mainCategoryID, pagingType };
+    if (isApproved !== undefined) {
+      params = { ...params, isApproved };
+    }
     const axiosOptions: AxiosRequestConfig = {
       method: 'get',
-      params: { page, search, mainCategoryID, pagingType }
+      params
     };
     const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
     const url = API.GET.inventory.products;

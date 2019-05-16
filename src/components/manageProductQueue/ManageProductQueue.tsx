@@ -362,6 +362,7 @@ class ManageProductQueue extends React.Component<
           secondModal={true}
           handleProductSelect={this.handleProductSelect}
           selectedQueueObject={this.state.selectedQueueObject}
+          isApproved={true}
         />
       </div>
     );

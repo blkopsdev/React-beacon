@@ -137,6 +137,19 @@ class EditAlertForm extends React.Component<Iprops, State> {
           required: false,
           initialContent: text
         }
+      },
+      file: {
+        render: FormUtil.FileInput,
+        meta: {
+          type: 'file',
+          label: 'alertFileLabel',
+          colWidth: 12,
+          name: 'alert-file',
+          required: false,
+          onChange: onFileChange,
+          fileName: fileName || imageUrl
+        }
+        //   formState: fileName || imageUrl || ''
       }
     };
     return FormUtil.translateForm(
@@ -208,7 +221,7 @@ class EditAlertForm extends React.Component<Iprops, State> {
     const data = new FormData();
     Object.keys(formValue).map(key => {
       const value = formValue[key];
-      data.append(key, value.value ? value.value : value);
+      data.append(key, value && value.value ? value.value : value);
     });
 
     return data;

@@ -36,7 +36,7 @@ interface Iprops {
 interface IdispatchProps {
   showEditAlertModal: boolean;
   loading: boolean;
-  toggleModal: () => void;
+  toggleModal: typeof toggleEditAlertModal;
   saveAlert: typeof saveAlert;
   updateAlert: typeof updateAlert;
   selectedAlert: any;

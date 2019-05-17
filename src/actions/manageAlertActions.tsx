@@ -61,7 +61,7 @@ export function saveAlert(alert: any) {
         if (data.status !== 200) {
           throw undefined;
         } else {
-          const newAlert = { ...alert, id: data.data };
+          const newAlert = { ...alert, ...data.data };
           dispatch({
             type: types.ADD_ALERT_SUCCESS,
             payload: newAlert
@@ -92,7 +92,6 @@ export function updateAlert(alert: FormData) {
     const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
     const id = alert.get('id') as string;
     const url = API.PUT.alert.update.replace('{alertId}', id);
-    
     return adalFetch(authContext, resource, axios, url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (data.status !== 200) {
@@ -100,7 +99,7 @@ export function updateAlert(alert: FormData) {
         } else {
           dispatch({
             type: types.EDIT_ALERT_SUCCESS,
-            payload: alert
+            payload: { ...data.data }
           });
 
           toastr.success('Success', `Updated Alert.`, constants.toastrSuccess);

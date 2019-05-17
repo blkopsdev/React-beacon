@@ -220,13 +220,16 @@ export const FormUtil = {
                 }
                 e.target.filename = fileName;
                 console.log(fileName);
-                handler().onChange(e);
               }}
               style={{ display: 'none' }}
             />
           </ControlLabel>
         </FormGroup>
         {meta.fileName && <span>{meta.fileName}</span>}
+        {!meta.fileName &&
+          meta.imageUrl && (
+            <img src={meta.imageUrl} style={{ maxWidth: '100%' }} />
+          )}
       </Col>
     );
   },

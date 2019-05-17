@@ -20,7 +20,10 @@ import { translate, TranslationFunction } from 'react-i18next';
 
 import { FormUtil } from '../common/FormUtil';
 // import { forEach } from 'lodash';
-import { clearSelectedAlertID } from '../../actions/manageAlertActions';
+import {
+  clearSelectedAlertID,
+  toggleEditAlertModal
+} from '../../actions/manageAlertActions';
 import { IAlert } from 'src/models';
 // import * as moment from "../manageJob/EditJobForm";
 // import { IqueueObject } from '../../models';
@@ -40,6 +43,7 @@ interface Iprops {
   updateFormValue: (formValue: { [key: string]: any }) => void;
   setFormValues: (formValues: { [key: string]: any }) => void;
   formValues: { [key: string]: any };
+  toggleModal: typeof toggleEditAlertModal;
 }
 
 interface State {
@@ -72,12 +76,6 @@ class EditAlertForm extends React.Component<Iprops, State> {
     }
   }
 
-  componentDidUpdate(prevProps: Iprops, prevState: State) {
-    if (prevState.file !== this.state.file) {
-      this.setState({ fieldConfig: this.buildFieldConfig(this.onFileChange) });
-    }
-  }
-
   componentWillUnmount() {
     if (this.subscription) {
       this.subscription.unsubscribe();
@@ -88,14 +86,13 @@ class EditAlertForm extends React.Component<Iprops, State> {
 
   buildFieldConfig = (onFileChange: any) => {
     const { selectedAlert, formValues } = this.props;
-    let { type, title, text, imageUrl } = selectedAlert;
-
+    let { type, title, text } = selectedAlert;
+    const { imageUrl } = selectedAlert;
     const fileName = this.state && this.state.file ? this.state.file.name : '';
 
-    type = formValues.type ? formValues.type : type;
+    type = formValues.type ? formValues.type.value : type;
     title = formValues.title ? formValues.title : title;
     text = formValues.text ? formValues.text : text;
-    imageUrl = fileName ? fileName : imageUrl;
     const selectedType = constants.alertTypes.find(t => t.value === type) || {};
 
     const fieldConfigControls = {
@@ -125,7 +122,8 @@ class EditAlertForm extends React.Component<Iprops, State> {
           name: 'alert-type'
         },
         formState: {
-          value: selectedType
+          value: selectedType,
+          disabled: false
         }
       },
       text: {
@@ -136,7 +134,8 @@ class EditAlertForm extends React.Component<Iprops, State> {
           name: 'alert-text',
           required: false,
           initialContent: text
-        }
+        },
+        formState: text
       },
       file: {
         render: FormUtil.FileInput,
@@ -147,7 +146,8 @@ class EditAlertForm extends React.Component<Iprops, State> {
           name: 'alert-file',
           required: false,
           onChange: onFileChange,
-          fileName: fileName || imageUrl
+          fileName,
+          imageUrl
         }
         //   formState: fileName || imageUrl || ''
       }
@@ -188,14 +188,14 @@ class EditAlertForm extends React.Component<Iprops, State> {
     this.props.updateFormValue({ [key]: value });
   };
 
-  handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
+  handleSubmit = async (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (this.formGroup.status === 'INVALID') {
       this.formGroup.markAsSubmitted();
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-    let formData = {
+    const formData = {
       ...this.formGroup.value,
       type: this.formGroup.value.type.value
     };
@@ -204,17 +204,13 @@ class EditAlertForm extends React.Component<Iprops, State> {
     }
 
     if (!this.props.selectedAlert.id) {
-      if (formData.file) {
-        formData = this.toFormData(formData);
-      }
-      this.props.handleSubmit(formData);
+      await this.props.handleSubmit(this.toFormData(formData));
     } else {
       formData['id'] = this.props.selectedAlert.id;
-      if (formData.file) {
-        formData = this.toFormData(formData);
-      }
-      this.props.handleEdit(this.toFormData(formData));
+      await this.props.handleEdit(this.toFormData(formData));
     }
+
+    this.props.toggleModal();
   };
 
   toFormData<T>(formValue: T) {

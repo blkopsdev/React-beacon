@@ -299,7 +299,7 @@ const tiles = [
     srcBanner: require('src/images/beaconTrainingHeader.jpg'),
     color: 'dark',
     width: 270,
-    height: 136,
+    height: 300,
     url: '/alerts',
     securityFunction: securityFunctions.ManageAlerts.id,
     description: ''
@@ -553,6 +553,19 @@ const tiles = [
     securityFunction: securityFunctions.ViewInventory.id,
     description: ''
   }
+  // {
+  //   icon: icons.inventory,
+  //   iconType: 'img',
+  //   title: 'alerts',
+  //   src: require('src/images/beaconManageInventory.jpg'),
+  //   srcBanner: require('src/images/beaconManageInventoryHeader.jpg'),
+  //   color: 'green',
+  //   width: 270,
+  //   height: 300,
+  //   url: '/alerts',
+  //   securityFunction: securityFunctions.ViewInventory.id,
+  //   description: ''
+  // }
 ];
 
 export const constants = {

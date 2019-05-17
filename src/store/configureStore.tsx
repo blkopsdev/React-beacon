@@ -91,11 +91,19 @@ export default function configureStore() {
     const composeEnhancers = require('redux-devtools-extension').composeWithDevTools(
       // const composeEnhancers = require('remote-redux-devtools').composeWithDevTools( // for inspecting while using Edge browser remotedev.io/local
       {
-        actionsBlacklist: ['persist/REHYDRATE'], // this improves the perfomance of redux devtools
+        actionsBlacklist: [
+          'persist/REHYDRATE',
+          'persist/PERSIST',
+          'BEGIN_AJAX_CALL'
+        ], // this improves the perfomance of redux devtools
         autoPause: true,
         latency: 1000,
         maxAge: 20,
-        shouldHotReload: false
+        shouldHotReload: false,
+        stateSanitizer: (state: IinitialState) =>
+          state.manageInventory
+            ? { ...state, manageInventory: '<<LONG_BLOB>>' }
+            : state
       }
     );
     const store = createStore(

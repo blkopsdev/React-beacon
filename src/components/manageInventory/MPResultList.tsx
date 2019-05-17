@@ -15,6 +15,7 @@ import { getMeasurementPointList } from 'src/actions/manageMeasurementPointLists
 import { isEmpty } from 'lodash';
 import { constants } from 'src/constants/constants';
 import { initialMeasurementPoint } from 'src/reducers/initialState';
+import { resetSelectedResult } from 'src/actions/measurementPointResultsActions';
 
 interface Props {
   selectedItem: ImeasurementPointResult;
@@ -24,6 +25,7 @@ interface Props {
   getMeasurementPointList: typeof getMeasurementPointList;
   measurementPointsByID: { [key: string]: ImeasurementPoint };
   locationString: string;
+  resetSelectedResult: typeof resetSelectedResult;
 }
 
 const AnswerListItem = (
@@ -159,7 +161,10 @@ export class MPResultList extends React.Component<Props, {}> {
           <Button
             bsStyle={this.props.colorButton}
             type="button"
-            onClick={this.props.toggleModal}
+            onClick={() => {
+              this.props.toggleModal();
+              this.props.resetSelectedResult();
+            }}
           >
             {t('common:done')}
           </Button>

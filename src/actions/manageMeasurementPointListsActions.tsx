@@ -317,6 +317,7 @@ export const saveMeasurementPointToMeasurementPointList = (
 
 /*
 * Get a specific measurement point list
+* TODO verify we are receiving deleted MPs here
 */
 export function getMeasurementPointList(MPlistID: string): ThunkResult<void> {
   return (dispatch, getState) => {

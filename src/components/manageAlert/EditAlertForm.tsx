@@ -150,7 +150,7 @@ class EditAlertForm extends React.Component<Iprops, State> {
         render: FormUtil.FileInput,
         meta: {
           type: 'file',
-          label: 'alertFileLabel',
+          label: 'Select Image',
           colWidth: 12,
           name: 'alert-file',
           required: false,

@@ -188,6 +188,16 @@ export const FormUtil = {
 
     return (
       <Col xs={meta.colWidth}>
+        {meta.imageUrl && (
+          <img
+            src={meta.imageUrl}
+            style={{
+              maxWidth: '100%',
+              marginTop: '15px',
+              marginBottom: '15px'
+            }}
+          />
+        )}
         <FormGroup
           validationState={FormUtil.getValidationState(
             pristine,
@@ -225,11 +235,6 @@ export const FormUtil = {
             />
           </ControlLabel>
         </FormGroup>
-        {meta.fileName && <span>{meta.fileName}</span>}
-        {!meta.fileName &&
-          meta.imageUrl && (
-            <img src={meta.imageUrl} style={{ maxWidth: '100%' }} />
-          )}
       </Col>
     );
   },

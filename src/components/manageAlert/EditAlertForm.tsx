@@ -76,6 +76,12 @@ class EditAlertForm extends React.Component<Iprops, State> {
     }
   }
 
+  componentDidUpdate(prevProps: Iprops, prevState: State) {
+    if (prevProps.formValues.imageUrl !== this.props.formValues.imageUrl) {
+      this.setState({ fieldConfig: this.buildFieldConfig(this.onFileChange) });
+    }
+  }
+
   componentWillUnmount() {
     if (this.subscription) {
       this.subscription.unsubscribe();
@@ -86,13 +92,16 @@ class EditAlertForm extends React.Component<Iprops, State> {
 
   buildFieldConfig = (onFileChange: any) => {
     const { selectedAlert, formValues } = this.props;
-    let { type, title, text } = selectedAlert;
-    const { imageUrl } = selectedAlert;
-    const fileName = this.state && this.state.file ? this.state.file.name : '';
+    let { type, title, text, imageUrl } = selectedAlert;
 
-    type = formValues.type ? formValues.type.value : type;
+    type = formValues.type
+      ? formValues.type.value
+        ? formValues.type.value
+        : formValues.type
+      : type;
     title = formValues.title ? formValues.title : title;
     text = formValues.text ? formValues.text : text;
+    imageUrl = formValues.imageUrl ? formValues.imageUrl : imageUrl;
     const selectedType = constants.alertTypes.find(t => t.value === type) || {};
 
     const fieldConfigControls = {
@@ -146,7 +155,6 @@ class EditAlertForm extends React.Component<Iprops, State> {
           name: 'alert-file',
           required: false,
           onChange: onFileChange,
-          fileName,
           imageUrl
         }
         //   formState: fileName || imageUrl || ''
@@ -162,6 +170,13 @@ class EditAlertForm extends React.Component<Iprops, State> {
 
   onFileChange = (file: File) => {
     this.setState({ file });
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.onValueChanges(e.target.result, 'imageUrl');
+    };
+    if (file) {
+      reader.readAsDataURL(file);
+    }
   };
 
   /*

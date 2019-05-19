@@ -1,7 +1,7 @@
 import { toastr } from 'react-redux-toastr';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 
-import { Ifacility, ThunkResult } from '../models';
+import { Icustomer, Ifacility, ThunkResult } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
 import { constants } from 'src/constants/constants';
 import * as types from './actionTypes';
@@ -113,6 +113,38 @@ export function addCustomer({
       });
   };
 }
+
+export function updateCustomer(customer: Icustomer): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'put',
+      data: customer
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.PUT.customer.update.replace('{id}', customer.id);
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.CUSTOMER_UPDATE_SUCCESS,
+            customer: data.data
+          });
+          dispatch({ type: types.TOGGLE_MODAL_EDIT_CUSTOMER });
+          toastr.success('Success', 'Saved Customer', constants.toastrSuccess);
+          return data;
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.CUSTOMER_UPDATE_FAILED });
+        constants.handleError(error, 'add customer');
+        console.error(error);
+      });
+  };
+}
+
 export function addFacility(facility: Ifacility): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());

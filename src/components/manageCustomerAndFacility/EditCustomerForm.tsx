@@ -1,7 +1,7 @@
-/* 
-* Edit Customer Form 
+/*
+* Edit Customer Form
 * Add and Edit customers
-* 
+*
 */
 
 import * as React from 'react';
@@ -10,7 +10,8 @@ import {
   FormGenerator,
   // AbstractControl,
   FieldConfig,
-  FormGroup
+  FormGroup,
+  GroupProps
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
 // import { forEach, find } from "lodash";
@@ -25,38 +26,10 @@ import { clearSelectedCustomerID } from '../../actions/manageCustomerAndFacility
 // import { IqueueObject } from '../../models';
 
 // add the bootstrap form-control class to the react-select select component
-const buildFieldConfig = () => {
-  const fieldConfigControls = {
-    name: {
-      options: {
-        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
-      },
-      render: FormUtil.TextInput,
-      meta: {
-        label: 'customerNameLabel',
-        colWidth: 12,
-        type: 'input',
-        autoFocus: true,
-        name: 'customer-name'
-      }
-    },
-    vat: {
-      render: FormUtil.TextInput,
-      meta: {
-        label: 'customerVatLabel',
-        colWidth: 12,
-        name: 'customer-vat',
-        required: false
-      }
-    }
-  };
-  return {
-    controls: { ...fieldConfigControls }
-  };
-};
 
 interface Iprops {
   handleSubmit: any;
+  handleEdit: any;
   handleCancel: any;
   loading: boolean;
   colorButton: string;
@@ -75,11 +48,14 @@ class EditCustomerForm extends React.Component<Iprops, {}> {
   private subscription: any;
   constructor(props: Iprops) {
     super(props);
-    this.fieldConfig = FormUtil.translateForm(buildFieldConfig(), this.props.t);
+    this.fieldConfig = this.buildFieldConfig();
   }
   componentDidMount() {
     if (!this.props.selectedCustomer) {
       console.log(`adding a new Customer`);
+    } else {
+      this.props.setFormValues(this.props.selectedCustomer);
+      this.setState({ fieldConfig: this.buildFieldConfig() });
     }
   }
 
@@ -89,6 +65,48 @@ class EditCustomerForm extends React.Component<Iprops, {}> {
     }
     this.props.clearSelectedCustomerID();
   }
+
+  buildFieldConfig = () => {
+    const formValues = this.props.formValues;
+    let { name, vat } = this.props.selectedCustomer;
+
+    name = formValues.name || name;
+    vat = formValues.vat || vat;
+
+    const fieldConfigControls = {
+      name: {
+        options: {
+          validators: [
+            Validators.required,
+            FormUtil.validators.requiredWithTrim
+          ]
+        },
+        render: FormUtil.TextInput,
+        meta: {
+          label: 'customerNameLabel',
+          colWidth: 12,
+          type: 'input',
+          autoFocus: true,
+          name: 'customer-name'
+        },
+        formState: name
+      },
+      vat: {
+        render: FormUtil.TextInput,
+        meta: {
+          label: 'customerVatLabel',
+          colWidth: 12,
+          name: 'customer-vat',
+          required: false
+        },
+        formState: vat
+      }
+    } as { [key: string]: GroupProps };
+    const fieldConfig = {
+      controls: { ...fieldConfigControls }
+    };
+    return FormUtil.translateForm(fieldConfig, this.props.t);
+  };
 
   /*
   * (reusable)
@@ -121,8 +139,13 @@ class EditCustomerForm extends React.Component<Iprops, {}> {
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-    console.log(this.formGroup.value);
-    this.props.handleSubmit(this.formGroup.value);
+    const newCustomer = this.formGroup.value;
+    if (this.props.selectedCustomer.id) {
+      newCustomer['id'] = this.props.selectedCustomer.id;
+      this.props.handleEdit(newCustomer);
+    } else {
+      this.props.handleSubmit(newCustomer);
+    }
   };
 
   setForm = (form: FormGroup) => {

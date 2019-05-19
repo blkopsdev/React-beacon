@@ -14,11 +14,12 @@ import {
 } from '../../models';
 import {
   addCustomer,
-  toggleEditCustomerModal
+  toggleEditCustomerModal,
+  updateCustomer
 } from '../../actions/commonActions';
 import CommonModal from '../common/CommonModal';
 import EditCustomerForm from './EditCustomerForm';
-import { initialCustomer } from '../../reducers/initialState';
+// import { initialCustomer } from '../../reducers/initialState';
 import {
   clearSelectedCustomerID,
   setCustomerFormValues,
@@ -37,6 +38,7 @@ interface IdispatchProps {
   loading: boolean;
   toggleModal: () => void;
   addCustomer: typeof addCustomer;
+  updateCustomer: typeof updateCustomer;
   selectedCustomer: any;
   clearSelectedCustomerID: typeof clearSelectedCustomerID;
   updateFormValue: typeof updateCustomerFormValue;
@@ -59,6 +61,7 @@ class EditCustomerModal extends React.Component<Iprops & IdispatchProps, {}> {
           <EditCustomerForm
             {...this.props}
             handleSubmit={this.props.addCustomer}
+            handleEdit={this.props.updateCustomer}
             handleCancel={this.props.toggleModal}
             colorButton={this.props.colorButton}
             loading={this.props.loading}
@@ -72,15 +75,10 @@ class EditCustomerModal extends React.Component<Iprops & IdispatchProps, {}> {
 }
 
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
-  const selectedCustomer =
-    state.customerAndFacilityManage.data[
-      state.customerAndFacilityManage.selectedCustomerID
-    ] || initialCustomer;
   return {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
     showEditCustomerModal: state.showEditCustomerModal,
-    selectedCustomer,
     formValues: state.customerAndFacilityManage.customerFormValues
   };
 };
@@ -90,6 +88,7 @@ export default connect(
   {
     toggleModal: toggleEditCustomerModal,
     addCustomer,
+    updateCustomer,
     clearSelectedCustomerID,
     updateFormValue: updateCustomerFormValue,
     setFormValues: setCustomerFormValues

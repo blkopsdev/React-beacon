@@ -77,6 +77,9 @@ const API = {
     },
     facility: {
       update: `${root}/facility/{id}`
+    },
+    customer: {
+      update: `${root}/customer/{id}`
     }
   },
   DELETE: {

@@ -15,7 +15,6 @@ import {
   IinitialState,
   ItableFiltersReducer,
   Itile,
-  Ibrand,
   Icustomer,
   Ifacility
 } from '../../models';
@@ -23,7 +22,12 @@ import { TableUtil } from '../common/TableUtil';
 import { FormUtil } from '../common/FormUtil';
 import SearchTableForm from '../common/SearchTableForm';
 import { Button } from 'react-bootstrap';
-import ReactTable, { FinalState, RowInfo, RowRenderProps } from 'react-table';
+import ReactTable, {
+  Column,
+  FinalState,
+  RowInfo,
+  RowRenderProps
+} from 'react-table';
 
 import {
   setTableFilter,
@@ -54,7 +58,7 @@ interface Iprops extends RouteComponentProps<any> {
 }
 
 interface IdispatchProps {
-  tableData: Ibrand[];
+  tableData: Icustomer[];
   totalPages: number;
   showEditCustomerAndFacilityModal: boolean;
   getCustomers: typeof getCustomers;
@@ -178,12 +182,6 @@ class ManageCustomerAndFacility extends React.Component<
     }
   };
 
-  // handleEdit(row: any) {
-  //   this.setState({ selectedRow: row.index });
-  //   this.props.toggleEditCustomerModal();
-  //   // this.props.setSelectedCustomerAndFacilityID(row.original.id);
-  // }
-
   addFacility = (row: any) => {
     // console.log(row);
     this.props.toggleEditFacilityModal();
@@ -231,23 +229,41 @@ class ManageCustomerAndFacility extends React.Component<
   };
 
   /*
-  * Handle user clicking on a location row
-  * set the selected location to state and open the modal
-  */
-  getTrProps = (state: FinalState, rowInfo: RowInfoCustomer) => {
-    // console.log("ROWINFO", rowInfo, state, column);
-    return {
-      onClick: () => {
-        this.props.setSelectedCustomerID(rowInfo.original.id);
-        this.setState({
-          selectedRow: {
-            [rowInfo.viewIndex || 0]: !this.state.selectedRow[
-              rowInfo.viewIndex || 0
-            ]
-          }
-        });
-      }
-    };
+* Handle user clicking on a product row column
+* set the selected product to state and open the modal
+*/
+  getTdProps = (
+    state: FinalState,
+    rowInfo: RowInfoCustomer,
+    column: Column,
+    instance: any
+  ) => {
+    // console.log("ROWINFO", rowInfo, state);
+    if (column.id && column.id === 'expander-toggle') {
+      return {
+        onClick: () => {
+          this.setState({
+            selectedRow: {
+              [rowInfo.viewIndex || 0]: !this.state.selectedRow[
+                rowInfo.viewIndex || 0
+              ]
+            }
+          });
+        }
+      };
+    } else {
+      return {
+        onClick: (e: React.MouseEvent<HTMLFormElement>) => {
+          this.props.setSelectedCustomerID(rowInfo.original.id);
+          this.props.toggleEditCustomerModal();
+        },
+        style: {
+          background: this.state.selectedRow[rowInfo.viewIndex]
+            ? constants.colors[`${this.state.currentTile.color}Tr`]
+            : ''
+        }
+      };
+    }
   };
 
   render() {
@@ -285,7 +301,7 @@ class ManageCustomerAndFacility extends React.Component<
         <ReactTable
           data={tableData}
           columns={this.state.columns}
-          getTrProps={this.getTrProps}
+          getTdProps={this.getTdProps}
           defaultPageSize={
             this.props.tableFilters.rows || constants.tablePageSizeDefault
           }
@@ -314,6 +330,7 @@ class ManageCustomerAndFacility extends React.Component<
         />
 
         <EditCustomerModal
+          selectedCustomer={this.props.selectedCustomer}
           t={this.props.t}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
@@ -335,14 +352,18 @@ class ManageCustomerAndFacility extends React.Component<
 const mapStateToProps = (state: IinitialState) => {
   const tableData = state.customerAndFacilityManage.visibleCustomers;
   const selectedCustomer =
-    state.customerAndFacilityManage.visibleCustomers.find(
-      c => c.id === state.customerAndFacilityManage.selectedCustomerID
-    ) || initialCustomer;
+    state.customers[state.customerAndFacilityManage.selectedCustomerID] ||
+    initialCustomer;
 
   // console.log(selectedCustomer);
-  const selectedFacility =
-    state.facilities[state.customerAndFacilityManage.selectedFacilityID] ||
-    initialFacility;
+  let selectedFacility: Ifacility = initialFacility;
+  if (typeof selectedCustomer !== 'undefined' && selectedCustomer.facilities) {
+    selectedFacility =
+      selectedCustomer.facilities.find(
+        (facility: Ifacility) =>
+          facility.id === state.customerAndFacilityManage.selectedFacilityID
+      ) || initialFacility;
+  }
 
   return {
     tableData,

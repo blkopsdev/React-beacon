@@ -1,13 +1,24 @@
 import * as React from 'react';
-import ReactTable, { RowRenderProps, RowInfo, Column } from 'react-table';
+import ReactTable, {
+  RowRenderProps,
+  RowInfo,
+  Column,
+  FinalState
+} from 'react-table';
 import { TranslationFunction } from 'react-i18next';
 
 import { TableUtil } from '../common/TableUtil';
 import { Button } from 'react-bootstrap';
+import { Ifacility } from '../../models';
 interface ExpanderProps extends RowInfo {
   t: TranslationFunction;
   showAddFacility: boolean;
   addFacility: any;
+  setSelectedFacilityID: any;
+}
+
+interface RowInfoFacility extends RowInfo {
+  original: Ifacility;
 }
 
 /*
@@ -27,6 +38,27 @@ const ManageFacility = (props: ExpanderProps) => {
         )}
       </span>
     );
+  };
+
+  /*
+  * Handle user clicking on a location row
+  * set the selected location to state and open the modal
+  */
+  const getTrProps = (state: FinalState, rowInfo: RowInfoFacility) => {
+    // console.log("ROWINFO", rowInfo, state, column);
+    return {
+      onClick: () => {
+        props.setSelectedFacilityID(rowInfo.original.id);
+        props.addFacility();
+        // this.setState({
+        //   selectedRow: {
+        //     [rowInfo.viewIndex || 0]: !this.state.selectedRow[
+        //     rowInfo.viewIndex || 0
+        //       ]
+        //   }
+        // });
+      }
+    };
   };
 
   const expanderColumns = TableUtil.translateHeaders(
@@ -80,7 +112,7 @@ const ManageFacility = (props: ExpanderProps) => {
         showPageSizeOptions={false}
         rowsText="facilities"
         key={props.original.facilities ? props.original.facilities.length : 0}
-        // getTdProps={getTdProps}
+        getTdProps={getTrProps}
         noDataText="No installations found."
         resizable={false}
         showPagination={

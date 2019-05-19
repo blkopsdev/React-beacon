@@ -9,7 +9,8 @@ import {
   Validators,
   FormGenerator,
   FieldConfig,
-  FormGroup
+  FormGroup,
+  GroupProps
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
 import { orderBy } from 'lodash';
@@ -18,81 +19,10 @@ import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction } from 'react-i18next';
 
 import { FormUtil } from '../common/FormUtil';
-import { Icustomer } from 'src/models';
+import { Icustomer, Ifacility } from 'src/models';
 // import { IqueueObject } from '../../models';
 
 // add the bootstrap form-control class to the react-select select component
-
-const fieldConfig = {
-  controls: {
-    name: {
-      options: {
-        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
-      },
-      render: FormUtil.TextInput,
-      meta: { label: 'facilityNameLabel', colWidth: 12, name: 'fac-name' }
-    },
-    address: {
-      options: {
-        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
-      },
-      render: FormUtil.TextInput,
-      meta: {
-        label: 'user:address',
-        colWidth: 8,
-        type: 'text',
-        name: 'address'
-      }
-    },
-    address2: {
-      render: FormUtil.TextInput,
-      meta: {
-        label: 'user:address2',
-        colWidth: 4,
-        type: 'text',
-        name: 'address2',
-        required: false
-      }
-    },
-    city: {
-      options: {
-        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
-      },
-      render: FormUtil.TextInput,
-      meta: { label: 'user:city', colWidth: 5, type: 'text', name: 'city' }
-    },
-    state: {
-      options: {
-        validators: [Validators.required, FormUtil.validators.requiredWithTrim]
-      },
-      render: FormUtil.TextInput,
-      meta: { label: 'user:state', colWidth: 3, type: 'text', name: 'state' }
-    },
-    postalCode: {
-      options: {
-        validators: [
-          Validators.required,
-          Validators.pattern(/^[a-zA-Z0-9][a-zA-Z0-9\- ]{0,10}[a-zA-Z0-9]$/)
-        ]
-      },
-      render: FormUtil.TextInput,
-      meta: { label: 'user:zip', colWidth: 4, type: 'tel', name: 'postal-code' }
-    },
-    countryID: {
-      options: {
-        validators: Validators.required
-      },
-      render: FormUtil.Select,
-      meta: {
-        options: orderBy(constants.countries, 'label'),
-        label: 'user:country',
-        colWidth: 12,
-        placeholder: 'userQueue:countrySearchPlaceholder',
-        name: 'country'
-      }
-    }
-  }
-};
 
 interface Iprops {
   handleSubmit: any;
@@ -104,16 +34,23 @@ interface Iprops {
   updateFormValue: (formValue: { [key: string]: any }) => void;
   setFormValues: (formValues: { [key: string]: any }) => void;
   formValues: { [key: string]: any };
+  selectedFacility: Ifacility;
 }
 
-class EditFacilityForm extends React.Component<Iprops, {}> {
+interface IState {
+  fieldConfig: FieldConfig;
+}
+class EditFacilityForm extends React.Component<Iprops, IState> {
   private formGroup: FormGroup;
-  private fieldConfig: FieldConfig;
   private subscription: any;
+
   constructor(props: Iprops) {
     super(props);
-    this.fieldConfig = FormUtil.translateForm(fieldConfig, this.props.t);
+    this.state = {
+      fieldConfig: this.buildFieldConfig()
+    };
   }
+
   // componentDidUpdate(prevProps: Iprops) {
 
   // }
@@ -122,6 +59,9 @@ class EditFacilityForm extends React.Component<Iprops, {}> {
     if (!this.formGroup) {
       return;
     }
+    console.log(this.props.selectedFacility);
+    this.props.setFormValues(this.props.selectedFacility);
+    this.setState({ fieldConfig: this.buildFieldConfig() });
     this.formGroup.patchValue({
       countryID: {
         value: 'ABC5D95C-129F-4837-988C-0BF4AE1F3B67',
@@ -129,6 +69,121 @@ class EditFacilityForm extends React.Component<Iprops, {}> {
       }
     });
   }
+
+  buildFieldConfig = () => {
+    const formValues = this.props.formValues;
+    let {
+      name,
+      address,
+      address2,
+      city,
+      state,
+      postalCode
+    } = this.props.selectedFacility;
+
+    name = formValues.name || name;
+    address = formValues.address || address;
+    address2 = formValues.address2 || address2;
+    city = formValues.city || city;
+    state = formValues.state || state;
+    postalCode = formValues.postalCode || postalCode;
+
+    const fieldConfigControls = {
+      name: {
+        options: {
+          validators: [
+            Validators.required,
+            FormUtil.validators.requiredWithTrim
+          ]
+        },
+        render: FormUtil.TextInput,
+        meta: { label: 'facilityNameLabel', colWidth: 12, name: 'fac-name' },
+        formState: name
+      },
+      address: {
+        options: {
+          validators: [
+            Validators.required,
+            FormUtil.validators.requiredWithTrim
+          ]
+        },
+        render: FormUtil.TextInput,
+        meta: {
+          label: 'user:address',
+          colWidth: 8,
+          type: 'text',
+          name: 'address'
+        },
+        formState: address
+      },
+      address2: {
+        render: FormUtil.TextInput,
+        meta: {
+          label: 'user:address2',
+          colWidth: 4,
+          type: 'text',
+          name: 'address2',
+          required: false
+        },
+        formState: address2
+      },
+      city: {
+        options: {
+          validators: [
+            Validators.required,
+            FormUtil.validators.requiredWithTrim
+          ]
+        },
+        render: FormUtil.TextInput,
+        meta: { label: 'user:city', colWidth: 5, type: 'text', name: 'city' },
+        formState: city
+      },
+      state: {
+        options: {
+          validators: [
+            Validators.required,
+            FormUtil.validators.requiredWithTrim
+          ]
+        },
+        render: FormUtil.TextInput,
+        meta: { label: 'user:state', colWidth: 3, type: 'text', name: 'state' },
+        formState: state
+      },
+      postalCode: {
+        options: {
+          validators: [
+            Validators.required,
+            Validators.pattern(/^[a-zA-Z0-9][a-zA-Z0-9\- ]{0,10}[a-zA-Z0-9]$/)
+          ]
+        },
+        render: FormUtil.TextInput,
+        meta: {
+          label: 'user:zip',
+          colWidth: 4,
+          type: 'tel',
+          name: 'postal-code'
+        },
+        formState: postalCode
+      },
+      countryID: {
+        options: {
+          validators: Validators.required
+        },
+        render: FormUtil.Select,
+        meta: {
+          options: orderBy(constants.countries, 'label'),
+          label: 'user:country',
+          colWidth: 12,
+          placeholder: 'userQueue:countrySearchPlaceholder',
+          name: 'country'
+        }
+      }
+    } as { [key: string]: GroupProps };
+    const fieldConfig = {
+      controls: { ...fieldConfigControls }
+    };
+    return FormUtil.translateForm(fieldConfig, this.props.t);
+  };
 
   /*
   * (reusable)
@@ -230,7 +285,10 @@ class EditFacilityForm extends React.Component<Iprops, {}> {
         onSubmit={this.handleSubmit}
         className="clearfix beacon-form facility-form"
       >
-        <FormGenerator onMount={this.setForm} fieldConfig={this.fieldConfig} />
+        <FormGenerator
+          onMount={this.setForm}
+          fieldConfig={this.state.fieldConfig}
+        />
         <Col xs={12} className="form-buttons text-right">
           <Button
             bsStyle="default"
@@ -252,4 +310,5 @@ class EditFacilityForm extends React.Component<Iprops, {}> {
     );
   }
 }
+
 export default translate('common')(EditFacilityForm);

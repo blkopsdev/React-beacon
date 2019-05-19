@@ -2,7 +2,11 @@ import Banner from '../common/Banner';
 import * as React from 'react';
 import { FieldConfig } from 'react-reactive-form';
 import { I18n, translate } from 'react-i18next';
-import { emptyTile, initialCustomer } from '../../reducers/initialState';
+import {
+  emptyTile,
+  initialCustomer,
+  initialFacility
+} from '../../reducers/initialState';
 import { RouteComponentProps } from 'react-router';
 import { TranslationFunction } from 'i18next';
 import { constants } from '../../constants/constants';
@@ -12,7 +16,8 @@ import {
   ItableFiltersReducer,
   Itile,
   Ibrand,
-  Icustomer
+  Icustomer,
+  Ifacility
 } from '../../models';
 import { TableUtil } from '../common/TableUtil';
 import { FormUtil } from '../common/FormUtil';
@@ -62,6 +67,7 @@ interface IdispatchProps {
   setSelectedFacilityID: typeof setSelectedFacilityID;
   toggleEditFacilityModal: typeof toggleEditFacilityModal;
   selectedCustomer: Icustomer;
+  selectedFacility: Ifacility;
   filterVisibleCustomers: typeof filterVisibleCustomers;
   customers: { [key: string]: Icustomer };
 }
@@ -300,6 +306,7 @@ class ManageCustomerAndFacility extends React.Component<
               {...rowInfo}
               addFacility={this.addFacility}
               showAddFacility={true}
+              setSelectedFacilityID={this.props.setSelectedFacilityID}
               t={this.props.t}
             />
           )}
@@ -314,6 +321,7 @@ class ManageCustomerAndFacility extends React.Component<
         />
         <EditFacilityModal
           selectedCustomer={this.props.selectedCustomer}
+          selectedFacility={this.props.selectedFacility}
           t={this.props.t}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
@@ -327,9 +335,14 @@ class ManageCustomerAndFacility extends React.Component<
 const mapStateToProps = (state: IinitialState) => {
   const tableData = state.customerAndFacilityManage.visibleCustomers;
   const selectedCustomer =
-    state.customerAndFacilityManage.data[
-      state.customerAndFacilityManage.selectedCustomerID
-    ] || initialCustomer;
+    state.customerAndFacilityManage.visibleCustomers.find(
+      c => c.id === state.customerAndFacilityManage.selectedCustomerID
+    ) || initialCustomer;
+
+  // console.log(selectedCustomer);
+  const selectedFacility =
+    state.facilities[state.customerAndFacilityManage.selectedFacilityID] ||
+    initialFacility;
 
   return {
     tableData,
@@ -338,6 +351,7 @@ const mapStateToProps = (state: IinitialState) => {
       state.customerAndFacilityManage.showEditCustomerAndFacilityModal,
     tableFilters: state.customerAndFacilityManage.tableFilters,
     selectedCustomer,
+    selectedFacility,
     customers: state.customers
   };
 };

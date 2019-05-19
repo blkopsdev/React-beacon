@@ -8,7 +8,7 @@ import { TranslationFunction } from 'react-i18next';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import { Icustomer, IinitialState } from '../../models';
+import { Icustomer, Ifacility, IinitialState } from '../../models';
 import {
   addFacility,
   toggleEditFacilityModal
@@ -24,6 +24,7 @@ interface Iprops {
   colorButton: any;
   t: TranslationFunction;
   selectedCustomer: Icustomer;
+  selectedFacility: Ifacility;
 }
 
 interface IdispatchProps {
@@ -52,6 +53,7 @@ class EditFacilityModal extends React.Component<Iprops & IdispatchProps, {}> {
         onHide={this.props.toggleModal}
         body={
           <EditFacilityForm
+            selectedFacility={this.props.selectedFacility}
             updateFormValue={this.props.updateFormValue}
             setFormValues={this.props.setFormValues}
             formValues={this.props.formValues}

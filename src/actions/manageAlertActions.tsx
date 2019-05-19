@@ -20,7 +20,7 @@ export const getAlerts = () => async (dispatch: any, getState: any) => {
   const url = API.GET.alert.all;
 
   try {
-    const data = await adalFetch(
+    const data: AxiosResponse<any> = await adalFetch(
       authContext,
       resource,
       axios,
@@ -36,40 +36,44 @@ export const getAlerts = () => async (dispatch: any, getState: any) => {
   }
 };
 
-export function saveAlert(alert: any) {
-  return (dispatch: any, getState: any) => {
-    dispatch(beginAjaxCall());
-    let headers = {};
-    if (alert instanceof FormData) {
-      headers = { 'content-type': 'multipart/form-data' };
-    }
-    const axiosOptions: AxiosRequestConfig = {
-      method: 'post',
-      data: alert,
-      headers
-    };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
-    const url = API.POST.alert.create;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
-      .then((data: AxiosResponse<any>) => {
-        if (data.status !== 200) {
-          throw undefined;
-        } else {
-          const newAlert = { ...alert, ...data.data };
-          dispatch({
-            type: types.ADD_ALERT_SUCCESS,
-            payload: newAlert
-          });
-          toastr.success('Success', `Created Alert.`, constants.toastrSuccess);
-        }
-      })
-      .catch((error: any) => {
-        dispatch({ type: types.ADD_ALERT_FAILED });
-        constants.handleError(error, 'ADD_ALERT_FAILED');
-        console.error(error);
-      });
+export const saveAlert = (alert: any) => async (
+  dispatch: any,
+  getState: any
+) => {
+  dispatch(beginAjaxCall());
+  let headers = {};
+  if (alert instanceof FormData) {
+    headers = { 'content-type': 'multipart/form-data' };
+  }
+  const axiosOptions: AxiosRequestConfig = {
+    method: 'post',
+    data: alert,
+    headers
   };
-}
+  const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+  const url = API.POST.alert.create;
+
+  try {
+    const data: AxiosResponse<any> = await adalFetch(
+      authContext,
+      resource,
+      axios,
+      url,
+      axiosOptions
+    );
+
+    const newAlert = { ...alert, ...data.data };
+    dispatch({
+      type: types.ADD_ALERT_SUCCESS,
+      payload: newAlert
+    });
+
+    toastr.success('Success', `Created Alert.`, constants.toastrSuccess);
+  } catch (error) {
+    dispatch({ type: types.ADD_ALERT_FAILED });
+    constants.handleError(error, 'ADD_ALERT_FAILED');
+  }
+};
 
 export function updateAlert(alert: FormData) {
   return (dispatch: any, getState: any) => {

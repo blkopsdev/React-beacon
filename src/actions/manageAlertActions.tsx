@@ -36,10 +36,7 @@ export const getAlerts = () => async (dispatch: any, getState: any) => {
   }
 };
 
-export const saveAlert = (alert: any) => async (
-  dispatch: any,
-  getState: any
-) => {
+export const saveAlert = (alert: any) => async (dispatch: any) => {
   dispatch(beginAjaxCall());
   let headers = {};
   if (alert instanceof FormData) {
@@ -75,70 +72,54 @@ export const saveAlert = (alert: any) => async (
   }
 };
 
-export function updateAlert(alert: FormData) {
-  return (dispatch: any, getState: any) => {
-    dispatch(beginAjaxCall());
-    let headers = {};
-    if (alert instanceof FormData) {
-      headers = { 'content-type': 'multipart/form-data' };
-    }
-    const axiosOptions: AxiosRequestConfig = {
-      method: 'put',
-      data: alert,
-      headers
-    };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
-    const id = alert.get('id') as string;
-    const url = API.PUT.alert.update.replace('{alertId}', id);
-    console.log();
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
-      .then((data: AxiosResponse<any>) => {
-        if (data.status !== 200) {
-          throw undefined;
-        } else {
-          dispatch({
-            type: types.EDIT_ALERT_SUCCESS,
-            payload: { ...data.data }
-          });
-
-          toastr.success('Success', `Updated Alert.`, constants.toastrSuccess);
-        }
-      })
-      .catch((error: any) => {
-        dispatch({ type: types.EDIT_ALERT_FAILED });
-        constants.handleError(error, 'EDIT_ALERT_FAILED');
-        console.error(error);
-      });
+export const updateAlert = (alert: FormData) => async (dispatch: any) => {
+  dispatch(beginAjaxCall());
+  let headers = {};
+  if (alert instanceof FormData) {
+    headers = { 'content-type': 'multipart/form-data' };
+  }
+  const axiosOptions: AxiosRequestConfig = {
+    method: 'put',
+    data: alert,
+    headers
   };
-}
+  const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+  const id = alert.get('id') as string;
+  const url = API.PUT.alert.update.replace('{alertId}', id);
 
-export function deleteAlert(alert: IAlert) {
-  return (dispatch: any, getState: any) => {
-    dispatch(beginAjaxCall());
-    const axiosOptions: AxiosRequestConfig = {
-      method: 'delete'
-    };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
-    const url = API.DELETE.alert.delete.replace('{alertId}', alert.id);
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
-      .then((data: AxiosResponse<any>) => {
-        if (data.status !== 200) {
-          throw undefined;
-        } else {
-          dispatch({
-            type: types.REMOVE_ALERT_SUCCESS,
-            payload: alert
-          });
-          toastr.success('Success', `Deleted Alert.`, constants.toastrSuccess);
-        }
-      })
-      .catch((error: any) => {
-        dispatch({ type: types.REMOVE_ALERT_FAILED });
-        constants.handleError(error, 'REMOVE_ALERT_FAILED');
-        console.error(error);
-      });
+  try {
+    const data: AxiosResponse<any> = await adalFetch(
+      authContext,
+      resource,
+      axios,
+      url,
+      axiosOptions
+    );
+    dispatch({ type: types.EDIT_ALERT_SUCCESS, payload: data.data });
+    toastr.success('Success', `Updated Alert.`, constants.toastrSuccess);
+  } catch (error) {
+    dispatch({ type: types.EDIT_ALERT_FAILED });
+    constants.handleError(error, 'EDIT_ALERT_FAILED');
+  }
+};
+
+export const deleteAlert = (alert: IAlert) => async (dispatch: any) => {
+  dispatch(beginAjaxCall());
+  const axiosOptions: AxiosRequestConfig = {
+    method: 'delete'
   };
-}
+  const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+  const url = API.DELETE.alert.delete.replace('{alertId}', alert.id);
+
+  try {
+    await adalFetch(authContext, resource, axios, url, axiosOptions);
+    dispatch({ type: types.REMOVE_ALERT_SUCCESS, payload: alert });
+    toastr.success('Success', `Deleted Alert.`, constants.toastrSuccess);
+  } catch (error) {
+    dispatch({ type: types.REMOVE_ALERT_FAILED });
+    constants.handleError(error, 'REMOVE_ALERT_FAILED');
+  }
+};
 
 export const setSelectedAlertID = (id: string) => ({
   type: types.SET_SELECTED_ALERT_ID,

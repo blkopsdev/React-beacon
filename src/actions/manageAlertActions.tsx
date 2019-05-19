@@ -8,39 +8,33 @@ import { constants } from '../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { ItableFiltersParams, IAlert } from '../models';
 
-export function getAlerts() {
-  return (dispatch: any, getState: any) => {
-    dispatch(beginAjaxCall());
-    const { page, title } = getState().manageAlert.tableFilters;
-    const axiosOptions: AxiosRequestConfig = {
-      method: 'get',
-      params: { page, title }
-    };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
-    const url = API.GET.alert.all;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
-      .then((data: AxiosResponse<any>) => {
-        if (!data.data) {
-          throw undefined;
-        } else {
-          dispatch({
-            type: types.LOAD_ALERTS_SUCCESS,
-            payload: data.data.result
-          });
-          dispatch({
-            type: types.ALERT_MANAGE_TOTAL_PAGES,
-            pages: data.data.pages
-          });
-          return data;
-        }
-      })
-      .catch((error: any) => {
-        dispatch({ type: types.LOAD_ALERTS_SUCCESS });
-        constants.handleError(error, 'get alerts');
-        console.error(error);
-      });
+export const getAlerts = () => async (dispatch: any, getState: any) => {
+  dispatch(beginAjaxCall());
+  const { page, title } = getState().manageAlert.tableFilters;
+  const axiosOptions: AxiosRequestConfig = {
+    method: 'get',
+    params: { page, title }
   };
-}
+
+  const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+  const url = API.GET.alert.all;
+
+  try {
+    const data = await adalFetch(
+      authContext,
+      resource,
+      axios,
+      url,
+      axiosOptions
+    );
+
+    dispatch({ type: types.LOAD_ALERTS_SUCCESS, payload: data.data.result });
+    dispatch({ type: types.ALERT_MANAGE_TOTAL_PAGES, pages: data.data.pages });
+  } catch (error) {
+    dispatch({ type: types.LOAD_ALERTS_SUCCESS });
+    constants.handleError(error, 'get alerts');
+  }
+};
 
 export function saveAlert(alert: any) {
   return (dispatch: any, getState: any) => {
@@ -92,6 +86,7 @@ export function updateAlert(alert: FormData) {
     const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
     const id = alert.get('id') as string;
     const url = API.PUT.alert.update.replace('{alertId}', id);
+    console.log();
     return adalFetch(authContext, resource, axios, url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (data.status !== 200) {

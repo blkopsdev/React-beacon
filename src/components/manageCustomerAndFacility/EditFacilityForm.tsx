@@ -26,7 +26,9 @@ import { Icustomer, Ifacility } from 'src/models';
 
 interface Iprops {
   handleSubmit: any;
+  handleEdit: any;
   handleCancel: any;
+  clearSelectedFacilityID: any;
   loading: boolean;
   colorButton: string;
   t: TranslationFunction;
@@ -78,7 +80,8 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
       address2,
       city,
       state,
-      postalCode
+      postalCode,
+      countryID
     } = this.props.selectedFacility;
 
     name = formValues.name || name;
@@ -87,6 +90,10 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
     city = formValues.city || city;
     state = formValues.state || state;
     postalCode = formValues.postalCode || postalCode;
+    countryID = formValues.countryID.value || countryID;
+
+    const countries = orderBy(constants.countries, 'label');
+    const selectedCountry = countries.find(c => c.value === countryID);
 
     const fieldConfigControls = {
       name: {
@@ -171,11 +178,15 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
         },
         render: FormUtil.Select,
         meta: {
-          options: orderBy(constants.countries, 'label'),
+          options: countries,
           label: 'user:country',
           colWidth: 12,
           placeholder: 'userQueue:countrySearchPlaceholder',
           name: 'country'
+        },
+        formState: {
+          value: selectedCountry,
+          disabled: false
         }
       }
     } as { [key: string]: GroupProps };
@@ -216,6 +227,7 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
     if (this.subscription) {
       this.subscription.unsubscribe();
     }
+    this.props.clearSelectedFacilityID();
   }
 
   onCountryChanges = (value: any) => {
@@ -247,7 +259,12 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
       countryID: this.formGroup.value.countryID.value,
       customerID: this.props.selectedCustomer.id
     };
-    this.props.handleSubmit(newFacility);
+    if (this.props.selectedFacility.id) {
+      newFacility['id'] = this.props.selectedFacility.id;
+      this.props.handleEdit(newFacility);
+    } else {
+      this.props.handleSubmit(newFacility);
+    }
   };
 
   setForm = (form: FormGroup) => {

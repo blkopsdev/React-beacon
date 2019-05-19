@@ -11,11 +11,13 @@ import * as React from 'react';
 import { Icustomer, Ifacility, IinitialState } from '../../models';
 import {
   addFacility,
-  toggleEditFacilityModal
+  toggleEditFacilityModal,
+  updateFacility
 } from '../../actions/commonActions';
 import CommonModal from '../common/CommonModal';
 import EditFacilityForm from './EditFacilityForm';
 import {
+  clearSelectedFacilityID,
   setFacilityFormValues,
   updateFacilityFormValue
 } from '../../actions/manageCustomerAndFacilityActions';
@@ -32,8 +34,10 @@ interface IdispatchProps {
   loading: boolean;
   toggleModal: () => void;
   addFacility: typeof addFacility;
+  updateFacility: typeof updateFacility;
   updateFormValue: typeof updateFacilityFormValue;
   setFormValues: typeof setFacilityFormValues;
+  clearSelectedFacilityID: typeof setFacilityFormValues;
   formValues: { [key: string]: any };
 }
 
@@ -53,11 +57,13 @@ class EditFacilityModal extends React.Component<Iprops & IdispatchProps, {}> {
         onHide={this.props.toggleModal}
         body={
           <EditFacilityForm
+            clearSelectedFacilityID={this.props.clearSelectedFacilityID}
             selectedFacility={this.props.selectedFacility}
             updateFormValue={this.props.updateFormValue}
             setFormValues={this.props.setFormValues}
             formValues={this.props.formValues}
             handleSubmit={this.props.addFacility}
+            handleEdit={this.props.updateFacility}
             handleCancel={this.props.toggleModal}
             colorButton={this.props.colorButton}
             loading={this.props.loading}
@@ -87,7 +93,9 @@ export default connect(
   {
     toggleModal: toggleEditFacilityModal,
     addFacility,
+    updateFacility,
     updateFormValue: updateFacilityFormValue,
-    setFormValues: setFacilityFormValues
+    setFormValues: setFacilityFormValues,
+    clearSelectedFacilityID
   }
 )(EditFacilityModal);

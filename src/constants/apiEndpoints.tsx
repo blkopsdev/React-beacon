@@ -74,6 +74,9 @@ const API = {
     },
     brand: {
       update: `${root}/brand`
+    },
+    facility: {
+      update: `${root}/facility/{id}`
     }
   },
   DELETE: {

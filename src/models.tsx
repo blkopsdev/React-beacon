@@ -212,6 +212,7 @@ export interface IfacilityWithoutBuildings {
   address: string;
   address2: string;
   city: string;
+  countryID: string;
   state: string;
   postalCode: string;
   isDeleted: boolean;
@@ -324,7 +325,7 @@ export type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
 /* **********   Desktop Only ***********/
 
-/* 
+/*
 * TRAINING MODELS
 */
 // export interface GFBadge {

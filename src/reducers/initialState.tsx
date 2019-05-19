@@ -8,6 +8,7 @@ export const initialFacility = {
   address: '',
   address2: '',
   city: '',
+  countryID: '',
   state: '',
   postalCode: '',
   buildings: [],
@@ -173,7 +174,7 @@ export const initialBrand = {
 };
 
 /* ********************   DESKTOP ONLY  ***************/
-/* 
+/*
 
 /*
 *  TRAINING initial state

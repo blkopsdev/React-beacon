@@ -151,3 +151,42 @@ export function addFacility(facility: Ifacility): ThunkResult<void> {
       });
   };
 }
+
+export function updateFacility(facility: Ifacility): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'put',
+      data: facility
+    };
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.PUT.facility.update.replace('{id}', facility.id);
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.FACILITY_UPDATE_SUCCESS,
+            facility: data.data
+          });
+          dispatch({ type: types.TOGGLE_MODAL_EDIT_FACILITY });
+          toastr.success('Success', 'Saved Facility', constants.toastrSuccess);
+          // wait for the select options to update then trigger an event that a new facility has been added.
+          setTimeout(() => {
+            const event = new CustomEvent('newFacility', {
+              detail: data.data.id
+            });
+            document.dispatchEvent(event);
+          }, 400);
+
+          return data;
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.FACILITY_UPDATE_FAILED });
+        constants.handleError(error, 'add facility');
+        console.error(error);
+      });
+  };
+}

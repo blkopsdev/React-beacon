@@ -63,8 +63,7 @@ class ManageBrandForm extends React.Component<Iprops, {}> {
   }
 
   componentDidMount() {
-    if (!this.props.selectedBrand) {
-    } else {
+    if (this.props.selectedBrand) {
       // set values
       forEach(this.props.selectedBrand, (value, key) => {
         if (typeof value === 'string' && key.split('ID').length === 1) {
@@ -86,7 +85,7 @@ class ManageBrandForm extends React.Component<Iprops, {}> {
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-    
+
     const { name } = this.form.value;
     if (
       this.props.selectedBrand &&
@@ -120,7 +119,6 @@ class ManageBrandForm extends React.Component<Iprops, {}> {
 
     return (
       <div>
-
         <form onSubmit={this.handleSubmit} className={formClassName}>
           <FormGenerator
             onMount={this.setForm}

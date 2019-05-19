@@ -57,8 +57,7 @@ class EditAlertForm extends React.Component<Iprops, State> {
     };
   }
   componentDidMount() {
-    if (!this.props.selectedAlert.id) {
-    } else {
+    if (this.props.selectedAlert.id) {
       this.props.setFormValues(this.props.selectedAlert);
     }
   }

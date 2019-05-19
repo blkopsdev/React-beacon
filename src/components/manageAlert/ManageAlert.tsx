@@ -29,6 +29,8 @@ import ReactTable, { FinalState, RowInfo } from 'react-table';
 import * as moment from 'moment';
 import { orderBy } from 'lodash';
 import EditAlertModal from './EditAlertModal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { toastr } from 'react-redux-toastr';
 
 interface RowInfoAlert extends RowInfo {
   original: IAlert;
@@ -141,6 +143,22 @@ class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
     this.props.setSelectedAlertID(row.original.id);
   }
 
+  handleDelete(deletedItem: any) {
+    const toastrConfirmOptions = {
+      onOk: () => {
+        deletedItem = {
+          ...deletedItem
+        };
+        this.props.deleteAlert(deletedItem);
+        console.log('deleted', deletedItem);
+      },
+      onCancel: () => console.log('CANCEL: clicked'),
+      okText: this.props.t('deleteOk'),
+      cancelText: this.props.t('common:cancel')
+    };
+    toastr.confirm(this.props.t('deleteConfirm'), toastrConfirmOptions);
+  }
+
   onPageChange = (page: number) => {
     const newPage = page + 1;
     this.props.setTableFilter({ page: newPage });
@@ -160,6 +178,23 @@ class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
           Header: 'type',
           accessor: 'type',
           minWidth: 300
+        },
+        {
+          Header: '',
+          Cell: row => (
+            <div>
+              <Button
+                bsStyle="link"
+                style={{ float: 'right', color: 'red' }}
+                onClick={e => {
+                  e.stopPropagation();
+                  this.handleDelete(row.original);
+                }}
+              >
+                <FontAwesomeIcon icon={['far', 'times']} />
+              </Button>
+            </div>
+          )
         }
       ],
       this.props.t
@@ -191,6 +226,7 @@ class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
 
   render() {
     const { t, tableData = [], totalPages } = this.props;
+    // console.log(this.state.currentTile);
     return (
       <div className="manage-alert">
         <Banner

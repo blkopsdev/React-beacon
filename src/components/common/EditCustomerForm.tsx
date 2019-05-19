@@ -12,13 +12,11 @@ import {
   FieldConfig
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
-// import { forEach, find } from "lodash";
 import { constants } from 'src/constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction } from 'react-i18next';
 
 import { FormUtil } from '../common/FormUtil';
-// import { IqueueObject } from '../../models';
 
 // add the bootstrap form-control class to the react-select select component
 
@@ -58,13 +56,6 @@ class EditCustomerForm extends React.Component<Iprops, {}> {
     super(props);
     this.fieldConfig = FormUtil.translateForm(fieldConfig, this.props.t);
   }
-  // componentDidUpdate(prevProps: Iprops) {
-
-  // }
-
-  // componentDidMount() {
-
-  // }
 
   handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -73,7 +64,7 @@ class EditCustomerForm extends React.Component<Iprops, {}> {
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-    console.log(this.userForm.value);
+    
     this.props.handleSubmit(this.userForm.value);
   };
   setForm = (form: AbstractControl) => {

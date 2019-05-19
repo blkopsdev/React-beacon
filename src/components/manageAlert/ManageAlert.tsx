@@ -97,11 +97,6 @@ class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
       JSON.stringify(prevProps.tableFilters) !==
       JSON.stringify(this.props.tableFilters)
     ) {
-      console.log(
-        'alert manage filters changed',
-        prevProps.tableFilters,
-        this.props.tableFilters
-      );
       this.props.getAlerts();
     }
   }
@@ -150,7 +145,6 @@ class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
           ...deletedItem
         };
         this.props.deleteAlert(deletedItem);
-        console.log('deleted', deletedItem);
       },
       onCancel: () => console.log('CANCEL: clicked'),
       okText: this.props.t('deleteOk'),
@@ -203,9 +197,9 @@ class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
   };
 
   /*
-* Handle user clicking on a location row
-* set the selected location to state and open the modal
-*/
+  * Handle user clicking on a location row
+  * set the selected location to state and open the modal
+  */
   getTrProps = (state: FinalState, rowInfo: RowInfoAlert) => {
     if (rowInfo) {
       return {
@@ -226,7 +220,6 @@ class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
 
   render() {
     const { t, tableData = [], totalPages } = this.props;
-    // console.log(this.state.currentTile);
     return (
       <div className="manage-alert">
         <Banner

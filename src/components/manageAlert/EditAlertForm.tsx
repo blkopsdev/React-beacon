@@ -8,25 +8,20 @@ import * as React from 'react';
 import {
   Validators,
   FormGenerator,
-  // AbstractControl,
   FieldConfig,
   FormGroup
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
-// import { forEach, find } from "lodash";
 import { constants } from 'src/constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction } from 'react-i18next';
 
 import { FormUtil } from '../common/FormUtil';
-// import { forEach } from 'lodash';
 import {
   clearSelectedAlertID,
   toggleEditAlertModal
 } from '../../actions/manageAlertActions';
 import { IAlert } from 'src/models';
-// import * as moment from "../manageJob/EditJobForm";
-// import { IqueueObject } from '../../models';
 
 // add the bootstrap form-control class to the react-select select component
 
@@ -56,7 +51,6 @@ class EditAlertForm extends React.Component<Iprops, State> {
   private subscription: any;
   constructor(props: Iprops) {
     super(props);
-    // this.fieldConfig = FormUtil.translateForm(buildFieldConfig(this.onFileChange), this.props.t);
     this.state = {
       file: '',
       fieldConfig: this.buildFieldConfig(this.onFileChange)
@@ -64,15 +58,8 @@ class EditAlertForm extends React.Component<Iprops, State> {
   }
   componentDidMount() {
     if (!this.props.selectedAlert.id) {
-      console.log(`adding a new Alert`);
     } else {
       this.props.setFormValues(this.props.selectedAlert);
-      // forEach(this.props.selectedAlert, (value, key) => {
-      //     if (typeof value === 'string' && key.split('ID').length === 1) {
-      //       // it is a string and did Not find 'ID'
-      //       this.formGroup.patchValue({ [key]: value });
-      //     }
-      // });
     }
   }
 
@@ -157,7 +144,6 @@ class EditAlertForm extends React.Component<Iprops, State> {
           onChange: onFileChange,
           imageUrl
         }
-        //   formState: fileName || imageUrl || ''
       }
     };
     return FormUtil.translateForm(
@@ -196,9 +182,9 @@ class EditAlertForm extends React.Component<Iprops, State> {
   };
 
   /*
-* (reusable)
-* set the table filters to redux on each value change
-*/
+  * (reusable)
+  * set the table filters to redux on each value change
+  */
   onValueChanges = (value: any, key: string) => {
     this.props.updateFormValue({ [key]: value });
   };

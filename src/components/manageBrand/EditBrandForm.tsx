@@ -19,7 +19,6 @@ import { ItableFiltersReducer } from '../../models';
 import { saveBrand, updateBrand } from '../../actions/manageBrands';
 import { constants } from 'src/constants/constants';
 import { clearSelectedBrandID } from '../../actions/manageBrandActions';
-// import {saveBrand, updateBrand} from "../../actions/manageBrandActions";
 
 const buildFieldConfig = () => {
   const fieldConfigControls = {
@@ -65,7 +64,6 @@ class ManageBrandForm extends React.Component<Iprops, {}> {
 
   componentDidMount() {
     if (!this.props.selectedBrand) {
-      console.log(`adding a new Brand`);
     } else {
       // set values
       forEach(this.props.selectedBrand, (value, key) => {
@@ -88,7 +86,7 @@ class ManageBrandForm extends React.Component<Iprops, {}> {
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-    console.log(this.form.value);
+    
     const { name } = this.form.value;
     if (
       this.props.selectedBrand &&
@@ -122,7 +120,6 @@ class ManageBrandForm extends React.Component<Iprops, {}> {
 
     return (
       <div>
-        {/*{this.getBreadcrumbs()}*/}
 
         <form onSubmit={this.handleSubmit} className={formClassName}>
           <FormGenerator

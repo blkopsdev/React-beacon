@@ -229,7 +229,6 @@ export const FormUtil = {
                   fileName = fileInput.files[0].name;
                 }
                 e.target.filename = fileName;
-                console.log(fileName);
               }}
               style={{ display: 'none' }}
             />
@@ -301,7 +300,6 @@ export const FormUtil = {
       ? 'is-multi beacon-select'
       : 'beacon-select';
     const selectValidationClass = value && !pristine ? 'has-success' : '';
-    // console.log('validator', errors);
     const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
       <Col xs={meta.colWidth}>
@@ -383,7 +381,6 @@ export const FormUtil = {
     );
   },
   SelectWithoutValidation: ({ handler, meta }: AbstractControl) => {
-    // console.log('rendering select', meta.options, value, defaultValue)
     const selectClassName = meta.isMulti
       ? 'is-multi beacon-select'
       : 'beacon-select';
@@ -415,7 +412,6 @@ export const FormUtil = {
   },
   SelectWithoutValidationLeftLabel: ({ handler, meta }: AbstractControl) => {
     // TODO get rid of this because default values do not work for some unknwon reason.  we patch the values instead
-    // console.log('rendering select', meta.options, value, defaultValue)
     const selectClassName = meta.isMulti
       ? 'is-multi beacon-select'
       : 'beacon-select';
@@ -456,7 +452,6 @@ export const FormUtil = {
     submitted,
     value
   }: AbstractControl) => {
-    // console.log('rendering select', meta.options, value, defaultValue)
     const selectClassName = meta.isMulti
       ? 'is-multi beacon-select'
       : 'beacon-select';

@@ -19,7 +19,6 @@ import { translate, TranslationFunction } from 'react-i18next';
 
 import { FormUtil } from '../common/FormUtil';
 import { Icustomer } from 'src/models';
-// import { IqueueObject } from '../../models';
 
 // add the bootstrap form-control class to the react-select select component
 
@@ -114,9 +113,6 @@ class EditFacilityForm extends React.Component<Iprops, {}> {
     super(props);
     this.fieldConfig = FormUtil.translateForm(fieldConfig, this.props.t);
   }
-  // componentDidUpdate(prevProps: Iprops) {
-
-  // }
 
   componentDidMount() {
     if (!this.formGroup) {
@@ -147,9 +143,9 @@ class EditFacilityForm extends React.Component<Iprops, {}> {
   };
 
   /*
-* (reusable)
-* set the table filters to redux on each value change
-*/
+  * (reusable)
+  * set the table filters to redux on each value change
+  */
   onValueChanges = (value: any, key: string) => {
     this.props.updateFormValue({ [key]: value });
     if (key === 'countryID') {
@@ -186,7 +182,7 @@ class EditFacilityForm extends React.Component<Iprops, {}> {
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-    // console.log(this.formGroup.value);
+    
     const newFacility = {
       ...this.formGroup.value,
       countryID: this.formGroup.value.countryID.value,

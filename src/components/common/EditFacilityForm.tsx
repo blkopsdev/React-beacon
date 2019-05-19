@@ -19,7 +19,6 @@ import { translate, TranslationFunction } from 'react-i18next';
 
 import { FormUtil } from '../common/FormUtil';
 import { Ioption } from 'src/models';
-// import { IqueueObject } from '../../models';
 
 // add the bootstrap form-control class to the react-select select component
 
@@ -111,9 +110,6 @@ class EditFacilityForm extends React.Component<Iprops, {}> {
     super(props);
     this.fieldConfig = FormUtil.translateForm(fieldConfig, this.props.t);
   }
-  // componentDidUpdate(prevProps: Iprops) {
-
-  // }
 
   componentDidMount() {
     if (!this.userForm) {
@@ -161,7 +157,7 @@ class EditFacilityForm extends React.Component<Iprops, {}> {
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-    console.log(this.userForm.value);
+    
     const newFacility = {
       ...this.userForm.value,
       countryID: this.userForm.value.countryID.value,

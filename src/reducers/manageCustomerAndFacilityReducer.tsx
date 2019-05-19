@@ -48,7 +48,7 @@ export function manageCustomerAndFacilityReducer(
         item['facilities'] = [...facilities, updatedFacility];
         items[item.id] = item;
       } catch (e) {
-        console.log(e);
+        console.error(e);
       }
 
       return items;

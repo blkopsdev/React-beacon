@@ -43,10 +43,8 @@ interface RowInfoCustomer extends RowInfo {
 }
 
 interface Iprops extends RouteComponentProps<any> {
-  // Add your regular properties here
   t: TranslationFunction;
   i18n: I18n;
-  // loading: boolean;
 }
 
 interface IdispatchProps {
@@ -110,11 +108,6 @@ class ManageCustomerAndFacility extends React.Component<
       JSON.stringify(prevProps.tableFilters) !==
       JSON.stringify(this.props.tableFilters)
     ) {
-      console.log(
-        'user manage filters changed',
-        prevProps.tableFilters,
-        this.props.tableFilters
-      );
       this.props.getCustomers();
     }
   }
@@ -166,14 +159,7 @@ class ManageCustomerAndFacility extends React.Component<
     }
   };
 
-  // handleEdit(row: any) {
-  //   this.setState({ selectedRow: row.index });
-  //   this.props.toggleEditCustomerModal();
-  //   // this.props.setSelectedCustomerAndFacilityID(row.original.id);
-  // }
-
   addFacility = (row: any) => {
-    // console.log(row);
     this.props.toggleEditFacilityModal();
   };
 
@@ -182,8 +168,8 @@ class ManageCustomerAndFacility extends React.Component<
     this.props.setTableFilter({ page: newPage });
   };
   /*
-    * Set Columns sets columns to state
-    */
+  * Set Columns sets columns to state
+  */
   setColumns = () => {
     const columns = TableUtil.translateHeaders(
       [
@@ -221,7 +207,6 @@ class ManageCustomerAndFacility extends React.Component<
   * set the selected location to state and open the modal
   */
   getTrProps = (state: FinalState, rowInfo: RowInfoCustomer) => {
-    // console.log("ROWINFO", rowInfo, state, column);
     return {
       onClick: () => {
         this.props.setSelectedCustomerID(rowInfo.original.id);

@@ -8,21 +8,16 @@ import * as React from 'react';
 import {
   Validators,
   FormGenerator,
-  // AbstractControl,
   FieldConfig,
   FormGroup
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
-// import { forEach, find } from "lodash";
 import { constants } from 'src/constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction } from 'react-i18next';
 
 import { FormUtil } from '../common/FormUtil';
-// import { forEach } from 'lodash';
 import { clearSelectedCustomerID } from '../../actions/manageCustomerAndFacilityActions';
-// import * as moment from "../manageJob/EditJobForm";
-// import { IqueueObject } from '../../models';
 
 // add the bootstrap form-control class to the react-select select component
 const buildFieldConfig = () => {
@@ -77,11 +72,6 @@ class EditCustomerForm extends React.Component<Iprops, {}> {
     super(props);
     this.fieldConfig = FormUtil.translateForm(buildFieldConfig(), this.props.t);
   }
-  componentDidMount() {
-    if (!this.props.selectedCustomer) {
-      console.log(`adding a new Customer`);
-    }
-  }
 
   componentWillUnmount() {
     if (this.subscription) {
@@ -107,9 +97,9 @@ class EditCustomerForm extends React.Component<Iprops, {}> {
   };
 
   /*
-* (reusable)
-* set the table filters to redux on each value change
-*/
+  * (reusable)
+  * set the table filters to redux on each value change
+  */
   onValueChanges = (value: any, key: string) => {
     this.props.updateFormValue({ [key]: value });
   };
@@ -121,7 +111,6 @@ class EditCustomerForm extends React.Component<Iprops, {}> {
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-    console.log(this.formGroup.value);
     this.props.handleSubmit(this.formGroup.value);
   };
 

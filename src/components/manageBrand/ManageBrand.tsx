@@ -36,10 +36,8 @@ interface RowInfoBrand extends RowInfo {
 }
 
 interface Iprops extends RouteComponentProps<any> {
-  // Add your regular properties here
   t: TranslationFunction;
   i18n: I18n;
-  // loading: boolean;
 }
 
 interface IdispatchProps {
@@ -96,11 +94,6 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
       JSON.stringify(prevProps.tableFilters) !==
       JSON.stringify(this.props.tableFilters)
     ) {
-      console.log(
-        'user manage filters changed',
-        prevProps.tableFilters,
-        this.props.tableFilters
-      );
       this.props.getBrands();
     }
   }
@@ -164,9 +157,9 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
   };
 
   /*
-* Handle user clicking on a location row
-* set the selected location to state and open the modal
-*/
+  * Handle user clicking on a location row
+  * set the selected location to state and open the modal
+  */
   getTrProps = (state: FinalState, rowInfo: RowInfoBrand) => {
     if (rowInfo) {
       return {
@@ -232,7 +225,6 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
           previousText={t('common:previous')}
           nextText={t('common:next')}
           onPageChange={this.onPageChange}
-          // onSortedChange={this.onSortedChanged}
           sortable={false}
           multiSort={false}
           noDataText={t('common:noDataText')}

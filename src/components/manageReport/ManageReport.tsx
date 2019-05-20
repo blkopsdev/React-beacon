@@ -89,9 +89,10 @@ class ManageReport extends React.Component<Iprops & IdispatchProps, Istate> {
         {
           id: 'name',
           Header: 'name',
-          accessor: ({ reportType }: Ireport) => {
-            return this.props.t(constants.reportTypeEnumInverse[reportType]);
-          },
+          accessor: 'name',
+          // accessor: ({ reportType }: Ireport) => {
+          //   return this.props.t(constants.reportTypeEnumInverse[reportType]);
+          // },
           width: 500
         }
       ],

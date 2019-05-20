@@ -6,11 +6,13 @@ import { authContext } from '../actions/userActions';
 
 const reportTypeEnum = {
   annualInspection: 1,
-  jobNotes: 2
+  jobNotes: 2,
+  HTM: 3
 };
 const reportTypeEnumInverse = {
   1: 'annualInspection',
-  2: 'jobNotes'
+  2: 'jobNotes',
+  3: 'HTM'
 };
 
 const reportTypeOptions = [
@@ -21,6 +23,10 @@ const reportTypeOptions = [
   {
     value: reportTypeEnum.jobNotes,
     label: reportTypeEnumInverse[reportTypeEnum.jobNotes]
+  },
+  {
+    value: reportTypeEnum.HTM,
+    label: reportTypeEnumInverse[reportTypeEnum.HTM]
   }
 ];
 

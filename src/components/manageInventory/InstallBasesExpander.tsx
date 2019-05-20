@@ -155,7 +155,7 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
         minWidth: 100
       },
       {
-        Header: 'RFID',
+        Header: 'rfid',
         accessor: 'rfid',
         minWidth: 100
       },

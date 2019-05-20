@@ -139,6 +139,7 @@
     "name": "Name",
     "annualInspection": "Annual Inspection Report",
     "jobNotes": "Job Comments / Deficiency Report",
+    "HTM": "HTM Report",
     "coverLetter": "Cover Letter",
     "jobPlaceholder": "Search..."
   },

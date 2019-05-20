@@ -504,12 +504,11 @@ export function mergeProduct(
     dispatch(beginAjaxCall());
     dispatch({ type: types.CLOSE_ALL_MODALS });
     const axiosOptions: AxiosRequestConfig = {
-      method: 'post'
+      method: 'post',
+      data: { sourceProductID, targetProductID }
     };
     const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
-    const url = `${
-      API.POST.inventory.mergeProduct
-    }?sourceProductID=${sourceProductID}&targetProductID=${targetProductID}`;
+    const url = API.POST.inventory.mergeProduct;
     return adalFetch(authContext, resource, axios, url, axiosOptions).then(
       (data: AxiosResponse<any>) => {
         dispatch({

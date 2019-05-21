@@ -126,12 +126,8 @@ export const deleteAlert = (alert: IAlert) => (
 
   return adalFetch(authContext, resource, axios, url, axiosOptions)
     .then((data: AxiosResponse<any>) => {
-      if (!data.data) {
-        throw undefined;
-      } else {
-        dispatch({ type: types.REMOVE_ALERT_SUCCESS, payload: alert });
-        toastr.success('Success', `Deleted Alert.`, constants.toastrSuccess);
-      }
+      dispatch({ type: types.REMOVE_ALERT_SUCCESS, payload: alert });
+      toastr.success('Success', `Deleted Alert.`, constants.toastrSuccess);
     })
     .catch((error: any) => {
       dispatch({ type: types.REMOVE_ALERT_FAILED });

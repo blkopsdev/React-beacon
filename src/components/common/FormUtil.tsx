@@ -117,7 +117,11 @@ export const FormUtil = {
         bsSize="sm"
         className="datetime-select"
       >
-        <Col xs={meta.colWidth}>
+        <Col
+          xs={meta.colWidth}
+          md={meta.colWidthMedium}
+          lg={meta.colWidthLarge}
+        >
           <ControlLabel>
             {meta.label}
             <i className="required-label">{requiredLabel}</i>
@@ -135,7 +139,7 @@ export const FormUtil = {
   },
   DatetimeWithoutValidation: ({ handler, meta }: AbstractControl) => (
     <FormGroup bsSize="sm" className="datetime-select">
-      <Col xs={meta.colWidth}>
+      <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
         <ControlLabel>{meta.label}</ControlLabel>
         <Datetime
           defaultValue={meta.defaultValue}
@@ -156,7 +160,7 @@ export const FormUtil = {
   }: AbstractControl) => {
     const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
-      <Col xs={meta.colWidth}>
+      <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
         <FormGroup
           validationState={FormUtil.getValidationState(
             pristine,
@@ -210,7 +214,7 @@ export const FormUtil = {
         ? moment.utc(value).toDate()
         : value;
     return (
-      <Col xs={meta.colWidth}>
+      <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
         <FormGroup
           validationState={FormUtil.getValidationState(
             pristine,
@@ -247,7 +251,7 @@ export const FormUtil = {
   }: AbstractControl) => {
     const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
-      <Col xs={meta.colWidth}>
+      <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
         <FormGroup
           validationState={FormUtil.getValidationState(
             pristine,
@@ -274,7 +278,7 @@ export const FormUtil = {
     );
   },
   TextInputWithoutValidation: ({ handler, meta }: AbstractControl) => (
-    <Col xs={meta.colWidth}>
+    <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
       <FormGroup bsSize="sm">
         <ControlLabel>{meta.label}</ControlLabel>
         <FormControl
@@ -302,7 +306,7 @@ export const FormUtil = {
     // console.log('validator', errors);
     const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
-      <Col xs={meta.colWidth}>
+      <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
         <FormGroup
           validationState={FormUtil.getValidationState(
             pristine,
@@ -348,7 +352,7 @@ export const FormUtil = {
     const selectValidationClass = value && !pristine ? 'has-success' : '';
     const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
-      <Col xs={meta.colWidth}>
+      <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
         <FormGroup
           validationState={FormUtil.getValidationState(
             pristine,
@@ -418,7 +422,12 @@ export const FormUtil = {
       ? 'is-multi beacon-select'
       : 'beacon-select';
     return (
-      <Col xs={meta.colWidth} className={meta.className || ''}>
+      <Col
+        xs={meta.colWidth}
+        md={meta.colWidthMedium}
+        lg={meta.colWidthLarge}
+        className={meta.className || ''}
+      >
         <FormGroup bsSize="sm">
           <Col xs={2}>
             <ControlLabel>{meta.label}</ControlLabel>
@@ -461,7 +470,7 @@ export const FormUtil = {
     const selectValidationClass = value && !pristine ? 'has-success' : '';
     const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
-      <Col xs={meta.colWidth}>
+      <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
         <FormGroup
           validationState={FormUtil.getValidationState(
             pristine,
@@ -498,7 +507,7 @@ export const FormUtil = {
   },
   Button: ({ handler, meta }: AbstractControl) => {
     return (
-      <Col xs={meta.colWidth}>
+      <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
         <Button bsStyle="link" className="" onClick={meta.buttonAction}>
           {meta.buttonName}
         </Button>
@@ -531,7 +540,7 @@ export const FormUtil = {
   },
   TextLabel: ({ handler, meta }: any) => {
     return (
-      <Col xs={meta.colWidth}>
+      <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
         <FormGroup bsSize="sm">
           <ControlLabel>{meta.label}</ControlLabel>
           <h5 className="queue-form-label">{handler().value}</h5>
@@ -557,7 +566,7 @@ export const FormUtil = {
     const selectValidationClass = value && !pristine ? 'has-success' : '';
     const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
-      <Col xs={meta.colWidth}>
+      <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
         <Row>
           <Col xs={9}>
             <FormGroup
@@ -613,7 +622,7 @@ export const FormUtil = {
   }: AbstractControl) => {
     const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
-      <Col xs={meta.colWidth}>
+      <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
         <FormGroup bsSize="sm" style={meta.style}>
           <ControlLabel>
             {meta.label}
@@ -639,7 +648,7 @@ export const FormUtil = {
   }: AbstractControl) => {
     const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
-      <Col xs={meta.colWidth}>
+      <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
         <FormGroup
           validationState={FormUtil.getValidationState(
             pristine,
@@ -673,7 +682,7 @@ export const FormUtil = {
   }: AbstractControl) => {
     const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
-      <Col xs={meta.colWidth}>
+      <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
         <FormGroup
           validationState={FormUtil.getValidationState(
             pristine,

@@ -91,6 +91,8 @@ import 'react-toggle/style.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 import 'react-datetime/css/react-datetime.css';
+import 'react-datepicker/dist/react-datepicker.css';
+
 // import 'draft-js/dist/Draft.css';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './index.css';

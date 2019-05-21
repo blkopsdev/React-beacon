@@ -145,7 +145,9 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       roomID,
       id,
       position,
-      importedLocation
+      importedLocation,
+      installDate,
+      prodDate
     } = this.props.selectedItem;
     const shouldRequireQuantity =
       disabled === false && this.props.selectedItem && id ? false : true;
@@ -228,6 +230,28 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
           required: false
         },
         formState: { value: rfid, disabled }
+      },
+      installDate: {
+        render: FormUtil.DatePicker,
+        meta: {
+          label: 'install date',
+          colWidth: 6,
+          type: 'input',
+          name: 'install-date',
+          required: false
+        },
+        formState: { value: installDate, disabled }
+      },
+      prodDate: {
+        render: FormUtil.DatePicker,
+        meta: {
+          label: 'manufacture date',
+          colWidth: 6,
+          type: 'input',
+          name: 'manufacture-date',
+          required: false
+        },
+        formState: { value: prodDate, disabled }
       },
       remarks: {
         render: FormUtil.TextInput,

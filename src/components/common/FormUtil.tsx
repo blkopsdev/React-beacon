@@ -25,6 +25,7 @@ import { Ioption } from '../../models';
 import * as Datetime from 'react-datetime';
 import * as moment from 'moment';
 import RichTextEditor from './RichTextEditor';
+import ReactDatePicker from 'react-datepicker';
 
 // add the bootstrap form-control class to the react-select select component
 const ControlComponent = (props: any) => (
@@ -179,6 +180,58 @@ export const FormUtil = {
             {...handler()}
           />
           <FormControl.Feedback />
+        </FormGroup>
+      </Col>
+    );
+  },
+  DatePicker: ({
+    handler,
+    meta,
+    pristine,
+    errors,
+    submitted
+  }: AbstractControl) => {
+    const value = handler().value;
+    if (value && typeof value === 'string') {
+      console.log(
+        'date',
+        value,
+        new Date(value).toISOString(),
+        moment
+          .utc(value)
+          .toDate()
+          .toISOString()
+      );
+    }
+    const requiredLabel = meta.required === false ? ' - optional' : '';
+
+    const selected =
+      value && typeof value === 'string' && value.length
+        ? moment.utc(value).toDate()
+        : value;
+    return (
+      <Col xs={meta.colWidth}>
+        <FormGroup
+          validationState={FormUtil.getValidationState(
+            pristine,
+            errors,
+            submitted
+          )}
+          bsSize="sm"
+          className="datetime-select"
+        >
+          <ControlLabel>
+            {meta.label}
+            <i className="required-label">{requiredLabel}</i>
+          </ControlLabel>
+          <ReactDatePicker
+            selected={selected}
+            onChange={handler().onChange}
+            className="form-control"
+            showYearDropdown
+            showMonthDropdown
+            dropdownMode="select"
+          />
         </FormGroup>
       </Col>
     );

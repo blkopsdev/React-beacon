@@ -623,8 +623,10 @@ export const constants = {
         error.msg === 'Token Renewal Failed')
     ) {
       // adalFetch is catching that login is required
-      console.warn('attempting to catch expired session and login again');
-      // TODO figure out how to re-run the request?  if it is a get, it will likely re-run after refreshing and logging in again.  if it is a post or a put then...
+      console.error(
+        `Attempting to catch expired session and login again.  Request: ${message}`
+      );
+      // TODO figure out how to re-run the request?  if it is a get, it will likely re-run after refreshing and logging in again.  if it is a post or a put then... the data that the user entered will be lost.
       // adalReauth();
       authContext.login();
       return;

@@ -2,11 +2,7 @@ import Banner from '../common/Banner';
 import * as React from 'react';
 import { FieldConfig } from 'react-reactive-form';
 import { I18n, translate } from 'react-i18next';
-import {
-  emptyTile,
-  initialCustomer,
-  initialFacility
-} from '../../reducers/initialState';
+import { emptyTile, initialCustomer } from '../../reducers/initialState';
 import { RouteComponentProps } from 'react-router';
 import { TranslationFunction } from 'i18next';
 import { constants } from '../../constants/constants';
@@ -15,8 +11,7 @@ import {
   IinitialState,
   ItableFiltersReducer,
   Itile,
-  Icustomer,
-  Ifacility
+  Icustomer
 } from '../../models';
 import { TableUtil } from '../common/TableUtil';
 import { FormUtil } from '../common/FormUtil';
@@ -54,7 +49,6 @@ interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
   t: TranslationFunction;
   i18n: I18n;
-  // loading: boolean;
 }
 
 interface IdispatchProps {
@@ -71,7 +65,6 @@ interface IdispatchProps {
   setSelectedFacilityID: typeof setSelectedFacilityID;
   toggleEditFacilityModal: typeof toggleEditFacilityModal;
   selectedCustomer: Icustomer;
-  selectedFacility: Ifacility;
   filterVisibleCustomers: typeof filterVisibleCustomers;
   customers: { [key: string]: Icustomer };
 }
@@ -112,7 +105,7 @@ class ManageCustomerAndFacility extends React.Component<
         this.props.toggleEditCustomerModal &&
       !this.props.toggleEditCustomerModal
     ) {
-      this.setState({ selectedRow: null });
+      this.setState({ selectedRow: {} });
     }
     // automatically get inventory every time a fitler changes
     if (
@@ -242,6 +235,7 @@ class ManageCustomerAndFacility extends React.Component<
     if (column.id && column.id === 'expander-toggle') {
       return {
         onClick: () => {
+          this.props.setSelectedCustomerID(rowInfo.original.id);
           this.setState({
             selectedRow: {
               [rowInfo.viewIndex || 0]: !this.state.selectedRow[
@@ -258,9 +252,10 @@ class ManageCustomerAndFacility extends React.Component<
           this.props.toggleEditCustomerModal();
         },
         style: {
-          background: this.state.selectedRow[rowInfo.viewIndex]
-            ? constants.colors[`${this.state.currentTile.color}Tr`]
-            : ''
+          background:
+            this.state.selectedRow && this.state.selectedRow[rowInfo.viewIndex]
+              ? constants.colors[`${this.state.currentTile.color}Tr`]
+              : ''
         }
       };
     }
@@ -337,8 +332,6 @@ class ManageCustomerAndFacility extends React.Component<
           }
         />
         <EditFacilityModal
-          selectedCustomer={this.props.selectedCustomer}
-          selectedFacility={this.props.selectedFacility}
           t={this.props.t}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
@@ -355,16 +348,6 @@ const mapStateToProps = (state: IinitialState) => {
     state.customers[state.customerAndFacilityManage.selectedCustomerID] ||
     initialCustomer;
 
-  // console.log(selectedCustomer);
-  let selectedFacility: Ifacility = initialFacility;
-  if (typeof selectedCustomer !== 'undefined' && selectedCustomer.facilities) {
-    selectedFacility =
-      selectedCustomer.facilities.find(
-        (facility: Ifacility) =>
-          facility.id === state.customerAndFacilityManage.selectedFacilityID
-      ) || initialFacility;
-  }
-
   return {
     tableData,
     totalPages: state.customerAndFacilityManage.totalPages,
@@ -372,7 +355,6 @@ const mapStateToProps = (state: IinitialState) => {
       state.customerAndFacilityManage.showEditCustomerAndFacilityModal,
     tableFilters: state.customerAndFacilityManage.tableFilters,
     selectedCustomer,
-    selectedFacility,
     customers: state.customers
   };
 };

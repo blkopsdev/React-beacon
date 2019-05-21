@@ -21,12 +21,11 @@ import {
   setFacilityFormValues,
   updateFacilityFormValue
 } from '../../actions/manageCustomerAndFacilityActions';
+import { initialCustomer, initialFacility } from '../../reducers/initialState';
 
 interface Iprops {
   colorButton: any;
   t: TranslationFunction;
-  selectedCustomer: Icustomer;
-  selectedFacility: Ifacility;
 }
 
 interface IdispatchProps {
@@ -39,6 +38,8 @@ interface IdispatchProps {
   setFormValues: typeof setFacilityFormValues;
   clearSelectedFacilityID: typeof setFacilityFormValues;
   formValues: { [key: string]: any };
+  selectedCustomer: Icustomer;
+  selectedFacility: Ifacility;
 }
 
 class EditFacilityModal extends React.Component<Iprops & IdispatchProps, {}> {
@@ -64,7 +65,7 @@ class EditFacilityModal extends React.Component<Iprops & IdispatchProps, {}> {
             formValues={this.props.formValues}
             handleSubmit={this.props.addFacility}
             handleEdit={this.props.updateFacility}
-            handleCancel={this.props.toggleModal}
+            toggleModal={this.props.toggleModal}
             colorButton={this.props.colorButton}
             loading={this.props.loading}
             selectedCustomer={this.props.selectedCustomer}
@@ -80,11 +81,21 @@ class EditFacilityModal extends React.Component<Iprops & IdispatchProps, {}> {
 }
 
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
+  const selectedCustomer =
+    state.customers[state.customerAndFacilityManage.selectedCustomerID] ||
+    initialCustomer;
+
+  const selectedFacility: Ifacility =
+    state.facilities[state.customerAndFacilityManage.selectedFacilityID] ||
+    initialFacility;
+
   return {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
     showEditFacilityModal: state.showEditFacilityModal,
-    formValues: state.customerAndFacilityManage.facilityFormValues
+    formValues: state.customerAndFacilityManage.facilityFormValues,
+    selectedFacility,
+    selectedCustomer
   };
 };
 

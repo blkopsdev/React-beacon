@@ -27,7 +27,7 @@ import { Icustomer, Ifacility } from 'src/models';
 interface Iprops {
   handleSubmit: any;
   handleEdit: any;
-  handleCancel: any;
+  toggleModal: any;
   clearSelectedFacilityID: any;
   loading: boolean;
   colorButton: string;
@@ -53,23 +53,21 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
     };
   }
 
-  // componentDidUpdate(prevProps: Iprops) {
-
-  // }
-
-  componentDidMount() {
+  async componentDidMount() {
     if (!this.formGroup) {
       return;
     }
-    console.log(this.props.selectedFacility);
-    this.props.setFormValues(this.props.selectedFacility);
+
+    await this.props.setFormValues(this.props.selectedFacility);
     this.setState({ fieldConfig: this.buildFieldConfig() });
-    this.formGroup.patchValue({
-      countryID: {
-        value: 'ABC5D95C-129F-4837-988C-0BF4AE1F3B67',
-        label: 'United States of America'
-      }
-    });
+    if (!this.props.selectedFacility.countryID) {
+      this.formGroup.patchValue({
+        countryID: {
+          value: 'ABC5D95C-129F-4837-988C-0BF4AE1F3B67',
+          label: 'United States of America'
+        }
+      });
+    }
   }
 
   buildFieldConfig = () => {
@@ -90,11 +88,13 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
     city = formValues.city || city;
     state = formValues.state || state;
     postalCode = formValues.postalCode || postalCode;
-    countryID = formValues.countryID.value || countryID;
+    countryID =
+      (formValues.countryID && formValues.countryID.value) || countryID;
 
     const countries = orderBy(constants.countries, 'label');
-    const selectedCountry = countries.find(c => c.value === countryID);
-
+    const selectedCountry = countries.find(
+      c => c.value === countryID.toUpperCase()
+    );
     const fieldConfigControls = {
       name: {
         options: {
@@ -232,7 +232,7 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
 
   onCountryChanges = (value: any) => {
     const stateFormControl = this.formGroup.get('state');
-    if (value.value === `ABC5D95C-129F-4837-988C-0BF4AE1F3B67`) {
+    if (value && value.value === `ABC5D95C-129F-4837-988C-0BF4AE1F3B67`) {
       stateFormControl.enable();
       stateFormControl.setValidators([
         Validators.required,
@@ -275,6 +275,10 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
     this.subscribeToChanges();
   };
 
+  cleanForm = () => {
+    this.formGroup.reset();
+  };
+
   render() {
     const { t } = this.props;
     if (!this.props.selectedCustomer) {
@@ -288,7 +292,10 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
               bsStyle="default"
               type="button"
               className="pull-left"
-              onClick={this.props.handleCancel}
+              onClick={() => {
+                this.props.toggleModal();
+                this.props.setFormValues({});
+              }}
             >
               {t('cancel')}
             </Button>
@@ -303,6 +310,7 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
         className="clearfix beacon-form facility-form"
       >
         <FormGenerator
+          onUnmount={this.cleanForm}
           onMount={this.setForm}
           fieldConfig={this.state.fieldConfig}
         />
@@ -311,7 +319,10 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
             bsStyle="default"
             type="button"
             className="pull-left"
-            onClick={this.props.handleCancel}
+            onClick={() => {
+              this.props.toggleModal();
+              this.props.setFormValues({});
+            }}
           >
             {t('cancel')}
           </Button>

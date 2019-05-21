@@ -113,6 +113,16 @@ class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
           defaultValue: this.props.tableFilters.title,
           isClearable: true
         }
+      },
+      type: {
+        render: FormUtil.SelectWithoutValidation,
+        meta: {
+          options: constants.alertTypes,
+          label: 'alertTypeLabel',
+          colWidth: 3,
+          placeholder: 'Select type',
+          defaultValue: this.props.tableFilters.type
+        }
       }
     };
 
@@ -127,6 +137,8 @@ class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
       case 'name':
         this.props.setTableFilter({ title: value, page: 1 });
         break;
+      case 'type':
+        this.props.setTableFilter({ type: value.value, page: 1 });
       default:
         break;
     }

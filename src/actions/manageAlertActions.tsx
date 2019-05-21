@@ -16,10 +16,10 @@ export const getAlerts = () => (
   getState: any
 ): ThunkResult<void> => {
   dispatch(beginAjaxCall());
-  const { page, title } = getState().manageAlert.tableFilters;
+  const { page, title, type } = getState().manageAlert.tableFilters;
   const axiosOptions: AxiosRequestConfig = {
     method: 'get',
-    params: { page, title }
+    params: { page, title, type }
   };
 
   const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;

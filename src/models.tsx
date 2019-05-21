@@ -112,6 +112,8 @@ export interface Iproduct {
   installs: IinstallBase[];
   quantity: number;
   isDeleted: boolean;
+  isApproved: boolean;
+  mergedProductID: string;
 }
 /*
 * Location Models

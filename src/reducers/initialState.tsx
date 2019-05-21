@@ -48,7 +48,9 @@ export const initialProduct = {
   subcategory: initialSubcategory,
   installs: [],
   isDeleted: false,
-  quantity: 1
+  isApproved: false,
+  quantity: 1,
+  mergedProductID: ''
 };
 export const initialInstallBase = {
   id: '',

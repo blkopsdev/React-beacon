@@ -101,8 +101,8 @@ export default function configureStore() {
         maxAge: 20,
         shouldHotReload: false,
         stateSanitizer: (state: IinitialState) =>
-          state.manageInventory
-            ? { ...state, manageInventory: '<<LONG_BLOB>>' }
+          state.manageUserQueue
+            ? { ...state, manageUserQueue: '<<LONG_BLOB>>' }
             : state
       }
     );

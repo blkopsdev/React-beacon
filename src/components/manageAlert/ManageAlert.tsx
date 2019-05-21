@@ -25,7 +25,7 @@ import { TableUtil } from '../common/TableUtil';
 import { FormUtil } from '../common/FormUtil';
 import SearchTableForm from '../common/SearchTableForm';
 import { Button } from 'react-bootstrap';
-import ReactTable, { FinalState, RowInfo } from 'react-table';
+import ReactTable, { Column, FinalState, RowInfo } from 'react-table';
 import * as moment from 'moment';
 import { orderBy } from 'lodash';
 import EditAlertModal from './EditAlertModal';
@@ -175,20 +175,18 @@ class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
         },
         {
           Header: '',
-          Cell: row => (
-            <div>
+          id: 'delete',
+          minWidth: 25,
+          Cell: row => {
+            return (
               <Button
                 bsStyle="link"
-                style={{ float: 'right', color: 'red' }}
-                onClick={e => {
-                  e.stopPropagation();
-                  this.handleDelete(row.original);
-                }}
+                style={{ float: 'right', color: constants.colors.greyText }}
               >
                 <FontAwesomeIcon icon={['far', 'times']} />
               </Button>
-            </div>
-          )
+            );
+          }
         }
       ],
       this.props.t
@@ -197,15 +195,13 @@ class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
   };
 
   /*
-  * Handle user clicking on a location row
-  * set the selected location to state and open the modal
+  * (reusable)
+  * Handle user clicking on a product row
+  * set the selected product to state and open the modal
   */
-  getTrProps = (state: FinalState, rowInfo: RowInfoAlert) => {
+  getTrProps = (state: FinalState, rowInfo: RowInfo) => {
     if (rowInfo) {
       return {
-        onClick: (e: React.MouseEvent<HTMLFormElement>) => {
-          this.handleEdit(rowInfo);
-        },
         style: {
           background:
             rowInfo.index === this.state.selectedRow
@@ -215,6 +211,28 @@ class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
       };
     } else {
       return {};
+    }
+  };
+
+  getTdProps = (
+    fState: FinalState,
+    rowInfo: RowInfoAlert,
+    column: Column,
+    instance: any
+  ) => {
+    if (column.id && column.id === 'delete') {
+      return {
+        onClick: () => this.handleDelete(rowInfo.original)
+      };
+    } else {
+      return {
+        onClick: () => {
+          this.setState({
+            selectedRow: rowInfo.index
+          });
+          this.handleEdit(rowInfo.original);
+        }
+      };
     }
   };
 
@@ -256,6 +274,7 @@ class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
           data={tableData}
           columns={this.state.columns}
           getTrProps={this.getTrProps}
+          getTdProps={this.getTdProps}
           pageSize={tableData.length}
           manual
           pages={totalPages}

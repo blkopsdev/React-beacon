@@ -47,7 +47,7 @@ interface IdispatchProps {
   tableData: IAlert[];
   totalPages: number;
   showEditAlertModal: boolean;
-  getAlerts: any;
+  getAlerts: typeof getAlerts;
   toggleEditAlertModal: typeof toggleEditAlertModal;
   deleteAlert: typeof deleteAlert;
   setTableFilter: typeof setTableFilter;

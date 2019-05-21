@@ -17,7 +17,7 @@ export const getAlerts = () => async (dispatch: any, getState: any) => {
   };
 
   const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
-  const url = API.GET.alert.all;
+  const url = API.GET.alert.search;
 
   try {
     const data: AxiosResponse<any> = await adalFetch(

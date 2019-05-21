@@ -250,12 +250,6 @@ class ManageCustomerAndFacility extends React.Component<
         onClick: (e: React.MouseEvent<HTMLFormElement>) => {
           this.props.setSelectedCustomerID(rowInfo.original.id);
           this.props.toggleEditCustomerModal();
-        },
-        style: {
-          background:
-            this.state.selectedRow && this.state.selectedRow[rowInfo.viewIndex]
-              ? constants.colors[`${this.state.currentTile.color}Tr`]
-              : ''
         }
       };
     }

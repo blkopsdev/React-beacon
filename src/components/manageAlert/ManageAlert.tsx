@@ -230,7 +230,7 @@ class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
           this.setState({
             selectedRow: rowInfo.index
           });
-          this.handleEdit(rowInfo.original);
+          this.handleEdit(rowInfo);
         }
       };
     }

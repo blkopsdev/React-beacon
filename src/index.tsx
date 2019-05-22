@@ -116,6 +116,18 @@ TrackJS.install({
 // set the window name for UTA transaction window
 window.name = 'MyMedGas';
 
+/*
+* flush writes the current state to storage - this will be right after USER_LOGOUT_SUCCESS is triggered
+in userActions.  then we pause the persistor in order to prevent anything else from being persisted while we logout.
+*/
+const handleLogout = () => {
+  persistor.flush().then(() => {
+    persistor.pause();
+    authContext.logOut();
+  });
+};
+document.addEventListener('userLogout', handleLogout, false);
+
 // const Loading = () => <h3>Loading</h3>;
 // const ErrorPage = (error: any) => <h3>Error: {error}</h3>;
 const NoMatch = ({ location }: any) => {

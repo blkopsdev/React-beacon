@@ -79,6 +79,11 @@ class Login extends React.Component<Iprops, Istate> {
         // user is authenticated, so take them back to where they came from or to the default route
         this.props.history.push(from.pathname);
       }
+    } else {
+      console.log('the token is invalid');
+      if (this.props.user.isAuthenticated) {
+        console.error('token is expired but user is authenticated');
+      }
     }
   }
   componentDidMount() {

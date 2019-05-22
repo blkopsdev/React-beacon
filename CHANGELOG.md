@@ -1,3 +1,6 @@
+## MMG 0.2.4 May 22, 2019
+- added security function for HTM report
+
 ## MMG Desktop 0.2.3 May 21, 2019
 - added install date and manufacture date to device
 - imported location information is visible on device

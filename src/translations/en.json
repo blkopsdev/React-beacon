@@ -382,7 +382,8 @@
     "ManageLocations": "Manage Locations",
     "ManageJobs": "Manage Jobs",
     "ManageAllMeasurementPoints": "Manage Global Measurement Points",
-    "ManageCustomerMeasurementPoints": "Manage Customer Measurement Points"
+    "ManageCustomerMeasurementPoints": "Manage Customer Measurement Points",
+    "RunHTMReport": "Run HTM Report"
   },
   "training": {
     "shoppingCartTitle": "Shopping Cart",

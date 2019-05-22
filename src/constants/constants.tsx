@@ -267,6 +267,11 @@ const securityFunctions = {
     id: 'EC63D1C2-00C6-4D75-A0B7-1A4BFEBA338B',
     name: 'securityF:RunJobCommentsReport',
     description: 'Allows the user to run Job Comments Reports.'
+  },
+  RunHTMReport: {
+    id: '20EF9F72-28A1-4074-B3E2-2AF7912D414C',
+    name: 'securityF:RunHTMReport',
+    description: 'Allows the user to run the HTM report.'
   }
 };
 

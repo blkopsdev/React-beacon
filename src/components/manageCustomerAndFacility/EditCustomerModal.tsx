@@ -52,6 +52,13 @@ class EditCustomerModal extends React.Component<Iprops & IdispatchProps, {}> {
   }
 
   render() {
+    const { selectedCustomer, t } = this.props;
+
+    const formTitle =
+      selectedCustomer && selectedCustomer.name
+        ? selectedCustomer.name
+        : t('common:newCustomerModalTitle');
+
     return (
       <CommonModal
         modalVisible={this.props.showEditCustomerModal}
@@ -67,7 +74,7 @@ class EditCustomerModal extends React.Component<Iprops & IdispatchProps, {}> {
             loading={this.props.loading}
           />
         }
-        title={this.props.t('common:newCustomerModalTitle')}
+        title={formTitle}
         container={document.getElementById('two-pane-layout')}
       />
     );

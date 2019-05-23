@@ -48,9 +48,12 @@ class EditFacilityModal extends React.Component<Iprops & IdispatchProps, {}> {
   }
 
   render() {
-    const selectedCustomerLabel = this.props.selectedCustomer
-      ? this.props.selectedCustomer.name
-      : '';
+    const { selectedFacility, t } = this.props;
+    const formTitle =
+      selectedFacility && selectedFacility.name
+        ? selectedFacility.name
+        : t('common:newFacilityModalTitle');
+
     return (
       <CommonModal
         modalVisible={this.props.showEditFacilityModal}
@@ -71,9 +74,7 @@ class EditFacilityModal extends React.Component<Iprops & IdispatchProps, {}> {
             selectedCustomer={this.props.selectedCustomer}
           />
         }
-        title={`${this.props.t(
-          'common:newFacilityModalTitle'
-        )} for ${selectedCustomerLabel}`}
+        title={formTitle}
         container={document.getElementById('two-pane-layout')}
       />
     );

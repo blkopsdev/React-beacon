@@ -52,6 +52,13 @@ class EditAlertModal extends React.Component<Iprops & IdispatchProps, {}> {
   }
 
   render() {
+    let modalTitle;
+    if (this.props.selectedAlert && this.props.selectedAlert.id) {
+      modalTitle = this.props.t(`manageAlert:editBrand`);
+    } else {
+      modalTitle = this.props.t(`manageAlert:newBrand`);
+    }
+
     return (
       <CommonModal
         modalVisible={this.props.showEditAlertModal}
@@ -67,7 +74,7 @@ class EditAlertModal extends React.Component<Iprops & IdispatchProps, {}> {
             loading={this.props.loading}
           />
         }
-        title={this.props.t('common:newAlertModalTitle')}
+        title={modalTitle}
         container={document.getElementById('two-pane-layout')}
       />
     );

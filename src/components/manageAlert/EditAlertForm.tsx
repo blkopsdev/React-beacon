@@ -98,7 +98,7 @@ class EditAlertForm extends React.Component<Iprops, State> {
         },
         render: FormUtil.TextInput,
         meta: {
-          label: 'alertTitleLabel',
+          label: 'title',
           colWidth: 12,
           autoFocus: true,
           name: 'alert-title'
@@ -112,7 +112,7 @@ class EditAlertForm extends React.Component<Iprops, State> {
         render: FormUtil.Select,
         meta: {
           options: constants.alertTypes,
-          label: 'alertTypeLabel',
+          label: 'type',
           colWidth: 12,
           name: 'alert-type',
           isClearable: false
@@ -125,7 +125,7 @@ class EditAlertForm extends React.Component<Iprops, State> {
       text: {
         render: FormUtil.RichTextEditor,
         meta: {
-          label: 'alertTextLabel',
+          label: 'text',
           colWidth: 12,
           name: 'alert-text',
           required: false,

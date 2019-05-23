@@ -69,6 +69,14 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
     }
   }
 
+  componentWillUnmount() {
+    if (this.subscription) {
+      this.subscription.unsubscribe();
+    }
+    this.props.clearSelectedFacilityID();
+    this.props.setFormValues({});
+  }
+
   buildFieldConfig = () => {
     const formValues = this.props.formValues;
     let {
@@ -228,13 +236,6 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
         break;
     }
   };
-
-  componentWillUnmount() {
-    if (this.subscription) {
-      this.subscription.unsubscribe();
-    }
-    this.props.clearSelectedFacilityID();
-  }
 
   onCountryChanges = (value: any) => {
     const stateFormControl = this.formGroup.get('state');

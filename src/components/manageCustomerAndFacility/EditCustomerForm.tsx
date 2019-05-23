@@ -69,6 +69,7 @@ class EditCustomerForm extends React.Component<Iprops, IState> {
       this.subscription.unsubscribe();
     }
     this.props.clearSelectedCustomerID();
+    this.props.setFormValues({});
   }
 
   buildFieldConfig = () => {

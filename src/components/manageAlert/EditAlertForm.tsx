@@ -1,7 +1,7 @@
-/* 
-* Edit alert Form 
+/*
+* Edit alert Form
 * Add and Edit alerts
-* 
+*
 */
 
 import * as React from 'react';
@@ -88,7 +88,8 @@ class EditAlertForm extends React.Component<Iprops, State> {
     title = formValues.title ? formValues.title : title;
     text = formValues.text ? formValues.text : text;
     imageUrl = formValues.imageUrl ? formValues.imageUrl : imageUrl;
-    const selectedType = constants.alertTypes.find(t => t.value === type) || {};
+    const selectedType =
+      constants.alertTypes.find(t => t.value === type) || null;
 
     const fieldConfigControls = {
       title: {
@@ -113,8 +114,8 @@ class EditAlertForm extends React.Component<Iprops, State> {
           options: constants.alertTypes,
           label: 'alertTypeLabel',
           colWidth: 12,
-          autoFocus: true,
-          name: 'alert-type'
+          name: 'alert-type',
+          isClearable: false
         },
         formState: {
           value: selectedType,

@@ -28,7 +28,6 @@ import SearchTableForm from '../common/SearchTableForm';
 import { Button } from 'react-bootstrap';
 import ReactTable, { FinalState, RowInfo } from 'react-table';
 import EditBrandModal from './EditBrandModal';
-import * as moment from 'moment';
 import { orderBy } from 'lodash';
 
 interface RowInfoBrand extends RowInfo {
@@ -251,11 +250,7 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
 }
 
 const mapStateToProps = (state: IinitialState) => {
-  const tableData = orderBy(
-    state.manageBrand.data,
-    res => moment.utc(res.createDate).unix(),
-    'desc'
-  );
+  const tableData = orderBy(state.manageBrand.data, res => res.name, 'asc');
   return {
     tableData,
     totalPages: state.manageBrand.totalPages,

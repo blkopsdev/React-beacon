@@ -42,21 +42,26 @@ interface Iprops {
   formValues: { [key: string]: any };
 }
 
-class EditCustomerForm extends React.Component<Iprops, {}> {
+interface IState {
+  fieldConfig: FieldConfig;
+}
+
+class EditCustomerForm extends React.Component<Iprops, IState> {
   private formGroup: FormGroup;
-  private fieldConfig: FieldConfig;
   private subscription: any;
+  private debounce: any;
   constructor(props: Iprops) {
     super(props);
-    this.fieldConfig = this.buildFieldConfig();
+    this.state = {
+      fieldConfig: this.buildFieldConfig()
+    };
   }
-  componentDidMount() {
-    if (!this.props.selectedCustomer) {
-      console.log(`adding a new Customer`);
-    } else {
-      this.props.setFormValues(this.props.selectedCustomer);
-      this.setState({ fieldConfig: this.buildFieldConfig() });
+  async componentDidMount() {
+    if (!this.formGroup) {
+      return;
     }
+    await this.props.setFormValues(this.props.selectedCustomer);
+    this.setState({ fieldConfig: this.buildFieldConfig() });
   }
 
   componentWillUnmount() {
@@ -129,7 +134,10 @@ class EditCustomerForm extends React.Component<Iprops, {}> {
 * set the table filters to redux on each value change
 */
   onValueChanges = (value: any, key: string) => {
-    this.props.updateFormValue({ [key]: value });
+    clearTimeout(this.debounce);
+    this.debounce = setTimeout(() => {
+      this.props.updateFormValue({ [key]: value });
+    }, 200);
   };
 
   handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
@@ -156,18 +164,29 @@ class EditCustomerForm extends React.Component<Iprops, {}> {
     this.subscribeToChanges();
   };
 
+  cleanForm = () => {
+    this.formGroup.reset();
+  };
+
   render() {
     const { t } = this.props;
 
     return (
       <form onSubmit={this.handleSubmit} className="clearfix beacon-form">
-        <FormGenerator onMount={this.setForm} fieldConfig={this.fieldConfig} />
+        <FormGenerator
+          onUnmount={this.cleanForm}
+          onMount={this.setForm}
+          fieldConfig={this.state.fieldConfig}
+        />
         <Col xs={12} className="form-buttons text-right">
           <Button
             bsStyle="default"
             type="button"
             className="pull-left"
-            onClick={this.props.handleCancel}
+            onClick={() => {
+              this.props.handleCancel();
+              this.props.setFormValues({});
+            }}
           >
             {t('common:cancel')}
           </Button>

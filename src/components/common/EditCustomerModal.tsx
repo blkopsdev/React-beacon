@@ -10,16 +10,20 @@ import * as React from 'react';
 
 import {
   IinitialState
-  // Icustomer
 } from '../../models';
 import {
   addCustomer,
-  toggleEditCustomerModal
+  toggleEditCustomerModal,
+  updateCustomer
 } from '../../actions/commonActions';
-import CommonModal from '../common/CommonModal';
-import EditCustomerForm from '../common/EditCustomerForm';
+import CommonModal from './CommonModal';
+import EditCustomerForm from './EditCustomerForm';
+import {
+  clearSelectedCustomerID,
+  setCustomerFormValues,
+  updateCustomerFormValue
+} from '../../actions/manageCustomerAndFacilityActions';
 
-// import { map } from 'lodash';
 
 interface Iprops {
   colorButton: any;
@@ -31,6 +35,12 @@ interface IdispatchProps {
   loading: boolean;
   toggleModal: () => void;
   addCustomer: typeof addCustomer;
+  updateCustomer: typeof updateCustomer;
+  selectedCustomer: any;
+  clearSelectedCustomerID: typeof clearSelectedCustomerID;
+  updateFormValue: typeof updateCustomerFormValue;
+  setFormValues: typeof setCustomerFormValues;
+  formValues: { [key: string]: any };
 }
 
 class EditCustomerModal extends React.Component<Iprops & IdispatchProps, {}> {
@@ -39,21 +49,30 @@ class EditCustomerModal extends React.Component<Iprops & IdispatchProps, {}> {
   }
 
   render() {
+    const { selectedCustomer, t } = this.props;
+
+    const formTitle =
+      selectedCustomer && selectedCustomer.name
+        ? t('common:EditCustomerModalTitle')
+        : t('common:newCustomerModalTitle');
+
     return (
       <CommonModal
         modalVisible={this.props.showEditCustomerModal}
-        className="customer-edit second-modal"
+        className="customer-edit"
         onHide={this.props.toggleModal}
         body={
           <EditCustomerForm
+            {...this.props}
             handleSubmit={this.props.addCustomer}
+            handleEdit={this.props.updateCustomer}
             handleCancel={this.props.toggleModal}
             colorButton={this.props.colorButton}
             loading={this.props.loading}
           />
         }
-        title={this.props.t('common:newCustomerModalTitle')}
-        container={document.getElementById('modal-two')}
+        title={formTitle}
+        container={document.getElementById('two-pane-layout')}
       />
     );
   }
@@ -63,7 +82,8 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   return {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
-    showEditCustomerModal: state.showEditCustomerModal
+    showEditCustomerModal: state.showEditCustomerModal,
+    formValues: state.customerAndFacilityManage.customerFormValues
   };
 };
 
@@ -71,6 +91,10 @@ export default connect(
   mapStateToProps,
   {
     toggleModal: toggleEditCustomerModal,
-    addCustomer
+    addCustomer,
+    updateCustomer,
+    clearSelectedCustomerID,
+    updateFormValue: updateCustomerFormValue,
+    setFormValues: setCustomerFormValues
   }
 )(EditCustomerModal);

@@ -324,6 +324,7 @@ class ManageUserQueue extends React.Component<Iprops & IdispatchProps, Istate> {
           t={this.props.t}
         />
         <EditCustomerModal
+          selectedCustomer={{}}
           t={this.props.t}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]

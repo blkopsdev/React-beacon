@@ -35,12 +35,12 @@ import {
 } from '../../actions/manageCustomerAndFacilityActions';
 import ManageFacility from './ManageFacility';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import EditCustomerModal from './EditCustomerModal';
+import EditCustomerModal from '../common/EditCustomerModal';
 import {
   toggleEditCustomerModal,
   toggleEditFacilityModal
 } from '../../actions/commonActions';
-import EditFacilityModal from './EditFacilityModal';
+import EditFacilityModal from '../common/EditFacilityModal';
 
 interface RowInfoCustomer extends RowInfo {
   original: Icustomer;
@@ -328,6 +328,7 @@ class ManageCustomerAndFacility extends React.Component<
           }
         />
         <EditFacilityModal
+          modalClass=""
           t={this.props.t}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]

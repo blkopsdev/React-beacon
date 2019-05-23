@@ -57,8 +57,8 @@ class EditFacilityModal extends React.Component<Iprops & IdispatchProps, {}> {
     const { selectedFacility, t, modalClass } = this.props;
     const formTitle =
       selectedFacility && selectedFacility.name
-        ? t('common:EditFacilityModalTitle')
-        : t('common:newFacilityModalTitle');
+        ? t('manageCustomerAndFacility:editFacility')
+        : t('manageCustomerAndFacility:newFacility');
 
     return (
       <CommonModal

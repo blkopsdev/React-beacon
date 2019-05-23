@@ -112,7 +112,7 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
           ]
         },
         render: FormUtil.TextInput,
-        meta: { label: 'facilityNameLabel', colWidth: 12, name: 'fac-name' },
+        meta: { label: 'manageCustomerAndFacility:facilityNameLabel', colWidth: 12, name: 'fac-name' },
         formState: name
       },
       address: {

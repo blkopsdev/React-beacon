@@ -53,8 +53,8 @@ class EditCustomerModal extends React.Component<Iprops & IdispatchProps, {}> {
 
     const formTitle =
       selectedCustomer && selectedCustomer.name
-        ? t('common:EditCustomerModalTitle')
-        : t('common:newCustomerModalTitle');
+        ? t('manageCustomerAndFacility:editCustomer')
+        : t('manageCustomerAndFacility:newFacility');
 
     return (
       <CommonModal

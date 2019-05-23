@@ -96,7 +96,7 @@ class EditCustomerForm extends React.Component<Iprops, IState> {
       vat: {
         render: FormUtil.TextInput,
         meta: {
-          label: 'customerVatLabel',
+          label: 'manageCustomerAndFacility:customerVatLabel',
           colWidth: 12,
           name: 'customer-vat',
           required: false

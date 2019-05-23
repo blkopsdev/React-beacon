@@ -45,7 +45,7 @@ interface IState {
 class EditFacilityForm extends React.Component<Iprops, IState> {
   private formGroup: FormGroup;
   private subscription: any;
-
+  private debounce: any;
   constructor(props: Iprops) {
     super(props);
     this.state = {
@@ -57,7 +57,6 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
     if (!this.formGroup) {
       return;
     }
-
     await this.props.setFormValues(this.props.selectedFacility);
     this.setState({ fieldConfig: this.buildFieldConfig() });
     if (!this.props.selectedFacility.countryID) {
@@ -117,7 +116,7 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
         render: FormUtil.TextInput,
         meta: {
           label: 'user:address',
-          colWidth: 8,
+          colWidth: 6,
           type: 'text',
           name: 'address'
         },
@@ -127,7 +126,7 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
         render: FormUtil.TextInput,
         meta: {
           label: 'user:address2',
-          colWidth: 4,
+          colWidth: 6,
           type: 'text',
           name: 'address2',
           required: false
@@ -217,9 +216,16 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
 * set the table filters to redux on each value change
 */
   onValueChanges = (value: any, key: string) => {
-    this.props.updateFormValue({ [key]: value });
-    if (key === 'countryID') {
-      this.onCountryChanges(value);
+    switch (key) {
+      case 'countryID':
+        this.onCountryChanges(value);
+        break;
+      default:
+        clearTimeout(this.debounce);
+        this.debounce = setTimeout(() => {
+          this.props.updateFormValue({ [key]: value });
+        }, 200);
+        break;
     }
   };
 
@@ -232,14 +238,19 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
 
   onCountryChanges = (value: any) => {
     const stateFormControl = this.formGroup.get('state');
-    if (value && value.value === `ABC5D95C-129F-4837-988C-0BF4AE1F3B67`) {
+    if (
+      value &&
+      value.value.toUpperCase() === `ABC5D95C-129F-4837-988C-0BF4AE1F3B67`
+    ) {
       stateFormControl.enable();
       stateFormControl.setValidators([
         Validators.required,
         FormUtil.validators.requiredWithTrim
       ]);
       stateFormControl.patchValue(null);
+      this.props.updateFormValue({ state: '' });
     } else {
+      this.props.updateFormValue({ state: '' });
       stateFormControl.patchValue(null);
       stateFormControl.disable();
       stateFormControl.setValidators(null);

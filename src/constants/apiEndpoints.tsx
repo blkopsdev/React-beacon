@@ -10,7 +10,7 @@ const API = {
   POST: {
     building: `${root}/building`,
     customer: {
-      add: `${root}/customer/add`
+      add: `${root}/customer`
     },
 
     job: {

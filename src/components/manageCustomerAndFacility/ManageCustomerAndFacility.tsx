@@ -11,7 +11,8 @@ import {
   IinitialState,
   ItableFiltersReducer,
   Itile,
-  Icustomer
+  Icustomer,
+  Ifacility
 } from '../../models';
 import { TableUtil } from '../common/TableUtil';
 import { FormUtil } from '../common/FormUtil';
@@ -67,6 +68,7 @@ interface IdispatchProps {
   selectedCustomer: Icustomer;
   filterVisibleCustomers: typeof filterVisibleCustomers;
   customers: { [key: string]: Icustomer };
+  facilities: { [key: string]: Ifacility };
 }
 
 interface Istate {
@@ -349,7 +351,8 @@ const mapStateToProps = (state: IinitialState) => {
       state.customerAndFacilityManage.showEditCustomerAndFacilityModal,
     tableFilters: state.customerAndFacilityManage.tableFilters,
     selectedCustomer,
-    customers: state.customers
+    customers: state.customers,
+    facilities: state.facilities
   };
 };
 

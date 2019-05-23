@@ -6,52 +6,18 @@ import {
   createSelectedIDWithName,
   createTableFiltersWithName
 } from './commonReducers';
-import { pickBy, map, keyBy, filter, find } from 'lodash';
-import { FACILITY_UPDATE_SUCCESS } from '../actions/actionTypes';
+import { pickBy, map } from 'lodash';
 
 export function manageCustomerAndFacilityReducer(
-  state: { [key: string]: Icustomer } = {},
+  state: { [key: string]: Icustomer } = initialState.manageCustomerAndFacility
+    .data,
   action: any
 ) {
   switch (action.type) {
     case types.GET_CUSTOMERS_AND_FACILITY_SUCCESS:
-      const newCustomer = map(action.payload.result, (customer: Icustomer) => {
+      return map(action.payload.result, (customer: Icustomer) => {
         return cleanObject(customer);
       });
-      return keyBy(newCustomer, 'id');
-    case types.CUSTOMER_UPDATE_SUCCESS:
-      const customersFiltered = filter(state, c => c.id !== action.customerID);
-      const updatedCustomer = pickBy(
-        action.customer,
-        (property, key) => property !== null
-      );
-      return [
-        ...customersFiltered,
-        {
-          ...updatedCustomer
-        }
-      ] as Icustomer[];
-    case FACILITY_UPDATE_SUCCESS:
-      const item: any = {
-        ...find(state, c => c.id === action.facility.customerID)
-      };
-      const items = { ...state };
-      try {
-        const facilities = filter(
-          item.facilities,
-          c => c.id !== action.facilityID
-        );
-        const updatedFacility = pickBy(
-          action.facility,
-          (property, key) => property !== null
-        );
-        item['facilities'] = [...facilities, updatedFacility];
-        items[item.id] = item;
-      } catch (e) {
-        console.log(e);
-      }
-
-      return items;
     default:
       return state;
   }

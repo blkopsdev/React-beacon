@@ -52,7 +52,13 @@ export default function facilitiesReducer(
       return { ...state, ...newFacilitiesByID };
 
     case types.FACILITY_UPDATE_SUCCESS:
-      return { ...state, [action.facility.id]: action.facility }; // TODO only update specific attributes
+      return {
+        ...state,
+        [action.facility.id]: {
+          ...state[action.facility.id],
+          ...action.facility
+        }
+      }; // TODO only update specific attributes
     case types.LOCATION_MANAGE_SUCCESS:
       return { ...state, [action.facility.id]: action.facility };
 
@@ -62,7 +68,7 @@ export default function facilitiesReducer(
         | Ibuilding
         | Ifloor
         | Iroom;
-      /* 
+      /*
         This looks scary, but its fairly straightforward.
         We are dealing with a tree data structure something like this:
         buildings: [
@@ -86,7 +92,7 @@ export default function facilitiesReducer(
         ]
 
         This structure is the source of truth that sets the inital
-        content of the visible array. 
+        content of the visible array.
       */
       const facilityID = action.facilityID;
       const originalFacility = state[facilityID] as Ifacility;

@@ -601,7 +601,11 @@ export const constants = {
   handleError(error: any, message: string) {
     let msg = '';
     if (error && error.response && error.response.data) {
-      msg = `Failed to ${message}. ${error.response.data}`;
+      if (typeof error.response.data === 'object') {
+        msg = `Failed to ${message}. ${error.response.data.value}`;
+      } else {
+        msg = `Failed to ${message}. ${error.response.data}`;
+      }
     } else if (error && error.message) {
       msg = `Failed to ${message}.  Please try again or contact support. ${
         error.message

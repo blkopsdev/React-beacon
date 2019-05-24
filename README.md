@@ -29,7 +29,8 @@ https://xd.adobe.com/view/ab0b5766-bfd5-4610-6fa1-694ebec38af6-dd3a/
 https://photos.google.com/share/AF1QipO4h0sY9Yi_1ABgGjDvI3jKQwsZTBhxM3QXv9gnjBfltO2sLVgAu0tGmCrnVaizlA?key=eE9uZUVub3Atd19aVzA1Y2pzalpXd004STVBNW9B
 
 ## up to date Security Functions
-https://github.com/thebigpixel/Beacon-CoreCare-API/blob/David-Dev/Data/Constants.cs
+https://github.com/thebigpixel/Beacon-MMG-API/blob/phase2_test_deploy/Data/Constants.cs
+
 
 ## Random notes
 

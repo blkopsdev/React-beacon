@@ -15,6 +15,7 @@ import {
 } from 'src/models';
 import { MPResultList } from './MPResultList';
 import { getMeasurementPointList } from 'src/actions/manageMeasurementPointListsActions';
+import { resetSelectedResult } from 'src/actions/measurementPointResultsActions';
 
 interface Iprops {
   colorButton: any;
@@ -28,6 +29,7 @@ interface IdispatchProps {
   selectedItem: ImeasurementPointResult;
   getMeasurementPointList: typeof getMeasurementPointList;
   measurementPointsByID: { [key: string]: ImeasurementPoint };
+  resetSelectedResult: typeof resetSelectedResult;
 }
 
 const MPResultModalClass = (props: Iprops & IdispatchProps) => {
@@ -60,5 +62,9 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
 
 export const MPResultModal = connect(
   mapStateToProps,
-  { toggleModal: toggleMPResultModal, getMeasurementPointList }
+  {
+    toggleModal: toggleMPResultModal,
+    getMeasurementPointList,
+    resetSelectedResult
+  }
 )(MPResultModalClass);

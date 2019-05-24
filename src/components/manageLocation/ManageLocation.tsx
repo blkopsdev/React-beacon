@@ -187,15 +187,9 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
     // console.log("EDIT:", item);
   }
 
-  handleDelete(deletedItem: any) {
+  handleDelete(deletedItem: Ilocation | Ibuilding | Ifloor | Iroom) {
     const toastrConfirmOptions = {
       onOk: () => {
-        deletedItem = {
-          ...deletedItem,
-          buildingID: this.props.selectedBuilding.id,
-          floorID: this.props.selectedFloor.id,
-          locationID: this.props.selectedLocation.id
-        };
         this.props.deleteAnyLocation(deletedItem);
         console.log('deleted', deletedItem);
       },

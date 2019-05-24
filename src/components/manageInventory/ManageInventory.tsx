@@ -69,6 +69,7 @@ import { MPResultModal } from './MPResultModal';
 import { InstallBasesExpanderContainer } from './InstallBasesExpanderContainer';
 import { MPResultListHistoryModal } from './MPResultListHistoryModal';
 import { MPResultListNotesModal } from './MPResultNotesModal';
+import { MPResultAddModal } from './MPResultAddModal';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -265,24 +266,24 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
   setColumns = () => {
     const columns = TableUtil.translateHeaders(
       [
-        {
-          Header: 'manufacturer',
-          accessor: (product: Iproduct) => {
-            const brandName = product.brandID
-              ? this.props.productInfo.brands[product.brandID].name
-              : '';
-            if (brandName === '') {
-              console.error('missing brand', product);
-            }
-            return brandName;
-          },
-          id: 'manufacturer',
-          minWidth: 170
-        },
+        // {
+        //   Header: 'manufacturer',
+        //   accessor: (product: Iproduct) => {
+        //     const brandName = product.brandID
+        //       ? this.props.productInfo.brands[product.brandID].name
+        //       : '';
+        //     if (brandName === '') {
+        //       console.error('missing brand', product);
+        //     }
+        //     return brandName;
+        //   },
+        //   id: 'manufacturer',
+        //   minWidth: 170
+        // },
         {
           Header: 'name',
           accessor: 'name',
-          minWidth: 300
+          minWidth: 400
         },
         // {
         //   Header: 'common:productGroup',
@@ -703,6 +704,14 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
             constants.colors[`${this.state.currentTile.color}Button`]
           }
           t={this.props.t}
+          secondModal={true}
+        />
+        <MPResultAddModal
+          colorButton={
+            constants.colors[`${this.state.currentTile.color}Button`]
+          }
+          t={this.props.t}
+          selectedInstallBaseID={this.state.selectedInstall.id}
           secondModal={true}
         />
       </div>

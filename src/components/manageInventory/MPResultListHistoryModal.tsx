@@ -8,7 +8,8 @@ import * as React from 'react';
 import CommonModal from '../common/CommonModal';
 import {
   toggleMPResultHistory,
-  toggleMPResultNotes
+  toggleMPResultNotes,
+  toggleMPResultAddModal
 } from 'src/actions/manageInventoryActions';
 import { connect } from 'react-redux';
 import { IinitialState, ImeasurementPointResult } from 'src/models';
@@ -31,6 +32,7 @@ interface IdispatchProps {
   MPListResults: ImeasurementPointResult[];
   updateMeasurementPointResult: typeof updateMeasurementPointResult;
   toggleMPResultNotes: () => void;
+  toggleMPResultAddModal: () => void;
 }
 
 const MPResultListHistoryModalClass = (props: Iprops & IdispatchProps) => {
@@ -85,6 +87,7 @@ export const MPResultListHistoryModal = connect(
   {
     toggleModal: toggleMPResultHistory,
     updateMeasurementPointResult,
-    toggleMPResultNotes
+    toggleMPResultNotes,
+    toggleMPResultAddModal
   }
 )(MPResultListHistoryModalClass);

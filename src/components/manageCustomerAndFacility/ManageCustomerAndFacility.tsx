@@ -82,6 +82,7 @@ class ManageCustomerAndFacility extends React.Component<
   Iprops & IdispatchProps,
   Istate
 > {
+  debounce: any;
   constructor(props: Iprops & IdispatchProps) {
     super(props);
     this.state = {
@@ -170,7 +171,10 @@ class ManageCustomerAndFacility extends React.Component<
   onSearchValueChanges = (value: any, key: string) => {
     switch (key) {
       case 'search':
-        this.props.setTableFilter({ search: value, page: 0 }); // TODO add a debounce like in manageJob.tsx
+        clearTimeout(this.debounce);
+        this.debounce = setTimeout(() => {
+          this.props.setTableFilter({ search: value, page: 0 });
+        }, 500);
         break;
       default:
         break;

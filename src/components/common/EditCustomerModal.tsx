@@ -8,9 +8,7 @@ import { TranslationFunction } from 'react-i18next';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import {
-  IinitialState
-} from '../../models';
+import { IinitialState } from '../../models';
 import {
   addCustomer,
   toggleEditCustomerModal,
@@ -23,7 +21,6 @@ import {
   setCustomerFormValues,
   updateCustomerFormValue
 } from '../../actions/manageCustomerAndFacilityActions';
-
 
 interface Iprops {
   colorButton: any;
@@ -54,7 +51,7 @@ class EditCustomerModal extends React.Component<Iprops & IdispatchProps, {}> {
     const formTitle =
       selectedCustomer && selectedCustomer.name
         ? t('manageCustomerAndFacility:editCustomer')
-        : t('manageCustomerAndFacility:newFacility');
+        : t('manageCustomerAndFacility:newCustomer');
 
     return (
       <CommonModal

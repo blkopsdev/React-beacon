@@ -30,8 +30,7 @@ import {
   getCustomers,
   setSelectedCustomerID,
   clearSelectedCustomerID,
-  setSelectedFacilityID,
-  filterVisibleCustomers
+  setSelectedFacilityID
 } from '../../actions/manageCustomerAndFacilityActions';
 import ManageFacility from './ManageFacility';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -41,6 +40,8 @@ import {
   toggleEditFacilityModal
 } from '../../actions/commonActions';
 import EditFacilityModal from '../common/EditFacilityModal';
+import * as moment from 'moment';
+import { orderBy } from 'lodash';
 
 interface RowInfoCustomer extends RowInfo {
   original: Icustomer;
@@ -66,7 +67,6 @@ interface IdispatchProps {
   setSelectedFacilityID: typeof setSelectedFacilityID;
   toggleEditFacilityModal: typeof toggleEditFacilityModal;
   selectedCustomer: Icustomer;
-  filterVisibleCustomers: typeof filterVisibleCustomers;
   customers: { [key: string]: Icustomer };
   facilities: { [key: string]: Ifacility };
 }
@@ -99,7 +99,6 @@ class ManageCustomerAndFacility extends React.Component<
     });
     this.setColumns();
     this.props.getCustomers();
-    this.props.filterVisibleCustomers();
   }
 
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
@@ -121,13 +120,6 @@ class ManageCustomerAndFacility extends React.Component<
         this.props.tableFilters
       );
       this.props.getCustomers();
-      this.props.filterVisibleCustomers();
-    }
-    if (
-      JSON.stringify(this.props.customers) !==
-      JSON.stringify(prevProps.customers)
-    ) {
-      this.props.filterVisibleCustomers();
     }
   }
 
@@ -149,13 +141,13 @@ class ManageCustomerAndFacility extends React.Component<
 
   buildSearchControls = (): FieldConfig => {
     const mainSearchControls = {
-      search: {
+      name: {
         render: FormUtil.TextInputWithoutValidation,
         meta: {
           label: 'common:Customer',
           colWidth: 3,
           type: 'text',
-          placeholder: 'Search by text',
+          placeholder: 'Filter by name',
           defaultValue: this.props.tableFilters.customer,
           isClearable: true
         }
@@ -170,10 +162,10 @@ class ManageCustomerAndFacility extends React.Component<
 
   onSearchValueChanges = (value: any, key: string) => {
     switch (key) {
-      case 'search':
+      case 'name':
         clearTimeout(this.debounce);
         this.debounce = setTimeout(() => {
-          this.props.setTableFilter({ search: value, page: 0 });
+          this.props.setTableFilter({ name: value });
         }, 500);
         break;
       default:
@@ -221,10 +213,8 @@ class ManageCustomerAndFacility extends React.Component<
   };
 
   onPageChange = (page: number) => {
-    this.props.setTableFilter({ page });
-  };
-  onPageSizeChange = (rows: number) => {
-    this.props.setTableFilter({ rows, page: 0 });
+    const newPage = page + 1;
+    this.props.setTableFilter({ page: newPage });
   };
 
   /*
@@ -294,13 +284,13 @@ class ManageCustomerAndFacility extends React.Component<
           </Button>
         </div>
         <ReactTable
+          manual
           data={tableData}
+          pages={this.props.totalPages}
+          page={this.props.tableFilters.page - 1}
           columns={this.state.columns}
           getTdProps={this.getTdProps}
-          defaultPageSize={
-            this.props.tableFilters.rows || constants.tablePageSizeDefault
-          }
-          onPageSizeChange={this.onPageSizeChange}
+          pageSize={tableData.length}
           showPageSizeOptions={true}
           pageSizeOptions={constants.tablePageSizeOptions}
           className={`beacon-table -highlight ${this.state.currentTile.color}`}
@@ -344,7 +334,12 @@ class ManageCustomerAndFacility extends React.Component<
 }
 
 const mapStateToProps = (state: IinitialState) => {
-  const tableData = state.customerAndFacilityManage.visibleCustomers;
+  const tableData = orderBy(
+    state.customerAndFacilityManage.data,
+    res => moment.utc(res.createDate).unix(),
+    'desc'
+  );
+
   const selectedCustomer =
     state.customers[state.customerAndFacilityManage.selectedCustomerID] ||
     initialCustomer;
@@ -371,8 +366,7 @@ export default translate('manageCustomerAndFacility')(
       setSelectedCustomerID,
       clearSelectedCustomerID,
       setSelectedFacilityID,
-      toggleEditFacilityModal,
-      filterVisibleCustomers
+      toggleEditFacilityModal
     }
   )(ManageCustomerAndFacility)
 );

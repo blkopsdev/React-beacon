@@ -291,7 +291,7 @@ class ManageCustomerAndFacility extends React.Component<
           columns={this.state.columns}
           getTdProps={this.getTdProps}
           pageSize={tableData.length}
-          showPageSizeOptions={true}
+          showPageSizeOptions={false}
           pageSizeOptions={constants.tablePageSizeOptions}
           className={`beacon-table -highlight ${this.state.currentTile.color}`}
           previousText={t('common:previous')}

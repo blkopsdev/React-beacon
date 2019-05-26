@@ -5,7 +5,7 @@
 import { TranslationFunction } from 'react-i18next';
 import { connect } from 'react-redux';
 import * as React from 'react';
-
+import { filter } from 'lodash';
 import {
   IinitialState,
   Iproduct,
@@ -72,13 +72,35 @@ class SearchNewProductsModal extends React.Component<
 }
 
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
+  // TODO temporary fix for unaproved products.   This can be removed once we start using the P3 API.
+  // see this slack thread: https://thebigpixel.slack.com/archives/GCXFYDYKG/p1557935711142400
+  const unApprovedProducts = filter(
+    state.manageInventory.newProducts,
+    product => {
+      let shouldInclude = true;
+      // if we are filtering for isApproved (in the productqueue merge list), then filter out non-approved products
+      if (
+        ownProps.isApproved !== undefined &&
+        product.isApproved !== ownProps.isApproved
+      ) {
+        shouldInclude = false;
+      }
+      // if this product has been merged, never show it in the list of available products
+      if (product.mergedProductID && product.mergedProductID.length) {
+        shouldInclude = false;
+      }
+      return shouldInclude;
+    }
+  );
+
   return {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
     showModal: state.manageInventory.showSearchNewProductsModal,
     productInfo: state.manageInventory.productInfo,
     tableFilters: state.manageInventory.tableFilters,
-    newProducts: state.manageInventory.newProducts
+    // newProducts: state.manageInventory.newProducts
+    newProducts: unApprovedProducts
   };
 };
 

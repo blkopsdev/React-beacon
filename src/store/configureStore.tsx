@@ -6,7 +6,13 @@ import {
   AnyAction,
   compose
 } from 'redux';
-import { createMigrate, persistReducer, persistStore } from 'redux-persist';
+import {
+  createMigrate,
+  persistReducer,
+  persistStore,
+  TransformIn,
+  createTransform
+} from 'redux-persist';
 import { createOffline } from '@redux-offline/redux-offline';
 import axios, { AxiosRequestConfig, AxiosError } from 'axios';
 import * as localForage from 'localforage';
@@ -19,6 +25,23 @@ import { constants } from 'src/constants/constants';
 import rootReducer from '../reducers';
 import hardSet from 'redux-persist/lib/stateReconciler/hardSet';
 import TrackJSLogger from './TrackJSLogger';
+
+/*
+* handle persisisting date objects
+*/
+const replacer = (key: string, value: any) =>
+  value instanceof Date ? value.toISOString() : value;
+
+const reviver = (key: string, value: any) =>
+  typeof value === 'string' &&
+  value.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/)
+    ? new Date(value)
+    : value;
+
+export const encode = (toDeshydrate: TransformIn<IinitialState, string>) =>
+  JSON.stringify(toDeshydrate, replacer);
+
+export const decode = (toRehydrate: string) => JSON.parse(toRehydrate, reviver);
 
 const effect = (
   {
@@ -63,7 +86,8 @@ const persistConfig = {
     'showEditProfileModal',
     'showSecurityFunctionsModal'
   ],
-  stateReconciler: hardSet
+  stateReconciler: hardSet,
+  transforms: [createTransform(encode, decode)]
 };
 //   blacklist: ['toastr', 'showEditProfileModal'],  we can not blacklist the toastr because it causes the app to crash on load
 // we want to backlist toastr, because we do not want auth errors to show after it has successfully re-authorized.
@@ -90,11 +114,19 @@ export default function configureStore() {
     const composeEnhancers = require('redux-devtools-extension').composeWithDevTools(
       // const composeEnhancers = require('remote-redux-devtools').composeWithDevTools( // for inspecting while using Edge browser remotedev.io/local
       {
-        actionsBlacklist: ['persist/REHYDRATE'], // this improves the perfomance of redux devtools
+        actionsBlacklist: [
+          'persist/REHYDRATE',
+          'persist/PERSIST',
+          'BEGIN_AJAX_CALL'
+        ], // this improves the perfomance of redux devtools
         autoPause: true,
         latency: 1000,
         maxAge: 20,
-        shouldHotReload: false
+        shouldHotReload: false,
+        stateSanitizer: (state: IinitialState) =>
+          state.manageUserQueue
+            ? { ...state, manageUserQueue: '<<LONG_BLOB>>' }
+            : state
       }
     );
     const store = createStore(

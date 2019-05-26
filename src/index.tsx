@@ -91,6 +91,8 @@ import 'react-toggle/style.css';
 import 'bootstrap/dist/css/bootstrap.css';
 import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
 import 'react-datetime/css/react-datetime.css';
+import 'react-datepicker/dist/react-datepicker.css';
+
 // import 'draft-js/dist/Draft.css';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './index.css';
@@ -113,6 +115,18 @@ TrackJS.install({
 
 // set the window name for UTA transaction window
 window.name = 'MyMedGas';
+
+/*
+* flush writes the current state to storage - this will be right after USER_LOGOUT_SUCCESS is triggered
+in userActions.  then we pause the persistor in order to prevent anything else from being persisted while we logout.
+*/
+const handleLogout = () => {
+  persistor.flush().then(() => {
+    persistor.pause();
+    authContext.logOut();
+  });
+};
+document.addEventListener('userLogout', handleLogout, false);
 
 // const Loading = () => <h3>Loading</h3>;
 // const ErrorPage = (error: any) => <h3>Error: {error}</h3>;

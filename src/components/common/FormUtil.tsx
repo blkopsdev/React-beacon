@@ -25,6 +25,7 @@ import { Ioption } from '../../models';
 import * as Datetime from 'react-datetime';
 import * as moment from 'moment';
 import RichTextEditor from './RichTextEditor';
+import ReactDatePicker from 'react-datepicker';
 
 // add the bootstrap form-control class to the react-select select component
 const ControlComponent = (props: any) => (
@@ -58,6 +59,14 @@ export const FormUtil = {
       return {
         value: item.id,
         label: item.name || item.code || item.label || lastOption
+      };
+    });
+  },
+  convertIndexedObjectToOptions: (items: any): Ioption[] => {
+    return map(items, (item: any, key) => {
+      return {
+        value: key,
+        label: item
       };
     });
   },
@@ -108,7 +117,11 @@ export const FormUtil = {
         bsSize="sm"
         className="datetime-select"
       >
-        <Col xs={meta.colWidth}>
+        <Col
+          xs={meta.colWidth}
+          md={meta.colWidthMedium}
+          lg={meta.colWidthLarge}
+        >
           <ControlLabel>
             {meta.label}
             <i className="required-label">{requiredLabel}</i>
@@ -126,7 +139,7 @@ export const FormUtil = {
   },
   DatetimeWithoutValidation: ({ handler, meta }: AbstractControl) => (
     <FormGroup bsSize="sm" className="datetime-select">
-      <Col xs={meta.colWidth}>
+      <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
         <ControlLabel>{meta.label}</ControlLabel>
         <Datetime
           defaultValue={meta.defaultValue}
@@ -147,7 +160,7 @@ export const FormUtil = {
   }: AbstractControl) => {
     const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
-      <Col xs={meta.colWidth}>
+      <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
         <FormGroup
           validationState={FormUtil.getValidationState(
             pristine,
@@ -175,6 +188,58 @@ export const FormUtil = {
       </Col>
     );
   },
+  DatePicker: ({
+    handler,
+    meta,
+    pristine,
+    errors,
+    submitted
+  }: AbstractControl) => {
+    const value = handler().value;
+    if (value && typeof value === 'string') {
+      console.log(
+        'date',
+        value,
+        new Date(value).toISOString(),
+        moment
+          .utc(value)
+          .toDate()
+          .toISOString()
+      );
+    }
+    const requiredLabel = meta.required === false ? ' - optional' : '';
+
+    const selected =
+      value && typeof value === 'string' && value.length
+        ? moment.utc(value).toDate()
+        : value;
+    return (
+      <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
+        <FormGroup
+          validationState={FormUtil.getValidationState(
+            pristine,
+            errors,
+            submitted
+          )}
+          bsSize="sm"
+          className="datetime-select"
+        >
+          <ControlLabel>
+            {meta.label}
+            <i className="required-label">{requiredLabel}</i>
+          </ControlLabel>
+          <ReactDatePicker
+            selected={selected}
+            onChange={handler().onChange}
+            className="form-control"
+            showYearDropdown
+            showMonthDropdown
+            dropdownMode="select"
+          />
+        </FormGroup>
+      </Col>
+    );
+  },
   Toggle: ({
     handler,
     touched,
@@ -186,7 +251,7 @@ export const FormUtil = {
   }: AbstractControl) => {
     const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
-      <Col xs={meta.colWidth}>
+      <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
         <FormGroup
           validationState={FormUtil.getValidationState(
             pristine,
@@ -213,7 +278,7 @@ export const FormUtil = {
     );
   },
   TextInputWithoutValidation: ({ handler, meta }: AbstractControl) => (
-    <Col xs={meta.colWidth}>
+    <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
       <FormGroup bsSize="sm">
         <ControlLabel>{meta.label}</ControlLabel>
         <FormControl
@@ -241,7 +306,7 @@ export const FormUtil = {
     // console.log('validator', errors);
     const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
-      <Col xs={meta.colWidth}>
+      <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
         <FormGroup
           validationState={FormUtil.getValidationState(
             pristine,
@@ -287,7 +352,7 @@ export const FormUtil = {
     const selectValidationClass = value && !pristine ? 'has-success' : '';
     const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
-      <Col xs={meta.colWidth}>
+      <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
         <FormGroup
           validationState={FormUtil.getValidationState(
             pristine,
@@ -357,7 +422,12 @@ export const FormUtil = {
       ? 'is-multi beacon-select'
       : 'beacon-select';
     return (
-      <Col xs={meta.colWidth} className={meta.className || ''}>
+      <Col
+        xs={meta.colWidth}
+        md={meta.colWidthMedium}
+        lg={meta.colWidthLarge}
+        className={meta.className || ''}
+      >
         <FormGroup bsSize="sm">
           <Col xs={2}>
             <ControlLabel>{meta.label}</ControlLabel>
@@ -400,7 +470,7 @@ export const FormUtil = {
     const selectValidationClass = value && !pristine ? 'has-success' : '';
     const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
-      <Col xs={meta.colWidth}>
+      <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
         <FormGroup
           validationState={FormUtil.getValidationState(
             pristine,
@@ -437,7 +507,7 @@ export const FormUtil = {
   },
   Button: ({ handler, meta }: AbstractControl) => {
     return (
-      <Col xs={meta.colWidth}>
+      <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
         <Button bsStyle="link" className="" onClick={meta.buttonAction}>
           {meta.buttonName}
         </Button>
@@ -470,7 +540,7 @@ export const FormUtil = {
   },
   TextLabel: ({ handler, meta }: any) => {
     return (
-      <Col xs={meta.colWidth}>
+      <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
         <FormGroup bsSize="sm">
           <ControlLabel>{meta.label}</ControlLabel>
           <h5 className="queue-form-label">{handler().value}</h5>
@@ -496,7 +566,7 @@ export const FormUtil = {
     const selectValidationClass = value && !pristine ? 'has-success' : '';
     const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
-      <Col xs={meta.colWidth}>
+      <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
         <Row>
           <Col xs={9}>
             <FormGroup
@@ -552,7 +622,7 @@ export const FormUtil = {
   }: AbstractControl) => {
     const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
-      <Col xs={meta.colWidth}>
+      <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
         <FormGroup bsSize="sm" style={meta.style}>
           <ControlLabel>
             {meta.label}
@@ -578,7 +648,7 @@ export const FormUtil = {
   }: AbstractControl) => {
     const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
-      <Col xs={meta.colWidth}>
+      <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
         <FormGroup
           validationState={FormUtil.getValidationState(
             pristine,
@@ -612,7 +682,7 @@ export const FormUtil = {
   }: AbstractControl) => {
     const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
-      <Col xs={meta.colWidth}>
+      <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
         <FormGroup
           validationState={FormUtil.getValidationState(
             pristine,

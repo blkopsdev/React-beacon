@@ -534,7 +534,7 @@ export interface ImanageUserQueueReducer {
   data: IqueueObject[];
   totalPages: number;
   showEditQueueUserModal: boolean;
-  // editUserFormValues: { [key: string]: any };
+  editUserFormValues: { [key: string]: any };
   tableFilters: ItableFiltersReducer;
 }
 

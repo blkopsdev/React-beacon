@@ -195,7 +195,10 @@ runWithAdal(
                   <PrivateRoute path="/team" component={TwoPaneLayout} />
                   <PrivateRoute path="/inventory" component={TwoPaneLayout} />
                   <PrivateRoute path="/brands" component={TwoPaneLayout} />
-                  <PrivateRoute path="/customer-and-facility" component={TwoPaneLayout} />
+                  <PrivateRoute
+                    path="/customer-and-facility"
+                    component={TwoPaneLayout}
+                  />
                   <PrivateRoute
                     path="/productqueue"
                     component={TwoPaneLayout}

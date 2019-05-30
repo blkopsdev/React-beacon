@@ -219,6 +219,11 @@ export const initialLesson = {
   isProtected: false
 };
 
+export const initialQueueObject = {
+  id: '',
+  user: ''
+};
+
 /* initialState */
 export default {
   ajaxCallsInProgress: 0,

@@ -22,7 +22,7 @@ import {
 } from '../../models';
 import { TableUtil } from '../common/TableUtil';
 import { closeAllModals, getCustomers } from '../../actions/commonActions';
-import { emptyTile } from '../../reducers/initialState';
+import { emptyTile, initialQueueObject } from '../../reducers/initialState';
 import {
   getUserQueue,
   approveUser,
@@ -317,7 +317,9 @@ class ManageUserQueue extends React.Component<Iprops & IdispatchProps, Istate> {
           resizable={false}
         />
         <EditQueueUserModal
-          selectedQueueObject={this.props.tableData[this.state.selectedRow]}
+          selectedQueueObject={
+            this.props.tableData[this.state.selectedRow] || initialQueueObject
+          }
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }

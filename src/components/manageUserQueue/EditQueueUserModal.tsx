@@ -8,7 +8,7 @@ import { TranslationFunction } from 'react-i18next';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import { Ifacility, IinitialState, Ioption, IqueueObject } from '../../models';
+import { IinitialState, Ioption, IqueueObject } from '../../models';
 import {
   getFacilitiesByCustomer,
   toggleEditCustomerModal,
@@ -23,7 +23,6 @@ import {
 } from '../../actions/manageUserQueueActions';
 import CommonModal from '../common/CommonModal';
 import EditQueueUserForm from './EditQueueUserForm';
-import { filter } from 'lodash';
 import { FormUtil } from '../common/FormUtil';
 
 interface Iprops {
@@ -68,20 +67,12 @@ class EditQueueUserModal extends React.Component<Iprops & IdispatchProps, {}> {
 }
 
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
-  const customerID =
-    state.manageUserQueue.editUserFormValues.customerID ||
-    ownProps.selectedQueueObject.user.customerID;
-  const filteredFacilities = filter(
-    state.facilities,
-    (facility: Ifacility) => facility.customerID === customerID
-  );
-
   return {
     user: state.user,
     userQueue: state.manageUserQueue,
     loading: state.ajaxCallsInProgress > 0,
     customerOptions: FormUtil.convertToOptions(state.customers),
-    facilityOptions: FormUtil.convertToOptions(filteredFacilities),
+    facilityOptions: FormUtil.convertToOptions(state.facilities),
     showEditQueueUserModal: state.manageUserQueue.showEditQueueUserModal,
     showEditCustomerModal: state.showEditCustomerModal,
     showEditFacilityModal: state.showEditFacilityModal,

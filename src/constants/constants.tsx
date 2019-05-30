@@ -145,7 +145,8 @@ const icons = {
   measurements: require('../images/icons/BM_Measurement.png'),
   manageReport: require('../images/icons/BM_Reports.png'),
   brands: require('../images/icons/BM_Inventory.png'),
-  customerAndFacility: require('../images/icons/BM_Inventory.png')
+  customerAndFacility: require('../images/icons/BM_Inventory.png'),
+  alerts: require('../images/icons/BM_Inventory.png')
 };
 
 const securityFunctions = {
@@ -254,6 +255,11 @@ const securityFunctions = {
     name: 'securityF:ManageBrands',
     description: 'Allows the user to manage global brands.'
   },
+  ManageAlerts: {
+    id: '6701ED68-A98C-4F62-BB4D-02219E88804B',
+    name: 'securityF:ManageBrands', // TODO change security function name
+    description: 'Allows the user to manage global alerts.'
+  },
   ViewReports: {
     id: 'FF7FAA1C-DF33-4237-98DA-2A8279250619',
     name: 'securityF:ViewReports',
@@ -294,21 +300,28 @@ const colors = {
   purpleTr: 'rgba(98,73,157,.2)',
   purpleBanner: 'rgba(98,73,157,.7)',
   dark: '#060A33',
+  darkBanner: 'rgba(98,73,157,.7)',
   red: '#d00000',
   greyText: `#AAAAAA`
 };
+
+const alertTypes = [
+  { value: 'alert', label: 'Alert' },
+  { value: 'informational', label: 'Informational' }
+];
+
 const tiles = [
   {
-    icon: 'icon-alerts',
-    iconType: 'fa',
+    icon: icons.alerts,
+    iconType: 'img',
     title: 'alerts',
-    src: 'https://placekitten.com/360/136',
-    srcBanner: '',
+    src: require('src/images/beaconTraining.jpg'),
+    srcBanner: require('src/images/beaconTrainingHeader.jpg'),
     color: 'dark',
     width: 270,
-    height: 136,
+    height: 300,
     url: '/alerts',
-    securityFunction: '',
+    securityFunction: securityFunctions.ManageAlerts.id,
     description: ''
   },
   {
@@ -560,6 +573,19 @@ const tiles = [
     securityFunction: securityFunctions.ViewInventory.id,
     description: ''
   }
+  // {
+  //   icon: icons.inventory,
+  //   iconType: 'img',
+  //   title: 'alerts',
+  //   src: require('src/images/beaconManageInventory.jpg'),
+  //   srcBanner: require('src/images/beaconManageInventoryHeader.jpg'),
+  //   color: 'green',
+  //   width: 270,
+  //   height: 300,
+  //   url: '/alerts',
+  //   securityFunction: securityFunctions.ViewInventory.id,
+  //   description: ''
+  // }
 ];
 
 export const constants = {
@@ -578,6 +604,7 @@ export const constants = {
     transitionOut: 'bounceOutUp' as transitionOutType,
     timeOut: 3000
   },
+  alertTypes,
   colors,
   securityFunctions,
   tiles,

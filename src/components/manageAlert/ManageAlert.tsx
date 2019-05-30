@@ -11,47 +11,50 @@ import {
   IinitialState,
   ItableFiltersReducer,
   Itile,
-  IBrand,
-  Ibrand
+  IAlert
 } from '../../models';
 import {
-  clearSelectedBrandID,
-  deleteBrand,
-  getBrands,
-  setSelectedBrandID,
+  clearSelectedAlertID,
+  deleteAlert,
+  getAlerts,
+  setSelectedAlertID,
   setTableFilter,
-  toggleEditBrandModal
-} from '../../actions/manageBrandActions';
+  toggleEditAlertModal
+} from '../../actions/manageAlertActions';
 import { TableUtil } from '../common/TableUtil';
 import { FormUtil } from '../common/FormUtil';
 import SearchTableForm from '../common/SearchTableForm';
 import { Button } from 'react-bootstrap';
-import ReactTable, { FinalState, RowInfo } from 'react-table';
-import EditBrandModal from './EditBrandModal';
+import ReactTable, { Column, FinalState, RowInfo } from 'react-table';
 import * as moment from 'moment';
 import { orderBy } from 'lodash';
+import EditAlertModal from './EditAlertModal';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { toastr } from 'react-redux-toastr';
 
-interface RowInfoBrand extends RowInfo {
-  original: IBrand;
+interface RowInfoAlert extends RowInfo {
+  original: IAlert;
 }
 
 interface Iprops extends RouteComponentProps<any> {
+  // Add your regular properties here
   t: TranslationFunction;
   i18n: I18n;
+  // loading: boolean;
 }
 
 interface IdispatchProps {
-  tableData: Ibrand[];
+  tableData: IAlert[];
   totalPages: number;
-  showEditBrandModal: boolean;
-  getBrands: any;
-  toggleEditBrandModal: typeof toggleEditBrandModal;
-  deleteBrand: typeof deleteBrand;
+  showEditAlertModal: boolean;
+  getAlerts: typeof getAlerts;
+  toggleEditAlertModal: typeof toggleEditAlertModal;
+  deleteAlert: typeof deleteAlert;
   setTableFilter: typeof setTableFilter;
   tableFilters: ItableFiltersReducer;
   loading: boolean;
-  setSelectedBrandID: typeof setSelectedBrandID;
-  clearSelectedBrandID: typeof clearSelectedBrandID;
+  setSelectedAlertID: typeof setSelectedAlertID;
+  clearSelectedAlertID: typeof clearSelectedAlertID;
 }
 
 interface Istate {
@@ -61,7 +64,8 @@ interface Istate {
   searchFieldConfig: FieldConfig;
 }
 
-class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
+class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
+  private debounce: any;
   constructor(props: Iprops & IdispatchProps) {
     super(props);
     this.state = {
@@ -79,13 +83,13 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
   }
 
   componentDidMount(): void {
-    this.props.getBrands();
+    this.props.getAlerts();
   }
 
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
     if (
-      prevProps.showEditBrandModal !== this.props.showEditBrandModal &&
-      !this.props.showEditBrandModal
+      prevProps.showEditAlertModal !== this.props.showEditAlertModal &&
+      !this.props.showEditAlertModal
     ) {
       this.setState({ selectedRow: null });
     }
@@ -94,7 +98,7 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
       JSON.stringify(prevProps.tableFilters) !==
       JSON.stringify(this.props.tableFilters)
     ) {
-      this.props.getBrands();
+      this.props.getAlerts();
     }
   }
 
@@ -103,11 +107,22 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
       name: {
         render: FormUtil.TextInputWithoutValidation,
         meta: {
-          label: 'common:Brand',
+          label: 'common:Alert',
           colWidth: 3,
           type: 'text',
-          placeholder: 'Search by text',
-          defaultValue: this.props.tableFilters.brand,
+          placeholder: 'Search by title',
+          defaultValue: this.props.tableFilters.title,
+          isClearable: true
+        }
+      },
+      type: {
+        render: FormUtil.SelectWithoutValidation,
+        meta: {
+          options: constants.alertTypes,
+          label: 'alertTypeLabel',
+          colWidth: 3,
+          placeholder: 'Select type',
+          defaultValue: this.props.tableFilters.type,
           isClearable: true
         }
       }
@@ -122,8 +137,16 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
   onSearchValueChanges = (value: any, key: string) => {
     switch (key) {
       case 'name':
-        this.props.setTableFilter({ name: value, page: 1 });
+        clearTimeout(this.debounce);
+        this.debounce = setTimeout(() => {
+          this.props.setTableFilter({ title: value, page: 1 });
+        }, 500);
         break;
+      case 'type':
+        this.props.setTableFilter({
+          type: value ? value.value : null,
+          page: 1
+        });
       default:
         break;
     }
@@ -131,8 +154,23 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
 
   handleEdit(row: any) {
     this.setState({ selectedRow: row.index });
-    this.props.toggleEditBrandModal();
-    this.props.setSelectedBrandID(row.original.id);
+    this.props.toggleEditAlertModal();
+    this.props.setSelectedAlertID(row.original.id);
+  }
+
+  handleDelete(deletedItem: any) {
+    const toastrConfirmOptions = {
+      onOk: () => {
+        deletedItem = {
+          ...deletedItem
+        };
+        this.props.deleteAlert(deletedItem);
+      },
+      onCancel: () => console.log('CANCEL: clicked'),
+      okText: this.props.t('deleteOk'),
+      cancelText: this.props.t('common:cancel')
+    };
+    toastr.confirm(this.props.t('deleteConfirm'), toastrConfirmOptions);
   }
 
   onPageChange = (page: number) => {
@@ -146,9 +184,29 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
     const columns = TableUtil.translateHeaders(
       [
         {
-          Header: 'name',
-          accessor: 'name',
+          Header: 'title',
+          accessor: 'title',
           minWidth: 300
+        },
+        {
+          Header: 'type',
+          accessor: 'type',
+          minWidth: 300
+        },
+        {
+          Header: '',
+          id: 'delete',
+          minWidth: 25,
+          Cell: row => {
+            return (
+              <Button
+                bsStyle="link"
+                style={{ float: 'right', color: constants.colors.greyText }}
+              >
+                <FontAwesomeIcon icon={['far', 'times']} />
+              </Button>
+            );
+          }
         }
       ],
       this.props.t
@@ -157,15 +215,13 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
   };
 
   /*
-  * Handle user clicking on a location row
-  * set the selected location to state and open the modal
+  * (reusable)
+  * Handle user clicking on a product row
+  * set the selected product to state and open the modal
   */
-  getTrProps = (state: FinalState, rowInfo: RowInfoBrand) => {
+  getTrProps = (state: FinalState, rowInfo: RowInfo) => {
     if (rowInfo) {
       return {
-        onClick: (e: React.MouseEvent<HTMLFormElement>) => {
-          this.handleEdit(rowInfo);
-        },
         style: {
           background:
             rowInfo.index === this.state.selectedRow
@@ -178,10 +234,32 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
     }
   };
 
+  getTdProps = (
+    fState: FinalState,
+    rowInfo: RowInfoAlert,
+    column: Column,
+    instance: any
+  ) => {
+    if (column.id && column.id === 'delete') {
+      return {
+        onClick: () => this.handleDelete(rowInfo.original)
+      };
+    } else {
+      return {
+        onClick: () => {
+          this.setState({
+            selectedRow: rowInfo.index
+          });
+          this.handleEdit(rowInfo);
+        }
+      };
+    }
+  };
+
   render() {
     const { t, tableData = [], totalPages } = this.props;
     return (
-      <div className="manage-brand">
+      <div className="manage-alert">
         <Banner
           title={t('bannerTitle')}
           img={this.state.currentTile.srcBanner}
@@ -189,7 +267,7 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
         />
         <SearchTableForm
           fieldConfig={this.state.searchFieldConfig}
-          handleSubmit={this.props.getBrands}
+          handleSubmit={this.props.getAlerts}
           loading={this.props.loading}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
@@ -205,17 +283,18 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
             bsStyle="link"
             onClick={() => {
               this.setState({ selectedRow: null }, () => {
-                this.props.toggleEditBrandModal();
+                this.props.toggleEditAlertModal();
               });
             }}
           >
-            {t(`manageBrand:newBrand`)}
+            {t(`manageAlert:newAlert`)}
           </Button>
         </div>
         <ReactTable
           data={tableData}
           columns={this.state.columns}
           getTrProps={this.getTrProps}
+          getTdProps={this.getTdProps}
           pageSize={tableData.length}
           manual
           pages={totalPages}
@@ -225,13 +304,14 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
           previousText={t('common:previous')}
           nextText={t('common:next')}
           onPageChange={this.onPageChange}
+          // onSortedChange={this.onSortedChanged}
           sortable={false}
           multiSort={false}
           noDataText={t('common:noDataText')}
           resizable={false}
         />
 
-        <EditBrandModal
+        <EditAlertModal
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
@@ -244,28 +324,28 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
 
 const mapStateToProps = (state: IinitialState) => {
   const tableData = orderBy(
-    state.manageBrand.data,
+    state.manageAlert.data,
     res => moment.utc(res.createDate).unix(),
     'desc'
   );
   return {
     tableData,
-    totalPages: state.manageBrand.totalPages,
-    showEditBrandModal: state.manageBrand.showEditBrandModal,
-    tableFilters: state.manageBrand.tableFilters
+    totalPages: state.manageAlert.totalPages,
+    showEditAlertModal: state.manageAlert.showEditAlertModal,
+    tableFilters: state.manageAlert.tableFilters
   };
 };
 
-export default translate('manageBrand')(
+export default translate('manageAlert')(
   connect(
     mapStateToProps,
     {
-      getBrands,
-      toggleEditBrandModal,
-      deleteBrand,
+      getAlerts,
+      toggleEditAlertModal,
+      deleteAlert,
       setTableFilter,
-      setSelectedBrandID,
-      clearSelectedBrandID
+      setSelectedAlertID,
+      clearSelectedAlertID
     }
-  )(ManageBrand)
+  )(ManageAlert)
 );

@@ -12,14 +12,13 @@ export default ({
   color: string;
 }) => (
   <div
-    className="banner purple"
+    className="banner purple soso"
     style={{
       backgroundColor: color,
       background: `linear-gradient(${constants.colors[`${color}Banner`]},
       ${constants.colors[`${color}Banner`]}), url(${img}) no-repeat left/cover`
     }}
   >
-    {/* <img src={img} /> */}
     <span className="title">{title}</span>
     {subtitle && <span className="subtitle">{subtitle}</span>}
   </div>

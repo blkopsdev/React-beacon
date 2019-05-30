@@ -25,6 +25,7 @@ import {
 interface Iprops {
   colorButton: any;
   t: TranslationFunction;
+  secondModal?: boolean;
 }
 
 interface IdispatchProps {
@@ -47,7 +48,9 @@ class EditCustomerModal extends React.Component<Iprops & IdispatchProps, {}> {
 
   render() {
     const { selectedCustomer, t } = this.props;
-
+    const className = this.props.secondModal
+      ? 'customer-edit second-modal'
+      : 'customer-edit';
     const formTitle =
       selectedCustomer && selectedCustomer.name
         ? t('manageCustomerAndFacility:editCustomer')
@@ -56,7 +59,7 @@ class EditCustomerModal extends React.Component<Iprops & IdispatchProps, {}> {
     return (
       <CommonModal
         modalVisible={this.props.showEditCustomerModal}
-        className="customer-edit"
+        className={className}
         onHide={this.props.toggleModal}
         body={
           <EditCustomerForm

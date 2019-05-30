@@ -28,6 +28,7 @@ interface Iprops {
   t: TranslationFunction;
   modalClass?: string;
   selectedCustomer?: Icustomer & Ioption;
+  secondModal?: boolean;
 }
 
 interface IdispatchProps {
@@ -54,7 +55,10 @@ class EditFacilityModal extends React.Component<Iprops & IdispatchProps, {}> {
   }
 
   render() {
-    const { selectedFacility, t, modalClass } = this.props;
+    const className = this.props.secondModal
+      ? 'customer-edit second-modal'
+      : 'customer-edit';
+    const { selectedFacility, t } = this.props;
     const formTitle =
       selectedFacility && selectedFacility.name
         ? t('manageCustomerAndFacility:editFacility')
@@ -63,7 +67,7 @@ class EditFacilityModal extends React.Component<Iprops & IdispatchProps, {}> {
     return (
       <CommonModal
         modalVisible={this.props.showEditFacilityModal}
-        className={`customer-edit ${modalClass}`}
+        className={className}
         onHide={this.props.toggleModal}
         body={
           <EditFacilityForm

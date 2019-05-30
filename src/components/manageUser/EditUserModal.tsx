@@ -20,7 +20,7 @@ import {
   toggleEditUserModal,
   toggleSecurityFunctionsModal,
   setEditUserFormValues,
-  updateEditUserFormValue
+  updateEditUserFormValues
 } from '../../actions/manageUserActions';
 import CommonModal from '../common/CommonModal';
 import EditUserForm from './EditUserForm';
@@ -43,7 +43,7 @@ interface IdispatchProps {
   toggleEditCustomerModal: typeof toggleEditCustomerModal;
   toggleEditFacilityModal: typeof toggleEditFacilityModal;
   toggleSecurityFunctionsModal: typeof toggleSecurityFunctionsModal;
-  updateFormValue: (formValue: { [key: string]: any }) => void;
+  updateFormValues: (formValues: { [key: string]: any }) => void;
   setFormValues: (formValues: { [key: string]: any }) => void;
   formValues: { [key: string]: any };
 }
@@ -68,13 +68,14 @@ class EditManageUserModal extends React.Component<Iprops & IdispatchProps, {}> {
 }
 
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
-  const customerID =
-    state.manageUser.editUserFormValues.customerID ||
-    ownProps.selectedUser.customerID;
-  const filteredFacilities = filter(
-    state.facilities,
-    (facility: Ifacility) => facility.customerID === customerID
-  );
+  const customerID = state.manageUser.editUserFormValues.customerID
+    ? state.manageUser.editUserFormValues.customerID.value
+    : ownProps.selectedUser.customerID;
+  const filteredFacilities =
+    filter(
+      state.facilities,
+      (facility: Ifacility) => facility.customerID === customerID
+    ) || [];
   return {
     user: state.user,
     userManage: state.manageUser,
@@ -98,6 +99,6 @@ export default connect(
     toggleEditFacilityModal,
     toggleSecurityFunctionsModal,
     setFormValues: setEditUserFormValues,
-    updateFormValue: updateEditUserFormValue
+    updateFormValues: updateEditUserFormValues
   }
 )(EditManageUserModal);

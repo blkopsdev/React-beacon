@@ -218,36 +218,37 @@ export const initialLesson = {
   cost: 0,
   isProtected: false
 };
+const initialUser = {
+  password: '',
+  username: '',
+  isAuthenticated: false,
+  email: '',
+  securityFunctions: [],
+  first: '',
+  last: '',
+  position: '',
+  address: '',
+  address2: '',
+  city: '',
+  state: '',
+  zip: '',
+  id: '',
+  facilities: [],
+  customerID: '',
+  hasTeamMembers: false,
+  customer: initialCustomer,
+  isActive: true
+};
 
 export const initialQueueObject = {
   id: '',
-  user: ''
+  user: initialUser
 };
 
 /* initialState */
 export default {
   ajaxCallsInProgress: 0,
-  user: {
-    password: '',
-    username: '',
-    isAuthenticated: false,
-    email: '',
-    securityFunctions: [],
-    first: '',
-    last: '',
-    position: '',
-    address: '',
-    address2: '',
-    city: '',
-    state: '',
-    zip: '',
-    id: '',
-    facilities: [],
-    customerID: '',
-    hasTeamMembers: false,
-    customer: initialCustomer,
-    isActive: true
-  },
+  user: initialUser,
   redirect: {
     redirectToReferrer: false,
     pathname: '/'

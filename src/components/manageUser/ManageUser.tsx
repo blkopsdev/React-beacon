@@ -331,6 +331,7 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
+          secondModal={true}
         />
         <CommonModal
           modalVisible={this.props.showSecurityFunctionsModal}

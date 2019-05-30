@@ -14,7 +14,8 @@ import {
   FormGenerator,
   AbstractControl,
   FieldConfig,
-  Observable
+  Observable,
+  FormGroup
 } from 'react-reactive-form';
 import { forEach, find, filter, map, differenceBy } from 'lodash';
 import { toastr } from 'react-redux-toastr';
@@ -113,13 +114,13 @@ interface Iprops extends React.Props<UserQueueForm> {
   toggleModal: () => void;
   updateQueueUser: typeof updateQueueUser;
   approveUser: (userQueueID: string) => void;
-  updateFormValue: (formValue: { [key: string]: any }) => void;
+  updateFormValues: (formValues: { [key: string]: any }) => void;
   setFormValues: (formValues: { [key: string]: any }) => void;
   formValues: { [key: string]: any };
 }
 
 class UserQueueForm extends React.Component<Iprops, {}> {
-  public formGroup: AbstractControl;
+  public formGroup: FormGroup;
   public fieldConfig: FieldConfig;
   public subscription: any;
   constructor(props: Iprops) {
@@ -260,8 +261,8 @@ class UserQueueForm extends React.Component<Iprops, {}> {
   * subscribe to the formGroup changes
   */
   subscribeToChanges = () => {
-    for (const key in this.fieldConfig) {
-      if (this.fieldConfig.hasOwnProperty(key)) {
+    for (const key in this.formGroup.controls) {
+      if (this.formGroup.controls.hasOwnProperty(key)) {
         this.subscription = this.formGroup
           .get(key)
           .valueChanges.subscribe((value: any) => {
@@ -278,7 +279,7 @@ class UserQueueForm extends React.Component<Iprops, {}> {
   onValueChanges = (value: any, key: string) => {
     switch (key) {
       case 'customerID':
-        this.props.updateFormValue({ [key]: value });
+        this.props.updateFormValues({ [key]: value });
         if (value && value.value) {
           this.props.getFacilitiesByCustomer(value.value);
         }
@@ -318,11 +319,12 @@ class UserQueueForm extends React.Component<Iprops, {}> {
       this.props.selectedQueueObject.id
     );
   };
-  setForm = (form: AbstractControl) => {
+  setForm = (form: FormGroup) => {
     this.formGroup = form;
     this.formGroup.meta = {
       loading: this.props.loading
     };
+    this.subscribeToChanges();
   };
 
   render() {
@@ -386,6 +388,7 @@ class UserQueueForm extends React.Component<Iprops, {}> {
           t={this.props.t}
           colorButton={this.props.colorButton}
           selectedCustomer={selectedCustomer}
+          secondModal={true}
         />
       </div>
     );

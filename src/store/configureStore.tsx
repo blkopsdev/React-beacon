@@ -125,7 +125,7 @@ export default function configureStore() {
         shouldHotReload: false,
         stateSanitizer: (state: IinitialState) =>
           state.manageUserQueue
-            ? { ...state, manageUserQueue: '<<LONG_BLOB>>' }
+            ? { ...state, manageInventory: '<<LONG_BLOB>>' }
             : state
       }
     );

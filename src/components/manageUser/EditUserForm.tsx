@@ -9,7 +9,8 @@ import {
   FormGenerator,
   AbstractControl,
   FieldConfig,
-  Observable
+  Observable,
+  FormGroup
 } from 'react-reactive-form';
 import { forEach, find, map, differenceBy, filter, includes } from 'lodash';
 import { toastr } from 'react-redux-toastr';
@@ -121,13 +122,13 @@ interface Iprops extends React.Props<EditUserForm> {
   toggleEditCustomerModal: typeof toggleEditCustomerModal;
   toggleEditFacilityModal: typeof toggleEditFacilityModal;
   toggleSecurityFunctionsModal: typeof toggleSecurityFunctionsModal;
-  updateFormValue: (formValue: { [key: string]: any }) => void;
+  updateFormValues: (formValues: { [key: string]: any }) => void;
   setFormValues: (formValues: { [key: string]: any }) => void;
   formValues: { [key: string]: any };
 }
 
 class EditUserForm extends React.Component<Iprops, {}> {
-  public formGroup: AbstractControl;
+  public formGroup: FormGroup;
   public fieldConfig: FieldConfig;
   public subscription: any;
   constructor(props: Iprops) {
@@ -257,8 +258,8 @@ class EditUserForm extends React.Component<Iprops, {}> {
   * subscribe to the formGroup changes
   */
   subscribeToChanges = () => {
-    for (const key in this.fieldConfig) {
-      if (this.fieldConfig.hasOwnProperty(key)) {
+    for (const key in this.formGroup.controls) {
+      if (this.formGroup.controls.hasOwnProperty(key)) {
         this.subscription = this.formGroup
           .get(key)
           .valueChanges.subscribe((value: any) => {
@@ -275,7 +276,7 @@ class EditUserForm extends React.Component<Iprops, {}> {
   onValueChanges = (value: any, key: string) => {
     switch (key) {
       case 'customerID':
-        this.props.updateFormValue({ [key]: value });
+        this.props.updateFormValues({ [key]: value });
         if (value && value.value) {
           this.props.getFacilitiesByCustomer(value.value);
         }
@@ -317,11 +318,12 @@ class EditUserForm extends React.Component<Iprops, {}> {
       email: this.props.selectedUser.email // have to add back the email because disabling the input removes it
     });
   };
-  setForm = (form: AbstractControl) => {
+  setForm = (form: FormGroup) => {
     this.formGroup = form;
     this.formGroup.meta = {
       loading: this.props.loading
     };
+    this.subscribeToChanges();
   };
 
   render() {
@@ -361,6 +363,7 @@ class EditUserForm extends React.Component<Iprops, {}> {
           t={this.props.t}
           colorButton={this.props.colorButton}
           selectedCustomer={selectedCustomer}
+          secondModal={true}
         />
       </div>
     );

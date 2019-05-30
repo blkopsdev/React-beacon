@@ -8,7 +8,7 @@ import { TranslationFunction } from 'react-i18next';
 import { connect } from 'react-redux';
 import * as React from 'react';
 
-import { IinitialState, Ioption, IqueueObject } from '../../models';
+import { IinitialState, Ioption, IqueueObject, Ifacility } from '../../models';
 import {
   getFacilitiesByCustomer,
   toggleEditCustomerModal,
@@ -19,11 +19,12 @@ import {
   toggleEditQueueUserModal,
   approveUser,
   setEditUserFormValues,
-  updateEditUserFormValue
+  updateEditUserFormValues
 } from '../../actions/manageUserQueueActions';
 import CommonModal from '../common/CommonModal';
 import EditQueueUserForm from './EditQueueUserForm';
 import { FormUtil } from '../common/FormUtil';
+import { filter } from 'lodash';
 
 interface Iprops {
   selectedQueueObject: IqueueObject;
@@ -42,7 +43,7 @@ interface IdispatchProps {
   toggleEditCustomerModal: typeof toggleEditCustomerModal;
   toggleEditFacilityModal: typeof toggleEditFacilityModal;
   approveUser: typeof approveUser;
-  updateFormValue: (formValue: { [key: string]: any }) => void;
+  updateFormValues: (formValues: { [key: string]: any }) => void;
   setFormValues: (formValues: { [key: string]: any }) => void;
   formValues: { [key: string]: any };
 }
@@ -67,12 +68,21 @@ class EditQueueUserModal extends React.Component<Iprops & IdispatchProps, {}> {
 }
 
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
+  const customerID = state.manageUserQueue.editUserFormValues.customerID
+    ? state.manageUserQueue.editUserFormValues.customerID.value
+    : ownProps.selectedQueueObject.user.customerID;
+  const filteredFacilities =
+    filter(
+      state.facilities,
+      (facility: Ifacility) => facility.customerID === customerID
+    ) || [];
+
   return {
     user: state.user,
     userQueue: state.manageUserQueue,
     loading: state.ajaxCallsInProgress > 0,
     customerOptions: FormUtil.convertToOptions(state.customers),
-    facilityOptions: FormUtil.convertToOptions(state.facilities),
+    facilityOptions: FormUtil.convertToOptions(filteredFacilities),
     showEditQueueUserModal: state.manageUserQueue.showEditQueueUserModal,
     showEditCustomerModal: state.showEditCustomerModal,
     showEditFacilityModal: state.showEditFacilityModal,
@@ -90,6 +100,6 @@ export default connect(
     toggleEditFacilityModal,
     approveUser,
     setFormValues: setEditUserFormValues,
-    updateFormValue: updateEditUserFormValue
+    updateFormValues: updateEditUserFormValues
   }
 )(EditQueueUserModal);

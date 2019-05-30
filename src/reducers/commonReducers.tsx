@@ -59,7 +59,7 @@ export function createFormValuesWithName(
     case `SET_FORM_VALUES_${tableName}`:
       return action.formValues;
     case `UPDATE_FORM_VALUES_${tableName}`:
-      return { ...state, ...action.formValue };
+      return { ...state, ...action.formValues };
     case types.USER_LOGOUT_SUCCESS:
       return {};
     default:

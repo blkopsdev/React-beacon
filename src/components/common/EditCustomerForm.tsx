@@ -85,7 +85,7 @@ class EditCustomerForm extends React.Component<Iprops, IState> {
         },
         render: FormUtil.TextInput,
         meta: {
-          label: 'customerNameLabel',
+          label: 'name',
           colWidth: 12,
           type: 'input',
           autoFocus: true,

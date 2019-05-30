@@ -154,7 +154,7 @@ export const setEditUserFormValues = (formValues: { [key: string]: any }) => ({
   formValues
 });
 
-export const updateEditUserFormValue = (formValues: {
+export const updateEditUserFormValues = (formValues: {
   [key: string]: any;
 }) => ({
   type: types.UPDATE_FORM_VALUES_MANAGE_USER_QUEUE,

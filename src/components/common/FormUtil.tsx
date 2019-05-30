@@ -82,6 +82,15 @@ export const FormUtil = {
       return null;
     }
   },
+  toFormData: (formValue: any) => {
+    const data = new FormData();
+    Object.keys(formValue).map(key => {
+      const value = formValue[key];
+      data.append(key, value && value.value ? value.value : value);
+    });
+
+    return data;
+  },
   getValidationState: (
     pristine: boolean,
     error: ValidationErrors,
@@ -256,6 +265,7 @@ export const FormUtil = {
       <Col xs={meta.colWidth}>
         {meta.imageUrl && (
           <img
+            alt="Uploaded Img"
             src={meta.imageUrl}
             style={{
               maxWidth: '100%',
@@ -279,6 +289,7 @@ export const FormUtil = {
               <i className="required-label">{requiredLabel}</i>
             </span>
             <FormControl
+              accept={'image/*'}
               id={'fileUpload'}
               placeholder={meta.placeholder}
               componentClass={meta.componentClass}

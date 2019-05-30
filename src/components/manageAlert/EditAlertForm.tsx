@@ -19,15 +19,17 @@ import { translate, TranslationFunction } from 'react-i18next';
 import { FormUtil } from '../common/FormUtil';
 import {
   clearSelectedAlertID,
-  toggleEditAlertModal
+  saveAlert,
+  toggleEditAlertModal,
+  updateAlert
 } from '../../actions/manageAlertActions';
 import { IAlert } from 'src/models';
 
 // add the bootstrap form-control class to the react-select select component
 
 interface Iprops {
-  handleSubmit: any;
-  handleEdit: any;
+  handleSubmit: typeof saveAlert;
+  handleEdit: typeof updateAlert;
   handleCancel: any;
   loading: boolean;
   colorButton: string;
@@ -189,7 +191,7 @@ class EditAlertForm extends React.Component<Iprops, State> {
     this.props.updateFormValue({ [key]: value });
   };
 
-  handleSubmit = async (e: React.MouseEvent<HTMLFormElement>) => {
+  handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
     if (this.formGroup.status === 'INVALID') {
       this.formGroup.markAsSubmitted();
@@ -205,24 +207,11 @@ class EditAlertForm extends React.Component<Iprops, State> {
     }
 
     if (!this.props.selectedAlert.id) {
-      await this.props.handleSubmit(this.toFormData(formData));
+      this.props.handleSubmit(formData);
     } else {
-      formData['id'] = this.props.selectedAlert.id;
-      await this.props.handleEdit(this.toFormData(formData));
+      this.props.handleEdit(formData, this.props.selectedAlert);
     }
-
-    this.props.toggleModal();
   };
-
-  toFormData<T>(formValue: T) {
-    const data = new FormData();
-    Object.keys(formValue).map(key => {
-      const value = formValue[key];
-      data.append(key, value && value.value ? value.value : value);
-    });
-
-    return data;
-  }
 
   setForm = (form: FormGroup) => {
     this.formGroup = form;

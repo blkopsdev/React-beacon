@@ -65,6 +65,7 @@ interface Istate {
 }
 
 class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
+  private debounce: any;
   constructor(props: Iprops & IdispatchProps) {
     super(props);
     this.state = {
@@ -136,7 +137,10 @@ class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
   onSearchValueChanges = (value: any, key: string) => {
     switch (key) {
       case 'name':
-        this.props.setTableFilter({ title: value, page: 1 });
+        clearTimeout(this.debounce);
+        this.debounce = setTimeout(() => {
+          this.props.setTableFilter({ title: value, page: 1 });
+        }, 500);
         break;
       case 'type':
         this.props.setTableFilter({

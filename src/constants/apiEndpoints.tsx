@@ -81,7 +81,7 @@ const API = {
       update: `${root}/brand`
     },
     alert: {
-      update: `${root}/alert/{alertId}`
+      update: `${root}/alert`
     }
   },
   DELETE: {
@@ -102,7 +102,7 @@ const API = {
       remove: `${root}/brand`
     },
     alert: {
-      delete: `${root}/alert/{alertId}`
+      delete: `${root}/alert`
     }
   },
   GET: {

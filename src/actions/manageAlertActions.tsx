@@ -8,55 +8,53 @@ import { constants } from '../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { ItableFiltersParams, IAlert, IinitialState } from '../models';
 import { ThunkAction } from 'redux-thunk';
+import { FormUtil } from '../components/common/FormUtil';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
-export const getAlerts = () => (
-  dispatch: any,
-  getState: any
-): ThunkResult<void> => {
-  dispatch(beginAjaxCall());
-  const { page, title, type } = getState().manageAlert.tableFilters;
-  const axiosOptions: AxiosRequestConfig = {
-    method: 'get',
-    params: { page, title, type }
-  };
+export const getAlerts = (): ThunkResult<void> => {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    const { page, title, type } = getState().manageAlert.tableFilters;
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'get',
+      params: { page, title, type }
+    };
 
-  const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
-  const url = API.GET.alert.search;
-  return adalFetch(authContext, resource, axios, url, axiosOptions)
-    .then((data: AxiosResponse<any>) => {
-      if (!data.data) {
-        throw undefined;
-      } else {
-        dispatch({
-          type: types.LOAD_ALERTS_SUCCESS,
-          payload: data.data.result
-        });
-        dispatch({
-          type: types.ALERT_MANAGE_TOTAL_PAGES,
-          pages: data.data.pages
-        });
-        return data;
-      }
-    })
-    .catch((error: any) => {
-      dispatch({ type: types.LOAD_ALERTS_SUCCESS });
-      constants.handleError(error, 'get alerts');
-    });
+    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+    const url = API.GET.alert.search;
+    return adalFetch(authContext, resource, axios, url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.LOAD_ALERTS_SUCCESS,
+            payload: data.data.result
+          });
+          dispatch({
+            type: types.ALERT_MANAGE_TOTAL_PAGES,
+            pages: data.data.pages
+          });
+          return data;
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.LOAD_ALERTS_SUCCESS });
+        constants.handleError(error, 'get alerts');
+      });
+  };
 };
 
-export const saveAlert = (alert: IAlert | FormData) => (
+export const saveAlert = (alert: IAlert) => (
   dispatch: any
 ): ThunkResult<void> => {
   dispatch(beginAjaxCall());
-  let headers = {};
-  if (alert instanceof FormData) {
-    headers = { 'content-type': 'multipart/form-data' };
-  }
+  const headers = { 'content-type': 'multipart/form-data' };
+
   const axiosOptions: AxiosRequestConfig = {
     method: 'post',
-    data: alert,
+    data: FormUtil.toFormData(alert),
     headers
   };
   const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
@@ -72,6 +70,7 @@ export const saveAlert = (alert: IAlert | FormData) => (
           payload: newAlert
         });
         toastr.success('Success', `Created Alert.`, constants.toastrSuccess);
+        dispatch({ type: types.TOGGLE_MODAL_EDIT_ALERT });
       }
     })
     .catch((error: any) => {
@@ -80,25 +79,20 @@ export const saveAlert = (alert: IAlert | FormData) => (
     });
 };
 
-export const updateAlert = (alert: IAlert | FormData) => (
+export const updateAlert = (alert: any, selectedAlert: IAlert) => (
   dispatch: any
 ): ThunkResult<void> => {
   dispatch(beginAjaxCall());
-  let headers = {};
-  let id: string = '';
-  if (alert instanceof FormData) {
-    headers = { 'content-type': 'multipart/form-data' };
-    id = alert.get('id') as string;
-  } else {
-    id = alert.id;
-  }
+  const headers = { 'content-type': 'multipart/form-data' };
+
+  alert['id'] = selectedAlert.id;
   const axiosOptions: AxiosRequestConfig = {
     method: 'put',
-    data: alert,
+    data: FormUtil.toFormData(alert),
     headers
   };
   const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
-  const url = API.PUT.alert.update.replace('{alertId}', id);
+  const url = `${API.PUT.alert.update}/${selectedAlert.id}`;
   return adalFetch(authContext, resource, axios, url, axiosOptions)
     .then((data: AxiosResponse<any>) => {
       if (!data.data) {
@@ -106,6 +100,7 @@ export const updateAlert = (alert: IAlert | FormData) => (
       } else {
         dispatch({ type: types.EDIT_ALERT_SUCCESS, payload: data.data });
         toastr.success('Success', `Updated Alert.`, constants.toastrSuccess);
+        dispatch({ type: types.TOGGLE_MODAL_EDIT_ALERT });
       }
     })
     .catch((error: any) => {
@@ -122,7 +117,7 @@ export const deleteAlert = (alert: IAlert) => (
     method: 'delete'
   };
   const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
-  const url = API.DELETE.alert.delete.replace('{alertId}', alert.id);
+  const url = `${API.DELETE.alert.delete}/${alert.id}`;
 
   return adalFetch(authContext, resource, axios, url, axiosOptions)
     .then((data: AxiosResponse<any>) => {

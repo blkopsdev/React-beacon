@@ -20,6 +20,7 @@ import {
   toggleMPResultHistory
 } from 'src/actions/manageInventoryActions';
 import { constants } from 'src/constants/constants';
+import { orderBy } from 'lodash';
 
 interface RowInfoInstallBase extends RowInfo {
   original: IinstallBaseWithStatus;
@@ -46,6 +47,18 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
   // console.log(props.original, `${props.original.class.id}/${props.original.userID}`);
   // console.log(props);
 
+  const installBasesWithLocationString = props.original.installs.map(
+    (install: IinstallBase) => {
+      return {
+        ...install,
+        locationString: TableUtil.buildLocation(install, props.facility)
+      };
+    }
+  );
+  const sortedInstallBases = orderBy(
+    installBasesWithLocationString,
+    'installString'
+  );
   /*
   * Handle user clicking on an install row column
   * if there is no "id" to key off of for a specific button, then set the selected install to state and open the edit install modal
@@ -86,9 +99,6 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
         }
       };
     } else if (column.id && column.id === 'historical-results-button') {
-      if (notTested) {
-        return {};
-      }
       return {
         onClick: () => {
           // this.props.selectHistoricalResult
@@ -145,15 +155,14 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
         minWidth: 100
       },
       {
-        Header: 'RFID',
+        Header: 'rfid',
         accessor: 'rfid',
         minWidth: 100
       },
       {
         Header: 'Location',
         id: 'location',
-        accessor: (install: IinstallBase) =>
-          TableUtil.buildLocation(install, props.facility),
+        accessor: 'locationString',
         minWidth: 220
       },
       {
@@ -201,15 +210,10 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
         Header: '',
         id: 'historical-results-button',
         Cell: ({ original }: { original: IinstallBaseWithStatus }) => {
-          const notTested =
-            original.status === constants.measurementPointResultStatusTypes[0];
-          const color = notTested
-            ? constants.colors.greyText
-            : constants.colors.green;
           return (
             <span
               className="historical-results-button"
-              style={{ color }}
+              style={{ color: constants.colors.green }}
               title={props.t('History')}
             >
               <FontAwesomeIcon icon={['far', 'history']} />
@@ -237,7 +241,7 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
     <div>
       <ReactTable
         className={'attempts-expander'}
-        data={props.original.installs}
+        data={sortedInstallBases}
         sortable={false}
         columns={expanderColumns}
         minRows={0}

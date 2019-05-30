@@ -1,5 +1,5 @@
-/* 
-* EditUserForm 
+/*
+* EditUserForm
 * Edit existing users
 */
 
@@ -328,7 +328,7 @@ class EditUserForm extends React.Component<Iprops, {}> {
     const { t } = this.props;
     const selectedCustomer = this.formGroup
       ? this.formGroup.value.customerID
-      : undefined;
+      : ({} as Ioption);
 
     const formClassName = `clearfix beacon-form ${this.props.colorButton}`;
 

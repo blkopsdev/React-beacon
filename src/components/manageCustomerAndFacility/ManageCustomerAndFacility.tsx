@@ -11,7 +11,8 @@ import {
   IinitialState,
   ItableFiltersReducer,
   Itile,
-  Icustomer
+  Icustomer,
+  Ifacility
 } from '../../models';
 import { TableUtil } from '../common/TableUtil';
 import { FormUtil } from '../common/FormUtil';
@@ -29,17 +30,18 @@ import {
   getCustomers,
   setSelectedCustomerID,
   clearSelectedCustomerID,
-  setSelectedFacilityID,
-  filterVisibleCustomers
+  setSelectedFacilityID
 } from '../../actions/manageCustomerAndFacilityActions';
 import ManageFacility from './ManageFacility';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import EditCustomerModal from './EditCustomerModal';
+import EditCustomerModal from '../common/EditCustomerModal';
 import {
   toggleEditCustomerModal,
   toggleEditFacilityModal
 } from '../../actions/commonActions';
-import EditFacilityModal from './EditFacilityModal';
+import EditFacilityModal from '../common/EditFacilityModal';
+import * as moment from 'moment';
+import { orderBy } from 'lodash';
 
 interface RowInfoCustomer extends RowInfo {
   original: Icustomer;
@@ -65,8 +67,8 @@ interface IdispatchProps {
   setSelectedFacilityID: typeof setSelectedFacilityID;
   toggleEditFacilityModal: typeof toggleEditFacilityModal;
   selectedCustomer: Icustomer;
-  filterVisibleCustomers: typeof filterVisibleCustomers;
   customers: { [key: string]: Icustomer };
+  facilities: { [key: string]: Ifacility };
 }
 
 interface Istate {
@@ -80,6 +82,7 @@ class ManageCustomerAndFacility extends React.Component<
   Iprops & IdispatchProps,
   Istate
 > {
+  debounce: any;
   constructor(props: Iprops & IdispatchProps) {
     super(props);
     this.state = {
@@ -96,7 +99,6 @@ class ManageCustomerAndFacility extends React.Component<
     });
     this.setColumns();
     this.props.getCustomers();
-    this.props.filterVisibleCustomers();
   }
 
   componentDidUpdate(prevProps: Iprops & IdispatchProps) {
@@ -118,13 +120,6 @@ class ManageCustomerAndFacility extends React.Component<
         this.props.tableFilters
       );
       this.props.getCustomers();
-      this.props.filterVisibleCustomers();
-    }
-    if (
-      JSON.stringify(this.props.customers) !==
-      JSON.stringify(prevProps.customers)
-    ) {
-      this.props.filterVisibleCustomers();
     }
   }
 
@@ -146,13 +141,13 @@ class ManageCustomerAndFacility extends React.Component<
 
   buildSearchControls = (): FieldConfig => {
     const mainSearchControls = {
-      search: {
+      name: {
         render: FormUtil.TextInputWithoutValidation,
         meta: {
           label: 'common:Customer',
           colWidth: 3,
           type: 'text',
-          placeholder: 'Search by text',
+          placeholder: 'Filter by name',
           defaultValue: this.props.tableFilters.customer,
           isClearable: true
         }
@@ -167,8 +162,11 @@ class ManageCustomerAndFacility extends React.Component<
 
   onSearchValueChanges = (value: any, key: string) => {
     switch (key) {
-      case 'search':
-        this.props.setTableFilter({ search: value, page: 0 }); // TODO add a debounce like in manageJob.tsx
+      case 'name':
+        clearTimeout(this.debounce);
+        this.debounce = setTimeout(() => {
+          this.props.setTableFilter({ name: value });
+        }, 500);
         break;
       default:
         break;
@@ -215,10 +213,8 @@ class ManageCustomerAndFacility extends React.Component<
   };
 
   onPageChange = (page: number) => {
-    this.props.setTableFilter({ page });
-  };
-  onPageSizeChange = (rows: number) => {
-    this.props.setTableFilter({ rows, page: 0 });
+    const newPage = page + 1;
+    this.props.setTableFilter({ page: newPage });
   };
 
   /*
@@ -288,14 +284,14 @@ class ManageCustomerAndFacility extends React.Component<
           </Button>
         </div>
         <ReactTable
+          manual
           data={tableData}
+          pages={this.props.totalPages}
+          page={this.props.tableFilters.page - 1}
           columns={this.state.columns}
           getTdProps={this.getTdProps}
-          defaultPageSize={
-            this.props.tableFilters.rows || constants.tablePageSizeDefault
-          }
-          onPageSizeChange={this.onPageSizeChange}
-          showPageSizeOptions={true}
+          pageSize={tableData.length}
+          showPageSizeOptions={false}
           pageSizeOptions={constants.tablePageSizeOptions}
           className={`beacon-table -highlight ${this.state.currentTile.color}`}
           previousText={t('common:previous')}
@@ -326,6 +322,7 @@ class ManageCustomerAndFacility extends React.Component<
           }
         />
         <EditFacilityModal
+          modalClass=""
           t={this.props.t}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
@@ -337,7 +334,12 @@ class ManageCustomerAndFacility extends React.Component<
 }
 
 const mapStateToProps = (state: IinitialState) => {
-  const tableData = state.customerAndFacilityManage.visibleCustomers;
+  const tableData = orderBy(
+    state.customerAndFacilityManage.data,
+    res => moment.utc(res.createDate).unix(),
+    'desc'
+  );
+
   const selectedCustomer =
     state.customers[state.customerAndFacilityManage.selectedCustomerID] ||
     initialCustomer;
@@ -349,7 +351,8 @@ const mapStateToProps = (state: IinitialState) => {
       state.customerAndFacilityManage.showEditCustomerAndFacilityModal,
     tableFilters: state.customerAndFacilityManage.tableFilters,
     selectedCustomer,
-    customers: state.customers
+    customers: state.customers,
+    facilities: state.facilities
   };
 };
 
@@ -363,8 +366,7 @@ export default translate('manageCustomerAndFacility')(
       setSelectedCustomerID,
       clearSelectedCustomerID,
       setSelectedFacilityID,
-      toggleEditFacilityModal,
-      filterVisibleCustomers
+      toggleEditFacilityModal
     }
   )(ManageCustomerAndFacility)
 );

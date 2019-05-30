@@ -6,11 +6,13 @@ import { authContext } from '../actions/userActions';
 
 const reportTypeEnum = {
   annualInspection: 1,
-  jobNotes: 2
+  jobNotes: 2,
+  HTM: 3
 };
 const reportTypeEnumInverse = {
   1: 'annualInspection',
-  2: 'jobNotes'
+  2: 'jobNotes',
+  3: 'HTM'
 };
 
 const reportTypeOptions = [
@@ -21,6 +23,10 @@ const reportTypeOptions = [
   {
     value: reportTypeEnum.jobNotes,
     label: reportTypeEnumInverse[reportTypeEnum.jobNotes]
+  },
+  {
+    value: reportTypeEnum.HTM,
+    label: reportTypeEnumInverse[reportTypeEnum.HTM]
   }
 ];
 
@@ -63,6 +69,15 @@ const measurementPointResultStatusTypes = {
   3: 'resultStatusPass',
   4: 'resultStatusCannotComplete',
   5: 'resultStatusRepair'
+};
+
+const measurementPointResultStatusTypesEnum = {
+  resultStatusNotTested: 0,
+  resultStatusIncomplete: 1,
+  resultStatusFail: 2,
+  resultStatusPass: 3,
+  resultStatusCannotComplete: 4,
+  resultStatusRepair: 5
 };
 /*
 New - No results have been saved for the job
@@ -253,6 +268,11 @@ const securityFunctions = {
     id: 'EC63D1C2-00C6-4D75-A0B7-1A4BFEBA338B',
     name: 'securityF:RunJobCommentsReport',
     description: 'Allows the user to run Job Comments Reports.'
+  },
+  RunHTMReport: {
+    id: '20EF9F72-28A1-4074-B3E2-2AF7912D414C',
+    name: 'securityF:RunHTMReport',
+    description: 'Allows the user to run the HTM report.'
   }
 };
 
@@ -574,6 +594,7 @@ export const constants = {
   measurementPointTypesInverse,
   measurementPointPassFailOptions,
   measurementPointResultStatusTypes,
+  measurementPointResultStatusTypesEnum,
   measurementPointPassFailTypes,
   reportTypeEnum,
   reportTypeEnumInverse,
@@ -601,7 +622,11 @@ export const constants = {
   handleError(error: any, message: string) {
     let msg = '';
     if (error && error.response && error.response.data) {
-      msg = `Failed to ${message}. ${error.response.data}`;
+      if (typeof error.response.data === 'object') {
+        msg = `Failed to ${message}. ${error.response.data.value}`;
+      } else {
+        msg = `Failed to ${message}. ${error.response.data}`;
+      }
     } else if (error && error.message) {
       msg = `Failed to ${message}.  Please try again or contact support. ${
         error.message
@@ -621,8 +646,10 @@ export const constants = {
         error.msg === 'Token Renewal Failed')
     ) {
       // adalFetch is catching that login is required
-      console.warn('attempting to catch expired session and login again');
-      // TODO figure out how to re-run the request?  if it is a get, it will likely re-run after refreshing and logging in again.  if it is a post or a put then...
+      console.error(
+        `Attempting to catch expired session and login again.  Request: ${message}`
+      );
+      // TODO figure out how to re-run the request?  if it is a get, it will likely re-run after refreshing and logging in again.  if it is a post or a put then... the data that the user entered will be lost.
       // adalReauth();
       authContext.login();
       return;

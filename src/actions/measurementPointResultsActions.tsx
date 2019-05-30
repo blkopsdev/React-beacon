@@ -16,6 +16,8 @@ import { initialMeasurmentPointResult } from 'src/reducers/initialState';
 import { values } from 'lodash';
 import { adalFetch } from 'react-adal';
 import { authContext } from './userActions';
+import { Dispatch } from 'react-redux';
+const uuidv4 = require('uuid/v4');
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
@@ -103,6 +105,50 @@ export const selectResult = (installID: string): ThunkResult<void> => {
       }
     }
   };
+};
+
+export function submitMeasurementPointResult(
+  formValues: any,
+  installBaseID: string
+): ThunkResult<void> {
+  return (dispatch, getState) => {
+    submitMeasurementPointResultHelper(dispatch, formValues, installBaseID);
+  };
+}
+const submitMeasurementPointResultHelper = (
+  dispatch: Dispatch,
+  formValues: any,
+  installBaseID: string
+) => {
+  // toastr.success('Tests submitted successfully', '', constants.toastrSuccess);
+  const result: ImeasurementPointResult = {
+    ...initialMeasurmentPointResult,
+    temporary: false,
+    createDate: moment.utc().toISOString(),
+    id: uuidv4(),
+    notes: formValues.notes || '',
+    status: formValues.status ? parseInt(formValues.status.value, 10) : 0,
+    installBaseID,
+    manualStatusOverride: true
+  };
+  const axiosRequest = {
+    url: API.POST.measurementPoint.addResults,
+    method: 'post',
+    data: result
+  };
+  dispatch({
+    type: types.UPDATE_MEASUREMENT_POINT_RESULT,
+    result,
+    meta: {
+      offline: {
+        effect: { axiosRequest, message: 'submit tests' },
+        rollback: {
+          type: types.UPDATE_MEASUREMENT_POINT_RESULT,
+          result: { ...result, temporary: true }
+        }
+      }
+    }
+  });
 };
 
 export function updateMeasurementPointResult(

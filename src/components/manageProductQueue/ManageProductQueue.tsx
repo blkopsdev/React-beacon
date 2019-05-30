@@ -170,23 +170,23 @@ class ManageProductQueue extends React.Component<
           Header: 'sku',
           accessor: 'product.sku'
         },
-        {
-          Header: 'manufacturer',
-          accessor: ({ product }: IproductQueueObject) => {
-            const brandName = product.brandID
-              ? this.props.productInfo.brands[product.brandID].name
-              : '';
-            if (brandName === '') {
-              console.error('missing brand', product);
-            }
-            return brandName;
-          },
-          id: 'manufacturer'
-        },
+        // {
+        //   Header: 'manufacturer',
+        //   accessor: ({ product }: IproductQueueObject) => {
+        //     const brandName = product.brandID
+        //       ? this.props.productInfo.brands[product.brandID].name
+        //       : '';
+        //     if (brandName === '') {
+        //       console.error('missing brand', product);
+        //     }
+        //     return brandName;
+        //   },
+        //   id: 'manufacturer'
+        // },
         {
           Header: 'name',
           accessor: 'product.name',
-          minWidth: 300
+          minWidth: 400
         }
       ],
       this.props.t

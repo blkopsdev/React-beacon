@@ -144,7 +144,10 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       locationID,
       roomID,
       id,
-      position
+      position,
+      importedLocation,
+      installDate,
+      prodDate
     } = this.props.selectedItem;
     const shouldRequireQuantity =
       disabled === false && this.props.selectedItem && id ? false : true;
@@ -228,6 +231,28 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
         },
         formState: { value: rfid, disabled }
       },
+      installDate: {
+        render: FormUtil.DatePicker,
+        meta: {
+          label: 'install date',
+          colWidth: 6,
+          type: 'input',
+          name: 'install-date',
+          required: false
+        },
+        formState: { value: installDate, disabled }
+      },
+      prodDate: {
+        render: FormUtil.DatePicker,
+        meta: {
+          label: 'manufacture date',
+          colWidth: 6,
+          type: 'input',
+          name: 'manufacture-date',
+          required: false
+        },
+        formState: { value: prodDate, disabled }
+      },
       remarks: {
         render: FormUtil.TextInput,
         meta: {
@@ -258,6 +283,19 @@ class ManageInstallForm extends React.Component<Iprops, Istate> {
       locLabel: {
         render: FormUtil.TextLabel,
         meta: { label: 'locationLabel', colWidth: 12, name: 'location-label' }
+      },
+      $field_3: {
+        render: () => (
+          <Col
+            xs={12}
+            style={{ display: `${importedLocation ? 'block' : 'none'}` }}
+          >
+            <FormGroup bsSize="sm">
+              <ControlLabel>{this.props.t('imported location')}</ControlLabel>
+              <h5 className="queue-form-label">{importedLocation}</h5>
+            </FormGroup>
+          </Col>
+        )
       },
       buildingID: {
         render: FormUtil.CreatableSelect,

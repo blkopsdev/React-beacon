@@ -59,5 +59,13 @@ export const migrations = {
       ...prevState,
       manageBrand: initialState.manageBrand
     };
+  },
+  22: state => {
+    const prevState = state as IinitialState;
+    return {
+      ...prevState,
+      measurementPointResults: initialState.measurementPointResults,
+      manageBrand: initialState.manageBrand
+    };
   }
 } as MigrationManifest;

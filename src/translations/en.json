@@ -9,11 +9,6 @@
     "facility": "facility",
     "mainCategory": "Category",
     "manufacturer": "Manufacturer",
-    "newCustomerModalTitle": "New Customer",
-    "customerNameLabel": "New Customer Name",
-    "customerVatLabel": "VAT",
-    "newFacilityModalTitle": "New Facility",
-    "facilityNameLabel": "New Facility Name",
     "selectCustomerWarning": "You must select a customer first.",
     "noDataText": "Sorry! We could not find any rows that matched that search.",
     "searchPlaceholder": "Search...",
@@ -32,7 +27,7 @@
     "welcome": "Welcome to MyMedGas!",
     "successTitle": "Success!",
     "successBody1":
-      "You have been successfully added into the system. An BeaconMedaes admin will review your application and be in touch with you soon.",
+      "You have been successfully added into the system. A BeaconMedaes admin will review your application and be in touch with you soon.",
     "successBody2": "Please make sure that",
     "successBody3":
       "no-reply@beaconmedaes.com is cleared so that it does not end up in your spam.",
@@ -139,6 +134,7 @@
     "name": "Name",
     "annualInspection": "Annual Inspection Report",
     "jobNotes": "Job Comments / Deficiency Report",
+    "HTM": "HTM Report",
     "coverLetter": "Cover Letter",
     "jobPlaceholder": "Search..."
   },
@@ -215,7 +211,16 @@
     "noProductsFound": "no products found",
     "MeasurementPointResultModalTitle": "Measurements",
     "MPresultHistoryModalTitle": "History",
-    "MPResultNotesModalTitle": "Notes"
+    "MPResultNotesModalTitle": "Notes",
+    "MPResultAddModalTitle": "Add Status",
+    "addResult": "Add Status",
+    "resultStatusIncomplete": "Incomplete",
+    "resultStatusNotTested": "Not Tested",
+    "resultStatusPass": "Pass",
+    "resultStatusFail": "Fail",
+    "resultStatusCannotComplete": "Cannot Complete",
+    "resultStatusRepair": "Repair",
+    "statusPlaceholder": "Search..."
   },
   "manageProductQueue": {
     "bannerTitle": "New Product Queue",
@@ -276,9 +281,14 @@
   "manageCustomerAndFacility": {
     "bannerTitle": "Manage Customer and Facility",
     "newCustomer": "Add Customer",
-    "newFAcility": "Add Facility",
+    "editCustomer": "Edit Customer",
+    "newFacility": "Add Facility",
+    "editFacility": "Edit Facility",
     "searchPlaceholder": "Search...",
-    "saveApprove": "Save & Approve"
+    "saveApprove": "Save & Approve",
+    "customerNameLabel": "Customer Name",
+    "customerVatLabel": "VAT",
+    "facilityNameLabel": "Facility Name"
   },
   "manageTraining": {
     "bannerTitle": "Training Progress",
@@ -379,7 +389,8 @@
     "ManageLocations": "Manage Locations",
     "ManageJobs": "Manage Jobs",
     "ManageAllMeasurementPoints": "Manage Global Measurement Points",
-    "ManageCustomerMeasurementPoints": "Manage Customer Measurement Points"
+    "ManageCustomerMeasurementPoints": "Manage Customer Measurement Points",
+    "RunHTMReport": "Run HTM Report"
   },
   "training": {
     "shoppingCartTitle": "Shopping Cart",

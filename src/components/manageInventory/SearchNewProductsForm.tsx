@@ -61,7 +61,16 @@ class SearchNewProductsForm extends React.Component<Iprops, {}> {
   // componentDidUpdate(prevProps: Iprops) {
   // }
   componentWillMount() {
-    this.props.resetNewProducts();
+    if (this.props.selectedQueueObject) {
+      this.props.getProducts(
+        1,
+        '',
+        this.props.selectedQueueObject.product.subcategory.mainCategoryID,
+        this.props.isApproved
+      );
+    } else {
+      this.props.resetNewProducts();
+    }
   }
   componentDidMount() {
     // if (!this.props.selectedItem) {

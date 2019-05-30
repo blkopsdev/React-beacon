@@ -14,6 +14,8 @@ import {
 import { getMeasurementPointList } from 'src/actions/manageMeasurementPointListsActions';
 import { isEmpty } from 'lodash';
 import { constants } from 'src/constants/constants';
+import { initialMeasurementPoint } from 'src/reducers/initialState';
+import { resetSelectedResult } from 'src/actions/measurementPointResultsActions';
 
 interface Props {
   selectedItem: ImeasurementPointResult;
@@ -23,6 +25,7 @@ interface Props {
   getMeasurementPointList: typeof getMeasurementPointList;
   measurementPointsByID: { [key: string]: ImeasurementPoint };
   locationString: string;
+  resetSelectedResult: typeof resetSelectedResult;
 }
 
 const AnswerListItem = (
@@ -97,15 +100,49 @@ export class MPResultList extends React.Component<Props, {}> {
     super(props);
   }
   componentWillMount() {
+    if (this.props.selectedItem.manualStatusOverride === true) {
+      return; //  do not get mplist
+    }
     this.props.getMeasurementPointList(
       this.props.selectedItem.measurementPointListID
     );
   }
 
   render() {
-    const { t } = this.props;
+    const { t, selectedItem } = this.props;
+    if (selectedItem.manualStatusOverride === true) {
+      return (
+        <div>
+          <h4 style={{ padding: '15px' }}>
+            {t('No measurement points.  Device status was manually added.')}
+          </h4>
+          <Col xs={12} className="form-buttons text-right">
+            <Button
+              bsStyle={this.props.colorButton}
+              type="button"
+              onClick={this.props.toggleModal}
+            >
+              {t('common:done')}
+            </Button>
+          </Col>
+        </div>
+      );
+    }
     if (isEmpty(this.props.measurementPointsByID)) {
-      return <h4 style={{ padding: '15px' }}>Loading...</h4>;
+      return (
+        <div>
+          <h4 style={{ padding: '15px' }}>{t('Loading...')}</h4>
+          <Col xs={12} className="form-buttons text-right">
+            <Button
+              bsStyle={this.props.colorButton}
+              type="button"
+              onClick={this.props.toggleModal}
+            >
+              {t('common:done')}
+            </Button>
+          </Col>
+        </div>
+      );
     }
     return (
       <div>
@@ -114,9 +151,9 @@ export class MPResultList extends React.Component<Props, {}> {
         </h5>
         <ListGroup>
           {this.props.selectedItem.measurementPointAnswers.map(mpAnswer => {
-            const measurementPoint = this.props.measurementPointsByID[
-              mpAnswer.measurementPointID
-            ];
+            const measurementPoint =
+              this.props.measurementPointsByID[mpAnswer.measurementPointID] ||
+              initialMeasurementPoint;
             return AnswerListItem(mpAnswer, measurementPoint, t);
           })}
         </ListGroup>
@@ -124,7 +161,10 @@ export class MPResultList extends React.Component<Props, {}> {
           <Button
             bsStyle={this.props.colorButton}
             type="button"
-            onClick={this.props.toggleModal}
+            onClick={() => {
+              this.props.toggleModal();
+              this.props.resetSelectedResult();
+            }}
           >
             {t('common:done')}
           </Button>

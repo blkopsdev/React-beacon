@@ -22,7 +22,7 @@ import { constants } from 'src/constants/constants';
 import * as moment from 'moment';
 import { getFacilitiesByCustomer } from 'src/actions/commonActions';
 
-interface Iprops extends React.Props<EditJobForm> {
+interface Iprops {
   selectedJob: Ijob;
   loading: boolean;
   colorButton: string;

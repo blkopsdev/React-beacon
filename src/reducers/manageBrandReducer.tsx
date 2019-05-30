@@ -1,4 +1,4 @@
-import initialState from './initialState';
+import initialState, { initialBrand } from './initialState';
 import * as types from '../actions/actionTypes';
 import { Ibrand, ImanageBrandReducer } from '../models';
 import {
@@ -72,6 +72,7 @@ export default function brandManage(
 
 const cleanBrandObject = (brand: Ibrand) => {
   return {
+    ...initialBrand,
     ...pickBy(brand, property => property !== null)
   } as Ibrand;
 };

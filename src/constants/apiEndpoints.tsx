@@ -10,7 +10,7 @@ const API = {
   POST: {
     building: `${root}/building`,
     customer: {
-      add: `${root}/customer/add`
+      add: `${root}/customer`
     },
 
     job: {
@@ -54,7 +54,8 @@ const API = {
       startQuiz: `${root}/training/startquiz`
     },
     measurementPoint: {
-      addglobalmpl: `${root}/MeasurementPoint/AddGlobalMeasurementPointList`
+      addglobalmpl: `${root}/MeasurementPoint/AddGlobalMeasurementPointList`,
+      addResults: `${root}/MeasurementPoint/AddJobMeasurementPointListResults`
     },
     report: {
       run: `${root}/report/run`

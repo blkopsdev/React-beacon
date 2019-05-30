@@ -148,3 +148,15 @@ export const setTableFilter = (filters: ItableFiltersParams) => ({
   type: types.SET_TABLE_FILTER_MANAGE_USER_QUEUE,
   filters
 });
+
+export const setEditUserFormValues = (formValues: { [key: string]: any }) => ({
+  type: types.SET_FORM_VALUES_MANAGE_USER_QUEUE,
+  formValues
+});
+
+export const updateEditUserFormValue = (formValues: {
+  [key: string]: any;
+}) => ({
+  type: types.UPDATE_FORM_VALUES_MANAGE_USER_QUEUE,
+  formValues
+});

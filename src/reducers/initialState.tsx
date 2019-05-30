@@ -49,7 +49,9 @@ export const initialProduct = {
   subcategory: initialSubcategory,
   installs: [],
   isDeleted: false,
-  quantity: 1
+  isApproved: false,
+  quantity: 1,
+  mergedProductID: ''
 };
 export const initialInstallBase = {
   id: '',
@@ -131,7 +133,8 @@ export const initialMeasurmentPointResult = {
   installBaseID: '',
   measurementPointListID: '',
   measurementPointAnswers: [],
-  compiledNotes: ''
+  compiledNotes: '',
+  manualStatusOverride: false
 };
 
 export const initialDefaultReport = {
@@ -214,6 +217,11 @@ export const initialLesson = {
   courseLessons: [],
   cost: 0,
   isProtected: false
+};
+
+export const initialQueueObject = {
+  id: '',
+  user: ''
 };
 
 /* initialState */
@@ -317,10 +325,11 @@ export default {
     showShoppingCartModal: false,
     showInstallContactModal: false,
     showSearchNewProductsModal: false,
-    showImportInstall: false,
+    showImportInstallModal: false,
     showMPResultModal: false,
     showMPResultHistoryModal: false,
-    showMPResultNotes: false,
+    showMPResultNotesModal: false,
+    showMPResultAddModal: false,
     totalPages: 1,
     data: [],
     cart: {

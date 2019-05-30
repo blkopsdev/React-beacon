@@ -144,16 +144,14 @@ export function userLogout(): ThunkResult<void> {
     userLogoutHelper(dispatch);
   };
 }
+
 const userLogoutHelper = (dispatch: Dispatch) => {
   dispatch({ type: types.USER_LOGOUT_SUCCESS });
   dispatch({ type: 'Offline/RESET_STATE' }); // reset the redux-offline outbox
   dispatch({ type: '@ReduxToastr/toastr/CLEAN_TOASTR' }); // reset the toastr
-
-  setTimeout(() => {
-    localForage.removeItem('state-core-care-web').then(() => {
-      authContext.logOut();
-    });
-  }, 500);
+  const event = new Event('userLogout');
+  document.dispatchEvent(event);
+  localForage.removeItem('med-gas-mobile_all-products');
 };
 
 export function signUpDirect(tempUser: ItempUser): ThunkResult<void> {

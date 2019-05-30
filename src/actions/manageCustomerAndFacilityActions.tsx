@@ -5,30 +5,23 @@ import { adalFetch } from 'react-adal';
 import { authContext } from './userActions';
 import * as types from './actionTypes';
 import { constants } from '../constants/constants';
-import {
-  ItableFiltersParams,
-  Icustomer,
-  IinitialState,
-  Ifacility
-} from '../models';
-import { filter, orderBy, values } from 'lodash';
-import { Dispatch } from 'redux';
+import { ItableFiltersParams, IinitialState } from '../models';
+
 import { ThunkAction } from 'redux-thunk';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
-export function getCustomers() {
+export function getCustomers(): ThunkResult<void> {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());
     const { tableFilters } = getState().customerAndFacilityManage;
-    const { page, search } = tableFilters;
-    const newPage = page + 1; // since we are using front end filtering the page# is zero indexed, but the API is not
+    const { page, name } = tableFilters;
     const axiosOptions: AxiosRequestConfig = {
       method: 'get',
       // TODO change this to paged once the API is sorted by name... or maybe just keep it as none.
       // once this is paged there is as small possibility that an updated Company will not be received even though it is visible in the table.
       // this could be resolved by switching to "windowed" type paging since then we can define the size of the page.
-      params: { page: newPage, search, pagingType: 'none' }
+      params: { page, name }
     };
     const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
     const url = API.GET.customer.search;
@@ -97,59 +90,3 @@ export const setTableFilter = (filters: ItableFiltersParams) => ({
   type: types.SET_TABLE_FILTER_MANAGE_CUSTOMER_AND_FACILITY,
   filters
 });
-
-export function filterVisibleCustomers(): ThunkResult<void> {
-  return (dispatch, getState) => {
-    const { tableFilters } = getState().customerAndFacilityManage;
-    const { customers, facilities } = getState();
-    filterVisibleCustomersHelper(
-      values(customers),
-      facilities,
-      tableFilters,
-      dispatch
-    );
-  };
-}
-const filterVisibleCustomersHelper = (
-  customers: Icustomer[],
-  facilities: { [key: string]: Ifacility },
-  tableFilters: ItableFiltersParams,
-  dispatch: Dispatch
-) => {
-  const { search } = tableFilters;
-  // get the most up to date facility objects
-  const customersWithUpdatedFacilities = customers.map(
-    (customer: Icustomer) => {
-      if (customer.facilities) {
-        const updatedFacilities = customer.facilities.map(facility => ({
-          ...facility,
-          ...facilities[facility.id]
-        }));
-        return { ...customer, facilities: updatedFacilities };
-      } else {
-        return customer;
-      }
-    }
-  );
-  let visibleCustomers = filter(
-    customersWithUpdatedFacilities,
-    (customer: Icustomer) => {
-      let shouldInclude = true;
-      if (
-        search &&
-        customer.name.toLowerCase().search(search.toLowerCase()) === -1
-      ) {
-        shouldInclude = false;
-      }
-      if (customer.isDeleted === true) {
-        shouldInclude = false;
-      }
-      return shouldInclude;
-    }
-  );
-  visibleCustomers = orderBy(visibleCustomers, 'name');
-  dispatch({
-    type: types.FILTER_VISIBLE_CUSTOMERS,
-    visibleCustomers
-  });
-};

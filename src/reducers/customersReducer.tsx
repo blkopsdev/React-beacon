@@ -1,7 +1,7 @@
 import * as types from '../actions/actionTypes';
 import { Icustomer } from '../models';
 import initialState, { initialCustomer } from './initialState';
-import { pickBy, map, keyBy } from 'lodash';
+import { pickBy, map, keyBy, find, filter } from 'lodash';
 
 export default function customers(
   state: { [key: string]: Icustomer } = initialState.customers,
@@ -25,7 +25,26 @@ export default function customers(
       );
       return { ...state, ...newCustomers };
     case types.CUSTOMER_UPDATE_SUCCESS:
-      return { ...state, [action.customer.id]: cleanCustomer(action.customer) };
+      return {
+        ...state,
+        [action.customer.id]: cleanCustomer({
+          ...state[action.customer.id],
+          ...action.customer
+        })
+      };
+    case types.FACILITY_UPDATE_SUCCESS:
+      const oldCustomer = { ...state[action.facility.customerID] };
+      const oldFacility = {
+        ...find(oldCustomer.facilities, f => f.id === action.facility.id)
+      };
+      const facilities = [
+        ...filter(oldCustomer.facilities, f => f.id !== action.facility.id)
+      ];
+      oldCustomer.facilities = [
+        ...facilities,
+        { ...oldFacility, ...action.facility }
+      ];
+      return { ...state, [action.facility.customerID]: { ...oldCustomer } };
     case types.USER_LOGOUT_SUCCESS:
       return initialState.customers;
     default:

@@ -33,7 +33,8 @@ import {
   emptyTile,
   initialBuilding,
   initialFloor,
-  initialLoc
+  initialLoc,
+  initialFacility
 } from '../../reducers/initialState';
 import {
   getFacility,
@@ -190,7 +191,13 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
   handleDelete(deletedItem: Ilocation | Ibuilding | Ifloor | Iroom) {
     const toastrConfirmOptions = {
       onOk: () => {
-        this.props.deleteAnyLocation(deletedItem);
+        deletedItem = {
+          ...deletedItem,
+          buildingID: this.props.selectedBuilding.id,
+          floorID: this.props.selectedFloor.id,
+          locationID: this.props.selectedLocation.id
+        };
+        this.props.deleteAnyLocation(deletedItem, this.props.facility.id);
         console.log('deleted', deletedItem);
       },
       onCancel: () => console.log('CANCEL: clicked'),
@@ -582,7 +589,12 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   // facility location object selectors
   // TODO these can be refactored to a id indexed and the facilitiesReducer can be improved by splitting it up into multiple reducers
-  const facility = state.manageLocation.facility;
+  const facilityOptions = FormUtil.convertToOptions(state.user.facilities);
+  const facilityID = state.manageLocation.tableFilters.facilityID
+    ? state.manageLocation.tableFilters.facilityID
+    : facilityOptions[0].value;
+
+  const facility = state.facilities[facilityID] || initialFacility;
   const selectedBuilding =
     facility.buildings.find(
       building => building.id === state.manageLocation.tableFilters.buildingID
@@ -600,9 +612,9 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     userManage: state.manageLocation,
     loading: state.ajaxCallsInProgress > 0,
     showEditLocationModal: state.manageLocation.showEditLocationModal,
-    facilityOptions: FormUtil.convertToOptions(state.user.facilities),
+    facilityOptions,
     tableData: state.manageLocation.visibleLocations,
-    facility: state.manageLocation.facility,
+    facility,
     tableFilters: state.manageLocation.tableFilters,
     selectedBuilding,
     selectedFloor,

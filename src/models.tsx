@@ -204,18 +204,24 @@ export interface Icustomer {
   name: string;
   vat?: string;
   isDeleted: boolean;
+  createDate?: string;
+  facilities?: Ifacility[];
 }
-export interface Ifacility {
+
+export interface IfacilityWithoutBuildings {
   id: string;
   name: string;
   customerID: string;
   address: string;
   address2: string;
   city: string;
+  countryID: string;
   state: string;
   postalCode: string;
-  buildings: Ibuilding[];
   isDeleted: boolean;
+}
+export interface Ifacility extends IfacilityWithoutBuildings {
+  buildings: Ibuilding[];
 }
 
 export interface Ioption {
@@ -323,7 +329,7 @@ export type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
 /* **********   Desktop Only ***********/
 
-/* 
+/*
 * TRAINING MODELS
 */
 // export interface GFBadge {
@@ -472,6 +478,7 @@ export interface ItableFiltersReducer {
   buildingID?: string;
   floorID?: string;
   locationID?: string;
+  rows?: number;
 }
 export interface ItableFiltersParams {
   search?: string;
@@ -491,6 +498,7 @@ export interface ItableFiltersParams {
   buildingID?: string;
   floorID?: string;
   locationID?: string;
+  rows?: number;
 }
 
 export interface IqueueObject {
@@ -526,6 +534,7 @@ export interface ImanageUserQueueReducer {
   data: IqueueObject[];
   totalPages: number;
   showEditQueueUserModal: boolean;
+  editUserFormValues: { [key: string]: any };
   tableFilters: ItableFiltersReducer;
 }
 
@@ -533,6 +542,7 @@ export interface ImanageUserReducer {
   data: Iuser[];
   totalPages: number;
   showEditUserModal: boolean;
+  editUserFormValues: { [key: string]: any };
   tableFilters: ItableFiltersReducer;
 }
 
@@ -550,6 +560,18 @@ export interface ImanageBrandReducer {
   showEditBrandModal: boolean;
   tableFilters: ItableFiltersReducer;
   selectedBrandID: string;
+}
+
+export interface ImanageCustomerAndFacilityReducer {
+  data: { [key: string]: Icustomer };
+  totalPages: number;
+  visibleCustomers: Icustomer[];
+  customerFormValues: { [key: string]: any };
+  facilityFormValues: { [key: string]: any };
+  showEditCustomerAndFacilityModal: boolean;
+  tableFilters: ItableFiltersReducer;
+  selectedCustomerID: string;
+  selectedFacilityID: string;
 }
 
 export interface ImanageJobReducer {
@@ -658,8 +680,8 @@ export interface IinitialState {
   manageInventory: ImanageInventoryReducer;
   manageProductQueue: ImanageProductQueueReducer;
   manageLocation: ImanageLocationReducer;
-  customers: Icustomer[];
-  facilities: Ifacility[];
+  customers: { [key: string]: Icustomer };
+  facilities: { [key: string]: Ifacility };
   showEditCustomerModal: boolean;
   showEditFacilityModal: boolean;
   showEditProfileModal: boolean;
@@ -671,4 +693,5 @@ export interface IinitialState {
   measurementPointResults: ImeasurementPointResultsReducer;
   manageReport: ImanageReportReducer;
   manageBrand: ImanageBrandReducer;
+  customerAndFacilityManage: ImanageCustomerAndFacilityReducer;
 }

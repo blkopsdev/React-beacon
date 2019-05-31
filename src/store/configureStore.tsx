@@ -81,7 +81,6 @@ const persistConfig = {
   blacklist: [
     'showEditProfileModal',
     'ajaxCallsInProgress',
-    'facilities',
     'showEditCustomerModal',
     'showEditFacilityModal',
     'showEditProfileModal',
@@ -126,7 +125,7 @@ export default function configureStore() {
         shouldHotReload: false,
         stateSanitizer: (state: IinitialState) =>
           state.manageUserQueue
-            ? { ...state, manageUserQueue: '<<LONG_BLOB>>' }
+            ? { ...state, manageInventory: '<<LONG_BLOB>>' }
             : state
       }
     );

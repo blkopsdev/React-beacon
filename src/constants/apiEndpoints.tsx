@@ -10,7 +10,7 @@ const API = {
   POST: {
     building: `${root}/building`,
     customer: {
-      add: `${root}/customer/add`
+      add: `${root}/customer`
     },
 
     job: {
@@ -75,6 +75,12 @@ const API = {
     },
     brand: {
       update: `${root}/brand`
+    },
+    facility: {
+      update: `${root}/facility/{id}`
+    },
+    customer: {
+      update: `${root}/customer/{id}`
     }
   },
   DELETE: {
@@ -101,7 +107,8 @@ const API = {
     },
 
     customer: {
-      getall: `${root}/customer/getall`
+      getall: `${root}/customer/getall`,
+      search: `${root}/customer/search`
     },
     job: {
       getall: `${root}/job/getall`,

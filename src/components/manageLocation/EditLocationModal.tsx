@@ -25,7 +25,8 @@ import EditLocationForm from './EditLocationForm';
 import {
   initialLoc,
   initialFloor,
-  initialBuilding
+  initialBuilding,
+  initialFacility
 } from 'src/reducers/initialState';
 
 interface Iprops {
@@ -80,7 +81,11 @@ class ManageInventoryModal extends React.Component<
 }
 
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
-  const facility = state.manageLocation.facility;
+  const facilityID = state.manageInventory.tableFilters.facility
+    ? state.manageInventory.tableFilters.facility.value
+    : state.user.facilities[0].id;
+
+  const facility = state.facilities[facilityID] || initialFacility;
   const selectedBuilding =
     facility.buildings.find(
       building => building.id === state.manageLocation.tableFilters.buildingID
@@ -98,7 +103,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     loading: state.ajaxCallsInProgress > 0,
     showModal: state.manageLocation.showEditLocationModal,
     tableFilters: state.manageLocation.tableFilters,
-    facility: state.manageLocation.facility,
+    facility,
     selectedBuilding,
     selectedFloor,
     selectedLocation

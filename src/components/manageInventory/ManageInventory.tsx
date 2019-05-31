@@ -39,7 +39,11 @@ import {
   toggleShoppingCartModal
 } from '../../actions/shoppingCartActions';
 import { closeAllModals } from '../../actions/commonActions';
-import { emptyTile, initialInstallBase } from '../../reducers/initialState';
+import {
+  emptyTile,
+  initialInstallBase,
+  initialFacility
+} from '../../reducers/initialState';
 import {
   initInventory,
   getProductInfo,
@@ -724,6 +728,11 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
 */
 
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
+  const facilityID = state.manageInventory.tableFilters.facility
+    ? state.manageInventory.tableFilters.facility.value
+    : state.user.facilities[0].id;
+
+  const facility = state.facilities[facilityID] || initialFacility;
   return {
     user: state.user,
     userManage: state.manageInventory,
@@ -739,7 +748,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     tableFilters: state.manageInventory.tableFilters,
     selectedProduct: state.manageInventory.selectedProduct,
     cart: state.manageInventory.cart,
-    facility: state.manageLocation.facility
+    facility
   };
 };
 export default translate('manageInventory')(

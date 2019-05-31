@@ -24,6 +24,7 @@ import {
 import { saveAnyLocation } from '../../actions/manageLocationActions';
 import CommonModal from '../common/CommonModal';
 import EditInstallForm from './EditInstallForm';
+import { initialFacility } from 'src/reducers/initialState';
 
 interface Iprops {
   selectedProduct: Iproduct;
@@ -77,10 +78,15 @@ class ManageInstallModal extends React.Component<Iprops & IdispatchProps, {}> {
 }
 
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
+  const facilityID = state.manageInventory.tableFilters.facility
+    ? state.manageInventory.tableFilters.facility.value
+    : state.user.facilities[0].id;
+
+  const facility = state.facilities[facilityID] || initialFacility;
   return {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
-    facility: state.manageLocation.facility,
+    facility,
     showModal: state.manageInventory.showEditInstallModal,
     productInfo: state.manageInventory.productInfo,
     tableFilters: state.manageInventory.tableFilters,

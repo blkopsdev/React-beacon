@@ -229,11 +229,11 @@ export function createJob(formValues: any): ThunkResult<void> {
   };
 }
 
-export const updateJobFormValue = (formValue: any) => ({
+export const updateJobFormValue = (formValue: { [key: string]: any }) => ({
   type: types.UPDATE_FORM_VALUES_MANAGE_JOB,
   formValue
 });
-export const setJobFormValues = (formValues: any) => ({
+export const setJobFormValues = (formValues: { [key: string]: any }) => ({
   type: types.SET_FORM_VALUES_MANAGE_JOB,
   formValues
 });

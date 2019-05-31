@@ -8,6 +8,7 @@ export const initialFacility = {
   address: '',
   address2: '',
   city: '',
+  countryID: '',
   state: '',
   postalCode: '',
   buildings: [],
@@ -148,10 +149,11 @@ export const initialReport = {
   headerLogoPath: ''
 };
 
-const initialCustomer = {
+export const initialCustomer = {
   id: '',
   name: '',
-  isDeleted: false
+  isDeleted: false,
+  facilities: []
 };
 export const initialJob = {
   id: '',
@@ -175,7 +177,7 @@ export const initialBrand = {
 };
 
 /* ********************   DESKTOP ONLY  ***************/
-/* 
+/*
 
 /*
 *  TRAINING initial state
@@ -216,31 +218,37 @@ export const initialLesson = {
   cost: 0,
   isProtected: false
 };
+const initialUser = {
+  password: '',
+  username: '',
+  isAuthenticated: false,
+  email: '',
+  securityFunctions: [],
+  first: '',
+  last: '',
+  position: '',
+  address: '',
+  address2: '',
+  city: '',
+  state: '',
+  zip: '',
+  id: '',
+  facilities: [],
+  customerID: '',
+  hasTeamMembers: false,
+  customer: initialCustomer,
+  isActive: true
+};
+
+export const initialQueueObject = {
+  id: '',
+  user: initialUser
+};
 
 /* initialState */
 export default {
   ajaxCallsInProgress: 0,
-  user: {
-    password: '',
-    username: '',
-    isAuthenticated: false,
-    email: '',
-    securityFunctions: [],
-    first: '',
-    last: '',
-    position: '',
-    address: '',
-    address2: '',
-    city: '',
-    state: '',
-    zip: '',
-    id: '',
-    facilities: [],
-    customerID: '',
-    hasTeamMembers: false,
-    customer: initialCustomer,
-    isActive: true
-  },
+  user: initialUser,
   redirect: {
     redirectToReferrer: false,
     pathname: '/'
@@ -250,12 +258,14 @@ export default {
     totalPages: 1,
     data: [],
     showEditQueueUserModal: false,
+    editUserFormValues: {},
     tableFilters: initialTableFilters
   },
   manageUser: {
     totalPages: 1,
     data: [],
     showEditUserModal: false,
+    editUserFormValues: {},
     tableFilters: initialTableFilters
   },
   manageJob: {
@@ -274,6 +284,17 @@ export default {
     tableFilters: initialTableFilters,
     selectedBrandID: ''
   },
+  manageCustomerAndFacility: {
+    totalPages: 1,
+    data: {},
+    visibleCustomers: [],
+    customerFormValues: {},
+    facilityFormValues: {},
+    showEditCustomerAndFacilityModal: false,
+    tableFilters: initialTableFilters,
+    selectedCustomerID: '',
+    selectedFacilityID: ''
+  },
   manageReport: {
     totalPages: 1,
     defaultReportsByID: {},
@@ -290,7 +311,6 @@ export default {
     tableFilters: initialTableFilters,
     selectedBuilding: initialBuilding,
     selectedFloor: initialFloor,
-    selectedLocation: initialLoc,
     selectedRoom: initialRoom
   },
 
@@ -388,12 +408,10 @@ export default {
     previousResult: initialMeasurmentPointResult,
     historicalResultID: ''
   },
-  customers: [],
-  facilities: [],
-
+  customers: {},
+  facilities: {},
   showEditCustomerModal: false,
   showEditFacilityModal: false,
-
   showEditProfileModal: false,
   showSecurityFunctionsModal: false
 };

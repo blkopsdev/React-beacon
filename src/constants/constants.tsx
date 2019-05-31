@@ -144,7 +144,8 @@ const icons = {
   locations: require('../images/icons/BM_ManageLocations.png'),
   measurements: require('../images/icons/BM_Measurement.png'),
   manageReport: require('../images/icons/BM_Reports.png'),
-  brands: require('../images/icons/BM_Inventory.png')
+  brands: require('../images/icons/BM_Inventory.png'),
+  customerAndFacility: require('../images/icons/BM_Inventory.png')
 };
 
 const securityFunctions = {
@@ -545,6 +546,19 @@ const tiles = [
     url: '/brands',
     securityFunction: securityFunctions.ViewInventory.id,
     description: ''
+  },
+  {
+    icon: icons.inventory,
+    iconType: 'img',
+    title: 'Customers and Facility',
+    src: require('src/images/beaconManageInventory.jpg'),
+    srcBanner: require('src/images/beaconManageInventoryHeader.jpg'),
+    color: 'green',
+    width: 270,
+    height: 300,
+    url: '/customer-and-facility',
+    securityFunction: securityFunctions.ViewInventory.id,
+    description: ''
   }
 ];
 
@@ -608,7 +622,11 @@ export const constants = {
   handleError(error: any, message: string) {
     let msg = '';
     if (error && error.response && error.response.data) {
-      msg = `Failed to ${message}. ${error.response.data}`;
+      if (typeof error.response.data === 'object') {
+        msg = `Failed to ${message}. ${error.response.data.value}`;
+      } else {
+        msg = `Failed to ${message}. ${error.response.data}`;
+      }
     } else if (error && error.message) {
       msg = `Failed to ${message}.  Please try again or contact support. ${
         error.message
@@ -648,5 +666,9 @@ export const constants = {
     toastr.error('Error', msg, constants.toastrError);
   },
   tableSearchDebounceTime: 300,
-  timedQuizHours: 2
+  timedQuizHours: 2,
+  searchProductPageCount: 80, // max items to show inside the product search modal
+  searchProductRecentProductLimit: 30,
+  tablePageSizeDefault: 25,
+  tablePageSizeOptions: [10, 25, 50, 100]
 };

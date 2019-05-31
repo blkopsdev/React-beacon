@@ -18,13 +18,8 @@ import { constants } from 'src/constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction } from 'react-i18next';
 
-<<<<<<< HEAD
-import { FormUtil } from '../common/FormUtil';
-import { Ioption } from 'src/models';
-=======
 import { FormUtil } from './FormUtil';
 import { Icustomer, Ifacility, Ioption } from 'src/models';
->>>>>>> phase_3
 
 // add the bootstrap form-control class to the react-select select component
 

@@ -58,8 +58,6 @@ class EditCustomerForm extends React.Component<Iprops, IState> {
     await this.props.setFormValues(this.props.selectedCustomer);
     this.setState({ fieldConfig: this.buildFieldConfig() });
   }
-<<<<<<< HEAD
-=======
 
   componentWillUnmount() {
     if (this.subscription) {
@@ -129,16 +127,15 @@ class EditCustomerForm extends React.Component<Iprops, IState> {
   };
 
   /*
-* (reusable)
-* set the table filters to redux on each value change
-*/
+  * (reusable)
+  * set the table filters to redux on each value change
+  */
   onValueChanges = (value: any, key: string) => {
     clearTimeout(this.debounce);
     this.debounce = setTimeout(() => {
       this.props.updateFormValue({ [key]: value });
     }, 200);
   };
->>>>>>> phase_3
 
   handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -147,10 +144,6 @@ class EditCustomerForm extends React.Component<Iprops, IState> {
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-<<<<<<< HEAD
-    
-    this.props.handleSubmit(this.userForm.value);
-=======
     const newCustomer = this.formGroup.value;
     if (this.props.selectedCustomer.id) {
       newCustomer['id'] = this.props.selectedCustomer.id;
@@ -158,7 +151,6 @@ class EditCustomerForm extends React.Component<Iprops, IState> {
     } else {
       this.props.handleSubmit(newCustomer);
     }
->>>>>>> phase_3
   };
 
   setForm = (form: FormGroup) => {

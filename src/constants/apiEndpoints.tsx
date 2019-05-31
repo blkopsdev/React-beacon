@@ -80,6 +80,9 @@ const API = {
     brand: {
       update: `${root}/brand`
     },
+    alert: {
+      update: `${root}/alert`
+    },
     facility: {
       update: `${root}/facility/{id}`
     },

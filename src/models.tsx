@@ -186,6 +186,19 @@ export interface IBrand {
   name: string;
 }
 
+export interface IAlert {
+  id: string;
+  title: string;
+  text: string;
+  type?: string;
+  imageUrl: string;
+  expirationDate: string;
+  createDate: string;
+  updateDate: string;
+  creatorID: string;
+  updaterID: string;
+}
+
 export interface Itile {
   icon: string | string[];
   title: string;
@@ -472,6 +485,7 @@ export interface ItableFiltersReducer {
   customer?: Ioption;
   mainCategory?: Ioption;
   brand?: Ioption;
+  title?: Ioption;
   sorted?: SortingRule[];
   standard?: Ioption;
   facilityID?: string;
@@ -492,6 +506,7 @@ export interface ItableFiltersParams {
   customer?: Ioption;
   mainCategory?: Ioption;
   brand?: Ioption;
+  title?: Ioption;
   sorted?: SortingRule[];
   standard?: Ioption;
   facilityID?: string;
@@ -560,6 +575,15 @@ export interface ImanageBrandReducer {
   showEditBrandModal: boolean;
   tableFilters: ItableFiltersReducer;
   selectedBrandID: string;
+}
+
+export interface ImanageAlertReducer {
+  data: { [key: string]: IAlert };
+  totalPages: number;
+  showEditAlertModal: boolean;
+  tableFilters: ItableFiltersReducer;
+  selectedAlertID: string;
+  alertFormValues: { [key: string]: any };
 }
 
 export interface ImanageCustomerAndFacilityReducer {
@@ -694,4 +718,5 @@ export interface IinitialState {
   manageReport: ImanageReportReducer;
   manageBrand: ImanageBrandReducer;
   customerAndFacilityManage: ImanageCustomerAndFacilityReducer;
+  manageAlert: ImanageAlertReducer;
 }

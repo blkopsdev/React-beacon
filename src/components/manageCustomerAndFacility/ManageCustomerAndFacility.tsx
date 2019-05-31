@@ -48,7 +48,6 @@ interface RowInfoCustomer extends RowInfo {
 }
 
 interface Iprops extends RouteComponentProps<any> {
-  // Add your regular properties here
   t: TranslationFunction;
   i18n: I18n;
 }
@@ -114,11 +113,6 @@ class ManageCustomerAndFacility extends React.Component<
       JSON.stringify(prevProps.tableFilters) !==
       JSON.stringify(this.props.tableFilters)
     ) {
-      console.log(
-        'user manage filters changed',
-        prevProps.tableFilters,
-        this.props.tableFilters
-      );
       this.props.getCustomers();
     }
   }
@@ -174,12 +168,11 @@ class ManageCustomerAndFacility extends React.Component<
   };
 
   addFacility = (row: any) => {
-    // console.log(row);
     this.props.toggleEditFacilityModal();
   };
   /*
-    * Set Columns sets columns to state
-    */
+  * Set Columns sets columns to state
+  */
   setColumns = () => {
     const columns = TableUtil.translateHeaders(
       [
@@ -218,9 +211,9 @@ class ManageCustomerAndFacility extends React.Component<
   };
 
   /*
-* Handle user clicking on a product row column
-* set the selected product to state and open the modal
-*/
+  * Handle user clicking on a product row column
+  * set the selected product to state and open the modal
+  */
   getTdProps = (
     state: FinalState,
     rowInfo: RowInfoCustomer,

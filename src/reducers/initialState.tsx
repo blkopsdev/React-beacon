@@ -176,6 +176,19 @@ export const initialBrand = {
   updaterID: ''
 };
 
+export const initialAlert = {
+  id: '',
+  title: '',
+  text: '',
+  type: '',
+  imageUrl: '',
+  expirationDate: '',
+  createDate: '',
+  updateDate: '',
+  creatorID: '',
+  updaterID: ''
+};
+
 /* ********************   DESKTOP ONLY  ***************/
 /*
 
@@ -283,6 +296,14 @@ export default {
     showEditBrandModal: false,
     tableFilters: initialTableFilters,
     selectedBrandID: ''
+  },
+  manageAlert: {
+    totalPages: 1,
+    data: {},
+    showEditAlertModal: false,
+    tableFilters: initialTableFilters,
+    selectedAlertID: '',
+    alertFormValues: {}
   },
   manageCustomerAndFacility: {
     totalPages: 1,

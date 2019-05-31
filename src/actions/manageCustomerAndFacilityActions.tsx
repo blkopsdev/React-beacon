@@ -5,14 +5,22 @@ import { adalFetch } from 'react-adal';
 import { authContext } from './userActions';
 import * as types from './actionTypes';
 import { constants } from '../constants/constants';
-import { ItableFiltersParams } from '../models';
+import { ItableFiltersParams, IinitialState } from '../models';
 
-export function getCustomers() {
+import { ThunkAction } from 'redux-thunk';
+
+type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
+
+export function getCustomers(): ThunkResult<void> {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());
-    const { page, name } = getState().customerAndFacilityManage.tableFilters;
+    const { tableFilters } = getState().customerAndFacilityManage;
+    const { page, name } = tableFilters;
     const axiosOptions: AxiosRequestConfig = {
       method: 'get',
+      // TODO change this to paged once the API is sorted by name... or maybe just keep it as none.
+      // once this is paged there is as small possibility that an updated Company will not be received even though it is visible in the table.
+      // this could be resolved by switching to "windowed" type paging since then we can define the size of the page.
       params: { page, name }
     };
     const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
@@ -24,7 +32,7 @@ export function getCustomers() {
         } else {
           dispatch({
             type: types.GET_CUSTOMERS_AND_FACILITY_SUCCESS,
-            payload: data.data
+            payload: data.data.result
           });
           dispatch({
             type: types.CUSTOMERS_AND_FACILITY_TOTAL_PAGES,
@@ -35,7 +43,7 @@ export function getCustomers() {
       })
       .catch((error: any) => {
         dispatch({ type: types.GET_CUSTOMERS_AND_FACILITY_FAILED });
-        constants.handleError(error, 'get brands');
+        constants.handleError(error, 'get Customers');
         console.error(error);
       });
   };

@@ -3,7 +3,8 @@ import { pickBy, map } from 'lodash';
 import { Iuser, ImanageUserReducer } from '../models';
 import {
   createTableFiltersWithName,
-  modalToggleWithName
+  modalToggleWithName,
+  createFormValuesWithName
 } from './commonReducers';
 import initialState from './initialState';
 import * as types from '../actions/actionTypes';
@@ -64,6 +65,11 @@ export default function userManage(
   return {
     data: userManageData(state.data, action),
     totalPages: userManageTotalPages(state.totalPages, action),
+    editUserFormValues: createFormValuesWithName(
+      state.editUserFormValues,
+      action,
+      'MANAGE_USER'
+    ),
     showEditUserModal: modalToggleWithName(
       state.showEditUserModal,
       action,

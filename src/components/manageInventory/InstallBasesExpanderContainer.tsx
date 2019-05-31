@@ -13,6 +13,7 @@ import {
   toggleMPResultModal,
   toggleMPResultHistory
 } from 'src/actions/manageInventoryActions';
+import { initialFacility } from 'src/reducers/initialState';
 
 interface Iprops extends RowInfo {
   t: TranslationFunction;
@@ -24,8 +25,13 @@ interface Iprops extends RowInfo {
 }
 
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
+  const facilityID = state.manageInventory.tableFilters.facility
+    ? state.manageInventory.tableFilters.facility.value
+    : state.user.facilities[0].id;
+
+  const facility = state.facilities[facilityID] || initialFacility;
   return {
-    facility: state.manageLocation.facility,
+    facility,
     loading: state.ajaxCallsInProgress > 0
   };
 };

@@ -20,7 +20,7 @@ import {
 } from '../../models';
 import { TableUtil } from '../common/TableUtil';
 import { closeAllModals, getCustomers } from '../../actions/commonActions';
-import { emptyTile } from '../../reducers/initialState';
+import initialState, { emptyTile } from '../../reducers/initialState';
 import {
   getUserManage,
   setTableFilter,
@@ -317,17 +317,21 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
           resizable={false}
         />
         <EditUserModal
-          selectedUser={this.props.tableData[this.state.selectedRow]}
+          selectedUser={
+            this.props.tableData[this.state.selectedRow] || initialState.user
+          }
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
           t={this.props.t}
         />
         <EditCustomerModal
+          selectedCustomer={{}}
           t={this.props.t}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
+          secondModal={true}
         />
         <CommonModal
           modalVisible={this.props.showSecurityFunctionsModal}

@@ -108,7 +108,7 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
         name
       };
       // updating a location object
-      this.props.updateAnyLocation(newItem);
+      this.props.updateAnyLocation(newItem, this.props.facility.id);
     } else {
       // creating a new location
       this.props.saveAnyLocation(name, this.props.facility.id);

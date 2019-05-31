@@ -649,7 +649,11 @@ export const constants = {
   handleError(error: any, message: string) {
     let msg = '';
     if (error && error.response && error.response.data) {
-      msg = `Failed to ${message}. ${error.response.data}`;
+      if (typeof error.response.data === 'object') {
+        msg = `Failed to ${message}. ${error.response.data.value}`;
+      } else {
+        msg = `Failed to ${message}. ${error.response.data}`;
+      }
     } else if (error && error.message) {
       msg = `Failed to ${message}.  Please try again or contact support. ${
         error.message
@@ -689,5 +693,9 @@ export const constants = {
     toastr.error('Error', msg, constants.toastrError);
   },
   tableSearchDebounceTime: 300,
-  timedQuizHours: 2
+  timedQuizHours: 2,
+  searchProductPageCount: 80, // max items to show inside the product search modal
+  searchProductRecentProductLimit: 30,
+  tablePageSizeDefault: 25,
+  tablePageSizeOptions: [10, 25, 50, 100]
 };

@@ -1,5 +1,5 @@
-/* 
-* EditUserForm 
+/*
+* EditUserForm
 * Edit existing users
 */
 
@@ -9,7 +9,8 @@ import {
   FormGenerator,
   AbstractControl,
   FieldConfig,
-  Observable
+  Observable,
+  FormGroup
 } from 'react-reactive-form';
 import { forEach, find, map, differenceBy, filter, includes } from 'lodash';
 import { toastr } from 'react-redux-toastr';
@@ -45,7 +46,6 @@ interface AbstractControlEdited extends AbstractControl {
 const buildFieldConfig = (
   customerOptions: any[],
   facilityOptions: any[],
-  getFacilitiesByCustomer: (value: string) => Promise<void>,
   toggleEditCustomerModalCB: typeof toggleEditCustomerModal,
   toggleEditFacilityModalCB: typeof toggleEditFacilityModal,
   toggleSecurityFunctionsModalCB: typeof toggleSecurityFunctionsModal
@@ -56,7 +56,6 @@ const buildFieldConfig = (
       render: FormUtil.SelectWithButton,
       meta: {
         options: customerOptions,
-        getFacilitiesByCustomer,
         label: 'common:customer',
 
         colWidth: 12,
@@ -65,14 +64,7 @@ const buildFieldConfig = (
         buttonAction: toggleEditCustomerModalCB
       },
       options: {
-        validators: [
-          Validators.required,
-          (c: any) => {
-            if (c.value && c.value.value) {
-              getFacilitiesByCustomer(c.value.value);
-            }
-          }
-        ]
+        validators: [Validators.required]
       }
     },
     facilities: {
@@ -130,18 +122,21 @@ interface Iprops extends React.Props<EditUserForm> {
   toggleEditCustomerModal: typeof toggleEditCustomerModal;
   toggleEditFacilityModal: typeof toggleEditFacilityModal;
   toggleSecurityFunctionsModal: typeof toggleSecurityFunctionsModal;
+  updateFormValues: (formValues: { [key: string]: any }) => void;
+  setFormValues: (formValues: { [key: string]: any }) => void;
+  formValues: { [key: string]: any };
 }
 
 class EditUserForm extends React.Component<Iprops, {}> {
-  public userForm: AbstractControl;
+  public formGroup: FormGroup;
   public fieldConfig: FieldConfig;
+  public subscription: any;
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(
       buildFieldConfig(
         this.props.customerOptions,
         this.props.facilityOptions,
-        this.props.getFacilitiesByCustomer,
         this.props.toggleEditCustomerModal,
         this.props.toggleEditFacilityModal,
         this.props.toggleSecurityFunctionsModal
@@ -157,7 +152,7 @@ class EditUserForm extends React.Component<Iprops, {}> {
     }
     // set values
     forEach(this.props.selectedUser, (value, key) => {
-      this.userForm.patchValue({ [key]: value });
+      this.formGroup.patchValue({ [key]: value });
     });
 
     const {
@@ -165,7 +160,7 @@ class EditUserForm extends React.Component<Iprops, {}> {
       facilities,
       securityFunctions
     } = this.props.selectedUser;
-    this.userForm.patchValue({
+    this.formGroup.patchValue({
       customerID: find(
         this.props.customerOptions,
         (cust: Ioption) => cust.value === customerID
@@ -178,7 +173,7 @@ class EditUserForm extends React.Component<Iprops, {}> {
     const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
       return find(facilities, { id: fac.value }) ? true : false;
     });
-    this.userForm.patchValue({ facilities: facilitiesArray });
+    this.formGroup.patchValue({ facilities: facilitiesArray });
     document.addEventListener('newFacility', this.handleNewFacility, false);
 
     const securityFunctionsArray = filter(securityOptions, (sec: any) => {
@@ -188,11 +183,11 @@ class EditUserForm extends React.Component<Iprops, {}> {
       securityFunctionsArray,
       option => ({ value: option.value, label: this.props.t(option.label) })
     );
-    this.userForm.patchValue({
+    this.formGroup.patchValue({
       securityFunctions: securityfunctionsArrayTranslated
     });
 
-    const emailControl = this.userForm.get('email') as AbstractControlEdited;
+    const emailControl = this.formGroup.get('email') as AbstractControlEdited;
     emailControl.disable();
   }
   componentDidUpdate(prevProps: Iprops) {
@@ -208,7 +203,7 @@ class EditUserForm extends React.Component<Iprops, {}> {
       ).length ||
       prevProps.facilityOptions.length !== this.props.facilityOptions.length
     ) {
-      const facilitySelectControl = this.userForm.get(
+      const facilitySelectControl = this.formGroup.get(
         'facilities'
       ) as AbstractControlEdited;
       facilitySelectControl.meta.options = this.props.facilityOptions;
@@ -218,7 +213,7 @@ class EditUserForm extends React.Component<Iprops, {}> {
           ? true
           : false;
       });
-      this.userForm.patchValue({ facilities: facilitiesArray });
+      this.formGroup.patchValue({ facilities: facilitiesArray });
     }
     if (
       differenceBy(
@@ -228,7 +223,7 @@ class EditUserForm extends React.Component<Iprops, {}> {
       ).length ||
       prevProps.customerOptions.length !== this.props.customerOptions.length
     ) {
-      const customerSelectControl = this.userForm.get(
+      const customerSelectControl = this.formGroup.get(
         'customerID'
       ) as AbstractControlEdited;
       customerSelectControl.meta.options = this.props.customerOptions;
@@ -240,7 +235,7 @@ class EditUserForm extends React.Component<Iprops, {}> {
           ? false
           : true;
       });
-      this.userForm.patchValue({ customerID: newCustomer[0] });
+      this.formGroup.patchValue({ customerID: newCustomer[0] });
     }
   }
   componentWillUnmount() {
@@ -251,8 +246,45 @@ class EditUserForm extends React.Component<Iprops, {}> {
     // now select the facility the user just added
     // might be a better way to do this, but we are comparing the two arrays and finding the new facility
     const newFacility = find(this.props.facilityOptions, { value: facilityID });
-    const newFacilitiesArray = [...this.userForm.value.facilities, newFacility];
-    this.userForm.patchValue({ facilities: newFacilitiesArray });
+    const newFacilitiesArray = [
+      ...this.formGroup.value.facilities,
+      newFacility
+    ];
+    this.formGroup.patchValue({ facilities: newFacilitiesArray });
+  };
+
+  /*
+  * (reusable)
+  * subscribe to the formGroup changes
+  */
+  subscribeToChanges = () => {
+    for (const key in this.formGroup.controls) {
+      if (this.formGroup.controls.hasOwnProperty(key)) {
+        this.subscription = this.formGroup
+          .get(key)
+          .valueChanges.subscribe((value: any) => {
+            this.onValueChanges(value, key);
+          });
+      }
+    }
+  };
+
+  /*
+* (reusable)
+* set the table filters to redux on each value change
+*/
+  onValueChanges = (value: any, key: string) => {
+    switch (key) {
+      case 'customerID':
+        this.props.updateFormValues({ [key]: value });
+        if (value && value.value) {
+          this.props.getFacilitiesByCustomer(value.value);
+        }
+        break;
+      default:
+        // this.props.updateFormValue({ [key]: value });
+        break;
+    }
   };
 
   handleSubmit = (
@@ -260,44 +292,45 @@ class EditUserForm extends React.Component<Iprops, {}> {
     shouldApprove?: boolean
   ) => {
     e.preventDefault();
-    if (this.userForm.status === 'INVALID') {
-      this.userForm.markAsSubmitted();
+    if (this.formGroup.status === 'INVALID') {
+      this.formGroup.markAsSubmitted();
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
     const facilitiesArray = map(
-      this.userForm.value.facilities,
+      this.formGroup.value.facilities,
       (option: { value: string; label: string }) => {
         return { id: option.value };
       }
     );
     const securityFunctionsArray = map(
-      this.userForm.value.securityFunctions,
+      this.formGroup.value.securityFunctions,
       (option: { value: string; label: string }) => {
         return option.value;
       }
     );
     this.props.updateUser({
       id: this.props.selectedUser.id,
-      ...this.userForm.value,
-      customerID: this.userForm.value.customerID.value,
+      ...this.formGroup.value,
+      customerID: this.formGroup.value.customerID.value,
       facilities: facilitiesArray,
       securityFunctions: securityFunctionsArray,
       email: this.props.selectedUser.email // have to add back the email because disabling the input removes it
     });
   };
-  setForm = (form: AbstractControl) => {
-    this.userForm = form;
-    this.userForm.meta = {
+  setForm = (form: FormGroup) => {
+    this.formGroup = form;
+    this.formGroup.meta = {
       loading: this.props.loading
     };
+    this.subscribeToChanges();
   };
 
   render() {
     const { t } = this.props;
-    const selectedCustomer = this.userForm
-      ? this.userForm.value.customerID
-      : undefined;
+    const selectedCustomer = this.formGroup
+      ? this.formGroup.value.customerID
+      : ({} as Ioption);
 
     const formClassName = `clearfix beacon-form ${this.props.colorButton}`;
 
@@ -330,6 +363,7 @@ class EditUserForm extends React.Component<Iprops, {}> {
           t={this.props.t}
           colorButton={this.props.colorButton}
           selectedCustomer={selectedCustomer}
+          secondModal={true}
         />
       </div>
     );

@@ -9,11 +9,6 @@
     "facility": "facility",
     "mainCategory": "Category",
     "manufacturer": "Manufacturer",
-    "newCustomerModalTitle": "New Customer",
-    "customerNameLabel": "New Customer Name",
-    "customerVatLabel": "VAT",
-    "newFacilityModalTitle": "New Facility",
-    "facilityNameLabel": "New Facility Name",
     "selectCustomerWarning": "You must select a customer first.",
     "noDataText": "Sorry! We could not find any rows that matched that search.",
     "searchPlaceholder": "Search...",
@@ -295,9 +290,14 @@
   "manageCustomerAndFacility": {
     "bannerTitle": "Manage Customer and Facility",
     "newCustomer": "Add Customer",
-    "newFAcility": "Add Facility",
+    "editCustomer": "Edit Customer",
+    "newFacility": "Add Facility",
+    "editFacility": "Edit Facility",
     "searchPlaceholder": "Search...",
-    "saveApprove": "Save & Approve"
+    "saveApprove": "Save & Approve",
+    "customerNameLabel": "Customer Name",
+    "customerVatLabel": "VAT",
+    "facilityNameLabel": "Facility Name"
   },
   "manageTraining": {
     "bannerTitle": "Training Progress",

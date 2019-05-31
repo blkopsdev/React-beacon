@@ -2,6 +2,7 @@ import { pickBy, map, filter } from 'lodash';
 
 import { IqueueObject, ImanageUserQueueReducer } from '../models';
 import {
+  createFormValuesWithName,
   createTableFiltersWithName,
   modalToggleWithName
 } from './commonReducers';
@@ -71,6 +72,11 @@ export default function userQueue(
       state.showEditQueueUserModal,
       action,
       'EDIT_QUEUE_USER'
+    ),
+    editUserFormValues: createFormValuesWithName(
+      state.editUserFormValues,
+      action,
+      'MANAGE_USER_QUEUE'
     ),
     tableFilters: createTableFiltersWithName(
       state.tableFilters,

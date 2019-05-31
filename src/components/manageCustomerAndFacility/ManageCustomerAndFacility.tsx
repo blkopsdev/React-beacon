@@ -11,7 +11,6 @@ import {
   IinitialState,
   ItableFiltersReducer,
   Itile,
-  Ibrand,
   Icustomer,
   Ifacility
 } from '../../models';
@@ -19,9 +18,13 @@ import { TableUtil } from '../common/TableUtil';
 import { FormUtil } from '../common/FormUtil';
 import SearchTableForm from '../common/SearchTableForm';
 import { Button } from 'react-bootstrap';
-import ReactTable, { FinalState, RowInfo, RowRenderProps } from 'react-table';
-import * as moment from 'moment';
-import { orderBy } from 'lodash';
+import ReactTable, {
+  Column,
+  FinalState,
+  RowInfo,
+  RowRenderProps
+} from 'react-table';
+
 import {
   setTableFilter,
   getCustomers,
@@ -31,12 +34,14 @@ import {
 } from '../../actions/manageCustomerAndFacilityActions';
 import ManageFacility from './ManageFacility';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import EditCustomerModal from './EditCustomerModal';
+import EditCustomerModal from '../common/EditCustomerModal';
 import {
   toggleEditCustomerModal,
   toggleEditFacilityModal
 } from '../../actions/commonActions';
-import EditFacilityModal from './EditFacilityModal';
+import EditFacilityModal from '../common/EditFacilityModal';
+import * as moment from 'moment';
+import { orderBy } from 'lodash';
 
 interface RowInfoCustomer extends RowInfo {
   original: Icustomer;
@@ -48,7 +53,7 @@ interface Iprops extends RouteComponentProps<any> {
 }
 
 interface IdispatchProps {
-  tableData: Ibrand[];
+  tableData: Icustomer[];
   totalPages: number;
   showEditCustomerAndFacilityModal: boolean;
   getCustomers: typeof getCustomers;
@@ -61,6 +66,8 @@ interface IdispatchProps {
   setSelectedFacilityID: typeof setSelectedFacilityID;
   toggleEditFacilityModal: typeof toggleEditFacilityModal;
   selectedCustomer: Icustomer;
+  customers: { [key: string]: Icustomer };
+  facilities: { [key: string]: Ifacility };
 }
 
 interface Istate {
@@ -74,6 +81,7 @@ class ManageCustomerAndFacility extends React.Component<
   Iprops & IdispatchProps,
   Istate
 > {
+  debounce: any;
   constructor(props: Iprops & IdispatchProps) {
     super(props);
     this.state = {
@@ -89,9 +97,6 @@ class ManageCustomerAndFacility extends React.Component<
       currentTile: constants.getTileByURL(this.props.location.pathname)
     });
     this.setColumns();
-  }
-
-  componentDidMount(): void {
     this.props.getCustomers();
   }
 
@@ -101,7 +106,7 @@ class ManageCustomerAndFacility extends React.Component<
         this.props.toggleEditCustomerModal &&
       !this.props.toggleEditCustomerModal
     ) {
-      this.setState({ selectedRow: null });
+      this.setState({ selectedRow: {} });
     }
     // automatically get inventory every time a fitler changes
     if (
@@ -136,7 +141,7 @@ class ManageCustomerAndFacility extends React.Component<
           label: 'common:Customer',
           colWidth: 3,
           type: 'text',
-          placeholder: 'Search by text',
+          placeholder: 'Filter by name',
           defaultValue: this.props.tableFilters.customer,
           isClearable: true
         }
@@ -152,7 +157,10 @@ class ManageCustomerAndFacility extends React.Component<
   onSearchValueChanges = (value: any, key: string) => {
     switch (key) {
       case 'name':
-        this.props.setTableFilter({ name: value, page: 1 });
+        clearTimeout(this.debounce);
+        this.debounce = setTimeout(() => {
+          this.props.setTableFilter({ name: value });
+        }, 500);
         break;
       default:
         break;
@@ -161,11 +169,6 @@ class ManageCustomerAndFacility extends React.Component<
 
   addFacility = (row: any) => {
     this.props.toggleEditFacilityModal();
-  };
-
-  onPageChange = (page: number) => {
-    const newPage = page + 1;
-    this.props.setTableFilter({ page: newPage });
   };
   /*
   * Set Columns sets columns to state
@@ -182,8 +185,8 @@ class ManageCustomerAndFacility extends React.Component<
           Header: 'qty',
           id: 'quantity',
           minWidth: 50,
-          accessor: ({ facilities }: { facilities: Ifacility[] }) => {
-            return facilities.length; // using this rather than data.quantity because when we add new installs, we don't want to update the quantity on the product
+          accessor: ({ facilities }: Icustomer) => {
+            return facilities ? facilities.length : 0;
           }
         },
         {
@@ -202,27 +205,47 @@ class ManageCustomerAndFacility extends React.Component<
     this.setState({ columns });
   };
 
+  onPageChange = (page: number) => {
+    const newPage = page + 1;
+    this.props.setTableFilter({ page: newPage });
+  };
+
   /*
-  * Handle user clicking on a location row
-  * set the selected location to state and open the modal
+  * Handle user clicking on a product row column
+  * set the selected product to state and open the modal
   */
-  getTrProps = (state: FinalState, rowInfo: RowInfoCustomer) => {
-    return {
-      onClick: () => {
-        this.props.setSelectedCustomerID(rowInfo.original.id);
-        this.setState({
-          selectedRow: {
-            [rowInfo.viewIndex || 0]: !this.state.selectedRow[
-              rowInfo.viewIndex || 0
-            ]
-          }
-        });
-      }
-    };
+  getTdProps = (
+    state: FinalState,
+    rowInfo: RowInfoCustomer,
+    column: Column,
+    instance: any
+  ) => {
+    // console.log("ROWINFO", rowInfo, state);
+    if (column.id && column.id === 'expander-toggle') {
+      return {
+        onClick: () => {
+          this.props.setSelectedCustomerID(rowInfo.original.id);
+          this.setState({
+            selectedRow: {
+              [rowInfo.viewIndex || 0]: !this.state.selectedRow[
+                rowInfo.viewIndex || 0
+              ]
+            }
+          });
+        }
+      };
+    } else {
+      return {
+        onClick: (e: React.MouseEvent<HTMLFormElement>) => {
+          this.props.setSelectedCustomerID(rowInfo.original.id);
+          this.props.toggleEditCustomerModal();
+        }
+      };
+    }
   };
 
   render() {
-    const { t, tableData = [], totalPages } = this.props;
+    const { t, tableData = [] } = this.props;
     return (
       <div className="manage-customer-and-facility">
         <Banner
@@ -254,14 +277,15 @@ class ManageCustomerAndFacility extends React.Component<
           </Button>
         </div>
         <ReactTable
-          data={tableData}
-          columns={this.state.columns}
-          getTrProps={this.getTrProps}
-          pageSize={tableData.length}
           manual
-          pages={totalPages}
+          data={tableData}
+          pages={this.props.totalPages}
           page={this.props.tableFilters.page - 1}
+          columns={this.state.columns}
+          getTdProps={this.getTdProps}
+          pageSize={tableData.length}
           showPageSizeOptions={false}
+          pageSizeOptions={constants.tablePageSizeOptions}
           className={`beacon-table -highlight ${this.state.currentTile.color}`}
           previousText={t('common:previous')}
           nextText={t('common:next')}
@@ -276,6 +300,7 @@ class ManageCustomerAndFacility extends React.Component<
               {...rowInfo}
               addFacility={this.addFacility}
               showAddFacility={true}
+              setSelectedFacilityID={this.props.setSelectedFacilityID}
               t={this.props.t}
             />
           )}
@@ -283,13 +308,14 @@ class ManageCustomerAndFacility extends React.Component<
         />
 
         <EditCustomerModal
+          selectedCustomer={this.props.selectedCustomer}
           t={this.props.t}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
           }
         />
         <EditFacilityModal
-          selectedCustomer={this.props.selectedCustomer}
+          modalClass=""
           t={this.props.t}
           colorButton={
             constants.colors[`${this.state.currentTile.color}Button`]
@@ -306,10 +332,10 @@ const mapStateToProps = (state: IinitialState) => {
     res => moment.utc(res.createDate).unix(),
     'desc'
   );
+
   const selectedCustomer =
-    state.customerAndFacilityManage.data[
-      state.customerAndFacilityManage.selectedCustomerID
-    ] || initialCustomer;
+    state.customers[state.customerAndFacilityManage.selectedCustomerID] ||
+    initialCustomer;
 
   return {
     tableData,
@@ -317,7 +343,9 @@ const mapStateToProps = (state: IinitialState) => {
     showEditCustomerAndFacilityModal:
       state.customerAndFacilityManage.showEditCustomerAndFacilityModal,
     tableFilters: state.customerAndFacilityManage.tableFilters,
-    selectedCustomer
+    selectedCustomer,
+    customers: state.customers,
+    facilities: state.facilities
   };
 };
 

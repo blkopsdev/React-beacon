@@ -6,16 +6,9 @@
 
 import { TranslationFunction } from 'react-i18next';
 import { connect } from 'react-redux';
-import { map } from 'lodash';
 import * as React from 'react';
 
-import {
-  Icustomer,
-  Ifacility,
-  IinitialState,
-  Ioption,
-  IqueueObject
-} from '../../models';
+import { IinitialState, Ioption, IqueueObject, Ifacility } from '../../models';
 import {
   getFacilitiesByCustomer,
   toggleEditCustomerModal,
@@ -24,22 +17,14 @@ import {
 import {
   updateQueueUser,
   toggleEditQueueUserModal,
-  approveUser
+  approveUser,
+  setEditUserFormValues,
+  updateEditUserFormValues
 } from '../../actions/manageUserQueueActions';
 import CommonModal from '../common/CommonModal';
 import EditQueueUserForm from './EditQueueUserForm';
-
-const getCustomerOptions = (customers: Icustomer[]) => {
-  return map(customers, (cust: Icustomer) => {
-    return { value: cust.id, label: cust.name };
-  });
-};
-
-const getFacilitityOptions = (facilities: Ifacility[]) => {
-  return map(facilities, (facility: Ifacility) => {
-    return { value: facility.id, label: facility.name };
-  });
-};
+import { FormUtil } from '../common/FormUtil';
+import { filter } from 'lodash';
 
 interface Iprops {
   selectedQueueObject: IqueueObject;
@@ -58,6 +43,9 @@ interface IdispatchProps {
   toggleEditCustomerModal: typeof toggleEditCustomerModal;
   toggleEditFacilityModal: typeof toggleEditFacilityModal;
   approveUser: typeof approveUser;
+  updateFormValues: (formValues: { [key: string]: any }) => void;
+  setFormValues: (formValues: { [key: string]: any }) => void;
+  formValues: { [key: string]: any };
 }
 
 class EditQueueUserModal extends React.Component<Iprops & IdispatchProps, {}> {
@@ -80,15 +68,25 @@ class EditQueueUserModal extends React.Component<Iprops & IdispatchProps, {}> {
 }
 
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
+  const customerID = state.manageUserQueue.editUserFormValues.customerID
+    ? state.manageUserQueue.editUserFormValues.customerID.value
+    : ownProps.selectedQueueObject.user.customerID;
+  const filteredFacilities =
+    filter(
+      state.facilities,
+      (facility: Ifacility) => facility.customerID === customerID
+    ) || [];
+
   return {
     user: state.user,
     userQueue: state.manageUserQueue,
     loading: state.ajaxCallsInProgress > 0,
-    customerOptions: getCustomerOptions(state.customers),
-    facilityOptions: getFacilitityOptions(state.facilities),
+    customerOptions: FormUtil.convertToOptions(state.customers),
+    facilityOptions: FormUtil.convertToOptions(filteredFacilities),
     showEditQueueUserModal: state.manageUserQueue.showEditQueueUserModal,
     showEditCustomerModal: state.showEditCustomerModal,
-    showEditFacilityModal: state.showEditFacilityModal
+    showEditFacilityModal: state.showEditFacilityModal,
+    formValues: state.manageUserQueue.editUserFormValues
   };
 };
 
@@ -100,6 +98,8 @@ export default connect(
     toggleModal: toggleEditQueueUserModal,
     toggleEditCustomerModal,
     toggleEditFacilityModal,
-    approveUser
+    approveUser,
+    setFormValues: setEditUserFormValues,
+    updateFormValues: updateEditUserFormValues
   }
 )(EditQueueUserModal);

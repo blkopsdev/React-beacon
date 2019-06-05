@@ -211,9 +211,9 @@ class ManageCustomerAndFacility extends React.Component<
   };
 
   /*
-* Handle user clicking on a product row column
-* set the selected product to state and open the modal
-*/
+  * Handle user clicking on a product row column
+  * set the selected product to state and open the modal
+  */
   getTdProps = (
     state: FinalState,
     rowInfo: RowInfoCustomer,

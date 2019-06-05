@@ -127,9 +127,9 @@ class EditCustomerForm extends React.Component<Iprops, IState> {
   };
 
   /*
-* (reusable)
-* set the table filters to redux on each value change
-*/
+  * (reusable)
+  * set the table filters to redux on each value change
+  */
   onValueChanges = (value: any, key: string) => {
     clearTimeout(this.debounce);
     this.debounce = setTimeout(() => {

@@ -232,6 +232,9 @@ export interface IfacilityWithoutBuildings {
   state: string;
   postalCode: string;
   isDeleted: boolean;
+  contactName: string;
+  contactEmail: string;
+  contactPhone: string;
 }
 export interface Ifacility extends IfacilityWithoutBuildings {
   buildings: Ibuilding[];

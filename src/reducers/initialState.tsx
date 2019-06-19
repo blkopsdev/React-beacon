@@ -12,7 +12,10 @@ export const initialFacility = {
   state: '',
   postalCode: '',
   buildings: [],
-  isDeleted: false
+  isDeleted: false,
+  contactName: '',
+  contactEmail: '',
+  contactPhone: ''
 };
 const initialSubcategory = {
   mainCategoryID: '',

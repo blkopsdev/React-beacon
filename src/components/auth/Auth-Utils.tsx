@@ -1,17 +1,22 @@
-import { UserAgentApplication } from 'msal';
+import { UserAgentApplication, AuthResponse } from 'msal';
 import { acquireToken } from 'src/actions/userActions';
-import Axios from 'axios';
+import Axios, { AxiosRequestConfig } from 'axios';
 
 export const adalFetch = (
   authContext: UserAgentApplication,
   resource: any,
   axios: any,
   url: string,
-  axiosOptions: any
+  options: AxiosRequestConfig
 ) => {
   return acquireToken({
     scopes: [`${process.env.REACT_APP_AAD_CLIENT_ID}`]
-  }).then(() => {
+  }).then((tokenResponse: AuthResponse) => {
+    const headers = {
+      ...options.headers,
+      Authorization: `Bearer ${tokenResponse.accessToken}`
+    };
+    const axiosOptions = { ...options, headers };
     return Axios(url, axiosOptions);
   });
 };

@@ -8,7 +8,7 @@ import API from '../constants/apiEndpoints';
 import { constants } from 'src/constants/constants';
 import * as types from './actionTypes';
 import * as localForage from 'localforage';
-import { adalFetch } from 'react-adal';
+import { adalFetch } from 'src/components/auth/Auth-Utils';
 import { authContext } from './userActions';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
@@ -61,7 +61,7 @@ const checkForLoggedInUser = (
     setTimeout(() => {
       dispatch({ type: types.USER_LOGOUT_SUCCESS });
       localForage.removeItem('state-core-care-web').then(() => {
-        authContext.logOut();
+        authContext.logout();
       });
     }, 5000);
   }

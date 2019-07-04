@@ -19,7 +19,7 @@ import * as types from './actionTypes';
 import { filter, find } from 'lodash';
 import { Dispatch } from 'react-redux';
 const uuidv4 = require('uuid/v4');
-import { adalFetch } from 'react-adal';
+import { adalFetch } from 'src/components/auth/Auth-Utils';
 import { authContext } from './userActions';
 import { initialFacility } from 'src/reducers/initialState';
 

@@ -1,7 +1,7 @@
 import { beginAjaxCall } from './ajaxStatusActions';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import API from '../constants/apiEndpoints';
-import { adalFetch } from 'react-adal';
+import { adalFetch } from 'src/components/auth/Auth-Utils';
 import { authContext } from './userActions';
 import * as types from './actionTypes';
 import { constants } from '../constants/constants';
@@ -14,7 +14,7 @@ type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 export function getCustomers(): ThunkResult<void> {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());
-    const { tableFilters } = getState().customerAndFacilityManage;
+    const { tableFilters } = getState().manageCustomerAndFacility;
     const { page, name } = tableFilters;
     const axiosOptions: AxiosRequestConfig = {
       method: 'get',

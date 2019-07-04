@@ -1,7 +1,7 @@
 import { beginAjaxCall } from './ajaxStatusActions';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import API from '../constants/apiEndpoints';
-import { adalFetch } from 'react-adal';
+import { adalFetch } from 'src/components/auth/Auth-Utils';
 import { authContext } from './userActions';
 import * as types from './actionTypes';
 import { constants } from '../constants/constants';
@@ -46,9 +46,10 @@ export const getAlerts = (): ThunkResult<void> => {
   };
 };
 
-export const saveAlert = (alert: IAlert) => (
-  dispatch: any
-): ThunkResult<void> => {
+export const saveAlert = (alert: IAlert): ThunkResult<void> => (
+  dispatch,
+  getState
+) => {
   dispatch(beginAjaxCall());
   const headers = { 'content-type': 'multipart/form-data' };
 
@@ -79,9 +80,10 @@ export const saveAlert = (alert: IAlert) => (
     });
 };
 
-export const updateAlert = (alert: any, selectedAlert: IAlert) => (
-  dispatch: any
-): ThunkResult<void> => {
+export const updateAlert = (
+  alert: any,
+  selectedAlert: IAlert
+): ThunkResult<void> => dispatch => {
   dispatch(beginAjaxCall());
   const headers = { 'content-type': 'multipart/form-data' };
 
@@ -109,9 +111,7 @@ export const updateAlert = (alert: any, selectedAlert: IAlert) => (
     });
 };
 
-export const deleteAlert = (alert: IAlert) => (
-  dispatch: any
-): ThunkResult<void> => {
+export const deleteAlert = (alert: IAlert): ThunkResult<void> => dispatch => {
   dispatch(beginAjaxCall());
   const axiosOptions: AxiosRequestConfig = {
     method: 'delete'

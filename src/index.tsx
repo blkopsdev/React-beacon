@@ -38,7 +38,6 @@ import {
   faChevronRight
 } from '@fortawesome/free-solid-svg-icons';
 import { library } from '@fortawesome/fontawesome-svg-core';
-import { runWithAdal } from 'react-adal';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 import ReduxToastr from 'react-redux-toastr';
@@ -78,7 +77,7 @@ library.add(
   faHistory
 );
 
-import { authContext, setCachedToken } from './actions/userActions';
+import { authContext } from './actions/userActions';
 import Dashboard from './components/dashboard/Dashboard';
 import Header from './components/header/Header';
 import SignUpDirect from './components/auth/SignUpDirect';
@@ -96,12 +95,14 @@ import 'react-datepicker/dist/react-datepicker.css';
 // import 'draft-js/dist/Draft.css';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './index.css';
+import { constants } from './constants/constants';
 
 const { store, persistor } = configureStore();
 
 // set Axios default header for accepting JSON
 axios.defaults.headers.common['Accept'] = 'application/json';
 axios.defaults.headers.common['Content-Type'] = 'application/json';
+axios.defaults.timeout = constants.httpTimeout;
 
 // Trackjs
 
@@ -123,7 +124,7 @@ in userActions.  then we pause the persistor in order to prevent anything else f
 const handleLogout = () => {
   persistor.flush().then(() => {
     persistor.pause();
-    authContext.logOut();
+    authContext.logout();
   });
 };
 document.addEventListener('userLogout', handleLogout, false);
@@ -151,7 +152,7 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
   let authenticated = false;
   authenticated = user.isAuthenticated && user.id.length > 0;
   if (authenticated) {
-    setCachedToken();
+    // setCachedToken();
     TrackJS.configure({
       userId: user.email,
       version: process.env.REACT_APP_VERSION
@@ -176,65 +177,50 @@ const PrivateRoute = ({ component: Component, ...rest }: any) => {
   );
 };
 
-runWithAdal(
-  authContext,
-  () => {
-    ReactDOM.render(
-      <I18nextProvider i18n={i18n}>
-        <Provider store={store}>
-          <PersistGate loading={null} persistor={persistor}>
-            <Router>
-              <div className="main-body-content">
-                <Header />
-                <Switch>
-                  <Route exact path="/" component={Login} />
-                  <Route exact path="/signup" component={SignUpDirect} />
-                  <PrivateRoute path="/dashboard" component={Dashboard} />
-                  <PrivateRoute path="/queue" component={TwoPaneLayout} />
-                  <PrivateRoute path="/users" component={TwoPaneLayout} />
-                  <PrivateRoute path="/team" component={TwoPaneLayout} />
-                  <PrivateRoute path="/inventory" component={TwoPaneLayout} />
-                  <PrivateRoute path="/brands" component={TwoPaneLayout} />
-                  <PrivateRoute
-                    path="/customer-and-facility"
-                    component={TwoPaneLayout}
-                  />
-                  <PrivateRoute path="/alerts" component={TwoPaneLayout} />
-                  <PrivateRoute
-                    path="/productqueue"
-                    component={TwoPaneLayout}
-                  />
-                  <PrivateRoute path="/managejobs" component={TwoPaneLayout} />
-                  <PrivateRoute path="/reports" component={TwoPaneLayout} />
-                  <PrivateRoute path="/locations" component={TwoPaneLayout} />
-                  <PrivateRoute path="/training" component={TwoPaneLayout} />
-                  <PrivateRoute
-                    path="/manageTraining"
-                    component={TwoPaneLayout}
-                  />
-                  <PrivateRoute
-                    path="/measurements"
-                    component={TwoPaneLayout}
-                  />
-                  <PrivateRoute
-                    path="/customermeasurements"
-                    component={TwoPaneLayout}
-                  />
+ReactDOM.render(
+  <I18nextProvider i18n={i18n}>
+    <Provider store={store}>
+      <PersistGate loading={null} persistor={persistor}>
+        <Router>
+          <div className="main-body-content">
+            <Header />
+            <Switch>
+              <Route exact path="/" component={Login} />
+              <Route exact path="/signup" component={SignUpDirect} />
+              <PrivateRoute path="/dashboard" component={Dashboard} />
+              <PrivateRoute path="/queue" component={TwoPaneLayout} />
+              <PrivateRoute path="/users" component={TwoPaneLayout} />
+              <PrivateRoute path="/team" component={TwoPaneLayout} />
+              <PrivateRoute path="/inventory" component={TwoPaneLayout} />
+              <PrivateRoute path="/brands" component={TwoPaneLayout} />
+              <PrivateRoute
+                path="/customer-and-facility"
+                component={TwoPaneLayout}
+              />
+              <PrivateRoute path="/alerts" component={TwoPaneLayout} />
+              <PrivateRoute path="/productqueue" component={TwoPaneLayout} />
+              <PrivateRoute path="/managejobs" component={TwoPaneLayout} />
+              <PrivateRoute path="/reports" component={TwoPaneLayout} />
+              <PrivateRoute path="/locations" component={TwoPaneLayout} />
+              <PrivateRoute path="/training" component={TwoPaneLayout} />
+              <PrivateRoute path="/manageTraining" component={TwoPaneLayout} />
+              <PrivateRoute path="/measurements" component={TwoPaneLayout} />
+              <PrivateRoute
+                path="/customermeasurements"
+                component={TwoPaneLayout}
+              />
 
-                  <Route component={NoMatch} />
-                </Switch>
-                <ReduxToastr
-                  position={'top-right'}
-                  preventDuplicates={process.env.NODE_ENV === 'production'}
-                />
-              </div>
-            </Router>
-          </PersistGate>
-        </Provider>
-      </I18nextProvider>,
-      document.getElementById('root') as HTMLElement
-    );
-  },
-  true
+              <Route component={NoMatch} />
+            </Switch>
+            <ReduxToastr
+              position={'top-right'}
+              preventDuplicates={process.env.NODE_ENV === 'production'}
+            />
+          </div>
+        </Router>
+      </PersistGate>
+    </Provider>
+  </I18nextProvider>,
+  document.getElementById('root') as HTMLElement
 );
 registerServiceWorker();

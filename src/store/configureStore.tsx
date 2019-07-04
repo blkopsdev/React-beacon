@@ -4,7 +4,9 @@ import {
   Middleware,
   Store,
   AnyAction,
-  compose
+  compose,
+  Reducer,
+  StoreEnhancer
 } from 'redux';
 import {
   createMigrate,
@@ -25,6 +27,7 @@ import { constants } from 'src/constants/constants';
 import rootReducer from '../reducers';
 import hardSet from 'redux-persist/lib/stateReconciler/hardSet';
 import TrackJSLogger from './TrackJSLogger';
+import initialState from 'src/reducers/initialState';
 
 /*
 * handle persisisting date objects
@@ -33,10 +36,11 @@ const replacer = (key: string, value: any) =>
   value instanceof Date ? value.toISOString() : value;
 
 const reviver = (key: string, value: any) =>
-  typeof value === 'string' &&
-  value.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/)
-    ? new Date(value)
-    : value;
+  // typeof value === 'string' &&
+  // value.match(/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}/)
+  //   ? new Date(value)
+  //   : value;
+  value; // return the string because we do not want to create a date object here because it adds the timezone offset.
 
 export const encode = (toDeshydrate: TransformIn<IinitialState, string>) =>
   JSON.stringify(toDeshydrate, replacer);
@@ -81,6 +85,7 @@ const persistConfig = {
   blacklist: [
     'showEditProfileModal',
     'ajaxCallsInProgress',
+    'facilities',
     'showEditCustomerModal',
     'showEditFacilityModal',
     'showEditProfileModal',
@@ -92,20 +97,16 @@ const persistConfig = {
 //   blacklist: ['toastr', 'showEditProfileModal'],  we can not blacklist the toastr because it causes the app to crash on load
 // we want to backlist toastr, because we do not want auth errors to show after it has successfully re-authorized.
 
-const {
-  middleware: offlineMiddleware,
-  enhanceReducer: offlineEnhanceReducer,
-  enhanceStore: offlineEnhanceStore
-} = createOffline({
+const offlineEnhancer = createOffline({
   ...offlineConfig,
   persist: false,
   effect,
   discard
 });
 
-const persistedReducer = persistReducer(
+const persistedReducer: Reducer<IinitialState> = persistReducer(
   persistConfig,
-  offlineEnhanceReducer(rootReducer)
+  offlineEnhancer.enhanceReducer(rootReducer)
 );
 
 export default function configureStore() {
@@ -125,35 +126,37 @@ export default function configureStore() {
         shouldHotReload: false,
         stateSanitizer: (state: IinitialState) =>
           state.manageUserQueue
-            ? { ...state, manageInventory: '<<LONG_BLOB>>' }
+            ? { ...state, manageUserQueue: '<<LONG_BLOB>>' }
             : state
       }
     );
-    const store = createStore(
+    const store: Store<IinitialState, AnyAction> = createStore(
       persistedReducer,
+      initialState,
       composeEnhancers(
-        offlineEnhanceStore,
+        offlineEnhancer.enhanceStore,
         applyMiddleware(
-          thunk as ThunkMiddleware<IinitialState, any>,
+          thunk as ThunkMiddleware<IinitialState, AnyAction>,
           require('redux-immutable-state-invariant').default(),
-          offlineMiddleware as Middleware<any, any, any>
+          offlineEnhancer.middleware as Middleware<any, IinitialState, any>
         )
       )
-    ) as Store<any, AnyAction>;
+    );
     const persistor = persistStore(store);
     return { persistor, store };
   } else {
-    const store = createStore(
+    const store: Store<IinitialState, AnyAction> = createStore(
       persistedReducer,
+      initialState as IinitialState,
       compose(
+        offlineEnhancer.enhanceStore as StoreEnhancer,
         applyMiddleware(
-          thunk as ThunkMiddleware<IinitialState, any>,
-          offlineMiddleware as Middleware<any, any, any>,
+          thunk as ThunkMiddleware<IinitialState, AnyAction>,
+          offlineEnhancer.middleware as Middleware<any, IinitialState, any>,
           TrackJSLogger
-        ),
-        offlineEnhanceStore
+        )
       )
-    ) as Store<any, AnyAction>;
+    );
     const persistor = persistStore(store);
     return { persistor, store };
   }

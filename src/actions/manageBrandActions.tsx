@@ -1,7 +1,7 @@
 import { beginAjaxCall } from './ajaxStatusActions';
 import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
 import API from '../constants/apiEndpoints';
-import { adalFetch } from 'react-adal';
+import { adalFetch } from 'src/components/auth/Auth-Utils';
 import { authContext } from './userActions';
 import * as types from './actionTypes';
 import { constants } from '../constants/constants';
@@ -59,7 +59,7 @@ export function saveBrand(brand: any) {
             type: types.ADD_BRAND_SUCCESS,
             payload: newBrand
           });
-          const inventoryProductInfo = getState().manageInventory.productInfo;
+          const inventoryProductInfo = getState().productInfo;
           // Check if brands are loaded in inventory
           if (
             inventoryProductInfo.brandOptions &&
@@ -109,7 +109,7 @@ export function updateBrand(brand: any) {
             type: types.EDIT_BRAND_SUCCESS,
             payload: brand
           });
-          const inventoryProductInfo = getState().manageInventory.productInfo;
+          const inventoryProductInfo = getState().productInfo;
           // Check if brands are loaded in inventory
           if (
             inventoryProductInfo.brandOptions &&
@@ -162,7 +162,7 @@ export function deleteBrand(brand: any) {
             type: types.REMOVE_BRAND_SUCCESS,
             payload: brand
           });
-          const inventoryProductInfo = getState().manageInventory.productInfo;
+          const inventoryProductInfo = getState().productInfo;
           // Check if brands are loaded in inventory
           if (
             inventoryProductInfo.brandOptions &&

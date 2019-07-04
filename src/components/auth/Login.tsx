@@ -9,7 +9,7 @@
 
 import { Button, Col, Grid, Row } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Redirect, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
@@ -17,10 +17,9 @@ import * as React from 'react';
 import { IinitialState, Iuser, Iredirect } from '../../models';
 import {
   adalLogin,
-  checkCachedToken,
-  setCachedToken,
   userLogin,
-  userLogout
+  userLogout,
+  authContext
 } from '../../actions/userActions';
 import {
   setLoginRedirect,
@@ -28,7 +27,7 @@ import {
   setRedirectPathname
 } from '../../actions/redirectToReferrerAction';
 
-const Loading = () => <h3>Loading...</h3>;
+// const Loading = () => <h3>Loading...</h3>;
 
 interface Iprops extends RouteComponentProps<{}> {
   userLogin?: any;
@@ -63,8 +62,9 @@ class Login extends React.Component<Iprops, Istate> {
     /*
     * If we have a Azure AD token, then set it.  If we have a token, but the user is not authenticated, then use the token to login to the API
     */
-    if (checkCachedToken()) {
-      setCachedToken();
+
+    if (authContext.getAccount()) {
+      // setCachedToken();
       if (!this.props.user.isAuthenticated) {
         this.props
           .userLogin()
@@ -117,9 +117,9 @@ class Login extends React.Component<Iprops, Istate> {
     const { redirectToReferrer } = this.props.redirect;
 
     // if the user is authenticated but not fully, show loading
-    if (checkCachedToken()) {
-      return <Loading />;
-    }
+    // if (checkCachedToken()) {
+    //   return <Loading />;
+    // }
 
     // if user is authenticated and exists in the backend
     // redirect to the redirect.pathname or the dashboard

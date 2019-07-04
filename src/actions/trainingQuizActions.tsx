@@ -4,7 +4,7 @@ import { beginAjaxCall } from './ajaxStatusActions';
 import Axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import API from 'src/constants/apiEndpoints';
 import { authContext } from './userActions';
-import { adalFetch } from 'react-adal';
+import { adalFetch } from 'src/components/auth/Auth-Utils';
 import { sortBy, forEach } from 'lodash';
 import { constants } from 'src/constants/constants';
 

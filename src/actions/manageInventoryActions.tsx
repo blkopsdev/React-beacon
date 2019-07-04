@@ -20,7 +20,7 @@ import { map, values } from 'lodash';
 const uuidv4 = require('uuid/v4');
 import * as moment from 'moment';
 import { getFacilityMeasurementPointResultsHelper } from './measurementPointResultsActions';
-import { adalFetch } from 'react-adal';
+import { adalFetch } from 'src/components/auth/Auth-Utils';
 import { authContext } from './userActions';
 
 // import {AxiosResponse} from 'axios';

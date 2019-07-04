@@ -6,7 +6,7 @@ import { beginAjaxCall } from './ajaxStatusActions';
 import { constants } from 'src/constants/constants';
 import * as types from './actionTypes';
 import API from '../constants/apiEndpoints';
-import { adalFetch } from 'react-adal';
+import { adalFetch } from 'src/components/auth/Auth-Utils';
 import { authContext } from './userActions';
 
 export const closeAllModals = () => ({

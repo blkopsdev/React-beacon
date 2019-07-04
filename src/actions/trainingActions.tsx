@@ -13,8 +13,8 @@ import {
 import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { find, sortBy } from 'lodash';
 import { toastr } from 'react-redux-toastr';
-import { adalFetch } from 'react-adal';
 import { authContext } from './userActions';
+import { adalFetch } from 'src/components/auth/Auth-Utils';
 
 export function loadCourses(user: Iuser): ThunkResult<void> {
   return dispatch => {

@@ -16,7 +16,7 @@ import * as types from './actionTypes';
 // import * as moment from 'moment';
 import { filter, values } from 'lodash';
 import { initialMeasurementPointList } from 'src/reducers/initialState';
-import { adalFetch } from 'react-adal';
+import { adalFetch } from 'src/components/auth/Auth-Utils';
 import { authContext } from './userActions';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;

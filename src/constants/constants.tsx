@@ -2,7 +2,6 @@ import { transitionInType, transitionOutType, Iuser, Itile } from '../models';
 import { find } from 'lodash';
 import { emptyTile } from '../reducers/initialState';
 import { toastr } from 'react-redux-toastr';
-import { authContext } from '../actions/userActions';
 
 const reportTypeEnum = {
   annualInspection: 1,
@@ -678,7 +677,7 @@ export const constants = {
       );
       // TODO figure out how to re-run the request?  if it is a get, it will likely re-run after refreshing and logging in again.  if it is a post or a put then... the data that the user entered will be lost.
       // adalReauth();
-      authContext.login();
+      // authContext.login();
       return;
     }
     if (error && error.response && error.response.status === 401) {
@@ -697,5 +696,6 @@ export const constants = {
   searchProductPageCount: 80, // max items to show inside the product search modal
   searchProductRecentProductLimit: 30,
   tablePageSizeDefault: 25,
-  tablePageSizeOptions: [10, 25, 50, 100]
+  tablePageSizeOptions: [10, 25, 50, 100],
+  httpTimeout: 60000
 };

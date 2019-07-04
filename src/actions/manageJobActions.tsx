@@ -9,7 +9,7 @@ import { constants } from 'src/constants/constants';
 import * as types from './actionTypes';
 import * as moment from 'moment';
 const uuidv4 = require('uuid/v4');
-import { adalFetch } from 'react-adal';
+import { adalFetch } from 'src/components/auth/Auth-Utils';
 import { authContext } from './userActions';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;

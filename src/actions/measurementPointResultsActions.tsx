@@ -14,7 +14,7 @@ import * as types from './actionTypes';
 import * as moment from 'moment';
 import { initialMeasurmentPointResult } from 'src/reducers/initialState';
 import { values } from 'lodash';
-import { adalFetch } from 'react-adal';
+import { adalFetch } from 'src/components/auth/Auth-Utils';
 import { authContext } from './userActions';
 import { Dispatch } from 'react-redux';
 const uuidv4 = require('uuid/v4');

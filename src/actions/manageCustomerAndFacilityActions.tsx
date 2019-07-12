@@ -1,8 +1,8 @@
 import { beginAjaxCall } from './ajaxStatusActions';
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import API from '../constants/apiEndpoints';
-import { adalFetch } from 'src/components/auth/Auth-Utils';
-import { authContext } from './userActions';
+import { msalFetch } from 'src/components/auth/Auth-Utils';
+
 import * as types from './actionTypes';
 import { constants } from '../constants/constants';
 import { ItableFiltersParams, IinitialState } from '../models';
@@ -23,9 +23,9 @@ export function getCustomers(): ThunkResult<void> {
       // this could be resolved by switching to "windowed" type paging since then we can define the size of the page.
       params: { page, name }
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.GET.customer.search;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;

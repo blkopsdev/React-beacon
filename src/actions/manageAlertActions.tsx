@@ -1,8 +1,8 @@
 import { beginAjaxCall } from './ajaxStatusActions';
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import API from '../constants/apiEndpoints';
-import { adalFetch } from 'src/components/auth/Auth-Utils';
-import { authContext } from './userActions';
+import { msalFetch } from 'src/components/auth/Auth-Utils';
+
 import * as types from './actionTypes';
 import { constants } from '../constants/constants';
 import { toastr } from 'react-redux-toastr';
@@ -21,9 +21,8 @@ export const getAlerts = (): ThunkResult<void> => {
       params: { page, title, type }
     };
 
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
     const url = API.GET.alert.search;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
@@ -58,9 +57,9 @@ export const saveAlert = (alert: IAlert): ThunkResult<void> => (
     data: FormUtil.toFormData(alert),
     headers
   };
-  const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
   const url = API.POST.alert.create;
-  return adalFetch(authContext, resource, axios, url, axiosOptions)
+  return msalFetch(url, axiosOptions)
     .then((data: AxiosResponse<any>) => {
       if (!data.data) {
         throw undefined;
@@ -93,9 +92,9 @@ export const updateAlert = (
     data: FormUtil.toFormData(alert),
     headers
   };
-  const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
   const url = `${API.PUT.alert.update}/${selectedAlert.id}`;
-  return adalFetch(authContext, resource, axios, url, axiosOptions)
+  return msalFetch(url, axiosOptions)
     .then((data: AxiosResponse<any>) => {
       if (!data.data) {
         throw undefined;
@@ -116,10 +115,10 @@ export const deleteAlert = (alert: IAlert): ThunkResult<void> => dispatch => {
   const axiosOptions: AxiosRequestConfig = {
     method: 'delete'
   };
-  const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
   const url = `${API.DELETE.alert.delete}/${alert.id}`;
 
-  return adalFetch(authContext, resource, axios, url, axiosOptions)
+  return msalFetch(url, axiosOptions)
     .then((data: AxiosResponse<any>) => {
       dispatch({ type: types.REMOVE_ALERT_SUCCESS, payload: alert });
       toastr.success('Success', `Deleted Alert.`, constants.toastrSuccess);

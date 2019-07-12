@@ -45,7 +45,7 @@ declare module 'react-adal' {
         logOut(): any;
     }
 
-    export function adalFetch (
+    export function msalFetch (
         authContext: AuthenticationContext,
         resourceGuiId: string,
         fetch: any,

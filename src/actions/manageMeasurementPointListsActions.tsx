@@ -1,6 +1,6 @@
 import { ThunkAction } from 'redux-thunk';
 import { toastr } from 'react-redux-toastr';
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import {
   IinitialState,
@@ -16,8 +16,7 @@ import * as types from './actionTypes';
 // import * as moment from 'moment';
 import { filter, values } from 'lodash';
 import { initialMeasurementPointList } from 'src/reducers/initialState';
-import { adalFetch } from 'src/components/auth/Auth-Utils';
-import { authContext } from './userActions';
+import { msalFetch } from 'src/components/auth/Auth-Utils';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
@@ -39,9 +38,9 @@ export function getAllMeasurementPointLists(): ThunkResult<void> {
         standardID: standard && standard.value
       }
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.GET.measurementPoint.getall;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
@@ -92,9 +91,9 @@ export function addGlobalMeasurementPointList(
       method: 'post',
       data: listForAPI
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.POST.measurementPoint.addglobalmpl;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
@@ -170,8 +169,8 @@ export function updateGlobalMeasurementPointList(
         method: 'put',
         data: listForAPI
       };
-      const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
-      return adalFetch(authContext, resource, axios, url, axiosOptions).then(
+
+      return msalFetch(url, axiosOptions).then(
         (data: AxiosResponse<any>) => {
           if (!data.data) {
             throw undefined;
@@ -211,9 +210,9 @@ export function deleteGlobalMeasurementPointList(
     const axiosOptions: AxiosRequestConfig = {
       method: 'delete'
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = `${API.DELETE.measurementPoint.deleteglobalmpl}/${MPlistID}`;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (data.status !== 200) {
           throw undefined;
@@ -268,9 +267,9 @@ export function updateCustomerMeasurementPointList(
       method: 'put',
       data: listForAPI
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = `${API.PUT.measurementPoint.updatecustomermpl}/${mpl.id}`;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
@@ -325,11 +324,11 @@ export function getMeasurementPointList(MPlistID: string): ThunkResult<void> {
     const axiosOptions: AxiosRequestConfig = {
       method: 'get'
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = `${
       API.GET.measurementPoint.getMeasurementPointList
     }/${MPlistID}`;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;

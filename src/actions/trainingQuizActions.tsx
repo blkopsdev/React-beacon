@@ -1,10 +1,10 @@
 import * as types from './actionTypes';
 import { GFQuizItem, ThunkResult, Iuser } from 'src/models';
 import { beginAjaxCall } from './ajaxStatusActions';
-import Axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import API from 'src/constants/apiEndpoints';
-import { authContext } from './userActions';
-import { adalFetch } from 'src/components/auth/Auth-Utils';
+
+import { msalFetch } from 'src/components/auth/Auth-Utils';
 import { sortBy, forEach } from 'lodash';
 import { constants } from 'src/constants/constants';
 
@@ -30,11 +30,11 @@ export function getQuizzesByLessonID(
     const axiosOptions: AxiosRequestConfig = {
       method: 'get'
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = `${
       API.GET.trainingCurriculum.quizzesByLessonID
     }?lessonID=${lessonID}`;
-    return adalFetch(authContext, resource, Axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((response: AxiosResponse<any>) => {
         if (response.status !== 200) {
           throw response;
@@ -79,9 +79,9 @@ export function getAllQuizzes(user: Iuser): ThunkResult<void> {
     const axiosOptions: AxiosRequestConfig = {
       method: 'get'
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.GET.trainingCurriculum.allQuizzes;
-    return adalFetch(authContext, resource, Axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((response: AxiosResponse<any>) => {
         if (response.status !== 200) {
           throw response;
@@ -128,9 +128,9 @@ export function saveQuizResult(): ThunkResult<void> {
       method: 'post',
       data: body
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.POST.training.savequiz;
-    return adalFetch(authContext, resource, Axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         dispatch({
           type: types.SAVE_QUIZ_SUCCESS,

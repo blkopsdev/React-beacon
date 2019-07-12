@@ -6,7 +6,7 @@ import * as React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { IinitialState, Iuser, Iredirect } from '../../models';
-import { adalLogin, userLogin, userLogout } from '../../actions/userActions';
+import { MSALlogin, userLogin, userLogout } from '../../actions/userActions';
 import {
   setLoginRedirect,
   removeLoginRedirect,
@@ -18,7 +18,7 @@ import UserForm from './UserForm';
 
 interface Iprops extends RouteComponentProps<{}> {
   userLogin?: any;
-  adalLogin?: any;
+  MSALlogin?: any;
   userLogout?: any;
   setLoginRedirect?: any;
   setRedirectPathname?: any;
@@ -49,7 +49,7 @@ class SignUpWithMS extends React.Component<Iprops, any> {
       .setLoginRedirect()
       .then(() => {
         console.log('start adal login');
-        this.props.adalLogin();
+        this.props.MSALlogin();
       })
       .catch((error: any) => console.error(error));
   };
@@ -123,7 +123,7 @@ export default connect(
   mapStateToProps,
   {
     userLogin,
-    adalLogin,
+    MSALlogin,
     userLogout,
     setLoginRedirect,
     removeLoginRedirect,

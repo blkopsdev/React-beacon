@@ -10,11 +10,11 @@ import {
   IshoppingCartProduct,
   GFCourse
 } from 'src/models';
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { find, sortBy } from 'lodash';
 import { toastr } from 'react-redux-toastr';
-import { authContext } from './userActions';
-import { adalFetch } from 'src/components/auth/Auth-Utils';
+
+import { msalFetch } from 'src/components/auth/Auth-Utils';
 
 export function loadCourses(user: Iuser): ThunkResult<void> {
   return dispatch => {
@@ -23,9 +23,9 @@ export function loadCourses(user: Iuser): ThunkResult<void> {
     const axiosOptions: AxiosRequestConfig = {
       method: 'get'
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.GET.trainingCurriculum.allCourses;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((response: AxiosResponse<any>) => {
         if (response.status !== 200) {
           throw response;
@@ -72,11 +72,11 @@ export function getLessonsByCourseID(
     const axiosOptions: AxiosRequestConfig = {
       method: 'get'
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = `${
       API.GET.trainingCurriculum.lessonByCourseID
     }?courseID=${courseID}`;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((response: AxiosResponse<any>) => {
         if (response.status !== 200) {
           throw response;
@@ -101,9 +101,9 @@ export function getAllLessons(user: Iuser): ThunkResult<void> {
     const axiosOptions: AxiosRequestConfig = {
       method: 'get'
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.GET.trainingCurriculum.allLessons;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((response: AxiosResponse<any>) => {
         if (response.status !== 200) {
           throw response;
@@ -126,9 +126,9 @@ export function getAllLessonProgress(): ThunkResult<void> {
     const axiosOptions: AxiosRequestConfig = {
       method: 'get'
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.GET.training.getalllessonprogress;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         dispatch({
           type: types.GET_ALL_LESSON_PROGRESS_SUCCESS,
@@ -150,9 +150,9 @@ export function getProgressByLesson(lessonId: string): ThunkResult<void> {
     const axiosOptions: AxiosRequestConfig = {
       method: 'get'
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = `${API.GET.training.getprogressbylesson}/${lessonId}`;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         dispatch({
           type: types.GET_LESSON_PROGRESS_SUCCESS,
@@ -177,9 +177,9 @@ export function saveLessonProgress(
       method: 'post',
       data: progress
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.POST.training.savelessonprogress;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         dispatch({
           type: types.SAVE_LESSON_PROGRESS_SUCCESS,
@@ -286,9 +286,9 @@ export const trainingCheckout = (
         UTATransactionNumber: parseInt(transactionNumber, 10)
       }
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.POST.training.trainingCheckout;
-    return adalFetch(authContext, resource, axios, url, axiosOptions).then(
+    return msalFetch(url, axiosOptions).then(
       (data: AxiosResponse<any>) => {
         dispatch({
           type: types.CHECKOUT_TRAINING_SUCCESS
@@ -314,9 +314,9 @@ const getPurchasedTrainingHelper = (dispatch: any, getState: any) => {
   const axiosOptions: AxiosRequestConfig = {
     method: 'get'
   };
-  const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
   const url = API.GET.training.getPurchasedTraining;
-  return adalFetch(authContext, resource, axios, url, axiosOptions)
+  return msalFetch(url, axiosOptions)
     .then((data: AxiosResponse<any>) => {
       dispatch({
         type: types.GET_PURCHASED_TRAINING_SUCCESS,
@@ -339,9 +339,9 @@ export function startQuiz(quizID: string): ThunkResult<void> {
       method: 'post',
       data: { quizID }
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.POST.training.startQuiz;
-    return adalFetch(authContext, resource, axios, url, axiosOptions).then(
+    return msalFetch(url, axiosOptions).then(
       (data: AxiosResponse<any>) => {
         dispatch({
           type: types.START_QUIZ_SUCCESS,
@@ -367,9 +367,9 @@ export function getQuizResults(): ThunkResult<void> {
     const axiosOptions: AxiosRequestConfig = {
       method: 'get'
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.GET.training.getQuizResults;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         dispatch({
           type: types.GET_QUIZ_RESULTS_SUCCESS,

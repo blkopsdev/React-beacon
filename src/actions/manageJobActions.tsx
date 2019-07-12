@@ -1,6 +1,6 @@
 import { ThunkAction } from 'redux-thunk';
 import { toastr } from 'react-redux-toastr';
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { IinitialState, ItableFiltersParams, Ijob } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
@@ -9,8 +9,7 @@ import { constants } from 'src/constants/constants';
 import * as types from './actionTypes';
 import * as moment from 'moment';
 const uuidv4 = require('uuid/v4');
-import { adalFetch } from 'src/components/auth/Auth-Utils';
-import { authContext } from './userActions';
+import { msalFetch } from 'src/components/auth/Auth-Utils';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
@@ -37,9 +36,9 @@ export function getJobs(): ThunkResult<void> {
         endDate: endDate ? moment.utc(endDate).toISOString() : ''
       }
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.GET.job.getall;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
@@ -74,9 +73,9 @@ export function getAllJobs(): ThunkResult<void> {
         pagingType
       }
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.GET.job.getall;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
@@ -106,9 +105,9 @@ export function getFSEUsers(): ThunkResult<void> {
       method: 'get',
       params: {}
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.GET.user.getfseusers;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
@@ -153,9 +152,9 @@ export function updateJob(
       method: 'post',
       data: { job, users }
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.POST.job.update;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
@@ -202,9 +201,9 @@ export function createJob(formValues: any): ThunkResult<void> {
       method: 'post',
       data: { job, users }
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.POST.job.create;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;

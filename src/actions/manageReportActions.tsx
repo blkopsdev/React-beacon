@@ -1,6 +1,6 @@
 import { ThunkAction } from 'redux-thunk';
 import { toastr } from 'react-redux-toastr';
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import {
   IinitialState,
@@ -12,8 +12,7 @@ import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
 import { constants } from 'src/constants/constants';
 import * as types from './actionTypes';
-import { adalFetch } from 'src/components/auth/Auth-Utils';
-import { authContext } from './userActions';
+import { msalFetch } from 'src/components/auth/Auth-Utils';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
@@ -23,9 +22,9 @@ export function getDefaultReports(): ThunkResult<void> {
     const axiosOptions: AxiosRequestConfig = {
       method: 'get'
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.GET.report.defaults;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
@@ -111,9 +110,9 @@ export function runReport(
       headers: { Accept: 'application/pdf' },
       responseType: 'blob'
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.POST.report.run;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;

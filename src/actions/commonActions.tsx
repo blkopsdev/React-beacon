@@ -1,13 +1,12 @@
 import { toastr } from 'react-redux-toastr';
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { Icustomer, Ifacility, ThunkResult } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
 import { constants } from 'src/constants/constants';
 import * as types from './actionTypes';
 import API from '../constants/apiEndpoints';
-import { adalFetch } from 'src/components/auth/Auth-Utils';
-import { authContext } from './userActions';
+import { msalFetch } from 'src/components/auth/Auth-Utils';
 
 export const closeAllModals = () => ({
   type: types.CLOSE_ALL_MODALS
@@ -26,9 +25,9 @@ export function getFacilitiesByCustomer(customerID: string) {
       method: 'get',
       params: { customerID }
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.GET.facility.getbycustomer;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
@@ -54,9 +53,9 @@ export function getCustomers() {
       method: 'get',
       params: { pagingType: 'none' }
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.GET.customer.getall;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
@@ -90,9 +89,9 @@ export function addCustomer({
       method: 'post',
       data: { name, vat }
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.POST.customer.add;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
@@ -121,9 +120,9 @@ export function updateCustomer(customer: Icustomer): ThunkResult<void> {
       method: 'put',
       data: customer
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.PUT.customer.update.replace('{id}', customer.id);
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         dispatch({
           type: types.CUSTOMER_UPDATE_SUCCESS,
@@ -148,9 +147,9 @@ export function addFacility(facility: Ifacility): ThunkResult<void> {
       method: 'post',
       data: facility
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.POST.facility.add;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
@@ -187,9 +186,9 @@ export function updateFacility(facility: Ifacility): ThunkResult<void> {
       method: 'put',
       data: facility
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.PUT.facility.update.replace('{id}', facility.id);
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         dispatch({
           type: types.FACILITY_UPDATE_SUCCESS,

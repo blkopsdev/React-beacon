@@ -1,8 +1,8 @@
 import { beginAjaxCall } from './ajaxStatusActions';
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import API from '../constants/apiEndpoints';
-import { adalFetch } from 'src/components/auth/Auth-Utils';
-import { authContext } from './userActions';
+import { msalFetch } from 'src/components/auth/Auth-Utils';
+
 import * as types from './actionTypes';
 import { constants } from '../constants/constants';
 import { toastr } from 'react-redux-toastr';
@@ -17,9 +17,9 @@ export function getBrands() {
       method: 'get',
       params: { page, name }
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.GET.brand.getall;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
@@ -47,9 +47,9 @@ export function saveBrand(brand: any) {
       method: 'post',
       data: { name: brand }
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.POST.brand.add;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (data.status !== 200) {
           throw undefined;
@@ -98,9 +98,9 @@ export function updateBrand(brand: any) {
       method: 'put',
       data: { ...brand }
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = `${API.PUT.brand.update}/${brand.id}`;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (data.status !== 200) {
           throw undefined;
@@ -151,9 +151,9 @@ export function deleteBrand(brand: any) {
     const axiosOptions: AxiosRequestConfig = {
       method: 'delete'
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = `${API.DELETE.brand.remove}/${brand.id}`;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (data.status !== 200) {
           throw undefined;

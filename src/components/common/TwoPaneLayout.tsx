@@ -25,7 +25,6 @@ import ManageMeasurementPointList from '../manageMeasurementPointLists/ManageMea
 import ManageBrand from '../manageBrand/ManageBrand';
 import ManageCustomerAndFacility from '../manageCustomerAndFacility/ManageCustomerAndFacility';
 import ManageAlert from '../manageAlert/ManageAlert';
-import { msalApp, handleRedirectCallback } from '../auth/Auth-Utils';
 // const testme = () => {
 //   return <h3>Your test is a success</h3>;
 // };
@@ -36,8 +35,6 @@ const TwoPaneLayout = (props: any) => {
     props.user,
     tile.securityFunction
   );
-  console.warn('setting redirect callback from twopane');
-  msalApp.handleRedirectCallback(handleRedirectCallback);
 
   if (!hasAccess) {
     return (

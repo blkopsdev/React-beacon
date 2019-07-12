@@ -15,7 +15,6 @@ import {
 import { Button, Col, Grid, Row } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
 import UserForm from './UserForm';
-import { msalApp, handleRedirectCallback } from './Auth-Utils';
 
 interface Iprops extends RouteComponentProps<{}> {
   userLogin?: any;
@@ -36,7 +35,6 @@ class SignUpWithMS extends React.Component<Iprops, any> {
     super(props);
   }
   componentWillMount() {
-    msalApp.handleRedirectCallback(handleRedirectCallback);
     // if there is no username and there is a token, get the user
     // if (this.props.user.email.length === 0 && isAuthenticated()) {
     //   this.props.userLogin();

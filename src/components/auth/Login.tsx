@@ -21,7 +21,7 @@ import {
   removeLoginRedirect,
   setRedirectPathname
 } from '../../actions/redirectToReferrerAction';
-import { msalApp, handleRedirectCallback } from './Auth-Utils';
+import { msalApp } from './Auth-Utils';
 
 // const Loading = () => <h3>Loading...</h3>;
 
@@ -58,7 +58,6 @@ class Login extends React.Component<Iprops, Istate> {
       this.handleRedirectToSignup,
       false
     );
-    msalApp.handleRedirectCallback(handleRedirectCallback);
 
     if (msalApp.getAccount()) {
       if (!this.props.user.isAuthenticated) {

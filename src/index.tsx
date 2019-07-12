@@ -5,12 +5,6 @@
 import 'custom-event-polyfill';
 import { Provider } from 'react-redux';
 import {
-  BrowserRouter as Router,
-  Redirect,
-  Route,
-  Switch
-} from 'react-router-dom';
-import {
   faCog,
   faCalendarCheck,
   faTh,
@@ -40,14 +34,11 @@ import {
 import { library } from '@fortawesome/fontawesome-svg-core';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import ReduxToastr from 'react-redux-toastr';
 import axios from 'axios';
 
-import Login from './components/auth/Login';
 import configureStore from './store/configureStore';
 import registerServiceWorker from './registerServiceWorker';
-import { LinkContainer } from 'react-router-bootstrap';
-import { Button } from 'react-bootstrap';
+
 import { PersistGate } from 'redux-persist/integration/react';
 import { TrackJS } from 'trackjs';
 
@@ -77,10 +68,6 @@ library.add(
   faHistory
 );
 
-import Dashboard from './components/dashboard/Dashboard';
-import Header from './components/header/Header';
-import SignUpDirect from './components/auth/SignUpDirect';
-import TwoPaneLayout from './components/common/TwoPaneLayout';
 import i18n from './i18n';
 import { I18nextProvider } from 'react-i18next';
 
@@ -96,7 +83,7 @@ import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import './index.css';
 import { constants } from './constants/constants';
 import { msalApp } from './components/auth/Auth-Utils';
-import SignUpWithMS from './components/auth/SignUpWithMS';
+import App from './App';
 if (!(window !== window.parent && !window.opener)) {
   const { store, persistor } = configureStore();
 
@@ -130,97 +117,11 @@ in userActions.  then we pause the persistor in order to prevent anything else f
   };
   document.addEventListener('userLogout', handleLogout, false);
 
-  // const Loading = () => <h3>Loading</h3>;
-  // const ErrorPage = (error: any) => <h3>Error: {error}</h3>;
-  const NoMatch = ({ location }: any) => {
-    console.error(`no match for route: ${location.pathname}`);
-    return (
-      <div>
-        <h3>
-          <code>{location.pathname}</code> does not exist
-        </h3>
-        <LinkContainer to="/">
-          <Button bsStyle="link">Back to home page.</Button>
-        </LinkContainer>
-      </div>
-    );
-  };
-
-  // TODO if an API call is unauthenticated redirect to the login page
-
-  const PrivateRoute = ({ component: Component, ...rest }: any) => {
-    const user = store.getState().user;
-    let authenticated = false;
-    authenticated = user.isAuthenticated && user.id.length > 0;
-    if (authenticated) {
-      TrackJS.configure({
-        userId: user.email,
-        version: process.env.REACT_APP_VERSION
-      });
-      console.log('app is loaded and authenticated');
-    }
-    return (
-      <Route
-        {...rest}
-        render={(props: any) =>
-          authenticated ? (
-            <Component {...props} />
-          ) : (
-            <Redirect
-              to={{
-                pathname: '/',
-                state: { from: props.location }
-              }}
-            />
-          )
-        }
-      />
-    );
-  };
   ReactDOM.render(
     <I18nextProvider i18n={i18n}>
       <Provider store={store}>
         <PersistGate loading={null} persistor={persistor}>
-          <Router>
-            <div className="main-body-content">
-              <Header />
-              <Switch>
-                <Route exact path="/" component={Login} />
-                <Route exact path="/signup" component={SignUpDirect} />
-                <Route exact path="/social_signup" component={SignUpWithMS} />
-                <PrivateRoute path="/dashboard" component={Dashboard} />
-                <PrivateRoute path="/queue" component={TwoPaneLayout} />
-                <PrivateRoute path="/users" component={TwoPaneLayout} />
-                <PrivateRoute path="/team" component={TwoPaneLayout} />
-                <PrivateRoute path="/inventory" component={TwoPaneLayout} />
-                <PrivateRoute path="/brands" component={TwoPaneLayout} />
-                <PrivateRoute
-                  path="/customer-and-facility"
-                  component={TwoPaneLayout}
-                />
-                <PrivateRoute path="/alerts" component={TwoPaneLayout} />
-                <PrivateRoute path="/productqueue" component={TwoPaneLayout} />
-                <PrivateRoute path="/managejobs" component={TwoPaneLayout} />
-                <PrivateRoute path="/reports" component={TwoPaneLayout} />
-                <PrivateRoute path="/locations" component={TwoPaneLayout} />
-                <PrivateRoute path="/training" component={TwoPaneLayout} />
-                <PrivateRoute
-                  path="/manageTraining"
-                  component={TwoPaneLayout}
-                />
-                <PrivateRoute path="/measurements" component={TwoPaneLayout} />
-                <PrivateRoute
-                  path="/customermeasurements"
-                  component={TwoPaneLayout}
-                />
-                <Route component={NoMatch} />
-              </Switch>
-              <ReduxToastr
-                position={'top-right'}
-                preventDuplicates={process.env.NODE_ENV === 'production'}
-              />
-            </div>
-          </Router>
+          <App />
         </PersistGate>
       </Provider>
     </I18nextProvider>,

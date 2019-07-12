@@ -144,7 +144,7 @@ export const msalFetch = (
   isRetry?: boolean
 ): Promise<any> => {
   return acquireToken().then((tokenResponse: AuthResponse) => {
-    console.log('msalFetch tokenResponse: ', tokenResponse);
+    // console.log('msalFetch tokenResponse: ', tokenResponse);
     if (!tokenResponse || tokenResponse.accessToken === null) {
       console.error('missing token', tokenResponse);
       if (!isRetry) {

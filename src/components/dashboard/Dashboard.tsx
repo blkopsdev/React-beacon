@@ -6,7 +6,6 @@ import { Link } from 'react-router-dom';
 import { constants } from 'src/constants/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
-import { msalApp, handleRedirectCallback } from '../auth/Auth-Utils';
 
 const masonryOptions: MasonryOptions = {
   transitionDuration: 0
@@ -26,9 +25,6 @@ interface Iprops extends React.Props<Dashboard> {
 class Dashboard extends React.Component<Iprops, {}> {
   constructor(props: Iprops) {
     super(props);
-  }
-  componentDidMount() {
-    msalApp.handleRedirectCallback(handleRedirectCallback);
   }
 
   render() {

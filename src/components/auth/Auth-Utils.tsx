@@ -119,9 +119,6 @@ export const msalApp = new UserAgentApplication({
     tokenRenewalOffsetSeconds: -120
   }
 });
-document.addEventListener('DOMContentLoaded', () => {
-  msalApp.handleRedirectCallback(handleRedirectCallback);
-});
 
 export const acquireToken = () => {
   const redirect = true; // force redirect method because in order to support the popup we will need to add some code that will re-try the requests

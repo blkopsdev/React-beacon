@@ -17,6 +17,7 @@ import { RouteComponentProps } from 'react-router-dom';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 
 import UserForm from './UserForm';
+import { msalApp, handleRedirectCallback } from './Auth-Utils';
 
 interface Iprops extends RouteComponentProps<{}> {
   userLogin?: any;
@@ -64,6 +65,9 @@ class SignUpDirect extends React.Component<Iprops, Istate> {
       redirectToLogin: false,
       showSignupSuccess: false
     };
+  }
+  componentDidMount() {
+    msalApp.handleRedirectCallback(handleRedirectCallback);
   }
 
   cancel = () => {

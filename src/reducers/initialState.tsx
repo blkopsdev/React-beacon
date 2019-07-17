@@ -231,7 +231,7 @@ export const initialLesson = {
   cost: 0,
   isProtected: false
 };
-const initialUser = {
+export const initialUser = {
   password: '',
   username: '',
   isAuthenticated: false,

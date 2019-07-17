@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
 import { IinitialState, Iuser, Iredirect, ItempUser } from '../../models';
 import {
-  adalLogin,
+  MSALlogin,
   userLogin,
   userLogout,
   signUpDirect
@@ -20,7 +20,7 @@ import UserForm from './UserForm';
 
 interface Iprops extends RouteComponentProps<{}> {
   userLogin?: any;
-  adalLogin?: any;
+  MSALlogin?: any;
   userLogout?: any;
   setRedirectPathname?: any;
   removeLoginRedirect: () => Promise<void>;
@@ -132,7 +132,7 @@ export default translate('auth')(
     mapStateToProps,
     {
       userLogin,
-      adalLogin,
+      MSALlogin,
       userLogout,
       removeLoginRedirect,
       signUpDirect

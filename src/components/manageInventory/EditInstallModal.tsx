@@ -88,7 +88,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     loading: state.ajaxCallsInProgress > 0,
     facility,
     showModal: state.manageInventory.showEditInstallModal,
-    productInfo: state.manageInventory.productInfo,
+    productInfo: state.productInfo,
     tableFilters: state.manageInventory.tableFilters,
     secondModal: state.manageInventory.showSearchNewProductsModal
   };

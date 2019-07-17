@@ -328,21 +328,21 @@ class ManageCustomerAndFacility extends React.Component<
 
 const mapStateToProps = (state: IinitialState) => {
   const tableData = orderBy(
-    state.customerAndFacilityManage.data,
+    state.manageCustomerAndFacility.data,
     res => moment.utc(res.createDate).unix(),
     'desc'
   );
 
   const selectedCustomer =
-    state.customers[state.customerAndFacilityManage.selectedCustomerID] ||
+    state.customers[state.manageCustomerAndFacility.selectedCustomerID] ||
     initialCustomer;
 
   return {
     tableData,
-    totalPages: state.customerAndFacilityManage.totalPages,
+    totalPages: state.manageCustomerAndFacility.totalPages,
     showEditCustomerAndFacilityModal:
-      state.customerAndFacilityManage.showEditCustomerAndFacilityModal,
-    tableFilters: state.customerAndFacilityManage.tableFilters,
+      state.manageCustomerAndFacility.showEditCustomerAndFacilityModal,
+    tableFilters: state.manageCustomerAndFacility.tableFilters,
     selectedCustomer,
     customers: state.customers,
     facilities: state.facilities

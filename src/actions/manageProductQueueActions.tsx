@@ -1,13 +1,12 @@
 import { ThunkAction } from 'redux-thunk';
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { IinitialState, Iproduct, ItableFiltersParams } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
 import { constants } from 'src/constants/constants';
 import * as types from './actionTypes';
-import { adalFetch } from 'react-adal';
-import { authContext } from './userActions';
+import { msalFetch } from 'src/components/auth/Auth-Utils';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
@@ -19,9 +18,9 @@ export function getProductQueue(): ThunkResult<void> {
       method: 'get',
       params: { page, search }
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.GET.inventory.getproductqueue;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
@@ -50,9 +49,9 @@ export function approveProduct(productQueueID: string, dispatch: any) {
     method: 'post',
     data: { id: productQueueID }
   };
-  const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
   const url = API.POST.inventory.approveproduct;
-  return adalFetch(authContext, resource, axios, url, axiosOptions)
+  return msalFetch(url, axiosOptions)
     .then((data: AxiosResponse<any>) => {
       if (!data.data) {
         throw undefined;
@@ -82,9 +81,9 @@ export function updateQueueProduct(
       method: 'post',
       data: product
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.POST.inventory.updateproduct;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;

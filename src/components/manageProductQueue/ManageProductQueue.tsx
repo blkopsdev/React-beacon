@@ -380,7 +380,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     customers: state.customers,
     loading: state.ajaxCallsInProgress > 0,
     showApproveProductModal: state.manageProductQueue.showApproveProductModal,
-    productInfo: state.manageInventory.productInfo,
+    productInfo: state.productInfo,
     tableData: state.manageProductQueue.data,
     tableFilters: state.manageProductQueue.tableFilters
   };

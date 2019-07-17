@@ -1,8 +1,8 @@
 import { beginAjaxCall } from './ajaxStatusActions';
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import API from '../constants/apiEndpoints';
-import { adalFetch } from 'react-adal';
-import { authContext } from './userActions';
+import { msalFetch } from 'src/components/auth/Auth-Utils';
+
 import * as types from './actionTypes';
 import { constants } from '../constants/constants';
 import { toastr } from 'react-redux-toastr';
@@ -21,9 +21,8 @@ export const getAlerts = (): ThunkResult<void> => {
       params: { page, title, type }
     };
 
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
     const url = API.GET.alert.search;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
@@ -46,9 +45,10 @@ export const getAlerts = (): ThunkResult<void> => {
   };
 };
 
-export const saveAlert = (alert: IAlert) => (
-  dispatch: any
-): ThunkResult<void> => {
+export const saveAlert = (alert: IAlert): ThunkResult<void> => (
+  dispatch,
+  getState
+) => {
   dispatch(beginAjaxCall());
   const headers = { 'content-type': 'multipart/form-data' };
 
@@ -57,9 +57,9 @@ export const saveAlert = (alert: IAlert) => (
     data: FormUtil.toFormData(alert),
     headers
   };
-  const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
   const url = API.POST.alert.create;
-  return adalFetch(authContext, resource, axios, url, axiosOptions)
+  return msalFetch(url, axiosOptions)
     .then((data: AxiosResponse<any>) => {
       if (!data.data) {
         throw undefined;
@@ -79,9 +79,10 @@ export const saveAlert = (alert: IAlert) => (
     });
 };
 
-export const updateAlert = (alert: any, selectedAlert: IAlert) => (
-  dispatch: any
-): ThunkResult<void> => {
+export const updateAlert = (
+  alert: any,
+  selectedAlert: IAlert
+): ThunkResult<void> => dispatch => {
   dispatch(beginAjaxCall());
   const headers = { 'content-type': 'multipart/form-data' };
 
@@ -91,9 +92,9 @@ export const updateAlert = (alert: any, selectedAlert: IAlert) => (
     data: FormUtil.toFormData(alert),
     headers
   };
-  const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
   const url = `${API.PUT.alert.update}/${selectedAlert.id}`;
-  return adalFetch(authContext, resource, axios, url, axiosOptions)
+  return msalFetch(url, axiosOptions)
     .then((data: AxiosResponse<any>) => {
       if (!data.data) {
         throw undefined;
@@ -109,17 +110,15 @@ export const updateAlert = (alert: any, selectedAlert: IAlert) => (
     });
 };
 
-export const deleteAlert = (alert: IAlert) => (
-  dispatch: any
-): ThunkResult<void> => {
+export const deleteAlert = (alert: IAlert): ThunkResult<void> => dispatch => {
   dispatch(beginAjaxCall());
   const axiosOptions: AxiosRequestConfig = {
     method: 'delete'
   };
-  const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
   const url = `${API.DELETE.alert.delete}/${alert.id}`;
 
-  return adalFetch(authContext, resource, axios, url, axiosOptions)
+  return msalFetch(url, axiosOptions)
     .then((data: AxiosResponse<any>) => {
       dispatch({ type: types.REMOVE_ALERT_SUCCESS, payload: alert });
       toastr.success('Success', `Deleted Alert.`, constants.toastrSuccess);

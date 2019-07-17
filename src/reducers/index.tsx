@@ -20,7 +20,7 @@ import manageMeasurementPointLists from './manageMeasurementPointListsReducer';
 import measurementPointResults from './measurementPointResultsReducer';
 import { manageReportReducer } from './manageReportReducer';
 import brandManage from './manageBrandReducer';
-import customerAndFacilityManage from './manageCustomerAndFacilityReducer';
+import manageCustomerAndFacility from './manageCustomerAndFacilityReducer';
 import manageAlert from './manageAlertReducer';
 
 const rootReducer = combineReducers({
@@ -35,7 +35,7 @@ const rootReducer = combineReducers({
   manageLocation,
   manageBrand: brandManage,
   manageAlert,
-  customerAndFacilityManage,
+  manageCustomerAndFacility,
   customers,
   facilities,
   manageInventory,

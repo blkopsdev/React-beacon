@@ -172,7 +172,6 @@ export default function ManageInventory(
     data: dataReducer(state.data, action),
     totalPages: totalPagesReducer(state.totalPages, action),
     cart: cartReducerWithName(state.cart, action, 'INVENTORY'),
-    productInfo: productInfo(state.productInfo, action),
     selectedProduct: selectedProductReducer(state.selectedProduct, action),
     newProducts: newProductsReducer(state.newProducts, action),
     showShoppingCartModal: modalToggleWithName(
@@ -237,7 +236,7 @@ export default function ManageInventory(
 Brand, productType, Main Category, Power, Product Group, Standard, Subcategory, System Size 
 */
 export function productInfo(
-  state: IproductInfo = initialState.manageInventory.productInfo,
+  state: IproductInfo = initialState.productInfo,
   action: any
 ): IproductInfo {
   switch (action.type) {
@@ -279,7 +278,7 @@ export function productInfo(
     case types.UPDATE_PRODUCT_INFO_SUCCESS:
       return { ...state, ...action.payload };
     case types.USER_LOGOUT_SUCCESS:
-      return initialState.manageInventory.productInfo;
+      return initialState.productInfo;
     default:
       return state;
   }

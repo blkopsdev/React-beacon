@@ -94,18 +94,18 @@ class EditFacilityModal extends React.Component<Iprops & IdispatchProps, {}> {
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
   const selectedCustomer =
     ownProps.selectedCustomer ||
-    state.customers[state.customerAndFacilityManage.selectedCustomerID] ||
+    state.customers[state.manageCustomerAndFacility.selectedCustomerID] ||
     initialCustomer;
 
   const selectedFacility: Ifacility =
-    state.facilities[state.customerAndFacilityManage.selectedFacilityID] ||
+    state.facilities[state.manageCustomerAndFacility.selectedFacilityID] ||
     initialFacility;
 
   return {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
     showEditFacilityModal: state.showEditFacilityModal,
-    formValues: state.customerAndFacilityManage.facilityFormValues,
+    formValues: state.manageCustomerAndFacility.facilityFormValues,
     selectedFacility,
     selectedCustomer
   };

@@ -16,6 +16,7 @@ export interface Iuser {
   address2: string;
   city: string;
   state: string;
+  phone: string;
   zip: string;
   id: string;
   managerID?: string;
@@ -630,7 +631,6 @@ export interface ImanageInventoryReducer {
   data: Iproduct[];
   totalPages: number;
   cart: IshoppingCart;
-  productInfo: IproductInfo;
   showEditProductModal: boolean;
   showEditInstallModal: boolean;
   showShoppingCartModal: boolean;
@@ -717,6 +717,6 @@ export interface IinitialState {
   measurementPointResults: ImeasurementPointResultsReducer;
   manageReport: ImanageReportReducer;
   manageBrand: ImanageBrandReducer;
-  customerAndFacilityManage: ImanageCustomerAndFacilityReducer;
+  manageCustomerAndFacility: ImanageCustomerAndFacilityReducer;
   manageAlert: ImanageAlertReducer;
 }

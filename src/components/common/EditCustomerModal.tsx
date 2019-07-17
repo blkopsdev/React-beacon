@@ -83,7 +83,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
     showEditCustomerModal: state.showEditCustomerModal,
-    formValues: state.customerAndFacilityManage.customerFormValues
+    formValues: state.manageCustomerAndFacility.customerFormValues
   };
 };
 

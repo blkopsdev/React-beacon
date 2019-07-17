@@ -76,7 +76,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     showModal:
       state.manageInventory.showShoppingCartModal ||
       state.training.showShoppingCartModal,
-    productInfo: state.manageInventory.productInfo,
+    productInfo: state.productInfo,
     tableFilters: state.manageInventory.tableFilters
   };
 };

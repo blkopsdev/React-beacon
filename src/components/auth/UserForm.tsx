@@ -18,8 +18,67 @@ import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import { Ioption } from 'src/models';
 
+const passwordRegex = new RegExp(
+  '(?=^.{6,255}$)((?=.*d)(?=.*[A-Z])(?=.*[a-z])|(?=.*d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*'
+);
+
+const passwordMatchValidator = (g: any) => {
+  if (!g._parent) {
+    return;
+  }
+  if (!g._parent.get('tempPassword')) {
+    return null;
+  }
+  return g._parent.get('tempPassword').value ===
+    g._parent.get('passwordConfirm').value
+    ? null
+    : { mismatch: true };
+};
+
 // Field config to configure form
 const fieldConfigControls = {
+  tempPassword: {
+    options: {
+      // validators: [Validators.required]
+      validators: [Validators.required, Validators.pattern(passwordRegex)]
+    },
+
+    render: FormUtil.TextInput,
+    meta: {
+      label: 'password',
+      colWidth: 12,
+      type: 'password',
+      name: 'password'
+    }
+  },
+  passwordConfirm: {
+    options: {
+      // validators: [Validators.required]
+      validators: [
+        Validators.required,
+        Validators.pattern(passwordRegex),
+        passwordMatchValidator
+      ]
+    },
+    render: FormUtil.TextInput,
+    meta: {
+      label: 'password confirm',
+      colWidth: 12,
+      type: 'password',
+      name: 'password confirm'
+    }
+  },
+  $field_3: {
+    render: () => (
+      <Col xs={12} style={{ color: '#ffff', marginBottom: '10px' }}>
+        <small>
+          Password must be between 8 - 256 characters and requires 3 out of 4 of
+          the following: Lowercase letters, Uppercase letters, Numbers (0-9),
+          and Symbols (@#$!&).
+        </small>
+      </Col>
+    )
+  },
   tempCompany: {
     options: {
       validators: [Validators.required, FormUtil.validators.requiredWithTrim]

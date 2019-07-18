@@ -47,34 +47,28 @@ scope=${MSAL_SCOPES.MMG} ${
   MSAL_SCOPES.OPENID
 }&response_mode=fragment&nonce=123465`;
 
-export const handleRedirectCallback = (
+/*
+* temporarily set the callback because sometimes the callback we set inside app.tsx 
+* does not run soon enough and MSAL complains that we have not set a redirect callback.
+* here we use a javascript alert because we know that is loaded.
+*/
+const temporaryHandleRedirectCallback = (
   error: AuthError,
   response?: AuthResponse
 ) => {
+  console.error('msalRedirectCallback', error);
   if (error) {
-    console.error('msalRedirectCallback', error);
     const forgotPasswordError =
       error.message.indexOf('The user has forgotten their password') > -1;
     const forgotPasswordCancel =
-      error.errorMessage.indexOf('user has canceled entering') > -1;
-    const missingUserError =
-      error.errorMessage.indexOf('User does not exist') > -1;
+      error.errorMessage.indexOf('user has cancelled entering') > -1;
+
     if (forgotPasswordError) {
-      window.open(MSAL_FORGET);
+      window.location.replace(MSAL_FORGET);
       return;
     }
     if (forgotPasswordCancel) {
-      window.open(`${process.env.REACT_APP_HOST_DOMAIN}`);
-      return;
-    }
-    if (missingUserError) {
-      const event = new Event('missingUser');
-      document.dispatchEvent(event);
-      toastr.warning(
-        'Please Sign Up',
-        'User not found.  Please signup first.',
-        constants.toastrWarning
-      );
+      window.location.replace(`${process.env.REACT_APP_HOST_DOMAIN}`);
       return;
     }
     let errorMessage = error.errorMessage;
@@ -87,18 +81,7 @@ export const handleRedirectCallback = (
     if (messageTextOnly.length) {
       errorMessage = messageTextOnly;
     }
-    toastr.error(
-      'Error',
-      errorMessage + '  Please contact support if you need assistance.',
-      constants.toastrError
-    );
-    /*
-    * logout so that the user does not get stuck with the system automatically trying to login with the wrong account
-    * this does not work in some cases and the issue is being tracked here: 
-    * https://github.com/AzureAD/microsoft-authentication-library-for-js/issues/735
-    * commented out for now since it does not seem to work and causes an extra screen refresh
-    */
-    // msalApp.logout();
+    alert(errorMessage);
   }
 };
 
@@ -120,6 +103,8 @@ export const msalApp = new UserAgentApplication({
   }
 });
 
+msalApp.handleRedirectCallback(temporaryHandleRedirectCallback);
+
 export const acquireToken = () => {
   const redirect = true; // force redirect method because in order to support the popup we will need to add some code that will re-try the requests
   const request: AuthenticationParameters = {
@@ -129,9 +114,13 @@ export const acquireToken = () => {
     // Call acquireTokenPopup (popup window) in case of acquireTokenSilent failure
     // due to consent or interaction required ONLY
     if (requiresInteraction(error.errorCode)) {
-      return redirect
-        ? msalApp.acquireTokenRedirect(request)
-        : msalApp.acquireTokenPopup(request);
+      // set the redirect in redux
+      document.dispatchEvent(new Event('setRedirect'));
+      setTimeout(() => {
+        return redirect
+          ? msalApp.acquireTokenRedirect(request)
+          : msalApp.acquireTokenPopup(request);
+      }, 1000);
     } else {
       return error;
     }

@@ -1,9 +1,16 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { filter, isEmpty } from 'lodash';
-import { GFQuizItem, GFLesson, GFCourse, LessonProgress } from '../../models';
+import {
+  GFQuizItem,
+  GFLesson,
+  GFCourse,
+  LessonProgress,
+  Iuser,
+  IinitialState
+} from '../../models';
 
-import { setLesson, saveLessonProgress } from '../../actions/trainingActions';
+import { saveLessonProgress } from '../../actions/trainingActions';
 
 import {
   ListGroup,
@@ -21,7 +28,8 @@ import Player from '@vimeo/player';
 import * as moment from 'moment';
 import { toastr } from 'react-redux-toastr';
 import { constants } from 'src/constants/constants';
-import { setQuiz, getQuizzesByLessonID } from 'src/actions/trainingQuizActions';
+import { getQuizzesByLessonID } from 'src/actions/trainingQuizActions';
+import { initialLesson } from 'src/reducers/initialState';
 
 interface RouterParams {
   courseID: string;
@@ -29,104 +37,69 @@ interface RouterParams {
   quizID: string;
 }
 
-interface Props extends RouteComponentProps<RouterParams> {
-  user: any;
+interface IdispatchProps {
+  user: Iuser;
   courses: GFCourse[];
   lesson: GFLesson;
   lessons: GFLesson[];
-  quiz: GFQuizItem;
-  quizzes: { [key: string]: GFQuizItem };
-  setLesson: typeof setLesson;
+  lessonQuizzes: GFQuizItem[];
   saveLessonProgress: typeof saveLessonProgress;
-  setQuiz: typeof setQuiz;
   getQuizzesByLessonID: typeof getQuizzesByLessonID;
   loading: boolean;
-  params: any;
   progress: LessonProgress;
 }
 
+interface Props extends RouteComponentProps<RouterParams> {}
+
 interface State {
   primaryVideo: string;
-  lessonQuizzes: GFQuizItem[]; // the quizzes for this lesson
   waitingCount: number;
 }
 
 const saveTimeout = 15;
 
-class Lesson extends React.Component<Props, State> {
+class Lesson extends React.Component<Props & IdispatchProps, State> {
   private player: any;
   private pElem: any;
   private timeSpent: any;
   private lastUpdate: any;
   private lastSave: any;
-  constructor(props: Props) {
+  constructor(props: Props & IdispatchProps) {
     super(props);
     this.state = {
       primaryVideo: `https://player.vimeo.com/video/${
         this.props.lesson.primaryVideoPath
       }`,
-      lessonQuizzes: [],
       waitingCount: 0
     };
-    /* video embed URLS
-    * YouTube: `https://www.youtube.com/embed/${this.props.lesson.secondaryVideoPath}?ecver=1` 
-    * Wistia: `https://fast.wistia.net/embed/iframe/${this.props.lesson.secondaryVideoPath}?videoFoam=true`
-    * Vimeo: `https://player.vimeo.com/video/${this.props.lesson.primaryVideoPath}`
-    */
     this.timeSpent = 0;
   }
 
   componentWillMount() {
-    // process the quizzes immediately
-    this.loadQuizzes();
-    if (!isEmpty(this.props.quizzes)) {
-      this.filterVisibleQuizzes();
-    }
-  }
-
-  componentDidMount() {
-    console.log('component did mount in lesson');
     if (
       !this.props.match.params.lessonID ||
       !this.props.match.params.courseID
     ) {
       // no lesson id and no coursID is not allowed
-      console.log('no lesson id or no coursID allowed');
+      console.log('no lesson id or no coursID');
       this.props.history.replace(`/training`);
       return;
     }
 
     // Check to make sure we have already loaded courses, lessons and quizzes in redux
-    if (
-      isEmpty(this.props.courses) ||
-      isEmpty(this.props.lessons) ||
-      isEmpty(this.props.quizzes)
-    ) {
-      console.log('have not loaded courses, lessons, or quizzes');
+    if (isEmpty(this.props.courses) || isEmpty(this.props.lessons)) {
+      console.log('have not loaded courses, lessons');
       this.props.history.push(`/training`);
       return;
     }
-
-    // Check to see if there is any lesson in redux
-    // If there is a lesson we make sure it matches the lesson we are loading in the params otherwise
-    // direct links will load whatever lesson is left in redux
-    if (this.props.lesson.id !== this.props.match.params.lessonID) {
-      this.setLesson(this.props.match.params.lessonID);
-    }
+    this.props.getQuizzesByLessonID(
+      this.props.match.params.lessonID,
+      this.props.user
+    );
+  }
+  componentDidMount() {
     if (this.props.lesson.primaryVideoPath.length > 0) {
       this.setUpPlayer();
-    }
-  }
-  componentDidUpdate(prevProps: Props) {
-    if (
-      JSON.stringify(prevProps.quizzes) !== JSON.stringify(this.props.quizzes)
-    ) {
-      this.filterVisibleQuizzes();
-    }
-    if (
-      JSON.stringify(prevProps.lessons) !== JSON.stringify(this.props.lessons)
-    ) {
-      this.setLesson(this.props.match.params.lessonID);
     }
   }
 
@@ -241,41 +214,6 @@ class Lesson extends React.Component<Props, State> {
       });
   };
 
-  setLesson = (lessonID: string) => {
-    const newLesson = this.props.lessons[lessonID];
-    if (newLesson) {
-      this.props.setLesson(
-        this.props.lessons[this.props.match.params.lessonID]
-      );
-    } else {
-      console.log('did not find lesson in Redux, loading lessons from API');
-    }
-  };
-
-  /*
-  * Get the quizzes with the questions
-  */
-  loadQuizzes = () => {
-    this.props.getQuizzesByLessonID(
-      this.props.match.params.lessonID,
-      this.props.user
-    );
-  };
-
-  filterVisibleQuizzes = () => {
-    const lessonQuizzes = filter(this.props.quizzes, {
-      lessonID: this.props.match.params.lessonID
-    });
-    this.setState({ lessonQuizzes });
-  };
-
-  handleChange = (e: any) => {
-    this.setState({ [e.target.name]: e.target.value } as State);
-  };
-
-  goBack = () => {
-    this.props.history.replace(`/training/${this.props.match.params.courseID}`);
-  };
   /*
   * start a quiz
   */
@@ -290,22 +228,11 @@ class Lesson extends React.Component<Props, State> {
       this.showTimedQuizMessage(gfQuiz);
       return;
     }
-    // as long as this quiz is not already set as the quiz in redux, set it
-    if (!this.props.quiz || gfQuiz.id !== this.props.quiz.id) {
-      this.props.setQuiz(gfQuiz);
-    }
+
     const path = `/training/${this.props.match.params.courseID}/${
       this.props.match.params.lessonID
     }/${gfQuiz.id}`;
     this.props.history.push(path);
-  };
-
-  backToCourses = () => {
-    this.props.history.replace(`/training/${this.props.match.params.courseID}`);
-  };
-
-  backToAllCourses = () => {
-    this.props.history.push(`/training`);
   };
 
   render() {
@@ -332,7 +259,7 @@ class Lesson extends React.Component<Props, State> {
             </Col>
           </Row>
           <ListGroup className="lesson-list">
-            {this.state.lessonQuizzes.map((gfQuiz, index) => {
+            {this.props.lessonQuizzes.map((gfQuiz, index) => {
               let gfImage = gfQuiz.imagePath;
               if (gfQuiz.imagePath === null || gfQuiz.imagePath === '') {
                 gfImage = require('../../images/Azure.png');
@@ -367,14 +294,20 @@ class Lesson extends React.Component<Props, State> {
   }
 }
 
-const mapStateToProps = (state: any, ownProps: any) => {
+const mapStateToProps = (state: IinitialState, ownProps: Props) => {
+  const lesson =
+    state.training.lessons[ownProps.match.params.lessonID] || initialLesson;
+  const lessonQuizzes =
+    filter(state.training.quizzes, {
+      lessonID: ownProps.match.params.lessonID
+    }) || [];
+
   return {
     user: state.user,
     lessons: state.training.lessons,
     courses: state.training.courses,
-    quiz: state.training.quiz,
-    lesson: state.training.lesson,
-    quizzes: state.training.quizzes,
+    lesson,
+    lessonQuizzes,
     progress: state.training.lessonProgress[state.training.lesson.id],
     loading: state.ajaxCallsInProgress > 0
   };
@@ -383,9 +316,7 @@ const mapStateToProps = (state: any, ownProps: any) => {
 export default connect(
   mapStateToProps,
   {
-    setLesson,
     saveLessonProgress,
-    setQuiz,
     getQuizzesByLessonID
   }
 )(Lesson);

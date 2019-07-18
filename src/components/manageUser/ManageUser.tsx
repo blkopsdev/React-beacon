@@ -49,7 +49,7 @@ interface IdispatchProps {
   toggleEditUserModal: typeof toggleEditUserModal;
   toggleSecurityFunctionsModal: typeof toggleSecurityFunctionsModal;
   getUserManage: typeof getUserManage;
-  customers: Icustomer[];
+  customers: { [key: string]: Icustomer };
   closeAllModals: typeof closeAllModals;
   getCustomers: typeof getCustomers;
   userManage: ImanageUserReducer;

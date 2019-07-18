@@ -1,14 +1,14 @@
 import * as React from 'react';
 
 import { Col, FormGroup, FormControl } from 'react-bootstrap';
-// import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { GFQuizQuestion, GFQuizAnswer } from 'src/models';
 
 interface Props extends React.Props<Question> {
-  curQ: any;
-  checkingAnswer: boolean;
-  selectedAnswer: any;
-  textAnswer: any;
-  handleChange?: any;
+  curQ: GFQuizQuestion;
+  showCorrectAnswer: boolean;
+  selectedAnswer: GFQuizAnswer;
+  textAnswer: string;
+  handleChange: (answer: GFQuizAnswer) => void;
 }
 
 class Question extends React.Component<Props, {}> {
@@ -19,17 +19,17 @@ class Question extends React.Component<Props, {}> {
   buildOption(
     index: number,
     textHighlight: string,
-    option: any,
+    option: { option: string; isAnswer: boolean },
     rightOrWrong: string
   ) {
     let radioCheckBox;
     if (
-      this.props.selectedAnswer.option === option.option &&
+      this.props.selectedAnswer.answer === option.option &&
       rightOrWrong === 'fa fa-check right-or-wrong check-mark'
     ) {
       radioCheckBox = 'check-box-correct text-center';
     } else if (
-      this.props.selectedAnswer.option === option.option &&
+      this.props.selectedAnswer.answer === option.option &&
       rightOrWrong === 'fa fa-times checkmark right-or-wrong times-mark'
     ) {
       radioCheckBox = 'check-box-wrong text-center';
@@ -44,9 +44,13 @@ class Question extends React.Component<Props, {}> {
               type="radio"
               name={'optionsRadios'}
               value={option.option}
-              disabled={this.props.checkingAnswer}
+              disabled={this.props.showCorrectAnswer}
               onClick={(e: any) => {
-                this.props.handleChange(option);
+                this.props.handleChange({
+                  answer: option.option,
+                  isCorrect: option.isAnswer,
+                  questionID: this.props.curQ.id
+                });
               }}
             />
             <span className={radioCheckBox}>
@@ -61,15 +65,13 @@ class Question extends React.Component<Props, {}> {
   }
 
   render() {
-    let quizClassName;
-    let teacherViewing;
-    let textInputPlaceholder;
-    quizClassName = 'text-question';
-    teacherViewing = 'options';
-    textInputPlaceholder = 'Your answer...';
+    const quizClassName = 'text-question';
+    const teacherViewing = 'options';
+    const textInputPlaceholder = 'Your answer...';
+
     const curQ = this.props.curQ;
     return (
-      <div className="question">
+      <div>
         {curQ.type === 'blank' && (
           <div className={quizClassName}>
             <Col md={12}>
@@ -85,14 +87,14 @@ class Question extends React.Component<Props, {}> {
               <FormGroup className="quiz-text-field">
                 <FormControl
                   placeholder={textInputPlaceholder}
-                  value={this.props.textAnswer}
+                  value={this.props.selectedAnswer.answer}
                   type="text"
                   onChange={(e: any) => {
                     const val = e.target.value;
                     this.props.handleChange({
-                      option: val,
-                      name: 'textAnswer',
-                      isAnswer:
+                      answer: val,
+                      questionID: this.props.curQ.id,
+                      isCorrect:
                         curQ.correctAnswer.toLowerCase().trim() ===
                         val.toLowerCase().trim()
                     });
@@ -101,18 +103,18 @@ class Question extends React.Component<Props, {}> {
               </FormGroup>
             </Col>
             <Col md={6}>
-              {this.props.checkingAnswer &&
-                !this.props.selectedAnswer.isAnswer && (
+              {this.props.showCorrectAnswer &&
+                !this.props.selectedAnswer.isCorrect && (
                   <div className="fa fa-times checkmark right-or-wrong times-mark text-input" />
                 )}
-              {this.props.checkingAnswer &&
-                this.props.selectedAnswer.isAnswer && (
+              {this.props.showCorrectAnswer &&
+                this.props.selectedAnswer.isCorrect && (
                   <div className="fa fa-check right-or-wrong check-mark text-input" />
                 )}
             </Col>
             <Col md={12}>
-              {this.props.checkingAnswer &&
-                !this.props.selectedAnswer.isAnswer && (
+              {this.props.showCorrectAnswer &&
+                !this.props.selectedAnswer.isCorrect && (
                   <div className="text-input-wrong-answer">
                     <p>Correct Answer: {curQ.correctAnswer}</p>
                   </div>
@@ -132,13 +134,13 @@ class Question extends React.Component<Props, {}> {
               </div>
             </Col>
             <Col md={12} xs={12} className={teacherViewing}>
-              {curQ.options.map((option: any, index: number) => {
+              {curQ.options.map((option, index) => {
                 let textHighlight = '';
                 let rightOrWrong = '';
-                if (this.props.checkingAnswer === true) {
+                if (this.props.showCorrectAnswer === true) {
                   if (
-                    this.props.selectedAnswer.isAnswer !== true &&
-                    this.props.selectedAnswer.option === option.option
+                    this.props.selectedAnswer.isCorrect !== true &&
+                    this.props.selectedAnswer.answer === option.option
                   ) {
                     // answer was selected and is wrong
                     textHighlight = 'wrong-answer';

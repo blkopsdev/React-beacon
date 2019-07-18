@@ -13,9 +13,8 @@ export function removeLoginRedirect() {
   };
 }
 
-export function setRedirectPathname(pathname: string) {
+export function setRedirectPathname(pathname: string, setRedirect?: boolean) {
   return (dispatch: any, getState: any) => {
-    console.log(`setting redirect: ${pathname}`);
-    dispatch({ type: types.SET_REDIRECT_PATHNAME, pathname });
+    dispatch({ type: types.SET_REDIRECT_PATHNAME, pathname, setRedirect });
   };
 }

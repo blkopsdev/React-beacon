@@ -22,7 +22,7 @@ import {
 } from '../../models';
 import { TableUtil } from '../common/TableUtil';
 import { closeAllModals, getCustomers } from '../../actions/commonActions';
-import { emptyTile } from '../../reducers/initialState';
+import { emptyTile, initialUser } from '../../reducers/initialState';
 import {
   getJobs,
   getFSEUsers,
@@ -112,12 +112,17 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
         },
         {
           Header: 'FSE Lead',
-          // accessor: 'assignedUserID'
-          Cell: (row: any) => (
-            <span>
-              {row.original.assignedUser.first} {row.original.assignedUser.last}
-            </span>
-          )
+          Cell: (row: RowInfoJob) => {
+            const fseLead =
+              this.props.fseUsers.find(
+                user => user.id === row.original.assignedUserID
+              ) || initialUser;
+            return (
+              <span>
+                {fseLead.first} {fseLead.last}
+              </span>
+            );
+          }
         },
         {
           Header: 'start date',

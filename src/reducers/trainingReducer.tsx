@@ -7,18 +7,26 @@ import {
   ItrainingReducer,
   GFQuizItem,
   GFCourse,
-  LessonProgress
+  LessonProgress,
+  GFQuizAnswer,
+  GFQuizViewReducer
 } from 'src/models';
 import { cartReducerWithName, getQuantity } from './cartReducer';
-import { modalToggleWithName } from './commonReducers';
+import {
+  modalToggleWithName,
+  createSelectedIDWithName
+} from './commonReducers';
 
-function courseReducer(state: GFCourse[] = [], action: any): GFCourse[] {
+function courseReducer(
+  state: { [key: string]: GFCourse } = initialState.training.courses,
+  action: any
+): { [key: string]: GFCourse } {
   switch (action.type) {
     case types.LOAD_COURSES_SUCCESS:
-      return action.courses;
+      const courses = keyBy(action.courses, 'id');
+      return { ...state, ...courses };
     case types.USER_LOGOUT_SUCCESS:
-      return [];
-
+      return initialState.training.courses;
     default:
       return state;
   }
@@ -98,15 +106,6 @@ function quizzesReducer(
         state,
         keyBy(map(action.quizzes, quiz => cleanQuizObject(quiz)), 'id')
       );
-    // TODO commented out because we are assuming a single quiz for a lesson and showing tht score on the Lesson
-    // case types.GET_QUIZ_RESULTS_SUCCESS:
-    //     return mapValues(state, (quiz: GFQuizItem) => {
-    //       const quizResult = find(action.results, {quizID: quiz.id}) as any;
-    //       if (quizResult && quizResult.score){
-    //         return {...quiz, score: quizResult.score}
-    //       }
-    //       return quiz;
-    //     })
     case types.USER_LOGOUT_SUCCESS:
       return {};
     default:
@@ -117,8 +116,6 @@ function quizReducer(state: GFQuizItem = initialQuiz, action: any): GFQuizItem {
   switch (action.type) {
     case types.LOAD_QUIZ:
       return action.quiz;
-    case types.START_QUIZ_SUCCESS:
-      return { ...state, startTime: action.startTime };
     case types.USER_LOGOUT_SUCCESS:
       return initialQuiz;
     default:
@@ -162,6 +159,66 @@ function purchasedTrainingReducer(state: string[] = [], action: any): string[] {
   }
 }
 
+export function quizAnswersReducer(
+  state: GFQuizAnswer[] = initialState.training.quizAnswers,
+  action: any
+) {
+  switch (action.type) {
+    case types.ADD_ANSWER:
+      return [...state, action.answer];
+    case types.RESET_ANSWERS:
+      console.error('resetting answers');
+      return initialState.training.quizAnswers;
+    case types.USER_LOGOUT_SUCCESS:
+      return initialState.training.quizAnswers;
+
+    default:
+      return state;
+  }
+}
+
+const booleanReducer = (state: boolean = false, action: any): boolean => {
+  switch (action.type) {
+    case types.SAVE_QUIZ_ANSWERS_SUCCESS:
+      return true;
+    case types.RESET_ANSWERS:
+      return false;
+    case types.USER_LOGOUT_SUCCESS:
+      return false;
+    default:
+      return state;
+  }
+};
+
+const startTimeReducer = (
+  state: string = initialState.training.quizView.startTime,
+  action: any
+): string => {
+  switch (action.type) {
+    case types.START_QUIZ_SUCCESS:
+      return action.startTime;
+    case types.USER_LOGOUT_SUCCESS:
+      return initialState.training.quizView.startTime;
+    default:
+      return state;
+  }
+};
+
+export function quizViewReducer(
+  state: GFQuizViewReducer = initialState.training.quizView,
+  action: any
+) {
+  return {
+    quizComplete: booleanReducer(state.quizComplete, action),
+    inProgressQuizID: createSelectedIDWithName(
+      state.inProgressQuizID,
+      action,
+      'IN_PROGRESS_QUIZ'
+    ),
+    startTime: startTimeReducer(state.startTime, action)
+  };
+}
+
 export default function trainingReducer(
   state: ItrainingReducer = initialState.training,
   action: any
@@ -182,7 +239,9 @@ export default function trainingReducer(
       state.showShoppingCartModal,
       action,
       'SHOPPING_CART_TRAINING'
-    )
+    ),
+    quizAnswers: quizAnswersReducer(state.quizAnswers, action),
+    quizView: quizViewReducer(state.quizView, action)
   };
 }
 

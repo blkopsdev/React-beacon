@@ -195,7 +195,6 @@ export const initialAlert = {
 /*
 *  TRAINING initial state
 */
-
 export const initialQuiz = {
   id: '',
   name: '',
@@ -205,18 +204,19 @@ export const initialQuiz = {
   instructions: '',
   lessonID: '',
   isTimed: false,
-  questions: [
-    {
-      id: '',
-      text: '',
-      type: '',
-      options: [],
-      correctAnswer: '',
-      correctText: '',
-      wrongText: '',
-      order: 0
-    }
-  ]
+  questions: []
+};
+export const intialQuizAnswer = {
+  questionID: '',
+  answer: '',
+  isCorrect: false
+};
+export const initialQuizAnswers = { show: false, quizAnswers: {} };
+
+export const initialCourse = {
+  id: '',
+  name: '',
+  description: ''
 };
 export const initialLesson = {
   id: '',
@@ -391,13 +391,19 @@ export default {
       productsByID: {}
     },
     showShoppingCartModal: false,
-    courses: [],
+    courses: {},
     lessons: {},
     lesson: initialLesson,
     quizzes: {},
     quiz: initialQuiz,
     lessonProgress: {},
-    purchasedTraining: []
+    purchasedTraining: [],
+    quizAnswers: [],
+    quizView: {
+      quizComplete: false,
+      inProgressQuizID: '',
+      startTime: ''
+    }
   },
   manageTraining: {
     data: [
@@ -450,5 +456,3 @@ export const emptyTile = {
   securityFunction: '',
   description: ''
 };
-
-export const initialQuizAnswers = { show: false, quizAnswers: {} };

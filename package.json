@@ -18,6 +18,7 @@
     "@vimeo/player": "^2.7.0",
     "axios": "^0.18.0",
     "bootstrap": "^3.3.7",
+    "custom-event-polyfill": "^1.0.7",
     "draft-js": "^0.10.5",
     "draft-js-export-html": "^1.2.0",
     "draft-js-import-html": "^1.2.1",

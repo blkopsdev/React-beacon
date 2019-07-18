@@ -47,6 +47,49 @@ scope=${MSAL_SCOPES.MMG} ${
   MSAL_SCOPES.OPENID
 }&response_mode=fragment&nonce=123465`;
 
+/*
+* temporarily set the callback because sometimes the callback we set inside app.tsx 
+* does not run soon enough and MSAL complains that we have not set a redirect callback.
+* here we use a javascript alert because we know that is loaded.
+*/
+const temporaryHandleRedirectCallback = (
+  error: AuthError,
+  response?: AuthResponse
+) => {
+  console.error('msalRedirectCallback', error);
+  if (error) {
+    const forgotPasswordError =
+      error.message.indexOf('The user has forgotten their password') > -1;
+    const forgotPasswordCancel =
+      error.errorMessage.indexOf('user has cancelled entering') > -1;
+
+    if (forgotPasswordError) {
+      window.location.replace(MSAL_FORGET);
+      return;
+    }
+    if (forgotPasswordCancel) {
+      window.location.replace(`${process.env.REACT_APP_HOST_DOMAIN}`);
+      return;
+    }
+    let errorMessage = error.errorMessage;
+    const firstIndex = error.errorMessage.indexOf('Correlation ID:');
+    const secondIndex = 12; // index after the error code
+    const messageTextOnly = error.errorMessage.substring(
+      firstIndex,
+      secondIndex
+    );
+    if (messageTextOnly.length) {
+      errorMessage = messageTextOnly;
+    }
+    alert(errorMessage);
+  }
+};
+
+/*
+* this handles redirectcallbacks that occur after the application has loaded.
+* We might be able to remove this since the only time this might get called is 
+* during background refreshing of the token.
+*/
 export const handleRedirectCallback = (
   error: AuthError,
   response?: AuthResponse
@@ -56,15 +99,15 @@ export const handleRedirectCallback = (
     const forgotPasswordError =
       error.message.indexOf('The user has forgotten their password') > -1;
     const forgotPasswordCancel =
-      error.errorMessage.indexOf('user has canceled entering') > -1;
+      error.errorMessage.indexOf('user has cancelled entering') > -1;
     const missingUserError =
       error.errorMessage.indexOf('User does not exist') > -1;
     if (forgotPasswordError) {
-      window.open(MSAL_FORGET);
+      window.location.replace(MSAL_FORGET);
       return;
     }
     if (forgotPasswordCancel) {
-      window.open(`${process.env.REACT_APP_HOST_DOMAIN}`);
+      window.location.replace(`${process.env.REACT_APP_HOST_DOMAIN}`);
       return;
     }
     if (missingUserError) {
@@ -119,6 +162,8 @@ export const msalApp = new UserAgentApplication({
     tokenRenewalOffsetSeconds: -120
   }
 });
+
+msalApp.handleRedirectCallback(temporaryHandleRedirectCallback);
 
 export const acquireToken = () => {
   const redirect = true; // force redirect method because in order to support the popup we will need to add some code that will re-try the requests

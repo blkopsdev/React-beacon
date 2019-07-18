@@ -27,11 +27,11 @@ import { msalApp } from './Auth-Utils';
 
 interface Iprops extends RouteComponentProps<{}> {
   userLogin: () => any;
-  MSALlogin: any;
-  userLogout?: any;
-  setLoginRedirect?: any;
-  setRedirectPathname?: any;
-  removeLoginRedirect?: any;
+  MSALlogin: typeof MSALlogin;
+  userLogout: typeof userLogout;
+  setLoginRedirect: () => Promise<void>;
+  setRedirectPathname: typeof setRedirectPathname;
+  removeLoginRedirect: typeof removeLoginRedirect;
   user: Iuser;
   redirect: Iredirect;
   t: TranslationFunction;

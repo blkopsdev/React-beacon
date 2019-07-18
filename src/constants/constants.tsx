@@ -666,15 +666,19 @@ export const constants = {
       msg = 'Please connect to the internet.';
     }
 
-    if (error && error.response && error.response.status === 401) {
-      console.error(
-        'catching unauthorized, we should not get here now that we are using msalFetch'
-      );
+    if (error && error.errorCode === 'user_login_error') {
       setTimeout(() => {
         msalApp.loginRedirect({
           scopes: [MSAL_SCOPES.MMG]
         });
       }, 1000);
+      return;
+    }
+
+    if (error && error.response && error.response.status === 401) {
+      console.error(
+        'catching unauthorized, we should not get here now that we are using msalFetch'
+      );
       return; // don't show an error
     }
     toastr.error('Error', msg, constants.toastrError);

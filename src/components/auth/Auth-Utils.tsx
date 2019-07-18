@@ -85,66 +85,6 @@ const temporaryHandleRedirectCallback = (
   }
 };
 
-/*
-* this handles redirectcallbacks that occur after the application has loaded.
-* We might be able to remove this since the only time this might get called is 
-* during background refreshing of the token.
-*/
-export const handleRedirectCallback = (
-  error: AuthError,
-  response?: AuthResponse
-) => {
-  if (error) {
-    console.error('msalRedirectCallback', error);
-    const forgotPasswordError =
-      error.message.indexOf('The user has forgotten their password') > -1;
-    const forgotPasswordCancel =
-      error.errorMessage.indexOf('user has cancelled entering') > -1;
-    const missingUserError =
-      error.errorMessage.indexOf('User does not exist') > -1;
-    if (forgotPasswordError) {
-      window.location.replace(MSAL_FORGET);
-      return;
-    }
-    if (forgotPasswordCancel) {
-      window.location.replace(`${process.env.REACT_APP_HOST_DOMAIN}`);
-      return;
-    }
-    if (missingUserError) {
-      const event = new Event('missingUser');
-      document.dispatchEvent(event);
-      toastr.warning(
-        'Please Sign Up',
-        'User not found.  Please signup first.',
-        constants.toastrWarning
-      );
-      return;
-    }
-    let errorMessage = error.errorMessage;
-    const firstIndex = error.errorMessage.indexOf('Correlation ID:');
-    const secondIndex = 12; // index after the error code
-    const messageTextOnly = error.errorMessage.substring(
-      firstIndex,
-      secondIndex
-    );
-    if (messageTextOnly.length) {
-      errorMessage = messageTextOnly;
-    }
-    toastr.error(
-      'Error',
-      errorMessage + '  Please contact support if you need assistance.',
-      constants.toastrError
-    );
-    /*
-    * logout so that the user does not get stuck with the system automatically trying to login with the wrong account
-    * this does not work in some cases and the issue is being tracked here: 
-    * https://github.com/AzureAD/microsoft-authentication-library-for-js/issues/735
-    * commented out for now since it does not seem to work and causes an extra screen refresh
-    */
-    // msalApp.logout();
-  }
-};
-
 export const msalApp = new UserAgentApplication({
   auth: {
     clientId: `${process.env.REACT_APP_MSAL_CLIENT_ID}`,
@@ -174,9 +114,13 @@ export const acquireToken = () => {
     // Call acquireTokenPopup (popup window) in case of acquireTokenSilent failure
     // due to consent or interaction required ONLY
     if (requiresInteraction(error.errorCode)) {
-      return redirect
-        ? msalApp.acquireTokenRedirect(request)
-        : msalApp.acquireTokenPopup(request);
+      // set the redirect in redux
+      document.dispatchEvent(new Event('setRedirect'));
+      setTimeout(() => {
+        return redirect
+          ? msalApp.acquireTokenRedirect(request)
+          : msalApp.acquireTokenPopup(request);
+      }, 1000);
     } else {
       return error;
     }

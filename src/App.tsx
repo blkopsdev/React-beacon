@@ -18,6 +18,7 @@ import { msalApp, handleRedirectCallback } from './components/auth/Auth-Utils';
 import SignUpDirect from './components/auth/SignUpDirect';
 import SignUpWithMS from './components/auth/SignUpWithMS';
 import Dashboard from './components/dashboard/Dashboard';
+import { setRedirectPathname } from './actions/redirectToReferrerAction';
 
 window.addEventListener('beforeinstallprompt', e => {
   console.log('install prompt triggered');
@@ -39,6 +40,7 @@ const NoMatch = ({ location }: any) => {
 
 interface Props extends React.Props<App> {
   user: Iuser;
+  setRedirectPathname: typeof setRedirectPathname;
 }
 interface State {
   fullScreenLoading: boolean;
@@ -64,8 +66,26 @@ class App extends React.Component<Props, State> {
       this.handleNewVersion,
       false
     );
-    msalApp.handleRedirectCallback(handleRedirectCallback);
+    document.addEventListener('setRedirect', this.handleSetRedirect, false);
+    // msalApp.handleRedirectCallback(handleRedirectCallback);  // this appears to be triggering bogus errors
   }
+  componentWillUnmount() {
+    document.removeEventListener(
+      'missingUser',
+      this.handleRedirectToSignup,
+      false
+    );
+    document.removeEventListener(
+      'newVersionAvailable',
+      this.handleNewVersion,
+      false
+    );
+    document.removeEventListener('setRedirect', this.handleSetRedirect, false);
+  }
+  handleSetRedirect = () => {
+    const { pathname } = window.location;
+    this.props.setRedirectPathname(pathname, true);
+  };
   handleRedirectToSignup = () => {
     this.setState({ redirectToSocialSignup: true }, () => {
       this.setState({ redirectToSocialSignup: false });
@@ -185,5 +205,5 @@ const mapStateToProps = (state: IinitialState, ownProps: any) => {
 
 export default connect(
   mapStateToProps,
-  {}
+  { setRedirectPathname }
 )(App);

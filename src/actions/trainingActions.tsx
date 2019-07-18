@@ -13,7 +13,6 @@ import {
 import { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { find, sortBy } from 'lodash';
 import { toastr } from 'react-redux-toastr';
-
 import { msalFetch } from 'src/components/auth/Auth-Utils';
 
 export function loadCourses(user: Iuser): ThunkResult<void> {
@@ -330,33 +329,6 @@ const getPurchasedTrainingHelper = (dispatch: any, getState: any) => {
       constants.handleError(error, 'get purchased training');
     });
 };
-
-// Save quiz start
-export function startQuiz(quizID: string): ThunkResult<void> {
-  return dispatch => {
-    dispatch(beginAjaxCall());
-    const axiosOptions: AxiosRequestConfig = {
-      method: 'post',
-      data: { quizID }
-    };
-
-    const url = API.POST.training.startQuiz;
-    return msalFetch(url, axiosOptions).then(
-      (data: AxiosResponse<any>) => {
-        dispatch({
-          type: types.START_QUIZ_SUCCESS,
-          startTime: data.data.startTime
-        });
-      },
-      (error: any) => {
-        console.error('Error starting timed quiz', error);
-        dispatch({ type: types.START_QUIZ_FAILED });
-        constants.handleError(error, 'start quiz');
-        throw error;
-      }
-    );
-  };
-}
 
 /*
 * Get Quiz Results

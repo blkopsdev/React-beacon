@@ -91,7 +91,8 @@ const buildFieldConfig = (
         placeholder: 'userManage:securitySearchPlaceholder',
         buttonName: 'userManage:securityButton',
         buttonAction: toggleSecurityFunctionsModalCB,
-        isMulti: true
+        isMulti: true,
+        shouldTranslate: true
       },
       options: {
         validators: Validators.required

@@ -21,13 +21,21 @@ export function manageCustomerAndFacilityReducer(
 
       return keyBy(customers, 'id');
     case types.CUSTOMER_UPDATE_SUCCESS:
+      const oldCustomers = { ...state };
       return {
-        ...state,
+        ...oldCustomers,
         [action.customer.id]: cleanObject({
-          ...state[action.customer.id],
+          ...oldCustomers[action.customer.id],
           ...action.customer
         })
       };
+    case types.CUSTOMER_IMAGE_SAVE_SUCCESS:
+      const oldState = { ...state };
+      return {
+        ...oldState
+      };
+    case types.GET_CUSTOMER_IMAGE_SUCCESS:
+      return state;
     case types.FACILITY_UPDATE_SUCCESS:
       const oldCustomer = { ...state[action.facility.customerID] };
       const oldFacility = {

@@ -10,7 +10,8 @@ const API = {
   POST: {
     building: `${root}/building`,
     customer: {
-      add: `${root}/customer`
+      add: `${root}/customer`,
+      addlogo: `${root}/CustomerImage`
     },
 
     job: {
@@ -118,7 +119,8 @@ const API = {
 
     customer: {
       getall: `${root}/customer/getall`,
-      search: `${root}/customer/search`
+      search: `${root}/customer/search`,
+      getlogo: `${root}/customer/icon`
     },
     job: {
       getall: `${root}/job/getall`,

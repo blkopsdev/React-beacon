@@ -49,6 +49,35 @@ export function getCustomers(): ThunkResult<void> {
   };
 }
 
+export function getCustomerLogo(customerID: string): ThunkResult<void> {
+  return (dispatch: any, getState: any) => {
+    dispatch(beginAjaxCall());
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'get',
+      params: { customerID }
+    };
+
+    const url = API.GET.customer.getlogo;
+    return msalFetch(url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.GET_CUSTOMER_IMAGE_SUCCESS,
+            payload: data.data
+          });
+          return data;
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.GET_CUSTOMER_IMAGE_FAILED });
+        constants.handleError(error, 'get Customer Image');
+        console.error(error);
+      });
+  };
+}
+
 export const updateCustomerFormValue = (formValue: any) => ({
   type: types.UPDATE_FORM_VALUES_MANAGE_CUSTOMER,
   formValue

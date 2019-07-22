@@ -39,6 +39,7 @@ interface Iprops {
 
 interface IState {
   fieldConfig: FieldConfig;
+  file: any;
 }
 
 class EditCustomerForm extends React.Component<Iprops, IState> {
@@ -48,7 +49,8 @@ class EditCustomerForm extends React.Component<Iprops, IState> {
   constructor(props: Iprops) {
     super(props);
     this.state = {
-      fieldConfig: this.buildFieldConfig()
+      fieldConfig: this.buildFieldConfig(this.onFileChange),
+      file: null
     };
   }
   async componentDidMount() {
@@ -56,7 +58,7 @@ class EditCustomerForm extends React.Component<Iprops, IState> {
       return;
     }
     await this.props.setFormValues(this.props.selectedCustomer);
-    this.setState({ fieldConfig: this.buildFieldConfig() });
+    this.setState({ fieldConfig: this.buildFieldConfig(this.onFileChange) });
   }
 
   componentWillUnmount() {
@@ -68,11 +70,12 @@ class EditCustomerForm extends React.Component<Iprops, IState> {
     this.cleanForm();
   }
 
-  buildFieldConfig = () => {
+  buildFieldConfig = (onFileChange: any) => {
     const formValues = this.props.formValues;
-    let { name, vat } = this.props.selectedCustomer;
+    let { name, vat, imageUrl } = this.props.selectedCustomer;
 
     name = formValues.name || name;
+    imageUrl = formValues.imageUrl ? formValues.imageUrl : imageUrl;
     vat = formValues.vat || vat;
 
     const fieldConfigControls = {
@@ -93,6 +96,19 @@ class EditCustomerForm extends React.Component<Iprops, IState> {
         },
         formState: name
       },
+      logo: {
+        render: FormUtil.FileInput,
+        meta: {
+          type: 'file',
+          label: 'Select Image',
+          colWidth: 12,
+          name: 'alert-file',
+          required: false,
+          onChange: onFileChange,
+          imageUrl,
+          hasPreview: true
+        }
+      },
       vat: {
         render: FormUtil.TextInput,
         meta: {
@@ -108,6 +124,17 @@ class EditCustomerForm extends React.Component<Iprops, IState> {
       controls: { ...fieldConfigControls }
     };
     return FormUtil.translateForm(fieldConfig, this.props.t);
+  };
+
+  onFileChange = (file: File) => {
+    this.setState({ file });
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.onValueChanges(e.target.result, 'imageUrl');
+    };
+    if (file) {
+      reader.readAsDataURL(file);
+    }
   };
 
   /*
@@ -145,6 +172,9 @@ class EditCustomerForm extends React.Component<Iprops, IState> {
       return;
     }
     const newCustomer = this.formGroup.value;
+    if (this.state.file) {
+      newCustomer['file'] = this.state.file;
+    }
     if (this.props.selectedCustomer.id) {
       newCustomer['id'] = this.props.selectedCustomer.id;
       this.props.handleEdit(newCustomer);

@@ -158,6 +158,13 @@ export const initialCustomer = {
   isDeleted: false,
   facilities: []
 };
+
+export const initialCustomerImage = {
+  id: '',
+  customerID: '',
+  url: ''
+};
+
 export const initialJob = {
   id: '',
   customerID: '',

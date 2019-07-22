@@ -216,10 +216,18 @@ export interface Itile {
 export interface Icustomer {
   id: string;
   name: string;
+  file?: string;
   vat?: string;
   isDeleted: boolean;
   createDate?: string;
   facilities?: Ifacility[];
+}
+
+export interface ICustomerImage {
+  id: string;
+  customerID: string;
+  url?: string;
+  file?: any;
 }
 
 export interface IfacilityWithoutBuildings {

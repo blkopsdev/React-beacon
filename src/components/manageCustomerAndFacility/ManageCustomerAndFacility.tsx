@@ -30,7 +30,8 @@ import {
   getCustomers,
   setSelectedCustomerID,
   clearSelectedCustomerID,
-  setSelectedFacilityID
+  setSelectedFacilityID,
+  getCustomerLogo
 } from '../../actions/manageCustomerAndFacilityActions';
 import ManageFacility from './ManageFacility';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -65,6 +66,7 @@ interface IdispatchProps {
   clearSelectedCustomerID: typeof clearSelectedCustomerID;
   setSelectedFacilityID: typeof setSelectedFacilityID;
   toggleEditFacilityModal: typeof toggleEditFacilityModal;
+  getCustomerLogo: typeof getCustomerLogo;
   selectedCustomer: Icustomer;
   customers: { [key: string]: Icustomer };
   facilities: { [key: string]: Ifacility };
@@ -239,6 +241,7 @@ class ManageCustomerAndFacility extends React.Component<
         onClick: (e: React.MouseEvent<HTMLFormElement>) => {
           this.props.setSelectedCustomerID(rowInfo.original.id);
           this.props.toggleEditCustomerModal();
+          this.props.getCustomerLogo(rowInfo.original.id);
         }
       };
     }
@@ -359,7 +362,8 @@ export default translate('manageCustomerAndFacility')(
       setSelectedCustomerID,
       clearSelectedCustomerID,
       setSelectedFacilityID,
-      toggleEditFacilityModal
+      toggleEditFacilityModal,
+      getCustomerLogo
     }
   )(ManageCustomerAndFacility)
 );

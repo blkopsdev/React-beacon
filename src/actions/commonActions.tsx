@@ -1,12 +1,14 @@
 import { toastr } from 'react-redux-toastr';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 
-import { Icustomer, Ifacility, ThunkResult } from '../models';
+import { Icustomer, ICustomerImage, Ifacility, ThunkResult } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
 import { constants } from 'src/constants/constants';
 import * as types from './actionTypes';
 import API from '../constants/apiEndpoints';
 import { msalFetch } from 'src/components/auth/Auth-Utils';
+import { FormUtil } from '../components/common/FormUtil';
+import { initialCustomerImage } from '../reducers/initialState';
 
 export const closeAllModals = () => ({
   type: types.CLOSE_ALL_MODALS
@@ -76,18 +78,12 @@ export function getCustomers() {
   };
 }
 
-export function addCustomer({
-  name,
-  vat
-}: {
-  name: string;
-  vat: string;
-}): ThunkResult<void> {
+export function addCustomer(customer: Icustomer): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     const axiosOptions: AxiosRequestConfig = {
       method: 'post',
-      data: { name, vat }
+      data: customer
     };
 
     const url = API.POST.customer.add;
@@ -96,11 +92,19 @@ export function addCustomer({
         if (!data.data) {
           throw undefined;
         } else {
+          dispatch(
+            addCustomerLogo({
+              ...initialCustomerImage,
+              customerID: customer.id,
+              file: customer.file
+            })
+          );
+          delete customer['logo'];
           dispatch({
             type: types.CUSTOMER_UPDATE_SUCCESS,
             customer: data.data
           });
-          dispatch({ type: types.TOGGLE_MODAL_EDIT_CUSTOMER });
+          // dispatch({ type: types.TOGGLE_MODAL_EDIT_CUSTOMER });
           toastr.success('Success', 'Saved Customer', constants.toastrSuccess);
           return data;
         }
@@ -124,17 +128,62 @@ export function updateCustomer(customer: Icustomer): ThunkResult<void> {
     const url = API.PUT.customer.update.replace('{id}', customer.id);
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
+        dispatch(
+          addCustomerLogo({
+            ...initialCustomerImage,
+            customerID: customer.id,
+            file: customer.file
+          })
+        );
+        delete customer['file'];
         dispatch({
           type: types.CUSTOMER_UPDATE_SUCCESS,
           customer: { ...customer }
         });
-        dispatch({ type: types.TOGGLE_MODAL_EDIT_CUSTOMER });
+        // dispatch({ type: types.TOGGLE_MODAL_EDIT_CUSTOMER });
         toastr.success('Success', 'Update Customer', constants.toastrSuccess);
         return customer;
       })
       .catch((error: any) => {
-        dispatch({ type: types.CUSTOMER_UPDATE_FAILED });
+        // dispatch({ type: types.CUSTOMER_UPDATE_FAILED });
         constants.handleError(error, 'Update customer');
+        console.error(error);
+      });
+  };
+}
+
+export function addCustomerLogo(logo: ICustomerImage): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    const headers = { 'content-type': 'multipart/form-data' };
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'post',
+      data: FormUtil.toFormData(logo),
+      headers
+    };
+
+    const url = API.POST.customer.addlogo;
+    return msalFetch(url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({
+            type: types.CUSTOMER_IMAGE_SAVE_SUCCESS,
+            customerImage: data.data
+          });
+          dispatch({ type: types.TOGGLE_MODAL_EDIT_CUSTOMER });
+          toastr.success(
+            'Success',
+            'Saved Customer Logo',
+            constants.toastrSuccess
+          );
+          return data;
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.CUSTOMER_UPDATE_FAILED });
+        constants.handleError(error, 'add customer');
         console.error(error);
       });
   };

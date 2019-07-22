@@ -742,7 +742,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     showEditInstallModal: state.manageInventory.showEditInstallModal,
     showInstallContactModal: state.manageInventory.showInstallContactModal,
     facilityOptions: FormUtil.convertToOptions(state.user.facilities),
-    productInfo: state.manageInventory.productInfo,
+    productInfo: state.productInfo,
     cartTotal: getTotal(state.manageInventory.cart),
     tableData: state.manageInventory.data,
     tableFilters: state.manageInventory.tableFilters,

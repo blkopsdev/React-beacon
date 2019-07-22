@@ -60,7 +60,7 @@ function manageTotalPages(state: number = 1, action: any): number {
   }
 }
 
-export default function customerAndFacilityManage(
+export default function manageCustomerAndFacility(
   state: ImanageCustomerAndFacilityReducer = initialState.manageCustomerAndFacility,
   action: any
 ) {

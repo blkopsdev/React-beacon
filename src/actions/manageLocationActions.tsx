@@ -2,7 +2,7 @@
 
 import { ThunkAction } from 'redux-thunk';
 import { toastr } from 'react-redux-toastr';
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import {
   IinitialState,
@@ -19,8 +19,8 @@ import * as types from './actionTypes';
 import { filter, find } from 'lodash';
 import { Dispatch } from 'react-redux';
 const uuidv4 = require('uuid/v4');
-import { adalFetch } from 'react-adal';
-import { authContext } from './userActions';
+import { msalFetch } from 'src/components/auth/Auth-Utils';
+
 import { initialFacility } from 'src/reducers/initialState';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
@@ -31,9 +31,9 @@ export function getFacility(facilityID: string): ThunkResult<void> {
     const axiosOptions: AxiosRequestConfig = {
       method: 'get'
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = `${API.GET.facility.getbyid}/${facilityID}`;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
@@ -139,8 +139,8 @@ const saveAnyLocationObjectHelper = (
     method: 'post',
     data: locationObject
   };
-  const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
-  return adalFetch(authContext, resource, axios, url, axiosOptions)
+
+  return msalFetch(url, axiosOptions)
     .then((data: AxiosResponse<any>) => {
       if (!data.data) {
         throw undefined;
@@ -193,8 +193,8 @@ export function updateAnyLocation(
       method: 'put',
       data: locationObject
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (data.status !== 200) {
           throw undefined;
@@ -248,8 +248,8 @@ export function deleteAnyLocation(
     const axiosOptions: AxiosRequestConfig = {
       method: 'delete'
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (data.status !== 200) {
           throw undefined;

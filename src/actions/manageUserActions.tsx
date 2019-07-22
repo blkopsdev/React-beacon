@@ -1,6 +1,6 @@
 import { ThunkAction } from 'redux-thunk';
 import { toastr } from 'react-redux-toastr';
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { IinitialState, ItableFiltersParams, Iuser } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
@@ -8,8 +8,7 @@ import API from '../constants/apiEndpoints';
 import { constants } from 'src/constants/constants';
 import * as types from './actionTypes';
 import * as localForage from 'localforage';
-import { adalFetch } from 'react-adal';
-import { authContext } from './userActions';
+import { msalFetch, msalApp } from 'src/components/auth/Auth-Utils';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
@@ -22,9 +21,9 @@ export function getUserManage(): ThunkResult<void> {
       method: 'get',
       params: { page, search, customerID }
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.GET.user.getusersearch;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
@@ -61,7 +60,7 @@ const checkForLoggedInUser = (
     setTimeout(() => {
       dispatch({ type: types.USER_LOGOUT_SUCCESS });
       localForage.removeItem('state-core-care-web').then(() => {
-        authContext.logOut();
+        msalApp.logout();
       });
     }, 5000);
   }
@@ -74,9 +73,9 @@ export function updateUser(user: Iuser): ThunkResult<void> {
       method: 'post',
       data: user
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.POST.user.update;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;

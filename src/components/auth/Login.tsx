@@ -9,30 +9,25 @@
 
 import { Button, Col, Grid, Row } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
-import { Redirect, RouteComponentProps } from 'react-router-dom';
+import { RouteComponentProps, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
 
 import { IinitialState, Iuser, Iredirect } from '../../models';
-import {
-  adalLogin,
-  checkCachedToken,
-  setCachedToken,
-  userLogin,
-  userLogout
-} from '../../actions/userActions';
+import { MSALlogin, userLogin, userLogout } from '../../actions/userActions';
 import {
   setLoginRedirect,
   removeLoginRedirect,
   setRedirectPathname
 } from '../../actions/redirectToReferrerAction';
+import { msalApp } from './Auth-Utils';
 
-const Loading = () => <h3>Loading...</h3>;
+// const Loading = () => <h3>Loading...</h3>;
 
 interface Iprops extends RouteComponentProps<{}> {
-  userLogin?: any;
-  adalLogin?: any;
+  userLogin: () => any;
+  MSALlogin: any;
   userLogout?: any;
   setLoginRedirect?: any;
   setRedirectPathname?: any;
@@ -41,6 +36,7 @@ interface Iprops extends RouteComponentProps<{}> {
   redirect: Iredirect;
   t: TranslationFunction;
   i18n: I18n;
+  loading: boolean;
 }
 interface Istate {
   userLoginFailed: boolean;
@@ -57,27 +53,25 @@ class Login extends React.Component<Iprops, Istate> {
     };
   }
   componentWillMount() {
-    const { from } = this.props.location.state || {
-      from: { pathname: '/dashboard' }
-    };
-    /*
-    * If we have a Azure AD token, then set it.  If we have a token, but the user is not authenticated, then use the token to login to the API
-    */
-    if (checkCachedToken()) {
-      setCachedToken();
+    document.addEventListener(
+      'missingUser',
+      this.handleRedirectToSignup,
+      false
+    );
+
+    if (msalApp.getAccount()) {
       if (!this.props.user.isAuthenticated) {
         this.props
           .userLogin()
-          .then(() => {
-            this.props.history.push(from.pathname);
-          })
+          .then()
           .catch(() => {
             console.error('login failed in login.tsx');
             this.setState({ userLoginFailed: true });
           });
       } else {
-        // user is authenticated, so take them back to where they came from or to the default route
-        this.props.history.push(from.pathname);
+        console.log(
+          'user is fully authenticated and the login componen mounted'
+        );
       }
     } else {
       console.log('the token is invalid');
@@ -94,17 +88,23 @@ class Login extends React.Component<Iprops, Istate> {
     if (!this.props.redirect.redirectToReferrer) {
       this.props.setRedirectPathname(from.pathname);
     }
-
-    // TODO show a toast message if this.props.redirect.pathname does not equal "/"
-    // <p>You must log in to view the page at {from.pathname}</p>
   }
 
+  handleRedirectToSignup = () => {
+    this.props.history.push('/social_signup');
+  };
+
+  /*
+  * Login
+  * set loginRedirect to true so that it will redirect where the user was trying to go if anywhere
+  * when this returns from the MSAL redirect
+  */
   login = () => {
     this.props
       .setLoginRedirect()
       .then(() => {
         console.log('start adal login');
-        this.props.adalLogin();
+        this.props.MSALlogin();
       })
       .catch((error: any) => console.error(error));
   };
@@ -115,11 +115,6 @@ class Login extends React.Component<Iprops, Istate> {
       from: { pathname: '/' }
     };
     const { redirectToReferrer } = this.props.redirect;
-
-    // if the user is authenticated but not fully, show loading
-    if (checkCachedToken()) {
-      return <Loading />;
-    }
 
     // if user is authenticated and exists in the backend
     // redirect to the redirect.pathname or the dashboard
@@ -144,12 +139,18 @@ class Login extends React.Component<Iprops, Istate> {
                   bsStyle="default"
                   className="loginBtn"
                   onClick={this.login}
+                  disabled={this.props.loading}
                 >
                   <img width="20" height="20" src={azure} />
                   {t('loginButton')}
                 </Button>
                 <LinkContainer to={'/signup'}>
-                  <Button bsStyle="link" className="signupBtn" bsSize="large">
+                  <Button
+                    bsStyle="link"
+                    className="signupBtn"
+                    bsSize="large"
+                    disabled={this.props.loading}
+                  >
                     {t('signUp')}
                   </Button>
                 </LinkContainer>
@@ -164,7 +165,8 @@ class Login extends React.Component<Iprops, Istate> {
 const mapStateToProps = (state: IinitialState, ownProps: any) => {
   return {
     user: state.user,
-    redirect: state.redirect
+    redirect: state.redirect,
+    loading: state.ajaxCallsInProgress > 0
   };
 };
 
@@ -173,7 +175,7 @@ export default translate('auth')(
     mapStateToProps,
     {
       userLogin,
-      adalLogin,
+      MSALlogin,
       userLogout,
       setLoginRedirect,
       removeLoginRedirect,

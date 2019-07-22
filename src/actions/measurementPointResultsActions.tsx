@@ -1,5 +1,5 @@
 import { ThunkAction } from 'redux-thunk';
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import {
   IinitialState,
@@ -14,8 +14,8 @@ import * as types from './actionTypes';
 import * as moment from 'moment';
 import { initialMeasurmentPointResult } from 'src/reducers/initialState';
 import { values } from 'lodash';
-import { adalFetch } from 'react-adal';
-import { authContext } from './userActions';
+import { msalFetch } from 'src/components/auth/Auth-Utils';
+
 import { Dispatch } from 'react-redux';
 const uuidv4 = require('uuid/v4');
 
@@ -44,11 +44,11 @@ export const getFacilityMeasurementPointResultsHelper = (
   const axiosOptions: AxiosRequestConfig = {
     method: 'get'
   };
-  const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
   const url = `${
     API.GET.measurementPoint.getFacilityMeasurementPointListResults
   }/${facilityID}`;
-  return adalFetch(authContext, resource, axios, url, axiosOptions).then(
+  return msalFetch(url, axiosOptions).then(
     (data: AxiosResponse<any>) => {
       if (!data.data) {
         throw undefined;

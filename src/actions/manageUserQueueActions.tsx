@@ -1,14 +1,13 @@
 import { ThunkAction } from 'redux-thunk';
 // import { toastr } from 'react-redux-toastr';
-import axios, { AxiosRequestConfig, AxiosResponse } from 'axios';
+import { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { IinitialState, ItableFiltersParams, Iuser } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
 import { constants } from 'src/constants/constants';
 import * as types from './actionTypes';
-import { adalFetch } from 'react-adal';
-import { authContext } from './userActions';
+import { msalFetch } from 'src/components/auth/Auth-Utils';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
@@ -20,9 +19,9 @@ export function getUserQueue(): ThunkResult<void> {
       method: 'get',
       params: { page, search }
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.GET.user.getuserqueue;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
@@ -50,9 +49,9 @@ function handleApproveUser(userQueueID: string, dispatch: any) {
     method: 'post',
     data: { id: userQueueID }
   };
-  const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
   const url = API.POST.user.approve;
-  return adalFetch(authContext, resource, axios, url, axiosOptions).then(
+  return msalFetch(url, axiosOptions).then(
     (data: AxiosResponse<any>) => {
       if (!data.data) {
         throw undefined;
@@ -81,9 +80,9 @@ export function rejectUser(userQueueID: string) {
       method: 'post',
       data: { id: userQueueID }
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.POST.user.reject;
-    return adalFetch(authContext, resource, axios, url, axiosOptions).then(
+    return msalFetch(url, axiosOptions).then(
       (data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
@@ -112,9 +111,9 @@ export function updateQueueUser(
       method: 'post',
       data: user
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.POST.user.update;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;

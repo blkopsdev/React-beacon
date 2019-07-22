@@ -2,7 +2,7 @@ import * as React from 'react';
 
 import { ThunkAction } from 'redux-thunk';
 import { toastr } from 'react-redux-toastr';
-import axios, { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
+import { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 
 import {
   IinitialState,
@@ -20,8 +20,7 @@ import { map, values } from 'lodash';
 const uuidv4 = require('uuid/v4');
 import * as moment from 'moment';
 import { getFacilityMeasurementPointResultsHelper } from './measurementPointResultsActions';
-import { adalFetch } from 'react-adal';
-import { authContext } from './userActions';
+import { msalFetch } from 'src/components/auth/Auth-Utils';
 
 // import {AxiosResponse} from 'axios';
 
@@ -33,9 +32,9 @@ export function getProductInfo(): ThunkResult<void> {
     const axiosOptions: AxiosRequestConfig = {
       method: 'get'
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.GET.inventory.getproductinfo;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
@@ -77,9 +76,9 @@ export function getProducts(
       method: 'get',
       params
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.GET.inventory.products;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
@@ -131,9 +130,9 @@ const getInventoryHelper = (dispatch: any, getState: () => IinitialState) => {
     method: 'get',
     params: { page, search, facilityID, brandID, mainCategoryID }
   };
-  const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
   const url = API.GET.inventory.getinventory;
-  return adalFetch(authContext, resource, axios, url, axiosOptions)
+  return msalFetch(url, axiosOptions)
     .then((data: AxiosResponse<any>) => {
       if (!data.data) {
         throw undefined;
@@ -187,9 +186,9 @@ export function updateProduct(
       method: 'post',
       data: product
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.POST.inventory.updateproduct;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
@@ -220,9 +219,9 @@ export function saveProduct(product: Iproduct): ThunkResult<void> {
       method: 'post',
       data: product
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.POST.inventory.addproduct;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
@@ -259,9 +258,9 @@ export function updateInstall(
       method: 'post',
       data: install
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.POST.inventory.updateinstall;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
@@ -316,9 +315,9 @@ export function saveInstall(
       method: 'post',
       data: values(newInstalls)
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.POST.inventory.addinstall;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
           throw undefined;
@@ -351,9 +350,9 @@ export function deleteInstall(
       method: 'post',
       data: { id: installID }
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.POST.inventory.deleteInstall;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         dispatch({
           type: types.INSTALL_DELETE_SUCCESS,
@@ -389,9 +388,9 @@ export function installContact(
         message
       }
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.POST.inventory.installContact;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         dispatch({
           type: types.INSTALL_CONTACT_SUCCESS
@@ -430,9 +429,9 @@ export function importInstall(file: any): ThunkResult<void> {
         'content-type': 'multipart/form-data'
       }
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.POST.inventory.importInstall;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         dispatch({
           type: types.IMPORT_INSTALL_SUCCESS
@@ -489,9 +488,9 @@ export const requestQuote = ({
       method: 'post',
       data: { QuoteItems, facilityID, message }
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.POST.inventory.quote;
-    return adalFetch(authContext, resource, axios, url, axiosOptions)
+    return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         dispatch({
           type: types.CHECKOUT_INVENTORY_SUCCESS
@@ -517,9 +516,9 @@ export function mergeProduct(
       method: 'post',
       data: { sourceProductID, targetProductID }
     };
-    const resource = `${process.env.REACT_APP_ADAL_CLIENTID}`;
+
     const url = API.POST.inventory.mergeProduct;
-    return adalFetch(authContext, resource, axios, url, axiosOptions).then(
+    return msalFetch(url, axiosOptions).then(
       (data: AxiosResponse<any>) => {
         dispatch({
           type: types.PRODUCT_MERGE_SUCCESS

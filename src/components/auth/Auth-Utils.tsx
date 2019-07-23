@@ -5,8 +5,6 @@ import {
   AuthError
 } from 'msal';
 import Axios, { AxiosRequestConfig } from 'axios';
-import { toastr } from 'react-redux-toastr';
-import { constants } from 'src/constants/constants';
 
 export const isIE = () => {
   const ua = window.navigator.userAgent;
@@ -32,7 +30,8 @@ export const requiresInteraction = (errorMessage: string) => {
   return (
     errorMessage.indexOf('consent_required') > -1 ||
     errorMessage.indexOf('interaction_required') > -1 ||
-    errorMessage.indexOf('login_required') > -1
+    errorMessage.indexOf('login_required') > -1 ||
+    errorMessage.indexOf('user_login_error') > -1 // added by jfbloom22. not sure if this is correct
   );
 };
 const MSAL_AUTHORITY = `https://login.microsoftonline.com/tfp/${
@@ -62,6 +61,14 @@ const temporaryHandleRedirectCallback = (
       error.message.indexOf('The user has forgotten their password') > -1;
     const forgotPasswordCancel =
       error.errorMessage.indexOf('user has cancelled entering') > -1;
+    const loginInProgress =
+      error.errorMessage.indexOf('Login_In_Progress') > -1;
+    const acquireTokenInProgress =
+      error.message.indexOf('AcquireToken_In_Progress') > -1;
+
+    if (loginInProgress || acquireTokenInProgress) {
+      return;
+    } // ignore these errors
 
     if (forgotPasswordError) {
       window.location.replace(MSAL_FORGET);
@@ -99,10 +106,9 @@ export const msalApp = new UserAgentApplication({
     storeAuthStateInCookie: isIE()
   },
   system: {
-    tokenRenewalOffsetSeconds: -120
+    tokenRenewalOffsetSeconds: 0
   }
 });
-
 msalApp.handleRedirectCallback(temporaryHandleRedirectCallback);
 
 export const acquireToken = () => {
@@ -120,29 +126,41 @@ export const acquireToken = () => {
         return redirect
           ? msalApp.acquireTokenRedirect(request)
           : msalApp.acquireTokenPopup(request);
-      }, 1000);
+      }, 5000);
     } else {
       return error;
     }
   });
 };
 
+const delay = (t: number) => new Promise(resolve => setTimeout(resolve, t));
+
+/*
+* check the token before every API call.
+* goal is to redirect to login when needed and avoid displaying errors unless it fails to redirect for some reason.
+* If it is invalid it will try again.  If it is still invalid, redirect to the login page
+* if it is currently redirecting to the login page (logininprogress()) then it will wait
+* 
+*/
 export const msalFetch = (
   url: string,
   options: AxiosRequestConfig,
   isRetry?: boolean
 ): Promise<any> => {
   return acquireToken().then((tokenResponse: AuthResponse) => {
-    // console.log('msalFetch tokenResponse: ', tokenResponse);
+    console.log('msalFetch tokenResponse: ', tokenResponse);
     if (!tokenResponse || tokenResponse.accessToken === null) {
       console.error('missing token', tokenResponse);
-      if (!isRetry) {
-        console.log('retrying msalFetch');
-        return msalFetch(url, options, true);
-      } else {
-        msalApp.loginRedirect({ prompt: 'login' });
-        throw new Error('unable to renew token');
+      if (msalApp.getLoginInProgress() === false) {
+        msalApp.loginRedirect({
+          scopes: [MSAL_SCOPES.MMG]
+        });
       }
+      return delay(1000).then(() => {
+        throw new Error(
+          'attampt to redirect to login failed.  Please contact support.'
+        );
+      });
     }
     const headers = {
       ...options.headers,

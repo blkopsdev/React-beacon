@@ -19,7 +19,8 @@
     "save": "Save",
     "login": "Login",
     "job": "Job",
-    "confirm": "Confirm"
+    "confirm": "Confirm",
+    "warning": "Warning"
   },
   "auth": {
     "loginButton": "Login with Azure",
@@ -122,7 +123,7 @@
     "status": "Status",
     "facility": "Facility",
     "startDateWarning": "You have selected a start date after the end date.",
-    "pastDateWarning": "You have selected a start date that is in the past."
+    "pastDateWarning": "You have selected a start date in the past."
   },
   "reportManage": {
     "bannerTitle": "Manage Reports",

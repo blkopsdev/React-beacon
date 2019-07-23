@@ -37,11 +37,11 @@ export const requiresInteraction = (errorMessage: string) => {
 };
 const MSAL_AUTHORITY = `https://login.microsoftonline.com/tfp/${
   process.env.REACT_APP_MSAL_TENANT_ID
-}/B2C_1_MMG_B2C_SignIn/v2.0`;
+}/${process.env.REACT_APP_MSAL_SIGNIN_POLICY}/v2.0`;
 const MSAL_FORGET = `https://login.microsoftonline.com/tfp/beaconb2c.onmicrosoft.com/
-B2C_1_MMG_ForgotPassword_v2/oauth2/v2.0/authorize?client_id=${
-  process.env.REACT_APP_MSAL_CLIENT_ID
-}
+${
+  process.env.REACT_APP_MSAL_FORGET_PASSWORD_POLICY
+}/oauth2/v2.0/authorize?client_id=${process.env.REACT_APP_MSAL_CLIENT_ID}
 &redirect_uri=${process.env.REACT_APP_HOST_DOMAIN}&response_type=id_token&
 scope=${MSAL_SCOPES.MMG} ${
   MSAL_SCOPES.OPENID

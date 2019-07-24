@@ -18,7 +18,9 @@ export const isIE = () => {
 };
 
 export const MSAL_SCOPES = {
-  MMG: 'https://beaconb2c.onmicrosoft.com/mmg-api/read',
+  MMG: `https://${
+    process.env.REACT_APP_MSAL_TENANT_NAME
+  }.onmicrosoft.com/mmg-api/read`,
   OPENID: 'openid'
 };
 
@@ -37,7 +39,9 @@ export const requiresInteraction = (errorMessage: string) => {
 const MSAL_AUTHORITY = `https://login.microsoftonline.com/tfp/${
   process.env.REACT_APP_MSAL_TENANT_ID
 }/${process.env.REACT_APP_MSAL_SIGNIN_POLICY}/v2.0`;
-const MSAL_FORGET = `https://login.microsoftonline.com/tfp/beaconb2c.onmicrosoft.com/
+const MSAL_FORGET = `https://login.microsoftonline.com/tfp/${
+  process.env.REACT_APP_MSAL_TENANT_NAME
+}.onmicrosoft.com/
 ${
   process.env.REACT_APP_MSAL_FORGET_PASSWORD_POLICY
 }/oauth2/v2.0/authorize?client_id=${process.env.REACT_APP_MSAL_CLIENT_ID}

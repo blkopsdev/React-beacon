@@ -17,6 +17,8 @@ import * as types from './actionTypes';
 import { filter, values } from 'lodash';
 import { initialMeasurementPointList } from 'src/reducers/initialState';
 import { msalFetch } from 'src/components/auth/Auth-Utils';
+import { Dispatch } from 'react-redux';
+import { TranslationFunction } from 'i18next';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
@@ -195,7 +197,7 @@ export function updateGlobalMeasurementPointList(
         (error: any) => {
           dispatch({ type: types.MANAGE_MEASUREMENT_POINT_LIST_UPDATE_FAILED });
           constants.handleError(error, 'update measurement point list');
-          Promise.reject(error);
+          throw error;
         }
       );
     } else {
@@ -203,6 +205,48 @@ export function updateGlobalMeasurementPointList(
     }
   };
 }
+
+export function deleteMeasurementPoint(
+  measurementPointID: string,
+  measurementPointListID: string,
+  selectedTabID: string,
+  t: TranslationFunction
+): ThunkResult<void> {
+  return (dispatch, getState) => {
+    const measurementPointListsByID = getState().manageMeasurementPointLists
+      .data;
+    const selectedMeasurementPointList =
+      measurementPointListsByID[measurementPointListID];
+    const selectedTab = selectedMeasurementPointList.measurementPointTabs.find(
+      tab => tab.id === selectedTabID
+    );
+    if (!selectedTab) {
+      throw new Error('missing selected measurement point tab');
+    }
+    const selectedMeasurementPoint =
+      selectedTab.measurementPoints[measurementPointID];
+
+    const toastrConfirmOptions = {
+      onOk: () => {
+        saveMeasurementPointToMeasurementPointListHelper(
+          measurementPointListID,
+          selectedTabID,
+          { ...selectedMeasurementPoint, isDeleted: true },
+          dispatch,
+          getState
+        );
+        dispatch({
+          type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT
+        });
+      },
+      onCancel: () => console.log('CANCEL: clicked'),
+      okText: t('deleteMeasurementPointOk'),
+      cancelText: t('common:cancel')
+    };
+    toastr.confirm(t('deleteConfirmMP'), toastrConfirmOptions);
+  };
+}
+
 export function deleteGlobalMeasurementPointList(
   MPlistID: string
 ): ThunkResult<void> {
@@ -313,6 +357,21 @@ export const saveMeasurementPointToMeasurementPointList = (
   selectedTabID,
   measurementPoint
 });
+
+export const saveMeasurementPointToMeasurementPointListHelper = (
+  listID: string,
+  selectedTabID: string,
+  measurementPoint: ImeasurementPoint,
+  dispatch: Dispatch,
+  getState: () => IinitialState
+) => {
+  dispatch({
+    type: types.MANAGE_MEASUREMENT_POINT_SAVE_TO_LIST,
+    listID,
+    selectedTabID,
+    measurementPoint
+  });
+};
 
 /*
 * Get a specific measurement point list

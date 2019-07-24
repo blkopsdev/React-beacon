@@ -21,7 +21,8 @@ import {
   faSortAmountDown,
   faClipboardList,
   faWrench,
-  faHistory
+  faHistory,
+  faBars
 } from '@fortawesome/pro-regular-svg-icons';
 import {
   faUsers,
@@ -44,6 +45,7 @@ import { TrackJS } from 'trackjs';
 
 library.add(
   faCog,
+  faBars,
   faUsers,
   faCalendarCheck,
   faTh,

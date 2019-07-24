@@ -356,7 +356,7 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
       productTypeID: Ioption;
       powerID: Ioption;
       systemSizeID: Ioption;
-      standardID: Ioption;
+      standardID: string;
     };
     const productName = createProductName(
       brandID,
@@ -376,7 +376,7 @@ class ManageInventoryForm extends React.Component<Iprops, {}> {
       productTypeID: productTypeID ? productTypeID.value : '',
       powerID: powerID ? powerID.value : '',
       systemSizeID: systemSizeID ? systemSizeID.value : '',
-      standardID: standardID ? standardID.value : '',
+      standardID: standardID ? standardID : '',
       name: productName
     };
 

@@ -14,7 +14,6 @@ import {
 } from 'react-router-dom';
 import { constants } from './constants/constants';
 import { TrackJS } from 'trackjs';
-import { msalApp, handleRedirectCallback } from './components/auth/Auth-Utils';
 import SignUpDirect from './components/auth/SignUpDirect';
 import SignUpWithMS from './components/auth/SignUpWithMS';
 import Dashboard from './components/dashboard/Dashboard';

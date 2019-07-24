@@ -393,6 +393,12 @@ class ManageMeasurementPointList extends React.Component<
       return '';
     }
   };
+  canEditGlobal = () => {
+    return constants.hasSecurityFunction(
+      this.props.user,
+      constants.securityFunctions.ManageAllMeasurementPoints.id
+    );
+  };
 
   render() {
     if (this.props.mainCategoryOptions.length === 0) {
@@ -483,6 +489,7 @@ class ManageMeasurementPointList extends React.Component<
           }
           t={this.props.t}
           customerID={this.getCustomerID()}
+          canEditGlobal={this.canEditGlobal()}
         />
       </div>
     );

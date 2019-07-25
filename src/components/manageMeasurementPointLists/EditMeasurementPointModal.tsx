@@ -13,7 +13,8 @@ import {
   toggleEditMeasurementPointListModal,
   toggleEditMeasurementPointModal,
   saveMeasurementPointToMeasurementPointList,
-  updateMeasurementPoint
+  updateMeasurementPoint,
+  deleteMeasurementPoint
 } from '../../actions/manageMeasurementPointListsActions';
 import CommonModal from '../common/CommonModal';
 import EditMeasurementPointForm from './EditMeasurementPointForm';
@@ -37,6 +38,8 @@ interface IdispatchProps {
   selectedTab: ImeasurementPointListTab;
   updateMeasurementPoint: typeof updateMeasurementPoint;
   selectedMeasurementPoint: ImeasurementPoint;
+  canEditGlobal: boolean;
+  deleteMeasurementPoint: typeof deleteMeasurementPoint;
 }
 
 class EditMeasurementPointModal extends React.Component<
@@ -101,6 +104,7 @@ export default connect(
     toggleEditMeasurementPointListModal,
     toggleModal: toggleEditMeasurementPointModal,
     saveMeasurementPointToMeasurementPointList,
-    updateMeasurementPoint
+    updateMeasurementPoint,
+    deleteMeasurementPoint
   }
 )(EditMeasurementPointModal);

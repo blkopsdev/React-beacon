@@ -1,5 +1,5 @@
 import * as types from './actionTypes';
-import { GFQuizItem, ThunkResult, Iuser } from 'src/models';
+import { GFQuizItem, ThunkResult, Iuser, GFQuizAnswer } from 'src/models';
 import { beginAjaxCall } from './ajaxStatusActions';
 import { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import API from 'src/constants/apiEndpoints';
@@ -7,16 +7,6 @@ import API from 'src/constants/apiEndpoints';
 import { msalFetch } from 'src/components/auth/Auth-Utils';
 import { sortBy, forEach } from 'lodash';
 import { constants } from 'src/constants/constants';
-
-export function getQuizSuccess(quiz: GFQuizItem) {
-  return { type: types.LOAD_QUIZ, quiz };
-}
-
-export function setQuiz(quiz: GFQuizItem): ThunkResult<void> {
-  return dispatch => {
-    dispatch(getQuizSuccess(quiz));
-  };
-}
 
 /*
 * Quizzes with the questions for a particular lesson
@@ -100,48 +90,87 @@ export function getAllQuizzes(user: Iuser): ThunkResult<void> {
 /*
       Save quiz results
     */
-export function saveQuizResult(): ThunkResult<void> {
+export function saveQuizResult(
+  quizID: string,
+  quizName: string
+): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
-    const { quiz } = getState().training;
+    const { quizAnswers } = getState().training;
+    const { score } = calculateScore(quizAnswers);
 
-    // grind quiz results into the sausage that David's api is expecting
-    const answers: any[] = [];
-    let numCorrect: number = 0;
-    forEach(quiz.questions, q => {
-      if (q && q.userAnswer && q.userAnswer.isAnswer) {
-        numCorrect++;
-      }
-      answers.push({
-        QuestionID: q.id,
-        Answer: q.userAnswer.option,
-        IsCorrect: q.userAnswer.isAnswer
-      });
-    });
-    const score = ((numCorrect / quiz.questions.length) * 100).toFixed(0);
-    const body = {
-      Answers: answers,
-      QuizID: quiz.id,
-      Score: score
-    };
     const axiosOptions: AxiosRequestConfig = {
       method: 'post',
-      data: body
+      data: {
+        Answers: quizAnswers,
+        quizID,
+        Score: score
+      }
     };
 
     const url = API.POST.training.savequiz;
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         dispatch({
-          type: types.SAVE_QUIZ_SUCCESS,
+          type: types.SAVE_QUIZ_ANSWERS_SUCCESS,
           progress: data.data
         });
       })
       .catch((error: any) => {
         console.error('Error saving quiz', error);
-        dispatch({ type: types.SAVE_QUIZ_FAILED });
+        dispatch({ type: types.SAVE_QUIZ_ANSWERS_FAILED });
         constants.handleError(error, 'save quiz');
         throw error; // throw here because we have a .then in the quiz component
       });
   };
 }
+
+// Save quiz start
+export function startQuiz(quizID: string): ThunkResult<void> {
+  return dispatch => {
+    dispatch(beginAjaxCall());
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'post',
+      data: { quizID }
+    };
+    const url = API.POST.training.startQuiz;
+    return msalFetch(url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
+        dispatch({
+          type: types.START_QUIZ_SUCCESS,
+          startTime: data.data.startTime
+        });
+      })
+      .catch((error: any) => {
+        console.error('Error starting timed quiz', error);
+        dispatch({ type: types.START_QUIZ_FAILED });
+        constants.handleError(error, 'start quiz');
+        throw error; // intentionally re-throw
+      });
+  };
+}
+
+export const addAnswer = (answer: GFQuizAnswer) => ({
+  type: types.ADD_ANSWER,
+  answer
+});
+
+export const resetAnswers = () => ({
+  type: types.RESET_ANSWERS
+});
+
+export const setInProgressQuizID = (quizID: string) => ({
+  type: types.SET_SELECTED_IN_PROGRESS_QUIZ,
+  id: quizID
+});
+
+export const calculateScore = (quizAnswers: GFQuizAnswer[]) => {
+  let numCorrect = 0;
+  const tot = quizAnswers.length;
+  forEach(quizAnswers, answer => {
+    if (answer.isCorrect) {
+      numCorrect++;
+    }
+  });
+  return { score: Math.round((numCorrect / tot) * 100), numCorrect, tot };
+};

@@ -13,7 +13,14 @@ export default function redirect(
     case types.REMOVE_REDIRECT_REFERRER:
       return { ...state, redirectToReferrer: false } as Iredirect;
     case types.SET_REDIRECT_PATHNAME:
-      return { ...state, pathname: action.pathname } as Iredirect;
+      return {
+        ...state,
+        pathname: action.pathname,
+        redirectToReferrer:
+          action.setRedirect !== undefined
+            ? action.setRedirect
+            : state.redirectToReferrer
+      } as Iredirect;
     case types.REMOVE_REDIRECT_REFERRER:
       return initialState.redirect;
     case types.USER_LOGOUT_SUCCESS:

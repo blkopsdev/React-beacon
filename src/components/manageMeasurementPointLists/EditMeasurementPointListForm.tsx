@@ -11,7 +11,6 @@ import {
   FieldConfig,
   GroupProps
 } from 'react-reactive-form';
-import { filter, keyBy } from 'lodash';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import * as React from 'react';
@@ -74,7 +73,6 @@ interface Iprops extends React.Props<EditMeasurementPointListForm> {
 }
 
 interface Istate {
-  measurementPoints: ImeasurementPoint[];
   fieldConfig: FieldConfig;
 }
 
@@ -85,7 +83,6 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
   constructor(props: Iprops) {
     super(props);
     this.state = {
-      measurementPoints: this.parseMeasurementPoints(),
       fieldConfig: FormUtil.translateForm(this.buildFieldConfig(), this.props.t)
     };
   }
@@ -93,7 +90,6 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     const { measurementPointTabs } = this.props.selectedMeasurementPointList;
     if (measurementPointTabs.length) {
       this.props.setSelectedTabID(measurementPointTabs[0].id);
-      this.setState({ measurementPoints: this.parseMeasurementPoints() });
     }
   }
 
@@ -108,20 +104,11 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
     ) {
       console.log('selectedTab updated!!!!');
       this.setState({
-        measurementPoints: this.parseMeasurementPoints(),
         fieldConfig: FormUtil.translateForm(
           this.buildFieldConfig(),
           this.props.t
         )
       });
-    }
-
-    if (
-      JSON.stringify(this.props.selectedMeasurementPointList) !==
-      JSON.stringify(prevProps.selectedMeasurementPointList)
-    ) {
-      console.log('selectedMeasurementPointList updated!!!!');
-      this.setState({ measurementPoints: this.parseMeasurementPoints() });
     }
   }
   componentWillUnmount() {
@@ -276,20 +263,6 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
       })
       .catch((error: any) => console.error(error));
   };
-  /*
-  * Remove deleted measurementPoints and sort them
-  */
-  parseMeasurementPoints = () => {
-    const filteredMPs = filter(
-      this.props.selectedTab.measurementPoints,
-      mp => mp.isDeleted === false
-    );
-
-    filteredMPs.sort((a: ImeasurementPoint, b: ImeasurementPoint) => {
-      return a.order - b.order;
-    });
-    return filteredMPs;
-  };
 
   subscribeToValueChanges = () => {
     const controls = ['selectedTab', 'type', 'mainCategoryID', 'standardID'];
@@ -368,30 +341,10 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
   createNewMeasurementPoint = (type: number): ImeasurementPoint => {
     return {
       ...initialMeasurementPoint,
-      id: uuidv4(),
       type,
-      order: this.state.measurementPoints.length,
+      order: Object.keys(this.props.selectedTab.measurementPoints).length,
       customerID: this.props.customerID
     };
-  };
-
-  swapMeasurementPointOrder = (q1Index: number, q2Index: number) => {
-    const mps = this.state.measurementPoints;
-    console.log('Swapping ', mps[q1Index].label, mps[q2Index].label);
-    const tempOrder = mps[q1Index].order;
-    mps[q1Index] = { ...mps[q1Index], order: mps[q2Index].order };
-    mps[q2Index] = { ...mps[q2Index], order: tempOrder };
-    mps.sort((a: ImeasurementPoint, b: ImeasurementPoint) => {
-      return a.order - b.order;
-    });
-    this.props.updateMeasurementPointListTab({
-      ...this.props.selectedTab,
-      measurementPoints: keyBy(mps, 'id')
-    });
-    // set state here just to make it faster (might not be any faster in production)
-    this.setState({
-      measurementPoints: mps
-    });
   };
 
   validInitialTab = () => {
@@ -536,11 +489,13 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
           <Row>
             <Col xs={12} className="">
               <MeasurementPointList
-                measurementPointList={this.state.measurementPoints}
+                selectedTab={this.props.selectedTab}
                 setSelectedMeasurementPoint={this.setSelectedMeasurementPoint}
-                swapMeasurementPointOrder={this.swapMeasurementPointOrder}
                 deleteMeasurementPoint={this.deleteMeasurementPoint}
-                canEditGlobal={this.canEditGlobal()}
+                updateMeasurementPointListTab={
+                  this.props.updateMeasurementPointListTab
+                }
+                customerID={this.props.customerID}
               />
             </Col>
           </Row>

@@ -1,5 +1,9 @@
 @import "../../less/variables.less";
 .loginlayout {
+  background-image: url('images/beaconHome.jpg');
+  background-repeat: no-repeat;
+  background-size: cover;
+  min-height: calc(100vh - @headerHeight);
   .login-form {
     position: relative;
     margin-left: auto;
@@ -133,19 +137,4 @@
       }
     }
   }
-}
-
-.loginlayout:after {
-  content: "";
-  display: block;
-  position: absolute;
-  top: 0;
-  left: 0;
-  background-image: url('images/beaconHome.jpg');
-  background-repeat: no-repeat;
-  background-size: cover;
-  width: 100%;
-  height: 130%;
-  opacity: 0.2;
-  z-index: -1;
 }

@@ -396,6 +396,11 @@ export interface GFLesson {
   quizName?: string;
   isProtected: boolean;
 }
+export interface GFQuizAnswer {
+  questionID: string;
+  answer: string;
+  isCorrect: boolean;
+}
 
 export interface GFLessons {
   [key: string]: GFLesson;
@@ -444,7 +449,6 @@ export interface GFQuizItem {
   lessonID: string;
   questions: GFQuizQuestion[];
   isTimed: boolean;
-  startTime?: string;
   createDate?: any;
   updateDate?: any;
   studentCanAccess?: any;
@@ -474,9 +478,15 @@ export interface LessonProgress {
   isComplete: boolean;
 }
 
+export interface GFQuizViewReducer {
+  quizComplete: boolean;
+  inProgressQuizID: string;
+  startTime: string;
+}
+
 export interface ItrainingReducer {
-  courses: GFCourse[];
-  lessons: GFLessons | any;
+  courses: { [key: string]: GFCourse };
+  lessons: GFLessons;
   lesson: GFLesson;
   quizzes: { [key: string]: GFQuizItem };
   quiz: GFQuizItem;
@@ -484,6 +494,8 @@ export interface ItrainingReducer {
   cart: IshoppingCart;
   showShoppingCartModal: boolean;
   purchasedTraining: string[];
+  quizAnswers: GFQuizAnswer[];
+  quizView: GFQuizViewReducer;
 }
 
 export interface ItableFiltersReducer {

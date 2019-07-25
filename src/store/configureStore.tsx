@@ -85,7 +85,6 @@ const persistConfig = {
   blacklist: [
     'showEditProfileModal',
     'ajaxCallsInProgress',
-    'facilities',
     'showEditCustomerModal',
     'showEditFacilityModal',
     'showEditProfileModal',

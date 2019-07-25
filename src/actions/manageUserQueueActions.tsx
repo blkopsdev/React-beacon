@@ -82,21 +82,15 @@ export function rejectUser(userQueueID: string) {
     };
 
     const url = API.POST.user.reject;
-    return msalFetch(url, axiosOptions).then(
-      (data: AxiosResponse<any>) => {
-        if (!data.data) {
-          throw undefined;
-        } else {
-          dispatch({ type: types.USER_REJECT_SUCCESS, userQueueID });
-          return data;
-        }
-      },
-      (error: any) => {
+    return msalFetch(url, axiosOptions)
+      .then((response: AxiosResponse<any>) => {
+        dispatch({ type: types.USER_REJECT_SUCCESS, userQueueID });
+      })
+      .catch((error: any) => {
         dispatch({ type: types.USER_REJECT_FAILED });
         constants.handleError(error, 'reject user');
-        throw error;
-      }
-    );
+        throw error; // throw again so we can handle it in manageUserQueue
+      });
   };
 }
 export function updateQueueUser(

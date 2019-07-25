@@ -20,62 +20,19 @@
   }
 }
 
-.manage-form {
-  .form-buttons {}
+.question-list-item {
+  z-index: 1051 !important;
 }
-
 .question-list {
 
-  .sort-controls {
-    // z-index: 2;
-    position: absolute;
-    right: 15px;
-    width: 80px;
-    height: 90px;
-
-    .btn {
-      width: 40px;
-      height: 45px;
-      border-radius: 0%;
-      padding: 6px 3px;
-      border: none;
-      color: @darkGrey;
-    }
-  }
-
-  .question-list-item {
-    // padding-right: 40px;
-    width: calc(100% - 80px) !important;
-    height: 90px;
-    border: none;
-    border-radius: 0;
-
-    .list-label {
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-  }
-
-  .question-list-item-container:nth-child(odd) {
-    .question-list-item {
+    .question-list-item:nth-child(odd)  {
       background-color: fade(@purple, 5%);
 
       &:hover {
         background-color: fade(@purple, 20%);
       }
     }
-
-    .sort-controls {
-      .btn {
-        background-color: fade(@purple, 5%);
-
-        &:hover {
-          background-color: fade(@purple, 20%);
-        }
-      }
-    }
-  }
+  
 }
 
 .options-list {

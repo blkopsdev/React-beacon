@@ -31,8 +31,8 @@ export function userLogin(): ThunkResult<void> {
         method: 'post'
       };
       const url = API.POST.user.login;
-      return msalFetch(url, axiosOptions).then(
-        (data: AxiosResponse<any>) => {
+      return msalFetch(url, axiosOptions)
+        .then((data: AxiosResponse<any>) => {
           if (!data.data) {
             throw undefined;
           } else {
@@ -40,16 +40,15 @@ export function userLogin(): ThunkResult<void> {
             TrackJS.configure({ userId: data.data.email });
             return data;
           }
-        },
-        (error: any) => {
+        })
+        .catch((error: any) => {
           console.error('failed to login', error);
           dispatch({ type: types.USER_LOGIN_FAILED });
           userLogoutHelper(dispatch);
           // to avoid getting stuck, go ahead and log the user out after a longer pause
           constants.handleError(error, 'login');
-          throw error;
-        }
-      );
+          throw error; // intentionally re-throw
+        });
     });
   };
 }
@@ -87,21 +86,20 @@ const userLogoutHelper = (dispatch: Dispatch) => {
 export function signUpDirect(tempUser: ItempUser): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
-    return Axios.post(API.POST.user.signup, tempUser).then(
-      data => {
+    return Axios.post(API.POST.user.signup, tempUser)
+      .then(data => {
         if (!data.data) {
           throw undefined;
         } else {
           dispatch({ type: types.USER_SIGNUP_SUCCESS, user: data.data });
           return data;
         }
-      },
-      (error: any) => {
+      })
+      .catch((error: any) => {
         dispatch({ type: types.USER_SIGNUP_FAILED });
         constants.handleError(error, 'sign up');
-        throw error;
-      }
-    );
+        throw error; // intentionally re-throw
+      });
   };
 }
 

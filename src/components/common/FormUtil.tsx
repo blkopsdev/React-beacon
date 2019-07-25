@@ -16,7 +16,7 @@ import {
   AbstractControl,
   ValidationErrors
 } from 'react-reactive-form';
-import { mapValues, map } from 'lodash';
+import { mapValues, map, orderBy } from 'lodash';
 import { TranslationFunction } from 'react-i18next';
 import Select, { components } from 'react-select';
 import CreatableSelect from 'react-select/lib/Creatable';
@@ -82,15 +82,6 @@ export const FormUtil = {
       return null;
     }
   },
-  toFormData: (formValue: any) => {
-    const data = new FormData();
-    Object.keys(formValue).map(key => {
-      const value = formValue[key];
-      data.append(key, value && value.value ? value.value : value);
-    });
-
-    return data;
-  },
   getValidationState: (
     pristine: boolean,
     error: ValidationErrors,
@@ -105,6 +96,15 @@ export const FormUtil = {
     } else {
       return null;
     }
+  },
+  toFormData: (formValue: any) => {
+    const data = new FormData();
+    Object.keys(formValue).map(key => {
+      const value = formValue[key];
+      data.append(key, value && value.value ? value.value : value);
+    });
+
+    return data;
   },
   Datetime: ({
     handler,
@@ -197,7 +197,6 @@ export const FormUtil = {
       </Col>
     );
   },
-
   DatePicker: ({
     handler,
     meta,
@@ -246,70 +245,6 @@ export const FormUtil = {
             showMonthDropdown
             dropdownMode="select"
           />
-        </FormGroup>
-      </Col>
-    );
-  },
-  FileInput: ({
-    handler,
-    touched,
-    meta,
-    pristine,
-    errors,
-    submitted,
-    value
-  }: AbstractControl) => {
-    const requiredLabel = meta.required === false ? ' - Optional' : '';
-
-    return (
-      <Col xs={meta.colWidth}>
-        {meta.imageUrl && (
-          <img
-            alt="Uploaded Img"
-            src={meta.imageUrl}
-            style={{
-              maxWidth: '100%',
-              marginTop: '15px',
-              marginBottom: '15px'
-            }}
-          />
-        )}
-        <FormGroup
-          validationState={FormUtil.getValidationState(
-            pristine,
-            errors,
-            submitted
-          )}
-          bsSize="sm"
-          style={meta.style}
-        >
-          <ControlLabel htmlFor="fileUpload" style={{ cursor: 'pointer' }}>
-            <span className="btn btn-default">
-              {meta.label}
-              <i className="required-label">{requiredLabel}</i>
-            </span>
-            <FormControl
-              accept={'image/*'}
-              id={'fileUpload'}
-              placeholder={meta.placeholder}
-              componentClass={meta.componentClass}
-              type={meta.type || 'file'}
-              rows={meta.rows}
-              autoFocus={meta.autoFocus}
-              name={meta.name || ''}
-              {...handler()}
-              onChange={(e: any) => {
-                const fileInput = e.target;
-                let fileName = '';
-                if (!!fileInput.files.length) {
-                  meta.onChange(fileInput.files[0]);
-                  fileName = fileInput.files[0].name;
-                }
-                e.target.filename = fileName;
-              }}
-              style={{ display: 'none' }}
-            />
-          </ControlLabel>
         </FormGroup>
       </Col>
     );
@@ -377,6 +312,7 @@ export const FormUtil = {
       ? 'is-multi beacon-select'
       : 'beacon-select';
     const selectValidationClass = value && !pristine ? 'has-success' : '';
+    // console.log('validator', errors);
     const requiredLabel = meta.required === false ? ' - Optional' : '';
     return (
       <Col xs={meta.colWidth} md={meta.colWidthMedium} lg={meta.colWidthLarge}>
@@ -393,7 +329,7 @@ export const FormUtil = {
             <i className="required-label">{requiredLabel}</i>
           </ControlLabel>
           <Select
-            options={meta.options}
+            options={orderBy(meta.options, 'label')}
             className={`${selectClassName} ${selectValidationClass}`}
             components={{ Control: ControlComponent }}
             placeholder={meta.placeholder}
@@ -439,7 +375,7 @@ export const FormUtil = {
             <i className="required-label">{requiredLabel}</i>
           </ControlLabel>
           <CreatableSelect
-            options={meta.options}
+            options={orderBy(meta.options, 'label')}
             className={`${selectClassName} ${selectValidationClass}`}
             components={{ Control: ControlComponent }}
             placeholder={meta.placeholder}
@@ -458,6 +394,7 @@ export const FormUtil = {
     );
   },
   SelectWithoutValidation: ({ handler, meta }: AbstractControl) => {
+    // console.log('rendering select', meta.options, value, defaultValue)
     const selectClassName = meta.isMulti
       ? 'is-multi beacon-select'
       : 'beacon-select';
@@ -470,7 +407,7 @@ export const FormUtil = {
         <FormGroup bsSize="sm">
           <ControlLabel>{meta.label}</ControlLabel>
           <Select
-            options={meta.options}
+            options={orderBy(meta.options, 'label')}
             className={selectClassName}
             components={{ Control: ControlComponent }}
             placeholder={meta.placeholder}
@@ -489,6 +426,7 @@ export const FormUtil = {
   },
   SelectWithoutValidationLeftLabel: ({ handler, meta }: AbstractControl) => {
     // TODO get rid of this because default values do not work for some unknwon reason.  we patch the values instead
+    // console.log('rendering select', meta.options, value, defaultValue)
     const selectClassName = meta.isMulti
       ? 'is-multi beacon-select'
       : 'beacon-select';
@@ -505,7 +443,7 @@ export const FormUtil = {
           </Col>
           <Col xs={10}>
             <Select
-              options={meta.options}
+              options={orderBy(meta.options, 'label')}
               className={selectClassName}
               components={{ Control: ControlComponent }}
               placeholder={meta.placeholder}
@@ -534,6 +472,7 @@ export const FormUtil = {
     submitted,
     value
   }: AbstractControl) => {
+    // console.log('rendering select', meta.options, value, defaultValue)
     const selectClassName = meta.isMulti
       ? 'is-multi beacon-select'
       : 'beacon-select';
@@ -561,7 +500,7 @@ export const FormUtil = {
             {meta.buttonName}
           </Button>
           <Select
-            options={meta.options}
+            options={orderBy(meta.options, 'label')}
             className={`${selectClassName} ${selectValidationClass}`}
             components={{ Control: ControlComponent }}
             placeholder={meta.placeholder}
@@ -595,7 +534,11 @@ export const FormUtil = {
           newMeta = { ...newMeta, placeholder: t(field.meta.placeholder) };
         }
         // we need this to translate the options for the security functions
-        if (field.meta.options && field.meta.options.length) {
+        if (
+          field.meta.shouldTranslate &&
+          field.meta.options &&
+          field.meta.options.length
+        ) {
           const newOptions = map(field.meta.options, option => ({
             value: option.value,
             label: t(option.label)
@@ -655,7 +598,7 @@ export const FormUtil = {
                 </i>
               </ControlLabel>
               <CreatableSelect
-                options={meta.options}
+                options={orderBy(meta.options, 'label')}
                 className={`${selectClassName} ${selectValidationClass}`}
                 components={{ Control: ControlComponent }}
                 placeholder={meta.placeholder}
@@ -776,6 +719,70 @@ export const FormUtil = {
             {...handler()}
           />
           <FormControl.Feedback />
+        </FormGroup>
+      </Col>
+    );
+  },
+  FileInput: ({
+    handler,
+    touched,
+    meta,
+    pristine,
+    errors,
+    submitted,
+    value
+  }: AbstractControl) => {
+    const requiredLabel = meta.required === false ? ' - Optional' : '';
+
+    return (
+      <Col xs={meta.colWidth}>
+        {meta.imageUrl && (
+          <img
+            alt="Uploaded Img"
+            src={meta.imageUrl}
+            style={{
+              maxWidth: '100%',
+              marginTop: '15px',
+              marginBottom: '15px'
+            }}
+          />
+        )}
+        <FormGroup
+          validationState={FormUtil.getValidationState(
+            pristine,
+            errors,
+            submitted
+          )}
+          bsSize="sm"
+          style={meta.style}
+        >
+          <ControlLabel htmlFor="fileUpload" style={{ cursor: 'pointer' }}>
+            <span className="btn btn-default">
+              {meta.label}
+              <i className="required-label">{requiredLabel}</i>
+            </span>
+            <FormControl
+              accept={'image/*'}
+              id={'fileUpload'}
+              placeholder={meta.placeholder}
+              componentClass={meta.componentClass}
+              type={meta.type || 'file'}
+              rows={meta.rows}
+              autoFocus={meta.autoFocus}
+              name={meta.name || ''}
+              {...handler()}
+              onChange={(e: any) => {
+                const fileInput = e.target;
+                let fileName = '';
+                if (!!fileInput.files.length) {
+                  meta.onChange(fileInput.files[0]);
+                  fileName = fileInput.files[0].name;
+                }
+                e.target.filename = fileName;
+              }}
+              style={{ display: 'none' }}
+            />
+          </ControlLabel>
         </FormGroup>
       </Col>
     );

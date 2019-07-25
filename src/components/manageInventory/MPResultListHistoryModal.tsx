@@ -15,7 +15,8 @@ import { connect } from 'react-redux';
 import { IinitialState, ImeasurementPointResult } from 'src/models';
 import { MPResultHistory } from './MPResultHistory';
 import { values } from 'lodash';
-import { updateMeasurementPointResult } from 'src/actions/measurementPointResultsActions';
+import { setHistoricalResultID } from 'src/actions/measurementPointResultsActions';
+import { initialMeasurmentPointResult } from 'src/reducers/initialState';
 // import * as moment from 'moment';
 
 interface Iprops {
@@ -30,9 +31,9 @@ interface IdispatchProps {
   showModal: boolean;
   selectedItem: ImeasurementPointResult;
   MPListResults: ImeasurementPointResult[];
-  updateMeasurementPointResult: typeof updateMeasurementPointResult;
   toggleMPResultNotes: () => void;
   toggleMPResultAddModal: () => void;
+  setHistoricalResultID: typeof setHistoricalResultID;
 }
 
 const MPResultListHistoryModalClass = (props: Iprops & IdispatchProps) => {
@@ -58,26 +59,18 @@ const MPResultListHistoryModalClass = (props: Iprops & IdispatchProps) => {
 };
 
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
-  // let filteredInstallBaseResults: ImeasurementPointResult[] = [];
-  //   filteredInstallBaseResults = values(filter(state.measurementPointResults.measurementPointResultsByID,
-  //     result =>
-  //       result.installBaseID === state.measurementPointResults.selectedResult.id
-  //   ));
-
-  // if (filteredInstallBaseResults.length) {
-  //   filteredInstallBaseResults = orderBy(
-  //     filteredInstallBaseResults,
-  //     res => moment.utc(res.updateDate).unix(),
-  //     'desc'
-  //   );
   const MPListResults = values(
     state.measurementPointResults.measurementPointResultsByID
   );
+  const selectedItem =
+    state.measurementPointResults.measurementPointResultsByID[
+      state.measurementPointResults.historicalResultID
+    ] || initialMeasurmentPointResult;
   return {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
     showModal: state.manageInventory.showMPResultHistoryModal,
-    selectedItem: state.measurementPointResults.selectedResult,
+    selectedItem,
     MPListResults
   };
 };
@@ -86,8 +79,8 @@ export const MPResultListHistoryModal = connect(
   mapStateToProps,
   {
     toggleModal: toggleMPResultHistory,
-    updateMeasurementPointResult,
     toggleMPResultNotes,
-    toggleMPResultAddModal
+    toggleMPResultAddModal,
+    setHistoricalResultID
   }
 )(MPResultListHistoryModalClass);

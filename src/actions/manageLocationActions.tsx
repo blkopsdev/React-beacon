@@ -145,6 +145,7 @@ const saveAnyLocationObjectHelper = (
       if (!data.data) {
         throw undefined;
       } else {
+        dispatch({ type: types.TOGGLE_MODAL_EDIT_LOCATION });
         dispatch({
           type: types.LOCATION_ADD_SUCCESS,
           lType,
@@ -174,6 +175,7 @@ export function updateAnyLocation(
 ): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
+    dispatch({ type: types.TOGGLE_MODAL_EDIT_LOCATION });
     let url: string;
     let lType: string;
     if ('facilityID' in locationObject) {

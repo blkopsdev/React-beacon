@@ -113,7 +113,6 @@ class ManageLocationForm extends React.Component<Iprops, {}> {
       // creating a new location
       this.props.saveAnyLocation(name, this.props.facility.id);
     }
-    this.props.toggleModal();
   };
   setForm = (form: AbstractControl) => {
     this.form = form;

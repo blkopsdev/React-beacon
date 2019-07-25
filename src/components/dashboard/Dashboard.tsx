@@ -64,7 +64,6 @@ class Dashboard extends React.Component<Iprops, {}> {
         </div>
       );
     });
-    console.log('dashboard render', tileElements);
     return (
       <div>
         <div className="dashboard-background" />

@@ -134,20 +134,19 @@ export function startQuiz(quizID: string): ThunkResult<void> {
       data: { quizID }
     };
     const url = API.POST.training.startQuiz;
-    return msalFetch(url, axiosOptions).then(
-      (data: AxiosResponse<any>) => {
+    return msalFetch(url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         dispatch({
           type: types.START_QUIZ_SUCCESS,
           startTime: data.data.startTime
         });
-      },
-      (error: any) => {
+      })
+      .catch((error: any) => {
         console.error('Error starting timed quiz', error);
         dispatch({ type: types.START_QUIZ_FAILED });
         constants.handleError(error, 'start quiz');
-        throw error;
-      }
-    );
+        throw error; // intentionally re-throw
+      });
   };
 }
 

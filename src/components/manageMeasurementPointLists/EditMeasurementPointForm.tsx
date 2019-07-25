@@ -29,10 +29,11 @@ import {
 import {
   toggleEditMeasurementPointListModal,
   saveMeasurementPointToMeasurementPointList,
-  updateMeasurementPoint
+  updateMeasurementPoint,
+  deleteMeasurementPoint
 } from '../../actions/manageMeasurementPointListsActions';
 import { constants } from 'src/constants/constants';
-// const uuidv4 = require('uuid/v4');
+const uuidv4 = require('uuid/v4');
 
 interface IformSate {
   value: any;
@@ -300,6 +301,8 @@ interface Iprops extends React.Props<EditMeasurementPointForm> {
   selectedTab: ImeasurementPointListTab;
   updateMeasurementPoint: typeof updateMeasurementPoint;
   customerID: string;
+  canEditGlobal: boolean;
+  deleteMeasurementPoint: typeof deleteMeasurementPoint;
 }
 
 interface Istate {
@@ -323,7 +326,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
   componentDidMount() {
     if (
       !this.props.selectedMeasurementPointList ||
-      !this.props.selectedMeasurementPoint.id.length
+      !this.props.selectedMeasurementPoint
     ) {
       console.error('missing measurementPoint List or MeasurementPoint');
       this.props.toggleModal();
@@ -563,7 +566,8 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
       guideText,
       helpText,
       numericMinValue,
-      numericMaxValue
+      numericMaxValue,
+      id: this.props.selectedMeasurementPoint.id || uuidv4()
     };
 
     console.log('saving new MP', newQ);
@@ -587,6 +591,10 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
     const { t } = this.props;
 
     const formClassName = `clearfix beacon-form ${this.props.colorButton}`;
+    const deleteButtonStyle =
+      this.props.selectedMeasurementPoint.id.length === 0
+        ? { marginRight: '15px', display: 'none' }
+        : { marginRight: '15px' };
 
     return (
       <div>
@@ -603,6 +611,25 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
               onClick={this.props.toggleModal}
             >
               {t('cancel')}
+            </Button>
+            <Button
+              type="button"
+              bsStyle="warning"
+              disabled={
+                !this.props.canEditGlobal &&
+                !this.props.selectedMeasurementPoint.customerID
+              }
+              style={deleteButtonStyle}
+              onClick={() => {
+                this.props.deleteMeasurementPoint(
+                  this.props.selectedMeasurementPoint.id,
+                  this.props.selectedMeasurementPointList.id,
+                  this.props.selectedTab.id,
+                  t
+                );
+              }}
+            >
+              {t('common:delete')}
             </Button>
             <Button
               bsStyle={this.props.colorButton}

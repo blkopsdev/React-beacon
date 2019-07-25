@@ -15,7 +15,8 @@ import {
 } from 'src/models';
 import { MPResultList } from './MPResultList';
 import { getMeasurementPointList } from 'src/actions/manageMeasurementPointListsActions';
-import { resetSelectedResult } from 'src/actions/measurementPointResultsActions';
+import { clearHistoricalResultID } from 'src/actions/measurementPointResultsActions';
+import { initialMeasurmentPointResult } from 'src/reducers/initialState';
 
 interface Iprops {
   colorButton: any;
@@ -29,7 +30,7 @@ interface IdispatchProps {
   selectedItem: ImeasurementPointResult;
   getMeasurementPointList: typeof getMeasurementPointList;
   measurementPointsByID: { [key: string]: ImeasurementPoint };
-  resetSelectedResult: typeof resetSelectedResult;
+  clearHistoricalResultID: typeof clearHistoricalResultID;
 }
 
 const MPResultModalClass = (props: Iprops & IdispatchProps) => {
@@ -50,11 +51,16 @@ const MPResultModalClass = (props: Iprops & IdispatchProps) => {
 };
 
 const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
+  const selectedItem =
+    state.measurementPointResults.measurementPointResultsByID[
+      state.measurementPointResults.historicalResultID
+    ] || initialMeasurmentPointResult;
+
   return {
     user: state.user,
     loading: state.ajaxCallsInProgress > 0,
     showModal: state.manageInventory.showMPResultModal,
-    selectedItem: state.measurementPointResults.selectedResult,
+    selectedItem,
     measurementPointsByID:
       state.manageMeasurementPointLists.measurementPointsByID
   };
@@ -65,6 +71,6 @@ export const MPResultModal = connect(
   {
     toggleModal: toggleMPResultModal,
     getMeasurementPointList,
-    resetSelectedResult
+    clearHistoricalResultID
   }
 )(MPResultModalClass);

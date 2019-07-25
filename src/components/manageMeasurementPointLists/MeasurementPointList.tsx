@@ -1,91 +1,158 @@
 import * as React from 'react';
-import { ImeasurementPoint } from 'src/models';
-import { ListGroup, Button, ListGroupItem } from 'react-bootstrap';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { map } from 'lodash';
+import { ImeasurementPoint, ImeasurementPointListTab } from 'src/models';
+import { ListGroup, ListGroupItem, Row, Col } from 'react-bootstrap';
 import { constants } from 'src/constants/constants';
+import {
+  SortableContainer,
+  SortableElement,
+  SortableHandle
+} from 'react-sortable-hoc';
+import arrayMove from 'array-move';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { filter, keyBy } from 'lodash';
+import { updateMeasurementPointListTab } from 'src/actions/manageMeasurementPointListsActions';
+
+const DragHandle = SortableHandle(() => (
+  <span>
+    <FontAwesomeIcon icon={['far', 'bars']} size="lg" />
+  </span>
+));
 /*
 * List the Measurement Points
 */
 
-interface Iprops {
-  measurementPointList: ImeasurementPoint[];
-  setSelectedMeasurementPoint: (m: ImeasurementPoint) => void;
-  swapMeasurementPointOrder: (q1Index: number, q2Index: number) => void;
-  deleteMeasurementPoint: (m: ImeasurementPoint) => void;
-  canEditGlobal: boolean;
-}
+const SortableItem = SortableElement(
+  ({
+    mp,
+    disabled,
+    setSelectedMeasurementPoint
+  }: {
+    mp: ImeasurementPoint;
+    disabled: boolean;
+    setSelectedMeasurementPoint: (mp: ImeasurementPoint) => void;
+  }) => {
+    return (
+      <div className="question-list-item">
+        <ListGroupItem
+          onClick={() => {
+            setSelectedMeasurementPoint(mp);
+          }}
+          key={mp.id}
+          disabled={disabled}
+        >
+          <Row className="vertical-align">
+            <Col xs={1}>
+              <DragHandle />
+            </Col>
+            <Col xs={11}>
+              <h5 className="list-label">{mp.label}</h5>
+              {constants.measurementPointTypesInverse[mp.type]}
+            </Col>
+          </Row>
+        </ListGroupItem>
+      </div>
+    );
+  }
+);
 
+const SortableList = SortableContainer(({ children }: any) => {
+  return <ListGroup className="question-list">{children}</ListGroup>;
+});
+
+/*
+  * Remove deleted measurementPoints and sort them
+  */
+const filterAndSortMeasurementPoints = (measurementPointsByID: {
+  [key: string]: ImeasurementPoint;
+}) => {
+  const filteredMPs = filter(
+    measurementPointsByID,
+    mp => mp.isDeleted === false
+  );
+
+  filteredMPs.sort((a: ImeasurementPoint, b: ImeasurementPoint) => {
+    return a.order - b.order;
+  });
+  return filteredMPs;
+};
+
+interface Iprops {
+  selectedTab: ImeasurementPointListTab;
+  setSelectedMeasurementPoint: (m: ImeasurementPoint) => void;
+  deleteMeasurementPoint: (m: ImeasurementPoint) => void;
+  updateMeasurementPointListTab: typeof updateMeasurementPointListTab;
+  customerID: string;
+}
+interface Istate {
+  measurementPoints: ImeasurementPoint[];
+}
 /*
 * If the user can not edit global Measurement Points and there is not a CustomerID on the MP, then they can not edit.
 */
-export const MeasurementPointList = (props: Iprops) => {
-  const mps = props.measurementPointList;
-  return (
-    <ListGroup className="question-list">
-      {map(mps, (mp, index) => {
-        return (
-          <div className="question-list-item-container" key={mp.id}>
-            <span className="sort-controls">
-              <Button
-                type="button"
-                disabled={!props.canEditGlobal && !mp.customerID}
-                onClick={() => {
-                  props.setSelectedMeasurementPoint(mp);
-                }}
-              >
-                <FontAwesomeIcon icon={['far', 'edit']} />
-              </Button>
-              <Button
-                disabled={
-                  mp.order === 0 || (!props.canEditGlobal && !mp.customerID)
-                }
-                onClick={() => {
-                  // console.log('swap up', mp.label, mps[index - 1].label);
-                  props.swapMeasurementPointOrder(index, index - 1);
-                }}
-              >
-                <FontAwesomeIcon icon={['far', 'sort-amount-up']} fixedWidth />
-              </Button>
-              <Button
-                type="button"
-                disabled={!props.canEditGlobal && !mp.customerID}
-                style={{ color: constants.colors.red }}
-                onClick={() => {
-                  props.deleteMeasurementPoint(mp);
-                }}
-              >
-                <FontAwesomeIcon icon={['far', 'times']} />
-              </Button>
-              <Button
-                type="button"
-                disabled={
-                  mp.order === mps.length - 1 ||
-                  (!props.canEditGlobal && !mp.customerID)
-                }
-                onClick={() => {
-                  // console.log('swap up', mp.label, mps[index + 1].label);
-                  props.swapMeasurementPointOrder(index + 1, index);
-                }}
-              >
-                <FontAwesomeIcon
-                  icon={['far', 'sort-amount-down']}
-                  fixedWidth
-                />
-              </Button>
-            </span>
-            <ListGroupItem
-              className="question-list-item"
-              onClick={() => {
-                props.setSelectedMeasurementPoint(mp);
-              }}
-            >
-              <h5 className="list-label">{mp.label}</h5>
-              {constants.measurementPointTypesInverse[mp.type]}
-            </ListGroupItem>
-          </div>
-        );
-      })}
-    </ListGroup>
-  );
-};
+export class MeasurementPointList extends React.Component<Iprops, Istate> {
+  constructor(props: Iprops) {
+    super(props);
+    this.state = {
+      measurementPoints: filterAndSortMeasurementPoints(
+        this.props.selectedTab.measurementPoints
+      )
+    };
+  }
+
+  componentDidUpdate(prevProps: Iprops) {
+    if (
+      JSON.stringify(prevProps.selectedTab.measurementPoints) !==
+      JSON.stringify(this.props.selectedTab.measurementPoints)
+    ) {
+      this.setState({
+        measurementPoints: filterAndSortMeasurementPoints(
+          this.props.selectedTab.measurementPoints
+        )
+      });
+    }
+  }
+
+  onSortEnd = ({
+    oldIndex,
+    newIndex
+  }: {
+    oldIndex: number;
+    newIndex: number;
+  }) => {
+    const newMeasurementPoints = arrayMove(
+      this.state.measurementPoints,
+      oldIndex,
+      newIndex
+    );
+    this.updateSort(newMeasurementPoints);
+  };
+
+  updateSort = (measurementPoints: ImeasurementPoint[]) => {
+    const withOrderUpdated = measurementPoints.map(
+      (measurementPoint, index) => ({ ...measurementPoint, order: index })
+    );
+    const keyedMeasurementPoints = keyBy(withOrderUpdated, 'id');
+    this.props.updateMeasurementPointListTab({
+      ...this.props.selectedTab,
+      measurementPoints: keyedMeasurementPoints
+    });
+  };
+  render() {
+    if (this.state.measurementPoints.length === 0) {
+      return null;
+    }
+    return (
+      <SortableList onSortEnd={this.onSortEnd} useDragHandle>
+        {this.state.measurementPoints.map((value, index) => (
+          <SortableItem
+            key={`item-${index}`}
+            index={index}
+            mp={value}
+            setSelectedMeasurementPoint={this.props.setSelectedMeasurementPoint}
+            disabled={this.props.customerID.length > 0}
+          />
+        ))}
+      </SortableList>
+    );
+  }
+}

@@ -208,13 +208,13 @@ class EditJobForm extends React.Component<Iprops, Istate> {
           label: 'startDate',
           colWidth: 12,
           showTime: false,
-          name: 'start-date',
-          isValidDate: (current: any) => {
-            return (
-              moment.isMoment(current) &&
-              current.isAfter(moment().subtract(1, 'day'))
-            );
-          }
+          name: 'start-date'
+          // isValidDate: (current: any) => {
+          //   return (
+          //     moment.isMoment(current) &&
+          //     current.isAfter(moment().subtract(1, 'day'))
+          //   );
+          // }
         },
         options: {
           validators: [Validators.required, FormUtil.validators.isValidMoment]
@@ -232,7 +232,10 @@ class EditJobForm extends React.Component<Iprops, Istate> {
           showTime: false,
           name: 'end-date',
           isValidDate: (current: any) => {
-            return moment.isMoment(current) && current.isAfter(moment());
+            return (
+              moment.isMoment(current) &&
+              current.isAfter(moment().subtract(1, 'day'))
+            );
           }
         },
         options: {
@@ -356,12 +359,12 @@ class EditJobForm extends React.Component<Iprops, Istate> {
         startDateControl.setErrors({ beforeStart: true });
       } else if (startDate.isBefore(moment(), 'day')) {
         toastr.warning(
+          this.props.t('common:warning'),
           this.props.t('pastDateWarning'),
-          '',
           constants.toastrError
         );
-        const startDateControl = this.formGroup.get('startDate');
-        startDateControl.setErrors({ beforeStart: true });
+        // const startDateControl = this.formGroup.get('startDate');
+        // startDateControl.setErrors({ beforeStart: true });
       } else {
         const startDateControl = this.formGroup.get('startDate');
         startDateControl.setErrors(null);
@@ -377,12 +380,12 @@ class EditJobForm extends React.Component<Iprops, Istate> {
         endDateControl.setErrors({ beforeStart: true });
       } else if (endDate.isBefore(moment(), 'day')) {
         toastr.warning(
+          this.props.t('common:warning'),
           this.props.t('pastDateWarning'),
-          '',
           constants.toastrError
         );
-        const endDateControl = this.formGroup.get('endDate');
-        endDateControl.setErrors({ beforeStart: true });
+        // const endDateControl = this.formGroup.get('endDate');
+        // endDateControl.setErrors({ beforeStart: true });
       } else {
         const endDateControl = this.formGroup.get('endDate');
         endDateControl.setErrors(null);

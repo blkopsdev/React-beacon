@@ -518,19 +518,18 @@ export function mergeProduct(
     };
 
     const url = API.POST.inventory.mergeProduct;
-    return msalFetch(url, axiosOptions).then(
-      (data: AxiosResponse<any>) => {
+    return msalFetch(url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         dispatch({
           type: types.PRODUCT_MERGE_SUCCESS
         });
         toastr.success('Success', 'merged product', constants.toastrSuccess);
-      },
-      (error: any) => {
+      })
+      .catch((error: any) => {
         dispatch({ type: types.PRODUCT_MERGE_FAILED });
         constants.handleError(error, 'merge product');
         Promise.reject(error);
-      }
-    );
+      });
   };
 }
 

@@ -172,8 +172,8 @@ export function updateGlobalMeasurementPointList(
         data: listForAPI
       };
 
-      return msalFetch(url, axiosOptions).then(
-        (data: AxiosResponse<any>) => {
+      return msalFetch(url, axiosOptions)
+        .then((data: AxiosResponse<any>) => {
           if (!data.data) {
             throw undefined;
           } else {
@@ -193,13 +193,12 @@ export function updateGlobalMeasurementPointList(
               constants.toastrSuccess
             );
           }
-        },
-        (error: any) => {
+        })
+        .catch((error: any) => {
           dispatch({ type: types.MANAGE_MEASUREMENT_POINT_LIST_UPDATE_FAILED });
           constants.handleError(error, 'update measurement point list');
-          throw error;
-        }
-      );
+          throw error; // intentionally rethrow
+        });
     } else {
       return Promise.resolve(true);
     }

@@ -9,18 +9,17 @@ import * as moment from 'moment';
 import { constants } from 'src/constants/constants';
 import { orderBy } from 'lodash';
 import { TranslationFunction } from 'i18next';
-import { updateMeasurementPointResult } from 'src/actions/measurementPointResultsActions';
 
 interface Iprops {
   MPListResults: ImeasurementPointResult[];
   installBaseID: string;
   t: TranslationFunction;
-  updateMeasurementPointResult: typeof updateMeasurementPointResult;
   locationString: string;
   colorButton: any;
   toggleModal: () => void;
   toggleMPResultNotes: () => void;
   toggleMPResultAddModal: () => void;
+  setHistoricalResultID: (id: string) => void;
 }
 export const MPResultHistory = (props: Iprops) => {
   const { t } = props;
@@ -49,7 +48,8 @@ export const MPResultHistory = (props: Iprops) => {
               <ListGroupItem
                 key={result.id}
                 onClick={() => {
-                  props.updateMeasurementPointResult(result, true);
+                  props.setHistoricalResultID(result.id);
+                  // props.updateMeasurementPointResult(result, true);
                   props.toggleMPResultNotes();
                 }}
               >

@@ -287,18 +287,18 @@ export const trainingCheckout = (
     };
 
     const url = API.POST.training.trainingCheckout;
-    return msalFetch(url, axiosOptions).then(
-      (data: AxiosResponse<any>) => {
+    return msalFetch(url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
         dispatch({
           type: types.CHECKOUT_TRAINING_SUCCESS
         });
         getPurchasedTrainingHelper(dispatch, getState);
-      },
-      (error: any) => {
+      })
+      .catch((error: any) => {
         dispatch({ type: types.CHECKOUT_TRAINING_FAILED });
         constants.handleError(error, 'purchasing training');
-      }
-    );
+        throw error; // intentionally rethrow
+      });
   };
 };
 

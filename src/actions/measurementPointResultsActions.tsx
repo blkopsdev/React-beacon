@@ -48,8 +48,8 @@ export const getFacilityMeasurementPointResultsHelper = (
   const url = `${
     API.GET.measurementPoint.getFacilityMeasurementPointListResults
   }/${facilityID}`;
-  return msalFetch(url, axiosOptions).then(
-    (data: AxiosResponse<any>) => {
+  return msalFetch(url, axiosOptions)
+    .then((data: AxiosResponse<any>) => {
       if (!data.data) {
         throw undefined;
       } else {
@@ -60,13 +60,12 @@ export const getFacilityMeasurementPointResultsHelper = (
         });
         return data;
       }
-    },
-    (error: any) => {
+    })
+    .catch((error: any) => {
       dispatch({ type: types.GET_MEASUREMENT_POINT_FACILITY_RESULTS_FAILED });
       constants.handleError(error, 'get inspection results');
-      Promise.reject(error);
-    }
-  );
+      throw error; // intentionally rethrow
+    });
 };
 
 /*
@@ -90,7 +89,7 @@ export const selectResult = (installID: string): ThunkResult<void> => {
     });
     if (historicalResultID.length) {
       const historicalResult = measurementPointResultsByID[historicalResultID];
-      updateMPresultHelper(historicalResult, true, dispatch);
+      updateMPresultHelper(historicalResult, dispatch);
     } else {
       const previousResult = getPreviousResult(
         values(measurementPointResultsByID),
@@ -98,10 +97,10 @@ export const selectResult = (installID: string): ThunkResult<void> => {
         selectedMeasurementPointList
       );
       if (previousResult.id.length) {
-        updateMPresultHelper(previousResult, false, dispatch);
+        updateMPresultHelper(previousResult, dispatch);
       } else {
         console.log('No results for this install base.');
-        updateMPresultHelper(initialMeasurmentPointResult, false, dispatch);
+        updateMPresultHelper(initialMeasurmentPointResult, dispatch);
       }
     }
   };
@@ -152,35 +151,33 @@ const submitMeasurementPointResultHelper = (
 };
 
 export function updateMeasurementPointResult(
-  result: ImeasurementPointResult,
-  historicalResult: boolean
+  result: ImeasurementPointResult
 ): ThunkResult<void> {
   return (dispatch, getState) => {
-    updateMPresultHelper(result, historicalResult, dispatch);
+    updateMPresultHelper(result, dispatch);
   };
 }
 const updateMPresultHelper = (
   result: ImeasurementPointResult,
-  historicalResult: boolean,
-  dispatch: any
+  dispatch: Dispatch
 ) => {
   dispatch({
     type: types.UPDATE_MEASUREMENT_POINT_RESULT,
     result
   });
-  if (historicalResult) {
+};
+
+export function setHistoricalResultID(resultID: string): ThunkResult<void> {
+  return (dispatch, getState) => {
     dispatch({
       type: types.SET_HISTORICAL_RESULT_ID,
-      resultID: result.id
+      resultID
     });
-  }
-};
+  };
+}
 
 export const clearHistoricalResultID = () => ({
   type: types.CLEAR_HISTORICAL_RESULT_ID
-});
-export const resetSelectedResult = () => ({
-  type: types.RESET_MEASUREMENT_POINT_RESULT
 });
 
 /*
@@ -191,7 +188,6 @@ export const resetSelectedResult = () => ({
 * 1) try to find a previous result for this install 
 * 2) try to find a previous result for this type of measurement point list (clean the answers)
 * If we find one, return it
-* Then set it to the selectedResult 
 *  - if it is temporary then do Not create a new ID or remove any answers
 */
 const getPreviousResult = (

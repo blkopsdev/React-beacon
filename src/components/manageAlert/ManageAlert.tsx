@@ -190,8 +190,7 @@ class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
         },
         {
           Header: 'type',
-          accessor: 'type',
-          minWidth: 300
+          accessor: 'type'
         },
         {
           Header: '',
@@ -201,7 +200,7 @@ class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
             return (
               <Button
                 bsStyle="link"
-                style={{ float: 'right', color: constants.colors.greyText }}
+                style={{ float: 'right', color: constants.colors.red }}
               >
                 <FontAwesomeIcon icon={['far', 'times']} />
               </Button>

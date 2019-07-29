@@ -70,7 +70,7 @@ class Login extends React.Component<Iprops, Istate> {
           });
       } else {
         console.log(
-          'user is fully authenticated and the login componen mounted'
+          'user is fully authenticated and the login component mounted'
         );
       }
     } else {
@@ -118,7 +118,7 @@ class Login extends React.Component<Iprops, Istate> {
 
     // if user is authenticated and exists in the backend
     // redirect to the redirect.pathname or the dashboard
-    if (this.props.user.isAuthenticated) {
+    if (msalApp.getAccount() && this.props.user.isAuthenticated) {
       const loggedInPath: string = redirectToReferrer
         ? from.pathname
         : '/dashboard';

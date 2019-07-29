@@ -123,14 +123,12 @@ export const acquireToken = () => {
   return msalApp.acquireTokenSilent(request).catch(error => {
     // Call acquireTokenPopup (popup window) in case of acquireTokenSilent failure
     // due to consent or interaction required ONLY
+    console.log('error acquireTokenSilent', error);
     if (requiresInteraction(error.errorCode)) {
-      // set the redirect in redux
-      document.dispatchEvent(new Event('setRedirect'));
-      setTimeout(() => {
-        return redirect
-          ? msalApp.acquireTokenRedirect(request)
-          : msalApp.acquireTokenPopup(request);
-      }, 5000);
+      console.log('redirecting to login from inside acquireTokenSilent');
+      return redirect
+        ? msalApp.acquireTokenRedirect(request)
+        : msalApp.acquireTokenPopup(request);
     } else {
       return error;
     }
@@ -155,14 +153,9 @@ export const msalFetch = (
     console.log('msalFetch tokenResponse: ', tokenResponse);
     if (!tokenResponse || tokenResponse.accessToken === null) {
       console.error('missing token', tokenResponse);
-      if (msalApp.getLoginInProgress() === false) {
-        msalApp.loginRedirect({
-          scopes: [MSAL_SCOPES.MMG]
-        });
-      }
       return delay(1000).then(() => {
         throw new Error(
-          'attampt to redirect to login failed.  Please contact support.'
+          'attempt to redirect to login failed.  Please contact support.'
         );
       });
     }

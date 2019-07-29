@@ -18,7 +18,10 @@ import SignUpDirect from './components/auth/SignUpDirect';
 import SignUpWithMS from './components/auth/SignUpWithMS';
 import Dashboard from './components/dashboard/Dashboard';
 import { setRedirectPathname } from './actions/redirectToReferrerAction';
+import { msalApp } from './components/auth/Auth-Utils';
+import { throttle } from 'lodash';
 
+// import * as moment from 'moment';
 window.addEventListener('beforeinstallprompt', e => {
   console.log('install prompt triggered');
   // Prevent Chrome 67 and earlier from automatically showing the prompt
@@ -26,6 +29,8 @@ window.addEventListener('beforeinstallprompt', e => {
   // // Stash the event so it can be triggered later.
   // deferredPrompt = e;
 });
+// import 'moment/locale/de'
+// moment.locale('de')
 
 // const ErrorPage = (error: any) => <h3>Error: {error}</h3>;
 const NoMatch = ({ location }: any) => {
@@ -53,6 +58,7 @@ class App extends React.Component<Props, State> {
       fullScreenLoading: false,
       redirectToSocialSignup: false
     };
+    this.handleSetRedirect = throttle(this.handleSetRedirect, 2000);
   }
   componentDidMount() {
     document.addEventListener(
@@ -65,9 +71,15 @@ class App extends React.Component<Props, State> {
       this.handleNewVersion,
       false
     );
-    document.addEventListener('setRedirect', this.handleSetRedirect, false);
-    // msalApp.handleRedirectCallback(handleRedirectCallback);  // this appears to be triggering bogus errors
+    if (this.props.user.email.length) {
+      TrackJS.configure({
+        userId: this.props.user.email,
+        version: process.env.REACT_APP_VERSION
+      });
+      console.log('app is loaded and authenticated');
+    }
   }
+
   componentWillUnmount() {
     document.removeEventListener(
       'missingUser',
@@ -79,13 +91,13 @@ class App extends React.Component<Props, State> {
       this.handleNewVersion,
       false
     );
-    document.removeEventListener('setRedirect', this.handleSetRedirect, false);
   }
   handleSetRedirect = () => {
     const { pathname } = window.location;
     this.props.setRedirectPathname(pathname, true);
   };
   handleRedirectToSignup = () => {
+    // this.props.history.push('/social_signup');
     this.setState({ redirectToSocialSignup: true }, () => {
       this.setState({ redirectToSocialSignup: false });
     });
@@ -93,15 +105,10 @@ class App extends React.Component<Props, State> {
 
   PrivateRoute = ({ component: Component, ...rest }: any) => {
     const { user } = this.props;
-    let authenticated = false;
-    authenticated = user.isAuthenticated && user.id.length > 0;
+    const authenticated =
+      msalApp.getAccount() && user.isAuthenticated && user.id.length > 0;
     if (authenticated) {
-      // if authenticated, set the Azure token to the HTTP headers
-      TrackJS.configure({
-        userId: user.email,
-        version: process.env.REACT_APP_VERSION
-      });
-      console.log('app is loaded and authenticated');
+      this.handleSetRedirect();
     }
     return (
       <Route

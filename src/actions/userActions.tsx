@@ -37,7 +37,10 @@ export function userLogin(): ThunkResult<void> {
             throw undefined;
           } else {
             dispatch({ type: types.USER_LOGIN_SUCCESS, user: data.data });
-            TrackJS.configure({ userId: data.data.email });
+            TrackJS.configure({
+              userId: data.data.email,
+              version: process.env.REACT_APP_VERSION
+            });
             return data;
           }
         })

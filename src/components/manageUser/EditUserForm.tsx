@@ -29,6 +29,7 @@ import {
 } from '../../actions/manageUserActions';
 import EditFacilityModal from '../common/EditFacilityModal';
 import { constants } from 'src/constants/constants';
+import { components } from 'react-select';
 
 // passing in an object, but we need an array back
 const securityOptions = [
@@ -42,6 +43,30 @@ interface IstateChanges extends Observable<any> {
 interface AbstractControlEdited extends AbstractControl {
   stateChanges: IstateChanges;
 }
+
+const MultiValueLabel = (props: any) => {
+  const label = props.children.split('<br/>')[0];
+  const address = props.children.split('<br/>')[1];
+  const newProps = { ...props, children: label };
+  return (
+    <span>
+      <components.MultiValueLabel {...newProps} />
+      <small style={{ paddingLeft: '5px', display: 'block' }}>{address}</small>
+    </span>
+  );
+};
+// could not get this to look good
+// const Option = (props: any) => {
+//   const label = props.children.split('<br/>')[0];
+//   const address = props.children.split('<br/>')[1];
+//   const newProps = {...props, children: label}
+//   return (
+//     <span className="react-select__option">
+//       <components.Option {...newProps} />
+//       <small style={{paddingLeft:'5px', display: 'block'}}>{address}</small>
+//     </span>
+//   );
+// };
 
 const buildFieldConfig = (
   customerOptions: any[],
@@ -76,7 +101,8 @@ const buildFieldConfig = (
         placeholder: 'userQueue:facilitySearchPlaceholder',
         buttonName: 'userQueue:facilityButton',
         buttonAction: toggleEditFacilityModalCB,
-        isMulti: true
+        isMulti: true,
+        multiValueLabel: MultiValueLabel
       },
       options: {
         validators: Validators.required

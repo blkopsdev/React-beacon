@@ -502,7 +502,11 @@ export const FormUtil = {
           <Select
             options={orderBy(meta.options, 'label')}
             className={`${selectClassName} ${selectValidationClass}`}
-            components={{ Control: ControlComponent }}
+            components={{
+              Control: ControlComponent,
+              MultiValueLabel:
+                meta.multiValueLabel || components.MultiValueLabel
+            }}
             placeholder={meta.placeholder}
             isMulti={meta.isMulti}
             classNamePrefix="react-select"

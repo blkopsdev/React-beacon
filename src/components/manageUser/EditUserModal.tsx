@@ -24,7 +24,18 @@ import {
 } from '../../actions/manageUserActions';
 import CommonModal from '../common/CommonModal';
 import EditUserForm from './EditUserForm';
-import { filter } from 'lodash';
+import { filter, map } from 'lodash';
+
+// temporarily add the addresss to the facility name
+const buildFacilityOptions = (facilities: Ifacility[]) => {
+  return FormUtil.convertToOptions(
+    map(facilities, facility => {
+      const { name, address, address2, city, state, postalCode } = facility;
+      const nameWithAddress = `${name}<br/>${address} ${address2} ${city} ${state} ${postalCode}`;
+      return { ...facility, name: nameWithAddress } as Ifacility;
+    })
+  );
+};
 
 interface Iprops {
   selectedUser: Iuser;
@@ -81,7 +92,7 @@ const mapStateToProps = (state: IinitialState, ownProps: Iprops) => {
     userManage: state.manageUser,
     loading: state.ajaxCallsInProgress > 0,
     customerOptions: FormUtil.convertToOptions(state.customers),
-    facilityOptions: FormUtil.convertToOptions(filteredFacilities),
+    facilityOptions: buildFacilityOptions(filteredFacilities),
     showModal: state.manageUser.showEditUserModal,
     showEditCustomerModal: state.showEditCustomerModal,
     showEditFacilityModal: state.showEditFacilityModal,

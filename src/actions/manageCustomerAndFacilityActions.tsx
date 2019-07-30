@@ -53,11 +53,10 @@ export function getCustomerLogo(customerID: string): ThunkResult<void> {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());
     const axiosOptions: AxiosRequestConfig = {
-      method: 'get',
-      params: { customerID }
+      method: 'get'
     };
 
-    const url = API.GET.customer.getlogo;
+    const url = API.GET.customer.getlogo.replace('{customerId}', customerID);
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {

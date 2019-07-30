@@ -120,7 +120,7 @@ const API = {
     customer: {
       getall: `${root}/customer/getall`,
       search: `${root}/customer/search`,
-      getlogo: `${root}/customer/icon`
+      getlogo: `${root}/customer/{customerId}/icon`
     },
     job: {
       getall: `${root}/job/getall`,

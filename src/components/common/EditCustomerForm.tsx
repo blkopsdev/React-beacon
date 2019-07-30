@@ -61,6 +61,12 @@ class EditCustomerForm extends React.Component<Iprops, IState> {
     this.setState({ fieldConfig: this.buildFieldConfig(this.onFileChange) });
   }
 
+  componentDidUpdate(prevProps: Iprops) {
+    if (this.props.formValues.imageUrl !== prevProps.formValues.imageUrl) {
+      this.setState({ fieldConfig: this.buildFieldConfig(this.onFileChange) });
+    }
+  }
+
   componentWillUnmount() {
     if (this.subscription) {
       this.subscription.unsubscribe();

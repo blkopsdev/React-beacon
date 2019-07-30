@@ -77,9 +77,9 @@ export function getCustomerLogo(customerID: string): ThunkResult<void> {
   };
 }
 
-export const updateCustomerFormValue = (formValue: any) => ({
+export const updateCustomerFormValue = (formValues: any) => ({
   type: types.UPDATE_FORM_VALUES_MANAGE_CUSTOMER,
-  formValue
+  formValues
 });
 
 export const setCustomerFormValues = (formValues: any) => ({

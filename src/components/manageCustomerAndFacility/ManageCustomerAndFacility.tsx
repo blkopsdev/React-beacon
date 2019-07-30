@@ -273,6 +273,7 @@ class ManageCustomerAndFacility extends React.Component<
             className="table-add-button"
             bsStyle="link"
             onClick={() => {
+              this.props.clearSelectedCustomerID();
               this.props.toggleEditCustomerModal();
             }}
           >

@@ -38,7 +38,7 @@ import * as ReactDOM from 'react-dom';
 import axios from 'axios';
 
 import configureStore from './store/configureStore';
-import registerServiceWorker from './registerServiceWorker';
+// import registerServiceWorker from './registerServiceWorker';
 
 import { PersistGate } from 'redux-persist/integration/react';
 import { TrackJS } from 'trackjs';
@@ -130,7 +130,7 @@ in userActions.  then we pause the persistor in order to prevent anything else f
     document.getElementById('root') as HTMLElement
   );
 
-  registerServiceWorker();
+  // registerServiceWorker();
 } else {
   console.log('loading silent refresh in iFrame');
 }

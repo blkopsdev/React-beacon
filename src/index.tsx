@@ -38,7 +38,6 @@ import * as ReactDOM from 'react-dom';
 import axios from 'axios';
 
 import configureStore from './store/configureStore';
-// import registerServiceWorker from './registerServiceWorker';
 
 import { PersistGate } from 'redux-persist/integration/react';
 import { TrackJS } from 'trackjs';

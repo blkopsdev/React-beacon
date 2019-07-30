@@ -1,5 +1,3 @@
-import { toastr } from "react-redux-toastr";
-import { constants } from "./constants/constants";
 
 // tslint:disable:no-console
 // In production, we register a service worker to serve assets from local cache.
@@ -73,10 +71,9 @@ function registerValidSW(swUrl: string) {
                 // the fresh content will have been added to the cache.
                 // It's the perfect time to display a 'New content is
                 // available; please refresh.' message in your web app.
-                toastr.warning("Installing Update", "Please wait...", constants.toastrWarning);
-                setTimeout(() => {
-                  location.reload();
-                }, 5000);
+                // toastr.warning("Update Available", "Please refresh.", {...constants.toastrWarning, timeOut: 0})
+                const event = new Event('newVersionAvailable');
+                document.dispatchEvent(event);
                 console.log('New content is available; please refresh.');
               } else {
                 // At this point, everything has been precached.

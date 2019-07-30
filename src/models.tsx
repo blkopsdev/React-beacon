@@ -201,7 +201,8 @@ export interface IAlert {
 }
 
 export interface Itile {
-  icon: string | string[];
+  icon: string;
+  iconType: string;
   title: string;
   src: string;
   srcBanner: string;
@@ -212,6 +213,7 @@ export interface Itile {
   securityFunction: string;
   description: string;
 }
+// {icon: File, iconType: string, title: string, src: File, srcBanner: File, color: string, width: number, height: number, url: string, securityFunction: string, description: string}
 
 export interface Icustomer {
   id: string;

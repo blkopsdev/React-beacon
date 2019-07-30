@@ -446,6 +446,7 @@ export default {
 
 export const emptyTile = {
   icon: '',
+  iconType: '',
   title: '',
   src: '',
   srcBanner: '',

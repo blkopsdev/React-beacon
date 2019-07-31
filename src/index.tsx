@@ -87,6 +87,7 @@ import { constants } from './constants/constants';
 import { msalApp } from './components/auth/Auth-Utils';
 import App from './App';
 if (!(window !== window.parent && !window.opener)) {
+  console.log('registering service worker');
   registerServiceWorker();
   const { store, persistor } = configureStore();
 

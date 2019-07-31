@@ -8,7 +8,8 @@ import {
   FormGenerator,
   FieldConfig,
   GroupProps,
-  FormGroup
+  FormGroup,
+  FormArray
 } from 'react-reactive-form';
 import { find, filter } from 'lodash';
 import { toastr } from 'react-redux-toastr';
@@ -18,9 +19,9 @@ import * as React from 'react';
 import { FormUtil } from '../common/FormUtil';
 import { Ioption, Ijob } from '../../models';
 import { updateJob, createJob } from '../../actions/manageJobActions';
-import { constants } from 'src/constants/constants';
-import * as moment from 'moment';
-import { getFacilitiesByCustomer } from 'src/actions/commonActions';
+import { constants } from '../../constants/constants';
+import { getFacilitiesByCustomer } from '../../actions/commonActions';
+import moment from 'moment';
 
 interface Iprops {
   selectedJob: Ijob;
@@ -45,7 +46,7 @@ interface Istate {
 }
 
 class EditJobForm extends React.Component<Iprops, Istate> {
-  private formGroup: FormGroup;
+  private formGroup: FormGroup | any;
   private subscription: any;
   private debounce: any;
   constructor(props: Iprops) {
@@ -409,7 +410,7 @@ class EditJobForm extends React.Component<Iprops, Istate> {
       this.props.createJob(this.formGroup.value);
     }
   };
-  setForm = (form: FormGroup) => {
+  setForm = (form: FormGroup | FormArray) => {
     this.formGroup = form;
     this.formGroup.meta = {
       loading: this.props.loading

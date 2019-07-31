@@ -10,7 +10,8 @@ import {
   AbstractControl,
   FieldConfig,
   Observable,
-  GroupProps
+  GroupProps,
+  FormGroup
 } from 'react-reactive-form';
 import { filter } from 'lodash';
 import { toastr } from 'react-redux-toastr';
@@ -34,7 +35,7 @@ import {
   createProductName
 } from '../../actions/manageInventoryActions';
 import { updateQueueProduct } from '../../actions/manageProductQueueActions';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 
 interface IstateChanges extends Observable<any> {
   next: () => void;
@@ -61,7 +62,7 @@ interface Iprops {
 }
 
 class ManageInventoryForm extends React.Component<Iprops, {}> {
-  public userForm: AbstractControl;
+  private userForm: FormGroup | any;
   public fieldConfig: FieldConfig;
   private subscription: any;
 

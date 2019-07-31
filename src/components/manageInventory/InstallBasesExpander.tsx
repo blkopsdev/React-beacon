@@ -12,14 +12,14 @@ import { Button } from 'react-bootstrap';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { TranslationFunction } from 'react-i18next';
 import { addToCart } from '../../actions/shoppingCartActions';
-import { Ifacility, IinstallBase, IinstallBaseWithStatus } from 'src/models';
+import { Ifacility, IinstallBase, IinstallBaseWithStatus } from '../../models';
 import { TableUtil } from '../common/TableUtil';
-import { selectResult } from 'src/actions/measurementPointResultsActions';
+import { selectResult } from '../../actions/measurementPointResultsActions';
 import {
   toggleMPResultModal,
   toggleMPResultHistory
-} from 'src/actions/manageInventoryActions';
-import { constants } from 'src/constants/constants';
+} from '../../actions/manageInventoryActions';
+import { constants } from '../../constants/constants';
 import { orderBy } from 'lodash';
 
 interface RowInfoInstallBase extends RowInfo {
@@ -74,47 +74,51 @@ export const InstallBasesExpander = (props: ExpanderProps) => {
   */
   const getTdProps = (
     state: FinalState,
-    rowInfo: RowInfoInstallBase,
-    column: Column,
+    rowInfo: RowInfoInstallBase | undefined,
+    column: Column | undefined,
     instance: any
   ) => {
-    const notTested =
-      rowInfo.original.status ===
-      constants.measurementPointResultStatusTypes[0];
-    if (column.id && column.id === 'contact-button') {
-      return {
-        onClick: () => {
-          props.contactAboutInstall(rowInfo.original);
+    if (rowInfo && column) {
+      const notTested =
+        rowInfo.original.status ===
+        constants.measurementPointResultStatusTypes[0];
+      if (column.id && column.id === 'contact-button') {
+        return {
+          onClick: () => {
+            props.contactAboutInstall(rowInfo.original);
+          }
+        };
+      } else if (column.id && column.id === 'select-result-button') {
+        if (notTested) {
+          return {};
         }
-      };
-    } else if (column.id && column.id === 'select-result-button') {
-      if (notTested) {
+        return {
+          onClick: () => {
+            props.selectResult(rowInfo.original.id);
+            props.toggleMPResultModal();
+            props.selectInstallBase(rowInfo.original); // TODO move this to redux
+          }
+        };
+      } else if (column.id && column.id === 'historical-results-button') {
+        return {
+          onClick: () => {
+            // this.props.selectHistoricalResult
+            console.log('selecting historical');
+            props.selectInstallBase(rowInfo.original);
+            props.toggleMPResultHistory();
+          }
+        };
+      } else if (column.id && column.id === 'select-result-button-disabled') {
         return {};
+      } else {
+        return {
+          onClick: () => {
+            props.handleInstallBaseSelect(rowInfo.original);
+          }
+        };
       }
-      return {
-        onClick: () => {
-          props.selectResult(rowInfo.original.id);
-          props.toggleMPResultModal();
-          props.selectInstallBase(rowInfo.original); // TODO move this to redux
-        }
-      };
-    } else if (column.id && column.id === 'historical-results-button') {
-      return {
-        onClick: () => {
-          // this.props.selectHistoricalResult
-          console.log('selecting historical');
-          props.selectInstallBase(rowInfo.original);
-          props.toggleMPResultHistory();
-        }
-      };
-    } else if (column.id && column.id === 'select-result-button-disabled') {
-      return {};
     } else {
-      return {
-        onClick: () => {
-          props.handleInstallBaseSelect(rowInfo.original);
-        }
-      };
+      console.error('error in gettdprops', rowInfo, column);
     }
   };
 

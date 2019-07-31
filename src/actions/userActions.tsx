@@ -3,7 +3,7 @@ import * as types from './actionTypes';
 import API from '../constants/apiEndpoints';
 import { beginAjaxCall, endAjaxCall } from './ajaxStatusActions';
 import { toastr } from 'react-redux-toastr';
-import { constants } from 'src/constants/constants';
+import { constants } from '../constants/constants';
 
 import { ItempUser, Iuser, IinitialState } from '../models';
 import { ThunkAction } from 'redux-thunk';
@@ -17,7 +17,7 @@ import {
   msalApp,
   acquireToken,
   MSAL_SCOPES
-} from 'src/components/auth/Auth-Utils';
+} from '../components/auth/Auth-Utils';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 

@@ -27,7 +27,7 @@ import {
   initialFloor,
   initialBuilding,
   initialFacility
-} from 'src/reducers/initialState';
+} from '../../reducers/initialState';
 
 interface Iprops {
   selectedItem: any;

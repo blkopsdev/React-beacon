@@ -19,7 +19,7 @@ import {
 } from '../../actions/manageJobActions';
 import CommonModal from '../common/CommonModal';
 import EditJobForm from './EditJobForm';
-import { initialJob } from 'src/reducers/initialState';
+import { initialJob } from '../../reducers/initialState';
 
 interface Iprops {
   colorButton: any;

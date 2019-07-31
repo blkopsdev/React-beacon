@@ -5,11 +5,11 @@ import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import { IinitialState, ItableFiltersParams, Ijob } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
-import { constants } from 'src/constants/constants';
 import * as types from './actionTypes';
 import * as moment from 'moment';
+import { msalFetch } from '../components/auth/Auth-Utils';
+import { constants } from '../constants/constants';
 const uuidv4 = require('uuid/v4');
-import { msalFetch } from 'src/components/auth/Auth-Utils';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 

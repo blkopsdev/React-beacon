@@ -2,8 +2,8 @@ import * as React from 'react';
 import { Row, Col, Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';
 import { RouteComponentProps } from 'react-router';
-import { GFQuizAnswer } from 'src/models';
-import { calculateScore } from 'src/actions/trainingQuizActions';
+import { GFQuizAnswer } from '../../models';
+import { calculateScore } from '../../actions/trainingQuizActions';
 
 const getScoreString = (score: number) => {
   let grade;

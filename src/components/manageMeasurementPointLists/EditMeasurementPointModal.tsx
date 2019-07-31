@@ -18,8 +18,8 @@ import {
 } from '../../actions/manageMeasurementPointListsActions';
 import CommonModal from '../common/CommonModal';
 import EditMeasurementPointForm from './EditMeasurementPointForm';
-import { constants } from 'src/constants/constants';
-import { initialMeasurementPointTab } from 'src/reducers/initialState';
+import { constants } from '../../constants/constants';
+import { initialMeasurementPointTab } from '../../reducers/initialState';
 
 interface Iprops {
   colorButton: any;

@@ -35,8 +35,8 @@ import {
   updateQuantityCart,
   deleteFromCart
 } from '../../actions/shoppingCartActions';
-import { constants } from 'src/constants/constants';
-import { requestQuote } from 'src/actions/manageInventoryActions';
+import { constants } from '../../constants/constants';
+import { requestQuote } from '../../actions/manageInventoryActions';
 
 /*
 * Input row with a button to delete the cart item
@@ -181,7 +181,7 @@ interface Istate {
 }
 
 class EditQuoteForm extends React.Component<Iprops, Istate> {
-  public userForm: AbstractControl;
+  private userForm: FormGroup | any;
   private subscription: any;
   constructor(props: Iprops) {
     super(props);

@@ -22,7 +22,7 @@ import Select, { components } from 'react-select';
 import CreatableSelect from 'react-select/lib/Creatable';
 import Toggle from 'react-toggle';
 import { Ioption } from '../../models';
-import * as Datetime from 'react-datetime';
+import Datetime from 'react-datetime';
 import * as moment from 'moment';
 import RichTextEditor from './RichTextEditor';
 import ReactDatePicker from 'react-datepicker';

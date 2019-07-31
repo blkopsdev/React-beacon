@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Breadcrumb } from 'react-bootstrap';
 
 import { RouteComponentProps } from 'react-router';
-import { GFQuizItem, GFCourse, GFLesson } from 'src/models';
+import { GFQuizItem, GFCourse, GFLesson } from '../../models';
 
 interface RouterParams {
   courseID: string;

@@ -6,7 +6,7 @@ import * as React from 'react';
 import HeaderMenu from './HeaderMenu';
 import { Link } from 'react-router-dom';
 
-const headerImg = require('src/images/BeaconLogo@2x.png');
+const headerImg = require('../../images/BeaconLogo@2x.png');
 
 const Header = (props: any) => {
   return (

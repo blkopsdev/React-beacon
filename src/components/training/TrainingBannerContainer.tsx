@@ -3,13 +3,13 @@
 */
 
 import { connect } from 'react-redux';
-import { IinitialState } from 'src/models';
+import { IinitialState } from '../../models';
 import { RouteComponentProps } from 'react-router';
 import {
   initialLesson,
   initialQuiz,
   initialCourse
-} from 'src/reducers/initialState';
+} from '../../reducers/initialState';
 import Banner from '../common/Banner';
 
 interface RouterParams {

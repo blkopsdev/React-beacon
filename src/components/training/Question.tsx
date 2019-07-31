@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 import { Col, FormGroup, FormControl } from 'react-bootstrap';
-import { GFQuizQuestion, GFQuizAnswer } from 'src/models';
+import { GFQuizQuestion, GFQuizAnswer } from '../../models';
 
 interface Props extends React.Props<Question> {
   curQ: GFQuizQuestion;

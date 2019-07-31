@@ -3,10 +3,10 @@ import { AxiosRequestConfig, AxiosResponse } from 'axios';
 
 import { Icustomer, Ifacility, ThunkResult } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
-import { constants } from 'src/constants/constants';
+import { constants } from '../constants/constants';
 import * as types from './actionTypes';
 import API from '../constants/apiEndpoints';
-import { msalFetch } from 'src/components/auth/Auth-Utils';
+import { msalFetch } from '../components/auth/Auth-Utils';
 
 export const closeAllModals = () => ({
   type: types.CLOSE_ALL_MODALS

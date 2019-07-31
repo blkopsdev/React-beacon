@@ -216,12 +216,12 @@ class ManageCustomerAndFacility extends React.Component<
   */
   getTdProps = (
     state: FinalState,
-    rowInfo: RowInfoCustomer,
-    column: Column,
+    rowInfo: RowInfoCustomer | undefined,
+    column: Column | undefined,
     instance: any
   ) => {
     // console.log("ROWINFO", rowInfo, state);
-    if (column.id && column.id === 'expander-toggle') {
+    if (rowInfo && column && column.id && column.id === 'expander-toggle') {
       return {
         onClick: () => {
           this.props.setSelectedCustomerID(rowInfo.original.id);
@@ -234,13 +234,15 @@ class ManageCustomerAndFacility extends React.Component<
           });
         }
       };
-    } else {
+    } else if (rowInfo) {
       return {
         onClick: (e: React.MouseEvent<HTMLFormElement>) => {
           this.props.setSelectedCustomerID(rowInfo.original.id);
           this.props.toggleEditCustomerModal();
         }
       };
+    } else {
+      console.error('error in gettdprops', rowInfo, column);
     }
   };
 

@@ -7,7 +7,8 @@ import * as React from 'react';
 import {
   FormGenerator,
   AbstractControl,
-  FieldConfig
+  FieldConfig,
+  FormGroup
 } from 'react-reactive-form';
 import { Col, Button, Row } from 'react-bootstrap';
 import { FormUtil } from '../common/FormUtil';
@@ -30,7 +31,7 @@ interface Istate {
   fieldConfig: FieldConfig;
 }
 export default class SearchTableForm extends React.Component<Iprops, Istate> {
-  public searchForm: AbstractControl;
+  private formGroup: FormGroup | any;
   private subscription: any;
   private showBtn: boolean;
   constructor(props: Iprops) {
@@ -73,10 +74,10 @@ export default class SearchTableForm extends React.Component<Iprops, Istate> {
   handleUpdatedFieldConfig = () => {
     forEach(this.props.fieldConfig.controls, (input: any, key) => {
       if (input.meta && input.meta.defaultValue) {
-        this.searchForm.patchValue({ [key]: input.meta.defaultValue });
+        this.formGroup.patchValue({ [key]: input.meta.defaultValue });
       }
       if (this.props.subscribeValueChanges) {
-        this.subscription = this.searchForm
+        this.subscription = this.formGroup
           .get(key)
           .valueChanges.subscribe((value: any) => {
             this.props.onValueChanges(value, key);
@@ -86,11 +87,11 @@ export default class SearchTableForm extends React.Component<Iprops, Istate> {
   };
   handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    this.props.handleSubmit(this.searchForm.value);
+    this.props.handleSubmit(this.formGroup.value);
   };
   setForm = (form: AbstractControl) => {
-    this.searchForm = form;
-    this.searchForm.meta = {
+    this.formGroup = form;
+    this.formGroup.meta = {
       loading: this.props.loading
     };
   };

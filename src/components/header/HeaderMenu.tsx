@@ -12,7 +12,7 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { ButtonToolbar, Dropdown, MenuItem } from 'react-bootstrap';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import EditProfileModal from './EditProfileModal';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 
 interface Iprops {
   user: Iuser;

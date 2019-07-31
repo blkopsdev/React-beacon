@@ -1,7 +1,7 @@
 import * as types from './actionTypes';
 import API from '../constants/apiEndpoints';
 import { beginAjaxCall } from './ajaxStatusActions';
-import { constants } from 'src/constants/constants';
+import { constants } from '../constants/constants';
 import {
   Iuser,
   GFLesson,
@@ -9,11 +9,11 @@ import {
   ThunkResult,
   IshoppingCartProduct,
   GFCourse
-} from 'src/models';
+} from '../models';
 import { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
 import { find, sortBy } from 'lodash';
 import { toastr } from 'react-redux-toastr';
-import { msalFetch } from 'src/components/auth/Auth-Utils';
+import { msalFetch } from '../components/auth/Auth-Utils';
 
 export function loadCourses(user: Iuser): ThunkResult<void> {
   return dispatch => {

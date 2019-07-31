@@ -24,7 +24,7 @@ import {
 } from '../../actions/manageMeasurementPointListsActions';
 import CommonModal from '../common/CommonModal';
 import EditMeasurementPointListForm from './EditMeasurementPointListForm';
-import { initialMeasurementPointTab } from 'src/reducers/initialState';
+import { initialMeasurementPointTab } from '../../reducers/initialState';
 // import { find } from 'lodash';
 
 interface Iprops {

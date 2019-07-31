@@ -16,8 +16,8 @@ import {
 } from 'react-reactive-form';
 import { FormUtil } from '../common/FormUtil';
 import { toastr } from 'react-redux-toastr';
-import { constants } from 'src/constants/constants';
-import { submitMeasurementPointResult } from 'src/actions/measurementPointResultsActions';
+import { constants } from '../../constants/constants';
+import { submitMeasurementPointResult } from '../../actions/measurementPointResultsActions';
 
 interface Iprops {
   loading: boolean;
@@ -33,7 +33,7 @@ interface Istate {
 }
 
 class MPResultAddFormClass extends React.Component<Iprops, Istate> {
-  private form: AbstractControl;
+  private form: AbstractControl | any;
   constructor(props: Iprops) {
     super(props);
     this.state = {

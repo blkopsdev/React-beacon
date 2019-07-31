@@ -10,10 +10,11 @@ import {
   FormGenerator,
   FieldConfig,
   FormGroup,
-  GroupProps
+  GroupProps,
+  FormArray
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction } from 'react-i18next';
 
@@ -42,7 +43,7 @@ interface IState {
 }
 
 class EditCustomerForm extends React.Component<Iprops, IState> {
-  private formGroup: FormGroup;
+  private formGroup: FormGroup | any;
   private subscription: any;
   private debounce: any;
   constructor(props: Iprops) {
@@ -153,7 +154,7 @@ class EditCustomerForm extends React.Component<Iprops, IState> {
     }
   };
 
-  setForm = (form: FormGroup) => {
+  setForm = (form: FormGroup | FormArray) => {
     this.formGroup = form;
     this.formGroup.meta = {
       loading: this.props.loading

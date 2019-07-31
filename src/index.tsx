@@ -42,6 +42,22 @@ import registerServiceWorker from './registerServiceWorker';
 
 import { PersistGate } from 'redux-persist/integration/react';
 import { TrackJS } from 'trackjs';
+import i18n from './i18n';
+import { I18nextProvider } from 'react-i18next';
+
+// import project css
+import 'react-toggle/style.css';
+import 'bootstrap/dist/css/bootstrap.css';
+import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
+import 'react-datetime/css/react-datetime.css';
+import 'react-datepicker/dist/react-datepicker.css';
+
+// import 'draft-js/dist/Draft.css';
+import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
+import './index.css';
+import { constants } from './constants/constants';
+import { msalApp } from './components/auth/Auth-Utils';
+import App from './App';
 
 library.add(
   faCog,
@@ -70,22 +86,6 @@ library.add(
   faHistory
 );
 
-import i18n from './i18n';
-import { I18nextProvider } from 'react-i18next';
-
-// import project css
-import 'react-toggle/style.css';
-import 'bootstrap/dist/css/bootstrap.css';
-import 'react-redux-toastr/lib/css/react-redux-toastr.min.css';
-import 'react-datetime/css/react-datetime.css';
-import 'react-datepicker/dist/react-datepicker.css';
-
-// import 'draft-js/dist/Draft.css';
-import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import './index.css';
-import { constants } from './constants/constants';
-import { msalApp } from './components/auth/Auth-Utils';
-import App from './App';
 if (!(window !== window.parent && !window.opener)) {
   const { store, persistor } = configureStore();
 

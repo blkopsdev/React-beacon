@@ -11,12 +11,12 @@ import {
 } from '../models';
 import { beginAjaxCall, endAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
-import { constants } from 'src/constants/constants';
+import { constants } from '../constants/constants';
 import * as types from './actionTypes';
 // import * as moment from 'moment';
 import { filter, values } from 'lodash';
-import { initialMeasurementPointList } from 'src/reducers/initialState';
-import { msalFetch } from 'src/components/auth/Auth-Utils';
+import { initialMeasurementPointList } from '../reducers/initialState';
+import { msalFetch } from '../components/auth/Auth-Utils';
 import { Dispatch } from 'react-redux';
 import { TranslationFunction } from 'i18next';
 

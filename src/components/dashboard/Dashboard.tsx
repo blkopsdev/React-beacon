@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { IinitialState, Iuser } from '../../models';
 import Masonry, { MasonryOptions } from 'react-masonry-component';
 import { Link } from 'react-router-dom';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 

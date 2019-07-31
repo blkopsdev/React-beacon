@@ -1,9 +1,7 @@
 import * as React from 'react';
-
 import { ThunkAction } from 'redux-thunk';
 import { toastr } from 'react-redux-toastr';
 import { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
-
 import {
   IinitialState,
   IinstallBase,
@@ -14,15 +12,13 @@ import {
 } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
-import { constants } from 'src/constants/constants';
+import { constants } from '../constants/constants';
 import * as types from './actionTypes';
 import { map, values } from 'lodash';
-const uuidv4 = require('uuid/v4');
 import * as moment from 'moment';
 import { getFacilityMeasurementPointResultsHelper } from './measurementPointResultsActions';
-import { msalFetch } from 'src/components/auth/Auth-Utils';
-
-// import {AxiosResponse} from 'axios';
+import { msalFetch } from '../components/auth/Auth-Utils';
+const uuidv4 = require('uuid/v4');
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 

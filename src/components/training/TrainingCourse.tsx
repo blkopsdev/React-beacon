@@ -1,5 +1,5 @@
-import { GFCourse } from 'src/models';
-import { addCourseToCart } from 'src/actions/trainingActions';
+import { GFCourse } from '../../models';
+import { addCourseToCart } from '../../actions/trainingActions';
 import * as React from 'react';
 import { Col, Panel, Button } from 'react-bootstrap';
 import { LinkContainer } from 'react-router-bootstrap';

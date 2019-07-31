@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 export default ({
   title,
   img,
@@ -10,16 +10,19 @@ export default ({
   img: any;
   subtitle?: string;
   color: string;
-}) => (
-  <div
-    className="banner purple soso"
-    style={{
-      backgroundColor: color,
-      background: `linear-gradient(${constants.colors[`${color}Banner`]},
-      ${constants.colors[`${color}Banner`]}), url(${img}) no-repeat left/cover`
-    }}
-  >
-    <span className="title">{title}</span>
-    {subtitle && <span className="subtitle">{subtitle}</span>}
-  </div>
-);
+}) => {
+  const colorIndex = `${color}Banner`;
+  return (
+    <div
+      className="banner purple soso"
+      style={{
+        backgroundColor: color,
+        background: `linear-gradient(${constants.colors[colorIndex]},
+      ${constants.colors[colorIndex]}), url(${img}) no-repeat left/cover`
+      }}
+    >
+      <span className="title">{title}</span>
+      {subtitle && <span className="subtitle">{subtitle}</span>}
+    </div>
+  );
+};

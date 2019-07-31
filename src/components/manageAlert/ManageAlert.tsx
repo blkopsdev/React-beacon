@@ -218,7 +218,7 @@ class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
   * Handle user clicking on a product row
   * set the selected product to state and open the modal
   */
-  getTrProps = (state: FinalState, rowInfo: RowInfo) => {
+  getTrProps = (state: FinalState, rowInfo: RowInfo | undefined) => {
     if (rowInfo) {
       return {
         style: {
@@ -235,15 +235,15 @@ class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
 
   getTdProps = (
     fState: FinalState,
-    rowInfo: RowInfoAlert,
-    column: Column,
+    rowInfo: RowInfoAlert | undefined,
+    column: Column | undefined,
     instance: any
   ) => {
-    if (column.id && column.id === 'delete') {
+    if (rowInfo && column && column.id && column.id === 'delete') {
       return {
         onClick: () => this.handleDelete(rowInfo.original)
       };
-    } else {
+    } else if (rowInfo) {
       return {
         onClick: () => {
           this.setState({
@@ -252,6 +252,8 @@ class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
           this.handleEdit(rowInfo);
         }
       };
+    } else {
+      console.error('error in gettdProps', rowInfo, column);
     }
   };
 

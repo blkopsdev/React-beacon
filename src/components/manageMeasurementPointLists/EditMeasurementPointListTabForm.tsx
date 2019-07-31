@@ -9,17 +9,18 @@ import {
   FormGenerator,
   AbstractControl,
   FieldConfig,
-  GroupProps
+  GroupProps,
+  FormGroup
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
 // import { forEach, find } from "lodash";
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction } from 'react-i18next';
 
 import { FormUtil } from '../common/FormUtil';
-import { ImeasurementPointListTab, ImeasurementPointList } from 'src/models';
-import { updateMeasurementPointListTab } from 'src/actions/manageMeasurementPointListsActions';
+import { ImeasurementPointListTab, ImeasurementPointList } from '../../models';
+import { updateMeasurementPointListTab } from '../../actions/manageMeasurementPointListsActions';
 // import { IqueueObject } from '../../models';
 
 // add the bootstrap form-control class to the react-select select component
@@ -63,7 +64,7 @@ interface Iprops {
 }
 
 class EditMeasurementPointListTabFormClass extends React.Component<Iprops, {}> {
-  private userForm: AbstractControl;
+  private userForm: FormGroup | any;
   private fieldConfig: FieldConfig;
   constructor(props: Iprops) {
     super(props);

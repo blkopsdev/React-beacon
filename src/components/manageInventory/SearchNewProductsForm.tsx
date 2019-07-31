@@ -7,7 +7,8 @@ import { Col, Button, ListGroup, Row, Well } from 'react-bootstrap';
 import {
   FormGenerator,
   AbstractControl,
-  FieldConfig
+  FieldConfig,
+  FormGroup
 } from 'react-reactive-form';
 import { forEach, map, isEmpty } from 'lodash';
 import { toastr } from 'react-redux-toastr';
@@ -26,7 +27,7 @@ import {
   toggleEditProductModal,
   resetNewProducts
 } from '../../actions/manageInventoryActions';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 
 interface Iprops {
   toggleModal: () => void;
@@ -46,7 +47,7 @@ interface Iprops {
 }
 
 class SearchNewProductsForm extends React.Component<Iprops, {}> {
-  public userForm: AbstractControl;
+  private userForm: FormGroup | any;
   public fieldConfig: FieldConfig;
   private subscription: any;
   private filterNewProductsTimeout: any;

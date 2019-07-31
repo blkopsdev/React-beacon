@@ -159,7 +159,7 @@ class ManageBrand extends React.Component<Iprops & IdispatchProps, Istate> {
   * Handle user clicking on a location row
   * set the selected location to state and open the modal
   */
-  getTrProps = (state: FinalState, rowInfo: RowInfoBrand) => {
+  getTrProps = (state: FinalState, rowInfo: RowInfoBrand | undefined) => {
     if (rowInfo) {
       return {
         onClick: (e: React.MouseEvent<HTMLFormElement>) => {

@@ -22,7 +22,7 @@ import {
   toggleShoppingCartModal
 } from '../../actions/shoppingCartActions';
 import CommonModal from '../common/CommonModal';
-import { requestQuote } from 'src/actions/manageInventoryActions';
+import { requestQuote } from '../../actions/manageInventoryActions';
 
 interface Iprops {
   colorButton: any;

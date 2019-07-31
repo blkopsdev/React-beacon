@@ -9,7 +9,7 @@ import {
   Button,
   Row
 } from 'react-bootstrap';
-import { initialCourse } from 'src/reducers/initialState';
+import { initialCourse } from '../../reducers/initialState';
 import {
   IshoppingCartProduct,
   GFCourse,
@@ -17,14 +17,14 @@ import {
   Iuser,
   LessonProgress,
   IinitialState
-} from 'src/models';
+} from '../../models';
 import { filter, sortBy } from 'lodash';
 import {
   addLessonToCart,
   getLessonsByCourseID
-} from 'src/actions/trainingActions';
+} from '../../actions/trainingActions';
 import { toastr } from 'react-redux-toastr';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 
 const ProgressColumn = ({ progress }: { progress: number }) => (
   <Col md={3}>

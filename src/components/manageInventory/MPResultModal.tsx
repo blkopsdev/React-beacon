@@ -6,17 +6,17 @@ import { TranslationFunction } from 'react-i18next';
 import * as React from 'react';
 
 import CommonModal from '../common/CommonModal';
-import { toggleMPResultModal } from 'src/actions/manageInventoryActions';
+import { toggleMPResultModal } from '../../actions/manageInventoryActions';
 import { connect } from 'react-redux';
 import {
   IinitialState,
   ImeasurementPointResult,
   ImeasurementPoint
-} from 'src/models';
+} from '../../models';
 import { MPResultList } from './MPResultList';
-import { getMeasurementPointList } from 'src/actions/manageMeasurementPointListsActions';
-import { clearHistoricalResultID } from 'src/actions/measurementPointResultsActions';
-import { initialMeasurmentPointResult } from 'src/reducers/initialState';
+import { getMeasurementPointList } from '../../actions/manageMeasurementPointListsActions';
+import { clearHistoricalResultID } from '../../actions/measurementPointResultsActions';
+import { initialMeasurmentPointResult } from '../../reducers/initialState';
 
 interface Iprops {
   colorButton: any;

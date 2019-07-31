@@ -10,7 +10,8 @@ import {
   AbstractControl,
   FieldConfig,
   Observable,
-  FormGroup
+  FormGroup,
+  FormArray
 } from 'react-reactive-form';
 import { forEach, find, map, differenceBy, filter, includes } from 'lodash';
 import { toastr } from 'react-redux-toastr';
@@ -28,7 +29,7 @@ import {
   toggleSecurityFunctionsModal
 } from '../../actions/manageUserActions';
 import EditFacilityModal from '../common/EditFacilityModal';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 import { components } from 'react-select';
 
 // passing in an object, but we need an array back
@@ -155,7 +156,7 @@ interface Iprops extends React.Props<EditUserForm> {
 }
 
 class EditUserForm extends React.Component<Iprops, {}> {
-  public formGroup: FormGroup;
+  private formGroup: FormGroup | any;
   public fieldConfig: FieldConfig;
   public subscription: any;
   constructor(props: Iprops) {
@@ -345,7 +346,7 @@ class EditUserForm extends React.Component<Iprops, {}> {
       email: this.props.selectedUser.email // have to add back the email because disabling the input removes it
     });
   };
-  setForm = (form: FormGroup) => {
+  setForm = (form: FormGroup | FormArray) => {
     this.formGroup = form;
     this.formGroup.meta = {
       loading: this.props.loading

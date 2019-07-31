@@ -10,12 +10,12 @@ import {
   ImeasurementPointResult,
   ImeasurementPointAnswer,
   ImeasurementPoint
-} from 'src/models';
-import { getMeasurementPointList } from 'src/actions/manageMeasurementPointListsActions';
+} from '../../models';
+import { getMeasurementPointList } from '../../actions/manageMeasurementPointListsActions';
 import { isEmpty } from 'lodash';
-import { constants } from 'src/constants/constants';
-import { initialMeasurementPoint } from 'src/reducers/initialState';
-import { clearHistoricalResultID } from 'src/actions/measurementPointResultsActions';
+import { constants } from '../../constants/constants';
+import { initialMeasurementPoint } from '../../reducers/initialState';
+import { clearHistoricalResultID } from '../../actions/measurementPointResultsActions';
 
 interface Props {
   selectedItem: ImeasurementPointResult;

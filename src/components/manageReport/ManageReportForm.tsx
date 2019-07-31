@@ -8,7 +8,8 @@ import {
   FormGenerator,
   AbstractControl,
   FieldConfig,
-  GroupProps
+  GroupProps,
+  FormGroup
 } from 'react-reactive-form';
 import { forEach } from 'lodash';
 import { toastr } from 'react-redux-toastr';
@@ -17,8 +18,8 @@ import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
 import { Ireport, IdefaultReport, Ioption } from '../../models';
-import { constants } from 'src/constants/constants';
-import { runReport, updateReport } from 'src/actions/manageReportActions';
+import { constants } from '../../constants/constants';
+import { runReport, updateReport } from '../../actions/manageReportActions';
 
 interface Iprops {
   selectedItem: Ireport;
@@ -36,7 +37,7 @@ interface Istate {
 }
 
 export class EditReportForm extends React.Component<Iprops, Istate> {
-  public formControl: AbstractControl;
+  private formGroup: FormGroup | any;
   private subscription: any;
   constructor(props: Iprops) {
     super(props);
@@ -113,7 +114,7 @@ export class EditReportForm extends React.Component<Iprops, Istate> {
 
   subscribeToValueChanges = () => {
     forEach(this.state.fieldConfig.controls, (input: any, key) => {
-      this.subscription = this.formControl
+      this.subscription = this.formGroup
         .get(key)
         .valueChanges.subscribe((value: any) => {
           this.onValueChanges(value, key);
@@ -136,20 +137,20 @@ export class EditReportForm extends React.Component<Iprops, Istate> {
 
   handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (this.formControl.status === 'INVALID') {
-      this.formControl.markAsSubmitted();
+    if (this.formGroup.status === 'INVALID') {
+      this.formGroup.markAsSubmitted();
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-    console.log(this.formControl.value);
+    console.log(this.formGroup.value);
     this.props.runReport(
-      this.formControl.value,
+      this.formGroup.value,
       this.props.selectedDefaultReport.reportType
     );
   };
   setForm = (form: AbstractControl) => {
-    this.formControl = form;
-    this.formControl.meta = {
+    this.formGroup = form;
+    this.formGroup.meta = {
       loading: this.props.loading
     };
     // this.subscribeToValueChanges();

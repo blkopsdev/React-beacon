@@ -35,7 +35,7 @@ import {
 import Banner from '../common/Banner';
 import EditJobModal from './EditJobModal';
 import SearchTableForm from '../common/SearchTableForm';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 import { orderBy } from 'lodash';
 
 interface RowInfoJob extends RowInfo {
@@ -245,7 +245,7 @@ class ManageJob extends React.Component<Iprops & IdispatchProps, Istate> {
   * Handle user clicking on a product row
   * set the selected product to state and open the modal
   */
-  getTrProps = (state: FinalState, rowInfo: RowInfoJob) => {
+  getTrProps = (state: FinalState, rowInfo: RowInfoJob | undefined) => {
     // console.log("ROWINFO", rowInfo);
     if (rowInfo) {
       return {

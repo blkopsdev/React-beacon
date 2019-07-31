@@ -24,7 +24,7 @@ import {
 import { saveAnyLocation } from '../../actions/manageLocationActions';
 import CommonModal from '../common/CommonModal';
 import EditInstallForm from './EditInstallForm';
-import { initialFacility } from 'src/reducers/initialState';
+import { initialFacility } from '../../reducers/initialState';
 
 interface Iprops {
   selectedProduct: Iproduct;

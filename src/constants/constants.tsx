@@ -2,14 +2,14 @@ import { transitionInType, transitionOutType, Iuser, Itile } from '../models';
 import { find } from 'lodash';
 import { emptyTile } from '../reducers/initialState';
 import { toastr } from 'react-redux-toastr';
-import { msalApp, MSAL_SCOPES } from 'src/components/auth/Auth-Utils';
+import { msalApp, MSAL_SCOPES } from '../components/auth/Auth-Utils';
 
 const reportTypeEnum = {
   annualInspection: 1,
   jobNotes: 2,
   HTM: 3
 };
-const reportTypeEnumInverse = {
+const reportTypeEnumInverse: { [key: number]: string } = {
   1: 'annualInspection',
   2: 'jobNotes',
   3: 'HTM'
@@ -30,11 +30,11 @@ const reportTypeOptions = [
   }
 ];
 
-const measurementPointListTypeEnum = {
+const measurementPointListTypeEnum: { [key: string]: number } = {
   Annual: 1,
   Verification: 2
 };
-const measurementPointListTypeLookup = {
+const measurementPointListTypeLookup: { [key: number]: string } = {
   1: 'Annual',
   2: 'Verification'
 };
@@ -44,13 +44,13 @@ const jobTypeOptions = [
   { value: '9c7fde18-0b94-4af8-b4aa-913c40e5aed0', label: 'Verification' },
   { value: 'ae78eaa3-89c2-490a-90c6-44e5cfa10b01', label: 'Repair' }
 ];
-const jobTypesByID = {
+const jobTypesByID: { [key: string]: string } = {
   '80eedbac-ec22-45ef-9ac7-f2eb4be2db4c': 'Audit',
   '524235fd-4633-4b7a-9c13-c37fc39efe69': 'Inspection',
   '9c7fde18-0b94-4af8-b4aa-913c40e5aed0': 'Verification',
   'ae78eaa3-89c2-490a-90c6-44e5cfa10b01': 'Repair'
 };
-const MPLTypebyJobTypesID = {
+const MPLTypebyJobTypesID: { [key: string]: number } = {
   '80eedbac-ec22-45ef-9ac7-f2eb4be2db4c': 0,
   '524235fd-4633-4b7a-9c13-c37fc39efe69': measurementPointListTypeEnum.Annual,
   '9c7fde18-0b94-4af8-b4aa-913c40e5aed0':
@@ -62,7 +62,7 @@ const measurementPointListTypeOptions = [
   { label: 'Annual', value: measurementPointListTypeEnum.Annual },
   { label: 'Verification', value: measurementPointListTypeEnum.Verification }
 ];
-const measurementPointResultStatusTypes = {
+const measurementPointResultStatusTypes: { [key: number]: string } = {
   0: 'resultStatusNotTested',
   1: 'resultStatusIncomplete',
   2: 'resultStatusFail',
@@ -71,7 +71,7 @@ const measurementPointResultStatusTypes = {
   5: 'resultStatusRepair'
 };
 
-const measurementPointResultStatusTypesEnum = {
+const measurementPointResultStatusTypesEnum: { [key: string]: number } = {
   resultStatusNotTested: 0,
   resultStatusIncomplete: 1,
   resultStatusFail: 2,
@@ -92,7 +92,7 @@ Reopened - Leader reopened the job after closing
 //   3: "reopened"
 // }
 
-const measurementPointTypeEnum = {
+const measurementPointTypeEnum: { [key: number]: string } = {
   1: 'Pass/Fail',
   2: 'Text',
   3: 'Numeric',
@@ -104,21 +104,21 @@ const measurementPointTypeOptions = [
   { label: 'Numeric', value: 3 },
   { label: 'Select', value: 4 }
 ];
-const measurementPointTypes = {
+const measurementPointTypes: { [key: string]: number } = {
   MEASUREMENT_POINT_PASSFAIL: 1,
   MEASUREMENT_POINT_TEXT: 2,
   MEASUREMENT_POINT_NUMERIC: 3,
   MEASUREMENT_POINT_SELECT: 4,
   GROUP: 5
 };
-const measurementPointTypesInverse = {
+const measurementPointTypesInverse: { [key: number]: string } = {
   1: 'Pass/Fail',
   2: 'Text',
   3: 'Numeric',
   4: 'Select',
   5: 'Group'
 };
-const measurementPointPassFailTypes = {
+const measurementPointPassFailTypes: { [key: string]: number } = {
   pass: 1,
   fail: 2,
   notApplicable: 3
@@ -282,7 +282,7 @@ const securityFunctions = {
   }
 };
 
-const colors = {
+const colors: { [key: string]: string } = {
   green: '#1ABC9C',
   greenButton: 'success', // use the bootstrap success button color
   greenTr: 'rgba(26,188,156,.2)',
@@ -302,7 +302,7 @@ const colors = {
   dark: '#060A33',
   darkBanner: 'rgba(98,73,157,.7)',
   red: '#d00000',
-  greyText: `#AAAAAA`
+  greyText: '#AAAAAA'
 };
 
 const alertTypes = [
@@ -315,8 +315,8 @@ const tiles = [
     icon: icons.alerts,
     iconType: 'img',
     title: 'alerts',
-    src: require('src/images/beaconTraining.jpg'),
-    srcBanner: require('src/images/beaconTrainingHeader.jpg'),
+    src: require('../images/beaconTraining.jpg'),
+    srcBanner: require('../images/beaconTrainingHeader.jpg'),
     color: 'dark',
     width: 270,
     height: 300,
@@ -328,8 +328,8 @@ const tiles = [
     icon: icons.training,
     iconType: 'img',
     title: 'training',
-    src: require('src/images/beaconTraining.jpg'),
-    srcBanner: require('src/images/beaconTrainingHeader.jpg'),
+    src: require('../images/beaconTraining.jpg'),
+    srcBanner: require('../images/beaconTrainingHeader.jpg'),
     color: 'blue',
     width: 270,
     height: 300,
@@ -341,8 +341,8 @@ const tiles = [
     icon: icons.manageAllTraining,
     iconType: 'img',
     title: 'manageAllTraining',
-    src: require('src/images/trainingProgressTile.jpg'),
-    srcBanner: require('src/images/trainingProgressHeader.jpg'),
+    src: require('../images/trainingProgressTile.jpg'),
+    srcBanner: require('../images/trainingProgressHeader.jpg'),
     color: 'orange',
     width: 270,
     height: 300,
@@ -354,8 +354,8 @@ const tiles = [
     icon: icons.inventory,
     iconType: 'img',
     title: 'inventory',
-    src: require('src/images/beaconManageInventory.jpg'),
-    srcBanner: require('src/images/beaconManageInventoryHeader.jpg'),
+    src: require('../images/beaconManageInventory.jpg'),
+    srcBanner: require('../images/beaconManageInventoryHeader.jpg'),
     color: 'green',
     width: 270,
     height: 300,
@@ -367,8 +367,8 @@ const tiles = [
     icon: icons.manageUsers,
     iconType: 'img',
     title: 'userManage',
-    src: require('src/images/beaconManageUsers.jpg'),
-    srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
+    src: require('../images/beaconManageUsers.jpg'),
+    srcBanner: require('../images/beaconManageUsersHeader.jpg'),
     color: 'purple',
     width: 270,
     height: 300,
@@ -380,8 +380,8 @@ const tiles = [
     icon: icons.userQueue,
     iconType: 'img',
     title: 'userQueue',
-    src: require('src/images/beaconQueue.jpg'),
-    srcBanner: require('src/images/beaconQueueHeader.jpg'),
+    src: require('../images/beaconQueue.jpg'),
+    srcBanner: require('../images/beaconQueueHeader.jpg'),
     color: 'orange',
     width: 270,
     height: 300,
@@ -393,8 +393,8 @@ const tiles = [
     icon: icons.manageTeam,
     iconType: 'img',
     title: 'manageTeam',
-    src: require('src/images/beaconManageTeam.jpg'),
-    srcBanner: require('src/images/beaconManageTeamHeader.jpg'),
+    src: require('../images/beaconManageTeam.jpg'),
+    srcBanner: require('../images/beaconManageTeamHeader.jpg'),
     color: 'blue',
     width: 270,
     height: 300,
@@ -406,8 +406,8 @@ const tiles = [
     icon: icons.locations,
     iconType: 'img',
     title: 'locations',
-    src: require('src/images/LocationTile.jpg'),
-    srcBanner: require('src/images/locationHeader.jpg'),
+    src: require('../images/LocationTile.jpg'),
+    srcBanner: require('../images/locationHeader.jpg'),
     color: 'green',
     width: 270,
     height: 300,
@@ -419,8 +419,8 @@ const tiles = [
     icon: icons.manageJobs,
     iconType: 'img',
     title: 'manageJobs',
-    src: require('src/images/beaconManageJobs.jpg'),
-    srcBanner: require('src/images/beaconManageJobsHeader.jpg'),
+    src: require('../images/beaconManageJobs.jpg'),
+    srcBanner: require('../images/beaconManageJobsHeader.jpg'),
     color: 'orange',
     width: 270,
     height: 300,
@@ -447,8 +447,8 @@ const tiles = [
     icon: icons.productQueue,
     iconType: 'img',
     title: 'productqueue',
-    src: require('src/images/beaconManageProductQueue.jpg'),
-    srcBanner: require('src/images/beaconManageProductQueueHeader.jpg'),
+    src: require('../images/beaconManageProductQueue.jpg'),
+    srcBanner: require('../images/beaconManageProductQueueHeader.jpg'),
     color: 'purple',
     width: 270,
     height: 300,
@@ -512,8 +512,8 @@ const tiles = [
     icon: icons.measurements,
     iconType: 'img',
     title: 'manageCustomerMeasurementPointList',
-    src: require('src/images/measurementTile.jpg'),
-    srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
+    src: require('../images/measurementTile.jpg'),
+    srcBanner: require('../images/beaconManageUsersHeader.jpg'),
     color: 'green',
     width: 270,
     height: 300,
@@ -525,8 +525,8 @@ const tiles = [
     icon: icons.measurements,
     iconType: 'img',
     title: 'manageMeasurementPointList',
-    src: require('src/images/measurementTile.jpg'),
-    srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
+    src: require('../images/measurementTile.jpg'),
+    srcBanner: require('../images/beaconManageUsersHeader.jpg'),
     color: 'purple',
     width: 270,
     height: 300,
@@ -538,8 +538,8 @@ const tiles = [
     icon: icons.manageReport,
     iconType: 'img',
     title: 'manageReports',
-    src: require('src/images/reportTile.jpg'),
-    srcBanner: require('src/images/beaconManageUsersHeader.jpg'),
+    src: require('../images/reportTile.jpg'),
+    srcBanner: require('../images/beaconManageUsersHeader.jpg'),
     color: 'orange',
     width: 270,
     height: 300,
@@ -551,8 +551,8 @@ const tiles = [
     icon: icons.inventory,
     iconType: 'img',
     title: 'brands',
-    src: require('src/images/beaconManageInventory.jpg'),
-    srcBanner: require('src/images/beaconManageInventoryHeader.jpg'),
+    src: require('../images/beaconManageInventory.jpg'),
+    srcBanner: require('../images/beaconManageInventoryHeader.jpg'),
     color: 'green',
     width: 270,
     height: 300,
@@ -564,8 +564,8 @@ const tiles = [
     icon: icons.inventory,
     iconType: 'img',
     title: 'Customers and Facility',
-    src: require('src/images/beaconManageInventory.jpg'),
-    srcBanner: require('src/images/beaconManageInventoryHeader.jpg'),
+    src: require('../images/beaconManageInventory.jpg'),
+    srcBanner: require('../images/beaconManageInventoryHeader.jpg'),
     color: 'green',
     width: 270,
     height: 300,
@@ -577,8 +577,8 @@ const tiles = [
   //   icon: icons.inventory,
   //   iconType: 'img',
   //   title: 'alerts',
-  //   src: require('src/images/beaconManageInventory.jpg'),
-  //   srcBanner: require('src/images/beaconManageInventoryHeader.jpg'),
+  //   src: require('../images/beaconManageInventory.jpg'),
+  //   srcBanner: require('../images/beaconManageInventoryHeader.jpg'),
   //   color: 'green',
   //   width: 270,
   //   height: 300,
@@ -645,7 +645,7 @@ export const constants = {
   },
 
   // {value: '', label: ''}
-  countries: require('src/constants/countries.json'),
+  countries: require('../constants/countries.json'),
   handleError(error: any, message: string) {
     let msg = '';
     if (error && error.response && error.response.data) {

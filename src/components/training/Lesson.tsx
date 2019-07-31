@@ -25,11 +25,11 @@ import {
 
 import { RouteComponentProps } from 'react-router';
 import Player from '@vimeo/player';
-import * as moment from 'moment';
+import moment from 'moment';
 import { toastr } from 'react-redux-toastr';
-import { constants } from 'src/constants/constants';
-import { getQuizzesByLessonID } from 'src/actions/trainingQuizActions';
-import { initialLesson } from 'src/reducers/initialState';
+import { constants } from '../../constants/constants';
+import { getQuizzesByLessonID } from '../../actions/trainingQuizActions';
+import { initialLesson } from '../../reducers/initialState';
 
 interface RouterParams {
   courseID: string;
@@ -129,7 +129,7 @@ class Lesson extends React.Component<Props & IdispatchProps, State> {
 
   setUpPlayer = () => {
     const options = {
-      id: this.props.lesson.primaryVideoPath,
+      id: parseInt(this.props.lesson.primaryVideoPath, 10),
       width: this.pElem.offsetWidth, // > 723 ? this.pElem.offsetWidth : 723,
       loop: false
     };

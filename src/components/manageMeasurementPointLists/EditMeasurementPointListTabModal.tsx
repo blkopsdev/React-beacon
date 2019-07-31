@@ -16,8 +16,8 @@ import CommonModal from '../common/CommonModal';
 import {
   toggleEditMeasurementPointTabModal,
   updateMeasurementPointListTab
-} from 'src/actions/manageMeasurementPointListsActions';
-import { initialMeasurementPointTab } from 'src/reducers/initialState';
+} from '../../actions/manageMeasurementPointListsActions';
+import { initialMeasurementPointTab } from '../../reducers/initialState';
 import { EditMeasurementPointListTabForm } from './EditMeasurementPointListTabForm';
 
 interface Iprops {

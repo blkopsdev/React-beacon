@@ -8,7 +8,8 @@ import {
   Validators,
   FormGenerator,
   AbstractControl,
-  FieldConfig
+  FieldConfig,
+  FormGroup
 } from 'react-reactive-form';
 import { forEach } from 'lodash';
 import { toastr } from 'react-redux-toastr';
@@ -27,7 +28,7 @@ import {
   saveAnyLocation,
   updateAnyLocation
 } from '../../actions/manageLocationActions';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 
 const buildFieldConfig = () => {
   const fieldConfigControls = {
@@ -68,7 +69,7 @@ interface Iprops {
 }
 
 class ManageLocationForm extends React.Component<Iprops, {}> {
-  public form: AbstractControl;
+  private form: FormGroup | any;
   public fieldConfig: FieldConfig;
   constructor(props: Iprops) {
     super(props);

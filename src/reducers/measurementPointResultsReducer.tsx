@@ -6,7 +6,7 @@
 import {
   ImeasurementPointResultsReducer,
   ImeasurementPointResult
-} from '../../models';
+} from '../models';
 import initialState, {
   initialMeasurmentPointResult,
   initialMeasurementPointResultAnswer

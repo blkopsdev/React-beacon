@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Breadcrumb } from 'react-bootstrap';
+import { Breadcrumb, BreadcrumbItem } from 'react-bootstrap';
 
 import { RouteComponentProps } from 'react-router';
 import { GFQuizItem, GFCourse, GFLesson } from '../../models';
@@ -26,7 +26,7 @@ export const TrainingBreadcrumb = ({
   if (!!match.params.quizID) {
     return (
       <Breadcrumb>
-        <Breadcrumb.Item>
+        <BreadcrumbItem>
           <span
             onClick={() => {
               history.push('/training');
@@ -34,8 +34,8 @@ export const TrainingBreadcrumb = ({
           >
             Training
           </span>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item>
+        </BreadcrumbItem>
+        <BreadcrumbItem>
           <span
             onClick={() => {
               history.replace(`/training/${match.params.courseID}`);
@@ -43,8 +43,8 @@ export const TrainingBreadcrumb = ({
           >
             {selectedCourse.name}
           </span>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item>
+        </BreadcrumbItem>
+        <BreadcrumbItem>
           <span
             onClick={() => {
               history.replace(
@@ -54,8 +54,8 @@ export const TrainingBreadcrumb = ({
           >
             {lesson.name}
           </span>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item active={true}>{quiz.name}</Breadcrumb.Item>
+        </BreadcrumbItem>
+        <BreadcrumbItem active={true}>{quiz.name}</BreadcrumbItem>
       </Breadcrumb>
     );
   }
@@ -63,7 +63,7 @@ export const TrainingBreadcrumb = ({
   if (!!match.params.lessonID) {
     return (
       <Breadcrumb>
-        <Breadcrumb.Item>
+        <BreadcrumbItem>
           <span
             onClick={() => {
               history.push('/training');
@@ -71,8 +71,8 @@ export const TrainingBreadcrumb = ({
           >
             Training
           </span>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item>
+        </BreadcrumbItem>
+        <BreadcrumbItem>
           <span
             onClick={() => {
               history.goBack();
@@ -80,8 +80,8 @@ export const TrainingBreadcrumb = ({
           >
             {selectedCourse.name}
           </span>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item active={true}>{lesson.name}</Breadcrumb.Item>
+        </BreadcrumbItem>
+        <BreadcrumbItem active={true}>{lesson.name}</BreadcrumbItem>
       </Breadcrumb>
     );
   }
@@ -89,7 +89,7 @@ export const TrainingBreadcrumb = ({
   if (!!match.params.courseID) {
     return (
       <Breadcrumb>
-        <Breadcrumb.Item>
+        <BreadcrumbItem>
           <span
             onClick={() => {
               history.goBack();
@@ -97,8 +97,8 @@ export const TrainingBreadcrumb = ({
           >
             Training
           </span>
-        </Breadcrumb.Item>
-        <Breadcrumb.Item active={true}>{selectedCourse.name}</Breadcrumb.Item>
+        </BreadcrumbItem>
+        <BreadcrumbItem active={true}>{selectedCourse.name}</BreadcrumbItem>
       </Breadcrumb>
     );
   }

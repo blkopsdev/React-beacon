@@ -10,7 +10,7 @@ import {
   LessonProgress,
   GFQuizAnswer,
   GFQuizViewReducer
-} from '../../models';
+} from '../models';
 import { cartReducerWithName, getQuantity } from './cartReducer';
 import {
   modalToggleWithName,

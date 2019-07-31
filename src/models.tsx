@@ -1,5 +1,7 @@
 import { ThunkAction } from 'redux-thunk';
 import { SortingRule } from 'react-table';
+import { ToastrState } from 'react-redux-toastr';
+import { Reducer } from 'redux';
 
 /* ***** Common between Mobile and Desktop ****** */
 
@@ -707,6 +709,7 @@ export interface ImanageMeasurementPointListsReducer {
 
 export interface IinitialState {
   user: Iuser;
+  toastr: Reducer<ToastrState>;
   ajaxCallsInProgress: number;
   redirect: Iredirect;
   manageUserQueue: ImanageUserQueueReducer;

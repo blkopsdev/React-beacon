@@ -38,6 +38,7 @@ import * as ReactDOM from 'react-dom';
 import axios from 'axios';
 
 import configureStore from './store/configureStore';
+import registerServiceWorker from './registerServiceWorker';
 
 import { PersistGate } from 'redux-persist/integration/react';
 import { TrackJS } from 'trackjs';
@@ -86,6 +87,7 @@ import { constants } from './constants/constants';
 import { msalApp } from './components/auth/Auth-Utils';
 import App from './App';
 if (!(window !== window.parent && !window.opener)) {
+  registerServiceWorker();
   const { store, persistor } = configureStore();
 
   // set Axios default header for accepting JSON
@@ -128,8 +130,6 @@ in userActions.  then we pause the persistor in order to prevent anything else f
     </I18nextProvider>,
     document.getElementById('root') as HTMLElement
   );
-
-  // registerServiceWorker();
 } else {
   console.log('loading silent refresh in iFrame');
 }

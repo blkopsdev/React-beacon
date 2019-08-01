@@ -23,7 +23,7 @@ export function getManageTraining(): ThunkResult<void> {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.MANAGE_TRAINING_SUCCESS,

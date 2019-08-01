@@ -42,10 +42,6 @@ interface IdispatchProps {
 }
 
 class EditCustomerModal extends React.Component<Iprops & IdispatchProps, {}> {
-  constructor(props: Iprops & IdispatchProps) {
-    super(props);
-  }
-
   render() {
     const { selectedCustomer, t } = this.props;
     const className = this.props.secondModal

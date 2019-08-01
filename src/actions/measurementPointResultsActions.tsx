@@ -51,7 +51,7 @@ export const getFacilityMeasurementPointResultsHelper = (
   return msalFetch(url, axiosOptions)
     .then((data: AxiosResponse<any>) => {
       if (!data.data) {
-        throw undefined;
+        throw new Error('missing data');
       } else {
         // console.log(data.data);
         dispatch({

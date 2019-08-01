@@ -12,9 +12,9 @@ interface Props extends React.Props<Question> {
 }
 
 class Question extends React.Component<Props, {}> {
-  constructor(props: Props) {
-    super(props);
-  }
+  // constructor(props: Props) {
+  //   super(props);
+  // }
 
   buildOption(
     index: number,

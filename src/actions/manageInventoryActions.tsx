@@ -33,7 +33,7 @@ export function getProductInfo(): ThunkResult<void> {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.GET_PRODUCT_INFO_SUCCESS,
@@ -77,7 +77,7 @@ export function getProducts(
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.GET_PRODUCTS_SUCCESS,
@@ -131,7 +131,7 @@ const getInventoryHelper = (dispatch: any, getState: () => IinitialState) => {
   return msalFetch(url, axiosOptions)
     .then((data: AxiosResponse<any>) => {
       if (!data.data) {
-        throw undefined;
+        throw new Error('missing data');
       } else {
         const rawInventory = data.data[1];
         const inventoryWithStatus = rawInventory.map((product: Iproduct) => {
@@ -187,7 +187,7 @@ export function updateProduct(
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.PRODUCT_UPDATE_SUCCESS,
@@ -220,7 +220,7 @@ export function saveProduct(product: Iproduct): ThunkResult<void> {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.PRODUCT_ADD_SUCCESS,
@@ -259,7 +259,7 @@ export function updateInstall(
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.INSTALL_UPDATE_SUCCESS,
@@ -316,7 +316,7 @@ export function saveInstall(
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.INSTALL_ADD_SUCCESS,

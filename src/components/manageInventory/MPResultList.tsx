@@ -96,9 +96,6 @@ const AnswerListItem = (
 };
 
 export class MPResultList extends React.Component<Props, {}> {
-  constructor(props: Props) {
-    super(props);
-  }
   componentWillMount() {
     if (this.props.selectedItem.manualStatusOverride === true) {
       return; //  do not get mplist

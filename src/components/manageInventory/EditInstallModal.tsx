@@ -49,10 +49,6 @@ interface IdispatchProps {
 }
 
 class ManageInstallModal extends React.Component<Iprops & IdispatchProps, {}> {
-  constructor(props: Iprops & IdispatchProps) {
-    super(props);
-  }
-
   render() {
     let modalTitle;
     if (this.props.selectedItem.id) {

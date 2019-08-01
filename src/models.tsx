@@ -2,6 +2,7 @@ import { ThunkAction } from 'redux-thunk';
 import { SortingRule } from 'react-table';
 import { ToastrState } from 'react-redux-toastr';
 import { Reducer } from 'redux';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 /* ***** Common between Mobile and Desktop ****** */
 
@@ -203,7 +204,8 @@ export interface IAlert {
 }
 
 export interface Itile {
-  icon: string | string[];
+  faIcon?: IconProp;
+  imgIcon?: string;
   title: string;
   src: string;
   srcBanner: string;

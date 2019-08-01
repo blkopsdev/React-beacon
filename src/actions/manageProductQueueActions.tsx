@@ -23,7 +23,7 @@ export function getProductQueue(): ThunkResult<void> {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.PRODUCT_QUEUE_SUCCESS,
@@ -54,7 +54,7 @@ export function approveProduct(productQueueID: string, dispatch: any) {
   return msalFetch(url, axiosOptions)
     .then((data: AxiosResponse<any>) => {
       if (!data.data) {
-        throw undefined;
+        throw new Error('missing data');
       } else {
         dispatch({
           type: types.PRODUCT_APPROVE_SUCCESS,
@@ -86,7 +86,7 @@ export function updateQueueProduct(
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.PRODUCT_UPDATE_SUCCESS,

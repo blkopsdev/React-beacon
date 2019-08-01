@@ -24,7 +24,7 @@ export function getUserManage(): ThunkResult<void> {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({ type: types.TEAM_MANAGE_SUCCESS, team: data.data[1] });
           dispatch({
@@ -55,7 +55,7 @@ export function updateTeamUser(user: Iuser): ThunkResult<void> {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.TEAM_UPDATE_SUCCESS,
@@ -89,7 +89,7 @@ export function saveTeamUser(user: Iuser): ThunkResult<void> {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.TEAM_SAVE_SUCCESS,

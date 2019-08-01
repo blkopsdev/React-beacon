@@ -46,10 +46,6 @@ class EditMeasurementPointModal extends React.Component<
   Iprops & IdispatchProps,
   {}
 > {
-  constructor(props: Iprops & IdispatchProps) {
-    super(props);
-  }
-
   getTitle() {
     if (
       this.props.selectedMeasurementPoint.id.length &&

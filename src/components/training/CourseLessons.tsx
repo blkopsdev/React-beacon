@@ -96,10 +96,6 @@ interface Props extends RouteComponentProps<RouterParams> {
   */
 
 class CourseLessonsClass extends React.Component<Props, {}> {
-  constructor(props: Props) {
-    super(props);
-  }
-
   componentWillMount() {
     // if we have a courseID then display the lessons in that course
     const { courseID } = this.props.match.params;
@@ -180,7 +176,7 @@ class CourseLessonsClass extends React.Component<Props, {}> {
                       md={gfLesson.score ? 6 : 9}
                       onClick={() => this.handleLessonClick(gfLesson)}
                     >
-                      <img width={32} height={32} src={imagePath} alt="Image" />
+                      <img width={32} height={32} src={imagePath} alt="" />
                       <span className="lesson-name">{gfLesson.name}</span>
                     </Col>
                     {gfLesson.score &&

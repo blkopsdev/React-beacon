@@ -32,7 +32,7 @@ export function getFacility(facilityID: string): ThunkResult<void> {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.LOCATION_MANAGE_SUCCESS,
@@ -139,7 +139,7 @@ const saveAnyLocationObjectHelper = (
   return msalFetch(url, axiosOptions)
     .then((data: AxiosResponse<any>) => {
       if (!data.data) {
-        throw undefined;
+        throw new Error('missing data');
       } else {
         dispatch({ type: types.TOGGLE_MODAL_EDIT_LOCATION });
         dispatch({
@@ -194,22 +194,14 @@ export function updateAnyLocation(
 
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
-        if (data.status !== 200) {
-          throw undefined;
-        } else {
-          dispatch({
-            type: types.LOCATION_UPDATE_SUCCESS,
-            lType,
-            locationObject,
-            facilityID
-          });
+        dispatch({
+          type: types.LOCATION_UPDATE_SUCCESS,
+          lType,
+          locationObject,
+          facilityID
+        });
 
-          toastr.success(
-            'Success',
-            `Updated ${lType}.`,
-            constants.toastrSuccess
-          );
-        }
+        toastr.success('Success', `Updated ${lType}.`, constants.toastrSuccess);
       })
       .catch((error: any) => {
         dispatch({ type: types.LOCATION_UPDATE_FAILED });
@@ -249,21 +241,13 @@ export function deleteAnyLocation(
 
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
-        if (data.status !== 200) {
-          throw undefined;
-        } else {
-          dispatch({
-            type: types.LOCATION_DELETE_SUCCESS,
-            lType,
-            locationObject,
-            facilityID
-          });
-          toastr.success(
-            'Success',
-            `Deleted ${lType}.`,
-            constants.toastrSuccess
-          );
-        }
+        dispatch({
+          type: types.LOCATION_DELETE_SUCCESS,
+          lType,
+          locationObject,
+          facilityID
+        });
+        toastr.success('Success', `Deleted ${lType}.`, constants.toastrSuccess);
       })
       .catch((error: any) => {
         dispatch({ type: types.LOCATION_DELETE_FAILED });

@@ -310,10 +310,9 @@ const alertTypes = [
   { value: 'informational', label: 'Informational' }
 ];
 
-const tiles = [
+const tiles: Itile[] = [
   {
-    icon: icons.alerts,
-    iconType: 'img',
+    imgIcon: icons.alerts,
     title: 'alerts',
     src: require('../images/beaconTraining.jpg'),
     srcBanner: require('../images/beaconTrainingHeader.jpg'),
@@ -325,8 +324,7 @@ const tiles = [
     description: ''
   },
   {
-    icon: icons.training,
-    iconType: 'img',
+    imgIcon: icons.training,
     title: 'training',
     src: require('../images/beaconTraining.jpg'),
     srcBanner: require('../images/beaconTrainingHeader.jpg'),
@@ -338,8 +336,7 @@ const tiles = [
     description: ''
   },
   {
-    icon: icons.manageAllTraining,
-    iconType: 'img',
+    imgIcon: icons.manageAllTraining,
     title: 'manageAllTraining',
     src: require('../images/trainingProgressTile.jpg'),
     srcBanner: require('../images/trainingProgressHeader.jpg'),
@@ -351,8 +348,7 @@ const tiles = [
     description: ''
   },
   {
-    icon: icons.inventory,
-    iconType: 'img',
+    imgIcon: icons.inventory,
     title: 'inventory',
     src: require('../images/beaconManageInventory.jpg'),
     srcBanner: require('../images/beaconManageInventoryHeader.jpg'),
@@ -364,8 +360,7 @@ const tiles = [
     description: ''
   },
   {
-    icon: icons.manageUsers,
-    iconType: 'img',
+    imgIcon: icons.manageUsers,
     title: 'userManage',
     src: require('../images/beaconManageUsers.jpg'),
     srcBanner: require('../images/beaconManageUsersHeader.jpg'),
@@ -377,8 +372,7 @@ const tiles = [
     description: ''
   },
   {
-    icon: icons.userQueue,
-    iconType: 'img',
+    imgIcon: icons.userQueue,
     title: 'userQueue',
     src: require('../images/beaconQueue.jpg'),
     srcBanner: require('../images/beaconQueueHeader.jpg'),
@@ -390,8 +384,7 @@ const tiles = [
     description: ''
   },
   {
-    icon: icons.manageTeam,
-    iconType: 'img',
+    imgIcon: icons.manageTeam,
     title: 'manageTeam',
     src: require('../images/beaconManageTeam.jpg'),
     srcBanner: require('../images/beaconManageTeamHeader.jpg'),
@@ -403,8 +396,7 @@ const tiles = [
     description: ''
   },
   {
-    icon: icons.locations,
-    iconType: 'img',
+    imgIcon: icons.locations,
     title: 'locations',
     src: require('../images/LocationTile.jpg'),
     srcBanner: require('../images/locationHeader.jpg'),
@@ -416,8 +408,7 @@ const tiles = [
     description: ''
   },
   {
-    icon: icons.manageJobs,
-    iconType: 'img',
+    imgIcon: icons.manageJobs,
     title: 'manageJobs',
     src: require('../images/beaconManageJobs.jpg'),
     srcBanner: require('../images/beaconManageJobsHeader.jpg'),
@@ -428,24 +419,8 @@ const tiles = [
     securityFunction: securityFunctions.ManageJobs.id,
     description: ''
   },
-
   {
-    icon: 'icon-docs',
-    iconType: 'fa',
-    title: 'documents',
-    src: 'https://placekitten.com/270/272',
-    srcBanner: '',
-    color: 'purple',
-    width: 270,
-    height: 272,
-    url: '/docs',
-    securityFunction: '',
-    description: ''
-  },
-
-  {
-    icon: icons.productQueue,
-    iconType: 'img',
+    imgIcon: icons.productQueue,
     title: 'productqueue',
     src: require('../images/beaconManageProductQueue.jpg'),
     srcBanner: require('../images/beaconManageProductQueueHeader.jpg'),
@@ -457,60 +432,7 @@ const tiles = [
     description: ''
   },
   {
-    icon: 'icon-admin',
-    iconType: 'fa',
-    title: 'administration',
-    src: 'https://placekitten.com/270/272',
-    srcBanner: '',
-    color: 'purple',
-    width: 270,
-    height: 272,
-    url: '/admin',
-    securityFunction: '',
-    description: ''
-  },
-  {
-    icon: 'icon-billing',
-    iconType: 'fa',
-    title: 'billing',
-    src: 'https://placekitten.com/270/300',
-    srcBanner: '',
-    color: 'orange',
-    width: 359,
-    height: 300,
-    url: '/billing',
-    securityFunction: '',
-    description: ''
-  },
-  {
-    icon: 'icon-groups',
-    iconType: 'fa',
-    title: 'groups',
-    src: 'https://placekitten.com/270/272',
-    srcBanner: '',
-    color: 'dark',
-    width: 270,
-    height: 272,
-    url: '/groups',
-    securityFunction: '',
-    description: ''
-  },
-  {
-    icon: 'icon-support',
-    iconType: 'fa',
-    title: 'support',
-    src: 'https://placekitten.com/270/136',
-    srcBanner: '',
-    color: 'dark',
-    width: 359,
-    height: 136,
-    url: '/support',
-    securityFunction: '',
-    description: ''
-  },
-  {
-    icon: icons.measurements,
-    iconType: 'img',
+    imgIcon: icons.measurements,
     title: 'manageCustomerMeasurementPointList',
     src: require('../images/measurementTile.jpg'),
     srcBanner: require('../images/beaconManageUsersHeader.jpg'),
@@ -522,8 +444,7 @@ const tiles = [
     description: ''
   },
   {
-    icon: icons.measurements,
-    iconType: 'img',
+    imgIcon: icons.measurements,
     title: 'manageMeasurementPointList',
     src: require('../images/measurementTile.jpg'),
     srcBanner: require('../images/beaconManageUsersHeader.jpg'),
@@ -535,8 +456,7 @@ const tiles = [
     description: ''
   },
   {
-    icon: icons.manageReport,
-    iconType: 'img',
+    imgIcon: icons.manageReport,
     title: 'manageReports',
     src: require('../images/reportTile.jpg'),
     srcBanner: require('../images/beaconManageUsersHeader.jpg'),
@@ -548,8 +468,7 @@ const tiles = [
     description: ''
   },
   {
-    icon: icons.inventory,
-    iconType: 'img',
+    imgIcon: icons.inventory,
     title: 'brands',
     src: require('../images/beaconManageInventory.jpg'),
     srcBanner: require('../images/beaconManageInventoryHeader.jpg'),
@@ -561,8 +480,7 @@ const tiles = [
     description: ''
   },
   {
-    icon: icons.inventory,
-    iconType: 'img',
+    imgIcon: icons.inventory,
     title: 'Customers and Facility',
     src: require('../images/beaconManageInventory.jpg'),
     srcBanner: require('../images/beaconManageInventoryHeader.jpg'),
@@ -573,19 +491,6 @@ const tiles = [
     securityFunction: securityFunctions.ViewInventory.id,
     description: ''
   }
-  // {
-  //   icon: icons.inventory,
-  //   iconType: 'img',
-  //   title: 'alerts',
-  //   src: require('../images/beaconManageInventory.jpg'),
-  //   srcBanner: require('../images/beaconManageInventoryHeader.jpg'),
-  //   color: 'green',
-  //   width: 270,
-  //   height: 300,
-  //   url: '/alerts',
-  //   securityFunction: securityFunctions.ViewInventory.id,
-  //   description: ''
-  // }
 ];
 
 export const constants = {

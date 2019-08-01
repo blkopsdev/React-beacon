@@ -28,7 +28,7 @@ export function getCustomers(): ThunkResult<void> {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.GET_CUSTOMERS_AND_FACILITY_SUCCESS,

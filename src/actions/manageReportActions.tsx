@@ -27,7 +27,7 @@ export function getDefaultReports(): ThunkResult<void> {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           console.log(data.data);
           dispatch({
@@ -115,7 +115,7 @@ export function runReport(
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.REPORT_ADD_SUCCESS

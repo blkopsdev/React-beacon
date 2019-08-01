@@ -25,7 +25,7 @@ export const getAlerts = (): ThunkResult<void> => {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.LOAD_ALERTS_SUCCESS,
@@ -62,7 +62,7 @@ export const saveAlert = (alert: IAlert): ThunkResult<void> => (
   return msalFetch(url, axiosOptions)
     .then((data: AxiosResponse<any>) => {
       if (!data.data) {
-        throw undefined;
+        throw new Error('missing data');
       } else {
         const newAlert = { ...alert, ...data.data };
         dispatch({
@@ -97,7 +97,7 @@ export const updateAlert = (
   return msalFetch(url, axiosOptions)
     .then((data: AxiosResponse<any>) => {
       if (!data.data) {
-        throw undefined;
+        throw new Error('missing data');
       } else {
         dispatch({ type: types.EDIT_ALERT_SUCCESS, payload: data.data });
         toastr.success('Success', `Updated Alert.`, constants.toastrSuccess);

@@ -30,7 +30,7 @@ export function getFacilitiesByCustomer(customerID: string) {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.GET_FACILITIES_SUCCESS,
@@ -58,7 +58,7 @@ export function getCustomers() {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.GET_CUSTOMERS_SUCCESS,
@@ -94,7 +94,7 @@ export function addCustomer({
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.CUSTOMER_UPDATE_SUCCESS,
@@ -152,7 +152,7 @@ export function addFacility(facility: Ifacility): ThunkResult<void> {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.FACILITY_UPDATE_SUCCESS,

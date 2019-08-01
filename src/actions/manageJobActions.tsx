@@ -41,7 +41,7 @@ export function getJobs(): ThunkResult<void> {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           console.log(data.data);
           dispatch({ type: types.JOB_MANAGE_SUCCESS, jobs: data.data.result });
@@ -78,7 +78,7 @@ export function getAllJobs(): ThunkResult<void> {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           console.log(data.data);
           dispatch({ type: types.JOB_MANAGE_SUCCESS, jobs: data.data.result });
@@ -110,7 +110,7 @@ export function getFSEUsers(): ThunkResult<void> {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.GET_FSE_SUCCESS,
@@ -157,7 +157,7 @@ export function updateJob(
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.JOB_UPDATE_SUCCESS,
@@ -206,7 +206,7 @@ export function createJob(formValues: any): ThunkResult<void> {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.JOB_ADD_SUCCESS,

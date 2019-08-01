@@ -50,10 +50,6 @@ interface IdispatchProps {
 }
 
 class EditQuoteModal extends React.Component<Iprops & IdispatchProps, {}> {
-  constructor(props: Iprops & IdispatchProps) {
-    super(props);
-  }
-
   render() {
     return (
       <CommonModal

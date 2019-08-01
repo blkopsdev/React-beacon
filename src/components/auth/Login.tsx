@@ -141,7 +141,7 @@ class Login extends React.Component<Iprops, Istate> {
                   onClick={this.login}
                   disabled={this.props.loading}
                 >
-                  <img width="20" height="20" src={azure} />
+                  <img width="20" height="20" src={azure} alt="icon" />
                   {t('loginButton')}
                 </Button>
                 <LinkContainer to={'/signup'}>

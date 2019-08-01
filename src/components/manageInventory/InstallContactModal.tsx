@@ -36,10 +36,6 @@ interface IdispatchProps {
 }
 
 class InstallContactModal extends React.Component<Iprops & IdispatchProps, {}> {
-  constructor(props: Iprops & IdispatchProps) {
-    super(props);
-  }
-
   render() {
     return (
       <CommonModal

@@ -43,10 +43,6 @@ interface IdispatchProps {
 }
 
 class EditManageJobModal extends React.Component<Iprops & IdispatchProps, {}> {
-  constructor(props: Iprops & IdispatchProps) {
-    super(props);
-  }
-
   render() {
     const { t } = this.props;
     const modalTitle = t(

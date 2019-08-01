@@ -37,9 +37,6 @@ interface IdispatchProps {
 }
 
 class EditManageUserModal extends React.Component<Iprops & IdispatchProps, {}> {
-  constructor(props: Iprops & IdispatchProps) {
-    super(props);
-  }
   // componentWillMount() {
 
   // }

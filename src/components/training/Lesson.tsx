@@ -273,7 +273,7 @@ class Lesson extends React.Component<Props & IdispatchProps, State> {
                 >
                   <Media>
                     <Media.Left>
-                      <img width={32} height={32} src={gfImage} alt="Image" />
+                      <img width={32} height={32} src={gfImage} alt="" />
                     </Media.Left>
                     <Media.Body>
                       <Media.Heading>{gfQuiz.name}</Media.Heading>

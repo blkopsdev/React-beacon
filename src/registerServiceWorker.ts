@@ -1,6 +1,3 @@
-import { toastr } from "react-redux-toastr";
-import { constants } from "./constants/constants";
-
 // tslint:disable:no-console
 // In production, we register a service worker to serve assets from local cache.
 

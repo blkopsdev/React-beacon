@@ -12,7 +12,7 @@ const Header = (props: any) => {
   return (
     <div className="header">
       <Link to={'/dashboard'}>
-        <img src={headerImg} />
+        <img src={headerImg} alt="logo" />
       </Link>
       <HeaderMenu {...props} />
     </div>

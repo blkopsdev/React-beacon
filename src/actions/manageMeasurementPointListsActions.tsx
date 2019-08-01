@@ -45,7 +45,7 @@ export function getAllMeasurementPointLists(): ThunkResult<void> {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           // console.log(data.data);
           dispatch({
@@ -98,7 +98,7 @@ export function addGlobalMeasurementPointList(
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch(endAjaxCall());
           dispatch({
@@ -175,7 +175,7 @@ export function updateGlobalMeasurementPointList(
       return msalFetch(url, axiosOptions)
         .then((data: AxiosResponse<any>) => {
           if (!data.data) {
-            throw undefined;
+            throw new Error('missing data');
           } else {
             dispatch(endAjaxCall());
             dispatch({ type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT_LISTS });
@@ -257,19 +257,15 @@ export function deleteGlobalMeasurementPointList(
     const url = `${API.DELETE.measurementPoint.deleteglobalmpl}/${MPlistID}`;
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
-        if (data.status !== 200) {
-          throw undefined;
-        } else {
-          dispatch({
-            type: types.MANAGE_MEASUREMENT_POINT_LIST_DELETE_SUCCESS,
-            MPlistID
-          });
-          toastr.success(
-            'Success',
-            'Deleted measurement point list.',
-            constants.toastrSuccess
-          );
-        }
+        dispatch({
+          type: types.MANAGE_MEASUREMENT_POINT_LIST_DELETE_SUCCESS,
+          MPlistID
+        });
+        toastr.success(
+          'Success',
+          'Deleted measurement point list.',
+          constants.toastrSuccess
+        );
       })
       .catch((error: any) => {
         dispatch({ type: types.MANAGE_MEASUREMENT_POINT_LIST_DELETE_FAILED });
@@ -315,7 +311,7 @@ export function updateCustomerMeasurementPointList(
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch(endAjaxCall());
           dispatch({ type: types.TOGGLE_MODAL_EDIT_MEASUREMENT_POINT_LISTS });
@@ -389,7 +385,7 @@ export function getMeasurementPointList(MPlistID: string): ThunkResult<void> {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.MEASUREMENT_POINT_LIST_SUCCESS,

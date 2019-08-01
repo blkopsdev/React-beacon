@@ -26,7 +26,7 @@ export function getUserManage(): ThunkResult<void> {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({ type: types.USER_MANAGE_SUCCESS, users: data.data[1] });
           dispatch({
@@ -78,7 +78,7 @@ export function updateUser(user: Iuser): ThunkResult<void> {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.USER_UPDATE_SUCCESS,

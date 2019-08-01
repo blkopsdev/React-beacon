@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { ListGroupItem, ListGroup } from 'react-bootstrap';
 import { connect } from 'react-redux';
-import { IinitialState, Iuser } from '../../models';
+import { IinitialState, Iuser, Itile } from '../../models';
 import { RouteComponentProps } from 'react-router-dom';
 import { LinkContainer } from 'react-router-bootstrap';
 import { map } from 'lodash';
@@ -9,22 +9,32 @@ import { constants } from '../../constants/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 
-const Item = (props: any) => {
-  const { url, title, icon, iconType } = props;
+interface itemProps extends Itile {
+  t: TranslationFunction;
+}
+
+const Item = (props: itemProps) => {
+  const { url, title, faIcon, imgIcon, t } = props;
   return (
     <LinkContainer to={url}>
       <ListGroupItem>
-        {iconType === 'fa' && <FontAwesomeIcon icon={icon} fixedWidth />}
-        {iconType === 'img' && (
-          <img src={icon} width={25} height={25} style={{ marginRight: 15 }} />
+        {faIcon !== undefined && <FontAwesomeIcon icon={faIcon} fixedWidth />}
+        {imgIcon !== undefined && (
+          <img
+            src={imgIcon}
+            width={25}
+            height={25}
+            style={{ marginRight: 15 }}
+            alt=""
+          />
         )}
-        <span className="menu-text">{props.t(title)}</span>
+        <span className="menu-text">{t(title)}</span>
       </ListGroupItem>
     </LinkContainer>
   );
 };
 
-const MenuItems = ({ user, t }: any) => (
+const MenuItems = ({ user, t }: { user: Iuser; t: TranslationFunction }) => (
   <ListGroup>
     <LinkContainer to={'/dashboard'}>
       <ListGroupItem>
@@ -33,6 +43,7 @@ const MenuItems = ({ user, t }: any) => (
           width={25}
           height={25}
           style={{ marginRight: 15 }}
+          alt=""
         />
         <span className="menu-text">{t('Dashboard')}</span>
       </ListGroupItem>
@@ -54,9 +65,6 @@ interface Iprops extends RouteComponentProps<{}> {
 }
 
 class SideMenu extends React.Component<Iprops, {}> {
-  constructor(props: any) {
-    super(props);
-  }
   render() {
     return (
       <div className="side-menu">

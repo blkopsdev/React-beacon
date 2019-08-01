@@ -147,6 +147,7 @@ class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
           type: value ? value.value : null,
           page: 1
         });
+        break;
       default:
         break;
     }

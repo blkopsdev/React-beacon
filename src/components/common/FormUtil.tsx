@@ -99,7 +99,7 @@ export const FormUtil = {
   },
   toFormData: (formValue: any) => {
     const data = new FormData();
-    Object.keys(formValue).map(key => {
+    Object.keys(formValue).forEach(key => {
       const value = formValue[key];
       data.append(key, value && value.value ? value.value : value);
     });

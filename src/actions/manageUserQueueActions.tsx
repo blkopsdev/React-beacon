@@ -24,7 +24,7 @@ export function getUserQueue(): ThunkResult<void> {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({ type: types.USER_QUEUE_SUCCESS, queue: data.data[1] });
           dispatch({ type: types.USER_QUEUE_TOTAL_PAGES, pages: data.data[0] });
@@ -54,7 +54,7 @@ function handleApproveUser(userQueueID: string, dispatch: any) {
   return msalFetch(url, axiosOptions).then(
     (data: AxiosResponse<any>) => {
       if (!data.data) {
-        throw undefined;
+        throw new Error('missing data');
       } else {
         dispatch({ type: types.USER_APPROVE_SUCCESS, userQueueID });
         return data;
@@ -110,7 +110,7 @@ export function updateQueueUser(
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.USER_QUEUE_UPDATE_SUCCESS,

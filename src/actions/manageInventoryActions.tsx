@@ -103,16 +103,21 @@ export function getProducts(
 export function initInventory(facilityID: string): ThunkResult<void> {
   return (dispatch, getState) => {
     getFacilityMeasurementPointResultsHelper(dispatch, getState, facilityID)
-      .then(() => getInventoryHelper(dispatch, getState))
+      .then(measurementPointResults =>
+        getInventoryHelper(dispatch, getState, measurementPointResults)
+      )
       .catch((error: any) =>
         console.error('error getting measurement point results', error)
       );
   };
 }
 
-const getInventoryHelper = (dispatch: any, getState: () => IinitialState) => {
+const getInventoryHelper = (
+  dispatch: any,
+  getState: () => IinitialState,
+  measurementPointResults?: ImeasurementPointResult[]
+) => {
   dispatch(beginAjaxCall());
-  const { measurementPointResultsByID } = getState().measurementPointResults;
   const {
     page,
     search,
@@ -139,10 +144,10 @@ const getInventoryHelper = (dispatch: any, getState: () => IinitialState) => {
       } else {
         const rawInventory = data.data[1];
         const inventoryWithStatus = rawInventory.map((product: Iproduct) => {
-          if (measurementPointResultsByID) {
+          if (measurementPointResults && measurementPointResults.length) {
             const updatedInstallBases = updateInstallBaseStatus(
               product.installs,
-              values(measurementPointResultsByID)
+              measurementPointResults
             );
             return { ...product, installs: updatedInstallBases };
           } else {

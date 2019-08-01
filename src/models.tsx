@@ -201,7 +201,8 @@ export interface IAlert {
 }
 
 export interface Itile {
-  icon: string | string[];
+  icon: string;
+  iconType: string;
   title: string;
   src: string;
   srcBanner: string;

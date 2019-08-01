@@ -144,7 +144,7 @@ const icons = {
   locations: require('../images/icons/BM_ManageLocations.png'),
   measurements: require('../images/icons/BM_Measurement.png'),
   manageReport: require('../images/icons/BM_Reports.png'),
-  brands: require('../images/icons/BM_Inventory.png'),
+  brands: require('../images/icons/BM_Brands.png'),
   customerAndFacility: require('../images/icons/BM_Inventory.png'),
   alerts: require('../images/icons/BM_Inventory.png')
 };
@@ -310,7 +310,7 @@ const alertTypes = [
   { value: 'informational', label: 'Informational' }
 ];
 
-const tiles = [
+const tiles: Itile[] = [
   {
     icon: icons.alerts,
     iconType: 'img',
@@ -548,12 +548,12 @@ const tiles = [
     description: ''
   },
   {
-    icon: icons.inventory,
+    icon: icons.brands,
     iconType: 'img',
     title: 'brands',
     src: require('src/images/beaconManageInventory.jpg'),
     srcBanner: require('src/images/beaconManageInventoryHeader.jpg'),
-    color: 'green',
+    color: 'blue',
     width: 270,
     height: 300,
     url: '/brands',

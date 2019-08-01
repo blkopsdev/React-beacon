@@ -58,7 +58,7 @@ export const getFacilityMeasurementPointResultsHelper = (
           type: types.GET_MEASUREMENT_POINT_FACILITY_RESULTS_SUCCESS,
           results: data.data
         });
-        return data;
+        return data.data;
       }
     })
     .catch((error: any) => {

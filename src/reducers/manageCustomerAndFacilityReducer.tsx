@@ -35,7 +35,13 @@ export function manageCustomerAndFacilityReducer(
         ...oldState
       };
     case types.GET_CUSTOMER_IMAGE_SUCCESS:
-      return state;
+      return {
+        ...state,
+        [action.payload.customerID]: {
+          ...state[action.payload.customerID],
+          imageUrl: action.payload.imageUrl
+        }
+      };
     case types.FACILITY_UPDATE_SUCCESS:
       const oldCustomer = { ...state[action.facility.customerID] };
       const oldFacility = {

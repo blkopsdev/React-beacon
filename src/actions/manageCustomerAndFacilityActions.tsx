@@ -53,7 +53,8 @@ export function getCustomerLogo(customerID: string): ThunkResult<void> {
   return (dispatch: any, getState: any) => {
     dispatch(beginAjaxCall());
     const axiosOptions: AxiosRequestConfig = {
-      method: 'get'
+      method: 'get',
+      responseType: 'arraybuffer'
     };
 
     const url = API.GET.customer.getlogo.replace('{customerId}', customerID);
@@ -62,10 +63,14 @@ export function getCustomerLogo(customerID: string): ThunkResult<void> {
         if (!data.data) {
           throw undefined;
         } else {
-          dispatch({
-            type: types.GET_CUSTOMER_IMAGE_SUCCESS,
-            payload: data.data
+          const fileReader = new FileReader();
+          fileReader.onloadend = () => {
+            dispatch(updateCustomerFormValue({ imageUrl: fileReader.result }));
+          };
+          const blob = new Blob([data.data], {
+            type: data.headers['content-type']
           });
+          fileReader.readAsDataURL(blob);
           return data;
         }
       })

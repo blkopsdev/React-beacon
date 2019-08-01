@@ -309,10 +309,9 @@ export default {
   manageCustomerAndFacility: {
     totalPages: 1,
     data: {},
-    visibleCustomers: [],
+    // visibleCustomers: [],
     customerFormValues: {},
     facilityFormValues: {},
-    showEditCustomerAndFacilityModal: false,
     tableFilters: initialTableFilters,
     selectedCustomerID: '',
     selectedFacilityID: ''
@@ -327,7 +326,6 @@ export default {
   },
   manageLocation: {
     totalPages: 1,
-    facility: initialFacility,
     visibleLocations: [],
     showEditLocationModal: false,
     tableFilters: initialTableFilters,

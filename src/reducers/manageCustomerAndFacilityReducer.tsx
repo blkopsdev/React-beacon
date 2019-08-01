@@ -12,7 +12,7 @@ export function manageCustomerAndFacilityReducer(
   state: { [key: string]: Icustomer } = initialState.manageCustomerAndFacility
     .data,
   action: any
-) {
+): { [key: string]: Icustomer } {
   switch (action.type) {
     case types.GET_CUSTOMERS_AND_FACILITY_SUCCESS:
       const customers = map(action.payload, (customer: Icustomer) => {
@@ -63,7 +63,7 @@ function manageTotalPages(state: number = 1, action: any): number {
 export default function manageCustomerAndFacility(
   state: ImanageCustomerAndFacilityReducer = initialState.manageCustomerAndFacility,
   action: any
-) {
+): ImanageCustomerAndFacilityReducer {
   return {
     data: manageCustomerAndFacilityReducer(state.data, action),
     totalPages: manageTotalPages(state.totalPages, action),

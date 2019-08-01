@@ -578,7 +578,6 @@ export interface ImanageUserReducer {
 
 export interface ImanageLocationReducer {
   visibleLocations: Array<Ibuilding | Ifloor | Ilocation | Iroom>;
-  facility: Ifacility;
   totalPages: number;
   showEditLocationModal: boolean;
   tableFilters: ItableFiltersReducer;
@@ -604,10 +603,10 @@ export interface ImanageAlertReducer {
 export interface ImanageCustomerAndFacilityReducer {
   data: { [key: string]: Icustomer };
   totalPages: number;
-  visibleCustomers: Icustomer[];
+  // visibleCustomers: Icustomer[];
   customerFormValues: { [key: string]: any };
   facilityFormValues: { [key: string]: any };
-  showEditCustomerAndFacilityModal: boolean;
+  // showEditCustomerAndFacilityModal: boolean;
   tableFilters: ItableFiltersReducer;
   selectedCustomerID: string;
   selectedFacilityID: string;

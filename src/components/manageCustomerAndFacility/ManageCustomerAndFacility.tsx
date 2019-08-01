@@ -55,7 +55,6 @@ interface Iprops extends RouteComponentProps<any> {
 interface IdispatchProps {
   tableData: Icustomer[];
   totalPages: number;
-  showEditCustomerAndFacilityModal: boolean;
   getCustomers: typeof getCustomers;
   toggleEditCustomerModal: typeof toggleEditCustomerModal;
   setTableFilter: typeof setTableFilter;
@@ -342,8 +341,6 @@ const mapStateToProps = (state: IinitialState) => {
   return {
     tableData,
     totalPages: state.manageCustomerAndFacility.totalPages,
-    showEditCustomerAndFacilityModal:
-      state.manageCustomerAndFacility.showEditCustomerAndFacilityModal,
     tableFilters: state.manageCustomerAndFacility.tableFilters,
     selectedCustomer,
     customers: state.customers,

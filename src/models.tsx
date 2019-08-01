@@ -707,30 +707,30 @@ export interface ImanageMeasurementPointListsReducer {
 }
 
 export interface IinitialState {
-  user: Iuser;
-  toastr: Reducer<ToastrState>;
   ajaxCallsInProgress: number;
+  user: Iuser;
+  toastr: ToastrState;
   redirect: Iredirect;
   manageUserQueue: ImanageUserQueueReducer;
   manageUser: ImanageUserReducer;
   manageJob: ImanageJobReducer;
+  manageBrand: ImanageBrandReducer;
+  manageAlert: ImanageAlertReducer;
+  manageCustomerAndFacility: ImanageCustomerAndFacilityReducer;
+  manageReport: ImanageReportReducer;
+  manageLocation: ImanageLocationReducer;
   manageTeam: ImanageTeamReducer;
   manageInventory: ImanageInventoryReducer;
+  productInfo: IproductInfo;
   manageProductQueue: ImanageProductQueueReducer;
-  manageLocation: ImanageLocationReducer;
+  training: ItrainingReducer;
+  manageTraining: ImanageTrainingReducer;
+  manageMeasurementPointLists: ImanageMeasurementPointListsReducer;
+  measurementPointResults: ImeasurementPointResultsReducer;
   customers: { [key: string]: Icustomer };
   facilities: { [key: string]: Ifacility };
   showEditCustomerModal: boolean;
   showEditFacilityModal: boolean;
   showEditProfileModal: boolean;
   showSecurityFunctionsModal: boolean;
-  training: ItrainingReducer;
-  manageTraining: ImanageTrainingReducer;
-  productInfo: IproductInfo;
-  manageMeasurementPointLists: ImanageMeasurementPointListsReducer;
-  measurementPointResults: ImeasurementPointResultsReducer;
-  manageReport: ImanageReportReducer;
-  manageBrand: ImanageBrandReducer;
-  manageCustomerAndFacility: ImanageCustomerAndFacilityReducer;
-  manageAlert: ImanageAlertReducer;
 }

@@ -1,3 +1,5 @@
+import { IinitialState } from '../models';
+
 export const initialOption = { value: '', label: '' };
 export const initialTableFilters = { search: '', page: 1 };
 
@@ -260,9 +262,10 @@ export const initialQueueObject = {
 };
 
 /* initialState */
-export default {
+const initialState: IinitialState = {
   ajaxCallsInProgress: 0,
   user: initialUser,
+  toastr: { toastrs: [] },
   redirect: {
     redirectToReferrer: false,
     pathname: '/'
@@ -328,10 +331,7 @@ export default {
     totalPages: 1,
     visibleLocations: [],
     showEditLocationModal: false,
-    tableFilters: initialTableFilters,
-    selectedBuilding: initialBuilding,
-    selectedFloor: initialFloor,
-    selectedRoom: initialRoom
+    tableFilters: initialTableFilters
   },
 
   manageTeam: {
@@ -454,3 +454,5 @@ export const emptyTile = {
   securityFunction: '',
   description: ''
 };
+
+export default initialState;

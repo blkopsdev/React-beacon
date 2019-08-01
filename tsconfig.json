@@ -18,7 +18,7 @@
     "isolatedModules": true,
     "noEmit": true,
     "jsx": "preserve",
-    "typeRoots" : [ "./typings/*", "./node_modules/@types"]
+    "typeRoots" : [ "./src/typings/*", "./node_modules/@types"]
   },
   "include": [
     "src"

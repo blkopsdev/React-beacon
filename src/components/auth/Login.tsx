@@ -72,8 +72,8 @@ class Login extends React.Component<Iprops, Istate> {
         this.props
           .userLogin()
           .then()
-          .catch(() => {
-            console.error('login failed in login.tsx');
+          .catch((error: any) => {
+            console.error('login failed in login.tsx', error);
             this.setState({ userLoginFailed: true });
           });
       } else {

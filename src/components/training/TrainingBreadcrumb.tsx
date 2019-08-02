@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { Breadcrumb } from 'react-bootstrap';
+import { Breadcrumb, BreadcrumbItem } from 'react-bootstrap';
 
 import { RouteComponentProps } from 'react-router';
-import { GFQuizItem, GFCourse, GFLesson } from 'src/models';
+import { GFQuizItem, GFCourse, GFLesson } from '../../models';
 import { LinkContainer } from 'react-router-bootstrap';
 
 interface RouterParams {
@@ -28,23 +28,23 @@ export const TrainingBreadcrumb = ({
     return (
       <Breadcrumb>
         <LinkContainer to={'/training'}>
-          <Breadcrumb.Item>
+          <BreadcrumbItem>
             <span>Training</span>
-          </Breadcrumb.Item>
+          </BreadcrumbItem>
         </LinkContainer>
         <LinkContainer to={`/training/${match.params.courseID}`}>
-          <Breadcrumb.Item>
+          <BreadcrumbItem>
             <span>{selectedCourse.name}</span>
-          </Breadcrumb.Item>
+          </BreadcrumbItem>
         </LinkContainer>
         <LinkContainer
           to={`/training/${match.params.courseID}/${match.params.lessonID}`}
         >
-          <Breadcrumb.Item>
+          <BreadcrumbItem>
             <span>{lesson.name}</span>
-          </Breadcrumb.Item>
+          </BreadcrumbItem>
         </LinkContainer>
-        <Breadcrumb.Item active={true}>{quiz.name}</Breadcrumb.Item>
+        <BreadcrumbItem active={true}>{quiz.name}</BreadcrumbItem>
       </Breadcrumb>
     );
   }
@@ -53,16 +53,16 @@ export const TrainingBreadcrumb = ({
     return (
       <Breadcrumb>
         <LinkContainer to={'/training'}>
-          <Breadcrumb.Item>
+          <BreadcrumbItem>
             <span>Training</span>
-          </Breadcrumb.Item>
+          </BreadcrumbItem>
         </LinkContainer>
         <LinkContainer to={`/training/${match.params.courseID}`}>
-          <Breadcrumb.Item>
+          <BreadcrumbItem>
             <span>{selectedCourse.name}</span>
-          </Breadcrumb.Item>
+          </BreadcrumbItem>
         </LinkContainer>
-        <Breadcrumb.Item active={true}>{lesson.name}</Breadcrumb.Item>
+        <BreadcrumbItem active={true}>{lesson.name}</BreadcrumbItem>
       </Breadcrumb>
     );
   }
@@ -71,11 +71,11 @@ export const TrainingBreadcrumb = ({
     return (
       <Breadcrumb>
         <LinkContainer to={'/training'}>
-          <Breadcrumb.Item>
+          <BreadcrumbItem>
             <span>Training</span>
-          </Breadcrumb.Item>
+          </BreadcrumbItem>
         </LinkContainer>
-        <Breadcrumb.Item active={true}>{selectedCourse.name}</Breadcrumb.Item>
+        <BreadcrumbItem active={true}>{selectedCourse.name}</BreadcrumbItem>
       </Breadcrumb>
     );
   }

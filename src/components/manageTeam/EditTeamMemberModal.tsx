@@ -38,10 +38,6 @@ interface IdispatchProps {
 }
 
 class EditTeamMemberModal extends React.Component<Iprops & IdispatchProps, {}> {
-  constructor(props: Iprops & IdispatchProps) {
-    super(props);
-  }
-
   render() {
     let modalTitle;
     if (this.props.selectedUser) {

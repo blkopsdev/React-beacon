@@ -3,7 +3,7 @@ import * as types from './actionTypes';
 import API from '../constants/apiEndpoints';
 import { beginAjaxCall, endAjaxCall } from './ajaxStatusActions';
 import { toastr } from 'react-redux-toastr';
-import { constants } from 'src/constants/constants';
+import { constants } from '../constants/constants';
 
 import { ItempUser, Iuser, IinitialState } from '../models';
 import { ThunkAction } from 'redux-thunk';
@@ -17,7 +17,7 @@ import {
   msalApp,
   acquireToken,
   MSAL_SCOPES
-} from 'src/components/auth/Auth-Utils';
+} from '../components/auth/Auth-Utils';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
@@ -34,7 +34,7 @@ export function userLogin(): ThunkResult<void> {
       return msalFetch(url, axiosOptions)
         .then((data: AxiosResponse<any>) => {
           if (!data.data) {
-            throw undefined;
+            throw new Error('missing data');
           } else {
             dispatch({ type: types.USER_LOGIN_SUCCESS, user: data.data });
             TrackJS.configure({
@@ -92,7 +92,7 @@ export function signUpDirect(tempUser: ItempUser): ThunkResult<void> {
     return Axios.post(API.POST.user.signup, tempUser)
       .then(data => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({ type: types.USER_SIGNUP_SUCCESS, user: data.data });
           return data;
@@ -143,7 +143,7 @@ export function updateUserProfile(formValues: {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.USER_UPDATE_PROFILE_SUCCESS,
@@ -196,11 +196,7 @@ export function deleteUserAccount(): ThunkResult<void> {
     const url = API.DELETE.user;
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
-        if (data.status !== 200) {
-          throw undefined;
-        } else {
-          userLogoutHelper(dispatch);
-        }
+        userLogoutHelper(dispatch);
       })
       .catch((error: any) => {
         dispatch(endAjaxCall());

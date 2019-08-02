@@ -10,9 +10,9 @@ import {
 } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
-import { constants } from 'src/constants/constants';
+import { constants } from '../constants/constants';
 import * as types from './actionTypes';
-import { msalFetch } from 'src/components/auth/Auth-Utils';
+import { msalFetch } from '../components/auth/Auth-Utils';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
@@ -27,7 +27,7 @@ export function getDefaultReports(): ThunkResult<void> {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           console.log(data.data);
           dispatch({
@@ -115,7 +115,7 @@ export function runReport(
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.REPORT_ADD_SUCCESS

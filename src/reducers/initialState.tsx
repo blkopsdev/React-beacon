@@ -1,3 +1,5 @@
+import { IinitialState } from '../models';
+
 export const initialOption = { value: '', label: '' };
 export const initialTableFilters = { search: '', page: 1 };
 
@@ -12,7 +14,10 @@ export const initialFacility = {
   state: '',
   postalCode: '',
   buildings: [],
-  isDeleted: false
+  isDeleted: false,
+  contactName: '',
+  contactEmail: '',
+  contactPhone: ''
 };
 const initialSubcategory = {
   mainCategoryID: '',
@@ -155,6 +160,13 @@ export const initialCustomer = {
   isDeleted: false,
   facilities: []
 };
+
+export const initialCustomerImage = {
+  id: '',
+  customerID: '',
+  url: ''
+};
+
 export const initialJob = {
   id: '',
   customerID: '',
@@ -260,9 +272,10 @@ export const initialQueueObject = {
 };
 
 /* initialState */
-export default {
+const initialState: IinitialState = {
   ajaxCallsInProgress: 0,
   user: initialUser,
+  toastr: { toastrs: [] },
   redirect: {
     redirectToReferrer: false,
     pathname: '/'
@@ -309,10 +322,9 @@ export default {
   manageCustomerAndFacility: {
     totalPages: 1,
     data: {},
-    visibleCustomers: [],
+    // visibleCustomers: [],
     customerFormValues: {},
     facilityFormValues: {},
-    showEditCustomerAndFacilityModal: false,
     tableFilters: initialTableFilters,
     selectedCustomerID: '',
     selectedFacilityID: ''
@@ -327,13 +339,9 @@ export default {
   },
   manageLocation: {
     totalPages: 1,
-    facility: initialFacility,
     visibleLocations: [],
     showEditLocationModal: false,
-    tableFilters: initialTableFilters,
-    selectedBuilding: initialBuilding,
-    selectedFloor: initialFloor,
-    selectedRoom: initialRoom
+    tableFilters: initialTableFilters
   },
 
   manageTeam: {
@@ -457,3 +465,5 @@ export const emptyTile = {
   securityFunction: '',
   description: ''
 };
+
+export default initialState;

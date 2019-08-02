@@ -9,10 +9,11 @@ import {
   Validators,
   FormGenerator,
   FieldConfig,
-  FormGroup
+  FormGroup,
+  FormArray
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction } from 'react-i18next';
 
@@ -23,7 +24,7 @@ import {
   toggleEditAlertModal,
   updateAlert
 } from '../../actions/manageAlertActions';
-import { IAlert } from 'src/models';
+import { IAlert } from '../../models';
 
 // add the bootstrap form-control class to the react-select select component
 
@@ -49,7 +50,7 @@ interface State {
 }
 
 class EditAlertForm extends React.Component<Iprops, State> {
-  private formGroup: FormGroup;
+  private formGroup: FormGroup | any;
   private subscription: any;
   constructor(props: Iprops) {
     super(props);
@@ -213,7 +214,7 @@ class EditAlertForm extends React.Component<Iprops, State> {
     }
   };
 
-  setForm = (form: FormGroup) => {
+  setForm = (form: FormGroup | FormArray) => {
     this.formGroup = form;
     this.formGroup.meta = {
       loading: this.props.loading

@@ -30,7 +30,8 @@ import {
   getCustomers,
   setSelectedCustomerID,
   clearSelectedCustomerID,
-  setSelectedFacilityID
+  setSelectedFacilityID,
+  getCustomerLogo
 } from '../../actions/manageCustomerAndFacilityActions';
 import ManageFacility from './ManageFacility';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -55,7 +56,6 @@ interface Iprops extends RouteComponentProps<any> {
 interface IdispatchProps {
   tableData: Icustomer[];
   totalPages: number;
-  showEditCustomerAndFacilityModal: boolean;
   getCustomers: typeof getCustomers;
   toggleEditCustomerModal: typeof toggleEditCustomerModal;
   setTableFilter: typeof setTableFilter;
@@ -65,6 +65,7 @@ interface IdispatchProps {
   clearSelectedCustomerID: typeof clearSelectedCustomerID;
   setSelectedFacilityID: typeof setSelectedFacilityID;
   toggleEditFacilityModal: typeof toggleEditFacilityModal;
+  getCustomerLogo: typeof getCustomerLogo;
   selectedCustomer: Icustomer;
   customers: { [key: string]: Icustomer };
   facilities: { [key: string]: Ifacility };
@@ -216,12 +217,12 @@ class ManageCustomerAndFacility extends React.Component<
   */
   getTdProps = (
     state: FinalState,
-    rowInfo: RowInfoCustomer,
-    column: Column,
+    rowInfo: RowInfoCustomer | undefined,
+    column: Column | undefined,
     instance: any
   ) => {
     // console.log("ROWINFO", rowInfo, state);
-    if (column.id && column.id === 'expander-toggle') {
+    if (rowInfo && column && column.id && column.id === 'expander-toggle') {
       return {
         onClick: () => {
           this.props.setSelectedCustomerID(rowInfo.original.id);
@@ -234,13 +235,16 @@ class ManageCustomerAndFacility extends React.Component<
           });
         }
       };
-    } else {
+    } else if (rowInfo) {
       return {
         onClick: (e: React.MouseEvent<HTMLFormElement>) => {
           this.props.setSelectedCustomerID(rowInfo.original.id);
           this.props.toggleEditCustomerModal();
+          this.props.getCustomerLogo(rowInfo.original.id);
         }
       };
+    } else {
+      console.error('error in gettdprops', rowInfo, column);
     }
   };
 
@@ -270,6 +274,7 @@ class ManageCustomerAndFacility extends React.Component<
             className="table-add-button"
             bsStyle="link"
             onClick={() => {
+              this.props.clearSelectedCustomerID();
               this.props.toggleEditCustomerModal();
             }}
           >
@@ -340,8 +345,6 @@ const mapStateToProps = (state: IinitialState) => {
   return {
     tableData,
     totalPages: state.manageCustomerAndFacility.totalPages,
-    showEditCustomerAndFacilityModal:
-      state.manageCustomerAndFacility.showEditCustomerAndFacilityModal,
     tableFilters: state.manageCustomerAndFacility.tableFilters,
     selectedCustomer,
     customers: state.customers,
@@ -359,7 +362,8 @@ export default translate('manageCustomerAndFacility')(
       setSelectedCustomerID,
       clearSelectedCustomerID,
       setSelectedFacilityID,
-      toggleEditFacilityModal
+      toggleEditFacilityModal,
+      getCustomerLogo
     }
   )(ManageCustomerAndFacility)
 );

@@ -1,5 +1,5 @@
 /*
-* Edit Customer Form
+* Edit Facility Form
 * Add and Edit facilities
 *
 */
@@ -10,16 +10,17 @@ import {
   FormGenerator,
   FieldConfig,
   FormGroup,
-  GroupProps
+  GroupProps,
+  FormArray
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
 import { orderBy } from 'lodash';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction } from 'react-i18next';
 
 import { FormUtil } from './FormUtil';
-import { Icustomer, Ifacility, Ioption } from 'src/models';
+import { Icustomer, Ifacility, Ioption } from '../../models';
 
 // add the bootstrap form-control class to the react-select select component
 
@@ -42,7 +43,7 @@ interface IState {
   fieldConfig: FieldConfig;
 }
 class EditFacilityForm extends React.Component<Iprops, IState> {
-  private formGroup: FormGroup;
+  private formGroup: FormGroup | any;
   private subscription: any;
   private debounce: any;
   constructor(props: Iprops) {
@@ -50,13 +51,14 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
     this.state = {
       fieldConfig: this.buildFieldConfig()
     };
+    this.formGroup = undefined;
   }
 
   async componentDidMount() {
     if (!this.formGroup) {
       return;
     }
-    
+
     await this.props.setFormValues(this.props.selectedFacility);
     this.setState({ fieldConfig: this.buildFieldConfig() });
     if (!this.props.selectedFacility.countryID) {
@@ -87,7 +89,10 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
       city,
       state,
       postalCode,
-      countryID
+      countryID,
+      contactName,
+      contactEmail,
+      contactPhone
     } = this.props.selectedFacility;
 
     name = formValues.name || name;
@@ -96,6 +101,9 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
     city = formValues.city || city;
     state = formValues.state || state;
     postalCode = formValues.postalCode || postalCode;
+    contactName = formValues.contactName || contactName;
+    contactEmail = formValues.contactEmail || contactEmail;
+    contactPhone = formValues.contactEmail || contactPhone;
     countryID =
       (formValues.countryID && formValues.countryID.value) || countryID;
 
@@ -112,7 +120,11 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
           ]
         },
         render: FormUtil.TextInput,
-        meta: { label: 'manageCustomerAndFacility:facilityNameLabel', colWidth: 12, name: 'fac-name' },
+        meta: {
+          label: 'manageCustomerAndFacility:facilityNameLabel',
+          colWidth: 12,
+          name: 'fac-name'
+        },
         formState: name
       },
       address: {
@@ -196,6 +208,39 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
           value: selectedCountry,
           disabled: false
         }
+      },
+      contactName: {
+        render: FormUtil.TextInput,
+        meta: {
+          label: 'user:contactName',
+          colWidth: 6,
+          type: 'text',
+          name: 'contactName',
+          required: false
+        },
+        formState: contactName
+      },
+      contactEmail: {
+        render: FormUtil.TextInput,
+        meta: {
+          label: 'user:contactEmail',
+          colWidth: 6,
+          type: 'text',
+          name: 'contactEmail',
+          required: false
+        },
+        formState: contactEmail
+      },
+      contactPhone: {
+        render: FormUtil.TextInput,
+        meta: {
+          label: 'user:contactPhone',
+          colWidth: 6,
+          type: 'text',
+          name: 'contactPhone',
+          required: false
+        },
+        formState: contactPhone
       }
     } as { [key: string]: GroupProps };
     const fieldConfig = {
@@ -283,7 +328,7 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
     }
   };
 
-  setForm = (form: FormGroup) => {
+  setForm = (form: FormGroup | FormArray) => {
     this.formGroup = form;
     this.formGroup.meta = {
       loading: this.props.loading

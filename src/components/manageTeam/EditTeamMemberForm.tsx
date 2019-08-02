@@ -9,7 +9,8 @@ import {
   FormGenerator,
   AbstractControl,
   FieldConfig,
-  Observable
+  Observable,
+  FormGroup
 } from 'react-reactive-form';
 import { forEach, differenceBy, filter, find, map } from 'lodash';
 import { toastr } from 'react-redux-toastr';
@@ -24,7 +25,7 @@ import {
   updateTeamUser
 } from '../../actions/manageTeamActions';
 import { getFacilitiesByCustomer } from '../../actions/commonActions';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 
 const buildFieldConfig = (facilityOptions: any[], selectedUser: any = {}) => {
   const { customer = null, facilities = null } = selectedUser;
@@ -87,7 +88,7 @@ interface Iprops {
 }
 
 class EditTeamMemberForm extends React.Component<Iprops, {}> {
-  public userForm: AbstractControl;
+  private formGroup: FormGroup | any;
   public fieldConfig: FieldConfig;
   constructor(props: Iprops) {
     super(props);
@@ -106,7 +107,7 @@ class EditTeamMemberForm extends React.Component<Iprops, {}> {
       prevProps.facilityOptions.length !== this.props.facilityOptions.length
     ) {
       // update the options
-      const facilitySelectControl = this.userForm.get(
+      const facilitySelectControl = this.formGroup.get(
         'facilities'
       ) as AbstractControlEdited;
       facilitySelectControl.meta.options = this.props.facilityOptions;
@@ -124,7 +125,7 @@ class EditTeamMemberForm extends React.Component<Iprops, {}> {
           return false;
         }
       });
-      this.userForm.patchValue({ facilities: facilitiesArray });
+      this.formGroup.patchValue({ facilities: facilitiesArray });
     }
   }
 
@@ -133,9 +134,9 @@ class EditTeamMemberForm extends React.Component<Iprops, {}> {
     const { customer, customerID } = this.props.user;
 
     if (customer) {
-      this.userForm.patchValue({ customerName: customer.name });
+      this.formGroup.patchValue({ customerName: customer.name });
     }
-    const customerControl = this.userForm.get(
+    const customerControl = this.formGroup.get(
       'customerName'
     ) as AbstractControlEdited;
     customerControl.disable();
@@ -153,13 +154,13 @@ class EditTeamMemberForm extends React.Component<Iprops, {}> {
       const facilitiesArray = filter(this.props.facilityOptions, (fac: any) => {
         return find(facilities, { id: fac.value }) ? true : false;
       });
-      this.userForm.patchValue({ facilities: facilitiesArray });
+      this.formGroup.patchValue({ facilities: facilitiesArray });
       // set values
       forEach(this.props.selectedUser, (value, key) => {
-        this.userForm.patchValue({ [key]: value });
+        this.formGroup.patchValue({ [key]: value });
       });
 
-      const emailControl = this.userForm.get('email') as AbstractControlEdited;
+      const emailControl = this.formGroup.get('email') as AbstractControlEdited;
       emailControl.disable();
     }
   }
@@ -169,14 +170,14 @@ class EditTeamMemberForm extends React.Component<Iprops, {}> {
     shouldApprove?: boolean
   ) => {
     e.preventDefault();
-    if (this.userForm.status === 'INVALID') {
-      this.userForm.markAsSubmitted();
+    if (this.formGroup.status === 'INVALID') {
+      this.formGroup.markAsSubmitted();
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-    console.log(this.userForm.value);
+    console.log(this.formGroup.value);
     const facilitiesArray = map(
-      this.userForm.value.facilities,
+      this.formGroup.value.facilities,
       (option: { value: string; label: string }) => {
         return { id: option.value };
       }
@@ -185,14 +186,14 @@ class EditTeamMemberForm extends React.Component<Iprops, {}> {
     if (this.props.selectedUser) {
       this.props.updateTeamUser({
         id: this.props.selectedUser.id,
-        ...this.userForm.value,
+        ...this.formGroup.value,
         facilities: facilitiesArray,
         customerID: this.props.user.customerID,
         email: this.props.selectedUser.email // have to add back the email because disabling the input removes it
       });
     } else {
       this.props.saveTeamUser({
-        ...this.userForm.value,
+        ...this.formGroup.value,
         facilities: facilitiesArray
       });
     }
@@ -210,8 +211,8 @@ class EditTeamMemberForm extends React.Component<Iprops, {}> {
     }
   };
   setForm = (form: AbstractControl) => {
-    this.userForm = form;
-    this.userForm.meta = {
+    this.formGroup = form;
+    this.formGroup.meta = {
       loading: this.props.loading
     };
   };

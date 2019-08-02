@@ -44,21 +44,26 @@ const ManageFacility = (props: ExpanderProps) => {
   * Handle user clicking on a location row
   * set the selected location to state and open the modal
   */
-  const getTrProps = (state: FinalState, rowInfo: RowInfoFacility) => {
+  const getTrProps = (
+    state: FinalState,
+    rowInfo: RowInfoFacility | undefined
+  ) => {
     // console.log("ROWINFO", rowInfo, state, column);
-    return {
-      onClick: () => {
-        props.setSelectedFacilityID(rowInfo.original.id);
-        props.addFacility();
-        // this.setState({
-        //   selectedRow: {
-        //     [rowInfo.viewIndex || 0]: !this.state.selectedRow[
-        //     rowInfo.viewIndex || 0
-        //       ]
-        //   }
-        // });
-      }
-    };
+    if (rowInfo) {
+      return {
+        onClick: () => {
+          props.setSelectedFacilityID(rowInfo.original.id);
+          props.addFacility();
+          // this.setState({
+          //   selectedRow: {
+          //     [rowInfo.viewIndex || 0]: !this.state.selectedRow[
+          //     rowInfo.viewIndex || 0
+          //       ]
+          //   }
+          // });
+        }
+      };
+    }
   };
 
   const expanderColumns = TableUtil.translateHeaders(

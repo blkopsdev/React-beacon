@@ -50,10 +50,6 @@ class SearchNewProductsModal extends React.Component<
   Iprops & IdispatchProps,
   {}
 > {
-  constructor(props: Iprops & IdispatchProps) {
-    super(props);
-  }
-
   render() {
     const className = this.props.secondModal
       ? 'user-edit second-modal'

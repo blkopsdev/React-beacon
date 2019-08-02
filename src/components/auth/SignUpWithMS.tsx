@@ -31,9 +31,6 @@ interface Iprops extends RouteComponentProps<{}> {
 const azure = require('../../images/Azure.png');
 
 class SignUpWithMS extends React.Component<Iprops, any> {
-  constructor(props: Iprops) {
-    super(props);
-  }
   componentWillMount() {
     // if there is no username and there is a token, get the user
     // if (this.props.user.email.length === 0 && isAuthenticated()) {
@@ -96,8 +93,8 @@ class SignUpWithMS extends React.Component<Iprops, any> {
                       className="loginBtn"
                       onClick={this.login}
                     >
-                      <img width="20" height="20" src={azure} /> Sign Up with
-                      Azure
+                      <img width="20" height="20" src={azure} alt="" /> Sign Up
+                      with Azure
                     </Button>
                   </div>
                 )}

@@ -5,8 +5,9 @@
 
 import {
   ImeasurementPointResultsReducer,
-  ImeasurementPointResult
-} from 'src/models';
+  ImeasurementPointResult,
+  ImeasurementPointAnswer
+} from '../models';
 import initialState, {
   initialMeasurmentPointResult,
   initialMeasurementPointResultAnswer
@@ -118,12 +119,15 @@ export default function measurementPointResultsReducer(
 const cleanResult = (
   result: ImeasurementPointResult
 ): ImeasurementPointResult => {
-  const cleanedAnswers = result.measurementPointAnswers.map(answer => {
-    return {
-      ...initialMeasurementPointResultAnswer,
-      ...pickBy(answer, (property, key) => property !== null)
-    };
-  });
+  let cleanedAnswers: ImeasurementPointAnswer[] = [];
+  if (result.measurementPointAnswers && result.measurementPointAnswers.length) {
+    cleanedAnswers = result.measurementPointAnswers.map(answer => {
+      return {
+        ...initialMeasurementPointResultAnswer,
+        ...pickBy(answer, (property, key) => property !== null)
+      };
+    });
+  }
   return {
     ...initialMeasurmentPointResult,
     ...pickBy(result, (property, key) => property !== null),

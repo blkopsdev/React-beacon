@@ -16,7 +16,6 @@ import ManageJob from '../manageJob/ManageJob';
 import ManageLocation from '../manageLocation/ManageLocation';
 import Training from '../training/Training';
 import ManageTraining from '../manageTraining/ManageTraining';
-import { constants } from 'src/constants/constants';
 import { IinitialState } from '../../models';
 import ManageReport from '../manageReport/ManageReport';
 
@@ -25,6 +24,7 @@ import ManageMeasurementPointList from '../manageMeasurementPointLists/ManageMea
 import ManageBrand from '../manageBrand/ManageBrand';
 import ManageCustomerAndFacility from '../manageCustomerAndFacility/ManageCustomerAndFacility';
 import ManageAlert from '../manageAlert/ManageAlert';
+import { constants } from '../../constants/constants';
 // const testme = () => {
 //   return <h3>Your test is a success</h3>;
 // };

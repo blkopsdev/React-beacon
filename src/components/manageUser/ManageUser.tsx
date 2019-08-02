@@ -34,7 +34,7 @@ import EditCustomerModal from '../common/EditCustomerModal';
 import EditUserModal from './EditUserModal';
 import SearchTableForm from '../common/SearchTableForm';
 import SecurityFunctionsList from './SecurityFunctionsList';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 import { FieldConfig } from 'react-reactive-form';
 
 interface Iprops extends RouteComponentProps<any> {
@@ -215,7 +215,7 @@ class UserManage extends React.Component<Iprops & IdispatchProps, Istate> {
   * Handle user clicking on a product row
   * set the selected product to state and open the modal
   */
-  getTrProps = (state: FinalState, rowInfo: RowInfo) => {
+  getTrProps = (state: FinalState, rowInfo: RowInfo | undefined) => {
     // console.log("ROWINFO", rowInfo);
     if (rowInfo) {
       return {

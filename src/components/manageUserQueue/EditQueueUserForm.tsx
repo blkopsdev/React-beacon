@@ -15,7 +15,8 @@ import {
   AbstractControl,
   FieldConfig,
   Observable,
-  FormGroup
+  FormGroup,
+  FormArray
 } from 'react-reactive-form';
 import { forEach, find, filter, map, differenceBy } from 'lodash';
 import { toastr } from 'react-redux-toastr';
@@ -30,7 +31,7 @@ import {
 } from '../../actions/commonActions';
 import { updateQueueUser } from '../../actions/manageUserQueueActions';
 import EditFacilityModal from '../common/EditFacilityModal';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 
 interface IstateChanges extends Observable<any> {
   next: () => void;
@@ -120,7 +121,7 @@ interface Iprops extends React.Props<UserQueueForm> {
 }
 
 class UserQueueForm extends React.Component<Iprops, {}> {
-  public formGroup: FormGroup;
+  private formGroup: FormGroup | any;
   public fieldConfig: FieldConfig;
   public subscription: any;
   constructor(props: Iprops) {
@@ -319,7 +320,7 @@ class UserQueueForm extends React.Component<Iprops, {}> {
       this.props.selectedQueueObject.id
     );
   };
-  setForm = (form: FormGroup) => {
+  setForm = (form: FormGroup | FormArray) => {
     this.formGroup = form;
     this.formGroup.meta = {
       loading: this.props.loading

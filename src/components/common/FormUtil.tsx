@@ -22,7 +22,7 @@ import Select, { components } from 'react-select';
 import CreatableSelect from 'react-select/lib/Creatable';
 import Toggle from 'react-toggle';
 import { Ioption } from '../../models';
-import * as Datetime from 'react-datetime';
+import Datetime from 'react-datetime';
 import * as moment from 'moment';
 import RichTextEditor from './RichTextEditor';
 import ReactDatePicker from 'react-datepicker';
@@ -99,7 +99,7 @@ export const FormUtil = {
   },
   toFormData: (formValue: any) => {
     const data = new FormData();
-    Object.keys(formValue).map(key => {
+    Object.keys(formValue).forEach(key => {
       const value = formValue[key];
       data.append(key, value && value.value ? value.value : value);
     });

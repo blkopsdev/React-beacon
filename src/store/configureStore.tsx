@@ -23,11 +23,11 @@ import thunk, { ThunkMiddleware } from 'redux-thunk';
 
 import { IinitialState } from '../models';
 import { migrations } from './migrations';
-import { constants } from 'src/constants/constants';
+import { constants } from '../constants/constants';
 import rootReducer from '../reducers';
 import hardSet from 'redux-persist/lib/stateReconciler/hardSet';
 import TrackJSLogger from './TrackJSLogger';
-import initialState from 'src/reducers/initialState';
+import initialState from '../reducers/initialState';
 
 /*
 * handle persisisting date objects

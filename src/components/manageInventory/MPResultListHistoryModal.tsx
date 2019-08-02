@@ -10,13 +10,13 @@ import {
   toggleMPResultHistory,
   toggleMPResultNotes,
   toggleMPResultAddModal
-} from 'src/actions/manageInventoryActions';
+} from '../../actions/manageInventoryActions';
 import { connect } from 'react-redux';
-import { IinitialState, ImeasurementPointResult } from 'src/models';
+import { IinitialState, ImeasurementPointResult } from '../../models';
 import { MPResultHistory } from './MPResultHistory';
 import { values } from 'lodash';
-import { setHistoricalResultID } from 'src/actions/measurementPointResultsActions';
-import { initialMeasurmentPointResult } from 'src/reducers/initialState';
+import { setHistoricalResultID } from '../../actions/measurementPointResultsActions';
+import { initialMeasurmentPointResult } from '../../reducers/initialState';
 // import * as moment from 'moment';
 
 interface Iprops {

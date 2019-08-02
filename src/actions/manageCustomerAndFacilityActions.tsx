@@ -1,7 +1,7 @@
 import { beginAjaxCall } from './ajaxStatusActions';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import API from '../constants/apiEndpoints';
-import { msalFetch } from 'src/components/auth/Auth-Utils';
+import { msalFetch } from '../components/auth/Auth-Utils';
 
 import * as types from './actionTypes';
 import { constants } from '../constants/constants';
@@ -28,7 +28,7 @@ export function getCustomers(): ThunkResult<void> {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.GET_CUSTOMERS_AND_FACILITY_SUCCESS,
@@ -49,9 +49,43 @@ export function getCustomers(): ThunkResult<void> {
   };
 }
 
-export const updateCustomerFormValue = (formValue: any) => ({
+export function getCustomerLogo(customerID: string): ThunkResult<void> {
+  return (dispatch: any, getState: any) => {
+    dispatch(beginAjaxCall());
+    const axiosOptions: AxiosRequestConfig = {
+      method: 'get',
+      responseType: 'arraybuffer'
+    };
+
+    const url = API.GET.customer.getlogo.replace('{customerId}', customerID);
+    return msalFetch(url, axiosOptions)
+      .then((data: AxiosResponse<any>) => {
+        if (!data.data) {
+          throw undefined;
+        } else {
+          dispatch({ type: types.GET_CUSTOMER_IMAGE_SUCCESS });
+          const fileReader = new FileReader();
+          fileReader.onloadend = () => {
+            dispatch(updateCustomerFormValue({ imageUrl: fileReader.result }));
+          };
+          const blob = new Blob([data.data], {
+            type: data.headers['content-type']
+          });
+          fileReader.readAsDataURL(blob);
+          return data;
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.GET_CUSTOMER_IMAGE_FAILED });
+        constants.handleError(error, 'get Customer Image');
+        console.error(error);
+      });
+  };
+}
+
+export const updateCustomerFormValue = (formValues: any) => ({
   type: types.UPDATE_FORM_VALUES_MANAGE_CUSTOMER,
-  formValue
+  formValues
 });
 
 export const setCustomerFormValues = (formValues: any) => ({

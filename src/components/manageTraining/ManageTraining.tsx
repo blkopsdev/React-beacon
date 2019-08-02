@@ -20,12 +20,12 @@ import { emptyTile } from '../../reducers/initialState';
 import Banner from '../common/Banner';
 
 import SearchTableForm from '../common/SearchTableForm';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 import { FieldConfig } from 'react-reactive-form';
 import {
   getManageTraining,
   setTableFilter
-} from 'src/actions/manageTrainingActions';
+} from '../../actions/manageTrainingActions';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here

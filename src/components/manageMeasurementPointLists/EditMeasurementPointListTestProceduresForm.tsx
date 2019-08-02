@@ -8,15 +8,16 @@ import {
   FormGenerator,
   AbstractControl,
   FieldConfig,
-  GroupProps
+  GroupProps,
+  FormGroup
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction } from 'react-i18next';
 
 import { FormUtil } from '../common/FormUtil';
-import { ImeasurementPointList } from 'src/models';
+import { ImeasurementPointList } from '../../models';
 
 const fieldConfig = (
   measurementPointList: ImeasurementPointList,
@@ -59,7 +60,7 @@ class EditMeasurementPointListTestProceduresFormClass extends React.Component<
   Iprops,
   {}
 > {
-  private userForm: AbstractControl;
+  private userForm: FormGroup | any;
   private fieldConfig: FieldConfig;
   constructor(props: Iprops) {
     super(props);

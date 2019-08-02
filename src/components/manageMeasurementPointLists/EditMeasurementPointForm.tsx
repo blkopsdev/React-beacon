@@ -9,7 +9,8 @@ import {
   FormGenerator,
   FieldConfig,
   AbstractControl,
-  GroupProps
+  GroupProps,
+  FormGroup
 } from 'react-reactive-form';
 import { find, map } from 'lodash';
 import { toastr } from 'react-redux-toastr';
@@ -32,7 +33,7 @@ import {
   updateMeasurementPoint,
   deleteMeasurementPoint
 } from '../../actions/manageMeasurementPointListsActions';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 const uuidv4 = require('uuid/v4');
 
 interface IformSate {
@@ -309,7 +310,7 @@ interface Istate {
   fieldConfig: FieldConfig;
 }
 class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
-  public measurementsForm: AbstractControl;
+  private formGroup: FormGroup | any;
   private subscription: any;
   private persistTimeout: any;
 
@@ -352,7 +353,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
       controls = [];
     }
     controls.forEach((key: string) => {
-      this.subscription = this.measurementsForm
+      this.subscription = this.formGroup
         .get(key)
         .valueChanges.subscribe((value: Ioption | null) => {
           this.handleValueChange(key, value);
@@ -509,9 +510,9 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
 
   handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (this.measurementsForm.status === 'INVALID') {
-      console.log(this.measurementsForm);
-      this.measurementsForm.markAsSubmitted();
+    if (this.formGroup.status === 'INVALID') {
+      console.log(this.formGroup);
+      this.formGroup.markAsSubmitted();
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
@@ -530,7 +531,7 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
       numericMaxValue,
       isRequired,
       showInReport
-    } = this.measurementsForm.value;
+    } = this.formGroup.value;
 
     let selectDefaultOptionID = '';
     if (selectOptions && selectOptions.length) {
@@ -580,8 +581,8 @@ class EditMeasurementPointForm extends React.Component<Iprops, Istate> {
   };
 
   setForm = (form: AbstractControl) => {
-    this.measurementsForm = form;
-    this.measurementsForm.meta = {
+    this.formGroup = form;
+    this.formGroup.meta = {
       loading: this.props.loading
     };
     this.subscribeToValueChanges();

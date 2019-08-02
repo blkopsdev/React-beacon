@@ -1,5 +1,8 @@
 import { ThunkAction } from 'redux-thunk';
 import { SortingRule } from 'react-table';
+import { ToastrState } from 'react-redux-toastr';
+import { Reducer } from 'redux';
+import { IconProp } from '@fortawesome/fontawesome-svg-core';
 
 /* ***** Common between Mobile and Desktop ****** */
 
@@ -201,8 +204,8 @@ export interface IAlert {
 }
 
 export interface Itile {
-  icon: string;
-  iconType: string;
+  faIcon?: IconProp;
+  imgIcon?: string;
   title: string;
   src: string;
   srcBanner: string;
@@ -223,6 +226,13 @@ export interface Icustomer {
   facilities?: Ifacility[];
 }
 
+export interface ICustomerImage {
+  id: string;
+  customerID: string;
+  url?: string;
+  file?: any;
+}
+
 export interface IfacilityWithoutBuildings {
   id: string;
   name: string;
@@ -234,6 +244,9 @@ export interface IfacilityWithoutBuildings {
   state: string;
   postalCode: string;
   isDeleted: boolean;
+  contactName: string;
+  contactEmail: string;
+  contactPhone: string;
 }
 export interface Ifacility extends IfacilityWithoutBuildings {
   buildings: Ibuilding[];
@@ -577,7 +590,6 @@ export interface ImanageUserReducer {
 
 export interface ImanageLocationReducer {
   visibleLocations: Array<Ibuilding | Ifloor | Ilocation | Iroom>;
-  facility: Ifacility;
   totalPages: number;
   showEditLocationModal: boolean;
   tableFilters: ItableFiltersReducer;
@@ -603,10 +615,10 @@ export interface ImanageAlertReducer {
 export interface ImanageCustomerAndFacilityReducer {
   data: { [key: string]: Icustomer };
   totalPages: number;
-  visibleCustomers: Icustomer[];
+  // visibleCustomers: Icustomer[];
   customerFormValues: { [key: string]: any };
   facilityFormValues: { [key: string]: any };
-  showEditCustomerAndFacilityModal: boolean;
+  // showEditCustomerAndFacilityModal: boolean;
   tableFilters: ItableFiltersReducer;
   selectedCustomerID: string;
   selectedFacilityID: string;
@@ -707,29 +719,30 @@ export interface ImanageMeasurementPointListsReducer {
 }
 
 export interface IinitialState {
-  user: Iuser;
   ajaxCallsInProgress: number;
+  user: Iuser;
+  toastr: ToastrState;
   redirect: Iredirect;
   manageUserQueue: ImanageUserQueueReducer;
   manageUser: ImanageUserReducer;
   manageJob: ImanageJobReducer;
+  manageBrand: ImanageBrandReducer;
+  manageAlert: ImanageAlertReducer;
+  manageCustomerAndFacility: ImanageCustomerAndFacilityReducer;
+  manageReport: ImanageReportReducer;
+  manageLocation: ImanageLocationReducer;
   manageTeam: ImanageTeamReducer;
   manageInventory: ImanageInventoryReducer;
+  productInfo: IproductInfo;
   manageProductQueue: ImanageProductQueueReducer;
-  manageLocation: ImanageLocationReducer;
+  training: ItrainingReducer;
+  manageTraining: ImanageTrainingReducer;
+  manageMeasurementPointLists: ImanageMeasurementPointListsReducer;
+  measurementPointResults: ImeasurementPointResultsReducer;
   customers: { [key: string]: Icustomer };
   facilities: { [key: string]: Ifacility };
   showEditCustomerModal: boolean;
   showEditFacilityModal: boolean;
   showEditProfileModal: boolean;
   showSecurityFunctionsModal: boolean;
-  training: ItrainingReducer;
-  manageTraining: ImanageTrainingReducer;
-  productInfo: IproductInfo;
-  manageMeasurementPointLists: ImanageMeasurementPointListsReducer;
-  measurementPointResults: ImeasurementPointResultsReducer;
-  manageReport: ImanageReportReducer;
-  manageBrand: ImanageBrandReducer;
-  manageCustomerAndFacility: ImanageCustomerAndFacilityReducer;
-  manageAlert: ImanageAlertReducer;
 }

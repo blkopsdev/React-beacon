@@ -2,7 +2,7 @@
 * Manage Brand Form
 */
 
-import { Col, Button } from 'react-bootstrap';
+import { Col, Button, FormGroup } from 'react-bootstrap';
 import {
   Validators,
   FormGenerator,
@@ -16,9 +16,12 @@ import * as React from 'react';
 
 import { FormUtil } from '../common/FormUtil';
 import { ItableFiltersReducer } from '../../models';
-import { saveBrand, updateBrand } from '../../actions/manageBrands';
-import { constants } from 'src/constants/constants';
-import { clearSelectedBrandID } from '../../actions/manageBrandActions';
+import { constants } from '../../constants/constants';
+import {
+  clearSelectedBrandID,
+  saveBrand,
+  updateBrand
+} from '../../actions/manageBrandActions';
 
 const buildFieldConfig = () => {
   const fieldConfigControls = {
@@ -55,7 +58,7 @@ interface Iprops {
 }
 
 class ManageBrandForm extends React.Component<Iprops, {}> {
-  public form: AbstractControl;
+  public form: FormGroup | any;
   public fieldConfig: FieldConfig;
   constructor(props: Iprops) {
     super(props);

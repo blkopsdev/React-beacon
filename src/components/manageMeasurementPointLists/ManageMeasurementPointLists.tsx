@@ -45,7 +45,7 @@ import Banner from '../common/Banner';
 // import CommonModal from '../common/CommonModal';
 import EditMeasurementPointListModal from './EditMeasurementPointListModal';
 import SearchTableForm from '../common/SearchTableForm';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 import { FieldConfig } from 'react-reactive-form';
 import { EditMeasurementPointListTabModal } from './EditMeasurementPointListTabModal';
 import { EditMeasurementPointListTestProceduresModal } from './EditMeasurementPointListTestProceduresModal';
@@ -296,7 +296,7 @@ class ManageMeasurementPointList extends React.Component<
   * Handle user clicking on a product row
   * set the selected product to state and open the modal
   */
-  getTrProps = (state: FinalState, rowInfo: RowInfo) => {
+  getTrProps = (state: FinalState, rowInfo: RowInfo | undefined) => {
     if (rowInfo) {
       return {
         style: {
@@ -352,15 +352,15 @@ class ManageMeasurementPointList extends React.Component<
 
   getTdProps = (
     fState: FinalState,
-    rowInfo: RowInfoMPL,
-    column: Column,
+    rowInfo: RowInfoMPL | undefined,
+    column: Column | undefined,
     instance: any
   ) => {
-    if (column.id && column.id === 'delete') {
+    if (rowInfo && column && column.id && column.id === 'delete') {
       return {
         onClick: () => this.handleDelete(rowInfo.original)
       };
-    } else {
+    } else if (rowInfo) {
       return {
         onClick: () => {
           this.setState({

@@ -16,8 +16,8 @@ import CommonModal from '../common/CommonModal';
 import {
   toggleEditMeasurementPointTabModal,
   updateMeasurementPointListTab
-} from 'src/actions/manageMeasurementPointListsActions';
-import { initialMeasurementPointTab } from 'src/reducers/initialState';
+} from '../../actions/manageMeasurementPointListsActions';
+import { initialMeasurementPointTab } from '../../reducers/initialState';
 import { EditMeasurementPointListTabForm } from './EditMeasurementPointListTabForm';
 
 interface Iprops {
@@ -39,10 +39,6 @@ class EditMeasurementPointListTabModalClass extends React.Component<
   Iprops & IdispatchProps,
   {}
 > {
-  constructor(props: Iprops & IdispatchProps) {
-    super(props);
-  }
-
   render() {
     return (
       <CommonModal

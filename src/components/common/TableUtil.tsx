@@ -1,7 +1,7 @@
 import { map, find } from 'lodash';
 import { TranslationFunction } from 'react-i18next';
 import { Column } from 'react-table';
-import { IinstallBase, Ifacility } from 'src/models';
+import { IinstallBase, Ifacility } from '../../models';
 
 export const TableUtil = {
   translateHeaders: (columns: Column[], t: TranslationFunction) => {

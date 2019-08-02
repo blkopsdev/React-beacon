@@ -27,14 +27,14 @@ import { closeAllModals } from '../../actions/commonActions';
 import { emptyTile } from '../../reducers/initialState';
 import { getAllJobs } from '../../actions/manageJobActions';
 import Banner from '../common/Banner';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 import {
   toggleEditReportModal,
   getDefaultReports,
   setSelectedReport,
   setSelectedDefaultReport,
   setTableFilter
-} from 'src/actions/manageReportActions';
+} from '../../actions/manageReportActions';
 import { values } from 'lodash';
 import ManageReportModal from './ManageReportModal';
 import { FieldConfig } from 'react-reactive-form';
@@ -151,7 +151,7 @@ class ManageReport extends React.Component<Iprops & IdispatchProps, Istate> {
   * (reusable)
   * set the row color after a user selects it
   */
-  getTrProps = (state: FinalState, rowInfo: RowInfo) => {
+  getTrProps = (state: FinalState, rowInfo: RowInfo | undefined) => {
     if (rowInfo) {
       return {
         style: {
@@ -262,7 +262,6 @@ class ManageReport extends React.Component<Iprops & IdispatchProps, Istate> {
           sortable={false}
           noDataText={t('common:noDataText')}
           resizable={false}
-          getTdProps={this.getTdProps}
         />
         <ManageReportModal
           {...this.props}

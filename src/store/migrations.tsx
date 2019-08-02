@@ -1,6 +1,6 @@
 import { MigrationManifest } from 'redux-persist';
-import { IinitialState } from 'src/models';
-import initialState from 'src/reducers/initialState';
+import { IinitialState } from '../models';
+import initialState from '../reducers/initialState';
 
 /*
 * Migration 1 runs when upgrading from 0 to 1

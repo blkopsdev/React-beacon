@@ -31,7 +31,7 @@ import {
 import Banner from '../common/Banner';
 import EditTeamMemberModal from './EditTeamMemberModal';
 import SearchTableForm from '../common/SearchTableForm';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -155,7 +155,7 @@ class TeamManage extends React.Component<Iprops & IdispatchProps, Istate> {
   * Handle user clicking on a product row
   * set the selected product to state and open the modal
   */
-  getTrProps = (state: FinalState, rowInfo: RowInfo) => {
+  getTrProps = (state: FinalState, rowInfo: RowInfo | undefined) => {
     // console.log("ROWINFO", rowInfo);
     if (rowInfo) {
       return {

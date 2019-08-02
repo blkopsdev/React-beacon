@@ -135,7 +135,7 @@ class App extends React.Component<Props, State> {
       timeOut: 5000
     });
     setTimeout(() => {
-      location.reload();
+      window.location.reload();
     }, 5000);
   };
 

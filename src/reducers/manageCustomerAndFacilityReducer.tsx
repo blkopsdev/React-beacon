@@ -12,7 +12,7 @@ export function manageCustomerAndFacilityReducer(
   state: { [key: string]: Icustomer } = initialState.manageCustomerAndFacility
     .data,
   action: any
-) {
+): { [key: string]: Icustomer } {
   switch (action.type) {
     case types.GET_CUSTOMERS_AND_FACILITY_SUCCESS:
       const customers = map(action.payload, (customer: Icustomer) => {
@@ -27,6 +27,16 @@ export function manageCustomerAndFacilityReducer(
           ...state[action.customer.id],
           ...action.customer
         })
+      };
+    case types.CUSTOMER_IMAGE_SAVE_SUCCESS:
+      return state;
+    case types.GET_CUSTOMER_IMAGE_SUCCESS:
+      return {
+        ...state,
+        [action.payload.customerID]: {
+          ...state[action.payload.customerID],
+          imageUrl: action.payload.imageUrl
+        }
       };
     case types.FACILITY_UPDATE_SUCCESS:
       const oldCustomer = { ...state[action.facility.customerID] };
@@ -63,7 +73,7 @@ function manageTotalPages(state: number = 1, action: any): number {
 export default function manageCustomerAndFacility(
   state: ImanageCustomerAndFacilityReducer = initialState.manageCustomerAndFacility,
   action: any
-) {
+): ImanageCustomerAndFacilityReducer {
   return {
     data: manageCustomerAndFacilityReducer(state.data, action),
     totalPages: manageTotalPages(state.totalPages, action),

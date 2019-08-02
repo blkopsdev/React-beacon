@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { ImeasurementPoint, ImeasurementPointListTab } from 'src/models';
+import { ImeasurementPoint, ImeasurementPointListTab } from '../../models';
 import { ListGroup, ListGroupItem, Row, Col } from 'react-bootstrap';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 import {
   SortableContainer,
   SortableElement,
@@ -10,7 +10,7 @@ import {
 import arrayMove from 'array-move';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { filter, keyBy } from 'lodash';
-import { updateMeasurementPointListTab } from 'src/actions/manageMeasurementPointListsActions';
+import { updateMeasurementPointListTab } from '../../actions/manageMeasurementPointListsActions';
 
 const DragHandle = SortableHandle(() => (
   <span>

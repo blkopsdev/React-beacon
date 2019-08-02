@@ -1,5 +1,5 @@
-import { combineReducers } from 'redux';
-import { reducer as toastr } from 'react-redux-toastr';
+import { combineReducers, Reducer } from 'redux';
+import { reducer as toastrReducer, ToastrState } from 'react-redux-toastr';
 
 import { createShowModalWithNamedType } from './commonReducers';
 import ajaxCallsInProgress from './ajaxStatusReducer';
@@ -25,7 +25,7 @@ import manageAlert from './manageAlertReducer';
 
 const rootReducer = combineReducers({
   ajaxCallsInProgress,
-  toastr,
+  toastr: toastrReducer as Reducer<ToastrState>,
   user,
   redirect,
   manageUserQueue,

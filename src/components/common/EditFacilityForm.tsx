@@ -10,16 +10,17 @@ import {
   FormGenerator,
   FieldConfig,
   FormGroup,
-  GroupProps
+  GroupProps,
+  FormArray
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
 import { orderBy } from 'lodash';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction } from 'react-i18next';
 
 import { FormUtil } from './FormUtil';
-import { Icustomer, Ifacility, Ioption } from 'src/models';
+import { Icustomer, Ifacility, Ioption } from '../../models';
 
 // add the bootstrap form-control class to the react-select select component
 
@@ -42,7 +43,7 @@ interface IState {
   fieldConfig: FieldConfig;
 }
 class EditFacilityForm extends React.Component<Iprops, IState> {
-  private formGroup: FormGroup;
+  private formGroup: FormGroup | any;
   private subscription: any;
   private debounce: any;
   constructor(props: Iprops) {
@@ -50,6 +51,7 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
     this.state = {
       fieldConfig: this.buildFieldConfig()
     };
+    this.formGroup = undefined;
   }
 
   async componentDidMount() {
@@ -326,7 +328,7 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
     }
   };
 
-  setForm = (form: FormGroup) => {
+  setForm = (form: FormGroup | FormArray) => {
     this.formGroup = form;
     this.formGroup.meta = {
       loading: this.props.loading

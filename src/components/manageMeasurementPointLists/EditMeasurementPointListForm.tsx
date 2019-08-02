@@ -9,7 +9,8 @@ import {
   FormGenerator,
   AbstractControl,
   FieldConfig,
-  GroupProps
+  GroupProps,
+  FormGroup
 } from 'react-reactive-form';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
@@ -35,12 +36,12 @@ import {
   toggleEditMeasurementPointListTestProceduresModal,
   updateMeasurementPointListTab
 } from '../../actions/manageMeasurementPointListsActions';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 import {
   initialMeasurementPoint,
   initialMeasurementPointTab,
   initialMeasurementPointList
-} from 'src/reducers/initialState';
+} from '../../reducers/initialState';
 import { MeasurementPointList } from './MeasurementPointList';
 const uuidv4 = require('uuid/v4');
 
@@ -77,7 +78,7 @@ interface Istate {
 }
 
 class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
-  public measurementsForm: AbstractControl;
+  public formGroup: FormGroup | any;
   private subscription: any;
   // private persistTimeout: any; // all inputs are selects so we don't care about a debounce
   constructor(props: Iprops) {
@@ -267,7 +268,7 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
   subscribeToValueChanges = () => {
     const controls = ['selectedTab', 'type', 'mainCategoryID', 'standardID'];
     controls.forEach((key: string) => {
-      this.subscription = this.measurementsForm
+      this.subscription = this.formGroup
         .get(key)
         .valueChanges.subscribe((value: Ioption | null) => {
           this.handleValueChange(key, value);
@@ -303,8 +304,8 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
   };
 
   setForm = (form: AbstractControl) => {
-    this.measurementsForm = form;
-    this.measurementsForm.meta = {
+    this.formGroup = form;
+    this.formGroup.meta = {
       loading: this.props.loading
     };
     this.subscribeToValueChanges();
@@ -366,12 +367,12 @@ class EditMeasurementPointListForm extends React.Component<Iprops, Istate> {
 */
   handleSubmit = (e: React.MouseEvent<HTMLFormElement>) => {
     e.preventDefault();
-    if (this.measurementsForm.status === 'INVALID') {
-      this.measurementsForm.markAsSubmitted();
+    if (this.formGroup.status === 'INVALID') {
+      this.formGroup.markAsSubmitted();
       toastr.error('Please check invalid inputs', '', constants.toastrError);
       return;
     }
-    const { type, mainCategoryID, standardID } = this.measurementsForm.value;
+    const { type, mainCategoryID, standardID } = this.formGroup.value;
     const mpl = {
       ...this.props.selectedMeasurementPointList,
       mainCategoryID: mainCategoryID ? mainCategoryID.value : '',

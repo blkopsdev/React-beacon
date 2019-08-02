@@ -9,12 +9,12 @@ import {
 } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
-import { constants } from 'src/constants/constants';
+import { constants } from '../constants/constants';
 import * as types from './actionTypes';
 import * as moment from 'moment';
-import { initialMeasurmentPointResult } from 'src/reducers/initialState';
+import { initialMeasurmentPointResult } from '../reducers/initialState';
 import { values } from 'lodash';
-import { msalFetch } from 'src/components/auth/Auth-Utils';
+import { msalFetch } from '../components/auth/Auth-Utils';
 
 import { Dispatch } from 'react-redux';
 const uuidv4 = require('uuid/v4');
@@ -51,7 +51,7 @@ export const getFacilityMeasurementPointResultsHelper = (
   return msalFetch(url, axiosOptions)
     .then((data: AxiosResponse<any>) => {
       if (!data.data) {
-        throw undefined;
+        throw new Error('missing data');
       } else {
         // console.log(data.data);
         dispatch({

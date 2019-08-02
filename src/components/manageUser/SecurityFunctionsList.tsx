@@ -4,7 +4,7 @@
 import * as React from 'react';
 import { ListGroup, ListGroupItem, Col, Button } from 'react-bootstrap';
 import { map } from 'lodash';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 
 const SecurityFunctionsList = (props: any) => {
   return (

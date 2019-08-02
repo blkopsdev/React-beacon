@@ -66,9 +66,9 @@ import ShoppingCartModal from '../shoppingCart/ShoppingCartModal';
 import ImportInstallModal from './ImportInstallModal';
 import InstallContactModal from './InstallContactModal';
 import SearchTableForm from '../common/SearchTableForm';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 import SearchNewProductsModal from './SearchNewProductsModal';
-import { getTotal } from 'src/reducers/cartReducer';
+import { getTotal } from '../../reducers/cartReducer';
 import { MPResultModal } from './MPResultModal';
 import { InstallBasesExpanderContainer } from './InstallBasesExpanderContainer';
 import { MPResultListHistoryModal } from './MPResultListHistoryModal';
@@ -409,12 +409,12 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
   */
   getTdProps = (
     state: FinalState,
-    rowInfo: RowInfo,
-    column: Column,
+    rowInfo: RowInfo | undefined,
+    column: Column | undefined,
     instance: any
   ) => {
     // console.log("ROWINFO", rowInfo, state);
-    if (column.id && column.id === 'expander-toggle') {
+    if (rowInfo && column && column.id && column.id === 'expander-toggle') {
       return {
         onClick: () => {
           this.setState({
@@ -426,7 +426,7 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
           });
         }
       };
-    } else {
+    } else if (rowInfo) {
       return {
         onClick: (e: React.MouseEvent<HTMLFormElement>) => {
           this.props.setSelectedProduct(rowInfo.original);
@@ -438,6 +438,8 @@ class ManageInventory extends React.Component<Iprops & IdispatchProps, Istate> {
             : ''
         }
       };
+    } else {
+      console.error('getTdProps failed', state, rowInfo, column);
     }
   };
 

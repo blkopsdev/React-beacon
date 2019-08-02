@@ -21,9 +21,9 @@ import { Row, Col, Alert } from 'react-bootstrap';
 import { forEach } from 'lodash';
 
 import { RouteComponentProps } from 'react-router';
-import * as moment from 'moment';
+import moment from 'moment';
 import { toastr } from 'react-redux-toastr';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 import {
   resetAnswers,
   saveQuizResult,
@@ -31,7 +31,7 @@ import {
   addAnswer,
   setInProgressQuizID,
   startQuiz
-} from 'src/actions/trainingQuizActions';
+} from '../../actions/trainingQuizActions';
 import { QuizButton } from './QuizButton';
 import { QuizComplete } from './QuizComplete';
 
@@ -300,12 +300,9 @@ class Quiz extends React.Component<Iprops & IdispatchProps, State> {
       textAnswer: ''
     });
 
-    forEach(
-      document.getElementsByName('optionsRadios'),
-      (el: HTMLFormElement) => {
-        el.checked = false;
-      }
-    );
+    forEach(document.getElementsByName('optionsRadios'), (el: any) => {
+      el.checked = false;
+    });
   }
 
   isQuizLoading = () => {

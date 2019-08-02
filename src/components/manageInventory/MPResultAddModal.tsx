@@ -6,10 +6,10 @@ import { TranslationFunction } from 'react-i18next';
 import * as React from 'react';
 
 import CommonModal from '../common/CommonModal';
-import { toggleMPResultAddModal } from 'src/actions/manageInventoryActions';
+import { toggleMPResultAddModal } from '../../actions/manageInventoryActions';
 import { connect } from 'react-redux';
-import { IinitialState } from 'src/models';
-import { submitMeasurementPointResult } from 'src/actions/measurementPointResultsActions';
+import { IinitialState } from '../../models';
+import { submitMeasurementPointResult } from '../../actions/measurementPointResultsActions';
 import { MPResultAddForm } from './MPResultAddForm';
 
 interface Iprops {

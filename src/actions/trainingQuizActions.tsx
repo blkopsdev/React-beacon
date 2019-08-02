@@ -1,12 +1,12 @@
 import * as types from './actionTypes';
-import { GFQuizItem, ThunkResult, Iuser, GFQuizAnswer } from 'src/models';
+import { GFQuizItem, ThunkResult, Iuser, GFQuizAnswer } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
 import { AxiosRequestConfig, AxiosResponse, AxiosError } from 'axios';
-import API from 'src/constants/apiEndpoints';
+import API from '../constants/apiEndpoints';
 
-import { msalFetch } from 'src/components/auth/Auth-Utils';
+import { msalFetch } from '../components/auth/Auth-Utils';
 import { sortBy, forEach } from 'lodash';
-import { constants } from 'src/constants/constants';
+import { constants } from '../constants/constants';
 
 /*
 * Quizzes with the questions for a particular lesson

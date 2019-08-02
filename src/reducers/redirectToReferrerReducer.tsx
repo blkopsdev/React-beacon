@@ -21,8 +21,6 @@ export default function redirect(
             ? action.setRedirect
             : state.redirectToReferrer
       } as Iredirect;
-    case types.REMOVE_REDIRECT_REFERRER:
-      return initialState.redirect;
     case types.USER_LOGOUT_SUCCESS:
       return initialState.redirect;
 

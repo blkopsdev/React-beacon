@@ -19,7 +19,7 @@ import {
 } from '../../actions/manageJobActions';
 import CommonModal from '../common/CommonModal';
 import EditJobForm from './EditJobForm';
-import { initialJob } from 'src/reducers/initialState';
+import { initialJob } from '../../reducers/initialState';
 
 interface Iprops {
   colorButton: any;
@@ -44,10 +44,6 @@ interface IdispatchProps {
 }
 
 class EditManageJobModal extends React.Component<Iprops & IdispatchProps, {}> {
-  constructor(props: Iprops & IdispatchProps) {
-    super(props);
-  }
-
   render() {
     let modalTitle;
     if (this.props.selectedJob && this.props.selectedJob.id) {

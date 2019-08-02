@@ -1,9 +1,6 @@
-// import * as React from 'react';
-
 import { ThunkAction } from 'redux-thunk';
 import { toastr } from 'react-redux-toastr';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
-
 import {
   IinitialState,
   ItableFiltersParams,
@@ -14,14 +11,13 @@ import {
 } from '../models';
 import { beginAjaxCall } from './ajaxStatusActions';
 import API from '../constants/apiEndpoints';
-import { constants } from 'src/constants/constants';
+import { constants } from '../constants/constants';
 import * as types from './actionTypes';
 import { filter, find } from 'lodash';
 import { Dispatch } from 'react-redux';
+import { msalFetch } from '../components/auth/Auth-Utils';
+import { initialFacility } from '../reducers/initialState';
 const uuidv4 = require('uuid/v4');
-import { msalFetch } from 'src/components/auth/Auth-Utils';
-
-import { initialFacility } from 'src/reducers/initialState';
 
 type ThunkResult<R> = ThunkAction<R, IinitialState, undefined, any>;
 
@@ -36,7 +32,7 @@ export function getFacility(facilityID: string): ThunkResult<void> {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.LOCATION_MANAGE_SUCCESS,
@@ -143,7 +139,7 @@ const saveAnyLocationObjectHelper = (
   return msalFetch(url, axiosOptions)
     .then((data: AxiosResponse<any>) => {
       if (!data.data) {
-        throw undefined;
+        throw new Error('missing data');
       } else {
         dispatch({ type: types.TOGGLE_MODAL_EDIT_LOCATION });
         dispatch({
@@ -198,22 +194,14 @@ export function updateAnyLocation(
 
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
-        if (data.status !== 200) {
-          throw undefined;
-        } else {
-          dispatch({
-            type: types.LOCATION_UPDATE_SUCCESS,
-            lType,
-            locationObject,
-            facilityID
-          });
+        dispatch({
+          type: types.LOCATION_UPDATE_SUCCESS,
+          lType,
+          locationObject,
+          facilityID
+        });
 
-          toastr.success(
-            'Success',
-            `Updated ${lType}.`,
-            constants.toastrSuccess
-          );
-        }
+        toastr.success('Success', `Updated ${lType}.`, constants.toastrSuccess);
       })
       .catch((error: any) => {
         dispatch({ type: types.LOCATION_UPDATE_FAILED });
@@ -253,21 +241,13 @@ export function deleteAnyLocation(
 
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
-        if (data.status !== 200) {
-          throw undefined;
-        } else {
-          dispatch({
-            type: types.LOCATION_DELETE_SUCCESS,
-            lType,
-            locationObject,
-            facilityID
-          });
-          toastr.success(
-            'Success',
-            `Deleted ${lType}.`,
-            constants.toastrSuccess
-          );
-        }
+        dispatch({
+          type: types.LOCATION_DELETE_SUCCESS,
+          lType,
+          locationObject,
+          facilityID
+        });
+        toastr.success('Success', `Deleted ${lType}.`, constants.toastrSuccess);
       })
       .catch((error: any) => {
         dispatch({ type: types.LOCATION_DELETE_FAILED });

@@ -38,7 +38,7 @@ import {
 import Banner from '../common/Banner';
 import EditProductModal from '../manageInventory/EditProductModal';
 import SearchTableForm from '../common/SearchTableForm';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 import SearchNewProductsModal from '../manageInventory/SearchNewProductsModal';
 import { toastr } from 'react-redux-toastr';
 
@@ -217,7 +217,7 @@ class ManageProductQueue extends React.Component<
   * Handle user clicking on a product row
   * set the selected product to state and open the modal
   */
-  getTrProps = (state: FinalState, rowInfo: RowInfo) => {
+  getTrProps = (state: FinalState, rowInfo: RowInfo | undefined) => {
     // console.log("ROWINFO", rowInfo, state);
     if (rowInfo) {
       return {

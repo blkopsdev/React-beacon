@@ -49,10 +49,6 @@ class ManageInventoryModal extends React.Component<
   Iprops & IdispatchProps,
   {}
 > {
-  constructor(props: Iprops & IdispatchProps) {
-    super(props);
-  }
-
   render() {
     let modalTitle;
     if (this.props.selectedQueueObject && this.props.selectedQueueObject.id) {

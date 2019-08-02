@@ -24,7 +24,7 @@ import {
 import { saveAnyLocation } from '../../actions/manageLocationActions';
 import CommonModal from '../common/CommonModal';
 import EditInstallForm from './EditInstallForm';
-import { initialFacility } from 'src/reducers/initialState';
+import { initialFacility } from '../../reducers/initialState';
 
 interface Iprops {
   selectedProduct: Iproduct;
@@ -49,10 +49,6 @@ interface IdispatchProps {
 }
 
 class ManageInstallModal extends React.Component<Iprops & IdispatchProps, {}> {
-  constructor(props: Iprops & IdispatchProps) {
-    super(props);
-  }
-
   render() {
     let modalTitle;
     if (this.props.selectedItem.id) {

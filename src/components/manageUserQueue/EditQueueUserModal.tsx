@@ -49,10 +49,6 @@ interface IdispatchProps {
 }
 
 class EditQueueUserModal extends React.Component<Iprops & IdispatchProps, {}> {
-  constructor(props: Iprops & IdispatchProps) {
-    super(props);
-  }
-
   render() {
     return (
       <CommonModal

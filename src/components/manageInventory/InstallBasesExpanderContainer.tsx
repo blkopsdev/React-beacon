@@ -4,16 +4,16 @@
 
 import { TranslationFunction } from 'react-i18next';
 import { connect } from 'react-redux';
-import { IinitialState, IinstallBase } from 'src/models';
+import { IinitialState, IinstallBase } from '../../models';
 import { InstallBasesExpander } from './InstallBasesExpander';
 import { RowInfo } from 'react-table';
-import { addToCart } from 'src/actions/shoppingCartActions';
-import { selectResult } from 'src/actions/measurementPointResultsActions';
+import { addToCart } from '../../actions/shoppingCartActions';
+import { selectResult } from '../../actions/measurementPointResultsActions';
 import {
   toggleMPResultModal,
   toggleMPResultHistory
-} from 'src/actions/manageInventoryActions';
-import { initialFacility } from 'src/reducers/initialState';
+} from '../../actions/manageInventoryActions';
+import { initialFacility } from '../../reducers/initialState';
 
 interface Iprops extends RowInfo {
   t: TranslationFunction;

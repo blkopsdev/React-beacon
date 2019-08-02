@@ -3,10 +3,10 @@
 */
 
 import * as React from 'react';
-import { ImeasurementPointResult } from 'src/models';
+import { ImeasurementPointResult } from '../../models';
 import { ListGroup, ListGroupItem, Row, Col, Button } from 'react-bootstrap';
 import * as moment from 'moment';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 import { orderBy } from 'lodash';
 import { TranslationFunction } from 'i18next';
 

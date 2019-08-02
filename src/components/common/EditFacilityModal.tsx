@@ -50,10 +50,6 @@ class EditFacilityModal extends React.Component<Iprops & IdispatchProps, {}> {
     modalClass: 'second-modal'
   };
 
-  constructor(props: Iprops & IdispatchProps) {
-    super(props);
-  }
-
   render() {
     const className = this.props.secondModal
       ? 'customer-edit second-modal'

@@ -56,7 +56,6 @@ interface Iprops extends RouteComponentProps<any> {
 interface IdispatchProps {
   tableData: Icustomer[];
   totalPages: number;
-  showEditCustomerAndFacilityModal: boolean;
   getCustomers: typeof getCustomers;
   toggleEditCustomerModal: typeof toggleEditCustomerModal;
   setTableFilter: typeof setTableFilter;
@@ -218,12 +217,12 @@ class ManageCustomerAndFacility extends React.Component<
   */
   getTdProps = (
     state: FinalState,
-    rowInfo: RowInfoCustomer,
-    column: Column,
+    rowInfo: RowInfoCustomer | undefined,
+    column: Column | undefined,
     instance: any
   ) => {
     // console.log("ROWINFO", rowInfo, state);
-    if (column.id && column.id === 'expander-toggle') {
+    if (rowInfo && column && column.id && column.id === 'expander-toggle') {
       return {
         onClick: () => {
           this.props.setSelectedCustomerID(rowInfo.original.id);
@@ -236,7 +235,7 @@ class ManageCustomerAndFacility extends React.Component<
           });
         }
       };
-    } else {
+    } else if (rowInfo) {
       return {
         onClick: (e: React.MouseEvent<HTMLFormElement>) => {
           this.props.setSelectedCustomerID(rowInfo.original.id);
@@ -244,6 +243,8 @@ class ManageCustomerAndFacility extends React.Component<
           this.props.getCustomerLogo(rowInfo.original.id);
         }
       };
+    } else {
+      console.error('error in gettdprops', rowInfo, column);
     }
   };
 
@@ -344,8 +345,6 @@ const mapStateToProps = (state: IinitialState) => {
   return {
     tableData,
     totalPages: state.manageCustomerAndFacility.totalPages,
-    showEditCustomerAndFacilityModal:
-      state.manageCustomerAndFacility.showEditCustomerAndFacilityModal,
     tableFilters: state.manageCustomerAndFacility.tableFilters,
     selectedCustomer,
     customers: state.customers,

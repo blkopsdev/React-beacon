@@ -21,7 +21,7 @@ import {
   installContact,
   toggleInstallContactModal
 } from '../../actions/manageInventoryActions';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 
 const TextLabel = ({ handler, meta }: any) => {
   return (
@@ -46,7 +46,7 @@ interface Iprops {
 }
 
 class InstallContactform extends React.Component<Iprops, {}> {
-  public userForm: AbstractControl;
+  private userForm: FormGroup | any;
   public fieldConfig: FieldConfig;
   constructor(props: Iprops) {
     super(props);

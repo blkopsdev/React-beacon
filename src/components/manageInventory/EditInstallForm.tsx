@@ -34,7 +34,7 @@ import {
   updateInstall,
   deleteInstall
 } from '../../actions/manageInventoryActions';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 
 interface IstateChanges extends Observable<any> {
   next: () => void;
@@ -73,7 +73,7 @@ interface Istate {
 }
 
 class ManageInstallForm extends React.Component<Iprops, Istate> {
-  public userForm: AbstractControl;
+  private userForm: FormGroup | any;
   private subscription: any;
   constructor(props: Iprops) {
     super(props);

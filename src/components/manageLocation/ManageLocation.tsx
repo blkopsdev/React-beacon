@@ -48,7 +48,7 @@ import {
 import Banner from '../common/Banner';
 import EditLocationModal from './EditLocationModal';
 import SearchTableForm from '../common/SearchTableForm';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 
 interface Iprops extends RouteComponentProps<any> {
   // Add your regular properties here
@@ -315,7 +315,7 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
   * Handle user clicking on a location row
   * set the selected location to state and open the modal
   */
-  getTrProps = (state: FinalState, rowInfo: RowInfo) => {
+  getTrProps = (state: FinalState, rowInfo: RowInfo | undefined) => {
     if (rowInfo) {
       return {
         onClick: (e: React.MouseEvent<HTMLFormElement>) => {

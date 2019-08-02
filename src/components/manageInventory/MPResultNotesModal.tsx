@@ -9,9 +9,9 @@ import CommonModal from '../common/CommonModal';
 import {
   toggleMPResultModal,
   toggleMPResultNotes
-} from 'src/actions/manageInventoryActions';
+} from '../../actions/manageInventoryActions';
 import { connect } from 'react-redux';
-import { IinitialState, ImeasurementPointResult } from 'src/models';
+import { IinitialState, ImeasurementPointResult } from '../../models';
 import { RichTextView } from '../common/RichTextView';
 
 interface Iprops {

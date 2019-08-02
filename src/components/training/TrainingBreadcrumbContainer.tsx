@@ -3,14 +3,14 @@
 */
 
 import { connect } from 'react-redux';
-import { IinitialState } from 'src/models';
+import { IinitialState } from '../../models';
 import { TrainingBreadcrumb } from './TrainingBreadcrumb';
 import { RouteComponentProps } from 'react-router';
 import {
   initialLesson,
   initialQuiz,
   initialCourse
-} from 'src/reducers/initialState';
+} from '../../reducers/initialState';
 
 interface RouterParams {
   courseID: string;

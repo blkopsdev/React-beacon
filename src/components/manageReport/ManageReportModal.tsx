@@ -18,10 +18,10 @@ import {
   updateReport,
   runReport,
   toggleEditReportModal
-} from 'src/actions/manageReportActions';
+} from '../../actions/manageReportActions';
 import { FormUtil } from '../common/FormUtil';
-import { constants } from 'src/constants/constants';
-import { initialDefaultReport } from 'src/reducers/initialState';
+import { constants } from '../../constants/constants';
+import { initialDefaultReport } from '../../reducers/initialState';
 import { map, orderBy, filter } from 'lodash';
 import * as moment from 'moment';
 import { EditReportForm } from './ManageReportForm';
@@ -43,10 +43,6 @@ interface IdispatchProps {
 }
 
 class EditManageJobModal extends React.Component<Iprops & IdispatchProps, {}> {
-  constructor(props: Iprops & IdispatchProps) {
-    super(props);
-  }
-
   render() {
     const { t } = this.props;
     const modalTitle = t(

@@ -11,15 +11,18 @@ import {
   Validators,
   FieldConfig
 } from 'react-reactive-form';
-import { Col, Button } from 'react-bootstrap';
-import { constants } from 'src/constants/constants';
+import { Col, Button, FormGroup } from 'react-bootstrap';
+import { constants } from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 import { Iuser, Icustomer, Ioption } from '../../models';
 import { forEach, find, differenceBy, filter, map } from 'lodash';
 
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
-import { deleteUserAccount, updateUserProfile } from 'src/actions/userActions';
+import {
+  deleteUserAccount,
+  updateUserProfile
+} from '../../actions/userActions';
 
 interface IstateChanges extends Observable<any> {
   next: () => void;
@@ -75,7 +78,7 @@ interface Iprops {
 }
 
 class UserProfileForm extends React.Component<Iprops, {}> {
-  public userForm: AbstractControl;
+  private userForm: FormGroup | any;
   private fieldConfig: FieldConfig;
   constructor(props: Iprops) {
     super(props);

@@ -12,11 +12,11 @@ import {
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
 import { forEach, orderBy } from 'lodash';
-import { constants } from 'src/constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
-import { Ioption } from 'src/models';
+import { constants } from '../../constants/constants';
+import { Ioption } from '../../models';
 
 const passwordRegex = new RegExp(
   '(?=^.{6,255}$)((?=.*d)(?=.*[A-Z])(?=.*[a-z])|(?=.*d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*'
@@ -166,12 +166,13 @@ interface Iprops extends React.Props<UserForm> {
 }
 
 class UserForm extends React.Component<Iprops, {}> {
-  public userForm: AbstractControl;
+  public userForm: AbstractControl | any;
   public fieldConfig: FieldConfig;
   private subscription: any;
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(fieldConfig, this.props.t);
+    this.userForm = undefined;
   }
 
   componentDidMount() {

@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { IinitialState, Iuser } from '../../models';
 import Masonry, { MasonryOptions } from 'react-masonry-component';
 import { Link } from 'react-router-dom';
-import { constants } from 'src/constants/constants';
+import { constants } from '../../constants/constants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
 
@@ -23,18 +23,14 @@ interface Iprops extends React.Props<Dashboard> {
 // }
 
 class Dashboard extends React.Component<Iprops, {}> {
-  constructor(props: Iprops) {
-    super(props);
-  }
-
   render() {
-    const availableTiles = tiles.filter((tile: any) => {
+    const availableTiles = tiles.filter(tile => {
       return constants.hasSecurityFunction(
         this.props.user,
         tile.securityFunction
       );
     });
-    const tileElements = availableTiles.map((tile: any) => {
+    const tileElements = availableTiles.map(tile => {
       const styles = {
         width: tile.width,
         height: tile.height
@@ -43,16 +39,19 @@ class Dashboard extends React.Component<Iprops, {}> {
         <div key={tile.title}>
           <Link to={tile.url}>
             <div className={`tile ${tile.color}`} style={styles}>
-              <img src={tile.src} style={styles} />
+              <img src={tile.src} style={styles} alt="" />
               <span className="title">
-                {tile.iconType === 'fa' && <FontAwesomeIcon icon={tile.icon} />}
-                {tile.iconType === 'img' && (
+                {tile.faIcon !== undefined && (
+                  <FontAwesomeIcon icon={tile.faIcon} />
+                )}
+                {tile.imgIcon !== undefined && (
                   <span>
                     <img
-                      src={tile.icon}
+                      src={tile.imgIcon}
                       width={40}
                       height={40}
                       style={{ opacity: 100, marginBottom: 10 }}
+                      alt=""
                     />
                     <br />
                   </span>

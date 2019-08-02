@@ -11,7 +11,7 @@ import {
 } from 'react-bootstrap';
 import { map } from 'lodash';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { ImeasurementPointSelectOption } from 'src/models';
+import { ImeasurementPointSelectOption } from '../../models';
 import { FormUtil } from '../common/FormUtil';
 const uuidv4 = require('uuid/v4');
 

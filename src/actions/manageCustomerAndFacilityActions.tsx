@@ -1,7 +1,7 @@
 import { beginAjaxCall } from './ajaxStatusActions';
 import { AxiosRequestConfig, AxiosResponse } from 'axios';
 import API from '../constants/apiEndpoints';
-import { msalFetch } from 'src/components/auth/Auth-Utils';
+import { msalFetch } from '../components/auth/Auth-Utils';
 
 import * as types from './actionTypes';
 import { constants } from '../constants/constants';
@@ -28,7 +28,7 @@ export function getCustomers(): ThunkResult<void> {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.GET_CUSTOMERS_AND_FACILITY_SUCCESS,

@@ -162,7 +162,7 @@ class App extends React.Component<Props, State> {
               <Switch>
                 <Route exact path="/" component={Login} />
                 <Route exact path="/signup" component={SignUpDirect} />
-                <Route exact path="/social_signup" component={SignUpWithMS} />
+                <Route exact path="/azure_signup" component={SignUpWithMS} />
                 <PrivateRoute path="/dashboard" component={Dashboard} />
                 <PrivateRoute path="/queue" component={TwoPaneLayout} />
                 <PrivateRoute path="/users" component={TwoPaneLayout} />

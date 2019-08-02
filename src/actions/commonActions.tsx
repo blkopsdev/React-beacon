@@ -167,7 +167,7 @@ export function addCustomerLogo(logo: ICustomerImage): ThunkResult<void> {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({
             type: types.CUSTOMER_IMAGE_SAVE_SUCCESS,

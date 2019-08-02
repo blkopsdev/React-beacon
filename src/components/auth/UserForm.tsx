@@ -8,15 +8,16 @@ import {
   Validators,
   FormGenerator,
   AbstractControl,
-  FieldConfig
+  FieldConfig,
+  FormGroup
 } from 'react-reactive-form';
 import { Col, Button } from 'react-bootstrap';
 import { forEach, orderBy } from 'lodash';
+import { constants } from '../../constants/constants';
 import { toastr } from 'react-redux-toastr';
 import { FormUtil, userBaseConfigControls } from '../common/FormUtil';
 import { translate, TranslationFunction, I18n } from 'react-i18next';
-import { constants } from '../../constants/constants';
-import { Ioption } from '../../models';
+import { Link } from 'react-router-dom';
 
 const passwordRegex = new RegExp(
   '(?=^.{6,255}$)((?=.*d)(?=.*[A-Z])(?=.*[a-z])|(?=.*d)(?=.*[^A-Za-z0-9])(?=.*[a-z])|(?=.*[^A-Za-z0-9])(?=.*[A-Z])(?=.*[a-z])|(?=.*d)(?=.*[A-Z])(?=.*[^A-Za-z0-9]))^.*'
@@ -166,13 +167,12 @@ interface Iprops extends React.Props<UserForm> {
 }
 
 class UserForm extends React.Component<Iprops, {}> {
-  public userForm: AbstractControl | any;
+  public userForm: FormGroup | any;
   public fieldConfig: FieldConfig;
   private subscription: any;
   constructor(props: Iprops) {
     super(props);
     this.fieldConfig = FormUtil.translateForm(fieldConfig, this.props.t);
-    this.userForm = undefined;
   }
 
   componentDidMount() {
@@ -183,8 +183,10 @@ class UserForm extends React.Component<Iprops, {}> {
     }
     this.subscription = this.userForm
       .get('countryID')
-      .valueChanges.subscribe((value: Ioption) => {
-        this.onCountryChanges(value.value);
+      .valueChanges.subscribe((value: any) => {
+        if (value && value.value) {
+          this.onCountryChanges(value.value);
+        }
       });
 
     this.userForm.patchValue({
@@ -244,6 +246,16 @@ class UserForm extends React.Component<Iprops, {}> {
         onSubmit={this.handleSubmit}
         className="clearfix beacon-form login-form"
       >
+        <h5 style={{ padding: '0px 15px 10px 15px', color: '#fff' }}>
+          Welcome to MyMedGas! Please signup below. If you are a BeaconMedaes
+          associate,{' '}
+          <Link to="/azure_signup" style={{ color: '#94cdff' }}>
+            please click here to sign up.
+          </Link>
+          {/* <LinkContainer to="/azure_signup">
+            <Button bsStyle="link">please click here to sign up.</Button>
+          </LinkContainer> */}
+        </h5>
         <FormGenerator onMount={this.setForm} fieldConfig={this.fieldConfig} />
         <Col xs={12} className="user-form-buttons">
           <Button

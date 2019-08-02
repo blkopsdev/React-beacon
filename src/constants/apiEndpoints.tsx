@@ -40,6 +40,7 @@ const API = {
     user: {
       login: `${root}/user/login`,
       signup: `${root}/user/signup`,
+      adSignup: `${root}/user/adsignup`,
       approve: `${root}/user/approve`,
       reject: `${root}/user/reject`,
       update: `${root}/user/update`,

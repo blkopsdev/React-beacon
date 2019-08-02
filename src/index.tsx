@@ -3,6 +3,7 @@
 * Initial routes are here and secondary routes are in TwoPanelLayout
 */
 import 'react-app-polyfill/ie11';
+import 'react-app-polyfill/stable';
 // import 'custom-event-polyfill';
 import { Provider } from 'react-redux';
 import {

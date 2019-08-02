@@ -63,6 +63,7 @@ export function getCustomerLogo(customerID: string): ThunkResult<void> {
         if (!data.data) {
           throw undefined;
         } else {
+          dispatch({ type: types.GET_CUSTOMER_IMAGE_SUCCESS });
           const fileReader = new FileReader();
           fileReader.onloadend = () => {
             dispatch(updateCustomerFormValue({ imageUrl: fileReader.result }));

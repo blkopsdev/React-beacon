@@ -178,14 +178,11 @@ class EditCustomerForm extends React.Component<Iprops, IState> {
       return;
     }
     const newCustomer = this.formGroup.value;
-    if (this.state.file) {
-      newCustomer['file'] = this.state.file;
-    }
     if (this.props.selectedCustomer.id) {
       newCustomer['id'] = this.props.selectedCustomer.id;
-      this.props.handleEdit(newCustomer);
+      this.props.handleEdit(newCustomer, this.state.file);
     } else {
-      this.props.handleSubmit(newCustomer);
+      this.props.handleSubmit(newCustomer, this.state.file);
     }
   };
 

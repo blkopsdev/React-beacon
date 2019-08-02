@@ -78,7 +78,7 @@ export function getCustomers() {
   };
 }
 
-export function addCustomer(customer: Icustomer): ThunkResult<void> {
+export function addCustomer(customer: Icustomer, file: any): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     const axiosOptions: AxiosRequestConfig = {
@@ -96,7 +96,7 @@ export function addCustomer(customer: Icustomer): ThunkResult<void> {
             addCustomerLogo({
               ...initialCustomerImage,
               customerID: customer.id,
-              file: customer.file
+              file
             })
           );
           delete customer['logo'];
@@ -117,7 +117,10 @@ export function addCustomer(customer: Icustomer): ThunkResult<void> {
   };
 }
 
-export function updateCustomer(customer: Icustomer): ThunkResult<void> {
+export function updateCustomer(
+  customer: Icustomer,
+  file: any
+): ThunkResult<void> {
   return (dispatch, getState) => {
     dispatch(beginAjaxCall());
     const axiosOptions: AxiosRequestConfig = {
@@ -132,10 +135,9 @@ export function updateCustomer(customer: Icustomer): ThunkResult<void> {
           addCustomerLogo({
             ...initialCustomerImage,
             customerID: customer.id,
-            file: customer.file
+            file
           })
         );
-        delete customer['file'];
         dispatch({
           type: types.CUSTOMER_UPDATE_SUCCESS,
           customer: { ...customer }

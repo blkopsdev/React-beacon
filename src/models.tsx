@@ -216,7 +216,6 @@ export interface Itile {
 export interface Icustomer {
   id: string;
   name: string;
-  file?: string;
   vat?: string;
   isDeleted: boolean;
   createDate?: string;

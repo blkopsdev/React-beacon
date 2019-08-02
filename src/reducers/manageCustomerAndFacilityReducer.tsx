@@ -28,6 +28,16 @@ export function manageCustomerAndFacilityReducer(
           ...action.customer
         })
       };
+    case types.CUSTOMER_IMAGE_SAVE_SUCCESS:
+      return state;
+    case types.GET_CUSTOMER_IMAGE_SUCCESS:
+      return {
+        ...state,
+        [action.payload.customerID]: {
+          ...state[action.payload.customerID],
+          imageUrl: action.payload.imageUrl
+        }
+      };
     case types.FACILITY_UPDATE_SUCCESS:
       const oldCustomer = { ...state[action.facility.customerID] };
       const oldFacility = {

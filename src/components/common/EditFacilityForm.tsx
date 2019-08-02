@@ -1,5 +1,5 @@
 /*
-* Edit Customer Form
+* Edit Facility Form
 * Add and Edit facilities
 *
 */
@@ -56,7 +56,7 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
     if (!this.formGroup) {
       return;
     }
-    
+
     await this.props.setFormValues(this.props.selectedFacility);
     this.setState({ fieldConfig: this.buildFieldConfig() });
     if (!this.props.selectedFacility.countryID) {
@@ -87,7 +87,10 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
       city,
       state,
       postalCode,
-      countryID
+      countryID,
+      contactName,
+      contactEmail,
+      contactPhone
     } = this.props.selectedFacility;
 
     name = formValues.name || name;
@@ -96,6 +99,9 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
     city = formValues.city || city;
     state = formValues.state || state;
     postalCode = formValues.postalCode || postalCode;
+    contactName = formValues.contactName || contactName;
+    contactEmail = formValues.contactEmail || contactEmail;
+    contactPhone = formValues.contactEmail || contactPhone;
     countryID =
       (formValues.countryID && formValues.countryID.value) || countryID;
 
@@ -112,7 +118,11 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
           ]
         },
         render: FormUtil.TextInput,
-        meta: { label: 'manageCustomerAndFacility:facilityNameLabel', colWidth: 12, name: 'fac-name' },
+        meta: {
+          label: 'manageCustomerAndFacility:facilityNameLabel',
+          colWidth: 12,
+          name: 'fac-name'
+        },
         formState: name
       },
       address: {
@@ -196,6 +206,39 @@ class EditFacilityForm extends React.Component<Iprops, IState> {
           value: selectedCountry,
           disabled: false
         }
+      },
+      contactName: {
+        render: FormUtil.TextInput,
+        meta: {
+          label: 'user:contactName',
+          colWidth: 6,
+          type: 'text',
+          name: 'contactName',
+          required: false
+        },
+        formState: contactName
+      },
+      contactEmail: {
+        render: FormUtil.TextInput,
+        meta: {
+          label: 'user:contactEmail',
+          colWidth: 6,
+          type: 'text',
+          name: 'contactEmail',
+          required: false
+        },
+        formState: contactEmail
+      },
+      contactPhone: {
+        render: FormUtil.TextInput,
+        meta: {
+          label: 'user:contactPhone',
+          colWidth: 6,
+          type: 'text',
+          name: 'contactPhone',
+          required: false
+        },
+        formState: contactPhone
       }
     } as { [key: string]: GroupProps };
     const fieldConfig = {

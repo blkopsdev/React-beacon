@@ -12,7 +12,10 @@ export const initialFacility = {
   state: '',
   postalCode: '',
   buildings: [],
-  isDeleted: false
+  isDeleted: false,
+  contactName: '',
+  contactEmail: '',
+  contactPhone: ''
 };
 const initialSubcategory = {
   mainCategoryID: '',
@@ -155,6 +158,13 @@ export const initialCustomer = {
   isDeleted: false,
   facilities: []
 };
+
+export const initialCustomerImage = {
+  id: '',
+  customerID: '',
+  url: ''
+};
+
 export const initialJob = {
   id: '',
   customerID: '',

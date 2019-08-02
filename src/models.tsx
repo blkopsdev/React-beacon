@@ -222,6 +222,13 @@ export interface Icustomer {
   facilities?: Ifacility[];
 }
 
+export interface ICustomerImage {
+  id: string;
+  customerID: string;
+  url?: string;
+  file?: any;
+}
+
 export interface IfacilityWithoutBuildings {
   id: string;
   name: string;
@@ -233,6 +240,9 @@ export interface IfacilityWithoutBuildings {
   state: string;
   postalCode: string;
   isDeleted: boolean;
+  contactName: string;
+  contactEmail: string;
+  contactPhone: string;
 }
 export interface Ifacility extends IfacilityWithoutBuildings {
   buildings: Ibuilding[];

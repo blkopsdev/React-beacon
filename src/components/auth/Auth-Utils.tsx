@@ -59,8 +59,8 @@ const temporaryHandleRedirectCallback = (
   error: AuthError,
   response?: AuthResponse
 ) => {
-  console.error('msalRedirectCallback', error);
   if (error) {
+    console.error('msalRedirectCallback', error);
     const forgotPasswordError =
       error.message.indexOf('The user has forgotten their password') > -1;
     const forgotPasswordCancel =
@@ -150,8 +150,8 @@ export const msalFetch = (
   isRetry?: boolean
 ): Promise<any> => {
   return acquireToken().then((tokenResponse: AuthResponse) => {
-    console.log('msalFetch tokenResponse: ', tokenResponse);
-    if (!tokenResponse || tokenResponse.accessToken === null) {
+    // console.log('msalFetch tokenResponse: ', tokenResponse);
+    if (!tokenResponse || (tokenResponse && !tokenResponse.accessToken)) {
       console.error('missing token', tokenResponse);
       return delay(1000).then(() => {
         throw new Error(

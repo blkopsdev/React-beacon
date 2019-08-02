@@ -18,7 +18,6 @@ import SignUpDirect from './components/auth/SignUpDirect';
 import SignUpWithMS from './components/auth/SignUpWithMS';
 import Dashboard from './components/dashboard/Dashboard';
 import { setRedirectPathname } from './actions/redirectToReferrerAction';
-import { msalApp } from './components/auth/Auth-Utils';
 import { throttle } from 'lodash';
 
 // import * as moment from 'moment';
@@ -97,7 +96,6 @@ class App extends React.Component<Props, State> {
     this.props.setRedirectPathname(pathname, true);
   };
   handleRedirectToSignup = () => {
-    // this.props.history.push('/social_signup');
     this.setState({ redirectToSocialSignup: true }, () => {
       this.setState({ redirectToSocialSignup: false });
     });
@@ -106,7 +104,8 @@ class App extends React.Component<Props, State> {
   PrivateRoute = ({ component: Component, ...rest }: any) => {
     const { user } = this.props;
     const authenticated =
-      msalApp.getAccount() && user.isAuthenticated && user.id.length > 0;
+      // msalApp.getAccount() && user.isAuthenticated && user.id.length > 0;
+      user.isAuthenticated && user.id.length > 0; // do not check validity of token here because we do not handle renewing the token when simply navigating to a new route
     if (authenticated) {
       this.handleSetRedirect();
     }
@@ -144,7 +143,7 @@ class App extends React.Component<Props, State> {
     if (this.state.redirectToSocialSignup) {
       return (
         <Router>
-          <Redirect to={'/social_signup'} />
+          <Redirect to={'/azure_signup'} />
         </Router>
       );
     }
@@ -162,7 +161,7 @@ class App extends React.Component<Props, State> {
               <Switch>
                 <Route exact path="/" component={Login} />
                 <Route exact path="/signup" component={SignUpDirect} />
-                <Route exact path="/social_signup" component={SignUpWithMS} />
+                <Route exact path="/azure_signup" component={SignUpWithMS} />
                 <PrivateRoute path="/dashboard" component={Dashboard} />
                 <PrivateRoute path="/queue" component={TwoPaneLayout} />
                 <PrivateRoute path="/users" component={TwoPaneLayout} />

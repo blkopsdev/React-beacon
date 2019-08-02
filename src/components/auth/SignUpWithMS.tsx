@@ -1,103 +1,103 @@
 /*
-* signup with existing Microsoft account.  
+* Signup with Beacon Microsoft AD
 */
-
 import * as React from 'react';
 import { connect } from 'react-redux';
-// import { Redirect } from 'react-router-dom';
-import { IinitialState, Iuser, Iredirect } from '../../models';
-import { MSALlogin, userLogin, userLogout } from '../../actions/userActions';
-import {
-  setLoginRedirect,
-  removeLoginRedirect,
-  setRedirectPathname
-} from '../../actions/redirectToReferrerAction';
-import { Button, Col, Grid, Row } from 'react-bootstrap';
+import { Redirect } from 'react-router-dom';
+import { IinitialState, Iuser } from '../../models';
+import { adSignup } from '../../actions/userActions';
+import { removeLoginRedirect } from '../../actions/redirectToReferrerAction';
+import { Col, Grid, Row, Button } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
-import UserForm from './UserForm';
+import { translate, TranslationFunction, I18n } from 'react-i18next';
+import SocialSignUpForm from './SocialSignUpForm';
 
 interface Iprops extends RouteComponentProps<{}> {
-  userLogin?: any;
-  MSALlogin?: any;
-  userLogout?: any;
-  setLoginRedirect?: any;
-  setRedirectPathname?: any;
-  removeLoginRedirect?: any;
+  removeLoginRedirect: () => Promise<void>;
   user: Iuser;
-  redirect: Iredirect;
+  adSignup: (formValues: { [key: string]: any }) => Promise<void>;
   loading: boolean;
+  t: TranslationFunction;
+  i18n: I18n;
+}
+interface Istate {
+  redirectToLogin: boolean;
+  showSignupSuccess: boolean;
 }
 
-const azure = require('../../images/Azure.png');
+const SignUpSuccess = (props: any) => {
+  const { t } = props;
+  return (
+    <div className="login-form signup-success" style={{ color: 'white' }}>
+      <h2>{t('successTitle')}</h2>
+      <p>{t('successBody1')}</p>
+      <p>
+        {t('successBody2')} <br /> {t('successBody3')}
+      </p>
+      <Button
+        bsStyle="link"
+        className="pull-right ok-button"
+        style={{ color: 'white', margin: '12px' }}
+        onClick={props.handleCancel}
+      >
+        {t('ok')}
+      </Button>
+    </div>
+  );
+};
 
-class SignUpWithMS extends React.Component<Iprops, any> {
-  componentWillMount() {
-    // if there is no username and there is a token, get the user
-    // if (this.props.user.email.length === 0 && isAuthenticated()) {
-    //   this.props.userLogin();
-    // }
+class SignUpDirect extends React.Component<Iprops, Istate> {
+  constructor(props: Iprops) {
+    super(props);
+    this.state = {
+      redirectToLogin: false,
+      showSignupSuccess: false
+    };
   }
-  // componentDidMount() {
-  //   this.props.setRedirectPathname('/signupWithMS');
-  // }
 
-  login = () => {
-    this.props
-      .setLoginRedirect()
+  cancel = () => {
+    this.setState({ redirectToLogin: true });
+  };
+  handleSubmit = (formValues: { [key: string]: any }) => {
+    return this.props
+      .adSignup(formValues)
       .then(() => {
-        console.log('start adal login');
-        this.props.MSALlogin();
+        this.setState({ showSignupSuccess: true });
       })
       .catch((error: any) => console.error(error));
   };
   render() {
-    const showSignUpForm: boolean = false;
-
-    // TODO not sure how to update these...
-    // if (isFullyAuthenticated(this.props.user)) {
-    //   this.props.removeLoginRedirect();
-    //   return <Redirect to={'/dashboard'} />;
-    // }
-    // if (!isFullyAuthenticated(this.props.user) && isAuthenticated()) {
-    //   this.props.removeLoginRedirect();
-    //   showSignUpForm = true;
-    // }
-    // if (this.props.user.isAuthenticated) {
-    //   this.props.removeLoginRedirect();
-    //   return <Redirect to={'/dashboard'} />;
-    // }
-    // if (!this.props.user.isAuthenticated) {
-    //   this.props.removeLoginRedirect();
-    //   showSignUpForm = true;
-    // }
-
+    const { t } = this.props;
+    if (this.props.user.isAuthenticated) {
+      this.props
+        .removeLoginRedirect()
+        .catch((error: any) => console.error(error));
+      return <Redirect to={'/dashboard'} />;
+    }
+    if (this.state.redirectToLogin) {
+      return <Redirect to={'/'} />;
+    }
+    const flipClass = this.state.showSignupSuccess
+      ? 'flip-container flip'
+      : 'flip-container';
     return (
-      <div className="loginlayout">
-        {/* <p>You must log in to view the page at {from.pathname}</p> */}
+      <div className="loginlayout signup">
         <Grid>
           <Row>
             <Col>
-              <div className="login-form">
-                {showSignUpForm && (
-                  <UserForm
-                    handleSubmit={this.login}
-                    handleCancel={this.login}
-                    loading={this.props.loading}
-                  />
-                )}
-                {!showSignUpForm && (
-                  <div>
-                    <span className="loginTitle">Sign Up With Azure</span>
-                    <Button
-                      bsStyle="default"
-                      className="loginBtn"
-                      onClick={this.login}
-                    >
-                      <img width="20" height="20" src={azure} alt="" /> Sign Up
-                      with Azure
-                    </Button>
+              <div className={flipClass}>
+                <div className="flipper">
+                  <div className="front">
+                    <SocialSignUpForm
+                      handleSubmit={this.handleSubmit}
+                      handleCancel={this.cancel}
+                      loading={this.props.loading}
+                    />
                   </div>
-                )}
+                  <div className="back">
+                    <SignUpSuccess handleCancel={this.cancel} t={t} />
+                  </div>
+                </div>
               </div>
             </Col>
           </Row>
@@ -109,21 +109,16 @@ class SignUpWithMS extends React.Component<Iprops, any> {
 const mapStateToProps = (state: IinitialState, ownProps: any) => {
   return {
     user: state.user,
-    redirect: state.redirect,
     loading: state.ajaxCallsInProgress > 0
   };
 };
 
-// export default LoginLayout;
-
-export default connect(
-  mapStateToProps,
-  {
-    userLogin,
-    MSALlogin,
-    userLogout,
-    setLoginRedirect,
-    removeLoginRedirect,
-    setRedirectPathname
-  }
-)(SignUpWithMS);
+export default translate('auth')(
+  connect(
+    mapStateToProps,
+    {
+      removeLoginRedirect,
+      adSignup
+    }
+  )(SignUpDirect)
+);

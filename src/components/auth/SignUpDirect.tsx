@@ -4,13 +4,8 @@
 import * as React from 'react';
 import { connect } from 'react-redux';
 import { Redirect } from 'react-router-dom';
-import { IinitialState, Iuser, Iredirect, ItempUser } from '../../models';
-import {
-  MSALlogin,
-  userLogin,
-  userLogout,
-  signUpDirect
-} from '../../actions/userActions';
+import { IinitialState, Iuser, ItempUser } from '../../models';
+import { signUpDirect } from '../../actions/userActions';
 import { removeLoginRedirect } from '../../actions/redirectToReferrerAction';
 import { Col, Grid, Row, Button } from 'react-bootstrap';
 import { RouteComponentProps } from 'react-router-dom';
@@ -19,14 +14,9 @@ import { translate, TranslationFunction, I18n } from 'react-i18next';
 import UserForm from './UserForm';
 
 interface Iprops extends RouteComponentProps<{}> {
-  userLogin?: any;
-  MSALlogin?: any;
-  userLogout?: any;
-  setRedirectPathname?: any;
   removeLoginRedirect: () => Promise<void>;
   user: Iuser;
-  redirect: Iredirect;
-  signUpDirect: any;
+  signUpDirect: (tempUser: ItempUser) => Promise<void>;
   loading: boolean;
   t: TranslationFunction;
   i18n: I18n;
@@ -120,20 +110,14 @@ class SignUpDirect extends React.Component<Iprops, Istate> {
 const mapStateToProps = (state: IinitialState, ownProps: any) => {
   return {
     user: state.user,
-    redirect: state.redirect,
     loading: state.ajaxCallsInProgress > 0
   };
 };
-
-// export default LoginLayout;
 
 export default translate('auth')(
   connect(
     mapStateToProps,
     {
-      userLogin,
-      MSALlogin,
-      userLogout,
       removeLoginRedirect,
       signUpDirect
     }

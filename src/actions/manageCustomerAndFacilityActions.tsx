@@ -61,7 +61,7 @@ export function getCustomerLogo(customerID: string): ThunkResult<void> {
     return msalFetch(url, axiosOptions)
       .then((data: AxiosResponse<any>) => {
         if (!data.data) {
-          throw undefined;
+          throw new Error('missing data');
         } else {
           dispatch({ type: types.GET_CUSTOMER_IMAGE_SUCCESS });
           const fileReader = new FileReader();

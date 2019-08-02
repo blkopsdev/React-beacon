@@ -57,14 +57,22 @@ class Login extends React.Component<Iprops, Istate> {
       this.handleRedirectToSignup,
       false
     );
+  }
+  componentDidMount() {
+    // store the referring loation in redux
+    const { from } = this.props.location.state || { from: { pathname: '/' } };
 
+    // if we are not already redirecting, then set it
+    if (!this.props.redirect.redirectToReferrer) {
+      this.props.setRedirectPathname(from.pathname);
+    }
     if (msalApp.getAccount()) {
       if (!this.props.user.isAuthenticated) {
         this.props
           .userLogin()
           .then()
-          .catch(() => {
-            console.error('login failed in login.tsx');
+          .catch((error: any) => {
+            console.error('login failed in login.tsx', error);
             this.setState({ userLoginFailed: true });
           });
       } else {
@@ -79,18 +87,9 @@ class Login extends React.Component<Iprops, Istate> {
       }
     }
   }
-  componentDidMount() {
-    // store the referring loation in redux
-    const { from } = this.props.location.state || { from: { pathname: '/' } };
-
-    // if we are not already redirecting, then set it
-    if (!this.props.redirect.redirectToReferrer) {
-      this.props.setRedirectPathname(from.pathname);
-    }
-  }
 
   handleRedirectToSignup = () => {
-    this.props.history.push('/social_signup');
+    this.props.history.push('/azure_signup');
   };
 
   /*

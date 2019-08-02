@@ -106,6 +106,37 @@ export function signUpDirect(tempUser: ItempUser): ThunkResult<void> {
   };
 }
 
+export function adSignup({
+  first,
+  last,
+  email
+}: {
+  [key: string]: any;
+}): ThunkResult<void> {
+  return (dispatch, getState) => {
+    dispatch(beginAjaxCall());
+    const body = {
+      first: first || '',
+      last: last || '',
+      email: email || ''
+    };
+    return Axios.post(API.POST.user.adSignup, body)
+      .then(data => {
+        if (!data.data) {
+          throw new Error('missing data');
+        } else {
+          dispatch({ type: types.USER_SIGNUP_SUCCESS, user: data.data });
+          return data;
+        }
+      })
+      .catch((error: any) => {
+        dispatch({ type: types.USER_SIGNUP_FAILED });
+        constants.handleError(error, 'sign up');
+        throw error; // intentionally re-throw
+      });
+  };
+}
+
 export const toggleEditProfileModal = () => ({
   type: types.TOGGLE_MODAL_EDIT_PROFILE
 });

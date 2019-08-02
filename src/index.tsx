@@ -2,7 +2,8 @@
 * Index is the entry point for the app. 
 * Initial routes are here and secondary routes are in TwoPanelLayout
 */
-import 'custom-event-polyfill';
+import 'react-app-polyfill/ie11';
+// import 'custom-event-polyfill';
 import { Provider } from 'react-redux';
 import {
   faCog,

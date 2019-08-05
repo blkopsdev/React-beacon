@@ -78,6 +78,7 @@ export function userLogout(): ThunkResult<void> {
 }
 
 const userLogoutHelper = (dispatch: Dispatch) => {
+  console.log('logging out');
   dispatch({ type: types.USER_LOGOUT_SUCCESS });
   dispatch({ type: 'Offline/RESET_STATE' }); // reset the redux-offline outbox
   dispatch({ type: '@ReduxToastr/toastr/CLEAN_TOASTR' }); // reset the toastr

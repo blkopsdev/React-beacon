@@ -18,9 +18,9 @@ export const isIE = () => {
 };
 
 export const MSAL_SCOPES = {
-  MMG: `https://${
-    process.env.REACT_APP_MSAL_TENANT_NAME
-  }.onmicrosoft.com/mmg-api/read`,
+  MMG: `https://${process.env.REACT_APP_MSAL_TENANT_NAME}.onmicrosoft.com/${
+    process.env.REACT_APP_MSAL_APP_ID_URI
+  }/read`,
   OPENID: 'openid'
 };
 

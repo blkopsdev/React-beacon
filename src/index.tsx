@@ -3,6 +3,7 @@
 * Initial routes are here and secondary routes are in TwoPanelLayout
 */
 import 'react-app-polyfill/ie11';
+import 'react-app-polyfill/stable';
 // import 'custom-event-polyfill';
 import { Provider } from 'react-redux';
 import {
@@ -88,6 +89,8 @@ library.add(
 );
 
 if (!(window !== window.parent && !window.opener)) {
+  console.log('registering service worker');
+  registerServiceWorker();
   const { store, persistor } = configureStore();
 
   // set Axios default header for accepting JSON
@@ -130,8 +133,6 @@ in userActions.  then we pause the persistor in order to prevent anything else f
     </I18nextProvider>,
     document.getElementById('root') as HTMLElement
   );
-
-  registerServiceWorker();
 } else {
   console.log('loading silent refresh in iFrame');
 }

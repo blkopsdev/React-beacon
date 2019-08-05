@@ -22,7 +22,6 @@ import {
   setRedirectPathname
 } from '../../actions/redirectToReferrerAction';
 import { msalApp } from './Auth-Utils';
-
 // const Loading = () => <h3>Loading...</h3>;
 
 interface Iprops extends RouteComponentProps<{}> {

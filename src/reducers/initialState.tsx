@@ -454,6 +454,7 @@ const initialState: IinitialState = {
 
 export const emptyTile = {
   icon: '',
+  iconType: '',
   title: '',
   src: '',
   srcBanner: '',

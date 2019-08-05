@@ -476,7 +476,7 @@ const tiles: Itile[] = [
     width: 270,
     height: 300,
     url: '/brands',
-    securityFunction: securityFunctions.ViewInventory.id,
+    securityFunction: securityFunctions.ManageBrands.id,
     description: ''
   },
   {

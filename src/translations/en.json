@@ -396,6 +396,7 @@
     "bannerTitle": "Manage Alerts",
     "newBrand": "Add Alert",
     "editBrand": "Edit Alert",
+    "alertTypeLabel": "Alert Type Label",
     "searchPlaceholder": "Search...",
     "saveApprove": "Save & Approve",
     "deleteOk": "Delete Alert",

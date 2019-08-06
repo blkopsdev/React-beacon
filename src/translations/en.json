@@ -394,8 +394,8 @@
   },
   "manageAlert": {
     "bannerTitle": "Manage Alerts",
-    "newBrand": "Add Alert",
-    "editBrand": "Edit Alert",
+    "newAlert": "Add Alert",
+    "editAlert": "Edit Alert",
     "alertTypeLabel": "Alert Type Label",
     "searchPlaceholder": "Search...",
     "saveApprove": "Save & Approve",

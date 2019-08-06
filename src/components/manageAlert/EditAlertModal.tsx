@@ -50,9 +50,9 @@ class EditAlertModal extends React.Component<Iprops & IdispatchProps, {}> {
   render() {
     let modalTitle;
     if (this.props.selectedAlert && this.props.selectedAlert.id) {
-      modalTitle = this.props.t(`manageAlert:editBrand`);
+      modalTitle = this.props.t(`manageAlert:editAlert`);
     } else {
-      modalTitle = this.props.t(`manageAlert:newBrand`);
+      modalTitle = this.props.t(`manageAlert:newAlert`);
     }
 
     return (

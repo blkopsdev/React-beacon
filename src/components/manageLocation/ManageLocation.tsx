@@ -116,7 +116,8 @@ class ManageLocation extends React.Component<Iprops & IdispatchProps, Istate> {
     }
     // make sure there is a facilityID is set to the table search filters so that it can be used in the EditProductForm
     if (
-      !this.props.tableFilters.facilityID ||
+      (this.props.facilityOptions.length &&
+        !this.props.tableFilters.facilityID) ||
       this.props.tableFilters.facilityID !== this.props.facility.id
     ) {
       const facilityID = this.props.tableFilters.facilityID

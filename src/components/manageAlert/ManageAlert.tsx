@@ -119,7 +119,7 @@ class ManageAlert extends React.Component<Iprops & IdispatchProps, Istate> {
         render: FormUtil.SelectWithoutValidation,
         meta: {
           options: constants.alertTypes,
-          label: 'alertTypeLabel',
+          label: 'manageAlert:alertTypeLabel',
           colWidth: 3,
           placeholder: 'Select type',
           defaultValue: this.props.tableFilters.type,

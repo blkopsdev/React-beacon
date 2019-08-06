@@ -481,10 +481,10 @@ const tiles: Itile[] = [
   },
   {
     imgIcon: icons.inventory,
-    title: 'Customers and Facility',
+    title: 'Customers',
     src: require('../images/beaconManageInventory.jpg'),
     srcBanner: require('../images/beaconManageInventoryHeader.jpg'),
-    color: 'green',
+    color: 'blue',
     width: 270,
     height: 300,
     url: '/customer-and-facility',

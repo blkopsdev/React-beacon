@@ -11,7 +11,7 @@
     "@redux-offline/redux-offline": "^2.5.1",
     "@vimeo/player": "^2.7.0",
     "adal-angular": "^1.0.17",
-    "axios": "^0.18.0",
+    "axios": "^1.8.2",
     "bootstrap": "^3.3.7",
     "draft-js": "^0.10.5",
     "draft-js-export-html": "^1.2.0",
